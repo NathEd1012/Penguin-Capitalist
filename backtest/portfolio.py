@@ -12,11 +12,13 @@ class Position:
 class Portfolio:
     cash: float = 5000.0
     fee_per_trade: float = 1.0
+    enable_fees: bool = True
     positions: Dict[str, Position] = field(default_factory=dict)
     trades: int = 0
 
     def buy(self, symbol: str, price: float, qty: int):
-        cost = price * qty + self.fee_per_trade
+        fee = self.fee_per_trade if self.enable_fees else 0.0
+        cost = price * qty + fee
         if cost > self.cash:
             return False
 
@@ -40,7 +42,8 @@ class Portfolio:
         pos = self.positions[symbol]
         qty = min(qty, pos.qty)
 
-        self.cash += price * qty - self.fee_per_trade
+        fee = self.fee_per_trade if self.enable_fees else 0.0
+        self.cash += price * qty - fee
         self.trades += 1
         pos.qty -= qty
 

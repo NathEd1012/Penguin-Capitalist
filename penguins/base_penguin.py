@@ -13,7 +13,7 @@ class BasePenguin(ABC):
         symbol: str,
         prices: List[float],
         portfolio: Portfolio,
-    ) -> str:
+    ) -> tuple[str, int]:
         """
-        BUY | SELL | HOLD
+        (BUY | SELL | HOLD, quantity)
         """

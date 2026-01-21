@@ -10,7 +10,7 @@ class MeanReversionPenguin(BasePenguin):
     def decide(self, symbol, prices, portfolio):
         r = rsi(prices)
         if r < 30:
-            return "BUY"
+            return "BUY", 1
         if r > 70:
-            return "SELL"
-        return "HOLD"
+            return "SELL", 1
+        return "HOLD", 0

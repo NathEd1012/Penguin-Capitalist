@@ -1,0 +1,30 @@
+{
+  "RandomPenguin": {
+    "wins": 3,
+    "runs": 7
+  },
+  "RandomPenguin2": {
+    "wins": 0,
+    "runs": 7
+  },
+  "TrendPenguin": {
+    "wins": 2,
+    "runs": 7
+  },
+  "CarefulTrendPenguin": {
+    "wins": 0,
+    "runs": 7
+  },
+  "MomentumPenguin": {
+    "wins": 1,
+    "runs": 5
+  },
+  "MeanReversionPenguin": {
+    "wins": 1,
+    "runs": 5
+  },
+  "BreakoutPenguin": {
+    "wins": 0,
+    "runs": 5
+  }
+}

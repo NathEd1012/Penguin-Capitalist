@@ -12,14 +12,14 @@ class Simulator:
     def step(self, prices):
         for symbol, price in prices.items():
             self.price_history[symbol].append(price)
-            decision = self.agent.decide(
+            decision, qty = self.agent.decide(
                 symbol,
                 self.price_history[symbol],
                 self.portfolio,
             )
 
             if decision == "BUY":
-                self.portfolio.buy(symbol, price, qty=1)
+                self.portfolio.buy(symbol, price, qty=qty)
 
             elif decision == "SELL":
-                self.portfolio.sell(symbol, price, qty=1)
+                self.portfolio.sell(symbol, price, qty=qty)

@@ -9,13 +9,13 @@ class BreakoutPenguin(BasePenguin):
 
     def decide(self, symbol, prices, portfolio):
         if len(prices) < self.lookback:
-            return "HOLD"
+            return "HOLD", 0
 
         high = max(prices[-self.lookback : -1])
         low = min(prices[-self.lookback : -1])
 
         if prices[-1] > high:
-            return "BUY"
+            return "BUY", 1
         if prices[-1] < low:
-            return "SELL"
-        return "HOLD"
+            return "SELL", 1
+        return "HOLD", 0

@@ -10,7 +10,7 @@ class MomentumPenguin(BasePenguin):
     def decide(self, symbol, prices, portfolio):
         r = roc(prices, 5)
         if r > 0.01:
-            return "BUY"
+            return "BUY", 1
         if r < -0.01:
-            return "SELL"
-        return "HOLD"
+            return "SELL", 1
+        return "HOLD", 0
