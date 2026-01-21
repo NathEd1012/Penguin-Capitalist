@@ -3,7 +3,7 @@ import signal
 import sys
 import random
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 import matplotlib
 
 matplotlib.use("Agg")
@@ -22,7 +22,14 @@ from config import (
 )
 from data_client import AlpacaClient
 from backtest.portfolio import Portfolio
-from data.scoreboard import load_scoreboard, save_scoreboard, register_penguin, record_win, record_run, print_scoreboard
+from data.scoreboard import (
+    load_scoreboard,
+    save_scoreboard,
+    register_penguin,
+    record_win,
+    record_run,
+    print_scoreboard,
+)
 
 from penguins import (
     MomentumPenguin,
@@ -33,6 +40,9 @@ from penguins import (
     TrendPenguin,
     CarefulTrendPenguin,
     CopilotPenguin,
+    MovingAverageCrossoverPenguin,
+    RSIMeanReversionPenguin,
+    VolatilityBreakoutPenguin,
 )
 
 
@@ -50,14 +60,25 @@ def plot_capital_curves(curves, filename):
     plt.figure(figsize=(12, 6))
     for name, vals in curves.items():
         plt.plot(range(1, len(vals) + 1), vals, marker="o", label=name, linewidth=2)
-    
+
     # Calculate and plot overall average capital
     if curves:
         curve_values = list(curves.values())
         num_penguins = len(curve_values)
-        overall_avg = [sum(vals[i] for vals in curve_values) / num_penguins for i in range(len(curve_values[0]))]
-        plt.plot(range(1, len(overall_avg) + 1), overall_avg, marker="s", label="Overall Average Capital", linewidth=3, color="black", linestyle="--")
-    
+        overall_avg = [
+            sum(vals[i] for vals in curve_values) / num_penguins
+            for i in range(len(curve_values[0]))
+        ]
+        plt.plot(
+            range(1, len(overall_avg) + 1),
+            overall_avg,
+            marker="s",
+            label="Overall Average Capital",
+            linewidth=3,
+            color="black",
+            linestyle="--",
+        )
+
     plt.axhline(
         y=INITIAL_CAPITAL,
         color="gray",
@@ -79,7 +100,7 @@ def plot_capital_curves(curves, filename):
 def run():
     # Load scoreboard and register penguins
     scoreboard = load_scoreboard()
-    
+
     print(f"🐧 Starting live simulation for {RUN_MINUTES} minutes")
     print(f"Symbols: {SYMBOLS}")
     print(f"Interval: {BAR_TIMEFRAME_MINUTES} minute(s) per bar\n")
@@ -95,6 +116,9 @@ def run():
         TrendPenguin(),
         CarefulTrendPenguin(),
         CopilotPenguin(),
+        MovingAverageCrossoverPenguin(),
+        RSIMeanReversionPenguin(),
+        VolatilityBreakoutPenguin(),
     ]
 
     # Register all penguins in scoreboard
@@ -102,7 +126,11 @@ def run():
         scoreboard = register_penguin(scoreboard, penguin.name)
 
     portfolios = {
-        p.name: Portfolio(cash=INITIAL_CAPITAL, fee_per_trade=TRANSACTION_COST, enable_fees=ENABLE_TRANSACTION_COSTS)
+        p.name: Portfolio(
+            cash=INITIAL_CAPITAL,
+            fee_per_trade=TRANSACTION_COST,
+            enable_fees=ENABLE_TRANSACTION_COSTS,
+        )
         for p in penguins
     }
     price_history = defaultdict(list)
@@ -119,6 +147,22 @@ def run():
     minute = 0
 
     while minute < RUN_MINUTES:
+        if not client.market_is_open():
+            clock = client.trading.get_clock()
+            next_open = clock.next_open
+            wake_up = next_open - timedelta(minutes=5)
+            now = client.now_et()
+            if wake_up > now:
+                sleep_seconds = (wake_up - now).total_seconds()
+                print(
+                    f"Market is closed — sleeping {sleep_seconds:.0f}s until 5 min before open"
+                )
+                time.sleep(sleep_seconds)
+            else:
+                print("Market is closed — sleeping 30s")
+                time.sleep(30)
+            continue
+
         minute += 1
         print(
             f"\n=== Minute {minute}/{RUN_MINUTES} {datetime.now().strftime('%H:%M:%S')} ==="
@@ -129,9 +173,11 @@ def run():
             try:
                 price = client.get_mid_price(s)
             except Exception as e:
-                print(f"  ⚠️ API error for {s}: {type(e).__name__}. Using synthetic price.")
+                print(
+                    f"  ⚠️ API error for {s}: {type(e).__name__}. Using synthetic price."
+                )
                 price = None
-            
+
             if price is None:
                 if USE_SYNTHETIC_DATA:
                     price = synthetic_price_bar(s, price_history)
@@ -160,14 +206,18 @@ def run():
                 if decision == "BUY":
                     success = portfolio.buy(s, latest_price, qty=qty)
                     if success:
-                        print(f"    ✓ {penguin.name} BUY {qty} {s} @ ${latest_price:.2f}")
+                        print(
+                            f"    ✓ {penguin.name} BUY {qty} {s} @ ${latest_price:.2f}"
+                        )
                         trades_log[penguin.name].append(
                             f"BUY {qty} {s} @ ${latest_price:.2f}"
                         )
                 elif decision == "SELL":
                     success = portfolio.sell(s, latest_price, qty=qty)
                     if success:
-                        print(f"    ✓ {penguin.name} SELL {qty} {s} @ ${latest_price:.2f}")
+                        print(
+                            f"    ✓ {penguin.name} SELL {qty} {s} @ ${latest_price:.2f}"
+                        )
                         trades_log[penguin.name].append(
                             f"SELL {qty} {s} @ ${latest_price:.2f}"
                         )
@@ -198,10 +248,12 @@ def run():
     # End of run: determine winner and save results
     print("\n" + "=" * 60)
     final_values = {name: vals[-1] if vals else 0.0 for name, vals in curves.items()}
-    
+
     # Filter out penguins with 0 trades for winner selection
-    eligible_winners = {name: val for name, val in final_values.items() if portfolios[name].trades > 0}
-    
+    eligible_winners = {
+        name: val for name, val in final_values.items() if portfolios[name].trades > 0
+    }
+
     if eligible_winners:
         winner = max(eligible_winners.items(), key=lambda kv: kv[1])
         winner_name, winner_value = winner
@@ -235,14 +287,25 @@ def run():
     plt.figure(figsize=(12, 6))
     for name, vals in curves.items():
         plt.plot(range(1, len(vals) + 1), vals, marker="o", label=name, linewidth=2)
-    
+
     # Calculate and plot overall average capital
     if curves:
         curve_values = list(curves.values())
         num_penguins = len(curve_values)
-        overall_avg = [sum(vals[i] for vals in curve_values) / num_penguins for i in range(len(curve_values[0]))]
-        plt.plot(range(1, len(overall_avg) + 1), overall_avg, marker="s", label="Overall Average Capital", linewidth=3, color="black", linestyle="--")
-    
+        overall_avg = [
+            sum(vals[i] for vals in curve_values) / num_penguins
+            for i in range(len(curve_values[0]))
+        ]
+        plt.plot(
+            range(1, len(overall_avg) + 1),
+            overall_avg,
+            marker="s",
+            label="Overall Average Capital",
+            linewidth=3,
+            color="black",
+            linestyle="--",
+        )
+
     plt.axhline(
         y=INITIAL_CAPITAL,
         color="gray",

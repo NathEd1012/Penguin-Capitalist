@@ -18,7 +18,9 @@ class CarefulTrendPenguin(BasePenguin):
 
         # Check last buy_consecutive bars for buy signal
         recent_buy = prices[-self.buy_consecutive :]
-        all_increasing = all(recent_buy[i] < recent_buy[i + 1] for i in range(len(recent_buy) - 1))
+        all_increasing = all(
+            recent_buy[i] < recent_buy[i + 1] for i in range(len(recent_buy) - 1)
+        )
         if all_increasing:
             increase = recent_buy[-1] - recent_buy[0]
             qty = max(1, int(increase / recent_buy[-1] * 100))
@@ -26,7 +28,9 @@ class CarefulTrendPenguin(BasePenguin):
 
         # Check last sell_consecutive bars for sell signal
         recent_sell = prices[-self.sell_consecutive :]
-        all_decreasing = all(recent_sell[i] > recent_sell[i + 1] for i in range(len(recent_sell) - 1))
+        all_decreasing = all(
+            recent_sell[i] > recent_sell[i + 1] for i in range(len(recent_sell) - 1)
+        )
         if all_decreasing:
             return "SELL", 1  # sell 1 for now
 
