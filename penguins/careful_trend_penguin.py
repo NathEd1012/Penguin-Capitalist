@@ -32,6 +32,10 @@ class CarefulTrendPenguin(BasePenguin):
             recent_sell[i] > recent_sell[i + 1] for i in range(len(recent_sell) - 1)
         )
         if all_decreasing:
-            return "SELL", 1  # sell 1 for now
+            qty = portfolio.get_position(symbol)
+            if qty > 0:
+                return "SELL", qty
+            else:
+                return "HOLD", 0
 
         return "HOLD", 0

@@ -1,0 +1,73 @@
+Penguin Trading Simulation Log
+Started: 2026-01-21 15:39:45
+Duration: 1 minutes
+Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO
+Initial Capital: $5,000.00
+
+================================================================================
+
+BreakoutPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+CarefulTrendPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+CopilotPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+MeanReversionPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+MomentumPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+RandomPenguin2
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  2
+  Final Positions: 2
+  Final Cash:    $4,784.71
+
+  Trades:
+    1. BUY 1 BE @ $144.34
+    2. BUY 1 MP @ $70.95
+
+TrendPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+

@@ -7,9 +7,6 @@ from .random_penguin2 import RandomPenguin2
 from .trend_penguin import TrendPenguin
 from .careful_trend_penguin import CarefulTrendPenguin
 from .copilot_penguin import CopilotPenguin
-from .moving_average_crossover_penguin import MovingAverageCrossoverPenguin
-from .rsi_mean_reversion_penguin import RSIMeanReversionPenguin
-from .volatility_breakout_penguin import VolatilityBreakoutPenguin
 
 __all__ = [
     "BasePenguin",
@@ -21,7 +18,4 @@ __all__ = [
     "TrendPenguin",
     "CarefulTrendPenguin",
     "CopilotPenguin",
-    "MovingAverageCrossoverPenguin",
-    "RSIMeanReversionPenguin",
-    "VolatilityBreakoutPenguin",
 ]

@@ -1,6 +1,7 @@
 venvPeng/
 runs/
 plots/
+logs/
 **/__pycache__/
 *.pyc
 *.pyo

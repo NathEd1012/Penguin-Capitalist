@@ -31,13 +31,13 @@ SYMBOLS = [
 """
 
 INITIAL_CAPITAL = 5000.0
-TRANSACTION_COST = 0
+TRANSACTION_COST = 1.0
 ENABLE_TRANSACTION_COSTS = True
 ORDER_QTY = 1  # Quantity per order
 
 # ========== TIMING SETTINGS ==========
 BAR_TIMEFRAME_MINUTES = 1  # 1-minute bars
-RUN_MINUTES = 15  # 50  # Total runtime (60 = 1 hour)
+RUN_MINUTES = 150  # Total runtime (60 = 1 hour)
 
 # ========== SIMULATION SETTINGS ==========
 SIMULATION_MINUTES = 60  # For backtest (kept for compatibility)

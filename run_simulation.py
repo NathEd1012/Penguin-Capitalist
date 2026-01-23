@@ -3,7 +3,7 @@ import signal
 import sys
 import random
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 import matplotlib
 
 matplotlib.use("Agg")
@@ -40,9 +40,6 @@ from penguins import (
     TrendPenguin,
     CarefulTrendPenguin,
     CopilotPenguin,
-    MovingAverageCrossoverPenguin,
-    RSIMeanReversionPenguin,
-    VolatilityBreakoutPenguin,
 )
 
 
@@ -116,9 +113,6 @@ def run():
         TrendPenguin(),
         CarefulTrendPenguin(),
         CopilotPenguin(),
-        MovingAverageCrossoverPenguin(),
-        RSIMeanReversionPenguin(),
-        VolatilityBreakoutPenguin(),
     ]
 
     # Register all penguins in scoreboard
@@ -147,22 +141,6 @@ def run():
     minute = 0
 
     while minute < RUN_MINUTES:
-        if not client.market_is_open():
-            clock = client.trading.get_clock()
-            next_open = clock.next_open
-            wake_up = next_open - timedelta(minutes=5)
-            now = client.now_et()
-            if wake_up > now:
-                sleep_seconds = (wake_up - now).total_seconds()
-                print(
-                    f"Market is closed — sleeping {sleep_seconds:.0f}s until 5 min before open"
-                )
-                time.sleep(sleep_seconds)
-            else:
-                print("Market is closed — sleeping 30s")
-                time.sleep(30)
-            continue
-
         minute += 1
         print(
             f"\n=== Minute {minute}/{RUN_MINUTES} {datetime.now().strftime('%H:%M:%S')} ==="
