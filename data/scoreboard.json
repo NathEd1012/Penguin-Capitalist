@@ -1,46 +1,46 @@
 {
   "RandomPenguin": {
-    "wins": 3,
-    "runs": 9
+    "wins": 4,
+    "runs": 13
   },
   "RandomPenguin2": {
     "wins": 0,
-    "runs": 9
+    "runs": 13
   },
   "TrendPenguin": {
     "wins": 3,
-    "runs": 9
+    "runs": 13
   },
   "CarefulTrendPenguin": {
     "wins": 0,
-    "runs": 9
+    "runs": 13
   },
   "MomentumPenguin": {
     "wins": 1,
-    "runs": 7
+    "runs": 11
   },
   "MeanReversionPenguin": {
-    "wins": 2,
-    "runs": 7
+    "wins": 3,
+    "runs": 11
   },
   "BreakoutPenguin": {
     "wins": 0,
-    "runs": 7
+    "runs": 11
   },
   "CopilotPenguin": {
-    "wins": 0,
-    "runs": 2
+    "wins": 3,
+    "runs": 6
   },
   "Moving Average Crossover": {
     "wins": 0,
-    "runs": 2
+    "runs": 3
   },
   "RSI Mean Reversion": {
     "wins": 0,
-    "runs": 2
+    "runs": 3
   },
   "Volatility Breakout": {
     "wins": 0,
-    "runs": 2
+    "runs": 3
   }
 }

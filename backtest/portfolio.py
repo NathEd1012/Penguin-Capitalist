@@ -58,3 +58,9 @@ class Portfolio:
             if s in prices:
                 v += p.qty * prices[s]
         return v
+
+    def get_position(self, symbol: str) -> int:
+        """Return the quantity held for the given symbol."""
+        if symbol in self.positions:
+            return self.positions[symbol].qty
+        return 0

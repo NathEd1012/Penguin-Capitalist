@@ -8,6 +8,8 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import json
+import pytz
 
 from config import (
     SYMBOLS,
@@ -19,6 +21,7 @@ from config import (
     USE_SYNTHETIC_DATA,
     CAPITAL_CURVES_FILE,
     TRADES_LOG_FILE,
+    CURVES_DATA_FILE,
 )
 from data_client import AlpacaClient
 from backtest.portfolio import Portfolio
@@ -56,7 +59,7 @@ def plot_capital_curves(curves, filename):
     """Plot and save capital curves."""
     plt.figure(figsize=(12, 6))
     for name, vals in curves.items():
-        plt.plot(range(1, len(vals) + 1), vals, marker="o", label=name, linewidth=2)
+        plt.plot(range(1, len(vals) + 1), vals, marker="o", label=name, linewidth=3)
 
     # Calculate and plot overall average capital
     if curves:
@@ -69,7 +72,7 @@ def plot_capital_curves(curves, filename):
         plt.plot(
             range(1, len(overall_avg) + 1),
             overall_avg,
-            marker="s",
+            marker=None,
             label="Overall Average Capital",
             linewidth=3,
             color="black",
@@ -132,7 +135,44 @@ def run():
     trades_log = {p.name: [] for p in penguins}
 
     def handle_sigint(signum, frame):
-        print("\n\n⛔ Interrupted by user (scoreboard not updated)")
+        print("\n\n⛔ Interrupted by user - saving current state...")
+        # Save current curves and trades
+        with open(CURVES_DATA_FILE, "w") as f:
+            json.dump(curves, f)
+        with open(TRADES_LOG_FILE, "w") as f:
+            f.write(f"Penguin Trading Simulation Log (Interrupted)\n")
+            f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Duration: {minute} minutes (interrupted)\n")
+            f.write(f"Symbols: {', '.join(SYMBOLS)}\n")
+            f.write(f"Initial Capital: ${INITIAL_CAPITAL:,.2f}\n\n")
+            f.write("=" * 80 + "\n\n")
+
+            latest_prices = {
+                s: price_history[s][-1] for s in SYMBOLS if price_history[s]
+            }
+            for name in sorted(portfolios.keys()):
+                p = portfolios[name]
+                v = p.value(latest_prices)
+                pnl = v - INITIAL_CAPITAL
+                pnl_pct = (pnl / INITIAL_CAPITAL * 100) if INITIAL_CAPITAL else 0
+
+                f.write(f"{name}\n")
+                f.write(f"  Current Value:   ${v:,.2f}\n")
+                f.write(f"  PnL:             ${pnl:+,.2f}  ({pnl_pct:+.2f}%)\n")
+                f.write(f"  Total Trades:    {p.trades}\n")
+                f.write(f"  Current Positions: {len(p.positions)}\n")
+                f.write(f"  Current Cash:    ${p.cash:,.2f}\n\n")
+
+                if trades_log[name]:
+                    f.write(f"  Trades (up to interruption):\n")
+                    for i, trade in enumerate(trades_log[name], 1):
+                        f.write(f"    {i}. {trade}\n")
+                else:
+                    f.write(f"  Trades: None\n")
+                f.write("\n")
+
+        print(f"📝 Saved interrupted log to {TRADES_LOG_FILE}")
+        print(f"📊 Saved interrupted curves to {CURVES_DATA_FILE}")
         sys.exit(0)
 
     signal.signal(signal.SIGINT, handle_sigint)
@@ -145,6 +185,32 @@ def run():
         print(
             f"\n=== Minute {minute}/{RUN_MINUTES} {datetime.now().strftime('%H:%M:%S')} ==="
         )
+
+        # Check if market is open
+        if not client.market_is_open():
+            clock = client.trading.get_clock()
+            next_open = clock.next_open
+            now = datetime.now(pytz.timezone("US/Eastern"))
+            time_to_open = (next_open - now).total_seconds()
+
+            if time_to_open > 30 * 60:
+                sleep_time = 30 * 60
+                print(
+                    f"  📴 Market closed - next open in {time_to_open/3600:.1f}h, sleeping 30 min..."
+                )
+            elif time_to_open > 5 * 60:
+                sleep_time = 5 * 60
+                print(
+                    f"  📴 Market closed - next open in {time_to_open/60:.1f} min, sleeping 5 min..."
+                )
+            else:
+                sleep_time = 30
+                print(
+                    f"  📴 Market closed - next open in {time_to_open:.0f} sec, sleeping 30 sec..."
+                )
+
+            time.sleep(sleep_time)
+            continue  # Skip to next minute after waking
 
         # Poll prices for each symbol
         for s in SYMBOLS:
@@ -264,7 +330,7 @@ def run():
     # Save capital curves plot
     plt.figure(figsize=(12, 6))
     for name, vals in curves.items():
-        plt.plot(range(1, len(vals) + 1), vals, marker="o", label=name, linewidth=2)
+        plt.plot(range(1, len(vals) + 1), vals, marker=None, label=name, linewidth=1)
 
     # Calculate and plot overall average capital
     if curves:
@@ -277,9 +343,9 @@ def run():
         plt.plot(
             range(1, len(overall_avg) + 1),
             overall_avg,
-            marker="s",
+            marker="",
             label="Overall Average Capital",
-            linewidth=3,
+            linewidth=2,
             color="black",
             linestyle="--",
         )
@@ -331,6 +397,11 @@ def run():
             f.write("\n")
 
     print(f"📝 Saved trades log to {TRADES_LOG_FILE}")
+
+    # Save curves data
+    with open(CURVES_DATA_FILE, "w") as f:
+        json.dump(curves, f)
+    print(f"📊 Saved curves data to {CURVES_DATA_FILE}")
 
 
 if __name__ == "__main__":
