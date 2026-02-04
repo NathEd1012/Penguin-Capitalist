@@ -2,6 +2,8 @@ import time
 import signal
 import sys
 import random
+import os
+import shutil
 from collections import defaultdict
 from datetime import datetime
 import matplotlib
@@ -247,9 +249,16 @@ def run():
     price_history = defaultdict(list)
     curves = {p.name: [] for p in penguins}
     trades_log = {p.name: [] for p in penguins}
+    actual_trading_minutes = 0  # Track minutes when market was actually open
 
     def handle_sigint(signum, frame):
-        print("\n\n⛔ Interrupted by user - saving current state...")
+        print("\n\n⛔ Interrupted by user...")
+        # Only save if we had meaningful trading time (>10 minutes)
+        if actual_trading_minutes < 10:
+            print(f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not saving run.")
+            sys.exit(0)
+        
+        print("💾 Saving current state...")
         # Save current curves and trades
         with open(CURVES_DATA_FILE, "w") as f:
             json.dump(curves, f)
@@ -286,10 +295,10 @@ def run():
                 f.write("\n")
 
         print(f"📝 Saved interrupted log to {TRADES_LOG_FILE}")
-        print(f"� Saved interrupted curves to {CURVES_DATA_FILE}")
-        # Only generate full report if run was at least 10 minutes
-        if minute >= 10:
-            print(f"\n✓ Run was {minute} minutes - generating full final report...")
+        print(f"📊 Saved interrupted curves to {CURVES_DATA_FILE}")
+        # Only generate full report if run was at least 10 minutes of actual trading
+        if actual_trading_minutes >= 10:
+            print(f"\n✓ Run had {actual_trading_minutes} minutes of trading - generating full final report...")
 
             # Get latest prices
             latest_prices = {
@@ -318,6 +327,19 @@ def run():
             # Generate final PDF report
             pdf_filename = os.path.join("run_current", "report_interrupted.pdf")
             create_final_report_pdf(curves, portfolios, pdf_filename)
+            
+            # Archive to run_old with timestamp
+            now = datetime.now()
+            timestamp = now.strftime("%y%m%d_%H%M")
+            old_run_dir = os.path.join("run_old", f"run_{timestamp}")
+            os.makedirs(old_run_dir, exist_ok=True)
+            
+            for filename in os.listdir("run_current"):
+                src = os.path.join("run_current", filename)
+                if os.path.isfile(src):
+                    dst = os.path.join(old_run_dir, filename)
+                    shutil.copy2(src, dst)
+            print(f"💾 Archived interrupted run to {old_run_dir}")
             sys.exit(0)
 
     signal.signal(signal.SIGINT, handle_sigint)
@@ -352,6 +374,7 @@ def run():
             continue  # Skip to next minute after waking
 
         minute += 1
+        actual_trading_minutes += 1  # Increment only when market is open
         loop_start = time.time()
         print(
             f"\n=== Minute {minute}/{RUN_MINUTES} {datetime.now().strftime('%H:%M:%S')} ==="
@@ -521,6 +544,23 @@ def run():
     # Generate final PDF report with capital curves and trade summary
     pdf_filename = os.path.join("run_current", "report.pdf")
     create_final_report_pdf(curves, portfolios, pdf_filename)
+    
+    # Save to run_old only if meaningful run (>10 minutes of actual trading)
+    if actual_trading_minutes >= 10:
+        now = datetime.now()
+        timestamp = now.strftime("%y%m%d_%H%M")
+        old_run_dir = os.path.join("run_old", f"run_{timestamp}")
+        os.makedirs(old_run_dir, exist_ok=True)
+        
+        # Copy files from run_current to timestamped folder in run_old
+        for filename in os.listdir("run_current"):
+            src = os.path.join("run_current", filename)
+            if os.path.isfile(src):
+                dst = os.path.join(old_run_dir, filename)
+                shutil.copy2(src, dst)
+        print(f"💾 Archived run to {old_run_dir}")
+    else:
+        print(f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not archiving to run_old.")
 
     # Save trades log
     with open(TRADES_LOG_FILE, "w") as f:
