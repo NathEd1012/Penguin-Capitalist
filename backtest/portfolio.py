@@ -32,7 +32,7 @@ class Portfolio:
         # Prevent buying at $0 (data retrieval error)
         if price <= 0:
             return False
-        
+
         fee = self.fee_per_trade if self.enable_fees else 0.0
         cost = price * qty + fee
         if cost > self.cash:

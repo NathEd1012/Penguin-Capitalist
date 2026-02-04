@@ -268,7 +268,7 @@ def run():
         print("💾 Saving current state...")
         # Save current curves and trades
         with open(CURVES_DATA_FILE, "w") as f:
-            json.dump(curves, f)
+            json.dump(curves, f, indent=2)
         with open(TRADES_LOG_FILE, "w") as f:
             f.write(f"Penguin Trading Simulation Log (Interrupted)\n")
             f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
@@ -337,10 +337,11 @@ def run():
             pdf_filename = os.path.join("run_current", "report_interrupted.pdf")
             create_final_report_pdf(curves, portfolios, pdf_filename)
 
-            # Archive to run_old with timestamp
-            now = datetime.now()
-            timestamp = now.strftime("%y%m%d_%H%M")
-            old_run_dir = os.path.join("run_old", f"run_{timestamp}")
+            # Archive to run_old with day/time structure
+            now = datetime.now().replace(minute=0, second=0)
+            date_str = now.strftime("%y%m%d")
+            time_str = now.strftime("%H%M")
+            old_run_dir = os.path.join("run_old", date_str, f"run_{time_str}")
             os.makedirs(old_run_dir, exist_ok=True)
 
             for filename in os.listdir("run_current"):
@@ -357,8 +358,21 @@ def run():
 
     while minute < RUN_MINUTES:
         # Check if market is open
-        if not client.market_is_open():
-            clock = client.trading.get_clock()
+        try:
+            market_open = client.market_is_open()
+        except Exception as e:
+            print(f"  ⚠️ Connection error checking market status: {type(e).__name__}. Retrying in 30s...")
+            time.sleep(30)
+            continue
+        
+        if not market_open:
+            try:
+                clock = client.trading.get_clock()
+            except Exception as e:
+                print(f"  ⚠️ Connection error getting clock: {type(e).__name__}. Retrying in 30s...")
+                time.sleep(30)
+                continue
+            
             next_open = clock.next_open
             now = datetime.now(pytz.timezone("US/Eastern"))
             time_to_open = (next_open - now).total_seconds()
@@ -439,7 +453,9 @@ def run():
                 if decision == "BUY":
                     # Validate price is not $0 before buying
                     if ask <= 0:
-                        print(f"    ⚠️ {penguin.name} skipped BUY {qty} {s} - invalid price ${ask:.2f}")
+                        print(
+                            f"    ⚠️ {penguin.name} skipped BUY {qty} {s} - invalid price ${ask:.2f}"
+                        )
                         continue
                     # Buy at ask price
                     success = portfolio.buy(s, ask, qty=qty)
@@ -558,9 +574,10 @@ def run():
 
     # Save to run_old only if meaningful run (>10 minutes of actual trading)
     if actual_trading_minutes >= 10:
-        now = datetime.now()
-        timestamp = now.strftime("%y%m%d_%H%M")
-        old_run_dir = os.path.join("run_old", f"run_{timestamp}")
+        now = datetime.now().replace(minute=0, second=0)
+        date_str = now.strftime("%y%m%d")
+        time_str = now.strftime("%H%M")
+        old_run_dir = os.path.join("run_old", date_str, f"run_{time_str}")
         os.makedirs(old_run_dir, exist_ok=True)
 
         # Copy files from run_current to timestamped folder in run_old
@@ -609,7 +626,7 @@ def run():
 
     # Save curves data
     with open(CURVES_DATA_FILE, "w") as f:
-        json.dump(curves, f)
+        json.dump(curves, f, indent=2)
     print(f"📊 Saved curves data to {CURVES_DATA_FILE}")
 
 
