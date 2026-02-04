@@ -9,15 +9,15 @@ class RSIMeanReversionPenguin(BasePenguin):
         self.oversold = oversold
         self.overbought = overbought
 
-    def decide(self, symbol, prices, portfolio):
-        if len(prices) < self.rsi_period + 1:
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
+        if len(mid_prices) < self.rsi_period + 1:
             return "HOLD", 0
 
-        rsi_val = rsi(prices, self.rsi_period)
+        rsi_val = rsi(mid_prices, self.rsi_period)
         qty = portfolio.get_position(symbol)
         cash = portfolio.cash
 
-        if rsi_val < self.oversold and qty <= 0 and cash >= prices[-1]:
+        if rsi_val < self.oversold and qty <= 0 and cash >= mid_prices[-1]:
             return "BUY", 1
         elif rsi_val > self.overbought and qty > 0:
             return "SELL", qty

@@ -7,7 +7,7 @@ class RandomPenguin2(BasePenguin):
     def __init__(self):
         super().__init__("RandomPenguin2")
 
-    def decide(self, symbol, prices, portfolio):
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """Make a random decision: BUY, SELL, or HOLD (same as RandomPenguin)."""
         choice = random.choice(["BUY", "SELL", "HOLD"])
         qty = 1 if choice in ["BUY", "SELL"] else 0

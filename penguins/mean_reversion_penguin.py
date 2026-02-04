@@ -7,8 +7,8 @@ class MeanReversionPenguin(BasePenguin):
     def __init__(self):
         super().__init__("MeanReversionPenguin")
 
-    def decide(self, symbol, prices, portfolio):
-        r = rsi(prices)
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
+        r = rsi(mid_prices)
         if r < 30:
             return "BUY", 1
         if r > 70:

@@ -1,0 +1,142 @@
+Penguin Trading Simulation Log
+Started: 2026-01-21 16:43:51
+Duration: 150 minutes
+Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO
+Initial Capital: $5,000.00
+
+================================================================================
+
+BreakoutPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+CarefulTrendPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+CopilotPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+MeanReversionPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+MomentumPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+Moving Average Crossover
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+RSI Mean Reversion
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+RandomPenguin
+  Final Value:   $4,996.09
+  PnL:           $-3.91  (-0.08%)
+  Total Trades:  12
+  Final Positions: 0
+  Final Cash:    $4,996.09
+
+  Trades:
+    1. BUY 1 AMD @ $252.65
+    2. BUY 1 MSFT @ $449.21
+    3. BUY 1 NVDA @ $181.25
+    4. BUY 1 PLTR @ $168.82
+    5. BUY 1 TSLA @ $428.07
+    6. BUY 1 LMT @ $293.15
+    7. FORCE SELL 1 NVDA @ $181.25
+    8. FORCE SELL 1 PLTR @ $168.82
+    9. FORCE SELL 1 AMD @ $246.91
+    10. FORCE SELL 1 MSFT @ $451.05
+    11. FORCE SELL 1 TSLA @ $428.07
+    12. FORCE SELL 1 LMT @ $293.15
+
+RandomPenguin2
+  Final Value:   $4,993.14
+  PnL:           $-6.86  (-0.14%)
+  Total Trades:  11
+  Final Positions: 0
+  Final Cash:    $4,993.14
+
+  Trades:
+    1. BUY 1 AMD @ $252.65
+    2. BUY 1 MP @ $67.93
+    3. BUY 1 AAPL @ $248.19
+    4. BUY 1 AMD @ $246.91
+    5. BUY 1 MSTR @ $162.75
+    6. BUY 1 NVO @ $59.03
+    7. FORCE SELL 1 AAPL @ $248.19
+    8. FORCE SELL 2 AMD @ $246.91
+    9. FORCE SELL 1 MP @ $66.81
+    10. FORCE SELL 1 MSTR @ $162.75
+    11. FORCE SELL 1 NVO @ $59.03
+
+TrendPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  12
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades:
+    1. BUY 1 AAPL @ $248.19
+    2. BUY 1 PLTR @ $168.82
+    3. BUY 1 BE @ $154.00
+    4. BUY 1 MSTR @ $162.75
+    5. BUY 1 MSFT @ $451.05
+    6. BUY 1 NVO @ $59.03
+    7. FORCE SELL 1 AAPL @ $248.19
+    8. FORCE SELL 1 PLTR @ $168.82
+    9. FORCE SELL 1 BE @ $154.00
+    10. FORCE SELL 1 MSTR @ $162.75
+    11. FORCE SELL 1 MSFT @ $451.05
+    12. FORCE SELL 1 NVO @ $59.03
+
+Volatility Breakout
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+

@@ -8,17 +8,17 @@ class VolatilityBreakoutPenguin(BasePenguin):
         self.period = period
         self.std_mult = std_mult
 
-    def decide(self, symbol, prices, portfolio):
-        if len(prices) < self.period:
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
+        if len(mid_prices) < self.period:
             return "HOLD", 0
 
-        recent_prices = prices[-self.period :]
+        recent_prices = mid_prices[-self.period :]
         mean = np.mean(recent_prices)
         std = np.std(recent_prices)
         upper = mean + self.std_mult * std
         lower = mean - self.std_mult * std
 
-        current_price = prices[-1]
+        current_price = mid_prices[-1]
         qty = portfolio.get_position(symbol)
         cash = portfolio.cash
 

@@ -44,22 +44,11 @@ FAST_MODE = True  # Skip real-time sleep, run as fast as possible
 import os
 from datetime import datetime
 
-# Create plots directory if it doesn't exist
-PLOTS_DIR = "plots"
-os.makedirs(PLOTS_DIR, exist_ok=True)
+# Create current_run directory if it doesn't exist
+CURRENT_RUN_DIR = "current_run"
+os.makedirs(CURRENT_RUN_DIR, exist_ok=True)
 
-# Create logs directory if it doesn't exist
-LOGS_DIR = "logs"
-os.makedirs(LOGS_DIR, exist_ok=True)
-
-# Dynamic filenames with date/time
-now = datetime.now()
-rounded_minute = round(now.minute / 10) * 10
-if rounded_minute == 60:
-    now = now.replace(hour=now.hour + 1, minute=0, second=0)
-else:
-    now = now.replace(minute=rounded_minute, second=0)
-timestamp = now.strftime("%y%m%d_%H%M")
-CAPITAL_CURVES_FILE = os.path.join(PLOTS_DIR, f"capital_{timestamp}.png")
-TRADES_LOG_FILE = os.path.join(LOGS_DIR, f"trades_{timestamp}.txt")
-CURVES_DATA_FILE = os.path.join(LOGS_DIR, f"data_{timestamp}.json")
+# Fixed filenames (no timestamp, gets overwritten each run)
+CAPITAL_CURVES_FILE = os.path.join(CURRENT_RUN_DIR, "capital_curves.png")
+TRADES_LOG_FILE = os.path.join(CURRENT_RUN_DIR, "trades.txt")
+CURVES_DATA_FILE = os.path.join(CURRENT_RUN_DIR, "data.json")

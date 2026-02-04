@@ -7,8 +7,8 @@ class MomentumPenguin(BasePenguin):
     def __init__(self):
         super().__init__("MomentumPenguin")
 
-    def decide(self, symbol, prices, portfolio):
-        r = roc(prices, 5)
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
+        r = roc(mid_prices, 5)
         if r > 0.01:
             return "BUY", 1
         if r < -0.01:

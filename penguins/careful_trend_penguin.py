@@ -8,16 +8,16 @@ class CarefulTrendPenguin(BasePenguin):
         self.buy_consecutive = buy_consecutive
         self.sell_consecutive = sell_consecutive
 
-    def decide(self, symbol, prices, portfolio):
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """
         Buy when stock has risen for buy_consecutive consecutive minutes.
         Sell when stock has fallen for sell_consecutive consecutive minutes.
         """
-        if len(prices) < max(self.buy_consecutive, self.sell_consecutive):
+        if len(mid_prices) < max(self.buy_consecutive, self.sell_consecutive):
             return "HOLD", 0
 
         # Check last buy_consecutive bars for buy signal
-        recent_buy = prices[-self.buy_consecutive :]
+        recent_buy = mid_prices[-self.buy_consecutive :]
         all_increasing = all(
             recent_buy[i] < recent_buy[i + 1] for i in range(len(recent_buy) - 1)
         )
@@ -27,7 +27,7 @@ class CarefulTrendPenguin(BasePenguin):
             return "BUY", qty
 
         # Check last sell_consecutive bars for sell signal
-        recent_sell = prices[-self.sell_consecutive :]
+        recent_sell = mid_prices[-self.sell_consecutive :]
         all_decreasing = all(
             recent_sell[i] > recent_sell[i + 1] for i in range(len(recent_sell) - 1)
         )

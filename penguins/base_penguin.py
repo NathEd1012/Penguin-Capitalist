@@ -11,9 +11,21 @@ class BasePenguin(ABC):
     def decide(
         self,
         symbol: str,
-        prices: List[float],
+        mid_prices: List[float],
+        bid: float,
+        ask: float,
         portfolio: Portfolio,
     ) -> tuple[str, int]:
         """
-        (BUY | SELL | HOLD, quantity)
+        Make trading decision based on mid-price history and current bid/ask.
+        
+        Args:
+            symbol: Stock symbol
+            mid_prices: Historical mid-prices for analysis
+            bid: Current bid price (sell at this)
+            ask: Current ask price (buy at this)
+            portfolio: Current portfolio
+            
+        Returns:
+            (BUY | SELL | HOLD, quantity)
         """

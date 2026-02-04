@@ -11,15 +11,15 @@ class MovingAverageCrossoverPenguin(BasePenguin):
         self.ma_func = ema if use_ema else sma
         self.prev_signal = None  # To avoid overtrading
 
-    def decide(self, symbol, prices, portfolio):
-        if len(prices) < self.slow_period + 1:
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
+        if len(mid_prices) < self.slow_period + 1:
             return "HOLD", 0
 
-        fast_ma = self.ma_func(prices, self.fast_period)
-        slow_ma = self.ma_func(prices, self.slow_period)
+        fast_ma = self.ma_func(mid_prices, self.fast_period)
+        slow_ma = self.ma_func(mid_prices, self.slow_period)
 
         # Previous MAs
-        prev_prices = prices[:-1]
+        prev_prices = mid_prices[:-1]
         if len(prev_prices) >= self.slow_period:
             prev_fast = self.ma_func(prev_prices, self.fast_period)
             prev_slow = self.ma_func(prev_prices, self.slow_period)
@@ -34,7 +34,7 @@ class MovingAverageCrossoverPenguin(BasePenguin):
         cash = portfolio.cash
 
         if current_cross > 0 and prev_cross <= 0:  # Bullish crossover
-            if qty <= 0 and cash >= prices[-1]:  # Not long, can buy
+            if qty <= 0 and cash >= mid_prices[-1]:  # Not long, can buy
                 return "BUY", 1
         elif current_cross < 0 and prev_cross >= 0:  # Bearish crossover
             if qty > 0:  # Long, sell

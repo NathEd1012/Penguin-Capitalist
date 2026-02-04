@@ -42,12 +42,23 @@ class AlpacaClient:
         return self.trading.get_clock().is_open
 
     # ---------- Price ----------
-    def get_mid_price(self, symbol: str) -> Optional[float]:
+    def get_quote(self, symbol: str):
+        """Get bid and ask prices."""
         req = StockLatestQuoteRequest(symbol_or_symbols=symbol, feed=self.feed)
-        q = self.data.get_stock_latest_quote(req).get(symbol)
+        return self.data.get_stock_latest_quote(req).get(symbol)
+
+    def get_bid_ask(self, symbol: str):
+        """Return (bid, ask) tuple or (None, None) if unavailable."""
+        q = self.get_quote(symbol)
         if not q or q.bid_price is None or q.ask_price is None:
+            return None, None
+        return q.bid_price, q.ask_price
+
+    def get_mid_price(self, symbol: str) -> Optional[float]:
+        bid, ask = self.get_bid_ask(symbol)
+        if bid is None or ask is None:
             return None
-        return (q.bid_price + q.ask_price) / 2
+        return (bid + ask) / 2
 
     # ---------- Orders ----------
     def buy_market(self, symbol: str, qty: int):

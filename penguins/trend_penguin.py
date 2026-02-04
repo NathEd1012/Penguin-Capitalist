@@ -7,16 +7,16 @@ class TrendPenguin(BasePenguin):
         super().__init__("TrendPenguin")
         self.lookback = lookback
 
-    def decide(self, symbol, prices, portfolio):
+    def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """
         Buy when stock rises from previous minute, sell when it falls, else hold.
         """
-        if len(prices) < 2:
+        if len(mid_prices) < 2:
             return "HOLD", 0
 
-        if prices[-1] > prices[-2]:
+        if mid_prices[-1] > mid_prices[-2]:
             return "BUY", 1
-        elif prices[-1] < prices[-2]:
+        elif mid_prices[-1] < mid_prices[-2]:
             return "SELL", 1
         else:
             return "HOLD", 0

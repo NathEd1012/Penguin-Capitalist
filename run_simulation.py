@@ -8,6 +8,8 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.table import Table
 import json
 import pytz
 
@@ -38,11 +40,7 @@ from penguins import (
     MomentumPenguin,
     MeanReversionPenguin,
     BreakoutPenguin,
-    RandomPenguin,
-    RandomPenguin2,
     TrendPenguin,
-    CarefulTrendPenguin,
-    CopilotPenguin,
 )
 
 
@@ -59,7 +57,7 @@ def plot_capital_curves(curves, filename):
     """Plot and save capital curves."""
     plt.figure(figsize=(12, 6))
     for name, vals in curves.items():
-        plt.plot(range(1, len(vals) + 1), vals, marker="o", label=name, linewidth=3)
+        plt.plot(range(1, len(vals) + 1), vals, label=name, linewidth=3)
 
     # Calculate and plot overall average capital
     if curves:
@@ -97,6 +95,126 @@ def plot_capital_curves(curves, filename):
     print(f"📈 Updated capital curves to {filename}")
 
 
+def create_final_report_pdf(curves, portfolios, filename):
+    """Create PDF with capital curves and per-symbol trade summary."""
+    with PdfPages(filename) as pdf:
+        # Page 1: Capital Curves
+        fig, ax = plt.subplots(figsize=(12, 8))
+
+        for name, vals in curves.items():
+            ax.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2)
+
+        # Calculate and plot overall average capital
+        if curves:
+            curve_values = list(curves.values())
+            num_penguins = len(curve_values)
+            overall_avg = [
+                sum(vals[i] for vals in curve_values) / num_penguins
+                for i in range(len(curve_values[0]))
+            ]
+            ax.plot(
+                range(1, len(overall_avg) + 1),
+                overall_avg,
+                marker=None,
+                label="Overall Average Capital",
+                linewidth=2.5,
+                color="black",
+                linestyle="--",
+            )
+
+        ax.axhline(
+            y=INITIAL_CAPITAL,
+            color="gray",
+            linestyle="--",
+            alpha=0.5,
+            label="Initial Capital",
+        )
+        ax.set_xlabel("Minute")
+        ax.set_ylabel("Total Capital ($)")
+        ax.set_title(f"Penguin Capital Curves")
+        ax.legend(fontsize=9)
+        ax.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        pdf.savefig(fig, bbox_inches="tight")
+        plt.close()
+
+        # Page 2+: Trade Summary Table for each Penguin
+        for penguin_name, portfolio in sorted(portfolios.items()):
+            fig = plt.figure(figsize=(12, 10))
+            ax = fig.add_subplot(111)
+            ax.axis("tight")
+            ax.axis("off")
+
+            summary = portfolio.get_symbol_summary()
+
+            # Build table data
+            table_data = [
+                [
+                    "Symbol",
+                    "Buy Cnt",
+                    "Sell Cnt",
+                    "Total Qty Bought",
+                    "Total Cost",
+                    "Total Revenue",
+                    "PnL",
+                    "PnL %",
+                ]
+            ]
+
+            total_pnl = 0
+            for symbol in sorted(summary.keys()):
+                s = summary[symbol]
+                pnl = s["pnl"]
+                pnl_pct = s["pnl_pct"]
+                total_pnl += pnl
+
+                table_data.append(
+                    [
+                        symbol,
+                        str(s["buy_count"]),
+                        str(s["sell_count"]),
+                        str(s["total_qty_bought"]),
+                        f"${s['total_cost']:,.2f}",
+                        f"${s['total_revenue']:,.2f}",
+                        f"${pnl:,.2f}",
+                        f"{pnl_pct:+.2f}%",
+                    ]
+                )
+
+            # Add total row
+            table_data.append(["TOTAL", "", "", "", "", "", f"${total_pnl:,.2f}", ""])
+
+            table = ax.table(
+                cellText=table_data,
+                cellLoc="center",
+                loc="center",
+                colWidths=[0.1, 0.1, 0.1, 0.15, 0.15, 0.15, 0.15, 0.1],
+            )
+            table.auto_set_font_size(False)
+            table.set_fontsize(9)
+            table.scale(1, 2)
+
+            # Style header row
+            for i in range(len(table_data[0])):
+                table[(0, i)].set_facecolor("#4472C4")
+                table[(0, i)].set_text_props(weight="bold", color="white")
+
+            # Style total row
+            for i in range(len(table_data[0])):
+                table[(len(table_data) - 1, i)].set_facecolor("#E7E6E6")
+                table[(len(table_data) - 1, i)].set_text_props(weight="bold")
+
+            title = f"Trade Summary: {penguin_name}"
+            fig.suptitle(title, fontsize=14, weight="bold", y=0.98)
+
+            plt.tight_layout()
+            pdf.savefig(fig, bbox_inches="tight")
+            plt.close()
+
+    print(f"📄 Final report saved to {filename}")
+
+
 def run():
     # Load scoreboard and register penguins
     scoreboard = load_scoreboard()
@@ -111,11 +229,7 @@ def run():
         MomentumPenguin(),
         MeanReversionPenguin(),
         BreakoutPenguin(),
-        RandomPenguin(),
-        RandomPenguin2(),
         TrendPenguin(),
-        CarefulTrendPenguin(),
-        CopilotPenguin(),
     ]
 
     # Register all penguins in scoreboard
@@ -172,20 +286,43 @@ def run():
                 f.write("\n")
 
         print(f"📝 Saved interrupted log to {TRADES_LOG_FILE}")
-        print(f"📊 Saved interrupted curves to {CURVES_DATA_FILE}")
-        sys.exit(0)
+        print(f"� Saved interrupted curves to {CURVES_DATA_FILE}")        
+        # Only generate full report if run was at least 10 minutes
+        if minute >= 10:
+            print(f"\n✓ Run was {minute} minutes - generating full final report...")
+            
+            # Get latest prices
+            latest_prices = {
+                s: price_history[s][-1] for s in SYMBOLS if price_history[s]
+            }
+            
+            # Liquidate all positions at market mid-prices
+            print("💨 Liquidating all positions...")
+            for penguin in penguins:
+                portfolio = portfolios[penguin.name]
+                for symbol in list(portfolio.positions.keys()):
+                    pos = portfolio.positions[symbol]
+                    if pos.qty > 0:
+                        price = latest_prices.get(symbol, 100.0)
+                        portfolio.sell(symbol, price, qty=pos.qty)
+                        print(f"  {penguin.name}: Sold {pos.qty} {symbol} @ ${price:.2f}")
+            
+            # Record final portfolio values
+            for penguin in penguins:
+                p = portfolios[penguin.name]
+                v = p.value(latest_prices)
+                curves[penguin.name].append(v)
+            
+            # Generate final PDF report
+            pdf_filename = os.path.join("current_run", "report_interrupted.pdf")
+            create_final_report_pdf(curves, portfolios, pdf_filename)
+            sys.exit(0)
 
     signal.signal(signal.SIGINT, handle_sigint)
 
-    start_time = time.time()
     minute = 0
 
     while minute < RUN_MINUTES:
-        minute += 1
-        print(
-            f"\n=== Minute {minute}/{RUN_MINUTES} {datetime.now().strftime('%H:%M:%S')} ==="
-        )
-
         # Check if market is open
         if not client.market_is_open():
             clock = client.trading.get_clock()
@@ -212,59 +349,73 @@ def run():
             time.sleep(sleep_time)
             continue  # Skip to next minute after waking
 
+        minute += 1
+        loop_start = time.time()
+        print(
+            f"\n=== Minute {minute}/{RUN_MINUTES} {datetime.now().strftime('%H:%M:%S')} ==="
+        )
+
         # Poll prices for each symbol
+        bid_ask_prices = {}
         for s in SYMBOLS:
             try:
-                price = client.get_mid_price(s)
+                bid, ask = client.get_bid_ask(s)
             except Exception as e:
                 print(
                     f"  ⚠️ API error for {s}: {type(e).__name__}. Using synthetic price."
                 )
-                price = None
+                bid, ask = None, None
 
-            if price is None:
+            if bid is None or ask is None:
                 if USE_SYNTHETIC_DATA:
-                    price = synthetic_price_bar(s, price_history)
-                    print(f"  {s}: ${price:.2f} (synthetic)")
+                    mid = synthetic_price_bar(s, price_history)
+                    spread = mid * 0.001  # 0.1% spread for synthetic
+                    bid, ask = mid - spread / 2, mid + spread / 2
+                    print(f"  {s}: ${mid:.2f} (synthetic, spread ${spread:.4f})")
                 else:
                     print(f"  ⚠️ No quote for {s}, skipping")
                     continue
             else:
-                print(f"  {s}: ${price:.2f}")
-            price_history[s].append(price)
+                mid = (bid + ask) / 2
+                spread = ask - bid
+                print(
+                    f"  {s}: ${mid:.2f} (bid ${bid:.2f}, ask ${ask:.2f}, spread ${spread:.4f})"
+                )
+
+            bid_ask_prices[s] = (bid, ask)
+            price_history[s].append(mid)  # Store mid for history/charting
 
         # Let each penguin trade
         for penguin in penguins:
             portfolio = portfolios[penguin.name]
             for s in SYMBOLS:
-                prices = price_history[s]
-                if not prices:
+                if s not in bid_ask_prices:
                     continue
+
+                mid_prices = price_history[s]
+                if not mid_prices:
+                    continue
+                
+                bid, ask = bid_ask_prices[s]
+                
                 try:
-                    decision, qty = penguin.decide(s, prices, portfolio)
+                    decision, qty = penguin.decide(s, mid_prices, bid, ask, portfolio)
                 except Exception as e:
                     print(f"    ❌ {penguin.name} error on {s}: {e}")
                     continue
 
-                latest_price = prices[-1]
                 if decision == "BUY":
-                    success = portfolio.buy(s, latest_price, qty=qty)
+                    # Buy at ask price
+                    success = portfolio.buy(s, ask, qty=qty)
                     if success:
-                        print(
-                            f"    ✓ {penguin.name} BUY {qty} {s} @ ${latest_price:.2f}"
-                        )
-                        trades_log[penguin.name].append(
-                            f"BUY {qty} {s} @ ${latest_price:.2f}"
-                        )
+                        print(f"    ✓ {penguin.name} BUY {qty} {s} @ ${ask:.2f} (ask)")
+                        trades_log[penguin.name].append(f"BUY {qty} {s} @ ${ask:.2f}")
                 elif decision == "SELL":
-                    success = portfolio.sell(s, latest_price, qty=qty)
+                    # Sell at bid price
+                    success = portfolio.sell(s, bid, qty=qty)
                     if success:
-                        print(
-                            f"    ✓ {penguin.name} SELL {qty} {s} @ ${latest_price:.2f}"
-                        )
-                        trades_log[penguin.name].append(
-                            f"SELL {qty} {s} @ ${latest_price:.2f}"
-                        )
+                        print(f"    ✓ {penguin.name} SELL {qty} {s} @ ${bid:.2f} (bid)")
+                        trades_log[penguin.name].append(f"SELL {qty} {s} @ ${bid:.2f}")
 
         # Record portfolio values
         latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
@@ -282,9 +433,8 @@ def run():
             print(f"    Trades: {p.trades}")
 
         # Wait for next bar
-        elapsed = time.time() - start_time
-        next_bar_time = minute * BAR_TIMEFRAME_MINUTES * 60
-        wait_time = next_bar_time - elapsed
+        elapsed = time.time() - loop_start
+        wait_time = BAR_TIMEFRAME_MINUTES * 60 - elapsed
         if wait_time > 0:
             print(f"  Waiting {wait_time:.1f}s for next minute...")
             time.sleep(wait_time)
@@ -365,6 +515,10 @@ def run():
     plt.tight_layout()
     plt.savefig(CAPITAL_CURVES_FILE, dpi=100)
     print(f"\n📈 Saved capital curves to {CAPITAL_CURVES_FILE}")
+
+    # Generate final PDF report with capital curves and trade summary
+    pdf_filename = os.path.join("current_run", "report.pdf")
+    create_final_report_pdf(curves, portfolios, pdf_filename)
 
     # Save trades log
     with open(TRADES_LOG_FILE, "w") as f:
