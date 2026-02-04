@@ -20,6 +20,8 @@ class CopilotPenguin(BasePenguin):
             return "BUY", 1
         elif r > 70:
             # Sell all if we have position
-            qty = portfolio.positions[symbol].qty if symbol in portfolio.positions else 0
+            qty = (
+                portfolio.positions[symbol].qty if symbol in portfolio.positions else 0
+            )
             return "SELL", qty
         return "HOLD", 0

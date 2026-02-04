@@ -286,16 +286,16 @@ def run():
                 f.write("\n")
 
         print(f"📝 Saved interrupted log to {TRADES_LOG_FILE}")
-        print(f"� Saved interrupted curves to {CURVES_DATA_FILE}")        
+        print(f"� Saved interrupted curves to {CURVES_DATA_FILE}")
         # Only generate full report if run was at least 10 minutes
         if minute >= 10:
             print(f"\n✓ Run was {minute} minutes - generating full final report...")
-            
+
             # Get latest prices
             latest_prices = {
                 s: price_history[s][-1] for s in SYMBOLS if price_history[s]
             }
-            
+
             # Liquidate all positions at market mid-prices
             print("💨 Liquidating all positions...")
             for penguin in penguins:
@@ -305,16 +305,18 @@ def run():
                     if pos.qty > 0:
                         price = latest_prices.get(symbol, 100.0)
                         portfolio.sell(symbol, price, qty=pos.qty)
-                        print(f"  {penguin.name}: Sold {pos.qty} {symbol} @ ${price:.2f}")
-            
+                        print(
+                            f"  {penguin.name}: Sold {pos.qty} {symbol} @ ${price:.2f}"
+                        )
+
             # Record final portfolio values
             for penguin in penguins:
                 p = portfolios[penguin.name]
                 v = p.value(latest_prices)
                 curves[penguin.name].append(v)
-            
+
             # Generate final PDF report
-            pdf_filename = os.path.join("current_run", "report_interrupted.pdf")
+            pdf_filename = os.path.join("run_current", "report_interrupted.pdf")
             create_final_report_pdf(curves, portfolios, pdf_filename)
             sys.exit(0)
 
@@ -395,9 +397,9 @@ def run():
                 mid_prices = price_history[s]
                 if not mid_prices:
                     continue
-                
+
                 bid, ask = bid_ask_prices[s]
-                
+
                 try:
                     decision, qty = penguin.decide(s, mid_prices, bid, ask, portfolio)
                 except Exception as e:
@@ -517,7 +519,7 @@ def run():
     print(f"\n📈 Saved capital curves to {CAPITAL_CURVES_FILE}")
 
     # Generate final PDF report with capital curves and trade summary
-    pdf_filename = os.path.join("current_run", "report.pdf")
+    pdf_filename = os.path.join("run_current", "report.pdf")
     create_final_report_pdf(curves, portfolios, pdf_filename)
 
     # Save trades log

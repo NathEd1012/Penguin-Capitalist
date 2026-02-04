@@ -44,8 +44,8 @@ FAST_MODE = True  # Skip real-time sleep, run as fast as possible
 import os
 from datetime import datetime
 
-# Create current_run directory if it doesn't exist
-CURRENT_RUN_DIR = "current_run"
+# Create run_current directory if it doesn't exist
+CURRENT_RUN_DIR = "run_current"
 os.makedirs(CURRENT_RUN_DIR, exist_ok=True)
 
 # Fixed filenames (no timestamp, gets overwritten each run)
