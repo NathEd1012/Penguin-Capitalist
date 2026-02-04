@@ -51,8 +51,13 @@ def synthetic_price_bar(symbol, price_history):
     if symbol not in price_history or not price_history[symbol]:
         return 100.0 + hash(symbol) % 50
     last = price_history[symbol][-1]
+    # Ensure last price is valid
+    if last <= 0:
+        return 100.0 + hash(symbol) % 50
     change_pct = random.gauss(0, 0.3)
-    return max(0.01, last * (1 + change_pct / 100))
+    new_price = last * (1 + change_pct / 100)
+    # Ensure minimum price of $0.01
+    return max(0.01, new_price)
 
 
 def plot_capital_curves(curves, filename):
@@ -255,9 +260,11 @@ def run():
         print("\n\n⛔ Interrupted by user...")
         # Only save if we had meaningful trading time (>10 minutes)
         if actual_trading_minutes < 10:
-            print(f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not saving run.")
+            print(
+                f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not saving run."
+            )
             sys.exit(0)
-        
+
         print("💾 Saving current state...")
         # Save current curves and trades
         with open(CURVES_DATA_FILE, "w") as f:
@@ -298,7 +305,9 @@ def run():
         print(f"📊 Saved interrupted curves to {CURVES_DATA_FILE}")
         # Only generate full report if run was at least 10 minutes of actual trading
         if actual_trading_minutes >= 10:
-            print(f"\n✓ Run had {actual_trading_minutes} minutes of trading - generating full final report...")
+            print(
+                f"\n✓ Run had {actual_trading_minutes} minutes of trading - generating full final report..."
+            )
 
             # Get latest prices
             latest_prices = {
@@ -327,13 +336,13 @@ def run():
             # Generate final PDF report
             pdf_filename = os.path.join("run_current", "report_interrupted.pdf")
             create_final_report_pdf(curves, portfolios, pdf_filename)
-            
+
             # Archive to run_old with timestamp
             now = datetime.now()
             timestamp = now.strftime("%y%m%d_%H%M")
             old_run_dir = os.path.join("run_old", f"run_{timestamp}")
             os.makedirs(old_run_dir, exist_ok=True)
-            
+
             for filename in os.listdir("run_current"):
                 src = os.path.join("run_current", filename)
                 if os.path.isfile(src):
@@ -396,16 +405,14 @@ def run():
                     mid = synthetic_price_bar(s, price_history)
                     spread = mid * 0.001  # 0.1% spread for synthetic
                     bid, ask = mid - spread / 2, mid + spread / 2
-                    print(f"  {s}: ${mid:.2f} (synthetic, spread ${spread:.4f})")
+                    print(f"{s}: ${bid:.2f}", end="  ")
                 else:
                     print(f"  ⚠️ No quote for {s}, skipping")
                     continue
             else:
                 mid = (bid + ask) / 2
                 spread = ask - bid
-                print(
-                    f"  {s}: ${mid:.2f} (bid ${bid:.2f}, ask ${ask:.2f}, spread ${spread:.4f})"
-                )
+                print(f"{s}: ${bid:.2f}", end="  ")
 
             bid_ask_prices[s] = (bid, ask)
             price_history[s].append(mid)  # Store mid for history/charting
@@ -430,6 +437,10 @@ def run():
                     continue
 
                 if decision == "BUY":
+                    # Validate price is not $0 before buying
+                    if ask <= 0:
+                        print(f"    ⚠️ {penguin.name} skipped BUY {qty} {s} - invalid price ${ask:.2f}")
+                        continue
                     # Buy at ask price
                     success = portfolio.buy(s, ask, qty=qty)
                     if success:
@@ -544,14 +555,14 @@ def run():
     # Generate final PDF report with capital curves and trade summary
     pdf_filename = os.path.join("run_current", "report.pdf")
     create_final_report_pdf(curves, portfolios, pdf_filename)
-    
+
     # Save to run_old only if meaningful run (>10 minutes of actual trading)
     if actual_trading_minutes >= 10:
         now = datetime.now()
         timestamp = now.strftime("%y%m%d_%H%M")
         old_run_dir = os.path.join("run_old", f"run_{timestamp}")
         os.makedirs(old_run_dir, exist_ok=True)
-        
+
         # Copy files from run_current to timestamped folder in run_old
         for filename in os.listdir("run_current"):
             src = os.path.join("run_current", filename)
@@ -560,7 +571,9 @@ def run():
                 shutil.copy2(src, dst)
         print(f"💾 Archived run to {old_run_dir}")
     else:
-        print(f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not archiving to run_old.")
+        print(
+            f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not archiving to run_old."
+        )
 
     # Save trades log
     with open(TRADES_LOG_FILE, "w") as f:
