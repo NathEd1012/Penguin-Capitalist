@@ -32,6 +32,10 @@ class AlpacaClient:
 
         self.feed = DataFeed.IEX
         self.tz = pytz.timezone("US/Eastern")
+        
+        # Track last seen prices to detect stale data
+        self._last_prices = {}  # {symbol: (bid, ask, timestamp)}
+        self._no_update_count = {}  # {symbol: consecutive_no_update_minutes}
 
     # ---------- Time ----------
     def now_et(self) -> datetime:
@@ -52,7 +56,39 @@ class AlpacaClient:
         q = self.get_quote(symbol)
         if not q or q.bid_price is None or q.ask_price is None:
             return None, None
-        return q.bid_price, q.ask_price
+        
+        bid, ask = q.bid_price, q.ask_price
+        now = datetime.now(pytz.UTC)
+        quote_time = q.timestamp if hasattr(q, 'timestamp') else now
+        
+        # Check if quote is stale (older than 5 minutes)
+        age_seconds = (now - quote_time).total_seconds()
+        if age_seconds > 300:  # 5 minutes
+            print(f"  ⚠️ Stale quote for {symbol}: {age_seconds:.0f}s old")
+            return None, None
+        
+        # Check if price hasn't changed for multiple consecutive minutes
+        # This catches IEX feed issues where quotes stop updating
+        if symbol in self._last_prices:
+            last_bid, last_ask, last_time = self._last_prices[symbol]
+            
+            # If bid/ask are identical to last check, increment counter
+            if bid == last_bid and ask == last_ask:
+                self._no_update_count[symbol] = self._no_update_count.get(symbol, 0) + 1
+                
+                # After 3 minutes of no updates during market hours, flag as stale
+                if self._no_update_count[symbol] >= 3:
+                    if self.market_is_open():
+                        print(f"  ⚠️ No price update for {symbol} ({self._no_update_count[symbol]} min): ${bid:.2f} / ${ask:.2f}")
+                        # Don't reject yet, but warn
+            else:
+                # Price changed, reset counter
+                self._no_update_count[symbol] = 0
+        
+        # Store this quote for next comparison
+        self._last_prices[symbol] = (bid, ask, now)
+        
+        return bid, ask
 
     def get_mid_price(self, symbol: str) -> Optional[float]:
         bid, ask = self.get_bid_ask(symbol)

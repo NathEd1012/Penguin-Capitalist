@@ -43,6 +43,7 @@ from penguins import (
     MeanReversionPenguin,
     BreakoutPenguin,
     TrendPenguin,
+    CopilotPenguin,
 )
 
 
@@ -102,7 +103,7 @@ def plot_capital_curves(curves, filename):
     print(f"📈 Updated capital curves to {filename}")
 
 
-def create_final_report_pdf(curves, portfolios, filename):
+def create_final_report_pdf(curves, portfolios, filename, latest_prices=None):
     """Create PDF with capital curves and per-symbol trade summary."""
     with PdfPages(filename) as pdf:
         # Page 1: Capital Curves
@@ -153,7 +154,15 @@ def create_final_report_pdf(curves, portfolios, filename):
             ax.axis("tight")
             ax.axis("off")
 
-            summary = portfolio.get_symbol_summary()
+            summary = portfolio.get_symbol_summary(latest_prices or {})
+
+            cash = portfolio.cash
+            market_value = 0.0
+            if latest_prices:
+                for symbol, pos in portfolio.positions.items():
+                    if symbol in latest_prices:
+                        market_value += pos.qty * latest_prices[symbol]
+            total_value = cash + market_value
 
             # Build table data
             table_data = [
@@ -161,10 +170,11 @@ def create_final_report_pdf(curves, portfolios, filename):
                     "Symbol",
                     "Buy Cnt",
                     "Sell Cnt",
-                    "Total Qty Bought",
+                    "Pos Qty",
+                    "Market Value",
                     "Total Cost",
                     "Total Revenue",
-                    "PnL",
+                    "Total PnL",
                     "PnL %",
                 ]
             ]
@@ -172,7 +182,7 @@ def create_final_report_pdf(curves, portfolios, filename):
             total_pnl = 0
             for symbol in sorted(summary.keys()):
                 s = summary[symbol]
-                pnl = s["pnl"]
+                pnl = s["total_pnl"]
                 pnl_pct = s["pnl_pct"]
                 total_pnl += pnl
 
@@ -181,7 +191,8 @@ def create_final_report_pdf(curves, portfolios, filename):
                         symbol,
                         str(s["buy_count"]),
                         str(s["sell_count"]),
-                        str(s["total_qty_bought"]),
+                        str(s["position_qty"]),
+                        f"${s['market_value']:,.2f}",
                         f"${s['total_cost']:,.2f}",
                         f"${s['total_revenue']:,.2f}",
                         f"${pnl:,.2f}",
@@ -190,13 +201,25 @@ def create_final_report_pdf(curves, portfolios, filename):
                 )
 
             # Add total row
-            table_data.append(["TOTAL", "", "", "", "", "", f"${total_pnl:,.2f}", ""])
+            table_data.append(
+                [
+                    "TOTAL",
+                    "",
+                    "",
+                    "",
+                    f"${market_value:,.2f}",
+                    "",
+                    "",
+                    f"${total_pnl:,.2f}",
+                    "",
+                ]
+            )
 
             table = ax.table(
                 cellText=table_data,
                 cellLoc="center",
                 loc="center",
-                colWidths=[0.1, 0.1, 0.1, 0.15, 0.15, 0.15, 0.15, 0.1],
+                colWidths=[0.09, 0.08, 0.08, 0.08, 0.13, 0.13, 0.13, 0.12, 0.09],
             )
             table.auto_set_font_size(False)
             table.set_fontsize(9)
@@ -215,11 +238,67 @@ def create_final_report_pdf(curves, portfolios, filename):
             title = f"Trade Summary: {penguin_name}"
             fig.suptitle(title, fontsize=14, weight="bold", y=0.98)
 
+            # Portfolio totals at the top
+            summary_text = (
+                f"Cash: ${cash:,.2f}    "
+                f"Market Value: ${market_value:,.2f}    "
+                f"Total Value: ${total_value:,.2f}"
+            )
+            fig.text(0.5, 0.93, summary_text, ha="center", fontsize=11)
+
             plt.tight_layout()
             pdf.savefig(fig, bbox_inches="tight")
             plt.close()
 
     print(f"📄 Final report saved to {filename}")
+
+
+def check_consistency(portfolio, latest_prices, curve_values, max_jump_pct=0.15):
+    """Validate positions vs trade history and detect suspicious curve jumps."""
+    warnings = []
+
+    # 1) Positions vs trade history
+    expected_qty = {}
+    for t in portfolio.trade_history:
+        expected_qty[t.symbol] = expected_qty.get(t.symbol, 0) + (
+            t.qty if t.side == "BUY" else -t.qty
+        )
+
+    for symbol, pos in portfolio.positions.items():
+        expected = expected_qty.get(symbol, 0)
+        if expected != pos.qty:
+            warnings.append(
+                f"Position mismatch for {symbol}: positions={pos.qty}, trades={expected}"
+            )
+
+    for symbol, qty in expected_qty.items():
+        if qty != 0 and symbol not in portfolio.positions:
+            warnings.append(
+                f"Missing position for {symbol}: trades imply qty={qty}, positions=0"
+            )
+
+    # 2) Curve vs portfolio value
+    if curve_values:
+        computed_value = portfolio.value(latest_prices)
+        curve_value = curve_values[-1]
+        if abs(computed_value - curve_value) > 0.01:
+            warnings.append(
+                f"Curve mismatch: curve=${curve_value:,.2f}, portfolio=${computed_value:,.2f}"
+            )
+
+        # 3) Large jumps in curve
+        for i in range(1, len(curve_values)):
+            prev = curve_values[i - 1]
+            curr = curve_values[i]
+            if prev <= 0:
+                continue
+            pct = (curr - prev) / prev
+            if abs(pct) >= max_jump_pct:
+                warnings.append(
+                    f"Large jump at minute {i + 1}: {pct:+.2%} (from ${prev:,.2f} to ${curr:,.2f})"
+                )
+
+    return warnings
 
 
 def run():
@@ -233,6 +312,7 @@ def run():
     client = AlpacaClient(paper=True)
 
     penguins = [
+        CopilotPenguin(),
         MomentumPenguin(),
         MeanReversionPenguin(),
         BreakoutPenguin(),
@@ -253,7 +333,7 @@ def run():
     }
     price_history = defaultdict(list)
     curves = {p.name: [] for p in penguins}
-    trades_log = {p.name: [] for p in penguins}
+    trades_log = {p.name: [] for p in penguins}  # List of (minute, trade_str) tuples
     actual_trading_minutes = 0  # Track minutes when market was actually open
 
     def handle_sigint(signum, frame):
@@ -280,6 +360,14 @@ def run():
             latest_prices = {
                 s: price_history[s][-1] for s in SYMBOLS if price_history[s]
             }
+            consistency_warnings = {
+                name: check_consistency(
+                    portfolios[name],
+                    latest_prices,
+                    curves.get(name, []),
+                )
+                for name in portfolios
+            }
             for name in sorted(portfolios.keys()):
                 p = portfolios[name]
                 v = p.value(latest_prices)
@@ -293,10 +381,22 @@ def run():
                 f.write(f"  Current Positions: {len(p.positions)}\n")
                 f.write(f"  Current Cash:    ${p.cash:,.2f}\n\n")
 
+                warnings = consistency_warnings.get(name, [])
+                if warnings:
+                    f.write("  Consistency Warnings:\n")
+                    for w in warnings:
+                        f.write(f"    - {w}\n")
+                    f.write("\n")
+
                 if trades_log[name]:
                     f.write(f"  Trades (up to interruption):\n")
-                    for i, trade in enumerate(trades_log[name], 1):
-                        f.write(f"    {i}. {trade}\n")
+                    current_minute = None
+                    for minute_num, trade_str in trades_log[name]:
+                        time_bucket = (minute_num // 10) * 10
+                        if time_bucket != current_minute:
+                            current_minute = time_bucket
+                            f.write(f"\n    Minute {time_bucket}-{time_bucket + 9}:\n")
+                        f.write(f"      {trade_str}\n")
                 else:
                     f.write(f"  Trades: None\n")
                 f.write("\n")
@@ -314,28 +414,15 @@ def run():
                 s: price_history[s][-1] for s in SYMBOLS if price_history[s]
             }
 
-            # Liquidate all positions at market mid-prices
-            print("💨 Liquidating all positions...")
-            for penguin in penguins:
-                portfolio = portfolios[penguin.name]
-                for symbol in list(portfolio.positions.keys()):
-                    pos = portfolio.positions[symbol]
-                    if pos.qty > 0:
-                        price = latest_prices.get(symbol, 100.0)
-                        portfolio.sell(symbol, price, qty=pos.qty)
-                        print(
-                            f"  {penguin.name}: Sold {pos.qty} {symbol} @ ${price:.2f}"
-                        )
+            # Keep portfolios intact to avoid double-counting trades on interruption
+            # Use latest prices for market value instead of force-liquidating
 
-            # Record final portfolio values
-            for penguin in penguins:
-                p = portfolios[penguin.name]
-                v = p.value(latest_prices)
-                curves[penguin.name].append(v)
+            # Ensure capital curve plot matches the report
+            plot_capital_curves(curves, CAPITAL_CURVES_FILE)
 
             # Generate final PDF report
             pdf_filename = os.path.join("run_current", "report_interrupted.pdf")
-            create_final_report_pdf(curves, portfolios, pdf_filename)
+            create_final_report_pdf(curves, portfolios, pdf_filename, latest_prices)
 
             # Archive to run_old with day/time structure
             now = datetime.now().replace(minute=0, second=0)
@@ -361,18 +448,22 @@ def run():
         try:
             market_open = client.market_is_open()
         except Exception as e:
-            print(f"  ⚠️ Connection error checking market status: {type(e).__name__}. Retrying in 30s...")
+            print(
+                f"  ⚠️ Connection error checking market status: {type(e).__name__}. Retrying in 30s..."
+            )
             time.sleep(30)
             continue
-        
+
         if not market_open:
             try:
                 clock = client.trading.get_clock()
             except Exception as e:
-                print(f"  ⚠️ Connection error getting clock: {type(e).__name__}. Retrying in 30s...")
+                print(
+                    f"  ⚠️ Connection error getting clock: {type(e).__name__}. Retrying in 30s..."
+                )
                 time.sleep(30)
                 continue
-            
+
             next_open = clock.next_open
             now = datetime.now(pytz.timezone("US/Eastern"))
             time_to_open = (next_open - now).total_seconds()
@@ -405,6 +496,7 @@ def run():
 
         # Poll prices for each symbol
         bid_ask_prices = {}
+        price_source = {}  # Track if price is real or synthetic
         for s in SYMBOLS:
             try:
                 bid, ask = client.get_bid_ask(s)
@@ -419,14 +511,16 @@ def run():
                     mid = synthetic_price_bar(s, price_history)
                     spread = mid * 0.001  # 0.1% spread for synthetic
                     bid, ask = mid - spread / 2, mid + spread / 2
-                    print(f"{s}: ${bid:.2f}", end="  ")
+                    print(f"{s}: ${bid:.2f} (synthetic)", end="  ")
+                    price_source[s] = "synthetic"
                 else:
                     print(f"  ⚠️ No quote for {s}, skipping")
                     continue
             else:
                 mid = (bid + ask) / 2
                 spread = ask - bid
-                print(f"{s}: ${bid:.2f}", end="  ")
+                print(f"{s}: ${bid:.2f} (real)", end="  ")
+                price_source[s] = "real"
 
             bid_ask_prices[s] = (bid, ask)
             price_history[s].append(mid)  # Store mid for history/charting
@@ -460,14 +554,20 @@ def run():
                     # Buy at ask price
                     success = portfolio.buy(s, ask, qty=qty)
                     if success:
-                        print(f"    ✓ {penguin.name} BUY {qty} {s} @ ${ask:.2f} (ask)")
-                        trades_log[penguin.name].append(f"BUY {qty} {s} @ ${ask:.2f}")
+                        source_marker = " [synthetic]" if price_source.get(s) == "synthetic" else ""
+                        print(f"    ✓ {penguin.name} BUY {qty} {s} @ ${ask:.2f} (ask){source_marker}")
+                        trades_log[penguin.name].append((minute, f"BUY {qty} {s} @ ${ask:.2f}{source_marker}"))
                 elif decision == "SELL":
+                    # Validate price is not $0 before selling
+                    if bid <= 0:
+                        print(f"    ⚠️ {penguin.name} skipped SELL {qty} {s} - invalid price ${bid:.2f}")
+                        continue
                     # Sell at bid price
                     success = portfolio.sell(s, bid, qty=qty)
                     if success:
-                        print(f"    ✓ {penguin.name} SELL {qty} {s} @ ${bid:.2f} (bid)")
-                        trades_log[penguin.name].append(f"SELL {qty} {s} @ ${bid:.2f}")
+                        source_marker = " [synthetic]" if price_source.get(s) == "synthetic" else ""
+                        print(f"    ✓ {penguin.name} SELL {qty} {s} @ ${bid:.2f} (bid){source_marker}")
+                        trades_log[penguin.name].append((minute, f"SELL {qty} {s} @ ${bid:.2f}{source_marker}"))
 
         # Record portfolio values
         latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
@@ -569,8 +669,9 @@ def run():
     print(f"\n📈 Saved capital curves to {CAPITAL_CURVES_FILE}")
 
     # Generate final PDF report with capital curves and trade summary
+    latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
     pdf_filename = os.path.join("run_current", "report.pdf")
-    create_final_report_pdf(curves, portfolios, pdf_filename)
+    create_final_report_pdf(curves, portfolios, pdf_filename, latest_prices)
 
     # Save to run_old only if meaningful run (>10 minutes of actual trading)
     if actual_trading_minutes >= 10:
@@ -601,6 +702,15 @@ def run():
         f.write(f"Initial Capital: ${INITIAL_CAPITAL:,.2f}\n\n")
         f.write("=" * 80 + "\n\n")
 
+        consistency_warnings = {
+            name: check_consistency(
+                portfolios[name],
+                latest_prices,
+                curves.get(name, []),
+            )
+            for name in portfolios
+        }
+
         for name in sorted(portfolios.keys()):
             port = portfolios[name]
             val = final_values[name]
@@ -614,10 +724,22 @@ def run():
             f.write(f"  Final Positions: {len(port.positions)}\n")
             f.write(f"  Final Cash:    ${port.cash:,.2f}\n\n")
 
+            warnings = consistency_warnings.get(name, [])
+            if warnings:
+                f.write("  Consistency Warnings:\n")
+                for w in warnings:
+                    f.write(f"    - {w}\n")
+                f.write("\n")
+
             if trades_log[name]:
                 f.write(f"  Trades:\n")
-                for i, trade in enumerate(trades_log[name], 1):
-                    f.write(f"    {i}. {trade}\n")
+                current_minute = None
+                for minute_num, trade_str in trades_log[name]:
+                    time_bucket = (minute_num // 10) * 10
+                    if time_bucket != current_minute:
+                        current_minute = time_bucket
+                        f.write(f"\n    Minute {time_bucket}-{time_bucket + 9}:\n")
+                    f.write(f"      {trade_str}\n")
             else:
                 f.write(f"  Trades: None\n")
             f.write("\n")
