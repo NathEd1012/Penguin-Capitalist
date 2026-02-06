@@ -56,7 +56,7 @@ class Portfolio:
         # Prevent selling at $0 (data retrieval error)
         if price <= 0:
             return False
-        
+
         if symbol not in self.positions:
             return False
 

@@ -554,20 +554,34 @@ def run():
                     # Buy at ask price
                     success = portfolio.buy(s, ask, qty=qty)
                     if success:
-                        source_marker = " [synthetic]" if price_source.get(s) == "synthetic" else ""
-                        print(f"    ✓ {penguin.name} BUY {qty} {s} @ ${ask:.2f} (ask){source_marker}")
-                        trades_log[penguin.name].append((minute, f"BUY {qty} {s} @ ${ask:.2f}{source_marker}"))
+                        source_marker = (
+                            " [synthetic]" if price_source.get(s) == "synthetic" else ""
+                        )
+                        print(
+                            f"    ✓ {penguin.name} BUY {qty} {s} @ ${ask:.2f} (ask){source_marker}"
+                        )
+                        trades_log[penguin.name].append(
+                            (minute, f"BUY {qty} {s} @ ${ask:.2f}{source_marker}")
+                        )
                 elif decision == "SELL":
                     # Validate price is not $0 before selling
                     if bid <= 0:
-                        print(f"    ⚠️ {penguin.name} skipped SELL {qty} {s} - invalid price ${bid:.2f}")
+                        print(
+                            f"    ⚠️ {penguin.name} skipped SELL {qty} {s} - invalid price ${bid:.2f}"
+                        )
                         continue
                     # Sell at bid price
                     success = portfolio.sell(s, bid, qty=qty)
                     if success:
-                        source_marker = " [synthetic]" if price_source.get(s) == "synthetic" else ""
-                        print(f"    ✓ {penguin.name} SELL {qty} {s} @ ${bid:.2f} (bid){source_marker}")
-                        trades_log[penguin.name].append((minute, f"SELL {qty} {s} @ ${bid:.2f}{source_marker}"))
+                        source_marker = (
+                            " [synthetic]" if price_source.get(s) == "synthetic" else ""
+                        )
+                        print(
+                            f"    ✓ {penguin.name} SELL {qty} {s} @ ${bid:.2f} (bid){source_marker}"
+                        )
+                        trades_log[penguin.name].append(
+                            (minute, f"SELL {qty} {s} @ ${bid:.2f}{source_marker}")
+                        )
 
         # Record portfolio values
         latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
