@@ -9,7 +9,7 @@
   },
   "TrendPenguin": {
     "wins": 3,
-    "runs": 13
+    "runs": 14
   },
   "CarefulTrendPenguin": {
     "wins": 0,
@@ -17,19 +17,19 @@
   },
   "MomentumPenguin": {
     "wins": 1,
-    "runs": 11
+    "runs": 12
   },
   "MeanReversionPenguin": {
     "wins": 3,
-    "runs": 11
+    "runs": 12
   },
   "BreakoutPenguin": {
-    "wins": 0,
-    "runs": 11
+    "wins": 1,
+    "runs": 12
   },
   "CopilotPenguin": {
     "wins": 3,
-    "runs": 6
+    "runs": 7
   },
   "Moving Average Crossover": {
     "wins": 0,

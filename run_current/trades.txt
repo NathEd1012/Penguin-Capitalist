@@ -1,1180 +1,5510 @@
-Penguin Trading Simulation Log (Interrupted)
-Started: 2026-02-05 16:28:47
-Duration: 59 minutes (interrupted)
+Penguin Trading Simulation Log
+Started: 2026-02-06 21:38:05
+Duration: 300 minutes
 Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO, GLD, SLV, PPLT, COPX, JO, LIT, URTH, GDXJ, SIL, REMX, PICK
 Initial Capital: $5,000.00
 
 ================================================================================
 
 BreakoutPenguin
-  Current Value:   $4,876.76
-  PnL:             $-123.24  (-2.46%)
-  Total Trades:    44
-  Current Positions: 5
-  Current Cash:    $692.61
+  Final Value:   $6,710.54
+  PnL:           $+1,710.54  (+34.21%)
+  Total Trades:  432
+  Final Positions: 14
+  Final Cash:    $208.63
 
-  Trades (up to interruption):
+  Consistency Warnings:
+    - Large jump at minute 58: +36.38% (from $4,874.44 to $6,647.69)
+
+  Trades:
 
     Minute 20-29:
-      BUY 1 LMT @ $304.07 [synthetic]
-      BUY 1 NOC @ $349.75 [synthetic]
-      BUY 1 LMT @ $304.40 [synthetic]
-      BUY 1 PPLT @ $191.58
-      BUY 1 PICK @ $59.15
-      BUY 1 SLV @ $70.50
-      BUY 1 PPLT @ $193.49
-      BUY 1 MP @ $61.66
-      BUY 1 NOC @ $350.06 [synthetic]
-      BUY 1 REMX @ $84.80
-      BUY 1 NOC @ $350.83 [synthetic]
-      BUY 1 REMX @ $85.61
-      BUY 1 NOC @ $351.11 [synthetic]
-      BUY 1 NOC @ $352.66 [synthetic]
+      BUY 1 NVDA @ $181.24
+      BUY 1 MP @ $63.27
+      BUY 1 TSLA @ $409.40
+      BUY 1 NVDA @ $181.51
+      BUY 1 COPX @ $95.00
+      BUY 1 GDXJ @ $127.22
+      BUY 1 REMX @ $86.96
+      BUY 1 AAPL @ $280.88
+      BUY 1 NOC @ $129.30 [synthetic]
+      BUY 1 JO @ $109.36 [synthetic]
+      BUY 1 NOC @ $129.37 [synthetic]
+      BUY 1 PPLT @ $188.58
+      BUY 1 NOC @ $129.94 [synthetic]
+      BUY 1 NOC @ $130.03 [synthetic]
+      BUY 1 PPLT @ $188.79
+      BUY 1 JO @ $109.51 [synthetic]
+      SELL 1 MP @ $56.99
+      BUY 1 GLD @ $454.91
+      BUY 1 PPLT @ $188.88
+      BUY 1 GDXJ @ $127.33
+      BUY 1 SIL @ $96.52
+      BUY 1 AAPL @ $280.88
+      BUY 1 NOC @ $130.14 [synthetic]
+      BUY 1 GLD @ $459.00
+      BUY 1 JO @ $110.00 [synthetic]
+      BUY 1 NOC @ $130.71 [synthetic]
+      SELL 1 GLD @ $441.66
+      BUY 1 SLV @ $69.39
+      BUY 1 JO @ $110.57 [synthetic]
+      BUY 1 LIT @ $75.00
+      BUY 1 GDXJ @ $127.49
+      BUY 1 NOC @ $130.99 [synthetic]
+      SELL 1 GLD @ $441.66
+      BUY 1 JO @ $110.57 [synthetic]
+      SELL 1 LIT @ $69.72
 
     Minute 30-39:
-      SELL 1 PICK @ $58.36
-      BUY 1 GLD @ $457.65
-      SELL 1 MP @ $55.36
-      BUY 1 NOC @ $353.08 [synthetic]
-      SELL 1 GLD @ $430.80
-      SELL 1 SLV @ $68.64
-      SELL 1 PPLT @ $179.24
-      SELL 1 PPLT @ $179.24
-      BUY 1 JO @ $140.98 [synthetic]
-      SELL 1 NOC @ $348.79 [synthetic]
+      SELL 1 REMX @ $85.12
+      BUY 1 NOC @ $131.22 [synthetic]
+      BUY 1 PPLT @ $189.39
+      BUY 1 GDXJ @ $127.35
+      SELL 1 NVDA @ $179.80
+      BUY 1 JO @ $110.85 [synthetic]
+      SELL 1 NVDA @ $179.78
+      BUY 1 MSTR @ $128.20
+      BUY 1 PPLT @ $193.81
+      BUY 1 GDXJ @ $127.58
+      BUY 1 PICK @ $59.69
+      BUY 1 SLV @ $69.43
+      BUY 1 GDXJ @ $127.77
 
     Minute 40-49:
-      SELL 1 NOC @ $348.04 [synthetic]
-      BUY 1 LMT @ $304.46 [synthetic]
-      BUY 1 LMT @ $305.03 [synthetic]
-      SELL 1 NOC @ $347.34 [synthetic]
-      BUY 1 LMT @ $305.31 [synthetic]
-      SELL 1 NOC @ $346.76 [synthetic]
-      BUY 1 LMT @ $305.69 [synthetic]
-      BUY 1 LMT @ $306.91 [synthetic]
-      BUY 1 LMT @ $307.42 [synthetic]
-      BUY 1 AAPL @ $278.20
-      SELL 1 NOC @ $346.68 [synthetic]
-      BUY 1 LMT @ $308.89 [synthetic]
+      SELL 1 AAPL @ $263.24
+      SELL 1 AAPL @ $263.24
+      BUY 1 NVDA @ $182.42
+      BUY 1 SLV @ $69.67
+      BUY 1 PPLT @ $195.85
+      BUY 1 SIL @ $97.50
+      SELL 1 JO @ $109.53 [synthetic]
 
     Minute 50-59:
-      SELL 1 NOC @ $345.09 [synthetic]
-      SELL 1 REMX @ $81.97
-      SELL 1 JO @ $139.29 [synthetic]
-      SELL 1 REMX @ $81.97
-      BUY 1 GLD @ $457.65
-      BUY 1 AAPL @ $278.20
-      BUY 1 MSFT @ $401.76
-      BUY 1 NVO @ $44.08
+      BUY 1 NOC @ $132.49 [synthetic]
+      SELL 1 JO @ $109.30 [synthetic]
+      SELL 1 JO @ $108.84 [synthetic]
+      SELL 1 COPX @ $84.33
+      SELL 1 JO @ $108.57 [synthetic]
+      SELL 1 JO @ $108.53 [synthetic]
+      BUY 1 URTH @ $189.10
+      BUY 1 REMX @ $86.58
+      SELL 1 JO @ $108.53 [synthetic]
+      BUY 1 AMD @ $208.00
+      SELL 1 NOC @ $129.76 [synthetic]
+      SELL 1 GDXJ @ $127.45
+      SELL 1 SLV @ $69.08
+      BUY 1 URTH @ $189.17
+      SELL 1 GDXJ @ $127.20
+      SELL 1 SLV @ $69.07
+      BUY 1 URTH @ $189.26
+
+    Minute 60-69:
+      BUY 1 PLTR @ $139.43
+      SELL 1 GDXJ @ $126.97
+      SELL 1 PLTR @ $132.50
+      BUY 1 MSTR @ $133.25
+      SELL 1 URTH @ $188.74
+      SELL 1 SIL @ $95.84
+      SELL 1 NVDA @ $181.86
+      BUY 1 MP @ $59.99
+      SELL 1 URTH @ $188.53
+      SELL 1 SIL @ $95.91
+      SELL 1 REMX @ $85.13
+      SELL 1 TSLA @ $409.00
+      BUY 1 NOC @ $351.92 [synthetic]
+      SELL 1 PPLT @ $188.07
+      SELL 1 URTH @ $188.39
+      SELL 1 SLV @ $68.41
+      SELL 1 PPLT @ $183.30
+      SELL 1 GDXJ @ $126.90
+      BUY 1 NVDA @ $182.77
+      BUY 1 LIT @ $71.03
+
+    Minute 70-79:
+      SELL 1 PPLT @ $183.30
+      BUY 1 LIT @ $71.04
+      BUY 1 NOC @ $352.79 [synthetic]
+      SELL 1 PPLT @ $183.30
+      BUY 1 LIT @ $71.09
+      BUY 1 SIL @ $96.82
+      BUY 1 NVO @ $46.69
+      BUY 1 NOC @ $353.27 [synthetic]
+      BUY 1 LMT @ $614.29
+      BUY 1 NVO @ $46.75
+      BUY 1 GDXJ @ $128.01
+      BUY 1 SIL @ $96.99
+      BUY 1 NVO @ $46.81
+      SELL 1 NVO @ $46.51
+      BUY 1 REMX @ $86.72
+
+    Minute 80-89:
+      SELL 1 GDXJ @ $126.88
+      SELL 1 SIL @ $95.87
+      BUY 1 BE @ $149.00
+      BUY 1 REMX @ $87.16
+      SELL 1 GDXJ @ $126.78
+      SELL 1 SIL @ $95.87
+
+    Minute 90-99:
+      BUY 1 NVO @ $46.87
+      SELL 1 GDXJ @ $126.59
+      BUY 1 AAPL @ $280.00
+      SELL 1 PICK @ $58.70
+      SELL 1 BE @ $116.31
+      BUY 1 SLV @ $69.42
+      BUY 1 SIL @ $96.87
+
+    Minute 100-109:
+      SELL 1 AMD @ $206.80
+      BUY 1 JO @ $107.07 [synthetic]
+      BUY 1 SLV @ $69.57
+      SELL 1 AAPL @ $278.75
+      BUY 1 MP @ $63.27
+      BUY 1 COPX @ $85.14
+      BUY 1 REMX @ $87.67
+      BUY 1 LIT @ $71.41
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $85.14
+      BUY 1 JO @ $107.14 [synthetic]
+      SELL 1 NOC @ $350.99 [synthetic]
+      SELL 1 PPLT @ $183.30
+      BUY 1 URTH @ $189.72
+
+    Minute 110-119:
+      BUY 1 NVDA @ $184.45
+      SELL 1 NOC @ $350.01 [synthetic]
+      BUY 1 NVDA @ $184.53
+      BUY 1 MSTR @ $138.53
+      SELL 1 NVO @ $46.61
+      BUY 1 MSTR @ $138.53
+      SELL 1 NOC @ $349.45 [synthetic]
+      BUY 1 NVDA @ $184.58
+      BUY 1 COPX @ $85.14
+      BUY 1 NVDA @ $184.80
+      SELL 1 LIT @ $70.65 [synthetic]
+      SELL 1 LIT @ $70.64 [synthetic]
+      BUY 1 JO @ $107.42 [synthetic]
+      SELL 1 LMT @ $619.09
+      SELL 1 REMX @ $86.20
+
+    Minute 120-129:
+      SELL 1 SLV @ $69.33
+      SELL 1 SIL @ $96.33
+      SELL 1 REMX @ $86.16
+      BUY 1 AMD @ $212.00
+      BUY 1 NVO @ $46.83
+      BUY 1 BE @ $144.00
+      BUY 1 NOC @ $354.94 [synthetic]
+      BUY 1 NVO @ $46.92
+      SELL 1 REMX @ $85.72
+      BUY 1 PICK @ $59.33
+      BUY 1 JO @ $108.71 [synthetic]
+      BUY 1 JO @ $108.78 [synthetic]
+
+    Minute 130-139:
+      SELL 1 NVDA @ $184.56
+      BUY 1 NVO @ $46.97
+      BUY 1 SLV @ $69.92
+      BUY 1 LIT @ $71.45
+      SELL 1 NVDA @ $184.55
+      BUY 1 SLV @ $69.99
+      BUY 1 JO @ $108.85 [synthetic]
+      SELL 1 NVDA @ $184.44
+      BUY 1 URTH @ $189.77
+      SELL 1 NVDA @ $184.42
+      BUY 1 JO @ $109.24 [synthetic]
+      BUY 1 SLV @ $70.05
+
+    Minute 140-149:
+      SELL 1 MP @ $56.99
+      SELL 1 NVO @ $46.73
+      BUY 1 SLV @ $70.20
+      SELL 1 NVO @ $46.68
+      BUY 1 SLV @ $70.30
+      SELL 1 NVDA @ $184.39
+      SELL 1 NVO @ $46.68
+      SELL 1 LIT @ $70.59
+      BUY 1 PLTR @ $136.93
+      SELL 1 NVO @ $46.63
+      BUY 1 SLV @ $70.43
+      SELL 1 AMD @ $206.80
+      BUY 1 SLV @ $70.49
+      BUY 1 SLV @ $70.53
+      BUY 1 SLV @ $70.63
+      BUY 1 GDXJ @ $128.13
+
+    Minute 150-159:
+      SELL 1 MSTR @ $126.76
+      BUY 1 COPX @ $85.21
+      BUY 1 SLV @ $70.66
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSTR @ $126.76
+      BUY 1 SLV @ $70.68
+      SELL 1 JO @ $107.92 [synthetic]
+      SELL 1 URTH @ $189.44
+      BUY 1 GDXJ @ $128.24
+      BUY 1 SIL @ $97.04
+      BUY 1 PPLT @ $192.25
+      SELL 1 LIT @ $70.48 [synthetic]
+      BUY 1 GDXJ @ $128.35
+      SELL 1 JO @ $107.55 [synthetic]
+      BUY 1 GDXJ @ $128.41
+      SELL 1 JO @ $107.47 [synthetic]
+      BUY 1 PICK @ $59.29
+      BUY 1 COPX @ $85.26
+      SELL 1 PLTR @ $133.00
+
+    Minute 160-169:
+      SELL 1 NVO @ $46.61
+      BUY 1 PICK @ $59.40
+      SELL 1 NOC @ $708.65
+      BUY 1 URTH @ $189.98
+      BUY 1 NVO @ $46.76
+      BUY 1 NVO @ $46.78
+      BUY 1 NVO @ $46.79
+      SELL 1 SLV @ $70.12
+      SELL 1 COPX @ $84.24
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $126.76
+      SELL 1 NOC @ $353.81 [synthetic]
+      SELL 1 SLV @ $69.92
+      SELL 1 GDXJ @ $127.60
+      SELL 1 NOC @ $353.75 [synthetic]
+      SELL 1 SLV @ $69.86
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.24
+      SELL 1 URTH @ $189.43
+      SELL 1 GDXJ @ $127.53
+
+    Minute 170-179:
+      SELL 1 GDXJ @ $127.55
+      BUY 1 TSLA @ $415.00
+      BUY 1 LIT @ $71.29 [synthetic]
+      SELL 1 NVO @ $46.52
+      BUY 1 JO @ $108.62 [synthetic]
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $62.99
+      SELL 1 JO @ $107.31 [synthetic]
+      SELL 1 JO @ $107.31 [synthetic]
+      SELL 1 BE @ $135.16
+      BUY 1 MSFT @ $400.50
+
+    Minute 180-189:
+      SELL 1 TSLA @ $410.01
+      BUY 1 SIL @ $97.16
+      BUY 1 URTH @ $190.02
+      BUY 1 MSTR @ $132.90
+      BUY 1 MSFT @ $400.50
+      BUY 1 NVO @ $46.82
+      BUY 1 GLD @ $456.56
+      BUY 1 REMX @ $87.67
+      BUY 1 PICK @ $59.38
+      BUY 1 AMD @ $212.00
+      SELL 1 JO @ $107.08 [synthetic]
+      SELL 1 LIT @ $70.59
+      BUY 1 GDXJ @ $128.52
+      BUY 1 NVO @ $46.89
+      BUY 1 GDXJ @ $128.51
+      BUY 1 PICK @ $59.38
+      BUY 1 GDXJ @ $128.55
+      BUY 1 COPX @ $85.23
+      BUY 1 GDXJ @ $128.55
+      SELL 1 PICK @ $58.84
+      SELL 1 JO @ $106.83 [synthetic]
+      BUY 1 NVO @ $46.93
+      SELL 1 JO @ $106.48 [synthetic]
+
+    Minute 190-199:
+      BUY 1 NVDA @ $184.86
+      SELL 1 MSFT @ $396.70
+      BUY 1 PPLT @ $191.83
+      BUY 1 URTH @ $189.97
+      SELL 1 MSFT @ $396.70
+      BUY 1 PPLT @ $191.83
+      SELL 1 COPX @ $84.24
+      BUY 1 LIT @ $71.55
+      BUY 1 NVDA @ $184.92
+      SELL 1 URTH @ $189.87
+      SELL 1 REMX @ $86.47
+      BUY 1 NVDA @ $184.96
+      SELL 1 SLV @ $70.05
+      BUY 1 MP @ $62.99
+      BUY 1 MP @ $62.99
+
+    Minute 200-209:
+      SELL 1 NOC @ $354.21 [synthetic]
+      SELL 1 SLV @ $70.00
+      SELL 1 GLD @ $455.91
+      SELL 1 SLV @ $69.96
+      SELL 1 NOC @ $353.18 [synthetic]
+      SELL 1 SLV @ $69.90
+      SELL 1 NVDA @ $184.58
+      BUY 1 SIL @ $97.53
+      BUY 1 REMX @ $87.86
+      SELL 1 NVDA @ $184.29
+      SELL 1 MSTR @ $126.76
+      SELL 1 NOC @ $352.12 [synthetic]
+      SELL 1 AMD @ $207.14
+      SELL 1 NOC @ $351.60 [synthetic]
+      SELL 1 LIT @ $70.26
+      BUY 1 AAPL @ $280.00
+      SELL 1 NOC @ $351.42 [synthetic]
+      SELL 1 GDXJ @ $128.02
+      SELL 1 GDXJ @ $127.93
+      SELL 1 NOC @ $350.58 [synthetic]
+      SELL 1 PICK @ $58.96 [synthetic]
+
+    Minute 210-219:
+      BUY 1 LMT @ $621.91
+      BUY 1 PPLT @ $198.02
+      SELL 1 GDXJ @ $127.91
+      SELL 1 PICK @ $58.86 [synthetic]
+      BUY 1 LMT @ $622.30
+      SELL 1 LIT @ $70.26
+      SELL 1 GDXJ @ $127.88
+      SELL 1 SIL @ $96.69
+      SELL 1 GDXJ @ $127.89
+      SELL 1 SLV @ $69.89
+      SELL 1 REMX @ $86.26
+      SELL 1 PPLT @ $185.28
+      SELL 1 SIL @ $96.56
+      SELL 1 NVDA @ $184.39
+      SELL 1 NVO @ $46.77
+      SELL 1 URTH @ $189.48
+      BUY 1 MSFT @ $399.90
+
+    Minute 220-229:
+      SELL 1 URTH @ $189.46
+      BUY 1 TSLA @ $414.80
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+      BUY 1 MSFT @ $399.90
+      BUY 1 PICK @ $59.42
+      BUY 1 SLV @ $70.22
+      BUY 1 TSLA @ $414.80
+      BUY 1 LIT @ $71.57
+      BUY 1 REMX @ $87.86
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+      BUY 1 TSLA @ $414.80
+      BUY 1 SLV @ $70.23
+      BUY 1 URTH @ $189.89
+      BUY 1 PICK @ $59.42
+      BUY 1 LIT @ $72.50
+      BUY 1 SIL @ $97.36
+      SELL 1 PICK @ $59.32
+      BUY 1 MSTR @ $133.09
+      BUY 1 NVO @ $46.90
+      SELL 1 PPLT @ $185.28
+      BUY 1 COPX @ $85.22
+      BUY 1 NVO @ $46.91
+      SELL 1 PPLT @ $185.28
+
+    Minute 230-239:
+      BUY 1 MSTR @ $135.00
+      BUY 1 NVO @ $46.98
+      BUY 1 SIL @ $97.70
+      SELL 1 AAPL @ $277.20
+      BUY 1 NVO @ $47.06
+      BUY 1 BE @ $144.00
+      BUY 1 NVO @ $47.13
+      SELL 1 LMT @ $620.62
+      SELL 1 COPX @ $84.35
+      BUY 1 REMX @ $87.92
+      BUY 1 MSTR @ $135.00
+      BUY 1 TSLA @ $414.80
+      BUY 1 NVO @ $47.16
+      SELL 1 MP @ $58.22
+      BUY 1 NVO @ $47.23
+      SELL 1 COPX @ $84.34
+      BUY 1 NVO @ $47.25
+
+    Minute 240-249:
+      BUY 1 NVO @ $47.29
+      SELL 1 LMT @ $620.48
+      BUY 1 NVO @ $47.31
+      SELL 1 SLV @ $69.85
+      BUY 1 MSFT @ $399.73
+      SELL 1 REMX @ $86.39
+      BUY 1 NVDA @ $184.65
+      SELL 1 AMD @ $202.00
+      BUY 1 NOC @ $354.34 [synthetic]
+      SELL 1 SLV @ $69.78
+      SELL 1 COPX @ $84.29
+      SELL 1 URTH @ $189.51
+      BUY 1 BE @ $144.00
+      BUY 1 NVO @ $47.34
+      SELL 1 LIT @ $70.23
+      BUY 1 NVDA @ $184.65
+      BUY 1 NVO @ $47.38
+      SELL 1 NOC @ $351.03 [synthetic]
+      BUY 1 NVDA @ $184.85
+      BUY 1 BE @ $144.00
+      BUY 1 PICK @ $59.42
+
+    Minute 250-259:
+      SELL 1 MSTR @ $126.76
+      SELL 1 TSLA @ $410.01
+      BUY 1 SLV @ $70.20
+      BUY 1 SIL @ $97.44
+      BUY 1 NVDA @ $185.08
+      BUY 1 COPX @ $85.22
+      BUY 1 REMX @ $88.00
+      SELL 1 PICK @ $59.02
+
+    Minute 260-269:
+      SELL 1 TSLA @ $410.01
+      SELL 1 SIL @ $96.78
+      BUY 1 NVDA @ $185.09
+      BUY 1 LIT @ $71.55
+      SELL 1 NVO @ $47.26
+      BUY 1 NOC @ $354.92 [synthetic]
+      SELL 1 TSLA @ $410.01
+      BUY 1 NOC @ $355.81 [synthetic]
+      SELL 1 LIT @ $70.28
+      BUY 1 NVO @ $47.40
+      BUY 1 MP @ $62.99
+      SELL 1 TSLA @ $410.01
+      BUY 1 NVO @ $47.43
+      BUY 1 JO @ $105.73 [synthetic]
+      BUY 1 NVDA @ $185.13
+      BUY 1 MP @ $62.99
+
+    Minute 270-279:
+      BUY 1 NVO @ $47.47
+      SELL 1 SLV @ $70.05
+      SELL 1 COPX @ $84.44
+      BUY 1 JO @ $106.60 [synthetic]
+
+    Minute 280-289:
+      SELL 1 MSTR @ $126.76
+      SELL 1 SLV @ $69.91
+      SELL 1 COPX @ $84.44
+      SELL 1 NOC @ $705.39
+      BUY 1 LMT @ $621.02
+      BUY 1 JO @ $107.41 [synthetic]
+      BUY 1 LIT @ $72.50
+      BUY 1 BE @ $144.00
+      BUY 1 REMX @ $87.85
+      SELL 1 REMX @ $86.45
+      BUY 1 NVO @ $47.52
+      SELL 1 REMX @ $86.48
+
+    Minute 290-299:
+      BUY 1 COPX @ $85.27
+      SELL 1 SLV @ $69.91
+      SELL 1 SIL @ $97.04
+      BUY 1 MSTR @ $135.00
+      BUY 1 NVO @ $47.59
+      SELL 1 SLV @ $69.89
+      SELL 1 SLV @ $69.65
+      SELL 1 SIL @ $96.92
+      SELL 1 MP @ $58.22
+      SELL 1 SIL @ $96.71
+      BUY 1 AMD @ $212.00
 
 CopilotPenguin
-  Current Value:   $4,651.76
-  PnL:             $-348.24  (-6.96%)
-  Total Trades:    43
-  Current Positions: 1
-  Current Cash:    $4,465.37
+  Final Value:   $3,166.84
+  PnL:           $-1,833.16  (-36.66%)
+  Total Trades:  274
+  Final Positions: 4
+  Final Cash:    $2,524.26
 
-  Trades (up to interruption):
+  Trades:
 
     Minute 20-29:
-      BUY 2 AAPL @ $282.00
-      BUY 2 PPLT @ $191.58
-      SELL 2 AAPL @ $276.16
-      BUY 1 BE @ $167.06
-      SELL 2 PPLT @ $187.07
-      BUY 2 PLTR @ $137.00
-      SELL 1 BE @ $123.45
-      SELL 2 PLTR @ $130.00
-      BUY 2 LIT @ $70.49
-      SELL 2 LIT @ $68.99
-      BUY 1 REMX @ $85.61
-      BUY 1 BE @ $164.14
-      BUY 1 URTH @ $188.70
-      SELL 1 REMX @ $83.28
-      SELL 1 BE @ $144.81
-      SELL 1 URTH @ $186.82
-      BUY 1 URTH @ $187.66
-      BUY 2 MP @ $61.66
-      BUY 1 BE @ $164.14
-      SELL 2 MP @ $55.36
+      BUY 2 AMD @ $206.00
+      BUY 2 AAPL @ $280.06
+      BUY 2 MSTR @ $122.68
+      SELL 2 MSTR @ $116.40
+      SELL 2 AAPL @ $263.24
+      BUY 2 MSTR @ $123.38
+      SELL 2 AMD @ $196.88
+      SELL 2 MSTR @ $116.40
 
     Minute 30-39:
-      SELL 1 BE @ $123.45
-      SELL 1 URTH @ $187.26
-      BUY 1 MP @ $61.66
-      BUY 1 BE @ $161.25
-      SELL 1 MP @ $55.36
-      SELL 1 BE @ $120.55
-      BUY 1 REMX @ $84.13
-      BUY 2 MP @ $61.66
-      SELL 1 REMX @ $82.42
+      BUY 2 BE @ $149.00
+      BUY 2 AAPL @ $280.85
+      SELL 2 BE @ $119.19
+      BUY 1 MSTR @ $128.20
+      BUY 1 COPX @ $95.00
+      SELL 1 MSTR @ $116.40
+      SELL 1 COPX @ $84.35
 
     Minute 40-49:
-      SELL 2 MP @ $55.36
-      BUY 1 BE @ $158.29
-      BUY 1 URTH @ $187.20
-      SELL 1 BE @ $120.55
-      BUY 2 MP @ $60.51
-      SELL 2 MP @ $55.36
+      BUY 2 BE @ $149.00
+      SELL 2 AAPL @ $263.24
+      SELL 2 BE @ $119.24
+      BUY 2 LIT @ $71.06
+      BUY 2 MSTR @ $123.30
+      BUY 2 PPLT @ $193.81
+      SELL 2 LIT @ $69.55
+      BUY 2 AMD @ $208.00
+      SELL 2 PPLT @ $183.30
+      SELL 2 AMD @ $204.92
+      BUY 2 COPX @ $85.23
+      BUY 2 AAPL @ $279.91
+      SELL 2 MSTR @ $125.06
 
     Minute 50-59:
-      BUY 2 PLTR @ $138.00
-      SELL 2 PLTR @ $129.22
-      BUY 2 PLTR @ $135.78
-      SELL 2 PLTR @ $130.06
-      BUY 2 PPLT @ $189.69
-      BUY 2 AMD @ $202.00
-      SELL 2 PPLT @ $182.42
-      SELL 2 AMD @ $184.00
+      BUY 1 BE @ $149.00
+      SELL 1 BE @ $119.24
+
+    Minute 60-69:
+      SELL 2 AAPL @ $263.24
+      BUY 2 PLTR @ $139.43
+      BUY 2 MSTR @ $133.25
+      SELL 2 PLTR @ $132.50
+      SELL 2 MSTR @ $122.50
+      SELL 2 COPX @ $84.01
+      BUY 2 MSTR @ $133.25
+      SELL 2 MSTR @ $126.10
+      BUY 2 AAPL @ $278.56
+      BUY 2 MSTR @ $133.25
+      SELL 2 MSTR @ $122.50
+
+    Minute 70-79:
+      SELL 2 AAPL @ $263.24
+      BUY 2 MSTR @ $133.25
+      BUY 2 AAPL @ $278.87
+      SELL 2 MSTR @ $122.50
+      BUY 2 PPLT @ $193.86
+      BUY 2 MP @ $61.00
+      SELL 2 PPLT @ $183.30
+
+    Minute 80-89:
+      SELL 2 MP @ $56.99
+      BUY 2 MSTR @ $133.25
+      SELL 2 MSTR @ $126.10
+      BUY 2 PLTR @ $136.61
+      BUY 2 MSTR @ $133.25
+      BUY 1 BE @ $149.00
+      SELL 2 MSTR @ $126.10
+      SELL 1 BE @ $139.67
+      BUY 1 BE @ $149.00
+      SELL 1 BE @ $139.83
+      BUY 2 MSTR @ $133.25
+      SELL 2 MSTR @ $129.00
+      BUY 1 BE @ $149.00
+
+    Minute 90-99:
+      SELL 1 BE @ $140.00
+      BUY 2 MP @ $60.60
+      SELL 2 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+      SELL 1 MSTR @ $122.50
+      BUY 2 PPLT @ $193.86
+      SELL 2 PLTR @ $133.00
+      SELL 2 PPLT @ $188.72
+      BUY 2 MP @ $60.85
+      SELL 2 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+      BUY 1 MP @ $63.27
+      SELL 1 MSTR @ $124.09
+      SELL 1 MP @ $60.79
+
+    Minute 100-109:
+      BUY 1 BE @ $144.00
+      BUY 2 PLTR @ $139.00
+      SELL 1 BE @ $134.50
+      BUY 1 MSTR @ $135.85
+      BUY 2 PPLT @ $196.00
+      SELL 2 PLTR @ $136.52
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $60.97
+      SELL 1 MSTR @ $131.33
+      SELL 2 PPLT @ $190.45
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+      BUY 1 MP @ $60.87
+      SELL 1 MSTR @ $124.09
+      SELL 1 MP @ $56.99
+      BUY 2 MSTR @ $135.85
+      SELL 2 MSTR @ $131.67
+
+    Minute 110-119:
+      BUY 1 MSTR @ $138.53
+      SELL 1 MSTR @ $132.43
+      BUY 1 MP @ $60.90
+      BUY 2 PLTR @ $142.15
+      SELL 2 PLTR @ $136.66
+      BUY 1 MSTR @ $133.09
+      BUY 2 PPLT @ $191.12
+      SELL 2 PPLT @ $183.30
+      BUY 2 BE @ $144.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $124.09
+      BUY 2 PPLT @ $191.05
+      SELL 2 AAPL @ $263.24
+      SELL 2 BE @ $134.50
+      SELL 2 PPLT @ $183.30
+
+    Minute 120-129:
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $135.79
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $135.79
+      BUY 2 MP @ $61.09
+      BUY 1 MSTR @ $138.53
+      BUY 2 AAPL @ $278.27
+      SELL 2 MP @ $56.99
+      SELL 1 MSTR @ $124.09
+      BUY 2 BE @ $144.00
+      BUY 2 PPLT @ $191.05
+      SELL 2 BE @ $136.59
+      BUY 1 MP @ $62.99
+      SELL 2 AAPL @ $263.24
+      SELL 1 MP @ $61.20
+      SELL 2 PPLT @ $183.30
+
+    Minute 130-139:
+      BUY 2 BE @ $144.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $135.00
+      SELL 2 BE @ $134.50
+      SELL 1 MP @ $61.00
+      SELL 1 MSTR @ $126.76
+      BUY 2 BE @ $144.00
+      BUY 1 MSTR @ $135.00
+      SELL 2 BE @ $134.50
+      BUY 1 MP @ $61.07
+      SELL 1 MSTR @ $126.76
+      BUY 2 AAPL @ $278.29
+      BUY 2 PPLT @ $191.62
+      SELL 1 MP @ $56.99
+      SELL 2 PPLT @ $185.28
+
+    Minute 140-149:
+      SELL 2 AAPL @ $263.24
+      BUY 2 AAPL @ $279.30
+      BUY 1 MP @ $62.99
+      SELL 1 MP @ $60.80
+
+    Minute 150-159:
+      BUY 1 MP @ $60.74
+      SELL 1 MP @ $56.99
+      SELL 2 AAPL @ $263.24
+
+    Minute 160-169:
+      BUY 2 MSTR @ $132.50
+      SELL 2 MSTR @ $126.76
+      BUY 2 AAPL @ $278.75
+      BUY 2 PLTR @ $139.00
+      BUY 1 MP @ $60.70
+      SELL 2 PLTR @ $136.17
+
+    Minute 170-179:
+      SELL 1 MP @ $56.99
+      SELL 2 AAPL @ $263.24
+      BUY 2 MSTR @ $133.00
+      SELL 2 MSTR @ $126.76
+      BUY 1 MP @ $62.99
+      SELL 1 MP @ $56.99
+      BUY 1 MP @ $62.99
+
+    Minute 180-189:
+      SELL 1 MP @ $56.99
+      BUY 1 MP @ $61.04
+      SELL 1 MP @ $56.99
+      BUY 2 BE @ $144.00
+      BUY 2 MSTR @ $133.00
+      BUY 2 AAPL @ $277.09
+      SELL 2 BE @ $134.50
+      BUY 1 MP @ $60.96
+      BUY 2 PLTR @ $139.00
+      BUY 2 BE @ $144.00
+      SELL 1 MP @ $56.99
+      SELL 2 PLTR @ $135.61
+      SELL 2 BE @ $134.50
+      SELL 2 AAPL @ $263.24
+      SELL 2 MSTR @ $126.76
+
+    Minute 190-199:
+      BUY 1 MP @ $62.99
+      SELL 1 MP @ $60.90
+      BUY 1 MP @ $62.99
+      SELL 1 MP @ $60.97
+      BUY 2 BE @ $141.00
+      SELL 2 BE @ $134.50
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $134.50
+      BUY 2 PLTR @ $139.00
+
+    Minute 200-209:
+      SELL 2 PLTR @ $133.00
+      BUY 2 AAPL @ $277.24
+      BUY 1 URTH @ $189.77
+      BUY 1 REMX @ $87.86
+      SELL 1 REMX @ $86.56
+      BUY 2 MSTR @ $132.56
+      SELL 2 MSTR @ $126.76
+      BUY 2 MP @ $61.17
+
+    Minute 210-219:
+      SELL 2 AAPL @ $263.24
+      BUY 2 BE @ $144.00
+      SELL 2 MP @ $58.22
+      SELL 2 BE @ $134.91
+      BUY 2 BE @ $144.00
+      BUY 1 LMT @ $621.56
+      SELL 2 BE @ $134.50
+      BUY 2 AAPL @ $277.49
+      BUY 2 MP @ $61.18
+
+    Minute 220-229:
+      SELL 2 MP @ $58.22
+      BUY 2 MP @ $61.20
+      BUY 2 BE @ $144.00
+      BUY 2 MSTR @ $133.00
+      SELL 1 LMT @ $620.86
+      SELL 2 BE @ $134.00
+      SELL 2 MP @ $58.22
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $134.00
+
+    Minute 230-239:
+      SELL 2 MSTR @ $126.76
+      BUY 2 BE @ $144.00
+      BUY 2 MP @ $62.99
+      SELL 2 BE @ $134.00
+      SELL 2 MP @ $58.22
+      BUY 2 MP @ $62.99
+      BUY 1 PICK @ $59.43
+      SELL 2 MP @ $58.22
+      SELL 2 AAPL @ $263.24
+      BUY 2 MP @ $62.99
+      BUY 2 MSTR @ $133.41
+      SELL 2 MP @ $61.15
+
+    Minute 240-249:
+      BUY 2 MP @ $61.19
+      SELL 2 MSTR @ $126.76
+      SELL 2 MP @ $58.22
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $136.96
+      BUY 2 AAPL @ $277.28
+      BUY 2 MSTR @ $133.70
+
+    Minute 250-259:
+      SELL 2 AAPL @ $263.24
+      BUY 2 MP @ $62.99
+      SELL 2 MSTR @ $126.76
+      SELL 2 MP @ $61.23
+      BUY 2 AAPL @ $277.94
+      BUY 2 MP @ $61.29
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $134.00
+      BUY 2 AMD @ $212.00
+      SELL 2 AMD @ $202.00
+      SELL 2 MP @ $58.22
+      BUY 2 PPLT @ $198.02
+      SELL 2 PPLT @ $191.12
+      SELL 1 PICK @ $59.02
+
+    Minute 260-269:
+      BUY 2 MP @ $61.22
+      BUY 2 MSTR @ $134.36
+      BUY 2 AMD @ $212.00
+      SELL 2 MSTR @ $126.76
+      BUY 1 PICK @ $59.53
+      SELL 2 AAPL @ $263.24
+      SELL 2 AMD @ $202.00
+
+    Minute 270-279:
+      SELL 2 MP @ $58.22
+      BUY 2 AAPL @ $278.31
+      BUY 2 MSTR @ $133.34
+
+    Minute 280-289:
+      BUY 2 MP @ $61.28
+      SELL 2 MSTR @ $126.76
+      BUY 2 MSTR @ $133.71
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $140.05
+      SELL 2 MP @ $58.22
+      SELL 2 MSTR @ $126.76
+      BUY 2 BE @ $144.00
+      SELL 2 BE @ $139.60
+      BUY 2 MP @ $61.38
+      SELL 2 MP @ $58.22
+      BUY 2 MSTR @ $133.71
+      BUY 2 AMD @ $212.00
+
+    Minute 290-299:
+      SELL 2 AMD @ $207.55
+      SELL 2 MSTR @ $128.00
+      BUY 2 MSTR @ $133.28
+      BUY 2 AMD @ $212.00
+      SELL 2 AMD @ $202.00
+      SELL 2 AAPL @ $263.24
+      BUY 1 LMT @ $622.63
+      BUY 2 MP @ $61.01
+
+    Minute 300-309:
+      SELL 1 LMT @ $621.41
 
 MeanReversionPenguin
-  Current Value:   $4,884.86
-  PnL:             $-115.14  (-2.30%)
-  Total Trades:    46
-  Current Positions: 10
-  Current Cash:    $9.18
+  Final Value:   $6,399.67
+  PnL:           $+1,399.67  (+27.99%)
+  Total Trades:  288
+  Final Positions: 9
+  Final Cash:    $401.17
 
-  Trades (up to interruption):
+  Trades:
+
+    Minute 10-19:
+      BUY 1 AAPL @ $279.29
+      BUY 1 AAPL @ $279.52
+      BUY 1 LIT @ $71.13
+      BUY 1 MSTR @ $121.88
+      BUY 1 MSFT @ $398.41
 
     Minute 20-29:
-      BUY 1 LIT @ $70.49
-      SELL 1 LIT @ $68.99
-      BUY 1 NVO @ $44.64
-      BUY 1 MSTR @ $120.00
-      BUY 1 NVO @ $44.60
-      BUY 1 MSTR @ $120.00
-      BUY 1 NVO @ $44.46
-      BUY 1 GDXJ @ $125.60
-      BUY 1 SIL @ $95.31
-      BUY 1 MSTR @ $120.00
-      BUY 1 NVO @ $44.49
-      BUY 1 GDXJ @ $125.44
-      BUY 1 SIL @ $95.28
+      BUY 1 NVO @ $46.39
+      BUY 1 BE @ $149.00
+      BUY 1 PLTR @ $132.84
+      SELL 1 LIT @ $69.81
+      BUY 1 URTH @ $188.82
 
     Minute 30-39:
-      BUY 1 MSTR @ $120.00
-      BUY 1 NVO @ $44.47
-      BUY 1 GDXJ @ $125.13
-      BUY 1 SIL @ $95.53
-      BUY 1 MSTR @ $120.00
-      BUY 1 NVO @ $45.40
-      BUY 1 COPX @ $84.32
-      BUY 1 GDXJ @ $125.81
-      BUY 1 SIL @ $95.33
-      BUY 1 MSTR @ $117.20
-      BUY 1 NVO @ $44.25
-      BUY 1 LIT @ $69.86
-      BUY 1 SIL @ $94.50
-      BUY 1 MSTR @ $117.20
-      BUY 1 NVO @ $44.21
-      BUY 1 COPX @ $83.76
-      BUY 1 LIT @ $69.66
-      BUY 1 SIL @ $94.26
-      BUY 1 NVO @ $44.13
-      BUY 1 COPX @ $83.76
-      BUY 1 SIL @ $94.25
-      BUY 1 NVDA @ $173.42
-      BUY 1 MSFT @ $399.18
-      BUY 1 TSLA @ $400.00
-      BUY 1 NVO @ $44.04
-      BUY 1 LIT @ $69.57
-      BUY 1 SIL @ $94.22
-      BUY 1 PICK @ $58.55
-      BUY 1 MSFT @ $399.75
-      BUY 1 TSLA @ $400.00
-      BUY 1 NVO @ $44.06
-      BUY 1 LIT @ $69.73
-      BUY 1 NVO @ $43.95
+      BUY 1 NVDA @ $179.61
+      BUY 1 MP @ $59.86
+      BUY 1 NVDA @ $179.72
+      BUY 1 MP @ $61.15
+      BUY 1 URTH @ $188.51
+      BUY 1 NVDA @ $179.57
+      BUY 1 MP @ $60.18
+
+    Minute 40-49:
+      BUY 1 NVDA @ $179.93
+      BUY 1 LIT @ $71.06
+      SELL 1 NVDA @ $182.39
+      SELL 1 NVDA @ $182.89
+      SELL 1 NVDA @ $182.87
+      SELL 1 BE @ $138.84
+      BUY 1 COPX @ $85.23
+      SELL 1 NVDA @ $182.70
+      SELL 1 MSTR @ $125.06
+
+    Minute 50-59:
+      BUY 1 GLD @ $454.57
+      BUY 1 JO @ $109.41 [synthetic]
+      BUY 1 JO @ $108.95 [synthetic]
+      BUY 1 JO @ $108.67 [synthetic]
+      BUY 1 JO @ $108.64 [synthetic]
+      BUY 1 GLD @ $454.64
+      BUY 1 JO @ $108.64 [synthetic]
+      BUY 1 JO @ $108.53 [synthetic]
+      SELL 1 NVO @ $46.62
+      BUY 1 JO @ $108.77 [synthetic]
+      BUY 1 JO @ $108.57 [synthetic]
+      BUY 1 PLTR @ $134.46
+      BUY 1 JO @ $108.49 [synthetic]
+      SELL 1 URTH @ $189.11
+      BUY 1 SLV @ $69.10
+      BUY 1 JO @ $108.79 [synthetic]
+      BUY 1 GDXJ @ $127.54
+      BUY 1 SIL @ $96.53
+
+    Minute 60-69:
+      BUY 1 SLV @ $69.15
+      BUY 1 JO @ $107.84 [synthetic]
+      BUY 1 GDXJ @ $127.45
+      BUY 1 PICK @ $59.29
+      BUY 1 JO @ $107.51 [synthetic]
+      BUY 1 GDXJ @ $127.63
+      BUY 1 SIL @ $96.50
+      SELL 1 PICK @ $58.70
+      BUY 1 JO @ $107.86 [synthetic]
+      BUY 1 LIT @ $71.10
+      BUY 1 GDXJ @ $127.16
+      SELL 1 LIT @ $70.24
+      BUY 1 PICK @ $59.03
+      SELL 1 LIT @ $70.24
+      BUY 1 SIL @ $96.44
+
+    Minute 70-79:
+      SELL 1 PICK @ $58.69
+      SELL 1 PLTR @ $135.82
+      SELL 1 URTH @ $189.25
+
+    Minute 80-89:
+      SELL 1 PLTR @ $132.50
+      SELL 1 GLD @ $453.66
+      SELL 1 MSFT @ $396.60
+      SELL 1 MP @ $60.62
+      SELL 1 MP @ $60.53
+      SELL 1 AAPL @ $279.41
+      SELL 1 MP @ $60.54
+      BUY 1 GDXJ @ $127.23
+      BUY 1 SIL @ $96.22
+      BUY 1 GLD @ $453.82
+      BUY 1 GDXJ @ $127.14
+      BUY 1 SIL @ $96.07
+
+    Minute 90-99:
+      BUY 1 GLD @ $453.52
+      BUY 1 LIT @ $71.25
+      BUY 1 GDXJ @ $126.97
+      BUY 1 SIL @ $95.98
+      BUY 1 NVDA @ $183.43
+      SELL 1 AAPL @ $279.60
+      BUY 1 LIT @ $71.25
+      BUY 1 GDXJ @ $126.77
+      BUY 1 SLV @ $68.13
+      SELL 1 LIT @ $70.72
+      SELL 1 LIT @ $70.72
+
+    Minute 100-109:
+      SELL 1 GDXJ @ $128.10
+      SELL 1 GDXJ @ $128.12
+      SELL 1 GDXJ @ $128.04
+      SELL 1 GLD @ $455.34
+      BUY 1 NOC @ $351.73 [synthetic]
+      SELL 1 GDXJ @ $127.84
+      SELL 1 GLD @ $455.34
+      SELL 1 SLV @ $69.37
+      SELL 1 GDXJ @ $127.67
+      SELL 1 NVDA @ $184.07
+      BUY 1 AAPL @ $278.49
+
+    Minute 110-119:
+      BUY 1 NOC @ $350.36 [synthetic]
+      BUY 1 NVO @ $46.65
+      BUY 1 NVO @ $46.62
+      BUY 1 GDXJ @ $127.87
+      BUY 1 NVO @ $46.64
+      BUY 1 GDXJ @ $127.76
+      BUY 1 NVO @ $46.64
+      BUY 1 NVO @ $46.69
+      SELL 1 GLD @ $456.27
+      SELL 1 SLV @ $69.85
+      BUY 1 PICK @ $59.33
+      SELL 1 JO @ $107.98 [synthetic]
+      BUY 1 AAPL @ $278.05
+      SELL 1 PICK @ $58.85
+
+    Minute 120-129:
+      BUY 1 PICK @ $59.33
+      SELL 1 PICK @ $58.94
+      SELL 1 NVO @ $46.91
+      SELL 1 JO @ $107.91 [synthetic]
+      SELL 1 NVO @ $46.90
+      SELL 1 JO @ $108.61 [synthetic]
+      SELL 1 NVO @ $46.88
+      SELL 1 JO @ $108.67 [synthetic]
+      SELL 1 NVO @ $46.92
+      SELL 1 JO @ $108.32 [synthetic]
+
+    Minute 130-139:
+      SELL 1 NVO @ $46.96
+      SELL 1 SLV @ $69.98
+      SELL 1 JO @ $108.74 [synthetic]
+      SELL 1 JO @ $109.13 [synthetic]
+      SELL 1 JO @ $109.35 [synthetic]
+
+    Minute 140-149:
+      SELL 1 JO @ $109.99 [synthetic]
+      SELL 1 JO @ $109.89 [synthetic]
+      SELL 1 NOC @ $357.21 [synthetic]
+      SELL 1 JO @ $109.19 [synthetic]
+      SELL 1 NOC @ $358.20 [synthetic]
+      BUY 1 NVO @ $46.72
+      BUY 1 NVO @ $46.64
+      BUY 1 NVO @ $46.64
+      BUY 1 NVO @ $46.66
+      BUY 1 NVO @ $46.67
+
+    Minute 150-159:
+      BUY 1 NVO @ $46.68
+      BUY 1 PICK @ $59.40
+      BUY 1 NVO @ $46.64
+      SELL 1 PICK @ $58.84
+      BUY 1 NVO @ $46.70
+      BUY 1 NVO @ $46.67
+      BUY 1 BE @ $144.00
+      BUY 1 NVO @ $46.65
+      BUY 1 JO @ $108.03 [synthetic]
+      BUY 1 BE @ $144.00
+      BUY 1 JO @ $108.21 [synthetic]
+      SELL 1 BE @ $136.70
+      BUY 1 JO @ $107.66 [synthetic]
+      BUY 1 JO @ $107.58 [synthetic]
+
+    Minute 160-169:
+      BUY 1 GLD @ $455.04
+      BUY 1 SLV @ $69.94
+      SELL 1 AAPL @ $278.06
+      BUY 1 GLD @ $455.35
+      BUY 1 SLV @ $69.88
+      BUY 1 GDXJ @ $128.00
+
+    Minute 170-179:
+      BUY 1 GLD @ $455.33
+      BUY 1 SLV @ $69.95
+      BUY 1 GDXJ @ $127.79
+      BUY 1 AAPL @ $277.91
+      BUY 1 SLV @ $69.95
+
+    Minute 180-189:
+      SELL 1 GLD @ $456.10
+      SELL 1 GLD @ $456.10
+      SELL 1 SLV @ $70.36
+      SELL 1 GLD @ $456.08
+      SELL 1 GDXJ @ $128.13
+      SELL 1 GDXJ @ $128.19
+      SELL 1 GDXJ @ $128.21
+      SELL 1 NVO @ $46.86
+      SELL 1 GDXJ @ $128.22
+      SELL 1 NVO @ $46.87
+      SELL 1 NVO @ $46.91
+
+    Minute 190-199:
+      SELL 1 NVO @ $46.93
+      SELL 1 SLV @ $70.27
+      BUY 1 REMX @ $86.73
+      SELL 1 NVO @ $46.95
+      SELL 1 NVO @ $46.96
+      BUY 1 JO @ $105.29 [synthetic]
+      BUY 1 JO @ $105.46 [synthetic]
+      BUY 1 SLV @ $70.07
+
+    Minute 200-209:
+      BUY 1 SLV @ $69.97
+      SELL 1 BE @ $134.50
+      BUY 1 NOC @ $353.54 [synthetic]
+      BUY 1 SLV @ $69.91
+      BUY 1 PPLT @ $191.51
+      BUY 1 NOC @ $352.47 [synthetic]
+      BUY 1 NOC @ $351.95 [synthetic]
+      BUY 1 LIT @ $71.18
+      BUY 1 TSLA @ $412.18
+      BUY 1 LIT @ $71.18
+      BUY 1 LIT @ $71.18
+      SELL 1 AAPL @ $277.66
+      BUY 1 LIT @ $71.18
+      BUY 1 PICK @ $59.02 [synthetic]
+
+    Minute 210-219:
+      BUY 1 LIT @ $71.18
+      SELL 1 REMX @ $86.55
+      BUY 1 PICK @ $58.92 [synthetic]
+      BUY 1 LIT @ $71.17
+      BUY 1 PICK @ $58.97 [synthetic]
+      SELL 1 LIT @ $70.26
+
+    Minute 220-229:
+      SELL 1 LIT @ $70.26
+      BUY 1 GDXJ @ $127.68
+      SELL 1 NOC @ $706.62
+      BUY 1 GDXJ @ $127.70
+      BUY 1 NVDA @ $184.24
+      SELL 1 NOC @ $706.73
+      SELL 1 PICK @ $59.23
+      BUY 1 NVDA @ $184.25
+      SELL 1 AAPL @ $277.51
+      SELL 1 LIT @ $71.04
+      SELL 1 PICK @ $59.23
+      SELL 1 LIT @ $71.04
+      SELL 1 LIT @ $71.04
+
+    Minute 230-239:
+      SELL 1 NVO @ $46.97
+      SELL 1 GDXJ @ $127.96
+      SELL 1 NVO @ $47.05
+      SELL 1 NVO @ $47.12
+      SELL 1 NVO @ $47.11
+      BUY 1 JO @ $104.59 [synthetic]
+      BUY 1 AAPL @ $277.50
+      BUY 1 JO @ $104.39 [synthetic]
+      BUY 1 AAPL @ $277.12
+      BUY 1 AAPL @ $277.07
+      BUY 1 AAPL @ $277.50
+      SELL 1 NOC @ $707.21
+      SELL 1 PPLT @ $190.07
+
+    Minute 240-249:
+      BUY 1 AAPL @ $277.38
+      BUY 1 NOC @ $352.03 [synthetic]
+      SELL 1 PICK @ $58.97
+      BUY 1 GLD @ $455.14
+      BUY 1 GDXJ @ $127.79
+      BUY 1 GDXJ @ $127.74
+      BUY 1 PICK @ $59.43
+      SELL 1 NVDA @ $184.55
+      BUY 1 LIT @ $71.50
+      SELL 1 PICK @ $59.26
+      SELL 1 NVDA @ $184.84
+
+    Minute 250-259:
+      BUY 1 LIT @ $71.55
+      SELL 1 SIL @ $97.29
+      BUY 1 LIT @ $71.61
+      BUY 1 NOC @ $347.98 [synthetic]
+      BUY 1 LIT @ $71.64
+      SELL 1 SIL @ $97.37
+      BUY 1 LIT @ $71.64
+      SELL 1 JO @ $105.14 [synthetic]
+      BUY 1 LIT @ $71.64
+      BUY 1 LIT @ $71.64
+      SELL 1 SLV @ $70.24
+      BUY 1 LIT @ $71.64
+      SELL 1 SLV @ $70.30
+      BUY 1 LIT @ $71.64
+      SELL 1 SLV @ $70.29
+      BUY 1 LIT @ $71.64
+      SELL 1 SLV @ $70.20
+
+    Minute 260-269:
+      SELL 1 SLV @ $70.17
+      SELL 1 LIT @ $70.78
+      SELL 1 GLD @ $455.48
+      SELL 1 LIT @ $71.15
+      SELL 1 LIT @ $71.15
+      SELL 1 AAPL @ $278.56
+      SELL 1 NOC @ $354.56 [synthetic]
+      SELL 1 NOC @ $355.45 [synthetic]
+      BUY 1 GDXJ @ $127.73
+      BUY 1 GLD @ $455.40
+      BUY 1 AAPL @ $278.74
+
+    Minute 270-279:
+      BUY 1 LMT @ $309.35 [synthetic]
+      SELL 1 JO @ $105.79 [synthetic]
+      SELL 1 JO @ $105.98 [synthetic]
+      SELL 1 JO @ $106.49 [synthetic]
+      BUY 1 LIT @ $71.61
+      SELL 1 JO @ $106.24 [synthetic]
+      BUY 1 LIT @ $71.61
+      SELL 1 GDXJ @ $128.06
+      SELL 1 LIT @ $70.28
+
+    Minute 280-289:
+      SELL 1 LMT @ $620.77
+      SELL 1 LIT @ $70.28
+      SELL 1 AAPL @ $277.75
+      SELL 1 LIT @ $70.28
+      BUY 1 URTH @ $189.85
+      SELL 1 JO @ $107.14 [synthetic]
+      SELL 1 GDXJ @ $128.45
+
+    Minute 290-299:
+      SELL 1 COPX @ $84.70
+      BUY 1 AAPL @ $278.07
+      BUY 1 GLD @ $454.51
+      BUY 1 SLV @ $69.54
+      BUY 1 SIL @ $96.97
+      BUY 1 GLD @ $454.41
+      BUY 1 SLV @ $69.57
+
+    Minute 300-309:
+      BUY 1 GLD @ $454.31
 
 MomentumPenguin
-  Current Value:   $4,577.70
-  PnL:             $-422.30  (-8.45%)
-  Total Trades:    210
-  Current Positions: 9
-  Current Cash:    $1,473.98
+  Final Value:   $4,291.59
+  PnL:           $-708.41  (-14.17%)
+  Total Trades:  555
+  Final Positions: 14
+  Final Cash:    $778.79
 
-  Trades (up to interruption):
+  Trades:
 
     Minute 0-9:
-      BUY 1 AMD @ $208.09
-      BUY 1 MP @ $61.66
-      BUY 1 AAPL @ $275.09
-      BUY 1 PLTR @ $135.79
-      BUY 1 AAPL @ $275.23
-      BUY 1 PLTR @ $143.70
-      SELL 1 AMD @ $196.80
-      BUY 1 BE @ $160.74
-      BUY 1 PLTR @ $136.68
-      BUY 1 BE @ $163.65
-      SELL 1 MP @ $55.36
-      BUY 1 MSTR @ $121.50
-      BUY 1 SLV @ $67.68
-      BUY 1 LIT @ $75.00
-      BUY 1 SIL @ $95.29
+      BUY 1 AMD @ $203.91
+      BUY 1 MSTR @ $128.20
+      BUY 1 REMX @ $85.72
+      BUY 1 MSTR @ $128.20
+      BUY 1 NVO @ $46.79
+      BUY 1 PLTR @ $137.40
+      BUY 1 MSTR @ $128.20
+      BUY 1 AMD @ $211.16
+      SELL 1 MSTR @ $116.40
 
     Minute 10-19:
-      SELL 1 AAPL @ $272.00
-      BUY 1 BE @ $163.65
-      BUY 1 MSTR @ $121.79
-      BUY 1 TSLA @ $402.00
-      BUY 1 GLD @ $450.00
-      BUY 1 COPX @ $84.06
-      BUY 1 GDXJ @ $125.89
-      BUY 1 SIL @ $96.18
-      BUY 1 REMX @ $84.57
-      BUY 1 NVDA @ $183.73
-      BUY 1 PLTR @ $135.74
-      BUY 1 BE @ $167.06
-      BUY 1 MSTR @ $126.14
-      BUY 1 SLV @ $68.81
-      BUY 1 GDXJ @ $126.59
-      BUY 1 SIL @ $96.49
-      SELL 1 REMX @ $81.61
-      BUY 1 AAPL @ $282.00
-      SELL 1 PLTR @ $130.00
-      BUY 1 BE @ $167.06
-      BUY 1 MSTR @ $121.83
-      BUY 1 SLV @ $68.91
-      BUY 1 COPX @ $84.44
-      BUY 1 GDXJ @ $126.69
-      BUY 1 SIL @ $96.46
-      SELL 1 PLTR @ $130.00
-      BUY 1 BE @ $167.06
-      BUY 1 MSTR @ $126.14
-      BUY 1 SLV @ $68.87
-      BUY 1 COPX @ $84.27
-      BUY 1 SIL @ $96.46
-      SELL 1 BE @ $123.45
-      BUY 1 SLV @ $69.21
-      SELL 1 LIT @ $68.60
-      BUY 1 GDXJ @ $127.26
-      SELL 1 NVDA @ $173.00
-      SELL 1 PLTR @ $130.00
-      BUY 1 BE @ $167.06
-      BUY 1 NVO @ $45.34
-      BUY 1 SLV @ $69.62
-      SELL 1 AAPL @ $272.00
-      BUY 1 MSTR @ $126.14
-      BUY 1 SLV @ $70.00
-      BUY 1 COPX @ $85.39
-      SELL 1 BE @ $123.45
-      BUY 1 REMX @ $84.90
-      SELL 1 GLD @ $430.80
-      BUY 1 PPLT @ $191.58
+      BUY 1 PLTR @ $137.40
+      SELL 1 MSTR @ $116.40
+      BUY 1 NOC @ $128.93 [synthetic]
+      BUY 1 REMX @ $86.75
+      SELL 1 AMD @ $196.88
+      SELL 1 MSTR @ $116.40
+      BUY 1 PPLT @ $188.06
+      BUY 1 URTH @ $188.79
+      SELL 1 AMD @ $196.88
+      BUY 1 BE @ $149.00
+      BUY 1 NVDA @ $181.00
+      SELL 1 BE @ $121.86
+      BUY 1 NVDA @ $180.60
+      BUY 1 MP @ $63.27
+      SELL 1 PPLT @ $181.37
+      BUY 1 URTH @ $189.02
+      BUY 1 NVDA @ $180.51
+      BUY 1 BE @ $149.00
+      BUY 1 MP @ $63.27
+      BUY 1 MSTR @ $123.80
+      BUY 1 AMD @ $206.00
+      BUY 1 BE @ $149.00
+      BUY 1 MP @ $63.27
+      SELL 1 BE @ $124.92
+      BUY 1 MP @ $63.27
+      SELL 1 MSTR @ $116.40
+      SELL 1 PLTR @ $134.00
+      BUY 1 AMD @ $204.45
+      BUY 1 BE @ $149.00
+      BUY 1 MP @ $63.27
+      BUY 1 AMD @ $205.12
+      BUY 1 BE @ $149.00
+      BUY 1 PPLT @ $188.33
 
     Minute 20-29:
-      BUY 1 NVDA @ $176.86
-      SELL 1 SIL @ $95.64
-      BUY 1 NVDA @ $176.54
-      SELL 1 BE @ $123.45
-      BUY 1 MP @ $61.66
-      SELL 1 MSTR @ $116.80
-      SELL 1 NVO @ $44.50
-      SELL 1 PLTR @ $130.00
-      SELL 1 BE @ $142.34
-      SELL 1 MSTR @ $116.80
-      BUY 1 GLD @ $447.09
-      BUY 1 SLV @ $70.50
-      SELL 1 MSTR @ $116.80
-      BUY 1 URTH @ $188.70
-      BUY 1 MP @ $61.66
-      SELL 1 MSTR @ $116.80
-      SELL 1 PPLT @ $181.26
-      SELL 1 URTH @ $186.82
-      SELL 1 BE @ $143.09
-      SELL 1 MSTR @ $116.80
-      SELL 1 SLV @ $69.30
-      BUY 1 URTH @ $187.66
-      SELL 1 AAPL @ $273.21
+      BUY 1 AMD @ $206.00
+      BUY 1 BE @ $149.00
+      BUY 1 MP @ $63.27
+      BUY 1 MSTR @ $123.50
+      BUY 1 TSLA @ $409.40
+      BUY 1 PPLT @ $188.05
+      BUY 1 AAPL @ $280.30
+      SELL 1 BE @ $124.92
+      BUY 1 MP @ $63.27
+      SELL 1 PPLT @ $181.37
+      BUY 1 COPX @ $95.00
+      BUY 1 REMX @ $86.96
+      BUY 1 AAPL @ $280.88
       BUY 1 AMD @ $208.45
-      BUY 1 SLV @ $70.50
-      SELL 1 COPX @ $83.50
-      BUY 1 URTH @ $187.53
-      SELL 1 GDXJ @ $122.63
-      SELL 1 SIL @ $95.08
-      BUY 1 BE @ $164.14
-      SELL 1 SLV @ $69.01
-      SELL 1 COPX @ $83.50
-      BUY 1 URTH @ $187.53
-      SELL 1 GDXJ @ $125.02
-      SELL 1 SIL @ $94.92
-      SELL 1 REMX @ $83.28
+      SELL 1 BE @ $122.01
+      BUY 1 NOC @ $129.30 [synthetic]
+      SELL 1 PPLT @ $181.37
+      BUY 1 PLTR @ $137.40
+      SELL 1 BE @ $122.01
+      BUY 1 MSTR @ $122.68
+      SELL 1 BE @ $122.01
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $116.40
+      SELL 1 TSLA @ $400.64
+      BUY 1 NOC @ $130.03 [synthetic]
+      SELL 1 AAPL @ $263.24
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $123.38
+      BUY 1 PPLT @ $188.88
+      SELL 1 COPX @ $83.77
+      SELL 1 AMD @ $196.88
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $123.00
+      BUY 1 PPLT @ $193.81
+      SELL 1 PLTR @ $132.44
+      SELL 1 AMD @ $196.88
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $116.40
+      BUY 1 NOC @ $130.71 [synthetic]
+      BUY 1 JO @ $110.57 [synthetic]
+      BUY 1 LIT @ $75.00
+      SELL 1 AAPL @ $263.24
+      SELL 1 AMD @ $196.88
+      SELL 1 MP @ $56.99
+      SELL 1 PPLT @ $183.30
+      BUY 1 JO @ $110.57 [synthetic]
 
     Minute 30-39:
-      SELL 1 BE @ $123.45
-      SELL 1 COPX @ $83.50
-      SELL 1 GDXJ @ $124.66
-      SELL 1 AMD @ $198.00
-      SELL 1 BE @ $123.45
-      SELL 1 MP @ $55.36
-      BUY 1 GLD @ $457.65
-      SELL 1 COPX @ $83.13
-      SELL 1 GDXJ @ $121.37
-      SELL 1 SIL @ $94.22
-      SELL 1 MP @ $55.36
-      SELL 1 MSTR @ $116.44
-      BUY 1 GLD @ $457.65
-      SELL 1 URTH @ $187.09
-      SELL 1 SIL @ $94.01
-      BUY 1 BE @ $161.25
-      SELL 1 GLD @ $430.80
-      SELL 1 SLV @ $68.64
-      SELL 1 URTH @ $186.93
-      BUY 1 GDXJ @ $128.63
-      SELL 1 BE @ $120.55
-      BUY 1 MP @ $61.66
-      SELL 1 URTH @ $187.01
-      SELL 1 BE @ $120.55
-      SELL 1 GLD @ $430.80
-      SELL 1 SLV @ $68.17
-      BUY 1 REMX @ $84.13
-      BUY 1 MP @ $61.66
-      SELL 1 TSLA @ $390.00
-      SELL 1 GLD @ $443.32
-      SELL 1 SLV @ $67.92
-      BUY 1 PLTR @ $138.00
-      BUY 1 GLD @ $457.65
-      BUY 1 PPLT @ $191.54
-      SELL 1 GDXJ @ $123.76
-      SELL 1 PLTR @ $130.00
-      BUY 1 AMD @ $203.00
-      SELL 1 MP @ $55.36
-      SELL 1 SLV @ $67.94
-      BUY 1 PPLT @ $191.54
+      SELL 1 AMD @ $201.92
+      BUY 1 BE @ $149.00
+      SELL 1 AMD @ $202.14
+      SELL 1 BE @ $119.19
+      SELL 1 MSTR @ $116.40
+      SELL 1 MSTR @ $116.40
+      BUY 1 PLTR @ $137.40
+      BUY 1 MSTR @ $128.20
+      BUY 1 PPLT @ $193.81
+      BUY 1 COPX @ $95.00
+      SELL 1 LIT @ $69.72
+      BUY 1 AAPL @ $279.88
+      SELL 1 PLTR @ $132.50
+      BUY 1 GLD @ $459.00
+      BUY 1 PPLT @ $189.83
+      BUY 1 AAPL @ $279.97
+      BUY 1 AMD @ $208.45
+      SELL 1 PPLT @ $183.30
+      SELL 1 MSTR @ $116.40
+      SELL 1 COPX @ $84.45
+      BUY 1 PLTR @ $139.43
+      SELL 1 PPLT @ $183.30
 
     Minute 40-49:
-      BUY 1 PLTR @ $138.00
-      BUY 1 AMD @ $203.00
-      SELL 1 MP @ $55.36
-      SELL 1 SLV @ $68.11
-      BUY 1 URTH @ $187.12
-      BUY 1 AMD @ $203.00
-      BUY 1 BE @ $158.29
-      BUY 1 PPLT @ $191.54
-      BUY 1 URTH @ $187.20
-      BUY 1 PLTR @ $138.00
-      BUY 1 AMD @ $203.00
-      SELL 1 BE @ $120.55
-      BUY 1 SLV @ $70.35
-      BUY 1 URTH @ $186.89
-      SELL 1 PLTR @ $130.00
-      BUY 1 AMD @ $203.00
-      SELL 1 GLD @ $444.05
-      SELL 1 SLV @ $67.75
-      BUY 1 URTH @ $186.80
-      SELL 1 PPLT @ $179.24
-      BUY 1 URTH @ $186.72
-      SELL 1 PLTR @ $129.10
-      BUY 1 MP @ $61.66
-      BUY 1 GLD @ $457.65
-      SELL 1 PPLT @ $183.08
-      SELL 1 AMD @ $193.07
-      BUY 1 MP @ $60.51
-      SELL 1 PPLT @ $177.20
-      SELL 1 SLV @ $67.75
-      BUY 1 LMT @ $307.42 [synthetic]
-      BUY 1 SLV @ $69.67
-      BUY 1 LMT @ $308.89 [synthetic]
+      BUY 1 PLTR @ $139.43
+      BUY 1 BE @ $149.00
+      BUY 1 MSTR @ $125.00
+      BUY 1 PPLT @ $189.58
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $133.20
+      BUY 1 BE @ $149.00
+      SELL 1 AAPL @ $263.24
+      SELL 1 AMD @ $203.06
+      BUY 1 BE @ $149.00
+      BUY 1 PPLT @ $189.67
+      SELL 1 PLTR @ $132.50
+      BUY 1 BE @ $149.00
+      BUY 1 MSTR @ $123.30
+      BUY 1 AMD @ $204.74
+      BUY 1 MSTR @ $125.00
+      SELL 1 JO @ $110.14 [synthetic]
+      SELL 1 PLTR @ $134.00
+      BUY 1 PPLT @ $195.85
+      SELL 1 JO @ $109.94 [synthetic]
+      BUY 1 NVDA @ $182.91
 
     Minute 50-59:
-      SELL 1 AMD @ $184.00
-      BUY 1 TSLA @ $397.00
-      SELL 1 GLD @ $444.60
-      SELL 1 AMD @ $184.00
-      SELL 1 MP @ $55.36
-      BUY 1 TSLA @ $397.00
-      BUY 1 SLV @ $69.67
-      SELL 1 AMD @ $184.00
-      SELL 1 MP @ $54.21
-      BUY 1 SLV @ $69.67
+      SELL 1 MSTR @ $122.50
+      SELL 1 MSTR @ $122.50
+      SELL 1 GLD @ $441.66
+      BUY 1 PPLT @ $195.85
+      SELL 1 NOC @ $130.95 [synthetic]
+      SELL 1 PPLT @ $183.30
+      SELL 1 BE @ $119.24
+      SELL 1 MSTR @ $122.50
+      SELL 1 NOC @ $129.76 [synthetic]
+      SELL 1 BE @ $119.24
+      BUY 1 MSTR @ $133.25
+      BUY 1 PLTR @ $139.43
+      SELL 1 BE @ $119.24
+      BUY 1 MSTR @ $133.25
+      BUY 1 GLD @ $454.55
+      SELL 1 PPLT @ $188.46
+
+    Minute 60-69:
+      BUY 1 PLTR @ $139.43
+      SELL 1 BE @ $119.24
+      BUY 1 MSTR @ $133.25
+      SELL 1 MSTR @ $122.50
+      BUY 1 MSTR @ $133.25
+      BUY 1 MSTR @ $133.25
+      BUY 1 MSTR @ $133.25
+      BUY 1 AAPL @ $278.77
+      SELL 1 PLTR @ $133.41
+      BUY 1 MP @ $59.99
+      SELL 1 MSTR @ $125.64
+      BUY 1 MSTR @ $133.25
+      SELL 1 AMD @ $204.00
+      SELL 1 GLD @ $441.66
+      SELL 1 PPLT @ $183.30
+      BUY 1 AAPL @ $278.93
+      SELL 1 MSTR @ $122.50
+      SELL 1 PLTR @ $132.50
+      SELL 1 MSTR @ $122.50
+
+    Minute 70-79:
+      SELL 1 MP @ $56.99
+      SELL 1 PPLT @ $183.30
+      SELL 1 AAPL @ $263.24
+      SELL 1 MSTR @ $122.50
+      SELL 1 PPLT @ $183.30
+      BUY 1 GLD @ $454.65
+      BUY 1 PPLT @ $188.65
+      SELL 1 AAPL @ $263.24
+      BUY 1 BE @ $136.38
+      SELL 1 MSTR @ $122.50
+      BUY 1 MSTR @ $127.88
+      BUY 1 NOC @ $353.27 [synthetic]
+      BUY 1 LMT @ $614.29
+      SELL 1 PPLT @ $183.30
+      BUY 1 MSFT @ $399.00
+      BUY 1 PLTR @ $135.42
+      SELL 1 BE @ $119.24
+      SELL 1 LMT @ $610.81
+      BUY 1 REMX @ $87.16
+
+    Minute 80-89:
+      BUY 1 PLTR @ $140.00
+      BUY 1 AMD @ $208.45
+      BUY 1 BE @ $149.00
+      BUY 1 MSTR @ $133.25
+      SELL 1 MSTR @ $126.10
+      SELL 1 PLTR @ $135.56
+      BUY 1 MP @ $61.00
+      BUY 1 MSTR @ $133.25
+      BUY 1 MP @ $60.63
+      SELL 1 MSTR @ $122.50
+
+    Minute 90-99:
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $122.50
+      SELL 1 MSTR @ $126.00
+      BUY 1 NOC @ $355.10 [synthetic]
+      SELL 1 MP @ $56.99
+      SELL 1 BE @ $116.31
+      BUY 1 MP @ $60.58
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $60.62
+      BUY 1 SLV @ $69.53
+      BUY 1 SIL @ $97.18
+      BUY 1 SLV @ $69.54
+
+    Minute 100-109:
+      SELL 1 MP @ $56.99
+      BUY 1 MP @ $60.97
+      SELL 1 MP @ $56.99
+      BUY 1 MP @ $63.27
+      SELL 1 MP @ $56.99
+      SELL 1 MP @ $56.99
+      BUY 1 MP @ $63.27
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+
+    Minute 110-119:
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $124.09
+      BUY 1 MP @ $63.27
+      BUY 1 MP @ $60.81
+      SELL 1 MP @ $56.99
+      BUY 1 JO @ $108.09 [synthetic]
+      SELL 1 MP @ $56.99
+
+    Minute 120-129:
+      SELL 1 MP @ $56.99
+      BUY 1 MP @ $60.92
+      BUY 1 MP @ $61.09
+      SELL 1 NOC @ $350.91 [synthetic]
+
+    Minute 130-139:
+      BUY 1 PLTR @ $136.55
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $61.01
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $60.96
+      BUY 1 PPLT @ $191.73
+      SELL 1 AMD @ $206.80
+      BUY 1 PPLT @ $191.49
+      BUY 1 MP @ $62.99
+      SELL 1 MP @ $56.99
+      SELL 1 PPLT @ $185.28
+      BUY 1 PLTR @ $136.55
+      SELL 1 PPLT @ $190.70
+
+    Minute 140-149:
+      BUY 1 BE @ $144.00
+      BUY 1 JO @ $109.95 [synthetic]
+      SELL 1 AMD @ $208.28
+      BUY 1 BE @ $144.00
+      BUY 1 JO @ $110.10 [synthetic]
+      SELL 1 PLTR @ $133.00
+      BUY 1 MSTR @ $133.50
+      SELL 1 BE @ $134.50
+      SELL 1 JO @ $108.37 [synthetic]
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $60.94
+      SELL 1 JO @ $108.28 [synthetic]
+      SELL 1 MP @ $60.83
+      SELL 1 JO @ $108.07 [synthetic]
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 MP @ $60.90
+
+    Minute 150-159:
+      BUY 1 PPLT @ $191.55
+      BUY 1 PPLT @ $191.82
+      SELL 1 MP @ $56.99
+      SELL 1 NOC @ $354.19 [synthetic]
+      SELL 1 PPLT @ $185.28
       BUY 1 PLTR @ $138.00
-      SELL 1 AMD @ $184.00
-      SELL 1 LMT @ $608.00
-      SELL 1 SLV @ $67.16
-      BUY 1 PLTR @ $135.78
-      BUY 1 MSTR @ $114.89
-      SELL 1 LMT @ $608.00
-      BUY 1 GLD @ $457.65
-      BUY 1 PPLT @ $189.69
-      BUY 1 PLTR @ $135.78
-      BUY 1 GLD @ $457.65
-      BUY 1 PLTR @ $135.78
-      BUY 1 AMD @ $202.00
-      BUY 1 MP @ $60.51
-      BUY 1 MSTR @ $114.89
-      SELL 1 SLV @ $67.36
-      BUY 1 PPLT @ $189.69
-      SELL 1 PLTR @ $130.07
-      BUY 1 AMD @ $202.00
-      SELL 1 SLV @ $67.36
-      SELL 1 PLTR @ $129.00
-      SELL 1 TSLA @ $385.71
-      BUY 1 GLD @ $443.14
-      SELL 1 PLTR @ $129.82
-      SELL 1 AMD @ $184.00
-      SELL 1 MSTR @ $110.01
-      SELL 1 TSLA @ $385.71
-      SELL 1 GLD @ $442.33
-      SELL 1 SLV @ $66.78
+      SELL 1 MP @ $60.75
+      BUY 1 PPLT @ $191.86
+      BUY 1 MSTR @ $132.06
+      SELL 1 PLTR @ $133.00
+      SELL 1 PPLT @ $185.28
+      BUY 1 PLTR @ $136.31
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $60.77
+      BUY 1 PPLT @ $192.09
+      SELL 1 AMD @ $206.80
+      SELL 1 PPLT @ $185.28
+      SELL 1 MP @ $56.99
+      BUY 1 PPLT @ $191.80
+
+    Minute 160-169:
+      BUY 1 AAPL @ $278.33
+      BUY 1 MP @ $62.99
+      SELL 1 PPLT @ $185.28
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $126.76
+      SELL 1 NOC @ $708.65
+
+    Minute 170-179:
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $135.54
+      BUY 1 MP @ $62.99
+      SELL 1 PPLT @ $185.28
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $56.99
+      BUY 1 AMD @ $212.00
+      BUY 1 AAPL @ $277.42
+      BUY 1 PPLT @ $190.72
+      BUY 1 PLTR @ $139.00
+      SELL 1 AMD @ $207.31
+      BUY 1 MP @ $62.99
+      SELL 1 AAPL @ $263.24
+      SELL 1 MP @ $56.99
+      SELL 1 PPLT @ $185.28
+      BUY 1 AMD @ $212.00
+
+    Minute 180-189:
+      SELL 1 AMD @ $207.14
+      BUY 1 BE @ $144.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MSTR @ $132.90
+      BUY 1 AAPL @ $277.08
+      BUY 1 PLTR @ $139.00
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $60.96
+      SELL 1 MP @ $56.99
+      SELL 1 AMD @ $207.14
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $56.99
+      BUY 1 PPLT @ $191.16
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $135.59
+      SELL 1 AMD @ $207.14
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $60.96
+      BUY 1 PPLT @ $191.28
+      SELL 1 BE @ $134.50
+      BUY 1 PPLT @ $191.28
+
+    Minute 190-199:
+      BUY 1 PLTR @ $139.00
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 MP @ $60.96
+      BUY 1 PPLT @ $191.45
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 AMD @ $207.50
+      BUY 1 BE @ $144.00
+      SELL 1 AMD @ $207.14
+      BUY 1 BE @ $141.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $132.32
+      SELL 1 URTH @ $189.87
+      SELL 1 REMX @ $86.47
+      BUY 1 PLTR @ $139.00
+      SELL 1 AMD @ $207.14
+      SELL 1 MP @ $61.13
+      SELL 1 MSTR @ $126.76
+      SELL 1 PLTR @ $133.00
+      BUY 1 PLTR @ $139.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+
+    Minute 200-209:
+      BUY 1 AAPL @ $277.17
+      BUY 1 MP @ $61.44
+      SELL 1 MSTR @ $126.76
+      BUY 1 PLTR @ $139.00
+      SELL 1 MP @ $58.22
+      SELL 1 PPLT @ $185.28
+      SELL 1 MP @ $61.11
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $58.22
+      SELL 1 BE @ $135.16
+      BUY 1 MSTR @ $131.73
+      SELL 1 PLTR @ $135.29
+      BUY 1 AMD @ $212.00
+      BUY 1 MSTR @ $133.00
+      SELL 1 PPLT @ $185.28
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $132.56
+      BUY 1 PPLT @ $191.58
+      SELL 1 AMD @ $207.21
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $61.17
+
+    Minute 210-219:
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $126.76
+      SELL 1 AAPL @ $263.24
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 LMT @ $622.30
+      SELL 1 MSTR @ $126.76
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $132.33
+      SELL 1 BE @ $134.50
+      SELL 1 BE @ $134.50
+      SELL 1 PPLT @ $185.28
+      BUY 1 MP @ $61.18
+      SELL 1 MSTR @ $126.76
+      BUY 1 LMT @ $621.91
+      SELL 1 PPLT @ $185.28
+      BUY 1 MP @ $61.24
+
+    Minute 220-229:
+      BUY 1 MSTR @ $132.10
+      SELL 1 LMT @ $620.86
+      BUY 1 PPLT @ $191.28
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $132.68
+      SELL 1 LMT @ $620.86
+      BUY 1 MP @ $62.99
+      SELL 1 PPLT @ $185.28
+      BUY 1 PLTR @ $137.55
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      SELL 1 PPLT @ $185.28
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $58.22
+      BUY 1 LIT @ $72.50
+      BUY 1 PLTR @ $137.55
+      SELL 1 MP @ $61.44
+      BUY 1 MP @ $62.99
+
+    Minute 230-239:
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $135.00
+      BUY 1 PPLT @ $191.32
+      SELL 1 AMD @ $202.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 PPLT @ $191.44
+      BUY 1 MP @ $62.99
+      BUY 1 PPLT @ $191.16
+      BUY 1 PICK @ $59.36
+      SELL 1 MP @ $58.22
+      BUY 1 PPLT @ $191.10
+      BUY 1 MP @ $62.99
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $126.76
+      BUY 1 MP @ $61.25
+      BUY 1 MSTR @ $135.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.99
+      BUY 1 MP @ $62.99
+      SELL 1 MP @ $61.15
+
+    Minute 240-249:
+      BUY 1 MP @ $61.19
+      SELL 1 MSTR @ $126.76
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $126.76
+      SELL 1 MP @ $58.22
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 BE @ $144.00
+      BUY 1 MSTR @ $134.36
+      SELL 1 BE @ $137.02
+      BUY 1 MSTR @ $134.36
+      SELL 1 GLD @ $441.66
+      BUY 1 BE @ $144.00
+      SELL 1 PPLT @ $185.28
+      BUY 1 PLTR @ $137.55
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      SELL 1 NOC @ $349.94 [synthetic]
+
+    Minute 250-259:
+      BUY 1 PLTR @ $137.55
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 PLTR @ $137.55
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $61.26
+      SELL 1 MSTR @ $126.76
+      BUY 1 MP @ $61.29
+      BUY 1 JO @ $105.02 [synthetic]
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $61.30
+      SELL 1 PLTR @ $133.00
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $61.25
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $61.16
+      BUY 1 MSTR @ $133.08
+      SELL 1 PPLT @ $185.28
+      BUY 1 MP @ $62.99
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 PPLT @ $198.02
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      BUY 1 PPLT @ $198.02
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      SELL 1 PICK @ $59.02
+
+    Minute 260-269:
+      SELL 1 AMD @ $202.00
+      SELL 1 MP @ $58.22
+      BUY 1 PPLT @ $191.74
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      BUY 1 NOC @ $353.17 [synthetic]
+      SELL 1 PPLT @ $190.88
+      SELL 1 AMD @ $205.98
+      SELL 1 PPLT @ $190.75
+      BUY 1 MP @ $61.22
+      BUY 1 NOC @ $354.92 [synthetic]
+      BUY 1 PICK @ $59.43
+      BUY 1 MP @ $61.27
+      BUY 1 MSTR @ $134.36
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $62.99
+      BUY 1 MP @ $62.99
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $62.99
+
+    Minute 270-279:
+      SELL 1 PPLT @ $185.28
+      SELL 1 MP @ $61.40
+      BUY 1 AAPL @ $278.29
+      SELL 1 MP @ $58.22
+      SELL 1 MP @ $58.22
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      BUY 1 PPLT @ $191.83
+      BUY 1 MSTR @ $133.71
+      SELL 1 PPLT @ $190.98
+      BUY 1 MP @ $61.38
+      BUY 1 MP @ $61.35
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.19
+
+    Minute 280-289:
+      SELL 1 MSTR @ $126.76
+      BUY 1 MP @ $62.99
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 BE @ $144.00
+      SELL 1 NOC @ $705.39
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.35
+      SELL 1 MSTR @ $126.76
+      BUY 1 AMD @ $207.73
+      SELL 1 MP @ $58.22
+      SELL 1 PPLT @ $191.46
+      BUY 1 LMT @ $621.87
+      SELL 1 PPLT @ $191.18
+      SELL 1 JO @ $105.96 [synthetic]
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.06
+
+    Minute 290-299:
+      SELL 1 MP @ $58.22
+      SELL 1 LMT @ $621.17
+      BUY 1 AMD @ $212.00
+      BUY 1 PPLT @ $198.02
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $60.86
+      SELL 1 AMD @ $202.00
+      SELL 1 MP @ $60.94
+      SELL 1 AAPL @ $263.24
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $135.00
+      SELL 1 AMD @ $207.72
+      BUY 1 MP @ $60.83
+      BUY 1 MSTR @ $135.00
+      SELL 1 PPLT @ $190.30
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $135.00
+      BUY 1 LMT @ $622.63
+      BUY 1 AMD @ $212.00
+
+    Minute 300-309:
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $62.99
+      SELL 1 LMT @ $621.41
 
 TrendPenguin
-  Current Value:   $5,121.37
-  PnL:             $+121.37  (+2.43%)
-  Total Trades:    740
-  Current Positions: 14
-  Current Cash:    $70.67
+  Final Value:   $5,304.35
+  PnL:           $+304.35  (+6.09%)
+  Total Trades:  3607
+  Final Positions: 14
+  Final Cash:    $318.12
 
-  Trades (up to interruption):
+  Trades:
 
     Minute 0-9:
-      BUY 1 NVDA @ $175.33
-      BUY 1 AMD @ $210.00
-      BUY 1 NVO @ $45.20
-      BUY 1 SLV @ $70.29
-      BUY 1 COPX @ $83.99
-      BUY 1 JO @ $140.17 [synthetic]
-      BUY 1 LIT @ $69.83
-      BUY 1 PICK @ $58.70
-      SELL 1 NVDA @ $174.56
-      BUY 1 PLTR @ $140.00
-      BUY 1 NOC @ $120.05 [synthetic]
-      SELL 1 NVO @ $44.69
-      SELL 1 SLV @ $67.46
-      SELL 1 COPX @ $82.71
-      BUY 1 JO @ $140.56 [synthetic]
-      SELL 1 PICK @ $58.01
-      BUY 1 AAPL @ $276.57
-      SELL 1 PLTR @ $130.00
-      SELL 1 AMD @ $197.00
-      BUY 1 BE @ $160.74
-      BUY 1 MP @ $61.66
-      BUY 1 MSFT @ $406.33
-      BUY 1 TSLA @ $398.00
-      SELL 1 NOC @ $119.64 [synthetic]
-      BUY 1 NVO @ $44.83
-      BUY 1 COPX @ $83.89
-      BUY 1 JO @ $140.79 [synthetic]
-      SELL 1 LIT @ $68.01
-      BUY 1 URTH @ $187.26
-      BUY 1 AAPL @ $282.00
-      SELL 1 BE @ $120.54
-      SELL 1 MP @ $55.36
-      BUY 1 MSFT @ $406.00
-      SELL 1 TSLA @ $392.00
-      BUY 1 NOC @ $120.57 [synthetic]
-      BUY 1 NVO @ $45.10
-      BUY 1 SLV @ $68.94
-      BUY 1 PPLT @ $187.69
-      SELL 1 COPX @ $82.50
-      BUY 1 JO @ $140.95 [synthetic]
-      BUY 1 URTH @ $187.25
-      BUY 1 SIL @ $95.40
-      BUY 1 REMX @ $84.39
-      BUY 1 NVDA @ $175.48
-      SELL 1 AAPL @ $276.02
-      BUY 1 PLTR @ $137.43
-      BUY 1 AMD @ $208.09
-      BUY 1 BE @ $160.74
-      BUY 1 MP @ $61.66
-      BUY 1 MSTR @ $126.14
-      SELL 1 MSFT @ $402.73
-      BUY 1 TSLA @ $400.00
-      BUY 1 NOC @ $120.88 [synthetic]
-      BUY 1 LMT @ $110.56 [synthetic]
-      SELL 1 NVO @ $44.93
-      SELL 1 SLV @ $67.31
-      SELL 1 PPLT @ $177.51
-      BUY 1 COPX @ $83.61
-      SELL 1 JO @ $140.70 [synthetic]
-      BUY 1 LIT @ $69.57
-      BUY 1 URTH @ $187.59
-      BUY 1 GDXJ @ $124.69
-      SELL 1 SIL @ $93.19
-      BUY 1 REMX @ $84.39
-      BUY 1 PICK @ $58.46
-      SELL 1 NVDA @ $175.16
-      SELL 1 AAPL @ $274.97
-      BUY 1 PLTR @ $135.79
-      SELL 1 AMD @ $196.80
-      SELL 1 MP @ $55.36
-      SELL 1 MSTR @ $114.00
-      SELL 1 MSFT @ $402.73
-      SELL 1 TSLA @ $392.00
-      BUY 1 NOC @ $120.92 [synthetic]
-      SELL 1 LMT @ $109.75 [synthetic]
-      BUY 1 NVO @ $45.15
-      BUY 1 GLD @ $443.11
-      SELL 1 COPX @ $82.81
-      BUY 1 JO @ $140.86 [synthetic]
-      BUY 1 LIT @ $69.70
-      SELL 1 URTH @ $187.21
-      SELL 1 GDXJ @ $123.56
-      BUY 1 SIL @ $93.70
-      SELL 1 REMX @ $81.61
-      SELL 1 PICK @ $57.89
-      BUY 1 PLTR @ $143.70
-      BUY 1 NVO @ $45.25
-      SELL 1 GLD @ $442.28
-      SELL 1 JO @ $140.26 [synthetic]
-      SELL 1 URTH @ $187.00
-      BUY 1 SIL @ $94.29
-      BUY 1 PICK @ $58.40
-      BUY 1 NVDA @ $175.67
-      BUY 1 AAPL @ $274.95
-      SELL 1 PLTR @ $136.41
-      BUY 1 AMD @ $202.00
-      BUY 1 BE @ $163.65
-      BUY 1 MSTR @ $121.50
-      BUY 1 MSFT @ $404.82
-      BUY 1 TSLA @ $402.00
-      BUY 1 LMT @ $109.70 [synthetic]
-      SELL 1 NVO @ $44.85
-      BUY 1 GLD @ $444.10
-      BUY 1 SLV @ $67.68
-      BUY 1 COPX @ $84.07
-      BUY 1 JO @ $140.43 [synthetic]
-      BUY 1 LIT @ $75.00
-      BUY 1 URTH @ $187.98
-      SELL 1 REMX @ $81.61
-      BUY 1 PICK @ $58.65
+      BUY 1 NVDA @ $181.00
+      BUY 1 AMD @ $211.16
+      BUY 1 MSTR @ $125.72
+      BUY 1 TSLA @ $402.47
+      BUY 1 GLD @ $453.20
+      BUY 1 PPLT @ $191.86
+      BUY 1 COPX @ $84.93
+      BUY 1 JO @ $108.11 [synthetic]
+      BUY 1 LIT @ $70.76
+      BUY 1 URTH @ $188.79
+      BUY 1 GDXJ @ $126.31
+      BUY 1 REMX @ $86.75
+      BUY 1 PICK @ $59.05
+      SELL 1 NVDA @ $177.13
+      BUY 1 PLTR @ $134.70
+      BUY 1 AMD @ $211.16
+      BUY 1 TSLA @ $406.00
+      BUY 1 NVO @ $46.27
+      SELL 1 GLD @ $452.58
+      SELL 1 PPLT @ $186.96
+      BUY 1 COPX @ $84.93
+      BUY 1 JO @ $108.14 [synthetic]
+      BUY 1 LIT @ $71.08
+      SELL 1 URTH @ $188.41
+      SELL 1 GDXJ @ $125.86
+      SELL 1 REMX @ $83.73
+      BUY 1 PLTR @ $137.40
+      SELL 1 AMD @ $195.00
+      BUY 1 MSTR @ $128.20
+      BUY 1 MSFT @ $402.50
+      BUY 1 TSLA @ $406.00
+      BUY 1 NOC @ $127.97 [synthetic]
+      BUY 1 NVO @ $46.33
+      BUY 1 SLV @ $68.61
+      SELL 1 COPX @ $84.21
+      SELL 1 JO @ $107.86 [synthetic]
+      BUY 1 LIT @ $71.08
+      BUY 1 SIL @ $95.63
+      SELL 1 PICK @ $58.50
+      BUY 1 AAPL @ $278.91
+      SELL 1 PLTR @ $132.00
+      BUY 1 AMD @ $211.16
+      BUY 1 MSFT @ $418.97
+      SELL 1 TSLA @ $404.03
+      SELL 1 NOC @ $127.43 [synthetic]
+      BUY 1 NVO @ $46.35
+      BUY 1 GLD @ $453.30
+      BUY 1 SLV @ $68.80
+      BUY 1 PPLT @ $187.59
+      BUY 1 COPX @ $84.41
+      BUY 1 JO @ $108.10 [synthetic]
+      BUY 1 URTH @ $188.60
+      BUY 1 GDXJ @ $126.60
+      BUY 1 SIL @ $95.97
+      BUY 1 PICK @ $58.95
+      BUY 1 PLTR @ $137.40
+      SELL 1 MSTR @ $116.40
+      SELL 1 MSFT @ $396.00
+      SELL 1 TSLA @ $400.64
+      BUY 1 NOC @ $128.37 [synthetic]
+      BUY 1 NVO @ $46.47
+      BUY 1 GLD @ $454.90
+      BUY 1 SLV @ $69.23
+      SELL 1 PPLT @ $181.37
+      BUY 1 COPX @ $84.98
+      BUY 1 JO @ $108.11 [synthetic]
+      BUY 1 LIT @ $71.13
+      SELL 1 URTH @ $188.51
+      BUY 1 GDXJ @ $127.22
+      BUY 1 SIL @ $96.70
+      BUY 1 REMX @ $85.72
+      SELL 1 AAPL @ $279.24
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $211.16
+      SELL 1 MSFT @ $396.00
+      SELL 1 NOC @ $128.00 [synthetic]
+      BUY 1 NVO @ $46.79
+      SELL 1 GLD @ $454.00
+      SELL 1 SLV @ $69.19
+      BUY 1 PPLT @ $188.06
+      BUY 1 COPX @ $85.05
+      SELL 1 JO @ $107.98 [synthetic]
+      BUY 1 URTH @ $188.85
+      BUY 1 GDXJ @ $127.22
+      SELL 1 SIL @ $96.03
+      SELL 1 REMX @ $85.25
+      BUY 1 PLTR @ $137.40
+      SELL 1 AMD @ $202.36
+      BUY 1 BE @ $149.00
+      BUY 1 MSFT @ $400.09
+      BUY 1 NOC @ $128.33 [synthetic]
+      SELL 1 NVO @ $46.53
+      SELL 1 GLD @ $453.61
+      SELL 1 SLV @ $68.99
+      SELL 1 PPLT @ $181.37
+      SELL 1 COPX @ $84.05
+      SELL 1 JO @ $107.64 [synthetic]
+      SELL 1 URTH @ $188.60
+      SELL 1 GDXJ @ $126.42
+      SELL 1 SIL @ $95.86
+      SELL 1 PICK @ $58.50
+      BUY 1 NVDA @ $178.78
+      BUY 1 AAPL @ $279.70
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $196.88
+      SELL 1 BE @ $124.76
+      SELL 1 MSTR @ $116.40
+      SELL 1 MSFT @ $397.00
+      SELL 1 NOC @ $128.00 [synthetic]
+      SELL 1 NVO @ $46.48
+      SELL 1 SLV @ $68.85
+      BUY 1 PPLT @ $188.06
+      SELL 1 COPX @ $83.89
+      BUY 1 JO @ $108.08 [synthetic]
+      SELL 1 GDXJ @ $126.20
+      SELL 1 SIL @ $95.49
+      BUY 1 REMX @ $85.53
 
     Minute 10-19:
-      SELL 1 NVDA @ $175.02
-      SELL 1 AAPL @ $272.00
-      SELL 1 PLTR @ $130.00
-      BUY 1 AMD @ $210.00
-      SELL 1 BE @ $123.45
-      SELL 1 MSTR @ $116.80
-      SELL 1 MSFT @ $403.00
-      BUY 1 TSLA @ $402.00
-      BUY 1 LMT @ $109.76 [synthetic]
-      BUY 1 NVO @ $45.19
-      BUY 1 GLD @ $450.00
-      SELL 1 LIT @ $68.01
-      BUY 1 SIL @ $96.18
-      SELL 1 PICK @ $57.89
-      BUY 1 MP @ $61.66
-      SELL 1 TSLA @ $392.00
-      BUY 1 LMT @ $109.80 [synthetic]
-      SELL 1 NVO @ $44.80
-      SELL 1 GLD @ $430.80
-      BUY 1 SLV @ $68.81
-      BUY 1 COPX @ $84.22
-      BUY 1 JO @ $140.93 [synthetic]
-      BUY 1 URTH @ $188.12
-      BUY 1 GDXJ @ $126.59
-      BUY 1 SIL @ $96.49
-      BUY 1 PICK @ $58.74
-      SELL 1 PLTR @ $130.00
-      SELL 1 MP @ $55.36
-      SELL 1 LMT @ $109.44 [synthetic]
-      BUY 1 NVO @ $45.18
-      BUY 1 SLV @ $68.91
-      SELL 1 COPX @ $83.39
-      SELL 1 JO @ $140.72 [synthetic]
-      BUY 1 LIT @ $69.92
-      BUY 1 URTH @ $188.06
-      BUY 1 GDXJ @ $126.69
+      SELL 1 NVDA @ $178.48
+      SELL 1 AAPL @ $279.61
+      SELL 1 AMD @ $202.14
+      SELL 1 TSLA @ $400.64
+      BUY 1 NOC @ $128.93 [synthetic]
+      BUY 1 NVO @ $46.50
+      BUY 1 GLD @ $453.30
+      SELL 1 PPLT @ $186.84
+      BUY 1 COPX @ $84.68
+      SELL 1 JO @ $107.79 [synthetic]
+      BUY 1 URTH @ $188.80
+      SELL 1 GDXJ @ $126.29
+      BUY 1 SIL @ $96.16
+      BUY 1 REMX @ $86.75
+      BUY 1 NVDA @ $178.90
+      BUY 1 BE @ $149.00
+      BUY 1 MSTR @ $121.32
+      BUY 1 MSFT @ $399.93
+      BUY 1 TSLA @ $405.00
+      BUY 1 NOC @ $128.96 [synthetic]
+      BUY 1 NVO @ $46.56
+      SELL 1 GLD @ $452.55
+      BUY 1 PPLT @ $188.06
+      SELL 1 COPX @ $83.89
+      BUY 1 JO @ $108.10 [synthetic]
+      SELL 1 LIT @ $69.81
+      BUY 1 URTH @ $188.79
       SELL 1 SIL @ $95.51
-      BUY 1 REMX @ $84.57
-      SELL 1 AMD @ $198.00
-      BUY 1 BE @ $167.06
-      SELL 1 NVO @ $45.11
-      SELL 1 GLD @ $446.09
-      SELL 1 SLV @ $68.85
-      BUY 1 COPX @ $84.27
-      SELL 1 JO @ $140.64 [synthetic]
-      SELL 1 URTH @ $187.53
-      SELL 1 GDXJ @ $125.75
-      BUY 1 SIL @ $96.46
-      SELL 1 REMX @ $81.61
-      SELL 1 PICK @ $58.50
-      BUY 1 AAPL @ $274.84
-      BUY 1 PLTR @ $137.00
-      BUY 1 AMD @ $208.45
-      SELL 1 BE @ $123.45
-      BUY 1 TSLA @ $401.00
-      BUY 1 LMT @ $110.10 [synthetic]
-      SELL 1 JO @ $140.33 [synthetic]
-      BUY 1 LIT @ $70.16
-      BUY 1 SIL @ $97.03
-      SELL 1 AAPL @ $274.02
-      SELL 1 PLTR @ $130.00
-      BUY 1 MSFT @ $403.96
-      SELL 1 TSLA @ $395.00
-      BUY 1 NOC @ $346.47 [synthetic]
-      BUY 1 NVO @ $45.48
-      SELL 1 JO @ $140.08 [synthetic]
-      BUY 1 GDXJ @ $127.64
-      SELL 1 PICK @ $58.47
-      SELL 1 AMD @ $198.00
-      BUY 1 BE @ $167.06
-      SELL 1 NVO @ $45.31
-      SELL 1 SLV @ $69.61
-      BUY 1 PPLT @ $191.58
-      SELL 1 COPX @ $84.04
-      SELL 1 JO @ $139.71 [synthetic]
-      BUY 1 LIT @ $70.26
-      SELL 1 URTH @ $187.89
-      SELL 1 GDXJ @ $126.84
-      SELL 1 SIL @ $96.34
-      BUY 1 PICK @ $59.00
-      BUY 1 NVDA @ $176.86
-      BUY 1 AMD @ $208.45
-      SELL 1 BE @ $123.45
-      SELL 1 MSFT @ $400.40
-      BUY 1 TSLA @ $401.00
-      SELL 1 NVO @ $45.17
-      BUY 1 SLV @ $70.00
-      BUY 1 COPX @ $85.39
-      BUY 1 JO @ $140.34 [synthetic]
-      SELL 1 GDXJ @ $126.85
-      BUY 1 SIL @ $96.87
-      SELL 1 NVDA @ $176.31
-      BUY 1 AMD @ $208.45
-      SELL 1 TSLA @ $398.00
-      BUY 1 NVO @ $45.24
-      SELL 1 SLV @ $69.51
-      BUY 1 PPLT @ $186.56
-      SELL 1 COPX @ $84.21
-      BUY 1 JO @ $140.79 [synthetic]
-      BUY 1 LIT @ $70.37
-      SELL 1 URTH @ $187.27
-      SELL 1 SIL @ $95.63
-      BUY 1 REMX @ $84.90
-      SELL 1 PICK @ $58.68
-      BUY 1 PLTR @ $137.00
-      SELL 1 AMD @ $198.00
-      BUY 1 BE @ $167.06
-      SELL 1 NVO @ $45.09
-      SELL 1 SLV @ $69.35
-      SELL 1 PPLT @ $179.39
-      BUY 1 COPX @ $85.41
-      SELL 1 JO @ $139.84 [synthetic]
-      SELL 1 LIT @ $68.99
-      BUY 1 URTH @ $188.02
-      SELL 1 SIL @ $95.99
-      BUY 1 REMX @ $85.70
-      BUY 1 PICK @ $58.95
+      BUY 1 REMX @ $86.75
+      BUY 1 NVDA @ $179.79
+      BUY 1 AAPL @ $279.42
+      SELL 1 PLTR @ $132.00
+      BUY 1 AMD @ $203.50
+      BUY 1 BE @ $149.00
+      BUY 1 MSTR @ $128.20
+      BUY 1 MSFT @ $400.01
+      SELL 1 TSLA @ $400.64
+      SELL 1 NOC @ $128.32 [synthetic]
+      BUY 1 GLD @ $453.69
+      BUY 1 SLV @ $68.74
+      BUY 1 PPLT @ $188.06
+      BUY 1 COPX @ $84.54
+      SELL 1 AAPL @ $278.96
+      BUY 1 PLTR @ $137.40
+      SELL 1 BE @ $121.86
+      BUY 1 NOC @ $128.83 [synthetic]
+      BUY 1 NVO @ $46.57
+      SELL 1 GLD @ $452.94
+      BUY 1 SLV @ $68.84
+      SELL 1 PPLT @ $187.35
+      SELL 1 COPX @ $83.73
+      SELL 1 JO @ $107.87 [synthetic]
+      BUY 1 URTH @ $189.09
+      BUY 1 SIL @ $96.15
+      SELL 1 REMX @ $85.09
+      SELL 1 NVDA @ $180.57
+      BUY 1 AAPL @ $280.00
+      SELL 1 PLTR @ $134.00
+      BUY 1 AMD @ $207.95
+      BUY 1 MP @ $63.27
+      SELL 1 MSTR @ $116.40
+      SELL 1 MSFT @ $399.14
+      BUY 1 TSLA @ $408.00
+      BUY 1 NOC @ $128.96 [synthetic]
+      SELL 1 NVO @ $46.51
+      SELL 1 SLV @ $68.58
+      SELL 1 PPLT @ $181.37
+      BUY 1 COPX @ $84.59
+      BUY 1 JO @ $107.99 [synthetic]
+      SELL 1 URTH @ $188.86
+      BUY 1 GDXJ @ $126.94
+      BUY 1 SIL @ $96.15
+      SELL 1 REMX @ $85.09
+      SELL 1 NVDA @ $180.43
+      SELL 1 AAPL @ $279.27
+      BUY 1 PLTR @ $137.40
+      SELL 1 AMD @ $196.88
+      BUY 1 MSTR @ $123.80
+      BUY 1 MSFT @ $401.55
+      BUY 1 NOC @ $129.18 [synthetic]
+      BUY 1 SLV @ $68.78
+      BUY 1 PPLT @ $188.06
+      SELL 1 COPX @ $83.73
+      BUY 1 JO @ $108.35 [synthetic]
+      SELL 1 URTH @ $188.81
+      SELL 1 GDXJ @ $126.46
+      SELL 1 SIL @ $95.57
+      BUY 1 REMX @ $85.61
+      BUY 1 PICK @ $58.92
+      BUY 1 NVDA @ $180.52
+      SELL 1 PLTR @ $134.00
+      BUY 1 AMD @ $206.00
+      BUY 1 BE @ $149.00
+      SELL 1 MSTR @ $116.40
+      SELL 1 MSFT @ $398.03
+      BUY 1 TSLA @ $408.00
+      SELL 1 NOC @ $128.48 [synthetic]
+      SELL 1 NVO @ $46.50
+      SELL 1 SLV @ $68.69
+      BUY 1 PPLT @ $187.97
+      BUY 1 COPX @ $84.72
+      SELL 1 JO @ $107.97 [synthetic]
+      BUY 1 URTH @ $189.18
+      SELL 1 AMD @ $196.88
+      SELL 1 MSTR @ $116.40
+      SELL 1 TSLA @ $400.64
+      SELL 1 NOC @ $127.55 [synthetic]
+      SELL 1 NVO @ $46.39
+      BUY 1 GLD @ $453.82
+      BUY 1 SLV @ $68.78
+      BUY 1 PPLT @ $188.06
+      SELL 1 COPX @ $83.73
+      BUY 1 JO @ $108.58 [synthetic]
+      BUY 1 GDXJ @ $126.93
+      SELL 1 REMX @ $85.32
+      BUY 1 MSTR @ $122.67
+      SELL 1 MSFT @ $397.00
+      SELL 1 TSLA @ $400.64
+      BUY 1 NOC @ $128.16 [synthetic]
+      BUY 1 NVO @ $46.42
+      BUY 1 GLD @ $454.17
+      BUY 1 SLV @ $68.96
+      SELL 1 COPX @ $83.99
+      BUY 1 JO @ $108.79 [synthetic]
+      BUY 1 LIT @ $71.16
+      SELL 1 MSTR @ $116.40
+      BUY 1 NOC @ $128.77 [synthetic]
+      SELL 1 NVO @ $46.36
 
     Minute 20-29:
-      BUY 1 NVDA @ $176.86
-      BUY 1 AAPL @ $282.00
-      SELL 1 PLTR @ $130.00
-      SELL 1 BE @ $123.45
-      SELL 1 TSLA @ $395.00
-      BUY 1 LMT @ $304.07 [synthetic]
-      SELL 1 NVO @ $44.99
-      BUY 1 SLV @ $69.41
-      SELL 1 COPX @ $84.02
-      SELL 1 JO @ $139.69 [synthetic]
-      SELL 1 URTH @ $187.76
-      SELL 1 SIL @ $95.64
-      SELL 1 REMX @ $83.28
-      SELL 1 PICK @ $58.79
-      SELL 1 NVDA @ $176.50
-      SELL 1 AAPL @ $276.16
-      BUY 1 PLTR @ $137.00
-      BUY 1 BE @ $167.06
-      BUY 1 MSTR @ $126.14
-      BUY 1 MSFT @ $406.12
-      BUY 1 TSLA @ $400.00
-      BUY 1 NVO @ $45.12
-      BUY 1 SLV @ $69.82
-      BUY 1 PICK @ $59.15
-      SELL 1 BE @ $123.45
-      SELL 1 MSTR @ $116.80
-      SELL 1 TSLA @ $395.00
-      SELL 1 NOC @ $348.92 [synthetic]
-      SELL 1 LMT @ $303.74 [synthetic]
-      SELL 1 NVO @ $44.92
-      BUY 1 GLD @ $450.00
-      BUY 1 SLV @ $70.50
-      BUY 1 PPLT @ $193.49
-      SELL 1 COPX @ $84.15
-      BUY 1 JO @ $139.86 [synthetic]
-      BUY 1 LIT @ $70.49
-      SELL 1 URTH @ $187.93
-      BUY 1 GDXJ @ $126.74
-      SELL 1 SIL @ $96.14
-      SELL 1 REMX @ $83.28
-      SELL 1 PICK @ $58.62
-      BUY 1 AAPL @ $279.50
-      SELL 1 PLTR @ $130.00
-      SELL 1 AMD @ $198.00
-      SELL 1 BE @ $123.45
-      BUY 1 MP @ $61.66
-      SELL 1 MSFT @ $403.13
-      BUY 1 TSLA @ $401.00
-      BUY 1 NOC @ $350.06 [synthetic]
-      SELL 1 LMT @ $303.08 [synthetic]
-      SELL 1 GLD @ $446.87
-      SELL 1 SLV @ $67.54
-      SELL 1 PPLT @ $181.26
-      BUY 1 COPX @ $85.41
-      SELL 1 JO @ $139.50 [synthetic]
-      BUY 1 GDXJ @ $126.68
-      BUY 1 SIL @ $96.68
-      BUY 1 REMX @ $84.80
-      BUY 1 PICK @ $59.06
-      SELL 1 AAPL @ $276.01
-      BUY 1 PLTR @ $135.00
+      SELL 1 NOC @ $128.52 [synthetic]
+      BUY 1 NVO @ $46.47
+      SELL 1 GLD @ $453.55
+      SELL 1 SLV @ $68.74
+      SELL 1 PPLT @ $187.20
+      SELL 1 COPX @ $84.34
+      SELL 1 JO @ $108.82 [synthetic]
+      SELL 1 URTH @ $188.88
+      SELL 1 GDXJ @ $126.84
+      SELL 1 SIL @ $95.79
+      BUY 1 REMX @ $85.97
+      SELL 1 PICK @ $58.58
+      BUY 1 NVDA @ $181.51
       BUY 1 AMD @ $208.45
-      BUY 1 BE @ $144.00
-      SELL 1 MP @ $55.36
-      BUY 1 MSFT @ $406.12
-      BUY 1 NOC @ $350.83 [synthetic]
-      SELL 1 LMT @ $302.08 [synthetic]
-      BUY 1 NVO @ $44.59
-      BUY 1 SLV @ $70.50
-      SELL 1 COPX @ $84.03
-      BUY 1 JO @ $140.06 [synthetic]
-      SELL 1 GDXJ @ $126.45
-      BUY 1 SIL @ $96.68
-      BUY 1 REMX @ $85.61
-      SELL 1 PICK @ $58.62
-      BUY 1 NVDA @ $175.50
-      BUY 1 AAPL @ $279.50
-      SELL 1 PLTR @ $130.00
-      SELL 1 AMD @ $202.36
-      BUY 1 BE @ $164.14
-      BUY 1 MSTR @ $118.52
-      SELL 1 MSFT @ $401.80
-      BUY 1 NOC @ $351.11 [synthetic]
-      SELL 1 LMT @ $300.92 [synthetic]
-      SELL 1 NVO @ $44.50
-      SELL 1 SLV @ $69.58
-      SELL 1 PPLT @ $181.26
-      SELL 1 JO @ $139.82 [synthetic]
-      BUY 1 URTH @ $188.70
-      SELL 1 GDXJ @ $126.20
-      SELL 1 SIL @ $95.55
-      SELL 1 REMX @ $83.28
-      BUY 1 PICK @ $59.03
-      SELL 1 NVDA @ $175.17
-      SELL 1 AAPL @ $274.10
-      BUY 1 PLTR @ $135.00
+      SELL 1 BE @ $124.92
+      SELL 1 MP @ $59.66
+      BUY 1 MSFT @ $399.73
+      BUY 1 NOC @ $129.00 [synthetic]
+      SELL 1 NVO @ $46.38
+      BUY 1 GLD @ $454.61
+      BUY 1 SLV @ $69.00
+      SELL 1 PPLT @ $181.37
+      BUY 1 COPX @ $95.00
+      SELL 1 JO @ $108.57 [synthetic]
+      BUY 1 URTH @ $189.22
+      BUY 1 GDXJ @ $127.22
+      SELL 1 NVDA @ $181.16
+      BUY 1 BE @ $149.00
+      SELL 1 MSFT @ $397.00
+      BUY 1 TSLA @ $409.40
+      SELL 1 NVO @ $46.33
+      SELL 1 GLD @ $453.85
+      SELL 1 SLV @ $68.87
+      SELL 1 PPLT @ $181.37
+      SELL 1 COPX @ $84.16
+      BUY 1 JO @ $109.36 [synthetic]
+      SELL 1 URTH @ $188.85
+      SELL 1 GDXJ @ $126.81
+      SELL 1 REMX @ $85.48
+      SELL 1 NVDA @ $180.90
+      BUY 1 PLTR @ $137.40
+      SELL 1 AMD @ $204.96
+      BUY 1 MSTR @ $122.68
+      SELL 1 TSLA @ $400.64
+      BUY 1 NOC @ $129.37 [synthetic]
+      SELL 1 NVO @ $46.32
+      SELL 1 GLD @ $453.81
+      SELL 1 SLV @ $68.80
+      BUY 1 PPLT @ $188.58
+      SELL 1 JO @ $109.23 [synthetic]
+      SELL 1 LIT @ $69.81
+      SELL 1 URTH @ $188.69
+      SELL 1 REMX @ $85.36
+      BUY 1 AAPL @ $280.88
+      SELL 1 PLTR @ $132.00
       BUY 1 AMD @ $208.45
-      BUY 1 BE @ $164.14
-      BUY 1 MP @ $61.66
-      BUY 1 MSTR @ $120.00
-      BUY 1 NOC @ $352.66 [synthetic]
-      BUY 1 NVO @ $44.64
-      SELL 1 SLV @ $69.48
-      BUY 1 PPLT @ $193.49
-      BUY 1 COPX @ $85.21
-      SELL 1 LIT @ $69.06
-      SELL 1 URTH @ $186.82
-      BUY 1 SIL @ $95.88
-      BUY 1 REMX @ $84.90
-      SELL 1 PICK @ $58.57
-      SELL 1 PLTR @ $130.00
-      SELL 1 AMD @ $198.00
-      SELL 1 BE @ $143.09
-      SELL 1 MP @ $55.36
-      BUY 1 MSFT @ $402.46
-      SELL 1 TSLA @ $395.00
-      SELL 1 NOC @ $351.70 [synthetic]
-      SELL 1 NVO @ $44.54
-      SELL 1 SLV @ $69.30
-      SELL 1 COPX @ $83.92
-      BUY 1 JO @ $140.26 [synthetic]
-      SELL 1 LIT @ $69.06
-      BUY 1 URTH @ $187.66
-      SELL 1 SIL @ $95.17
-      SELL 1 REMX @ $83.28
+      BUY 1 MP @ $61.15
+      SELL 1 MSTR @ $116.40
+      BUY 1 MSFT @ $401.55
+      BUY 1 TSLA @ $408.00
+      BUY 1 NOC @ $129.94 [synthetic]
+      BUY 1 NVO @ $46.42
+      SELL 1 SLV @ $68.79
+      SELL 1 PPLT @ $187.63
+      SELL 1 JO @ $109.20 [synthetic]
+      BUY 1 NVDA @ $180.80
+      SELL 1 AAPL @ $279.87
+      SELL 1 AMD @ $203.89
+      SELL 1 BE @ $122.01
+      SELL 1 MP @ $56.99
+      SELL 1 MSFT @ $396.08
+      BUY 1 NOC @ $130.03 [synthetic]
+      BUY 1 NVO @ $46.48
+      BUY 1 SLV @ $68.86
+      BUY 1 PPLT @ $188.79
+      BUY 1 COPX @ $84.11
+      BUY 1 JO @ $109.51 [synthetic]
+      BUY 1 URTH @ $188.75
+      BUY 1 GDXJ @ $126.92
+      BUY 1 SIL @ $95.97
+      SELL 1 NVDA @ $180.71
       BUY 1 AMD @ $208.45
-      SELL 1 BE @ $123.45
-      BUY 1 MP @ $61.66
-      SELL 1 MSFT @ $401.04
-      BUY 1 NOC @ $352.56 [synthetic]
-      BUY 1 SLV @ $70.50
-      SELL 1 PPLT @ $181.26
-      SELL 1 JO @ $139.58 [synthetic]
-      SELL 1 URTH @ $187.34
-      SELL 1 SIL @ $95.08
-      BUY 1 REMX @ $84.89
-      BUY 1 NVDA @ $174.71
-      BUY 1 AAPL @ $273.95
-      BUY 1 PLTR @ $133.56
-      BUY 1 BE @ $164.14
-      SELL 1 MP @ $55.36
-      SELL 1 NOC @ $350.01 [synthetic]
-      SELL 1 SLV @ $69.01
-      BUY 1 PPLT @ $191.54
-      BUY 1 JO @ $139.76 [synthetic]
-      SELL 1 LIT @ $69.06
-      BUY 1 GDXJ @ $125.44
-      SELL 1 SIL @ $94.92
+      BUY 1 BE @ $149.00
+      BUY 1 MSTR @ $123.38
+      BUY 1 TSLA @ $408.76
+      SELL 1 NOC @ $129.88 [synthetic]
+      SELL 1 NVO @ $46.38
+      BUY 1 GLD @ $454.91
+      BUY 1 SLV @ $69.12
+      BUY 1 PPLT @ $188.88
+      BUY 1 COPX @ $84.77
+      SELL 1 JO @ $109.32 [synthetic]
+      SELL 1 URTH @ $188.51
+      BUY 1 GDXJ @ $127.33
+      BUY 1 SIL @ $96.52
+      BUY 1 REMX @ $86.96
+      SELL 1 AMD @ $196.88
+      BUY 1 MSTR @ $123.00
+      SELL 1 NVO @ $46.36
+      SELL 1 SLV @ $69.07
+      SELL 1 PPLT @ $181.37
+      SELL 1 COPX @ $83.77
+      BUY 1 JO @ $110.00 [synthetic]
+      BUY 1 URTH @ $188.78
+      SELL 1 GDXJ @ $126.74
+      SELL 1 SIL @ $95.81
+      BUY 1 REMX @ $86.96
+      BUY 1 NVDA @ $181.36
+      SELL 1 BE @ $119.19
+      SELL 1 MSTR @ $116.40
+      BUY 1 NOC @ $130.71 [synthetic]
+      SELL 1 NVO @ $46.35
+      SELL 1 GLD @ $441.66
+      BUY 1 SLV @ $69.39
+      BUY 1 COPX @ $84.55
+      BUY 1 JO @ $110.57 [synthetic]
+      BUY 1 LIT @ $75.00
+      SELL 1 URTH @ $187.92
+      BUY 1 GDXJ @ $127.49
+      BUY 1 SIL @ $96.38
+      SELL 1 REMX @ $85.20
+      SELL 1 NVDA @ $180.72
+      BUY 1 PLTR @ $137.40
+      SELL 1 AMD @ $196.88
+      BUY 1 MSTR @ $123.38
+      SELL 1 TSLA @ $400.64
+      BUY 1 NOC @ $130.99 [synthetic]
+      BUY 1 NVO @ $46.45
+      SELL 1 SLV @ $69.06
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $84.65
+      BUY 1 JO @ $110.57 [synthetic]
+      SELL 1 LIT @ $69.72
+      BUY 1 URTH @ $188.77
+      SELL 1 GDXJ @ $126.78
+      SELL 1 SIL @ $95.75
+      BUY 1 REMX @ $86.58
+      BUY 1 PICK @ $58.97
 
     Minute 30-39:
-      SELL 1 NVDA @ $174.18
-      BUY 1 AAPL @ $278.20
-      SELL 1 PLTR @ $130.00
-      SELL 1 AMD @ $198.00
-      SELL 1 BE @ $123.45
-      BUY 1 MSFT @ $401.77
-      BUY 1 NOC @ $351.27 [synthetic]
-      BUY 1 NVO @ $44.47
-      BUY 1 GLD @ $445.65
-      BUY 1 SLV @ $70.50
-      SELL 1 PPLT @ $185.59
-      BUY 1 JO @ $140.05 [synthetic]
-      SELL 1 LIT @ $69.06
-      SELL 1 GDXJ @ $124.66
-      BUY 1 SIL @ $95.53
-      SELL 1 MSFT @ $400.00
-      BUY 1 NOC @ $352.22 [synthetic]
-      BUY 1 NVO @ $45.40
-      SELL 1 SLV @ $69.79
-      BUY 1 PPLT @ $193.49
-      SELL 1 SIL @ $94.22
-      SELL 1 REMX @ $84.00
-      BUY 1 PICK @ $58.78
-      SELL 1 AAPL @ $273.50
-      SELL 1 AMD @ $197.00
-      SELL 1 BE @ $123.45
-      SELL 1 MSTR @ $116.44
-      BUY 1 MSFT @ $401.77
-      BUY 1 NOC @ $353.08 [synthetic]
-      SELL 1 NVO @ $44.18
-      SELL 1 GLD @ $444.00
-      SELL 1 PPLT @ $185.50
-      SELL 1 JO @ $139.83 [synthetic]
-      SELL 1 LIT @ $68.72
-      BUY 1 GDXJ @ $124.76
-      BUY 1 REMX @ $85.25
-      SELL 1 PICK @ $58.26
-      BUY 1 NVDA @ $173.74
-      BUY 1 AAPL @ $274.12
-      BUY 1 MP @ $61.66
-      SELL 1 MSTR @ $115.00
-      SELL 1 MSFT @ $397.57
-      SELL 1 NOC @ $352.70 [synthetic]
-      SELL 1 NVO @ $44.15
-      BUY 1 COPX @ $83.76
-      BUY 1 JO @ $140.20 [synthetic]
-      SELL 1 LIT @ $68.72
-      BUY 1 GDXJ @ $128.63
-      BUY 1 NVDA @ $173.75
-      BUY 1 AAPL @ $278.20
-      BUY 1 PLTR @ $132.63
-      BUY 1 MP @ $61.66
-      BUY 1 MSTR @ $123.78
-      SELL 1 NOC @ $351.92 [synthetic]
-      BUY 1 GLD @ $445.25
-      BUY 1 SLV @ $70.50
-      SELL 1 JO @ $139.96 [synthetic]
-      BUY 1 LIT @ $69.82
-      SELL 1 GDXJ @ $124.01
-      BUY 1 PICK @ $58.55
-      SELL 1 NVDA @ $173.39
-      SELL 1 AAPL @ $273.50
-      SELL 1 PLTR @ $131.80
-      SELL 1 MP @ $55.36
-      SELL 1 MSTR @ $115.00
-      SELL 1 NOC @ $350.69 [synthetic]
-      BUY 1 LMT @ $303.30 [synthetic]
-      SELL 1 GLD @ $443.97
-      SELL 1 SLV @ $68.26
-      BUY 1 COPX @ $83.95
-      BUY 1 JO @ $140.14 [synthetic]
-      SELL 1 LIT @ $68.91
-      SELL 1 GDXJ @ $123.83
-      SELL 1 REMX @ $82.42
-      SELL 1 PICK @ $58.22
-      SELL 1 NVDA @ $173.25
-      BUY 1 AAPL @ $275.38
-      BUY 1 MSFT @ $399.75
-      SELL 1 NOC @ $350.60 [synthetic]
-      SELL 1 LMT @ $302.78 [synthetic]
-      BUY 1 NVO @ $44.06
-      BUY 1 GLD @ $457.65
-      SELL 1 COPX @ $83.28
-      BUY 1 JO @ $140.19 [synthetic]
-      BUY 1 LIT @ $69.73
-      BUY 1 GDXJ @ $124.49
-      BUY 1 SIL @ $94.54
-      BUY 1 REMX @ $84.13
-      BUY 1 PICK @ $58.55
-      SELL 1 AAPL @ $273.50
-      SELL 1 MSFT @ $398.00
-      BUY 1 NOC @ $351.16 [synthetic]
-      BUY 1 LMT @ $303.88 [synthetic]
-      SELL 1 NVO @ $43.92
-      SELL 1 GLD @ $443.32
-      BUY 1 PPLT @ $191.54
-      BUY 1 COPX @ $83.95
-      BUY 1 JO @ $140.64 [synthetic]
-      SELL 1 GDXJ @ $123.79
-      SELL 1 SIL @ $93.75
-      SELL 1 PICK @ $58.29
-      BUY 1 NVDA @ $173.25
-      BUY 1 AAPL @ $275.08
-      BUY 1 PLTR @ $138.00
-      BUY 1 NOC @ $351.94 [synthetic]
-      SELL 1 LMT @ $302.96 [synthetic]
-      BUY 1 NVO @ $43.95
-      BUY 1 SLV @ $70.35
-      SELL 1 COPX @ $82.81
-      BUY 1 JO @ $140.98 [synthetic]
-      SELL 1 LIT @ $68.34
-      SELL 1 NVDA @ $173.04
-      BUY 1 AAPL @ $275.38
-      SELL 1 PLTR @ $130.00
-      BUY 1 AMD @ $203.00
-      BUY 1 MSTR @ $121.46
-      SELL 1 NOC @ $348.79 [synthetic]
-      BUY 1 LMT @ $304.08 [synthetic]
-      BUY 1 NVO @ $43.99
-      SELL 1 SLV @ $67.94
-      BUY 1 COPX @ $83.14
-      SELL 1 JO @ $140.23 [synthetic]
-      BUY 1 GDXJ @ $124.27
-      BUY 1 PICK @ $58.55
+      BUY 1 AAPL @ $280.26
+      BUY 1 PLTR @ $137.40
+      BUY 1 AMD @ $202.58
+      SELL 1 NOC @ $130.64 [synthetic]
+      BUY 1 NVO @ $46.46
+      SELL 1 SLV @ $68.94
+      BUY 1 PPLT @ $188.88
+      SELL 1 COPX @ $83.93
+      SELL 1 JO @ $110.30 [synthetic]
+      BUY 1 URTH @ $188.73
+      BUY 1 GDXJ @ $127.22
+      SELL 1 SIL @ $95.53
+      SELL 1 REMX @ $85.12
+      SELL 1 PICK @ $58.55
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $132.00
+      BUY 1 AMD @ $202.68
+      SELL 1 MSTR @ $116.40
+      BUY 1 TSLA @ $407.34
+      BUY 1 NOC @ $131.22 [synthetic]
+      SELL 1 JO @ $110.11 [synthetic]
+      SELL 1 URTH @ $188.37
+      BUY 1 GDXJ @ $127.35
+      BUY 1 SIL @ $96.22
+      BUY 1 REMX @ $85.37
+      SELL 1 AMD @ $196.88
+      BUY 1 MSTR @ $122.90
+      SELL 1 TSLA @ $404.00
+      SELL 1 NOC @ $130.50 [synthetic]
+      BUY 1 NVO @ $46.56
+      BUY 1 SLV @ $69.27
+      SELL 1 PPLT @ $188.28
+      SELL 1 COPX @ $83.96
+      BUY 1 JO @ $110.85 [synthetic]
+      SELL 1 URTH @ $188.40
+      SELL 1 GDXJ @ $126.95
+      SELL 1 SIL @ $95.55
+      BUY 1 REMX @ $86.58
+      BUY 1 PICK @ $59.05
+      BUY 1 AAPL @ $280.85
+      BUY 1 AMD @ $208.45
+      BUY 1 MP @ $61.15
+      BUY 1 MSTR @ $128.20
+      SELL 1 NOC @ $130.47 [synthetic]
+      SELL 1 NVO @ $46.49
+      SELL 1 SLV @ $69.22
+      BUY 1 PPLT @ $193.81
+      BUY 1 COPX @ $95.00
+      SELL 1 JO @ $110.52 [synthetic]
+      BUY 1 URTH @ $188.79
+      BUY 1 GDXJ @ $127.58
+      SELL 1 REMX @ $85.40
+      BUY 1 PICK @ $59.69
+      SELL 1 AAPL @ $279.81
+      SELL 1 PLTR @ $132.50
+      SELL 1 AMD @ $196.88
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $116.40
+      BUY 1 MSFT @ $400.00
+      BUY 1 TSLA @ $407.33
+      SELL 1 NVO @ $46.44
+      SELL 1 PPLT @ $189.20
+      SELL 1 COPX @ $84.35
+      SELL 1 JO @ $110.49 [synthetic]
+      BUY 1 LIT @ $71.06
+      SELL 1 URTH @ $188.35
+      BUY 1 GDXJ @ $127.77
+      BUY 1 SIL @ $96.25
+      SELL 1 REMX @ $85.10
+      SELL 1 PICK @ $58.68
+      BUY 1 NVDA @ $179.72
+      BUY 1 PLTR @ $137.40
+      SELL 1 BE @ $116.44
+      BUY 1 MP @ $61.15
+      SELL 1 MSFT @ $393.67
+      SELL 1 TSLA @ $404.00
+      SELL 1 NOC @ $130.49 [synthetic]
+      SELL 1 NVO @ $46.41
+      BUY 1 SLV @ $69.51
+      BUY 1 COPX @ $84.95
+      SELL 1 JO @ $110.23 [synthetic]
+      SELL 1 GDXJ @ $127.44
+      SELL 1 SIL @ $95.91
+      BUY 1 REMX @ $86.58
+      SELL 1 PICK @ $58.68
+      SELL 1 NVDA @ $179.54
+      BUY 1 PLTR @ $139.43
+      SELL 1 AMD @ $196.88
+      SELL 1 MSTR @ $116.40
+      BUY 1 MSFT @ $396.25
+      BUY 1 TSLA @ $408.76
+      SELL 1 NOC @ $130.46 [synthetic]
+      BUY 1 GLD @ $459.00
+      SELL 1 SLV @ $69.37
+      BUY 1 PPLT @ $189.80
+      SELL 1 COPX @ $84.22
+      BUY 1 JO @ $110.88 [synthetic]
+      BUY 1 URTH @ $188.53
+      BUY 1 GDXJ @ $127.83
+      BUY 1 SIL @ $96.40
+      SELL 1 GLD @ $455.32
+      BUY 1 SLV @ $69.41
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $85.00
+      BUY 1 JO @ $111.08 [synthetic]
+      BUY 1 URTH @ $188.62
+      BUY 1 GDXJ @ $128.03
+      SELL 1 REMX @ $84.79
+      SELL 1 MP @ $56.99
+      SELL 1 MSFT @ $396.02
+      SELL 1 TSLA @ $407.46
+      BUY 1 NOC @ $131.32 [synthetic]
+      BUY 1 NVO @ $46.45
+      BUY 1 GLD @ $456.06
+      BUY 1 SLV @ $69.57
+      BUY 1 PPLT @ $189.86
+      BUY 1 COPX @ $85.07
+      SELL 1 JO @ $110.63 [synthetic]
+      SELL 1 URTH @ $188.31
+      BUY 1 GDXJ @ $128.55
+      BUY 1 SIL @ $97.10
+      SELL 1 REMX @ $85.18
+      BUY 1 PICK @ $59.21
+      SELL 1 MSTR @ $116.40
+      SELL 1 TSLA @ $404.00
+      BUY 1 NOC @ $131.40 [synthetic]
+      BUY 1 LMT @ $309.87 [synthetic]
+      BUY 1 NVO @ $46.49
+      SELL 1 GLD @ $455.40
+      BUY 1 SLV @ $69.62
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $85.17
+      BUY 1 JO @ $111.41 [synthetic]
+      BUY 1 URTH @ $188.93
+      BUY 1 GDXJ @ $128.54
+      SELL 1 SIL @ $96.42
+      BUY 1 REMX @ $86.58
+      BUY 1 PICK @ $59.27
 
     Minute 40-49:
-      SELL 1 MP @ $55.36
-      SELL 1 MSTR @ $110.01
-      SELL 1 NOC @ $348.04 [synthetic]
-      BUY 1 LMT @ $304.46 [synthetic]
-      SELL 1 NVO @ $43.92
-      BUY 1 SLV @ $68.13
-      SELL 1 PPLT @ $179.24
-      BUY 1 COPX @ $83.35
-      BUY 1 JO @ $140.70 [synthetic]
-      BUY 1 GDXJ @ $124.92
-      SELL 1 REMX @ $82.42
-      BUY 1 PICK @ $58.62
-      SELL 1 AAPL @ $273.50
-      BUY 1 BE @ $158.29
-      BUY 1 MSTR @ $121.46
-      SELL 1 SLV @ $67.32
-      BUY 1 COPX @ $83.39
-      SELL 1 JO @ $140.53 [synthetic]
-      SELL 1 GDXJ @ $124.49
-      BUY 1 SIL @ $94.78
-      BUY 1 REMX @ $84.13
-      SELL 1 PICK @ $58.10
-      BUY 1 PLTR @ $138.00
-      SELL 1 BE @ $120.55
-      BUY 1 MP @ $61.66
-      SELL 1 NOC @ $347.34 [synthetic]
-      BUY 1 LMT @ $305.31 [synthetic]
-      SELL 1 NVO @ $43.79
-      BUY 1 SLV @ $70.35
-      SELL 1 COPX @ $83.04
-      SELL 1 JO @ $140.09 [synthetic]
-      SELL 1 GDXJ @ $124.01
-      SELL 1 SIL @ $93.86
-      SELL 1 REMX @ $82.42
-      BUY 1 AAPL @ $275.26
-      SELL 1 PLTR @ $130.00
-      SELL 1 AMD @ $194.00
-      BUY 1 TSLA @ $398.00
-      SELL 1 NOC @ $346.76 [synthetic]
-      SELL 1 LMT @ $303.67 [synthetic]
-      SELL 1 SLV @ $67.75
-      BUY 1 COPX @ $83.95
-      BUY 1 JO @ $140.47 [synthetic]
-      SELL 1 PICK @ $58.04
-      SELL 1 AAPL @ $275.09
-      SELL 1 MSTR @ $114.00
-      SELL 1 TSLA @ $388.01
-      BUY 1 NOC @ $348.26 [synthetic]
-      BUY 1 LMT @ $304.46 [synthetic]
-      BUY 1 NVO @ $43.79
-      SELL 1 COPX @ $82.46
-      BUY 1 JO @ $140.91 [synthetic]
-      BUY 1 REMX @ $83.98
-      BUY 1 AAPL @ $275.16
-      BUY 1 MSFT @ $401.76
-      BUY 1 NVO @ $43.85
-      SELL 1 COPX @ $82.12
-      SELL 1 JO @ $140.49 [synthetic]
-      BUY 1 SIL @ $93.94
-      SELL 1 REMX @ $81.97
-      BUY 1 PICK @ $58.73
-      SELL 1 AAPL @ $273.50
-      SELL 1 MP @ $55.36
-      BUY 1 MSTR @ $119.18
-      SELL 1 MSFT @ $398.00
-      BUY 1 NOC @ $349.02 [synthetic]
-      BUY 1 LMT @ $306.91 [synthetic]
-      SELL 1 NVO @ $43.77
-      BUY 1 JO @ $140.96 [synthetic]
-      SELL 1 SIL @ $93.09
-      BUY 1 REMX @ $83.15
-      SELL 1 PICK @ $57.89
-      BUY 1 MP @ $60.51
-      SELL 1 MSTR @ $110.01
-      SELL 1 NOC @ $348.17 [synthetic]
-      SELL 1 LMT @ $305.28 [synthetic]
-      BUY 1 NVO @ $43.79
-      BUY 1 GLD @ $444.81
-      BUY 1 SLV @ $67.78
-      BUY 1 PPLT @ $184.64
-      SELL 1 JO @ $140.65 [synthetic]
-      BUY 1 URTH @ $186.86
-      SELL 1 REMX @ $81.97
-      BUY 1 PICK @ $58.70
-      SELL 1 MP @ $55.36
-      SELL 1 NOC @ $347.28 [synthetic]
-      BUY 1 LMT @ $307.42 [synthetic]
-      BUY 1 NVO @ $43.90
+      BUY 1 PLTR @ $139.43
+      SELL 1 NVO @ $46.46
+      SELL 1 SLV @ $69.52
+      SELL 1 COPX @ $84.62
+      SELL 1 JO @ $111.25 [synthetic]
+      BUY 1 LIT @ $71.06
+      SELL 1 URTH @ $188.66
+      BUY 1 GDXJ @ $128.55
+      BUY 1 SIL @ $96.96
+      SELL 1 REMX @ $85.27
+      BUY 1 PICK @ $59.29
+      SELL 1 PLTR @ $133.20
+      SELL 1 NOC @ $130.39 [synthetic]
+      SELL 1 LMT @ $309.14 [synthetic]
+      SELL 1 NVO @ $46.36
+      SELL 1 SLV @ $69.46
+      BUY 1 COPX @ $85.16
+      SELL 1 JO @ $110.93 [synthetic]
+      SELL 1 LIT @ $70.35
+      SELL 1 URTH @ $188.33
+      SELL 1 GDXJ @ $127.86
+      SELL 1 SIL @ $96.45
+      SELL 1 PICK @ $58.78
+      BUY 1 PLTR @ $139.43
+      BUY 1 AMD @ $203.21
+      BUY 1 MSFT @ $395.74
+      BUY 1 NOC @ $130.60 [synthetic]
+      BUY 1 LMT @ $310.56 [synthetic]
+      BUY 1 SLV @ $69.51
+      BUY 1 PPLT @ $189.67
+      BUY 1 LIT @ $71.06
+      SELL 1 PLTR @ $132.50
+      BUY 1 MSTR @ $123.30
+      SELL 1 MSFT @ $394.31
+      BUY 1 TSLA @ $409.40
+      SELL 1 NOC @ $130.42 [synthetic]
+      SELL 1 LMT @ $615.52
+      SELL 1 SLV @ $69.27
+      BUY 1 PPLT @ $193.81
+      SELL 1 COPX @ $84.42
+      SELL 1 LIT @ $70.35
+      SELL 1 GDXJ @ $127.84
+      BUY 1 PICK @ $59.24
+      BUY 1 PLTR @ $139.43
+      SELL 1 AMD @ $203.76
+      BUY 1 MP @ $61.15
+      BUY 1 MSTR @ $125.00
+      SELL 1 TSLA @ $404.00
+      BUY 1 NOC @ $131.20 [synthetic]
+      SELL 1 SLV @ $69.14
+      SELL 1 PPLT @ $188.35
+      SELL 1 COPX @ $84.10
+      SELL 1 LIT @ $69.55
+      SELL 1 GDXJ @ $127.51
+      SELL 1 SIL @ $95.94
+      BUY 1 REMX @ $86.58
+      SELL 1 PICK @ $58.71
+      BUY 1 NVDA @ $182.42
+      BUY 1 AAPL @ $279.58
+      SELL 1 PLTR @ $134.00
+      BUY 1 AMD @ $208.00
+      BUY 1 MSTR @ $130.70
+      BUY 1 MSFT @ $396.21
+      BUY 1 TSLA @ $410.48
+      SELL 1 NOC @ $130.54 [synthetic]
+      BUY 1 NVO @ $46.50
       BUY 1 SLV @ $69.67
-      SELL 1 URTH @ $186.69
-      BUY 1 GDXJ @ $123.71
-      BUY 1 SIL @ $94.04
-      SELL 1 PICK @ $58.19
-      BUY 1 MP @ $60.51
-      SELL 1 NOC @ $346.68 [synthetic]
-      BUY 1 LMT @ $308.89 [synthetic]
-      SELL 1 SLV @ $67.83
-      SELL 1 PPLT @ $177.20
-      SELL 1 COPX @ $82.19
-      SELL 1 JO @ $140.10 [synthetic]
-      BUY 1 LIT @ $69.63
-      BUY 1 URTH @ $186.86
-      BUY 1 GDXJ @ $123.79
-      SELL 1 SIL @ $93.38
-      SELL 1 REMX @ $81.97
+      BUY 1 COPX @ $85.21
+      SELL 1 REMX @ $84.99
+      BUY 1 PICK @ $59.25
+      SELL 1 AAPL @ $263.24
+      BUY 1 PLTR @ $134.86
+      BUY 1 AMD @ $208.00
+      SELL 1 MP @ $56.99
+      SELL 1 TSLA @ $404.00
+      BUY 1 NOC @ $131.68 [synthetic]
+      BUY 1 NVO @ $46.51
+      BUY 1 SLV @ $69.70
+      SELL 1 PPLT @ $183.30
+      SELL 1 COPX @ $84.52
+      BUY 1 JO @ $110.17 [synthetic]
+      BUY 1 LIT @ $71.06
+      BUY 1 URTH @ $189.13
+      SELL 1 GDXJ @ $128.45
+      BUY 1 PICK @ $59.29
+      SELL 1 NVDA @ $182.87
+      SELL 1 PLTR @ $134.00
+      SELL 1 AMD @ $204.92
+      BUY 1 BE @ $149.00
+      BUY 1 MP @ $61.15
+      BUY 1 MSTR @ $130.70
+      BUY 1 NOC @ $131.93 [synthetic]
+      BUY 1 NVO @ $46.54
+      SELL 1 SLV @ $69.59
+      BUY 1 PPLT @ $190.44
+      SELL 1 JO @ $110.04 [synthetic]
+      BUY 1 LIT @ $71.07
+      SELL 1 GDXJ @ $128.35
+      BUY 1 REMX @ $86.58
+      SELL 1 PICK @ $58.70
+      SELL 1 PLTR @ $134.00
+      BUY 1 AMD @ $208.00
+      SELL 1 BE @ $119.24
+      BUY 1 MSTR @ $130.70
+      SELL 1 MSFT @ $395.83
+      BUY 1 TSLA @ $413.10
+      BUY 1 NVO @ $46.58
+      SELL 1 SLV @ $69.43
+      SELL 1 PPLT @ $189.30
+      SELL 1 COPX @ $84.63
+      BUY 1 JO @ $110.22 [synthetic]
+      BUY 1 LIT @ $71.07
+      SELL 1 URTH @ $188.99
+      SELL 1 GDXJ @ $128.03
+      BUY 1 REMX @ $86.58
+      BUY 1 PLTR @ $134.61
+      SELL 1 AMD @ $204.00
+      BUY 1 MSTR @ $130.70
+      SELL 1 TSLA @ $409.93
+      SELL 1 NOC @ $132.09 [synthetic]
+      BUY 1 NVO @ $46.65
+      BUY 1 GLD @ $455.06
+      SELL 1 COPX @ $84.53
+      SELL 1 JO @ $109.53 [synthetic]
+      SELL 1 LIT @ $69.73
+      BUY 1 URTH @ $189.22
+      SELL 1 GDXJ @ $127.87
+      BUY 1 SIL @ $97.19
+      SELL 1 REMX @ $84.99
 
     Minute 50-59:
-      SELL 1 AAPL @ $274.91
-      SELL 1 MP @ $55.36
-      BUY 1 MSTR @ $114.89
-      BUY 1 TSLA @ $397.00
-      SELL 1 LMT @ $608.00
-      BUY 1 NVO @ $44.01
-      BUY 1 GLD @ $445.14
-      SELL 1 SLV @ $67.00
-      BUY 1 PPLT @ $189.69
-      SELL 1 JO @ $140.09 [synthetic]
-      SELL 1 URTH @ $186.67
-      BUY 1 GDXJ @ $123.87
-      BUY 1 SIL @ $94.05
-      BUY 1 REMX @ $84.35
-      SELL 1 AAPL @ $273.50
-      BUY 1 PLTR @ $130.05
-      SELL 1 TSLA @ $386.53
-      SELL 1 NOC @ $345.09 [synthetic]
-      SELL 1 NVO @ $43.85
-      SELL 1 GLD @ $430.80
-      BUY 1 SLV @ $69.67
-      SELL 1 COPX @ $82.13
-      BUY 1 JO @ $140.63 [synthetic]
-      BUY 1 URTH @ $187.08
-      SELL 1 GDXJ @ $123.30
-      BUY 1 SIL @ $94.28
-      SELL 1 REMX @ $81.97
-      BUY 1 AAPL @ $275.83
-      BUY 1 PLTR @ $138.00
-      BUY 1 AMD @ $202.00
-      BUY 1 MP @ $60.51
-      BUY 1 MSFT @ $401.76
-      SELL 1 NVO @ $43.84
-      SELL 1 SLV @ $67.43
-      SELL 1 JO @ $140.38 [synthetic]
-      SELL 1 LIT @ $68.27
-      SELL 1 URTH @ $186.50
-      SELL 1 GDXJ @ $123.29
-      SELL 1 SIL @ $93.43
-      BUY 1 PICK @ $58.29
-      BUY 1 NVDA @ $172.21
-      BUY 1 AAPL @ $276.46
-      BUY 1 PLTR @ $138.00
-      SELL 1 MSFT @ $398.06
-      BUY 1 TSLA @ $397.00
-      SELL 1 NOC @ $345.75 [synthetic]
-      BUY 1 NVO @ $43.95
-      SELL 1 GLD @ $430.80
-      SELL 1 PPLT @ $177.20
-      SELL 1 JO @ $139.29 [synthetic]
-      BUY 1 URTH @ $186.95
-      SELL 1 GDXJ @ $123.10
-      BUY 1 SIL @ $94.08
-      BUY 1 PICK @ $58.29
-      SELL 1 NVDA @ $172.16
-      BUY 1 AAPL @ $276.58
-      SELL 1 PLTR @ $129.10
-      BUY 1 AMD @ $202.00
-      BUY 1 MSTR @ $114.89
-      BUY 1 MSFT @ $401.76
-      SELL 1 TSLA @ $390.09
-      BUY 1 NVO @ $44.02
-      BUY 1 GLD @ $457.65
-      BUY 1 SLV @ $69.67
-      BUY 1 PPLT @ $189.69
-      SELL 1 JO @ $139.17 [synthetic]
-      SELL 1 URTH @ $186.53
-      BUY 1 GDXJ @ $124.03
-      SELL 1 SIL @ $93.03
-      BUY 1 REMX @ $83.37
-      SELL 1 PICK @ $57.53
-      SELL 1 AAPL @ $275.89
-      BUY 1 PLTR @ $135.78
-      SELL 1 AMD @ $184.00
-      SELL 1 MSTR @ $110.01
-      SELL 1 MSFT @ $398.75
-      BUY 1 NOC @ $345.42 [synthetic]
-      SELL 1 NVO @ $43.92
-      SELL 1 GLD @ $443.78
-      SELL 1 SLV @ $67.09
-      BUY 1 JO @ $139.33 [synthetic]
-      SELL 1 GDXJ @ $122.66
-      SELL 1 SIL @ $92.89
-      BUY 1 PICK @ $58.29
-      BUY 1 NVDA @ $172.52
+      SELL 1 PLTR @ $134.00
+      BUY 1 AMD @ $208.00
+      BUY 1 BE @ $149.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $122.50
+      BUY 1 TSLA @ $410.62
+      BUY 1 NOC @ $132.49 [synthetic]
+      SELL 1 GLD @ $454.04
+      BUY 1 PPLT @ $195.85
+      BUY 1 COPX @ $85.23
+      SELL 1 URTH @ $188.89
+      SELL 1 GDXJ @ $127.83
+      SELL 1 SIL @ $96.34
+      SELL 1 REMX @ $85.66
+      BUY 1 NVDA @ $182.38
+      BUY 1 AAPL @ $280.10
+      SELL 1 PLTR @ $134.00
+      SELL 1 AMD @ $204.87
+      SELL 1 BE @ $137.09
+      BUY 1 MP @ $61.15
+      BUY 1 MSFT @ $395.60
+      SELL 1 NOC @ $131.83 [synthetic]
+      BUY 1 LMT @ $307.36 [synthetic]
+      SELL 1 NVO @ $46.70
+      BUY 1 SLV @ $69.25
+      SELL 1 PPLT @ $188.85
+      SELL 1 COPX @ $84.53
+      SELL 1 NVDA @ $182.29
+      SELL 1 AAPL @ $279.67
+      BUY 1 PLTR @ $135.38
+      SELL 1 AMD @ $203.50
+      BUY 1 BE @ $149.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSFT @ $394.94
+      SELL 1 TSLA @ $410.37
+      SELL 1 NOC @ $131.51 [synthetic]
+      BUY 1 LMT @ $307.74 [synthetic]
+      SELL 1 NVO @ $46.62
+      BUY 1 GLD @ $454.72
+      BUY 1 SLV @ $69.34
+      BUY 1 PPLT @ $189.81
+      BUY 1 URTH @ $189.03
+      BUY 1 AAPL @ $279.78
+      SELL 1 PLTR @ $132.50
+      BUY 1 AMD @ $208.00
+      BUY 1 BE @ $149.00
+      SELL 1 MSTR @ $122.50
+      BUY 1 NOC @ $131.77 [synthetic]
+      SELL 1 AAPL @ $279.71
+      BUY 1 PLTR @ $134.04
+      SELL 1 AMD @ $203.50
+      SELL 1 BE @ $137.65
+      BUY 1 MP @ $61.00
+      BUY 1 MSTR @ $130.70
+      SELL 1 NOC @ $131.25 [synthetic]
+      SELL 1 LMT @ $307.29 [synthetic]
+      BUY 1 NVO @ $46.64
+      SELL 1 GLD @ $441.66
+      SELL 1 SLV @ $69.14
+      BUY 1 PPLT @ $195.85
+      BUY 1 COPX @ $85.23
+      SELL 1 URTH @ $188.75
+      BUY 1 NVDA @ $182.68
+      BUY 1 AAPL @ $279.86
+      BUY 1 PLTR @ $134.34
+      BUY 1 AMD @ $208.00
+      BUY 1 BE @ $149.00
+      SELL 1 NOC @ $130.95 [synthetic]
+      BUY 1 LMT @ $307.75 [synthetic]
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $85.23
+      BUY 1 LIT @ $71.08
+      SELL 1 AAPL @ $279.58
+      SELL 1 PLTR @ $133.30
+      BUY 1 AMD @ $208.00
+      SELL 1 BE @ $138.03
+      SELL 1 MP @ $56.99
+      SELL 1 NOC @ $130.55 [synthetic]
+      SELL 1 LMT @ $306.14 [synthetic]
+      SELL 1 NVO @ $46.62
+      BUY 1 GLD @ $454.70
+      BUY 1 SLV @ $69.30
+      SELL 1 PPLT @ $188.91
+      SELL 1 COPX @ $84.50
+      BUY 1 JO @ $108.77 [synthetic]
+      BUY 1 URTH @ $189.40
+      SELL 1 NVDA @ $182.45
+      SELL 1 PLTR @ $132.50
+      SELL 1 AMD @ $204.80
+      SELL 1 BE @ $119.24
+      SELL 1 MSTR @ $122.50
+      BUY 1 MSFT @ $399.00
+      BUY 1 TSLA @ $411.70
+      SELL 1 NOC @ $129.76 [synthetic]
+      BUY 1 LMT @ $306.58 [synthetic]
+      SELL 1 NVO @ $46.55
+      SELL 1 GLD @ $453.89
+      SELL 1 SLV @ $69.19
+      SELL 1 COPX @ $84.47
+      SELL 1 JO @ $108.46 [synthetic]
+      SELL 1 URTH @ $189.06
+      BUY 1 AAPL @ $279.71
+      BUY 1 PLTR @ $134.46
+      BUY 1 AMD @ $208.00
+      BUY 1 MP @ $61.00
+      BUY 1 MSTR @ $133.25
+      SELL 1 MSFT @ $394.96
+      BUY 1 TSLA @ $411.93
+      SELL 1 NVO @ $46.51
+      SELL 1 SLV @ $69.08
+      BUY 1 COPX @ $85.23
+      BUY 1 URTH @ $189.17
+      SELL 1 AAPL @ $279.64
+      BUY 1 PLTR @ $139.43
+      SELL 1 AMD @ $205.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSFT @ $396.10
+      SELL 1 TSLA @ $410.50
+      SELL 1 LMT @ $305.73 [synthetic]
+      BUY 1 NVO @ $46.59
+      BUY 1 GLD @ $454.55
+      BUY 1 PPLT @ $189.23
+      SELL 1 COPX @ $84.23
+      BUY 1 JO @ $108.79 [synthetic]
+      BUY 1 LIT @ $71.10
+
+    Minute 60-69:
+      SELL 1 MSFT @ $395.20
+      BUY 1 TSLA @ $412.12
+      SELL 1 JO @ $107.73 [synthetic]
+      SELL 1 URTH @ $189.15
+      BUY 1 SIL @ $96.53
+      BUY 1 REMX @ $86.58
+      SELL 1 PLTR @ $132.50
+      SELL 1 AMD @ $205.98
+      BUY 1 MP @ $61.00
+      SELL 1 MSTR @ $122.50
+      SELL 1 TSLA @ $410.50
+      SELL 1 LMT @ $305.92 [synthetic]
+      SELL 1 NVO @ $46.59
+      BUY 1 GLD @ $454.95
+      BUY 1 SLV @ $69.27
+      BUY 1 COPX @ $85.23
+      BUY 1 GDXJ @ $127.63
+      SELL 1 SIL @ $96.07
+      SELL 1 REMX @ $85.58
+      BUY 1 AAPL @ $280.00
+      SELL 1 PLTR @ $132.50
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $133.25
+      SELL 1 TSLA @ $410.50
+      SELL 1 NVO @ $46.58
+      SELL 1 GLD @ $453.80
+      SELL 1 SLV @ $69.10
+      SELL 1 PPLT @ $188.30
+      SELL 1 COPX @ $84.01
+      BUY 1 JO @ $107.86 [synthetic]
+      SELL 1 GDXJ @ $126.97
+      BUY 1 NVDA @ $182.33
+      SELL 1 AAPL @ $263.24
+      BUY 1 MSTR @ $133.25
+      BUY 1 MSFT @ $399.00
+      BUY 1 TSLA @ $412.50
+      BUY 1 NOC @ $351.71 [synthetic]
+      BUY 1 LMT @ $305.72 [synthetic]
+      BUY 1 NVO @ $46.61
+      BUY 1 SLV @ $69.34
+      BUY 1 COPX @ $84.30
+      SELL 1 PICK @ $58.89
+      SELL 1 NVDA @ $182.12
+      BUY 1 AAPL @ $280.65
+      SELL 1 MSFT @ $394.20
+      BUY 1 TSLA @ $412.50
+      SELL 1 NOC @ $351.15 [synthetic]
+      BUY 1 LMT @ $306.13 [synthetic]
+      BUY 1 NVO @ $46.62
+      SELL 1 GLD @ $454.20
+      SELL 1 SLV @ $69.25
+      SELL 1 COPX @ $83.99
+      BUY 1 JO @ $108.52 [synthetic]
+      BUY 1 LIT @ $70.99
+      BUY 1 PICK @ $59.29
+      SELL 1 AAPL @ $278.73
+      BUY 1 MP @ $59.99
+      SELL 1 MSTR @ $125.64
+      SELL 1 TSLA @ $409.00
+      SELL 1 NOC @ $351.11 [synthetic]
+      BUY 1 LMT @ $307.08 [synthetic]
+      BUY 1 NVO @ $46.63
+      BUY 1 GLD @ $454.96
+      BUY 1 COPX @ $84.80
+      SELL 1 JO @ $107.82 [synthetic]
+      BUY 1 NVDA @ $181.92
+      BUY 1 AAPL @ $278.83
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $133.25
+      SELL 1 TSLA @ $409.00
+      BUY 1 NOC @ $351.92 [synthetic]
+      SELL 1 LMT @ $306.16 [synthetic]
+      BUY 1 NVO @ $46.64
+      SELL 1 GLD @ $454.39
+      BUY 1 COPX @ $84.80
+      SELL 1 JO @ $107.43 [synthetic]
+      BUY 1 SIL @ $96.28
+      SELL 1 PICK @ $58.68
+      BUY 1 NVDA @ $182.00
+      SELL 1 AAPL @ $278.50
+      BUY 1 PLTR @ $133.53
+      BUY 1 MP @ $60.01
+      SELL 1 MSTR @ $122.50
+      BUY 1 TSLA @ $410.00
+      SELL 1 NOC @ $350.12 [synthetic]
+      SELL 1 LMT @ $304.02 [synthetic]
+      SELL 1 NVO @ $46.58
+      SELL 1 COPX @ $83.94
+      BUY 1 URTH @ $188.71
+      SELL 1 SIL @ $96.03
+      BUY 1 REMX @ $86.72
+      SELL 1 PICK @ $58.67
+      BUY 1 NVDA @ $182.65
+      BUY 1 AAPL @ $278.93
+      BUY 1 PLTR @ $133.90
+      BUY 1 MP @ $60.20
+      BUY 1 MSFT @ $395.00
+      SELL 1 NOC @ $349.61 [synthetic]
+      BUY 1 GLD @ $454.40
+      SELL 1 MSTR @ $122.50
+      SELL 1 MSFT @ $390.00
+      SELL 1 TSLA @ $409.39
+      SELL 1 NVO @ $46.57
+      BUY 1 GLD @ $454.50
+      BUY 1 SLV @ $68.78
+      BUY 1 COPX @ $84.80
+      BUY 1 LIT @ $71.03
+      BUY 1 URTH @ $188.98
+      BUY 1 SIL @ $96.42
+
+    Minute 70-79:
+      SELL 1 NVDA @ $182.70
+      SELL 1 AAPL @ $278.85
+      BUY 1 PLTR @ $134.25
+      BUY 1 AMD @ $208.45
+      SELL 1 MP @ $56.99
+      BUY 1 NVO @ $46.61
+      SELL 1 GLD @ $453.87
+      SELL 1 SLV @ $68.63
+      BUY 1 COPX @ $84.86
+      BUY 1 JO @ $107.30 [synthetic]
+      BUY 1 LIT @ $71.04
+      SELL 1 URTH @ $188.71
+      SELL 1 SIL @ $96.24
+      SELL 1 REMX @ $85.13
+      SELL 1 NVDA @ $182.61
+      BUY 1 PLTR @ $134.49
+      SELL 1 AMD @ $204.00
+      SELL 1 MP @ $56.99
+      BUY 1 TSLA @ $412.50
+      BUY 1 NOC @ $352.79 [synthetic]
+      SELL 1 NVO @ $46.59
+      SELL 1 GLD @ $453.45
+      SELL 1 COPX @ $84.32
+      SELL 1 JO @ $107.05 [synthetic]
+      BUY 1 URTH @ $189.20
+      BUY 1 NVDA @ $182.68
+      BUY 1 AAPL @ $278.79
+      SELL 1 PLTR @ $132.50
+      BUY 1 MP @ $61.00
+      BUY 1 MSTR @ $127.88
+      SELL 1 TSLA @ $409.11
+      SELL 1 NOC @ $351.72 [synthetic]
+      BUY 1 NVO @ $46.65
+      BUY 1 GLD @ $454.65
+      BUY 1 SLV @ $68.66
+      BUY 1 PPLT @ $188.65
+      BUY 1 COPX @ $84.86
+      BUY 1 LIT @ $71.09
+      SELL 1 URTH @ $188.73
+      BUY 1 GDXJ @ $127.75
+      BUY 1 SIL @ $96.82
+      SELL 1 NVDA @ $182.63
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $132.50
+      BUY 1 BE @ $136.38
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $122.50
+      BUY 1 MSFT @ $394.82
+      BUY 1 NVO @ $46.69
+      SELL 1 GLD @ $453.79
+      SELL 1 SLV @ $68.51
+      SELL 1 PPLT @ $187.45
+      SELL 1 COPX @ $84.32
+      BUY 1 JO @ $106.73 [synthetic]
+      SELL 1 LIT @ $70.24
+      BUY 1 URTH @ $189.27
+      SELL 1 GDXJ @ $127.48
+      SELL 1 SIL @ $96.19
+      BUY 1 REMX @ $85.60
+      BUY 1 NVDA @ $182.75
+      BUY 1 AAPL @ $279.30
+      BUY 1 PLTR @ $134.81
+      BUY 1 AMD @ $208.45
+      SELL 1 BE @ $119.24
+      BUY 1 MP @ $60.24
+      BUY 1 MSTR @ $127.88
+      BUY 1 NVO @ $46.75
+      BUY 1 SLV @ $68.90
+      SELL 1 COPX @ $84.35
+      BUY 1 JO @ $107.24 [synthetic]
+      SELL 1 URTH @ $188.70
+      BUY 1 GDXJ @ $128.01
+      SELL 1 REMX @ $85.08
+      BUY 1 PLTR @ $134.82
+      SELL 1 AMD @ $204.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $122.50
+      BUY 1 MSFT @ $399.00
+      SELL 1 PICK @ $58.69
+      SELL 1 NVDA @ $182.81 [synthetic]
+      SELL 1 AAPL @ $278.77
+      BUY 1 PLTR @ $135.42
+      BUY 1 AMD @ $208.45
+      BUY 1 MP @ $60.53
+      SELL 1 MSFT @ $395.97
+      BUY 1 TSLA @ $411.00
+      SELL 1 LMT @ $610.81
+      SELL 1 NVO @ $46.53
+      BUY 1 SLV @ $69.07
+      BUY 1 PPLT @ $189.54
+      SELL 1 COPX @ $84.26
+      SELL 1 JO @ $106.65 [synthetic]
+      BUY 1 LIT @ $71.25
+      BUY 1 URTH @ $189.31
+      SELL 1 GDXJ @ $127.70
+      BUY 1 REMX @ $86.72
+      BUY 1 PICK @ $59.31
+      BUY 1 NVDA @ $184.00
+      BUY 1 PLTR @ $135.42
+      SELL 1 MSFT @ $395.78
+      SELL 1 TSLA @ $409.47
+      SELL 1 NVO @ $46.51
+      SELL 1 SLV @ $69.03
+      SELL 1 PPLT @ $188.81
+      BUY 1 COPX @ $84.99
+      BUY 1 JO @ $107.18 [synthetic]
+      BUY 1 GDXJ @ $128.06
+      SELL 1 NVDA @ $183.98
+      BUY 1 AAPL @ $278.87
+      BUY 1 PLTR @ $135.54
+      BUY 1 AMD @ $208.45
+      BUY 1 MP @ $61.00
+      BUY 1 NOC @ $352.53 [synthetic]
+      SELL 1 SLV @ $69.02
+      SELL 1 COPX @ $84.43
+      SELL 1 JO @ $106.15 [synthetic]
+      BUY 1 URTH @ $189.29
+      SELL 1 GDXJ @ $127.68
+      BUY 1 REMX @ $86.72
+      SELL 1 AAPL @ $278.59
+      BUY 1 PLTR @ $140.00
+      SELL 1 AMD @ $207.55
+      SELL 1 MSTR @ $126.10
+      BUY 1 TSLA @ $411.00
+      SELL 1 NOC @ $351.56 [synthetic]
+      BUY 1 NVO @ $46.63
+      BUY 1 JO @ $106.38 [synthetic]
+      BUY 1 SIL @ $96.74
+      BUY 1 REMX @ $87.16
+      BUY 1 PICK @ $59.31
+
+    Minute 80-89:
+      SELL 1 PLTR @ $132.50
+      BUY 1 AMD @ $208.45
+      SELL 1 TSLA @ $408.00
+      BUY 1 NOC @ $352.46 [synthetic]
+      SELL 1 NVO @ $46.60
+      BUY 1 PPLT @ $193.86
+      SELL 1 JO @ $106.13 [synthetic]
+      SELL 1 LIT @ $70.24
+      SELL 1 SIL @ $96.45
+      SELL 1 REMX @ $85.83
+      SELL 1 PICK @ $58.88
+      SELL 1 NVDA @ $184.13
+      BUY 1 AAPL @ $279.09
+      BUY 1 PLTR @ $140.00
+      SELL 1 AMD @ $208.17
+      BUY 1 BE @ $149.00
+      SELL 1 NOC @ $350.60 [synthetic]
+      BUY 1 NVO @ $46.74
+      BUY 1 PPLT @ $189.18
+      BUY 1 COPX @ $84.99
+      SELL 1 JO @ $106.12 [synthetic]
+      BUY 1 URTH @ $189.32
+      SELL 1 REMX @ $85.71
+      SELL 1 PICK @ $58.84
+      BUY 1 NVDA @ $184.20
+      SELL 1 AAPL @ $279.04
+      SELL 1 PLTR @ $136.41
+      SELL 1 AMD @ $207.98
+      SELL 1 BE @ $119.24
+      BUY 1 MSTR @ $133.25
+      BUY 1 TSLA @ $410.61
+      BUY 1 NVO @ $46.78
+      SELL 1 PPLT @ $183.30
+      SELL 1 COPX @ $84.25
+      BUY 1 JO @ $106.82 [synthetic]
+      BUY 1 URTH @ $189.34
+      BUY 1 REMX @ $85.96
+      SELL 1 NVDA @ $183.76
+      SELL 1 PLTR @ $136.18
+      BUY 1 AMD @ $208.45
+      BUY 1 BE @ $149.00
+      SELL 1 MSTR @ $126.10
+      SELL 1 TSLA @ $408.00
+      BUY 1 NVO @ $46.79
+      BUY 1 GLD @ $453.82
+      BUY 1 COPX @ $84.99
+      SELL 1 JO @ $106.22 [synthetic]
+      SELL 1 URTH @ $189.13
+      SELL 1 REMX @ $85.71
+      BUY 1 AAPL @ $279.13
+      BUY 1 PLTR @ $140.00
+      SELL 1 AMD @ $207.00
+      BUY 1 BE @ $149.00
+      SELL 1 MP @ $56.99
+      BUY 1 NVO @ $46.83
+      BUY 1 SLV @ $68.69
+      SELL 1 COPX @ $84.22
+      BUY 1 JO @ $106.41 [synthetic]
+      SELL 1 PLTR @ $136.30
+      SELL 1 BE @ $138.50
+      BUY 1 MP @ $60.72
+      SELL 1 MSTR @ $126.10
+      BUY 1 NOC @ $352.22 [synthetic]
+      SELL 1 NVO @ $46.79
+      BUY 1 SLV @ $68.91
+      SELL 1 PPLT @ $189.26
+      BUY 1 COPX @ $84.99
+      BUY 1 JO @ $106.55 [synthetic]
+      SELL 1 PLTR @ $135.56
+      BUY 1 MP @ $61.00
+      SELL 1 NOC @ $350.78 [synthetic]
+      SELL 1 NVO @ $46.79
+      SELL 1 GLD @ $454.06
+      BUY 1 SLV @ $68.93
+      SELL 1 COPX @ $84.31
+      BUY 1 JO @ $106.76 [synthetic]
+      BUY 1 URTH @ $189.34
+      BUY 1 REMX @ $87.16
+      BUY 1 PICK @ $59.31
+      SELL 1 AAPL @ $279.41
+      BUY 1 PLTR @ $136.70
+      BUY 1 AMD @ $208.00
+      SELL 1 BE @ $138.50
+      SELL 1 MP @ $60.54
+      BUY 1 MSTR @ $135.85
+      BUY 1 MSFT @ $399.00
+      BUY 1 NVO @ $46.84
+      SELL 1 JO @ $106.47 [synthetic]
+      SELL 1 URTH @ $189.00
+      SELL 1 REMX @ $85.73
+      SELL 1 PICK @ $58.80
+      BUY 1 NVDA @ $183.57
+      SELL 1 PLTR @ $135.56
+      SELL 1 AMD @ $207.00
+      BUY 1 BE @ $149.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $129.00
+      SELL 1 MSFT @ $397.80
+      BUY 1 TSLA @ $410.46
+      BUY 1 NOC @ $354.28 [synthetic]
+      SELL 1 NVO @ $46.81
+      SELL 1 SLV @ $68.80
+      BUY 1 COPX @ $84.99
+      BUY 1 JO @ $106.83 [synthetic]
+      BUY 1 URTH @ $189.38
+      SELL 1 NVDA @ $183.35
+      BUY 1 PLTR @ $136.70
+      SELL 1 BE @ $138.50
+      BUY 1 MP @ $61.00
+      SELL 1 MSTR @ $122.50
+      SELL 1 NOC @ $353.57 [synthetic]
+      SELL 1 NVO @ $46.80
+      SELL 1 SLV @ $68.67
+      SELL 1 COPX @ $84.14
+      SELL 1 JO @ $106.31 [synthetic]
+      SELL 1 URTH @ $189.19
+      SELL 1 REMX @ $85.83
+
+    Minute 90-99:
+      BUY 1 AAPL @ $279.31
+      SELL 1 PLTR @ $135.56
+      BUY 1 AMD @ $208.45
+      BUY 1 BE @ $149.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $122.50
+      BUY 1 MSFT @ $399.00
+      SELL 1 TSLA @ $410.04
+      BUY 1 NOC @ $355.20 [synthetic]
+      BUY 1 NVO @ $46.87
+      SELL 1 SLV @ $68.56
+      BUY 1 COPX @ $84.99
+      SELL 1 JO @ $105.98 [synthetic]
+      BUY 1 URTH @ $189.54
+      BUY 1 REMX @ $87.16
+      BUY 1 NVDA @ $183.43
+      BUY 1 PLTR @ $136.74
+      SELL 1 MSFT @ $396.97
+      BUY 1 TSLA @ $410.40
+      SELL 1 NOC @ $354.75 [synthetic]
+      BUY 1 NVO @ $46.93
+      BUY 1 SLV @ $68.59
+      BUY 1 PPLT @ $193.86
+      SELL 1 COPX @ $84.09
+      BUY 1 JO @ $106.29 [synthetic]
+      SELL 1 URTH @ $189.22
+      BUY 1 SIL @ $96.01
+      SELL 1 REMX @ $85.73
+      SELL 1 NVDA @ $183.27
+      SELL 1 AAPL @ $279.43
+      BUY 1 PLTR @ $140.00
+      BUY 1 AMD @ $208.45
+      SELL 1 BE @ $138.50
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+      SELL 1 TSLA @ $408.00
+      BUY 1 LMT @ $307.85 [synthetic]
+      SELL 1 NVO @ $46.89
+      SELL 1 SLV @ $68.12
+      SELL 1 PPLT @ $187.91
+      BUY 1 JO @ $106.35 [synthetic]
+      BUY 1 URTH @ $189.54
+      SELL 1 SIL @ $95.56
+      SELL 1 PLTR @ $135.21
+      SELL 1 AMD @ $206.80
+      BUY 1 MP @ $60.58
+      SELL 1 MSTR @ $122.50
+      BUY 1 TSLA @ $410.50
+      SELL 1 LMT @ $614.64
+      SELL 1 NVO @ $46.63
+      BUY 1 GLD @ $455.62
+      BUY 1 SLV @ $69.42
+      BUY 1 PPLT @ $193.86
+      BUY 1 COPX @ $84.92
+      BUY 1 JO @ $106.67 [synthetic]
+      SELL 1 LIT @ $70.60
+      SELL 1 URTH @ $189.28
+      BUY 1 GDXJ @ $128.12
+      BUY 1 SIL @ $96.87
+      BUY 1 REMX @ $87.16
+      BUY 1 PICK @ $59.27
+      BUY 1 NVDA @ $183.30
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $60.62
+      BUY 1 NVO @ $46.76
+      SELL 1 GLD @ $455.12
+      BUY 1 SLV @ $69.53
+      SELL 1 PPLT @ $188.72
+      SELL 1 COPX @ $84.34
+      SELL 1 JO @ $106.28 [synthetic]
+      BUY 1 LIT @ $71.29
+      BUY 1 URTH @ $189.40
+      SELL 1 GDXJ @ $127.93
+      BUY 1 SIL @ $97.18
+      BUY 1 PICK @ $59.13
+      BUY 1 NVDA @ $183.58
+      BUY 1 AAPL @ $280.00
+      SELL 1 AMD @ $206.80
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $130.50
+      SELL 1 NVO @ $46.66
+      BUY 1 SLV @ $69.54
+      SELL 1 REMX @ $86.07
+      BUY 1 PICK @ $59.31
+      SELL 1 AAPL @ $278.99
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $207.85
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $60.85
+      BUY 1 NVO @ $46.90
+      SELL 1 SLV @ $69.49
+      BUY 1 LIT @ $71.41
+      SELL 1 SIL @ $96.97
+      BUY 1 REMX @ $87.67
+      SELL 1 PICK @ $59.12
+      SELL 1 NVDA @ $183.65
+      BUY 1 PLTR @ $140.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+      SELL 1 JO @ $106.41 [synthetic]
+      BUY 1 GDXJ @ $128.45
+      SELL 1 PLTR @ $136.40
+      BUY 1 MP @ $63.27
+      SELL 1 MSTR @ $124.09
+      SELL 1 NVO @ $46.84
+      SELL 1 SLV @ $69.38
+      BUY 1 COPX @ $84.62
+      SELL 1 JO @ $106.32 [synthetic]
+      SELL 1 URTH @ $189.22
+      SELL 1 GDXJ @ $128.15
+      BUY 1 SIL @ $97.08
+      BUY 1 REMX @ $87.67
+      SELL 1 PICK @ $58.86
+      SELL 1 NVDA @ $183.53
+      SELL 1 PLTR @ $136.40
+      SELL 1 MP @ $60.79
+      BUY 1 MSTR @ $130.71
+      SELL 1 TSLA @ $411.00
+      SELL 1 NVO @ $46.83
+      SELL 1 SLV @ $69.34
+      BUY 1 PPLT @ $190.89
+      BUY 1 COPX @ $85.14
+      BUY 1 JO @ $106.67 [synthetic]
+      SELL 1 URTH @ $189.18
+      BUY 1 SIL @ $97.36
+      SELL 1 REMX @ $86.20
+      BUY 1 PICK @ $59.33
+
+    Minute 100-109:
+      BUY 1 NVDA @ $183.57
+      BUY 1 AAPL @ $278.95
+      SELL 1 PLTR @ $136.40
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $60.74
+      BUY 1 MSTR @ $131.03
+      BUY 1 TSLA @ $413.50
+      BUY 1 NVO @ $46.85
+      SELL 1 PPLT @ $189.85
+      SELL 1 COPX @ $84.55
+      BUY 1 JO @ $107.07 [synthetic]
+      SELL 1 URTH @ $189.18
+      SELL 1 SIL @ $96.57
+      BUY 1 REMX @ $87.67
+      BUY 1 NVDA @ $183.75
+      BUY 1 AAPL @ $279.01
+      BUY 1 PLTR @ $139.00
+      SELL 1 BE @ $134.50
+      BUY 1 MSTR @ $135.85
+      SELL 1 TSLA @ $411.00
+      SELL 1 NVO @ $46.77
+      BUY 1 GLD @ $455.56
+      BUY 1 SLV @ $69.40
+      BUY 1 COPX @ $84.64
+      SELL 1 JO @ $106.59 [synthetic]
+      BUY 1 GDXJ @ $128.33
+      SELL 1 PLTR @ $136.52
+      BUY 1 MP @ $60.97
+      BUY 1 NVO @ $46.80
+      SELL 1 COPX @ $84.48
+      SELL 1 JO @ $106.06 [synthetic]
+      SELL 1 LIT @ $71.05 [synthetic]
+      BUY 1 URTH @ $189.47
+      SELL 1 SIL @ $96.57
+      SELL 1 REMX @ $86.25
+      BUY 1 NVDA @ $184.13
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $124.09
+      BUY 1 MSFT @ $399.00
+      SELL 1 NVO @ $46.77
+      SELL 1 SLV @ $69.53
+      BUY 1 COPX @ $84.69
+      SELL 1 JO @ $106.00 [synthetic]
+      SELL 1 LIT @ $70.97 [synthetic]
+      BUY 1 URTH @ $189.56
+      SELL 1 GDXJ @ $128.04
+      SELL 1 SIL @ $96.89
+      BUY 1 REMX @ $86.42
+      BUY 1 PICK @ $59.23
+      SELL 1 NVDA @ $184.04
+      BUY 1 AAPL @ $280.00
+      SELL 1 MSTR @ $124.09
+      SELL 1 MSFT @ $397.28
+      SELL 1 NVO @ $46.74
+      SELL 1 GLD @ $455.34
+      SELL 1 COPX @ $84.48
+      BUY 1 LIT @ $71.16 [synthetic]
+      SELL 1 URTH @ $189.37
+      SELL 1 PICK @ $59.13
+      BUY 1 NVDA @ $184.12
+      SELL 1 AAPL @ $278.75
+      BUY 1 PLTR @ $136.42
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $63.27
+      BUY 1 MSTR @ $135.85
+      BUY 1 TSLA @ $413.18
+      SELL 1 NVO @ $46.69
+      BUY 1 GLD @ $455.77
+      BUY 1 SLV @ $69.48
+      BUY 1 COPX @ $85.14
+      BUY 1 JO @ $106.46 [synthetic]
+      SELL 1 LIT @ $70.74 [synthetic]
+      BUY 1 GDXJ @ $128.10
+      SELL 1 PICK @ $58.86
+      SELL 1 NVDA @ $183.95
+      SELL 1 AAPL @ $278.63
+      SELL 1 PLTR @ $136.02
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $135.85
+      BUY 1 MSFT @ $399.00
+      SELL 1 TSLA @ $411.50
+      BUY 1 NOC @ $352.42 [synthetic]
+      SELL 1 NVO @ $46.67
+      SELL 1 GLD @ $455.34
+      SELL 1 SLV @ $69.37
+      BUY 1 PPLT @ $190.55
+      SELL 1 COPX @ $84.50
+      BUY 1 JO @ $106.64 [synthetic]
+      BUY 1 LIT @ $71.41
+      BUY 1 URTH @ $189.58
+      SELL 1 GDXJ @ $127.67
+      SELL 1 REMX @ $86.25
+      BUY 1 PICK @ $59.33
+      BUY 1 NVDA @ $184.09
+      BUY 1 AAPL @ $278.69
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $144.00
+      SELL 1 NOC @ $351.98 [synthetic]
+      BUY 1 NVO @ $46.69
+      BUY 1 SLV @ $69.52
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $85.14
+      BUY 1 JO @ $106.69 [synthetic]
+      SELL 1 URTH @ $189.41
+      BUY 1 GDXJ @ $128.09
+      BUY 1 SIL @ $96.83
+      SELL 1 NVDA @ $184.00
+      SELL 1 AAPL @ $278.60
+      BUY 1 AMD @ $208.00
+      BUY 1 MP @ $63.27
+      SELL 1 MSTR @ $131.64
+      SELL 1 MSFT @ $397.18
+      BUY 1 TSLA @ $413.80
+      SELL 1 NVO @ $46.65
+      BUY 1 SLV @ $69.57
+      BUY 1 PPLT @ $190.64
+      SELL 1 COPX @ $84.54
+      BUY 1 JO @ $107.14 [synthetic]
+      SELL 1 GDXJ @ $127.75
+      SELL 1 SIL @ $96.43
+      BUY 1 REMX @ $86.36
+      BUY 1 NVDA @ $184.36
+      SELL 1 AAPL @ $278.37
+      BUY 1 PLTR @ $136.24
+      SELL 1 MSTR @ $124.09
+      SELL 1 TSLA @ $413.27
+      SELL 1 SLV @ $69.50
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $85.14
+      SELL 1 JO @ $106.70 [synthetic]
+      BUY 1 URTH @ $189.72
+      BUY 1 SIL @ $96.76
+      BUY 1 REMX @ $87.67
+
+    Minute 110-119:
+      BUY 1 NVDA @ $184.45
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $206.80
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $124.09
+      BUY 1 NVO @ $46.65
+      BUY 1 GLD @ $455.84
+      BUY 1 SLV @ $69.53
+      BUY 1 PPLT @ $190.84
+      SELL 1 COPX @ $84.28
+      SELL 1 JO @ $106.32 [synthetic]
+      SELL 1 LIT @ $70.59
+      SELL 1 URTH @ $189.26
+      SELL 1 SIL @ $96.62
+      SELL 1 REMX @ $86.25
+      BUY 1 NVDA @ $184.53
+      BUY 1 AAPL @ $278.36
+      BUY 1 PLTR @ $136.28
+      BUY 1 AMD @ $208.45
+      SELL 1 BE @ $135.40
+      BUY 1 MSTR @ $138.53
+      SELL 1 NVO @ $46.61
+      SELL 1 GLD @ $455.14
+      SELL 1 SLV @ $69.41
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $84.54
+      BUY 1 JO @ $106.79 [synthetic]
+      BUY 1 URTH @ $189.52
+      SELL 1 NVDA @ $184.46
+      BUY 1 AAPL @ $278.38
+      BUY 1 PLTR @ $136.40
+      BUY 1 AMD @ $207.93
+      SELL 1 BE @ $135.22
+      BUY 1 MP @ $60.81
+      BUY 1 NVO @ $46.64
+      SELL 1 COPX @ $84.47
+      SELL 1 JO @ $106.11 [synthetic]
+      BUY 1 URTH @ $189.52
+      SELL 1 REMX @ $86.20
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $207.79
+      BUY 1 MP @ $60.90
+      SELL 1 MSTR @ $132.25
+      BUY 1 TSLA @ $414.44
+      BUY 1 SLV @ $69.53
+      SELL 1 AAPL @ $278.61
+      BUY 1 PLTR @ $136.45
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $124.09
+      SELL 1 TSLA @ $411.50
+      BUY 1 NVO @ $46.69
+      BUY 1 GLD @ $456.64
+      BUY 1 SLV @ $69.91
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $61.06
+      BUY 1 MSTR @ $138.53
+      BUY 1 NVO @ $46.71
+      SELL 1 GLD @ $456.04
+      SELL 1 SLV @ $69.78
+      SELL 1 COPX @ $84.78
+      BUY 1 JO @ $106.80 [synthetic]
+      SELL 1 LIT @ $70.65 [synthetic]
+      BUY 1 URTH @ $189.66
+      BUY 1 GDXJ @ $128.35
+      BUY 1 SIL @ $97.27
+      SELL 1 NVDA @ $184.92
+      SELL 1 AAPL @ $278.55
+      SELL 1 PLTR @ $136.66
+      SELL 1 AMD @ $208.51
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.01
+      SELL 1 MSTR @ $132.51
+      BUY 1 NOC @ $351.02 [synthetic]
+      BUY 1 NVO @ $46.73
+      BUY 1 GLD @ $456.60
+      BUY 1 SLV @ $69.86
+      BUY 1 JO @ $107.11 [synthetic]
+      SELL 1 LIT @ $70.64 [synthetic]
+      SELL 1 GDXJ @ $127.93
+      SELL 1 SIL @ $96.84
+      SELL 1 REMX @ $86.30
+      SELL 1 NVDA @ $184.89
+      BUY 1 PLTR @ $136.90
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $61.14
+      BUY 1 MSTR @ $133.20
+      SELL 1 NVO @ $46.66
+      SELL 1 GLD @ $455.64
+      SELL 1 SLV @ $69.72
+      BUY 1 JO @ $107.42 [synthetic]
+      BUY 1 LIT @ $71.41
+      SELL 1 URTH @ $189.61
+      BUY 1 NVDA @ $185.09
+      SELL 1 PLTR @ $136.60
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $124.09
+      BUY 1 MSFT @ $399.00
+      BUY 1 NVO @ $46.69
+      BUY 1 SLV @ $69.75
+      BUY 1 PPLT @ $191.05
+      SELL 1 URTH @ $189.60
+      BUY 1 GDXJ @ $128.19
+      SELL 1 PLTR @ $136.25
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $132.38
+      SELL 1 MSFT @ $396.70
+      SELL 1 NOC @ $706.98
+      SELL 1 NVO @ $46.65
+      SELL 1 PPLT @ $183.30
+      SELL 1 JO @ $107.49 [synthetic]
+      SELL 1 URTH @ $189.33
+      SELL 1 GDXJ @ $127.85
+      SELL 1 PICK @ $58.85
+
+    Minute 120-129:
+      SELL 1 NVDA @ $184.92
       BUY 1 AAPL @ $278.20
+      BUY 1 AMD @ $207.69
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $124.09
+      SELL 1 NVO @ $46.62
+      SELL 1 SLV @ $69.33
+      SELL 1 JO @ $107.38 [synthetic]
+      BUY 1 URTH @ $189.55
+      BUY 1 REMX @ $87.67
+      SELL 1 PICK @ $58.82
+      SELL 1 NVDA @ $184.86
+      SELL 1 AAPL @ $278.09
+      BUY 1 PLTR @ $136.38
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $138.53
+      BUY 1 MSFT @ $398.00
+      BUY 1 NVO @ $46.71
+      BUY 1 GLD @ $455.32
+      BUY 1 SLV @ $69.41
+      BUY 1 PPLT @ $190.46
+      BUY 1 COPX @ $84.66
+      BUY 1 JO @ $107.71 [synthetic]
+      BUY 1 URTH @ $189.56
+      SELL 1 REMX @ $86.16
+      BUY 1 PICK @ $59.33
+      BUY 1 NVDA @ $184.95
+      BUY 1 PLTR @ $136.25
+      SELL 1 MSFT @ $396.70
+      BUY 1 NVO @ $46.83
+      BUY 1 GLD @ $455.52
+      SELL 1 URTH @ $189.40
+      BUY 1 GDXJ @ $127.72
+      SELL 1 PICK @ $58.84
+      SELL 1 NVDA @ $184.78
+      BUY 1 AAPL @ $278.30
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $206.80
+      SELL 1 BE @ $135.79
+      SELL 1 MSTR @ $124.09
+      BUY 1 MSFT @ $397.86
+      SELL 1 GLD @ $454.82
+      SELL 1 SLV @ $69.37
+      SELL 1 PPLT @ $183.30
+      SELL 1 COPX @ $84.54
+      SELL 1 JO @ $107.60 [synthetic]
+      SELL 1 URTH @ $189.40
+      SELL 1 GDXJ @ $127.21
+      BUY 1 SIL @ $96.42
+      BUY 1 PICK @ $59.33
+      BUY 1 NVDA @ $184.89
+      SELL 1 AAPL @ $278.09
+      BUY 1 PLTR @ $136.39
+      BUY 1 AMD @ $207.80
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $60.92
+      BUY 1 MSTR @ $138.53
+      BUY 1 MSFT @ $398.00
+      BUY 1 NVO @ $46.92
+      BUY 1 SLV @ $69.41
+      BUY 1 PPLT @ $190.69
+      SELL 1 LIT @ $70.69 [synthetic]
+      BUY 1 PICK @ $59.33
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $206.80
+      SELL 1 BE @ $135.79
+      BUY 1 MP @ $61.09
+      SELL 1 MSTR @ $124.09
+      BUY 1 MSFT @ $398.00
+      SELL 1 NVO @ $46.90
+      BUY 1 SLV @ $69.55
+      BUY 1 COPX @ $84.99
+      SELL 1 SIL @ $96.09
+      BUY 1 REMX @ $87.67
+      SELL 1 PICK @ $58.84
+      SELL 1 MP @ $56.99
+      SELL 1 MSFT @ $396.70
+      BUY 1 NOC @ $353.66 [synthetic]
+      SELL 1 NVO @ $46.88
+      SELL 1 GLD @ $455.05
+      SELL 1 SLV @ $69.48
+      BUY 1 PPLT @ $191.10
+      SELL 1 COPX @ $84.24
+      BUY 1 JO @ $108.78 [synthetic]
+      BUY 1 URTH @ $189.63
+      BUY 1 SIL @ $96.58
+      SELL 1 NVDA @ $184.98
+      BUY 1 PLTR @ $136.44
+      BUY 1 MP @ $62.99
+      SELL 1 NOC @ $352.47 [synthetic]
+      BUY 1 NVO @ $46.93
+      BUY 1 GLD @ $455.62
+      BUY 1 SLV @ $69.55
+      SELL 1 PPLT @ $190.15
+      BUY 1 COPX @ $84.96
+      SELL 1 JO @ $108.32 [synthetic]
+      SELL 1 URTH @ $189.24
+      BUY 1 GDXJ @ $127.88
+      BUY 1 SIL @ $96.62
+      SELL 1 NVDA @ $184.84
+      BUY 1 AAPL @ $278.29
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      SELL 1 NVO @ $46.90
+      BUY 1 SLV @ $69.56
+      SELL 1 COPX @ $84.71
+      SELL 1 JO @ $107.90 [synthetic]
+      SELL 1 URTH @ $189.24
+      SELL 1 GDXJ @ $127.51
+      SELL 1 SIL @ $96.09
+      BUY 1 NVDA @ $185.03
+      SELL 1 AAPL @ $263.24
+      BUY 1 PLTR @ $136.55
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $135.00
+      SELL 1 MSFT @ $397.55
+      SELL 1 NVO @ $46.86
+      BUY 1 GLD @ $455.82
+      BUY 1 SLV @ $69.71
+      SELL 1 PPLT @ $183.30
+      BUY 1 COPX @ $84.87
+      SELL 1 JO @ $107.80 [synthetic]
+      BUY 1 LIT @ $71.42
+      BUY 1 URTH @ $189.68
+      BUY 1 GDXJ @ $128.08
+
+    Minute 130-139:
+      SELL 1 PLTR @ $136.42
+      SELL 1 AMD @ $208.05
+      SELL 1 MP @ $61.13
+      BUY 1 MSFT @ $397.76
+      BUY 1 NVO @ $46.96
+      SELL 1 GLD @ $455.35
+      BUY 1 SLV @ $69.75
+      SELL 1 COPX @ $84.81
+      SELL 1 JO @ $107.80 [synthetic]
+      SELL 1 URTH @ $189.40
+      SELL 1 GDXJ @ $127.67
+      SELL 1 SIL @ $96.09
+      BUY 1 REMX @ $87.67
+      SELL 1 NVDA @ $184.71
+      SELL 1 PLTR @ $136.38
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $61.00
+      SELL 1 MSTR @ $126.76
+      BUY 1 MSFT @ $399.12
+      BUY 1 NOC @ $352.27 [synthetic]
+      SELL 1 NVO @ $46.90
+      SELL 1 GLD @ $455.25
+      SELL 1 SLV @ $69.71
+      BUY 1 PPLT @ $191.10
+      BUY 1 JO @ $108.17 [synthetic]
+      BUY 1 SIL @ $96.65
+      SELL 1 REMX @ $85.72
+      BUY 1 PICK @ $59.33
+      BUY 1 AAPL @ $278.38
+      BUY 1 PLTR @ $136.55
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $61.10
+      BUY 1 MSTR @ $135.00
+      SELL 1 MSFT @ $397.00
+      BUY 1 TSLA @ $415.00
+      SELL 1 NOC @ $351.27 [synthetic]
+      BUY 1 NVO @ $46.94
+      BUY 1 GLD @ $455.82
+      BUY 1 SLV @ $69.85
+      SELL 1 SIL @ $96.09
+      SELL 1 PICK @ $58.84
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $61.01
+      SELL 1 MSTR @ $133.25
+      BUY 1 NVO @ $46.97
+      BUY 1 SLV @ $69.92
+      BUY 1 JO @ $108.63 [synthetic]
+      SELL 1 URTH @ $189.65
+      BUY 1 SIL @ $96.90
+      BUY 1 PICK @ $59.27
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $60.96
+      SELL 1 TSLA @ $412.10
+      BUY 1 NOC @ $354.89 [synthetic]
+      SELL 1 NVO @ $46.94
+      BUY 1 GLD @ $456.12
+      SELL 1 PPLT @ $190.83
+      BUY 1 COPX @ $85.12
+      BUY 1 JO @ $108.85 [synthetic]
+      SELL 1 PICK @ $58.84
+      SELL 1 AAPL @ $278.29
+      BUY 1 PLTR @ $136.55
+      SELL 1 AMD @ $206.80
+      BUY 1 MP @ $62.99
+      SELL 1 MSFT @ $397.40
+      BUY 1 NOC @ $357.06 [synthetic]
+      SELL 1 NVO @ $46.92
+      SELL 1 GLD @ $455.55
+      SELL 1 SLV @ $69.93
+      SELL 1 COPX @ $84.24
+      SELL 1 JO @ $108.72 [synthetic]
+      BUY 1 URTH @ $189.77
+      SELL 1 SIL @ $96.67
+      BUY 1 NVDA @ $184.75
+      BUY 1 PLTR @ $136.68
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.46
+      BUY 1 NVO @ $47.00
+      BUY 1 SLV @ $69.99
+      BUY 1 PPLT @ $191.62
+      SELL 1 NVDA @ $184.42
+      SELL 1 PLTR @ $136.39
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 MSFT @ $398.77
+      SELL 1 NOC @ $358.40 [synthetic]
+      SELL 1 NVO @ $46.95
+      SELL 1 GLD @ $455.46
+      SELL 1 SLV @ $69.87
+      SELL 1 PPLT @ $185.28
+      BUY 1 JO @ $109.24 [synthetic]
+      SELL 1 URTH @ $189.71
+      SELL 1 REMX @ $85.72
+      SELL 1 PICK @ $58.84
+      BUY 1 NVDA @ $184.51
+      BUY 1 AAPL @ $278.29
+      BUY 1 PLTR @ $136.55
+      BUY 1 MP @ $60.99
+      SELL 1 MSFT @ $396.70
+      SELL 1 NOC @ $357.49 [synthetic]
+      BUY 1 NVO @ $46.97
+      BUY 1 SLV @ $69.91
+      BUY 1 PPLT @ $191.60
+      BUY 1 COPX @ $84.79
+      BUY 1 JO @ $109.45 [synthetic]
+      BUY 1 URTH @ $189.83
+      BUY 1 GDXJ @ $128.02
+      BUY 1 SIL @ $96.70
+      SELL 1 NVDA @ $184.45
+      SELL 1 AAPL @ $278.18
+      SELL 1 PLTR @ $133.00
+      BUY 1 MSTR @ $133.50
+      BUY 1 MSFT @ $399.12
+      SELL 1 NVO @ $46.91
+      BUY 1 GLD @ $456.13
+      BUY 1 SLV @ $70.05
+      SELL 1 PPLT @ $185.28
+      BUY 1 COPX @ $84.78
+      SELL 1 JO @ $109.34 [synthetic]
+      SELL 1 URTH @ $189.74
+      BUY 1 GDXJ @ $128.06
+      BUY 1 SIL @ $96.76
+
+    Minute 140-149:
+      BUY 1 NVDA @ $184.63
+      BUY 1 PLTR @ $139.00
+      BUY 1 AMD @ $208.39
+      SELL 1 MP @ $60.88
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $398.35
+      BUY 1 TSLA @ $415.00
+      SELL 1 NVO @ $46.85
+      BUY 1 SLV @ $70.10
+      BUY 1 PPLT @ $191.92
+      SELL 1 COPX @ $84.24
+      BUY 1 JO @ $109.95 [synthetic]
+      SELL 1 URTH @ $189.72
+      BUY 1 GDXJ @ $128.15
+      SELL 1 SIL @ $96.39
+      SELL 1 NVDA @ $184.47
+      SELL 1 AMD @ $208.28
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $133.50
+      SELL 1 MSFT @ $398.00
+      BUY 1 NOC @ $356.78 [synthetic]
+      SELL 1 NVO @ $46.73
+      BUY 1 GLD @ $456.33
+      BUY 1 SLV @ $70.20
+      SELL 1 PPLT @ $190.96
+      SELL 1 COPX @ $84.24
+      BUY 1 JO @ $110.10 [synthetic]
+      SELL 1 GDXJ @ $127.86
+      SELL 1 SIL @ $96.39
+      BUY 1 NVDA @ $184.65
+      BUY 1 MP @ $62.99
+      SELL 1 TSLA @ $411.50
+      BUY 1 NOC @ $356.86 [synthetic]
+      BUY 1 SLV @ $70.30
+      BUY 1 COPX @ $85.21
+      SELL 1 JO @ $109.89 [synthetic]
+      SELL 1 GDXJ @ $127.79
+      BUY 1 SIL @ $96.77
+      SELL 1 NVDA @ $184.54
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $133.50
+      BUY 1 NVO @ $46.70
+      SELL 1 GLD @ $455.70
+      SELL 1 SLV @ $70.19
+      SELL 1 COPX @ $84.24
+      SELL 1 JO @ $109.19 [synthetic]
+      BUY 1 LIT @ $71.33 [synthetic]
+      BUY 1 URTH @ $189.77
+      SELL 1 GDXJ @ $127.65
+      SELL 1 SIL @ $96.30
+      BUY 1 NVDA @ $184.63
+      BUY 1 PLTR @ $138.00
+      SELL 1 AMD @ $206.80
+      BUY 1 MP @ $60.95
+      SELL 1 MSTR @ $126.76
+      BUY 1 MSFT @ $400.00
+      BUY 1 NOC @ $358.56 [synthetic]
+      BUY 1 NVO @ $46.72
+      SELL 1 JO @ $108.47 [synthetic]
+      SELL 1 LIT @ $70.59
+      BUY 1 URTH @ $189.83
+      SELL 1 NVDA @ $184.39
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $208.29
+      BUY 1 MP @ $60.83
+      SELL 1 NVO @ $46.68
+      SELL 1 GLD @ $455.70
+      SELL 1 SLV @ $70.25
+      SELL 1 JO @ $108.37 [synthetic]
+      SELL 1 LIT @ $70.59
+      BUY 1 URTH @ $189.80
+      BUY 1 NVDA @ $184.47
+      BUY 1 PLTR @ $136.93
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $60.94
+      SELL 1 MSTR @ $126.76
+      SELL 1 NOC @ $357.81 [synthetic]
+      SELL 1 NVO @ $46.63
+      BUY 1 GLD @ $456.23
+      BUY 1 SLV @ $70.43
+      SELL 1 JO @ $108.28 [synthetic]
+      BUY 1 LIT @ $71.50
+      SELL 1 URTH @ $189.67
+      BUY 1 GDXJ @ $127.99
+      BUY 1 SIL @ $96.73
+      SELL 1 PLTR @ $136.82
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $60.83
+      SELL 1 MSFT @ $397.00
+      BUY 1 TSLA @ $415.00
+      BUY 1 NOC @ $358.70 [synthetic]
+      SELL 1 GLD @ $455.80
+      BUY 1 SLV @ $70.49
+      BUY 1 PPLT @ $191.33
+      BUY 1 URTH @ $189.81
+      SELL 1 GDXJ @ $127.77
+      BUY 1 SIL @ $96.74
+      BUY 1 REMX @ $87.67
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $62.99
+      SELL 1 TSLA @ $411.50
+      SELL 1 NOC @ $357.61 [synthetic]
+      BUY 1 NVO @ $46.66
+      BUY 1 GLD @ $456.24
+      BUY 1 SLV @ $70.53
+      SELL 1 PPLT @ $185.28
+      BUY 1 JO @ $108.50 [synthetic]
+      SELL 1 URTH @ $189.67
+      BUY 1 GDXJ @ $128.11
+      BUY 1 SIL @ $96.79
+      SELL 1 NVDA @ $184.61
+      BUY 1 AAPL @ $279.30
+      SELL 1 AMD @ $208.31
+      SELL 1 MP @ $60.80
+      BUY 1 MSFT @ $401.55
+      SELL 1 NOC @ $357.44 [synthetic]
+      BUY 1 NVO @ $46.67
+      BUY 1 SLV @ $70.63
+      BUY 1 PPLT @ $191.35
+      BUY 1 COPX @ $84.95
+      SELL 1 JO @ $108.05 [synthetic]
+      BUY 1 GDXJ @ $128.13
+      SELL 1 REMX @ $86.43
+
+    Minute 150-159:
+      SELL 1 AAPL @ $278.57
+      BUY 1 PLTR @ $136.89
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $60.70
+      SELL 1 NOC @ $356.19 [synthetic]
+      BUY 1 NVO @ $46.68
+      SELL 1 GLD @ $456.10
+      SELL 1 SLV @ $70.53
+      BUY 1 PPLT @ $191.55
+      BUY 1 COPX @ $85.21
+      BUY 1 JO @ $108.51 [synthetic]
+      SELL 1 URTH @ $189.77
+      SELL 1 GDXJ @ $127.81
+      SELL 1 SIL @ $96.73
+      BUY 1 REMX @ $87.67
+      BUY 1 PLTR @ $139.00
+      SELL 1 AMD @ $206.80
+      BUY 1 MP @ $60.78
+      BUY 1 MSTR @ $132.50
+      BUY 1 MSFT @ $401.55
+      BUY 1 NOC @ $357.34 [synthetic]
+      SELL 1 NVO @ $46.63
+      SELL 1 JO @ $108.38 [synthetic]
+      SELL 1 URTH @ $189.73
+      BUY 1 GDXJ @ $128.21
+      BUY 1 SIL @ $96.89
+      BUY 1 REMX @ $87.67
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $396.70
+      SELL 1 NOC @ $354.19 [synthetic]
+      BUY 1 NVO @ $46.70
+      SELL 1 SLV @ $70.45
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.83
+      BUY 1 JO @ $108.64 [synthetic]
+      SELL 1 GDXJ @ $127.80
+      SELL 1 SIL @ $96.36
+      SELL 1 REMX @ $86.35
+      BUY 1 NVDA @ $184.34
+      BUY 1 AAPL @ $278.39
+      BUY 1 PLTR @ $138.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $60.78
+      SELL 1 MSFT @ $396.70
+      BUY 1 NOC @ $356.67 [synthetic]
+      SELL 1 NVO @ $46.66
+      BUY 1 GLD @ $456.53
+      BUY 1 SLV @ $70.52
+      BUY 1 PPLT @ $191.86
+      SELL 1 COPX @ $84.83
+      SELL 1 JO @ $108.46 [synthetic]
+      BUY 1 URTH @ $189.74
+      BUY 1 SIL @ $97.19
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $207.82
+      SELL 1 MP @ $60.66
+      BUY 1 MSTR @ $132.50
+      SELL 1 NOC @ $355.92 [synthetic]
+      SELL 1 NVO @ $46.64
+      BUY 1 GLD @ $456.73
+      BUY 1 SLV @ $70.68
+      SELL 1 PPLT @ $185.28
+      BUY 1 COPX @ $84.88
+      SELL 1 URTH @ $189.44
+      BUY 1 GDXJ @ $128.24
+      BUY 1 SIL @ $97.04
+      SELL 1 REMX @ $85.72
+      BUY 1 NVDA @ $184.40
+      SELL 1 AAPL @ $263.24
+      BUY 1 MP @ $60.80
+      BUY 1 MSTR @ $132.06
+      BUY 1 NVO @ $46.68
+      SELL 1 SLV @ $70.60
+      BUY 1 PPLT @ $192.25
+      SELL 1 LIT @ $70.48 [synthetic]
+      SELL 1 SIL @ $96.36
+      BUY 1 REMX @ $87.67
+      BUY 1 MP @ $60.85
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.74
+      BUY 1 SLV @ $70.78
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.24
+      BUY 1 LIT @ $70.76 [synthetic]
+      BUY 1 URTH @ $189.81
+      SELL 1 REMX @ $86.43
+      BUY 1 PLTR @ $136.31
+      SELL 1 MP @ $60.69
+      SELL 1 NVO @ $46.69
+      SELL 1 GLD @ $456.12
+      SELL 1 SLV @ $70.56
+      BUY 1 PPLT @ $192.09
+      BUY 1 COPX @ $85.21
+      BUY 1 LIT @ $70.88 [synthetic]
+      SELL 1 URTH @ $189.70
+      SELL 1 GDXJ @ $128.04
+      BUY 1 SIL @ $96.97
+      BUY 1 PICK @ $59.29
+      BUY 1 NVDA @ $184.75
+      BUY 1 PLTR @ $139.00
+      SELL 1 MP @ $60.69
+      SELL 1 NVO @ $46.65
+      SELL 1 SLV @ $70.54
+      SELL 1 PPLT @ $185.28
+      BUY 1 COPX @ $85.26
+      BUY 1 JO @ $108.34 [synthetic]
+      BUY 1 LIT @ $71.05 [synthetic]
+      BUY 1 GDXJ @ $128.31
+      SELL 1 SIL @ $96.65
+      BUY 1 REMX @ $87.67
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $56.99
+      SELL 1 GLD @ $456.12
+      SELL 1 SLV @ $70.42
+      BUY 1 PPLT @ $191.80
+      SELL 1 COPX @ $84.84
+      SELL 1 JO @ $108.12 [synthetic]
+      BUY 1 LIT @ $71.50
+      SELL 1 GDXJ @ $127.97
+      BUY 1 SIL @ $96.97
+      SELL 1 REMX @ $86.23
+      SELL 1 PICK @ $58.84
+
+    Minute 160-169:
+      SELL 1 NVDA @ $184.62
+      BUY 1 AAPL @ $278.33
+      BUY 1 PLTR @ $136.32
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $60.72
+      BUY 1 MSTR @ $132.50
+      SELL 1 NVO @ $46.61
+      BUY 1 SLV @ $70.45
+      SELL 1 PPLT @ $190.99
+      SELL 1 COPX @ $84.83
+      BUY 1 JO @ $108.35 [synthetic]
+      BUY 1 URTH @ $189.76
+      SELL 1 GDXJ @ $128.00
+      SELL 1 SIL @ $96.85
+      BUY 1 REMX @ $87.67
+      SELL 1 NVDA @ $184.55
+      BUY 1 AAPL @ $278.34
+      SELL 1 AMD @ $208.02
+      BUY 1 MP @ $60.78
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.72
+      SELL 1 SLV @ $70.33
+      SELL 1 PPLT @ $190.97
+      BUY 1 COPX @ $85.26
+      SELL 1 JO @ $108.19 [synthetic]
+      BUY 1 URTH @ $189.74
+      BUY 1 GDXJ @ $128.29
+      SELL 1 SIL @ $96.52
+      SELL 1 REMX @ $86.18
+      BUY 1 PICK @ $59.40
+      BUY 1 NVDA @ $184.67
+      BUY 1 PLTR @ $139.00
+      SELL 1 AMD @ $208.01
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $60.84
+      BUY 1 NVO @ $46.73
+      SELL 1 COPX @ $84.90
+      BUY 1 SIL @ $96.96
+      SELL 1 AAPL @ $278.38
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $62.99
+      SELL 1 NVO @ $46.71
+      SELL 1 SLV @ $70.30
+      BUY 1 PPLT @ $191.61
+      BUY 1 JO @ $108.46 [synthetic]
+      SELL 1 GDXJ @ $127.97
+      SELL 1 SIL @ $96.86
+      SELL 1 NVDA @ $184.76
+      BUY 1 AAPL @ $278.44
+      BUY 1 PLTR @ $136.33
+      SELL 1 AMD @ $208.01
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.76
+      BUY 1 SLV @ $70.43
+      SELL 1 PPLT @ $185.28
+      BUY 1 JO @ $108.52 [synthetic]
+      SELL 1 LIT @ $70.57 [synthetic]
+      SELL 1 URTH @ $189.74
+      BUY 1 GDXJ @ $128.32
+      SELL 1 SIL @ $96.52
+      BUY 1 REMX @ $87.67
+      SELL 1 AAPL @ $278.38
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $132.50
+      BUY 1 NVO @ $46.78
+      BUY 1 GLD @ $456.48
+      BUY 1 SLV @ $70.50
+      BUY 1 PPLT @ $198.02
+      SELL 1 JO @ $108.17 [synthetic]
+      BUY 1 LIT @ $71.50
+      SELL 1 PICK @ $58.84
+      SELL 1 NVDA @ $184.65
+      SELL 1 AAPL @ $278.33
+      BUY 1 PLTR @ $139.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $60.70
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.79
+      SELL 1 GLD @ $455.52
+      SELL 1 SLV @ $70.12
+      SELL 1 JO @ $107.63 [synthetic]
+      SELL 1 URTH @ $189.60
+      SELL 1 GDXJ @ $127.93
+      SELL 1 SIL @ $96.77
+      SELL 1 PLTR @ $136.41
+      SELL 1 AMD @ $206.80
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $60.61
+      BUY 1 MSFT @ $399.69
+      SELL 1 NVO @ $46.76
+      BUY 1 SLV @ $70.26
+      SELL 1 PPLT @ $190.52
+      BUY 1 COPX @ $85.26
+      BUY 1 JO @ $107.79 [synthetic]
+      BUY 1 URTH @ $189.77
+      BUY 1 SIL @ $96.86
+      SELL 1 REMX @ $86.17
+      BUY 1 PICK @ $59.40
+      SELL 1 PLTR @ $136.17
+      BUY 1 AMD @ $207.78
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $131.70
+      SELL 1 MSFT @ $397.00
+      BUY 1 TSLA @ $415.00
+      BUY 1 NVO @ $46.78
+      SELL 1 SLV @ $69.92
+      SELL 1 COPX @ $84.66
+      BUY 1 JO @ $108.04 [synthetic]
+      SELL 1 URTH @ $189.60
+      SELL 1 SIL @ $96.63
+      BUY 1 REMX @ $87.67
+      SELL 1 PICK @ $58.84
+      BUY 1 AAPL @ $278.75
+      BUY 1 PLTR @ $138.00
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $60.44
+      BUY 1 MSFT @ $399.54
+      SELL 1 TSLA @ $411.85
+      SELL 1 NVO @ $46.76
+      BUY 1 GLD @ $455.35
+      SELL 1 SLV @ $69.86
+      SELL 1 JO @ $107.70 [synthetic]
+      SELL 1 REMX @ $86.10
+
+    Minute 170-179:
+      BUY 1 NVDA @ $184.57
+      SELL 1 AAPL @ $278.02
+      SELL 1 PLTR @ $135.70
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $133.00
+      SELL 1 MSFT @ $399.42
+      BUY 1 NOC @ $355.47 [synthetic]
+      SELL 1 NVO @ $46.75
+      BUY 1 GLD @ $455.33
+      BUY 1 SLV @ $69.95
+      BUY 1 PPLT @ $198.02
+      BUY 1 COPX @ $85.26
+      BUY 1 JO @ $107.91 [synthetic]
+      SELL 1 LIT @ $71.00 [synthetic]
+      BUY 1 SIL @ $96.78
+      SELL 1 NVDA @ $184.40
+      SELL 1 PLTR @ $135.54
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 NOC @ $357.22 [synthetic]
+      BUY 1 NVO @ $46.79
+      SELL 1 GLD @ $454.91
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.68
+      BUY 1 JO @ $108.07 [synthetic]
+      BUY 1 LIT @ $71.29 [synthetic]
+      BUY 1 URTH @ $189.71
+      BUY 1 GDXJ @ $127.98
+      BUY 1 SIL @ $96.78
+      SELL 1 PLTR @ $135.46
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $126.76
+      SELL 1 NOC @ $356.20 [synthetic]
+      SELL 1 NVO @ $46.75
+      SELL 1 GLD @ $454.70
+      BUY 1 SLV @ $69.98
+      BUY 1 COPX @ $85.01
+      SELL 1 JO @ $107.63 [synthetic]
+      SELL 1 LIT @ $70.59
+      SELL 1 URTH @ $189.64
+      SELL 1 GDXJ @ $127.53
+      SELL 1 SIL @ $96.62
+      BUY 1 NVDA @ $184.57
+      SELL 1 AMD @ $207.55
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+      BUY 1 MSFT @ $400.00
+      BUY 1 NOC @ $356.65 [synthetic]
+      SELL 1 NVO @ $46.52
+      BUY 1 GLD @ $455.82
+      BUY 1 SLV @ $70.25
+      SELL 1 COPX @ $84.70
+      BUY 1 JO @ $108.08 [synthetic]
+      BUY 1 SIL @ $96.86
+      SELL 1 NVDA @ $184.45
+      BUY 1 PLTR @ $135.53
+      SELL 1 MP @ $60.64
+      SELL 1 NOC @ $709.80
+      BUY 1 NVO @ $46.61
+      SELL 1 GLD @ $455.20
+      SELL 1 SLV @ $70.18
+      BUY 1 COPX @ $85.04
+      BUY 1 JO @ $108.62 [synthetic]
+      BUY 1 SIL @ $96.87
+      BUY 1 PLTR @ $135.59
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSFT @ $397.00
+      SELL 1 NOC @ $709.41
+      BUY 1 NVO @ $46.62
+      SELL 1 SLV @ $70.04
+      SELL 1 COPX @ $84.66
+      SELL 1 JO @ $108.24 [synthetic]
+      BUY 1 GDXJ @ $128.17
+      SELL 1 SIL @ $96.72
+      BUY 1 PLTR @ $135.60
+      SELL 1 AMD @ $206.80
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $60.85
+      BUY 1 MSFT @ $399.58
+      BUY 1 NVO @ $46.65
+      SELL 1 SLV @ $69.90
+      BUY 1 PPLT @ $190.72
+      SELL 1 JO @ $107.59 [synthetic]
+      BUY 1 URTH @ $189.78
+      SELL 1 GDXJ @ $127.77
+      SELL 1 SIL @ $96.70
+      BUY 1 NVDA @ $184.39
+      BUY 1 AAPL @ $278.75
+      BUY 1 PLTR @ $139.00
+      BUY 1 AMD @ $207.37
+      SELL 1 BE @ $135.78
+      BUY 1 MP @ $62.99
+      SELL 1 MSFT @ $397.80
+      BUY 1 GLD @ $455.76
+      BUY 1 SLV @ $70.15
+      SELL 1 PPLT @ $185.28
+      BUY 1 COPX @ $84.96
+      SELL 1 JO @ $107.31 [synthetic]
+      SELL 1 LIT @ $70.89 [synthetic]
+      BUY 1 URTH @ $189.80
+      BUY 1 GDXJ @ $128.24
+      SELL 1 SIL @ $96.35
+      BUY 1 NVDA @ $184.40
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $135.52
+      SELL 1 AMD @ $206.80
+      SELL 1 MP @ $56.99
+      BUY 1 MSFT @ $399.37
+      BUY 1 TSLA @ $415.00
+      BUY 1 NVO @ $46.70
+      BUY 1 SLV @ $70.18
+      SELL 1 COPX @ $84.73
+      SELL 1 JO @ $107.31 [synthetic]
+      BUY 1 LIT @ $71.50
+      SELL 1 URTH @ $189.69
+      SELL 1 GDXJ @ $127.94
+      BUY 1 SIL @ $96.92
+      BUY 1 NVDA @ $184.50
+      BUY 1 AAPL @ $277.24
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $62.99
+      BUY 1 NVO @ $46.72
+      BUY 1 SLV @ $70.21
+
+    Minute 180-189:
+      SELL 1 MP @ $56.99
+      SELL 1 MSFT @ $397.80
+      SELL 1 TSLA @ $410.01
+      BUY 1 NVO @ $46.74
+      BUY 1 GLD @ $456.16
+      BUY 1 SLV @ $70.22
+      BUY 1 PPLT @ $191.10
+      BUY 1 COPX @ $84.85
+      SELL 1 URTH @ $189.47
+      BUY 1 GDXJ @ $128.29
+      BUY 1 SIL @ $97.16
+      SELL 1 NVDA @ $184.50
+      SELL 1 AAPL @ $277.15
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSFT @ $399.90
+      BUY 1 NVO @ $46.78
+      BUY 1 SLV @ $70.31
+      SELL 1 GDXJ @ $127.92
+      SELL 1 SIL @ $96.88
+      BUY 1 NVDA @ $184.64
+      BUY 1 NVO @ $46.82
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.89
+      BUY 1 GDXJ @ $128.21
+      SELL 1 SIL @ $96.35
+      BUY 1 REMX @ $87.67
+      BUY 1 PICK @ $59.38
+      SELL 1 NVDA @ $184.61
+      BUY 1 PLTR @ $139.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $56.99
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $399.72
+      BUY 1 TSLA @ $412.77
+      SELL 1 SLV @ $70.36
+      BUY 1 COPX @ $85.23
+      BUY 1 JO @ $107.95 [synthetic]
+      SELL 1 LIT @ $70.59
+      SELL 1 GDXJ @ $128.05
+      SELL 1 REMX @ $86.10
+      SELL 1 PICK @ $59.22
+      BUY 1 NVDA @ $184.69
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $61.04
+      SELL 1 GLD @ $456.08
+      SELL 1 SLV @ $70.30
+      SELL 1 COPX @ $84.83
+      SELL 1 JO @ $107.08 [synthetic]
+      SELL 1 LIT @ $70.59
+      BUY 1 URTH @ $189.87
+      BUY 1 GDXJ @ $128.52
+      BUY 1 SIL @ $97.10
+      SELL 1 NVDA @ $184.65
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $207.14
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $60.91
+      BUY 1 MSTR @ $133.00
+      BUY 1 TSLA @ $415.00
+      BUY 1 NVO @ $46.89
+      SELL 1 SLV @ $70.26
+      BUY 1 PPLT @ $190.95
+      BUY 1 JO @ $107.30 [synthetic]
+      BUY 1 LIT @ $71.50
+      SELL 1 URTH @ $189.78
+      BUY 1 GDXJ @ $128.51
+      BUY 1 SIL @ $97.15
+      BUY 1 PICK @ $59.38
+      BUY 1 PLTR @ $139.00
+      SELL 1 MP @ $56.99
+      SELL 1 TSLA @ $410.01
+      SELL 1 GLD @ $456.00
+      SELL 1 SLV @ $70.26
+      SELL 1 PPLT @ $185.28
+      BUY 1 COPX @ $84.93
+      SELL 1 JO @ $107.14 [synthetic]
+      BUY 1 URTH @ $189.86
+      BUY 1 GDXJ @ $128.55
+      SELL 1 SIL @ $96.69
+      SELL 1 NVDA @ $184.60
+      BUY 1 AAPL @ $277.20
+      BUY 1 PLTR @ $139.00
+      BUY 1 MP @ $60.98
+      SELL 1 MSTR @ $132.70
+      BUY 1 MSFT @ $400.50
+      BUY 1 TSLA @ $415.00
+      SELL 1 NVO @ $46.86
+      BUY 1 SLV @ $70.29
+      SELL 1 PICK @ $58.84
+      SELL 1 NVDA @ $184.59
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $135.59
+      BUY 1 MP @ $60.96
+      SELL 1 MSFT @ $397.80
+      SELL 1 TSLA @ $411.85
+      BUY 1 NVO @ $46.88
+      BUY 1 GLD @ $456.46
+      SELL 1 SLV @ $70.26
+      BUY 1 PPLT @ $191.28
+      SELL 1 COPX @ $84.80
+      SELL 1 URTH @ $189.79
+      SELL 1 GDXJ @ $128.04
+      SELL 1 SIL @ $97.00
+      BUY 1 PICK @ $59.38
+      BUY 1 NVDA @ $184.66
+      BUY 1 AAPL @ $277.47
+      BUY 1 PLTR @ $138.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $61.03
+      BUY 1 MSTR @ $132.53
+      SELL 1 TSLA @ $412.24
+      BUY 1 NVO @ $46.93
+      BUY 1 GLD @ $456.56
+      SELL 1 SLV @ $70.21
+      BUY 1 PPLT @ $191.28
+
+    Minute 190-199:
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.94
+      BUY 1 SLV @ $70.28
+      SELL 1 GDXJ @ $128.15
+      BUY 1 SIL @ $97.19
+      SELL 1 AAPL @ $277.25
+      SELL 1 PLTR @ $135.39
+      SELL 1 AMD @ $207.14
+      SELL 1 MP @ $60.90
+      BUY 1 TSLA @ $412.84
+      BUY 1 NVO @ $46.96
+      SELL 1 SLV @ $70.24
+      BUY 1 PPLT @ $191.45
+      BUY 1 GDXJ @ $128.26
+      SELL 1 SIL @ $96.69
+      BUY 1 REMX @ $86.73
+      SELL 1 NVDA @ $184.59
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $62.99
+      BUY 1 NVO @ $46.97
+      SELL 1 AMD @ $207.52
+      BUY 1 MP @ $62.99
+      SELL 1 TSLA @ $412.71
+      SELL 1 NVO @ $46.78
+      BUY 1 GLD @ $456.66
+      BUY 1 SLV @ $70.39
+      BUY 1 COPX @ $84.85
+      SELL 1 MP @ $60.97
+      SELL 1 NVO @ $46.77
+      SELL 1 SLV @ $70.32
+      BUY 1 PPLT @ $191.83
+      SELL 1 COPX @ $84.24
+      BUY 1 LIT @ $71.55
+      SELL 1 GDXJ @ $128.23
+      SELL 1 REMX @ $86.10
+      SELL 1 PICK @ $58.84
+      BUY 1 PLTR @ $139.00
+      SELL 1 MP @ $56.99
+      BUY 1 MSTR @ $132.32
+      BUY 1 NVO @ $46.80
+      SELL 1 GLD @ $456.16
+      SELL 1 SLV @ $70.19
+      SELL 1 PPLT @ $190.88
+      BUY 1 COPX @ $85.23
+      BUY 1 JO @ $105.46 [synthetic]
+      SELL 1 GDXJ @ $128.16
+      BUY 1 SIL @ $97.15
+      BUY 1 PICK @ $59.33
+      BUY 1 NVDA @ $184.92
+      BUY 1 AAPL @ $280.00
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.83
+      SELL 1 SLV @ $70.14
+      BUY 1 PPLT @ $191.64
+      SELL 1 COPX @ $84.76
+      SELL 1 LIT @ $70.59
+      SELL 1 SIL @ $96.69
+      SELL 1 PICK @ $58.99
+      BUY 1 NVDA @ $184.96
+      SELL 1 AAPL @ $277.07
+      BUY 1 PLTR @ $139.00
+      BUY 1 MP @ $61.20
+      SELL 1 NVO @ $46.80
+      SELL 1 SLV @ $70.05
+      SELL 1 PPLT @ $190.62
+      BUY 1 JO @ $106.08 [synthetic]
+      SELL 1 LIT @ $70.26
+      BUY 1 URTH @ $189.90
+      BUY 1 REMX @ $86.76
+      SELL 1 NVDA @ $184.88
+      BUY 1 AAPL @ $277.12
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 JO @ $105.75 [synthetic]
+      BUY 1 GDXJ @ $128.48
+      SELL 1 REMX @ $86.33
+      SELL 1 NVDA @ $184.84
+      BUY 1 AAPL @ $280.00
+      SELL 1 AMD @ $207.60
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+      SELL 1 NVO @ $46.82
+      SELL 1 GLD @ $456.21
+      SELL 1 SLV @ $70.06
+      BUY 1 PPLT @ $191.60
+      BUY 1 COPX @ $84.81
+      SELL 1 JO @ $105.75 [synthetic]
+      SELL 1 URTH @ $189.81
+      SELL 1 GDXJ @ $128.14
+      BUY 1 SIL @ $97.23
+
+    Minute 200-209:
+      SELL 1 AAPL @ $277.15
+      SELL 1 MP @ $61.37
+      SELL 1 MSTR @ $126.76
+      BUY 1 MSFT @ $398.71
+      SELL 1 NVO @ $46.81
+      SELL 1 GLD @ $456.01
+      SELL 1 SLV @ $70.00
+      BUY 1 COPX @ $84.78
+      BUY 1 JO @ $106.33 [synthetic]
+      SELL 1 SIL @ $97.10
+      BUY 1 NVDA @ $184.87
+      BUY 1 AAPL @ $277.18
+      BUY 1 PLTR @ $139.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.20
+      SELL 1 MSFT @ $397.00
+      BUY 1 NOC @ $354.64 [synthetic]
+      SELL 1 NVO @ $46.80
+      SELL 1 SLV @ $69.96
+      BUY 1 PPLT @ $191.55
+      BUY 1 COPX @ $84.83
+      BUY 1 JO @ $106.97 [synthetic]
+      BUY 1 GDXJ @ $128.17
+      BUY 1 SIL @ $97.19
+      SELL 1 NVDA @ $184.59
+      SELL 1 PLTR @ $133.00
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.00
+      SELL 1 NOC @ $353.18 [synthetic]
+      SELL 1 NVO @ $46.78
+      SELL 1 SLV @ $69.90
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.71
+      SELL 1 JO @ $106.55 [synthetic]
+      BUY 1 GDXJ @ $128.39
+      SELL 1 SIL @ $97.11
+      BUY 1 AAPL @ $277.41
+      BUY 1 MP @ $61.19
+      BUY 1 MSFT @ $397.82
+      BUY 1 TSLA @ $411.37
+      BUY 1 SLV @ $70.03
+      SELL 1 JO @ $106.42 [synthetic]
+      SELL 1 GDXJ @ $128.14
+      BUY 1 SIL @ $97.53
+      BUY 1 REMX @ $87.86
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $397.58
+      SELL 1 TSLA @ $410.01
+      BUY 1 NVO @ $46.80
+      SELL 1 SLV @ $70.00
+      SELL 1 PPLT @ $190.53
+      SELL 1 COPX @ $84.74
+      SELL 1 GDXJ @ $128.06
+      SELL 1 SIL @ $97.14
+      SELL 1 REMX @ $86.56
+      BUY 1 NVDA @ $184.65
+      SELL 1 AAPL @ $277.44
+      BUY 1 BE @ $135.31
+      BUY 1 MP @ $61.14
+      BUY 1 MSTR @ $131.73
+      BUY 1 MSFT @ $398.71
+      BUY 1 TSLA @ $412.18
+      BUY 1 NVO @ $46.81
+      BUY 1 SLV @ $70.06
+      BUY 1 PPLT @ $191.55
+      BUY 1 COPX @ $85.14
+      SELL 1 LIT @ $70.26
+      BUY 1 URTH @ $189.77
+      BUY 1 GDXJ @ $128.38
+      BUY 1 MP @ $61.16
+      SELL 1 TSLA @ $410.01
+      BUY 1 NVO @ $46.87
+      BUY 1 SLV @ $70.12
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.70
+      BUY 1 URTH @ $189.83
+      SELL 1 GDXJ @ $128.02
+      SELL 1 NVDA @ $184.70
+      SELL 1 AAPL @ $277.61
+      SELL 1 BE @ $135.34
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $132.47
+      SELL 1 MSFT @ $397.00
+      BUY 1 NOC @ $351.94 [synthetic]
+      BUY 1 NVO @ $46.88
+      SELL 1 SLV @ $70.07
+      BUY 1 PPLT @ $191.58
+      SELL 1 COPX @ $84.68
+      BUY 1 JO @ $105.83 [synthetic]
+      SELL 1 URTH @ $189.55
+      SELL 1 AAPL @ $277.54
+      BUY 1 PLTR @ $139.00
+      BUY 1 AMD @ $207.33
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.08
+      BUY 1 MSFT @ $398.71
+      BUY 1 NOC @ $352.01 [synthetic]
+      SELL 1 NVO @ $46.85
+      BUY 1 SLV @ $70.15
+      SELL 1 PPLT @ $190.68
+      SELL 1 JO @ $105.63 [synthetic]
+      BUY 1 URTH @ $189.81
+      BUY 1 GDXJ @ $128.31
+      BUY 1 SIL @ $97.15
+      BUY 1 NVDA @ $184.70
+      SELL 1 PLTR @ $135.25
+      SELL 1 AMD @ $207.21
+      BUY 1 MP @ $61.17
+      SELL 1 MSFT @ $397.65
+      SELL 1 NOC @ $350.58 [synthetic]
+      SELL 1 NVO @ $46.83
+      BUY 1 GLD @ $456.08
+      SELL 1 SLV @ $70.12
+      SELL 1 PPLT @ $190.60
+      SELL 1 URTH @ $189.70
+      BUY 1 GDXJ @ $128.30
+      SELL 1 SIL @ $96.69
+
+    Minute 210-219:
+      SELL 1 NVDA @ $184.61
+      BUY 1 AAPL @ $277.70
+      BUY 1 PLTR @ $139.00
+      SELL 1 MP @ $61.10
+      BUY 1 MSFT @ $400.00
+      BUY 1 NOC @ $351.81 [synthetic]
+      BUY 1 NVO @ $46.85
+      SELL 1 GLD @ $455.61
+      SELL 1 SLV @ $69.98
+      BUY 1 PPLT @ $198.02
+      BUY 1 URTH @ $189.77
+      SELL 1 GDXJ @ $127.91
+      BUY 1 SIL @ $97.10
+      BUY 1 NVDA @ $184.68
+      SELL 1 AAPL @ $263.24
+      SELL 1 PLTR @ $135.18
+      SELL 1 MP @ $58.22
+      SELL 1 MSFT @ $397.00
+      BUY 1 TSLA @ $411.74
+      BUY 1 NOC @ $353.01 [synthetic]
+      SELL 1 NVO @ $46.83
+      BUY 1 SLV @ $70.07
+      SELL 1 PPLT @ $190.78
+      BUY 1 COPX @ $84.74
+      SELL 1 LIT @ $70.26
+      SELL 1 URTH @ $189.69
+      SELL 1 GDXJ @ $127.88
+      SELL 1 SIL @ $96.69
+      BUY 1 REMX @ $87.86
+      BUY 1 PICK @ $58.97 [synthetic]
+      SELL 1 NVDA @ $184.64
+      BUY 1 AAPL @ $278.75
+      BUY 1 PLTR @ $139.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+      SELL 1 AAPL @ $277.71
+      BUY 1 AMD @ $207.15
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $132.33
+      SELL 1 NVO @ $46.82
+      SELL 1 SLV @ $70.06
+      SELL 1 PPLT @ $190.57
+      SELL 1 COPX @ $84.72
+      BUY 1 SIL @ $97.10
+      SELL 1 REMX @ $86.26
+      BUY 1 NVDA @ $184.67
+      SELL 1 AMD @ $206.93
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $132.13
+      SELL 1 TSLA @ $410.01
+      SELL 1 NOC @ $353.63 [synthetic]
+      BUY 1 LMT @ $621.56
+      SELL 1 NVO @ $46.81
+      SELL 1 SLV @ $70.00
+      SELL 1 PPLT @ $190.42
+      SELL 1 URTH @ $189.54
+      SELL 1 SIL @ $96.97
+      BUY 1 REMX @ $86.65
+      SELL 1 PICK @ $58.95
+      SELL 1 NVDA @ $184.64
+      BUY 1 PLTR @ $139.00
+      SELL 1 BE @ $134.50
+      BUY 1 MP @ $61.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 TSLA @ $414.80
+      SELL 1 NOC @ $353.52 [synthetic]
+      BUY 1 LMT @ $621.73
+      BUY 1 NVO @ $46.83
+      SELL 1 SLV @ $69.95
+      BUY 1 PPLT @ $191.28
+      BUY 1 COPX @ $85.14
+      BUY 1 URTH @ $189.83
+      BUY 1 REMX @ $87.86
+      SELL 1 PLTR @ $133.00
+      SELL 1 BE @ $134.50
+      SELL 1 MP @ $58.22
+      SELL 1 NOC @ $706.62
+      BUY 1 LMT @ $621.91
+      SELL 1 NVO @ $46.81
+      SELL 1 SLV @ $69.89
+      SELL 1 PPLT @ $190.19
+      SELL 1 COPX @ $84.57
+      SELL 1 URTH @ $189.69
+      BUY 1 SIL @ $97.48
+      SELL 1 REMX @ $86.26
+      BUY 1 PICK @ $59.42
+      BUY 1 AMD @ $206.75
+      BUY 1 BE @ $135.19
+      BUY 1 MP @ $61.19
+      BUY 1 MSTR @ $133.00
+      BUY 1 MSFT @ $398.30
+      SELL 1 TSLA @ $410.01
+      SELL 1 NVO @ $46.79
+      BUY 1 GLD @ $455.85
+      BUY 1 SLV @ $69.95
+      SELL 1 SIL @ $96.56
+      SELL 1 REMX @ $86.26
+      BUY 1 PLTR @ $138.00
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.13
+      SELL 1 NVO @ $46.77
+      BUY 1 SLV @ $69.99
+      BUY 1 PPLT @ $191.16
+      SELL 1 PLTR @ $135.10
+      BUY 1 BE @ $144.00
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $46.79
+      BUY 1 SLV @ $70.10
+
+    Minute 220-229:
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSFT @ $397.79
+      SELL 1 LMT @ $620.69
+      BUY 1 NVO @ $46.82
+      SELL 1 GLD @ $455.50
+      SELL 1 SLV @ $70.06
+      BUY 1 PPLT @ $191.46
+      BUY 1 JO @ $105.28 [synthetic]
+      BUY 1 PLTR @ $135.26
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $61.20
+      SELL 1 NVO @ $46.79
+      BUY 1 GLD @ $456.05
+      BUY 1 SLV @ $70.11
+      SELL 1 PPLT @ $190.57
+      BUY 1 JO @ $105.66 [synthetic]
+      SELL 1 LIT @ $70.26
+      BUY 1 URTH @ $189.72
+      BUY 1 GDXJ @ $127.69
+      BUY 1 SIL @ $97.00
+      BUY 1 REMX @ $87.86
+      SELL 1 PICK @ $59.02 [synthetic]
+      BUY 1 AAPL @ $278.75
+      BUY 1 PLTR @ $139.00
+      SELL 1 LMT @ $620.69
+      BUY 1 NVO @ $46.81
+      SELL 1 GLD @ $455.53
+      BUY 1 SLV @ $70.13
+      SELL 1 PPLT @ $190.42
+      BUY 1 COPX @ $84.71
+      SELL 1 JO @ $105.35 [synthetic]
+      BUY 1 URTH @ $189.73
+      SELL 1 GDXJ @ $127.59
+      SELL 1 SIL @ $96.90
+      BUY 1 PICK @ $59.25
+      BUY 1 NVDA @ $184.27
+      SELL 1 AAPL @ $277.81
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.00
+      BUY 1 MSFT @ $399.90
+      SELL 1 LMT @ $620.86
+      SELL 1 SLV @ $70.07
+      SELL 1 COPX @ $84.65
+      BUY 1 JO @ $105.72 [synthetic]
+      BUY 1 LIT @ $71.57
+      BUY 1 URTH @ $189.73
+      BUY 1 SIL @ $97.03
+      SELL 1 REMX @ $86.26
+      BUY 1 PICK @ $59.42
+      SELL 1 NVDA @ $184.23
+      BUY 1 PLTR @ $135.50
+      SELL 1 AMD @ $202.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $132.49
+      SELL 1 MSFT @ $398.35
+      BUY 1 TSLA @ $414.80
+      BUY 1 NVO @ $46.82
+      BUY 1 GLD @ $456.05
+      BUY 1 SLV @ $70.22
+      BUY 1 PPLT @ $191.37
+      BUY 1 COPX @ $85.14
+      SELL 1 JO @ $105.34 [synthetic]
+      SELL 1 URTH @ $189.59
+      BUY 1 GDXJ @ $127.91
+      SELL 1 SIL @ $96.80
+      BUY 1 REMX @ $87.86
+      BUY 1 NVDA @ $184.25
+      BUY 1 PLTR @ $135.46
+      BUY 1 AMD @ $206.60
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $62.99
+      BUY 1 NVO @ $46.83
+      SELL 1 GLD @ $455.53
+      SELL 1 SLV @ $70.10
+      SELL 1 PPLT @ $185.28
+      SELL 1 COPX @ $84.68
+      SELL 1 JO @ $105.15 [synthetic]
+      BUY 1 LIT @ $71.57
+      SELL 1 GDXJ @ $127.73
+      BUY 1 REMX @ $87.86
+      BUY 1 NVDA @ $184.59
+      BUY 1 AAPL @ $277.64
+      BUY 1 PLTR @ $137.55
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      SELL 1 REMX @ $86.26
+      BUY 1 PICK @ $59.42
+      SELL 1 NVDA @ $184.54
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $204.80
+      SELL 1 MP @ $58.22
+      BUY 1 MSFT @ $399.00
+      SELL 1 TSLA @ $410.01
+      SELL 1 NVO @ $46.85
+      SELL 1 SLV @ $70.16
+      BUY 1 COPX @ $84.85
+      BUY 1 LIT @ $72.50
+      SELL 1 URTH @ $189.59
+      BUY 1 GDXJ @ $128.15
+      BUY 1 SIL @ $97.36
+      SELL 1 PICK @ $59.32
+      SELL 1 NVDA @ $184.52
+      SELL 1 AAPL @ $277.58
+      BUY 1 PLTR @ $137.55
+      BUY 1 AMD @ $206.81
+      BUY 1 MP @ $61.49
+      BUY 1 MSTR @ $133.09
+      BUY 1 MSFT @ $399.15
+      BUY 1 NVO @ $46.90
+      SELL 1 SLV @ $70.10
+      BUY 1 COPX @ $85.22
+      SELL 1 LIT @ $71.04
+      SELL 1 URTH @ $189.59
+      BUY 1 GDXJ @ $128.32
+      SELL 1 SIL @ $97.07
+      SELL 1 REMX @ $86.71
+      BUY 1 PICK @ $59.44
+      SELL 1 PLTR @ $135.66
+      SELL 1 AMD @ $202.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $131.00
+      BUY 1 MSFT @ $399.44
+      BUY 1 NVO @ $46.91
+      SELL 1 SLV @ $70.04
+      SELL 1 COPX @ $84.86
+      SELL 1 GDXJ @ $127.95
+      SELL 1 PICK @ $59.03
+
+    Minute 230-239:
+      BUY 1 NVDA @ $184.48
       BUY 1 PLTR @ $135.78
-      BUY 1 MSTR @ $114.89
-      BUY 1 MSFT @ $401.76
-      SELL 1 NOC @ $343.63 [synthetic]
-      BUY 1 LMT @ $304.60 [synthetic]
-      BUY 1 NVO @ $44.08
-      BUY 1 PPLT @ $189.69
-      BUY 1 COPX @ $82.32
-      SELL 1 JO @ $139.12 [synthetic]
-      BUY 1 LIT @ $69.30
-      BUY 1 PICK @ $58.21
-      SELL 1 NVDA @ $171.86
-      SELL 1 AAPL @ $275.66
-      SELL 1 PLTR @ $130.07
-      BUY 1 AMD @ $202.00
-      SELL 1 MSTR @ $110.01
-      SELL 1 MSFT @ $398.86
-      SELL 1 LMT @ $303.91 [synthetic]
-      SELL 1 NVO @ $43.96
-      BUY 1 GLD @ $444.61
-      BUY 1 SLV @ $67.39
-      SELL 1 COPX @ $82.12
-      BUY 1 JO @ $139.66 [synthetic]
-      SELL 1 LIT @ $68.27
-      BUY 1 SIL @ $93.81
-      SELL 1 REMX @ $81.97
-      SELL 1 PICK @ $57.73
-      SELL 1 AAPL @ $273.50
-      SELL 1 PLTR @ $129.00
-      SELL 1 AMD @ $184.00
-      BUY 1 MSFT @ $400.69
-      BUY 1 LMT @ $304.40 [synthetic]
-      BUY 1 NVO @ $43.99
-      SELL 1 GLD @ $442.64
-      SELL 1 SLV @ $66.77
-      SELL 1 PPLT @ $177.20
-      SELL 1 JO @ $139.31 [synthetic]
-      SELL 1 SIL @ $92.96
-      BUY 1 REMX @ $84.09
-      SELL 1 PICK @ $57.58
-      BUY 1 NVDA @ $171.87
-      BUY 1 AAPL @ $275.79
-      BUY 1 PLTR @ $131.92
-      BUY 1 MSFT @ $401.76
-      BUY 1 TSLA @ $389.55
-      SELL 1 NVO @ $43.95
-      BUY 1 COPX @ $82.05
-      BUY 1 LIT @ $69.19
-      SELL 1 REMX @ $81.97
-      BUY 1 PICK @ $57.77
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $135.00
+      SELL 1 MSFT @ $397.79
+      BUY 1 NVO @ $46.98
+      BUY 1 GLD @ $456.15
+      BUY 1 SLV @ $70.11
+      BUY 1 COPX @ $84.94
+      SELL 1 NVDA @ $184.32
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $397.79
+      BUY 1 NVO @ $47.06
+      SELL 1 GLD @ $455.63
+      SELL 1 SLV @ $70.08
+      BUY 1 PPLT @ $191.44
+      SELL 1 COPX @ $84.75
+      SELL 1 GDXJ @ $127.89
+      BUY 1 REMX @ $87.92
+      SELL 1 PICK @ $59.03
+      BUY 1 AAPL @ $277.30
+      BUY 1 AMD @ $207.10
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $135.00
+      BUY 1 MSFT @ $399.14
+      BUY 1 NVO @ $47.13
+      SELL 1 PPLT @ $190.23
+      SELL 1 COPX @ $84.65
+      BUY 1 SIL @ $97.16
+      BUY 1 REMX @ $87.92
+      SELL 1 PICK @ $59.02
+      BUY 1 NVDA @ $184.45
+      SELL 1 AAPL @ $277.12
+      BUY 1 AMD @ $207.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.15
+      SELL 1 NVO @ $47.11
+      BUY 1 JO @ $105.03 [synthetic]
+      BUY 1 LIT @ $71.56 [synthetic]
+      BUY 1 GDXJ @ $127.87
+      SELL 1 SIL @ $96.84
+      SELL 1 REMX @ $86.42
+      BUY 1 NVDA @ $184.49
+      SELL 1 AMD @ $206.76
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.23
+      SELL 1 MSFT @ $399.06
+      SELL 1 NVO @ $47.10
+      BUY 1 SLV @ $70.00
+      BUY 1 PPLT @ $191.10
+      SELL 1 JO @ $104.91 [synthetic]
+      SELL 1 LIT @ $70.23
+      BUY 1 URTH @ $189.84
+      SELL 1 GDXJ @ $127.73
+      BUY 1 SIL @ $97.18
+      BUY 1 REMX @ $87.92
+      BUY 1 PICK @ $59.43
+      SELL 1 NVDA @ $184.41
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $206.90
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $397.79
+      BUY 1 TSLA @ $414.80
+      BUY 1 NVO @ $47.12
+      SELL 1 SLV @ $69.96
+      SELL 1 PPLT @ $190.06
+      SELL 1 URTH @ $189.77
+      BUY 1 GDXJ @ $127.85
+      BUY 1 REMX @ $87.92
+      SELL 1 PICK @ $58.99
+      BUY 1 NVDA @ $184.45
+      BUY 1 PLTR @ $137.55
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $61.25
+      BUY 1 MSTR @ $135.00
+      BUY 1 NVO @ $47.16
+      BUY 1 SLV @ $70.07
+      BUY 1 COPX @ $85.08
+      BUY 1 LIT @ $71.51
+      SELL 1 SIL @ $96.84
+      SELL 1 REMX @ $86.45
+      BUY 1 NVDA @ $184.50
+      SELL 1 AMD @ $202.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $132.96
+      SELL 1 TSLA @ $410.01
+      SELL 1 NVO @ $47.14
+      SELL 1 SLV @ $69.98
+      SELL 1 COPX @ $84.55
+      BUY 1 JO @ $104.91 [synthetic]
+      BUY 1 LIT @ $71.52
+      SELL 1 GDXJ @ $127.79
+      BUY 1 SIL @ $97.16
+      BUY 1 REMX @ $87.91
+      BUY 1 PICK @ $59.43
+      BUY 1 NVDA @ $184.51
+      SELL 1 PLTR @ $133.80
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $132.96
+      BUY 1 MSFT @ $399.32
+      BUY 1 TSLA @ $414.80
+      BUY 1 NVO @ $47.23
+      BUY 1 SLV @ $70.03
+      SELL 1 JO @ $104.60 [synthetic]
+      SELL 1 SIL @ $96.84
+      SELL 1 REMX @ $86.65
+      SELL 1 PICK @ $58.98
+      BUY 1 AAPL @ $277.50
+      SELL 1 MP @ $61.15
+      BUY 1 MSTR @ $133.39
+      SELL 1 SLV @ $69.97
+
+    Minute 240-249:
+      SELL 1 AAPL @ $263.24
+      BUY 1 PLTR @ $137.55
+      SELL 1 MP @ $61.15
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $47.29
+      BUY 1 SLV @ $70.01
+      BUY 1 PPLT @ $191.06
+      BUY 1 COPX @ $85.10
+      SELL 1 REMX @ $86.65
+      SELL 1 PLTR @ $135.75
+      BUY 1 AMD @ $206.79
+      SELL 1 MSTR @ $126.76
+      SELL 1 TSLA @ $410.01
+      BUY 1 NOC @ $353.84 [synthetic]
+      SELL 1 NVO @ $47.26
+      SELL 1 SLV @ $69.91
+      SELL 1 PPLT @ $190.08
+      SELL 1 COPX @ $84.59
+      BUY 1 JO @ $104.00 [synthetic]
+      BUY 1 URTH @ $189.78
+      BUY 1 GDXJ @ $127.84
+      SELL 1 NVDA @ $184.50
+      BUY 1 AAPL @ $277.28
+      SELL 1 PLTR @ $133.00
+      SELL 1 AMD @ $206.61
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.35
+      SELL 1 MSFT @ $399.00
+      BUY 1 NOC @ $354.30 [synthetic]
+      BUY 1 NVO @ $47.31
+      SELL 1 JO @ $103.63 [synthetic]
+      BUY 1 URTH @ $189.86
+      SELL 1 GDXJ @ $127.71
+      BUY 1 SIL @ $97.07
+      BUY 1 REMX @ $87.91
+      BUY 1 NVDA @ $184.55
+      SELL 1 MP @ $58.22
+      SELL 1 NOC @ $352.74 [synthetic]
+      SELL 1 NVO @ $47.28
+      BUY 1 GLD @ $455.35
+      SELL 1 URTH @ $189.73
+      BUY 1 GDXJ @ $127.80
+      SELL 1 SIL @ $97.00
+      SELL 1 REMX @ $86.39
+      BUY 1 NVDA @ $184.65
+      SELL 1 AAPL @ $277.24
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 NOC @ $354.34 [synthetic]
+      SELL 1 GLD @ $454.70
+      BUY 1 JO @ $104.34 [synthetic]
+      SELL 1 URTH @ $189.51
+      SELL 1 GDXJ @ $127.66
+      BUY 1 REMX @ $87.91
+      SELL 1 NVDA @ $184.55
+      BUY 1 PLTR @ $137.55
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $61.25
+      BUY 1 MSTR @ $134.36
+      BUY 1 MSFT @ $399.40
+      SELL 1 NOC @ $353.25 [synthetic]
+      BUY 1 NVO @ $47.31
+      BUY 1 GLD @ $455.36
+      SELL 1 NVDA @ $184.50
+      BUY 1 AMD @ $206.34
+      SELL 1 BE @ $137.02
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $133.07
+      BUY 1 NOC @ $353.92 [synthetic]
+      SELL 1 JO @ $104.12 [synthetic]
+      SELL 1 LIT @ $70.23
+      SELL 1 REMX @ $86.66
+      BUY 1 NVDA @ $184.65
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $206.41
+      SELL 1 MSFT @ $397.79
+      SELL 1 NOC @ $352.25 [synthetic]
+      BUY 1 NVO @ $47.38
+      SELL 1 GLD @ $441.66
+      BUY 1 PPLT @ $198.02
+      BUY 1 COPX @ $85.07
+      BUY 1 LIT @ $71.50
+      BUY 1 URTH @ $189.88
+      BUY 1 GDXJ @ $128.17
+      BUY 1 SIL @ $97.12
+      BUY 1 REMX @ $87.29
+      BUY 1 PICK @ $59.33
+      BUY 1 NVDA @ $184.70
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $61.22
+      BUY 1 MSTR @ $134.36
+      SELL 1 NOC @ $351.03 [synthetic]
+      SELL 1 PPLT @ $185.28
+      BUY 1 JO @ $104.10 [synthetic]
+      BUY 1 LIT @ $71.55
+      BUY 1 URTH @ $189.88
+      BUY 1 GDXJ @ $128.17
+      BUY 1 REMX @ $87.89
+      SELL 1 PICK @ $59.25
+      BUY 1 MP @ $61.27
+      SELL 1 NVO @ $47.33
+      SELL 1 COPX @ $84.65
+      BUY 1 JO @ $104.23 [synthetic]
+      SELL 1 URTH @ $189.70
+      BUY 1 GDXJ @ $128.32
+      BUY 1 SIL @ $97.30
+
+    Minute 250-259:
+      SELL 1 AMD @ $202.00
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      BUY 1 MSFT @ $399.60
+      SELL 1 NVO @ $47.31
+      SELL 1 GDXJ @ $128.06
+      BUY 1 SIL @ $97.35
+      SELL 1 REMX @ $86.42
+      SELL 1 MP @ $61.23
+      BUY 1 NVO @ $47.33
+      BUY 1 SLV @ $70.10
+      BUY 1 JO @ $104.95 [synthetic]
+      SELL 1 SIL @ $96.99
+      SELL 1 REMX @ $86.42
+      BUY 1 PICK @ $59.45
+      BUY 1 MP @ $61.29
+      SELL 1 MSFT @ $399.37
+      BUY 1 NVO @ $47.36
+      BUY 1 SLV @ $70.20
+      BUY 1 PPLT @ $191.53
+      BUY 1 COPX @ $85.22
+      BUY 1 LIT @ $71.64
+      SELL 1 GDXJ @ $128.14
+      BUY 1 SIL @ $97.44
+      SELL 1 NVO @ $47.32
+      SELL 1 SLV @ $70.17
+      SELL 1 COPX @ $84.67
+      BUY 1 JO @ $105.29 [synthetic]
+      SELL 1 URTH @ $189.61
+      SELL 1 GDXJ @ $127.87
+      SELL 1 SIL @ $97.22
+      SELL 1 REMX @ $86.48
+      SELL 1 PICK @ $59.20
+      SELL 1 NVDA @ $185.00
+      BUY 1 AAPL @ $277.93
+      BUY 1 PLTR @ $135.71
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $61.15
+      BUY 1 MSFT @ $399.76
+      SELL 1 PPLT @ $190.73
+      SELL 1 JO @ $105.14 [synthetic]
+      BUY 1 URTH @ $189.91
+      BUY 1 GDXJ @ $128.14
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $61.26
+      SELL 1 MSFT @ $399.66
+      BUY 1 TSLA @ $414.80
+      SELL 1 JO @ $104.62 [synthetic]
+      SELL 1 GDXJ @ $127.98
+      SELL 1 SIL @ $97.32
+      BUY 1 REMX @ $88.00
+      BUY 1 NVDA @ $185.08
+      BUY 1 PLTR @ $135.71
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $62.99
+      BUY 1 NVO @ $47.39
+      BUY 1 SLV @ $70.25
+      SELL 1 JO @ $104.43 [synthetic]
+      SELL 1 URTH @ $189.79
+      BUY 1 SIL @ $97.43
+      SELL 1 REMX @ $86.48
+      SELL 1 NVDA @ $185.01
+      SELL 1 AAPL @ $278.20
+      BUY 1 PLTR @ $135.71
+      SELL 1 MP @ $58.22
+      BUY 1 MSFT @ $399.85
+      SELL 1 NVO @ $47.36
+      BUY 1 SLV @ $70.32
+      BUY 1 PPLT @ $198.02
+      SELL 1 SIL @ $97.30
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 MSFT @ $399.36
+      BUY 1 TSLA @ $413.54
+      SELL 1 NVO @ $47.32
+      SELL 1 SLV @ $70.29
+      SELL 1 JO @ $104.25 [synthetic]
+      SELL 1 SIL @ $97.19
+      BUY 1 REMX @ $88.00
+      SELL 1 NVDA @ $184.97
+      BUY 1 AAPL @ $280.00
+      BUY 1 PLTR @ $135.40
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      SELL 1 NVO @ $47.30
+      SELL 1 SLV @ $70.20
+      SELL 1 PPLT @ $190.80
+      BUY 1 COPX @ $84.72
+      BUY 1 JO @ $104.54 [synthetic]
+      BUY 1 LIT @ $71.57
+      SELL 1 REMX @ $86.50
+
+    Minute 260-269:
+      BUY 1 NVDA @ $185.00
+      SELL 1 AAPL @ $278.41
+      SELL 1 PLTR @ $133.00
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $61.27
+      BUY 1 MSTR @ $134.36
+      BUY 1 MSFT @ $399.40
+      SELL 1 TSLA @ $410.01
+      BUY 1 NOC @ $351.26 [synthetic]
+      SELL 1 SLV @ $70.17
+      BUY 1 PPLT @ $191.74
+      SELL 1 COPX @ $84.69
+      BUY 1 JO @ $104.79 [synthetic]
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      SELL 1 MSFT @ $398.00
+      BUY 1 TSLA @ $413.76
+      BUY 1 SLV @ $70.25
+      SELL 1 JO @ $104.58 [synthetic]
+      BUY 1 LIT @ $71.55
+      BUY 1 SIL @ $97.17
+      SELL 1 NVDA @ $185.02
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $206.42
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $61.29
+      BUY 1 MSTR @ $134.36
+      SELL 1 TSLA @ $410.01
+      BUY 1 NOC @ $353.17 [synthetic]
+      SELL 1 NVO @ $47.29
+      SELL 1 SLV @ $70.17
+      SELL 1 PPLT @ $190.88
+      BUY 1 COPX @ $84.72
+      SELL 1 JO @ $104.23 [synthetic]
+      BUY 1 URTH @ $189.86
+      BUY 1 GDXJ @ $127.85
+      BUY 1 SIL @ $97.33
+      SELL 1 NVDA @ $184.98
+      SELL 1 AMD @ $205.98
+      BUY 1 MP @ $61.33
+      SELL 1 NOC @ $352.62 [synthetic]
+      SELL 1 NVO @ $47.26
+      SELL 1 COPX @ $84.63
+      BUY 1 JO @ $104.67 [synthetic]
+      SELL 1 LIT @ $70.28
+      SELL 1 URTH @ $189.69
+      SELL 1 GDXJ @ $127.46
+      SELL 1 SIL @ $96.96
+      SELL 1 NVDA @ $184.85
+      BUY 1 AAPL @ $278.59
+      BUY 1 PLTR @ $135.71
+      BUY 1 BE @ $144.00
+      BUY 1 MP @ $61.22
+      BUY 1 TSLA @ $413.06
+      BUY 1 NOC @ $354.92 [synthetic]
+      BUY 1 NVO @ $47.33
+      SELL 1 SIL @ $97.08
+      BUY 1 REMX @ $87.37
+      SELL 1 AAPL @ $278.54
+      SELL 1 PLTR @ $135.08
+      BUY 1 AMD @ $212.00
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $61.27
+      BUY 1 MSTR @ $134.36
+      SELL 1 TSLA @ $410.01
+      BUY 1 NOC @ $355.81 [synthetic]
+      SELL 1 NVO @ $47.31
+      BUY 1 COPX @ $85.18
+      BUY 1 JO @ $105.38 [synthetic]
+      SELL 1 LIT @ $70.28
+      SELL 1 REMX @ $86.48
+      BUY 1 PICK @ $59.53
+      SELL 1 NVDA @ $185.01
+      BUY 1 AAPL @ $278.77
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $126.76
+      SELL 1 NOC @ $707.29
+      BUY 1 NVO @ $47.40
+      BUY 1 SLV @ $70.09
+      BUY 1 PPLT @ $198.02
+      SELL 1 COPX @ $84.68
+      BUY 1 JO @ $105.57 [synthetic]
+      BUY 1 GDXJ @ $127.98
+      BUY 1 SIL @ $97.33
+      BUY 1 REMX @ $87.37
+      BUY 1 NVDA @ $185.07
+      SELL 1 AAPL @ $263.24
+      BUY 1 PLTR @ $135.71
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $62.99
+      SELL 1 TSLA @ $410.01
+      BUY 1 NVO @ $47.43
+      BUY 1 GLD @ $455.70
+      BUY 1 SLV @ $70.23
+      SELL 1 PPLT @ $191.00
+      BUY 1 COPX @ $85.21
+      BUY 1 JO @ $105.73 [synthetic]
+      SELL 1 GDXJ @ $127.74
+      BUY 1 SIL @ $97.33
+      SELL 1 REMX @ $86.45
+      BUY 1 NVDA @ $185.13
+      SELL 1 PLTR @ $133.00
+      BUY 1 MP @ $62.99
+      SELL 1 NVO @ $47.37
+      SELL 1 GLD @ $455.15
+      SELL 1 SLV @ $70.09
+      BUY 1 COPX @ $85.22
+      BUY 1 JO @ $106.04 [synthetic]
+      SELL 1 SIL @ $97.12
+      BUY 1 NVDA @ $185.35
+      BUY 1 PLTR @ $135.38
+      BUY 1 AMD @ $212.00
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $47.42
+      BUY 1 SLV @ $70.25
+      SELL 1 JO @ $105.70 [synthetic]
+      BUY 1 LIT @ $71.61
+      BUY 1 SIL @ $97.61
+
+    Minute 270-279:
+      SELL 1 NVDA @ $185.24
+      BUY 1 PLTR @ $135.71
+      SELL 1 AMD @ $206.79
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.36
+      BUY 1 MSTR @ $133.14
+      SELL 1 COPX @ $84.76
+      SELL 1 JO @ $105.31 [synthetic]
+      BUY 1 SIL @ $97.32
+      BUY 1 REMX @ $87.37
+      SELL 1 PICK @ $59.37
+      SELL 1 PLTR @ $133.80
+      BUY 1 AMD @ $206.96
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $61.45
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $47.47
+      BUY 1 SLV @ $70.35
+      SELL 1 COPX @ $84.74
+      BUY 1 JO @ $105.61 [synthetic]
+      BUY 1 REMX @ $87.37
+      SELL 1 NVDA @ $185.35
+      BUY 1 PLTR @ $135.13
+      SELL 1 AMD @ $202.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $134.36
+      SELL 1 NVO @ $47.41
+      SELL 1 SLV @ $70.29
+      BUY 1 JO @ $105.89 [synthetic]
+      SELL 1 SIL @ $96.78
+      BUY 1 REMX @ $87.37
+      SELL 1 NVDA @ $185.21
+      BUY 1 PLTR @ $135.71
+      BUY 1 MP @ $61.49
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $47.43
+      SELL 1 SLV @ $70.22
+      BUY 1 JO @ $106.08 [synthetic]
+      SELL 1 REMX @ $86.74
+      BUY 1 PICK @ $59.41
+      SELL 1 PLTR @ $135.06
+      SELL 1 BE @ $134.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $134.36
+      SELL 1 SLV @ $70.05
+      BUY 1 JO @ $106.60 [synthetic]
+      SELL 1 SIL @ $97.29
+      BUY 1 REMX @ $87.37
+      BUY 1 PICK @ $59.46
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.34
+      SELL 1 JO @ $106.13 [synthetic]
+      BUY 1 GDXJ @ $128.22
+      SELL 1 SIL @ $97.22
+      SELL 1 PICK @ $59.31
+      SELL 1 PLTR @ $133.80
+      BUY 1 AMD @ $206.92
+      BUY 1 MP @ $61.46
+      SELL 1 NVO @ $47.41
+      BUY 1 SLV @ $70.12
+      SELL 1 AMD @ $204.80
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $61.35
+      SELL 1 MSTR @ $133.21
+      BUY 1 SLV @ $70.15
+      BUY 1 PPLT @ $191.91
+      SELL 1 JO @ $105.94 [synthetic]
+      BUY 1 SIL @ $97.34
+      SELL 1 PLTR @ $135.30
+      SELL 1 BE @ $134.00
+      SELL 1 MP @ $61.28
+      BUY 1 MSTR @ $133.71
+      BUY 1 NVO @ $47.45
+      SELL 1 PPLT @ $190.93
+      BUY 1 COPX @ $85.27
+      BUY 1 JO @ $106.43 [synthetic]
+      SELL 1 GDXJ @ $127.97
+      SELL 1 SIL @ $97.26
+      SELL 1 REMX @ $86.70
+      SELL 1 PICK @ $59.31
+      BUY 1 NVDA @ $185.34
+      BUY 1 AMD @ $207.80
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $132.95
+      SELL 1 NVO @ $47.41
+      BUY 1 SLV @ $70.16
+      BUY 1 PPLT @ $191.97
+      SELL 1 COPX @ $84.44
+      BUY 1 JO @ $106.91 [synthetic]
+
+    Minute 280-289:
+      SELL 1 NVDA @ $185.29
+      SELL 1 AMD @ $206.93
+      SELL 1 BE @ $139.49
+      BUY 1 MP @ $61.28
+      SELL 1 MSTR @ $126.76
+      BUY 1 MSFT @ $399.96
+      SELL 1 SLV @ $69.91
+      SELL 1 PPLT @ $190.90
+      SELL 1 JO @ $106.59 [synthetic]
+      SELL 1 REMX @ $86.67
+      BUY 1 PICK @ $59.46
+      BUY 1 BE @ $140.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $133.71
+      SELL 1 MSFT @ $399.00
+      SELL 1 NOC @ $705.39
+      BUY 1 LMT @ $621.02
+      BUY 1 GLD @ $455.10
+      BUY 1 PPLT @ $191.83
+      BUY 1 JO @ $107.41 [synthetic]
+      BUY 1 LIT @ $72.50
+      SELL 1 PICK @ $59.28
+      SELL 1 MP @ $61.26
+      SELL 1 LMT @ $620.79
+      BUY 1 NVO @ $47.44
+      BUY 1 GLD @ $455.30
+      BUY 1 SLV @ $69.96
+      BUY 1 COPX @ $84.71
+      SELL 1 JO @ $107.25 [synthetic]
+      SELL 1 LIT @ $70.32
+      BUY 1 URTH @ $189.93
+      BUY 1 MP @ $62.99
+      SELL 1 REMX @ $86.45
+      BUY 1 PICK @ $59.37
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $126.76
+      BUY 1 NVO @ $47.50
+      BUY 1 SLV @ $70.15
+      SELL 1 PPLT @ $191.68
+      SELL 1 COPX @ $84.76
+      SELL 1 JO @ $107.14 [synthetic]
+      SELL 1 URTH @ $189.71
+      BUY 1 GDXJ @ $128.49
+      BUY 1 SIL @ $97.78
+      BUY 1 PICK @ $59.40
+      BUY 1 PLTR @ $135.22
+      SELL 1 BE @ $139.60
+      BUY 1 MP @ $62.99
+      BUY 1 NVO @ $47.52
+      SELL 1 GLD @ $455.03
+      SELL 1 SLV @ $70.10
+      SELL 1 JO @ $106.57 [synthetic]
+      BUY 1 URTH @ $189.97
+      SELL 1 GDXJ @ $128.13
+      SELL 1 SIL @ $97.19
+      BUY 1 REMX @ $87.88
+      BUY 1 AAPL @ $277.79
+      BUY 1 PLTR @ $135.71
+      BUY 1 AMD @ $207.80
+      SELL 1 MP @ $61.35
+      BUY 1 MSTR @ $133.71
+      SELL 1 NVO @ $47.50
+      SELL 1 GLD @ $454.93
+      SELL 1 SLV @ $70.06
+      SELL 1 JO @ $106.43 [synthetic]
+      BUY 1 LIT @ $71.62
+      SELL 1 URTH @ $189.70
+      BUY 1 SIL @ $97.26
+      BUY 1 REMX @ $87.89
+      BUY 1 NVDA @ $185.55
+      BUY 1 AAPL @ $278.02
+      SELL 1 PLTR @ $134.85
+      BUY 1 AMD @ $207.73
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.71
+      BUY 1 NVO @ $47.53
+      BUY 1 SLV @ $70.15
+      SELL 1 JO @ $106.26 [synthetic]
+      BUY 1 GDXJ @ $128.50
+      SELL 1 NVDA @ $185.51
+      SELL 1 PLTR @ $134.85
+      BUY 1 AMD @ $207.73
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $133.16
+      SELL 1 NVO @ $47.51
+      SELL 1 SLV @ $70.07
+      SELL 1 JO @ $105.96 [synthetic]
+      BUY 1 URTH @ $189.99
+      BUY 1 GDXJ @ $128.52
+      SELL 1 SIL @ $97.41
+      SELL 1 REMX @ $86.48
+      BUY 1 NVDA @ $185.53
+      SELL 1 AAPL @ $277.63
+      BUY 1 AMD @ $212.00
+      BUY 1 MP @ $62.99
+      SELL 1 MSTR @ $132.96
+      SELL 1 NVO @ $47.50
+      BUY 1 SLV @ $70.16
+      BUY 1 COPX @ $84.77
+      BUY 1 JO @ $106.48 [synthetic]
+      SELL 1 URTH @ $189.68
+      SELL 1 GDXJ @ $128.41
+      BUY 1 REMX @ $87.89
+
+    Minute 290-299:
+      SELL 1 NVDA @ $185.43
+      BUY 1 AAPL @ $277.77
+      BUY 1 MP @ $62.99
+      SELL 1 NVO @ $47.49
+      BUY 1 SLV @ $70.23
+      BUY 1 COPX @ $84.78
+      SELL 1 JO @ $106.17 [synthetic]
+      SELL 1 LIT @ $71.06
+      SELL 1 GDXJ @ $128.30
+      BUY 1 SIL @ $97.47
+      BUY 1 REMX @ $87.89
+      SELL 1 MP @ $58.22
+      SELL 1 NOC @ $707.04
+      BUY 1 NVO @ $47.52
+      SELL 1 SLV @ $70.14
+      SELL 1 COPX @ $84.73
+      BUY 1 JO @ $106.44 [synthetic]
+      BUY 1 URTH @ $190.21
+      SELL 1 SIL @ $97.36
+      SELL 1 REMX @ $86.48
+      SELL 1 AAPL @ $277.74
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      BUY 1 MSTR @ $133.28
+      BUY 1 TSLA @ $413.25
+      BUY 1 SLV @ $70.22
+      BUY 1 PPLT @ $198.02
+      SELL 1 LIT @ $70.75
+      SELL 1 URTH @ $189.86
+      BUY 1 GDXJ @ $128.54
+      BUY 1 SIL @ $97.47
+      BUY 1 REMX @ $86.82
+      SELL 1 AAPL @ $277.61
+      SELL 1 AMD @ $207.73
+      SELL 1 BE @ $139.60
+      BUY 1 MP @ $60.95
+      BUY 1 MSTR @ $133.32
+      BUY 1 MSFT @ $399.61
+      SELL 1 TSLA @ $412.92
+      BUY 1 NVO @ $47.53
+      SELL 1 SLV @ $70.06
+      SELL 1 PPLT @ $191.07
+      SELL 1 COPX @ $84.68
+      SELL 1 JO @ $106.34 [synthetic]
+      SELL 1 GDXJ @ $128.18
+      SELL 1 SIL @ $97.21
+      SELL 1 REMX @ $86.60
+      SELL 1 PICK @ $59.28
+      BUY 1 AAPL @ $280.00
+      BUY 1 PLTR @ $135.71
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $61.01
+      BUY 1 MSTR @ $134.00
+      SELL 1 MSFT @ $398.00
+      BUY 1 TSLA @ $413.44
+      BUY 1 NVO @ $47.57
+      SELL 1 SLV @ $69.91
+      BUY 1 COPX @ $85.27
+      BUY 1 JO @ $107.09 [synthetic]
+      BUY 1 REMX @ $87.89
+      BUY 1 PICK @ $59.37
+      BUY 1 NVDA @ $185.33
+      SELL 1 AAPL @ $278.06
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      SELL 1 MP @ $60.86
+      SELL 1 MSTR @ $133.19
+      BUY 1 MSFT @ $401.55
+      BUY 1 SLV @ $70.00
+      BUY 1 PPLT @ $191.78
+      SELL 1 COPX @ $84.69
+      SELL 1 JO @ $106.70 [synthetic]
+      BUY 1 PICK @ $59.38
+      BUY 1 PLTR @ $135.71
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $62.99
+      BUY 1 MSTR @ $135.00
+      SELL 1 MSFT @ $398.00
+      BUY 1 TSLA @ $414.20
+      SELL 1 SLV @ $69.89
+      SELL 1 PPLT @ $190.66
+      SELL 1 JO @ $106.45 [synthetic]
+      BUY 1 LIT @ $71.62
+      BUY 1 URTH @ $189.99
+      BUY 1 REMX @ $87.89
+      SELL 1 MP @ $60.79
+      SELL 1 NVO @ $47.50
+      SELL 1 SLV @ $69.65
+      SELL 1 URTH @ $189.69
+      SELL 1 REMX @ $86.41
+      BUY 1 PICK @ $59.46
+      SELL 1 NVDA @ $185.43
+      SELL 1 PLTR @ $133.00
+      BUY 1 AMD @ $212.00
+      BUY 1 BE @ $144.00
+      SELL 1 MP @ $58.22
+      SELL 1 MSTR @ $134.23
+      BUY 1 TSLA @ $414.90
+      SELL 1 NVO @ $47.48
+      SELL 1 SLV @ $69.52
+      BUY 1 PPLT @ $191.13
+      SELL 1 PICK @ $59.28
+      BUY 1 PLTR @ $135.71
+      SELL 1 BE @ $139.60
+      BUY 1 MP @ $61.01
+      SELL 1 TSLA @ $414.26
+      SELL 1 NVO @ $47.46
+      BUY 1 SLV @ $69.57
+      SELL 1 PPLT @ $190.16
+      BUY 1 JO @ $106.49 [synthetic]
+      SELL 1 LIT @ $70.75
+      BUY 1 URTH @ $189.93
+      BUY 1 GDXJ @ $128.17
+      BUY 1 SIL @ $96.98
+      BUY 1 REMX @ $87.89
+      SELL 1 PICK @ $59.28
+
+    Minute 300-309:
+      BUY 1 NVDA @ $185.51
+      SELL 1 AMD @ $202.00
+      BUY 1 MP @ $62.99
+      SELL 1 TSLA @ $414.12
+      BUY 1 NVO @ $47.48
+      BUY 1 SLV @ $69.61
+      BUY 1 COPX @ $84.68
+      SELL 1 JO @ $106.29 [synthetic]
+      BUY 1 LIT @ $71.62
+      BUY 1 URTH @ $189.94
+      SELL 1 GDXJ @ $128.01
+      BUY 1 SIL @ $97.00
+      SELL 1 REMX @ $86.41
 
