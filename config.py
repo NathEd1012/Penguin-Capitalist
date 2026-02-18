@@ -52,41 +52,7 @@ from datetime import datetime
 PLOTS_DIR = "plots"
 os.makedirs(PLOTS_DIR, exist_ok=True)
 
-# Dynamic filenames with date/time
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-CAPITAL_CURVES_FILE = os.path.join(PLOTS_DIR, f"capital_curves_{timestamp}.png")
-TRADES_LOG_FILE = f"trades_log_{timestamp}.txt"
-CURVES_DATA_FILE = f"curves_data_{timestamp}.json"
-
-# ========== ACTIVE PENGUINS ==========
-from penguins import (
-    BreakoutPenguin,
-    CarefulTrendPenguin,
-    CopilotPenguin,
-    MeanReversionPenguin,
-    MomentumPenguin,
-    RandomPenguin,
-    RandomPenguin2,
-    SupportResistancePenguin,
-    TrendPenguin,
-)
-from penguins.moving_average_crossover_penguin import MovingAverageCrossoverPenguin
-from penguins.rsi_mean_reversion_penguin import RSIMeanReversionPenguin
-from penguins.volatility_breakout_penguin import VolatilityBreakoutPenguin
-from penguins.sma20_multitimeframe_penguin import SMA20MultitimeframePenguin
-
-ACTIVE_PENGUINS = [
-    # BreakoutPenguin,
-    CarefulTrendPenguin,
-    CopilotPenguin,
-    # MeanReversionPenguin,
-    # MomentumPenguin,
-    MovingAverageCrossoverPenguin,
-    # RandomPenguin,
-    # RandomPenguin2,
-    RSIMeanReversionPenguin,
-    SMA20MultitimeframePenguin,
-    SupportResistancePenguin,
-    # TrendPenguin,
-    # VolatilityBreakoutPenguin,
-]
+# Fixed filenames (no timestamp, gets overwritten each run)
+CAPITAL_CURVES_FILE = os.path.join(CURRENT_RUN_DIR, "capital_curves.png")
+TRADES_LOG_FILE = os.path.join(CURRENT_RUN_DIR, "trades.txt")
+CURVES_DATA_FILE = os.path.join(CURRENT_RUN_DIR, "data.json")
