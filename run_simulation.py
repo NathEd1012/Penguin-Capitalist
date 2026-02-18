@@ -44,6 +44,7 @@ from penguins import (
     BreakoutPenguin,
     TrendPenguin,
     CopilotPenguin,
+    SupportResistancePenguin,
 )
 
 
@@ -317,6 +318,7 @@ def run():
         MeanReversionPenguin(),
         BreakoutPenguin(),
         TrendPenguin(),
+        SupportResistancePenguin(),
     ]
 
     # Register all penguins in scoreboard

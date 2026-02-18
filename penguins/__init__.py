@@ -7,6 +7,7 @@ from .random_penguin2 import RandomPenguin2
 from .trend_penguin import TrendPenguin
 from .careful_trend_penguin import CarefulTrendPenguin
 from .copilot_penguin import CopilotPenguin
+from .support_resistance_penguin import SupportResistancePenguin
 
 __all__ = [
     "BasePenguin",
@@ -18,4 +19,5 @@ __all__ = [
     "TrendPenguin",
     "CarefulTrendPenguin",
     "CopilotPenguin",
+    "SupportResistancePenguin",
 ]
