@@ -37,7 +37,7 @@ ORDER_QTY = 1  # Quantity per order
 
 # ========== TIMING SETTINGS ==========
 BAR_TIMEFRAME_MINUTES = 1  # 1-minute bars
-RUN_MINUTES = 15  # Total runtime (60 = 1 hour)
+RUN_MINUTES = 300  # Total runtime (60 = 1 hour)
 
 # ========== SIMULATION SETTINGS ==========
 SIMULATION_MINUTES = 60  # For backtest (kept for compatibility)
@@ -56,3 +56,4 @@ os.makedirs(PLOTS_DIR, exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 CAPITAL_CURVES_FILE = os.path.join(PLOTS_DIR, f"capital_curves_{timestamp}.png")
 TRADES_LOG_FILE = f"trades_log_{timestamp}.txt"
+CURVES_DATA_FILE = f"curves_data_{timestamp}.json"

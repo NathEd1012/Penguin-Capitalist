@@ -6,8 +6,6 @@ Initial Capital: $5,000.00
 
 ================================================================================
 
-  📴 Market closed - next open in 2.7h, sleeping 30 min...
-
 BreakoutPenguin
   Final Value:   $6,217.19
   PnL:           $+1,217.19  (+24.34%)

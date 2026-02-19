@@ -1,0 +1,190 @@
+Penguin Trading Simulation Log
+Started: 2026-02-18 15:45:05
+Duration: 15 minutes
+Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO
+Initial Capital: $5,000.00
+
+================================================================================
+
+BreakoutPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+CopilotPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+MeanReversionPenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+MomentumPenguin
+  Final Value:   $4,851.50
+  PnL:           $-148.50  (-2.97%)
+  Total Trades:  23
+  Final Positions: 5
+  Final Cash:    $3,923.43
+
+  Trades:
+
+    Minute 0-9:
+      BUY 1 AAPL @ $264.06
+      BUY 1 AMD @ $199.00
+      BUY 1 BE @ $170.32
+      BUY 1 MSTR @ $134.04
+      SELL 1 AMD @ $188.51
+      BUY 1 BE @ $167.25
+      BUY 1 MP @ $60.57
+      SELL 1 MSTR @ $125.50
+      BUY 1 PLTR @ $142.88
+      BUY 1 AMD @ $199.00
+      SELL 1 BE @ $128.32
+      SELL 1 MP @ $54.54
+      SELL 1 AMD @ $192.00
+      SELL 1 BE @ $128.32
+
+    Minute 10-19:
+      BUY 1 MSTR @ $134.04
+      BUY 1 PLTR @ $142.88
+      BUY 1 AMD @ $199.00
+      BUY 1 MSTR @ $134.04
+      SELL 1 AMD @ $192.00
+      BUY 1 MP @ $60.57
+      BUY 1 MP @ $60.57
+      SELL 1 PLTR @ $137.46
+      BUY 1 BE @ $155.00
+
+SupportResistancePenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
+TrendPenguin
+  Final Value:   $4,774.67
+  PnL:           $-225.33  (-4.51%)
+  Total Trades:  97
+  Final Positions: 9
+  Final Cash:    $1,239.98
+
+  Trades:
+
+    Minute 0-9:
+      BUY 1 NVDA @ $188.54
+      BUY 1 AAPL @ $265.10
+      BUY 1 PLTR @ $142.88
+      BUY 1 AMD @ $200.00
+      BUY 1 MSTR @ $134.04
+      BUY 1 MSFT @ $397.27
+      BUY 1 TSLA @ $412.50
+      BUY 1 NVDA @ $189.30
+      SELL 1 AAPL @ $263.07
+      SELL 1 PLTR @ $134.50
+      SELL 1 AMD @ $188.51
+      BUY 1 BE @ $170.32
+      BUY 1 MP @ $60.57
+      SELL 1 MSTR @ $125.50
+      BUY 1 MSFT @ $400.83
+      BUY 1 TSLA @ $417.60
+      BUY 1 NVO @ $48.87
+      SELL 1 NVDA @ $187.69
+      BUY 1 AAPL @ $264.06
+      BUY 1 PLTR @ $142.88
+      BUY 1 AMD @ $200.00
+      BUY 1 MSFT @ $400.83
+      SELL 1 NVO @ $48.65
+      BUY 1 NVDA @ $188.08
+      SELL 1 AAPL @ $262.80
+      SELL 1 PLTR @ $134.50
+      SELL 1 AMD @ $198.00
+      BUY 1 MSFT @ $400.83
+      BUY 1 NVO @ $48.73
+      SELL 1 NVDA @ $187.92
+      BUY 1 AAPL @ $264.06
+      BUY 1 MSTR @ $134.04
+      SELL 1 MSFT @ $396.62
+      SELL 1 TSLA @ $407.00
+      BUY 1 NVO @ $48.80
+      BUY 1 NVDA @ $188.32
+      BUY 1 AAPL @ $264.06
+      BUY 1 PLTR @ $142.88
+      SELL 1 BE @ $128.32
+      SELL 1 MSTR @ $125.50
+      SELL 1 MSFT @ $396.00
+      SELL 1 TSLA @ $407.00
+      BUY 1 NOC @ $354.47 [synthetic]
+      BUY 1 NVO @ $48.81
+      SELL 1 NVDA @ $187.97
+      SELL 1 AAPL @ $261.64
+      BUY 1 AMD @ $199.00
+      SELL 1 MP @ $54.54
+      BUY 1 MSTR @ $134.04
+      SELL 1 NOC @ $351.99 [synthetic]
+      SELL 1 NVO @ $48.58
+      SELL 1 NVDA @ $187.57
+      BUY 1 AAPL @ $262.98
+      SELL 1 AMD @ $192.00
+      SELL 1 MSTR @ $125.50
+      BUY 1 MSFT @ $400.83
+      BUY 1 NVO @ $48.82
+
+    Minute 10-19:
+      BUY 1 NVDA @ $188.58
+      BUY 1 AAPL @ $264.32
+      BUY 1 PLTR @ $142.88
+      BUY 1 AMD @ $199.00
+      BUY 1 MP @ $60.57
+      BUY 1 MSFT @ $400.83
+      BUY 1 TSLA @ $413.80
+      BUY 1 NOC @ $350.50 [synthetic]
+      BUY 1 NVO @ $48.85
+      SELL 1 NVDA @ $187.53
+      SELL 1 AAPL @ $263.58
+      SELL 1 PLTR @ $134.50
+      SELL 1 AMD @ $192.00
+      SELL 1 MSFT @ $396.00
+      BUY 1 NOC @ $350.59 [synthetic]
+      BUY 1 AAPL @ $265.10
+      BUY 1 AMD @ $199.00
+      BUY 1 MSFT @ $400.83
+      SELL 1 NOC @ $348.42 [synthetic]
+      BUY 1 NVO @ $48.89
+      BUY 1 NVDA @ $187.72
+      SELL 1 AAPL @ $263.42
+      SELL 1 AMD @ $192.00
+      SELL 1 MSFT @ $396.00
+      SELL 1 NOC @ $346.58 [synthetic]
+      SELL 1 NVO @ $48.86
+      BUY 1 NVDA @ $188.44
+      SELL 1 AAPL @ $263.17
+      BUY 1 PLTR @ $142.88
+      BUY 1 MP @ $60.57
+      BUY 1 MSFT @ $400.83
+      BUY 1 NVO @ $48.89
+      BUY 1 NVDA @ $188.61
+      BUY 1 AAPL @ $265.10
+      SELL 1 PLTR @ $137.46
+      BUY 1 AMD @ $196.41
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $54.54
+      SELL 1 MSFT @ $396.00
+      BUY 1 NVO @ $48.91
+

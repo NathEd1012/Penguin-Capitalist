@@ -9,27 +9,27 @@
   },
   "TrendPenguin": {
     "wins": 3,
-    "runs": 15
+    "runs": 17
   },
   "CarefulTrendPenguin": {
     "wins": 0,
     "runs": 13
   },
   "MomentumPenguin": {
-    "wins": 1,
-    "runs": 13
+    "wins": 2,
+    "runs": 15
   },
   "MeanReversionPenguin": {
-    "wins": 4,
-    "runs": 13
+    "wins": 5,
+    "runs": 15
   },
   "BreakoutPenguin": {
     "wins": 1,
-    "runs": 13
+    "runs": 15
   },
   "CopilotPenguin": {
     "wins": 3,
-    "runs": 8
+    "runs": 10
   },
   "Moving Average Crossover": {
     "wins": 0,
@@ -42,5 +42,9 @@
   "Volatility Breakout": {
     "wins": 0,
     "runs": 3
+  },
+  "SupportResistancePenguin": {
+    "wins": 0,
+    "runs": 2
   }
 }
