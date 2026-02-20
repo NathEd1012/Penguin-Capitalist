@@ -13,6 +13,9 @@ from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.data.enums import DataFeed
+from alpaca.data.timeframe import TimeFrame
+
+from data import get_timeframe_bars
 
 
 class AlpacaClient:
@@ -97,6 +100,22 @@ class AlpacaClient:
         if bid is None or ask is None:
             return None
         return (bid + ask) / 2
+
+    def get_multi_timeframe_history(self, symbol: str):
+        daily = get_timeframe_bars([symbol], TimeFrame.Day, lookback_days=180).get(
+            symbol, []
+        )
+        weekly = get_timeframe_bars([symbol], TimeFrame.Week, lookback_days=365).get(
+            symbol, []
+        )
+        monthly = get_timeframe_bars([symbol], TimeFrame.Month, lookback_days=730).get(
+            symbol, []
+        )
+        return {
+            "daily": daily,
+            "weekly": weekly,
+            "monthly": monthly,
+        }
 
     # ---------- Orders ----------
     def buy_market(self, symbol: str, qty: int):

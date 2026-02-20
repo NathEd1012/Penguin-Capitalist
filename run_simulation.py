@@ -26,8 +26,12 @@ from config import (
     CAPITAL_CURVES_FILE,
     TRADES_LOG_FILE,
     CURVES_DATA_FILE,
+    PLOTS_DIR,
+    ACTIVE_PENGUINS,
 )
 from data_client import AlpacaClient
+from data import get_minute_bars, get_timeframe_bars
+from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 from backtest.portfolio import Portfolio
 from data.scoreboard import (
     load_scoreboard,
@@ -38,14 +42,8 @@ from data.scoreboard import (
     print_scoreboard,
 )
 
-from penguins import (
-    MomentumPenguin,
-    MeanReversionPenguin,
-    BreakoutPenguin,
-    TrendPenguin,
-    CopilotPenguin,
-    SupportResistancePenguin,
-)
+from penguins import SupportResistancePenguin
+from penguins.sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
 
 
 def synthetic_price_bar(symbol, price_history):
@@ -312,14 +310,11 @@ def run():
 
     client = AlpacaClient(paper=True)
 
-    penguins = [
-        CopilotPenguin(),
-        MomentumPenguin(),
-        MeanReversionPenguin(),
-        BreakoutPenguin(),
-        TrendPenguin(),
-        SupportResistancePenguin(),
-    ]
+    penguins = [penguin_class() for penguin_class in ACTIVE_PENGUINS]
+
+    for penguin in penguins:
+        if isinstance(penguin, SMA20MultiTimeframePenguin):
+            penguin.initialize_sma_levels(SYMBOLS, client)
 
     # Register all penguins in scoreboard
     for penguin in penguins:
@@ -337,6 +332,181 @@ def run():
     curves = {p.name: [] for p in penguins}
     trades_log = {p.name: [] for p in penguins}  # List of (minute, trade_str) tuples
     actual_trading_minutes = 0  # Track minutes when market was actually open
+
+    sr_penguins = [p for p in penguins if isinstance(p, SupportResistancePenguin)]
+    if sr_penguins:
+        sr_penguin = sr_penguins[0]
+        warmup_bars = max(
+            60,
+            sr_penguin.left + sr_penguin.right + sr_penguin.atr_n,
+        )
+        print("Evaluating historical data for S&R lines...")
+
+        try:
+            warmup_history = get_minute_bars(SYMBOLS, minutes=warmup_bars)
+        except Exception as e:
+            warmup_history = {}
+            print(f"Warning: failed to load minute bars: {e}")
+
+        for symbol in SYMBOLS:
+            prices = warmup_history.get(symbol, [])
+            if prices:
+                price_history[symbol].extend(prices)
+
+        scales = [
+            ("Intraday", TimeFrame(5, TimeFrameUnit.Minute), 3),
+            ("Short Swing", TimeFrame(15, TimeFrameUnit.Minute), 10),
+            ("Swing", TimeFrame.Hour, 60),
+            ("Macro", TimeFrame.Day, 180),
+        ]
+
+        def _zones_overlap_strict(cluster, zone):
+            """Check if zone overlaps with any zone in cluster (no tolerance)."""
+            for existing in cluster["zones"]:
+                overlaps = not (
+                    existing["high"] < zone["low"]
+                    or zone["high"] < existing["low"]
+                )
+                if overlaps:
+                    return True
+            return False
+
+        zones_log_path = os.path.join("run_current", "support_resistance_zones.txt")
+        with open(zones_log_path, "w") as f:
+            f.write("=" * 80 + "\n")
+            f.write("SUPPORT & RESISTANCE ZONES LOG\n")
+            f.write("=" * 80 + "\n\n")
+            f.write("Parameters:\n")
+            f.write(
+                f"  - Pivot detection window: {sr_penguin.left} bars left, {sr_penguin.right} bars right\n"
+            )
+            f.write(f"  - ATR period: {sr_penguin.atr_n} bars\n")
+            f.write(
+                f"  - Minimum bars needed: {sr_penguin.left + sr_penguin.right + sr_penguin.atr_n} bars\n"
+            )
+            f.write(f"  - Zone width multiplier: {sr_penguin.zone_k}\n")
+            f.write("  - Minimum touches: 2\n")
+            f.write("  - Reaction requirement: move >= 1 ATR within 3 bars\n")
+            f.write("  - Merge tolerance: 0.3% of current price\n")
+            f.write("  - Scales: 5Min/3D, 15Min/10D, 60Min/60D, 1D/6M\n\n")
+
+            for symbol in SYMBOLS:
+                f.write("=" * 80 + "\n")
+                f.write(f"SYMBOL: {symbol} (MULTI-SCALE)\n")
+                f.write("=" * 80 + "\n\n")
+
+                per_scale_zones = []
+                latest_price = None
+
+                for scale_name, timeframe, lookback_days in scales:
+                    try:
+                        scale_history = get_timeframe_bars(
+                            [symbol],
+                            timeframe=timeframe,
+                            lookback_days=lookback_days,
+                        ).get(symbol, [])
+                    except Exception as e:
+                        scale_history = []
+                        print(
+                            f"Warning: failed to load {scale_name} bars for {symbol}: {e}"
+                        )
+
+                    if not scale_history:
+                        continue
+
+                    if latest_price is None:
+                        latest_price = scale_history[-1]
+
+                    zones = sr_penguin.compute_scale_zones(
+                        scale_history,
+                        min_touches=2,
+                        reaction_lookahead=3,
+                        reaction_atr_mult=1.0,
+                    )
+                    for zone in zones:
+                        # Cap touches and reactions to 10 per scale
+                        capped_touches = min(zone["touches"], 10)
+                        capped_reactions = min(zone.get("reactions", 0), 10)
+                        per_scale_zones.append(
+                            {
+                                "center": zone["center"],
+                                "low": zone["low"],
+                                "high": zone["high"],
+                                "touches": capped_touches,
+                                "reactions": capped_reactions,
+                                "score": zone.get("score", 0),
+                                "scale": scale_name,
+                            }
+                        )
+
+                if not per_scale_zones:
+                    f.write("No zones detected.\n\n")
+                    continue
+
+                current_price = latest_price if latest_price is not None else 0.0
+                tolerance = current_price * 0.003
+                max_zone_width = current_price * 0.005  # Max 0.5% of price
+
+                clusters = []
+                for zone in sorted(per_scale_zones, key=lambda z: z["center"]):
+                    merged = False
+                    for cluster in clusters:
+                        if _zones_overlap_strict(cluster, zone):
+                            cluster["zones"].append(zone)
+                            merged = True
+                            break
+                    if not merged:
+                        clusters.append({"zones": [zone]})
+
+                merged_zones = []
+                for cluster in clusters:
+                    zones = cluster["zones"]
+                    strongest = max(zones, key=lambda z: z["score"])
+                    
+                    # Calculate merged bounds
+                    merged_low = min(z["low"] for z in zones)
+                    merged_high = max(z["high"] for z in zones)
+                    merged_center = (merged_low + merged_high) / 2
+                    
+                    # Cap width to 0.5% of price
+                    if merged_high - merged_low > max_zone_width:
+                        merged_low = merged_center - max_zone_width / 2
+                        merged_high = merged_center + max_zone_width / 2
+                    
+                    merged_zone = {
+                        "center": merged_center,
+                        "low": merged_low,
+                        "high": merged_high,
+                        "touches": sum(z["touches"] for z in zones),
+                        "reactions": sum(z["reactions"] for z in zones),
+                        "score": strongest["score"],
+                        "scales": sorted({z["scale"] for z in zones}),
+                    }
+                    merged_zones.append(merged_zone)
+
+                merged_zones.sort(key=lambda z: z["score"], reverse=True)
+
+                f.write(f"Current price: ${current_price:.2f}\n\n")
+                f.write(f"ZONES ({len(merged_zones)}):\n")
+                for idx, zone in enumerate(merged_zones, 1):
+                    if zone["center"] < current_price - tolerance:
+                        label = "SUPPORT"
+                    elif zone["center"] > current_price + tolerance:
+                        label = "RESISTANCE"
+                    else:
+                        label = "PIVOT/RANGE"
+
+                    f.write(f"  Zone #{idx} [{label}]:\n")
+                    f.write(
+                        f"    Center: ${zone['center']:.2f}\n"
+                        f"    Range: ${zone['low']:.2f} - ${zone['high']:.2f}\n"
+                        f"    Touches: {zone['touches']}\n"
+                        f"    Reactions: {zone['reactions']}\n"
+                        f"    Strength Score: {zone['score']:.2f}\n"
+                        f"    Scales: {', '.join(zone['scales'])}\n"
+                    )
+
+                f.write("\n")
 
     def handle_sigint(signum, frame):
         print("\n\n⛔ Interrupted by user...")
@@ -423,22 +593,9 @@ def run():
             plot_capital_curves(curves, CAPITAL_CURVES_FILE)
 
             # Generate final PDF report
-            pdf_filename = os.path.join("run_current", "report_interrupted.pdf")
+            pdf_filename = os.path.join("run_current", "report.pdf")
             create_final_report_pdf(curves, portfolios, pdf_filename, latest_prices)
 
-            # Archive to run_old with day/time structure
-            now = datetime.now().replace(minute=0, second=0)
-            date_str = now.strftime("%y%m%d")
-            time_str = now.strftime("%H%M")
-            old_run_dir = os.path.join("run_old", date_str, f"run_{time_str}")
-            os.makedirs(old_run_dir, exist_ok=True)
-
-            for filename in os.listdir("run_current"):
-                src = os.path.join("run_current", filename)
-                if os.path.isfile(src):
-                    dst = os.path.join(old_run_dir, filename)
-                    shutil.copy2(src, dst)
-            print(f"💾 Archived interrupted run to {old_run_dir}")
             sys.exit(0)
 
     signal.signal(signal.SIGINT, handle_sigint)
@@ -533,6 +690,10 @@ def run():
             for s in SYMBOLS:
                 if s not in bid_ask_prices:
                     continue
+                
+                # Skip trading on synthetic data
+                if price_source.get(s) == "synthetic":
+                    continue
 
                 mid_prices = price_history[s]
                 if not mid_prices:
@@ -592,8 +753,8 @@ def run():
             v = p.value(latest_prices)
             curves[penguin.name].append(v)
 
-        # Plot capital curves every 10 minutes
-        if minute % 10 == 0:
+        # Plot capital curves every 10 trading minutes
+        if actual_trading_minutes % 10 == 0:
             plot_capital_curves(curves, CAPITAL_CURVES_FILE)
             print(f"  {penguin.name}:")
             print(f"    Cash (pocket): ${p.cash:,.2f}")
@@ -684,30 +845,21 @@ def run():
     plt.savefig(CAPITAL_CURVES_FILE, dpi=100)
     print(f"\n📈 Saved capital curves to {CAPITAL_CURVES_FILE}")
 
+    now = datetime.now()
+    rounded_minute = (now.minute // 10) * 10
+    date_stamp = now.strftime("%y%m%d")
+    time_stamp = f"{now.hour:02d}{rounded_minute:02d}"
+    final_plot_name = f"capital_curve_{date_stamp}_{time_stamp}.png"
+    final_plot_path = os.path.join(PLOTS_DIR, final_plot_name)
+    shutil.copy2(CAPITAL_CURVES_FILE, final_plot_path)
+    print(f"📈 Saved final capital curves to {final_plot_path}")
+
     # Generate final PDF report with capital curves and trade summary
     latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
     pdf_filename = os.path.join("run_current", "report.pdf")
     create_final_report_pdf(curves, portfolios, pdf_filename, latest_prices)
 
-    # Save to run_old only if meaningful run (>10 minutes of actual trading)
-    if actual_trading_minutes >= 10:
-        now = datetime.now().replace(minute=0, second=0)
-        date_str = now.strftime("%y%m%d")
-        time_str = now.strftime("%H%M")
-        old_run_dir = os.path.join("run_old", date_str, f"run_{time_str}")
-        os.makedirs(old_run_dir, exist_ok=True)
-
-        # Copy files from run_current to timestamped folder in run_old
-        for filename in os.listdir("run_current"):
-            src = os.path.join("run_current", filename)
-            if os.path.isfile(src):
-                dst = os.path.join(old_run_dir, filename)
-                shutil.copy2(src, dst)
-        print(f"💾 Archived run to {old_run_dir}")
-    else:
-        print(
-            f"⏭️  Only {actual_trading_minutes} minutes of actual trading - not archiving to run_old."
-        )
+    # Keep all outputs in run_current only
 
     # Save trades log
     with open(TRADES_LOG_FILE, "w") as f:

@@ -1,56 +1,123 @@
 from datetime import datetime, timedelta
 import pytz
-import random
 
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
-
-from data_client import AlpacaClient
+from alpaca.data.enums import DataFeed
 
 
 def get_minute_bars(
     symbols,
     minutes=180,
 ):
+    from data_client import AlpacaClient
+    
     client = AlpacaClient()
     end = datetime.now(pytz.UTC)
     start = end - timedelta(minutes=minutes)
+    min_start = end - timedelta(days=7)
+    if start > min_start:
+        start = min_start
 
     req = StockBarsRequest(
         symbol_or_symbols=symbols,
         timeframe=TimeFrame.Minute,
         start=start,
         end=end,
-        feed=client.feed,
+        feed=DataFeed.IEX,
     )
 
     bars = client.data.get_stock_bars(req)
+    bars_map = _normalize_bars_map(_extract_bars_map(bars))
 
     # Normalize to {symbol: [close prices]}
+    symbols_upper = [s.upper() for s in symbols]
     price_history = {
-        symbol: [bar.close for bar in bars[symbol]]
-        for symbol in symbols
-        if symbol in bars
+        symbol: [bar.close for bar in bars_map.get(symbol, [])]
+        for symbol in symbols_upper
     }
 
-    # If any symbols are missing from the API response, provide a synthetic
-    # fallback so simulations can run locally without failing.
-    missing = [s for s in symbols if s not in price_history]
+    return price_history
+
+
+def get_timeframe_bars(
+    symbols,
+    timeframe: TimeFrame,
+    lookback_days: int,
+):
+    from data_client import AlpacaClient
+    
+    client = AlpacaClient()
+    end = datetime.now(pytz.UTC)
+
+    days = max(lookback_days, 7)
+    start = end - timedelta(days=days)
+    min_start = end - timedelta(days=7)
+    if start > min_start:
+        start = min_start
+
+    req = StockBarsRequest(
+        symbol_or_symbols=symbols,
+        timeframe=timeframe,
+        start=start,
+        end=end,
+        feed=DataFeed.IEX,
+    )
+
+    bars_resp = client.data.get_stock_bars(req)
+    bars_map = _normalize_bars_map(_extract_bars_map(bars_resp))
+
+    symbols_upper = [s.upper() for s in symbols]
+    price_history = {
+        symbol: [bar.close for bar in bars_map.get(symbol, [])]
+        for symbol in symbols_upper
+    }
+
+    missing = [s for s in symbols_upper if not price_history.get(s)]
     if missing:
         print(
-            f"⚠️ API did not return bars for: {', '.join(missing)}; using synthetic data for them"
+            f"⚠️ API did not return bars for: {', '.join(missing)}; leaving them empty"
         )
 
-        def synthetic_prices(length, start=100.0):
-            prices = [start]
-            for _ in range(length - 1):
-                # small percent change noise
-                change_pct = random.gauss(0, 0.5)
-                prices.append(max(0.01, prices[-1] * (1 + change_pct / 100)))
-            return prices
-
-        for i, s in enumerate(missing):
-            # use a different start price per symbol to vary behavior
-            price_history[s] = synthetic_prices(minutes, start=100.0 + i * 10)
-
     return price_history
+
+
+def _extract_bars_map(bars_response) -> dict:
+    if bars_response is None:
+        return {}
+
+    if hasattr(bars_response, "data") and bars_response.data is not None:
+        data = bars_response.data
+        if hasattr(data, "keys"):
+            return data
+
+    if hasattr(bars_response, "df"):
+        df = bars_response.df
+        try:
+            if hasattr(df, "columns") and "symbol" in df.columns:
+                grouped = {}
+                for symbol, group in df.groupby("symbol"):
+                    grouped[str(symbol)] = list(group.itertuples(index=False))
+                return grouped
+            if hasattr(df, "index") and hasattr(df.index, "names"):
+                if "symbol" in df.index.names:
+                    grouped = {}
+                    for symbol, group in df.groupby(level="symbol"):
+                        grouped[str(symbol)] = list(group.itertuples(index=False))
+                    return grouped
+        except Exception:
+            return {}
+
+    try:
+        if hasattr(bars_response, "keys"):
+            return bars_response
+    except Exception:
+        return {}
+
+    return {}
+
+
+def _normalize_bars_map(bars_map: dict) -> dict:
+    if not bars_map:
+        return {}
+    return {str(symbol).upper(): values for symbol, values in bars_map.items()}

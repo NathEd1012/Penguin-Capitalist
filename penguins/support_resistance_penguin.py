@@ -109,6 +109,56 @@ class SupportResistancePenguin(BasePenguin):
                 return "SELL", qty
         
         return "HOLD", 0
+
+    def precompute_zones(self, symbol: str, mid_prices: List[float]) -> List[Dict]:
+        if len(mid_prices) < self.left + self.right + self.atr_n:
+            self._zone_cache[symbol] = []
+            self._cache_bars[symbol] = len(mid_prices)
+            return []
+
+        atr_val = self._compute_atr(mid_prices, self.atr_n)
+        if atr_val <= 0:
+            self._zone_cache[symbol] = []
+            self._cache_bars[symbol] = len(mid_prices)
+            return []
+
+        zones = self._detect_and_cluster_zones(mid_prices, atr_val)
+        self._zone_cache[symbol] = zones
+        self._cache_bars[symbol] = len(mid_prices)
+        return zones
+
+    def compute_scale_zones(
+        self,
+        mid_prices: List[float],
+        min_touches: int = 2,
+        reaction_lookahead: int = 3,
+        reaction_atr_mult: float = 1.0,
+    ) -> List[Dict]:
+        if len(mid_prices) < self.left + self.right + self.atr_n:
+            return []
+
+        atr_val = self._compute_atr(mid_prices, self.atr_n)
+        if atr_val <= 0:
+            return []
+
+        zones = self._detect_and_cluster_zones(mid_prices, atr_val)
+        filtered = []
+        for zone in zones:
+            if zone["touches"] < min_touches:
+                continue
+            reactions = self._count_reactions(
+                mid_prices,
+                zone,
+                atr_val,
+                reaction_lookahead,
+                reaction_atr_mult,
+            )
+            zone["reactions"] = reactions
+            if reactions < min_touches:
+                continue
+            filtered.append(zone)
+
+        return filtered
     
     def _check_buy_signal(
         self,
@@ -249,6 +299,34 @@ class SupportResistancePenguin(BasePenguin):
         zones = self._score_zones(zones, mid_prices)
         
         return zones
+
+    def _count_reactions(
+        self,
+        mid_prices: List[float],
+        zone: Dict,
+        atr_val: float,
+        lookahead: int,
+        atr_mult: float,
+    ) -> int:
+        if atr_val <= 0 or not zone.get("indices"):
+            return 0
+
+        threshold = atr_val * atr_mult
+        count = 0
+        for idx in zone["indices"]:
+            end = min(len(mid_prices) - 1, idx + lookahead)
+            if end <= idx:
+                continue
+
+            if zone["type"] == "support":
+                if max(mid_prices[idx : end + 1]) >= zone["center"] + threshold:
+                    count += 1
+            elif zone["type"] == "resistance":
+                if min(mid_prices[idx : end + 1]) <= zone["center"] - threshold:
+                    count += 1
+
+        return count
+
     
     def _compute_atr(self, prices: List[float], n: int) -> float:
         """

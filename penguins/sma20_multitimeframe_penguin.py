@@ -7,155 +7,150 @@ class SMA20MultiTimeframePenguin(BasePenguin):
     """
     SMA 20 Multi-Timeframe Trading Strategy
     
-    Analyzes SMA 20 from historical data at 3 timeframes (daily, weekly, monthly)
+    Dynamically analyzes SMA 20 from historical data at 3 timeframes (daily, weekly, monthly).
     Uses SMA lines as support/resistance levels:
-    - Above SMA: Price supported, expect bounce up (HOPE for support)
-    - Below SMA: Price below resistance, expect push down (FEAR resistance)
+    - Above SMA: Price supported, expect bounce up (support signal)
+    - Below SMA: Price resistance, expect rejection down (resistance signal)
     
     Trading Logic:
-    - BUY: Price crosses above any SMA line (support signal)
-    - SELL: Price crosses below any SMA line (resistance signal) or take profit
+    - BUY: Price crosses above weighted SMA (support signal), only when not holding
+    - SELL: Price crosses below weighted SMA (resistance signal) or take profit/stop loss
     """
     
     def __init__(self):
         super().__init__("SMA20MultiTimeframePenguin")
-        
-        # Store SMA lines from historical analysis
-        self.sma_levels: Dict[str, Dict[str, float]] = {}  # {symbol: {timeframe: sma_value}}
-        self._initialized = False
-        self._last_positions: Dict[str, bool] = {}  # Track if we were above/below SMA
+        self.data_client = None
+        self._previous_weighted_sma: Dict[str, float] = {}
         
     def initialize_sma_levels(self, symbols: List[str], data_client):
         """
-        Initialize SMA 20 levels from historical data at multiple timeframes.
+        Store data client reference for dynamic SMA calculation.
         Call this once at the start of the simulation.
         """
-        if self._initialized:
-            return
+        self.data_client = data_client
+        print(f"\n📊 {self.name}: Initialized for dynamic multi-timeframe SMA calculation\n")
+    
+    def _calculate_sma_levels(self, symbol: str) -> Dict[str, float]:
+        """Calculate current SMA 20 levels from fresh historical data."""
+        if not self.data_client:
+            return {}
         
-        print(f"\n📊 {self.name}: Analyzing SMA 20 from multi-timeframe historical data...")
+        try:
+            hist_data = self.data_client.get_multi_timeframe_history(symbol)
+        except Exception:
+            return {}
         
-        for symbol in symbols:
-            print(f"  Fetching historical data for {symbol}...")
-            
-            # Fetch historical data at multiple timeframes
-            hist_data = data_client.get_multi_timeframe_history(symbol)
-            
-            self.sma_levels[symbol] = {}
-            
-            # Calculate SMA 20 for each timeframe
-            for timeframe, prices in hist_data.items():
-                if not prices or len(prices) < 20:
-                    print(f"    ⚠️ {timeframe}: Insufficient data ({len(prices)} bars, need 20+)")
-                    self.sma_levels[symbol][timeframe] = None
-                    continue
-                
-                # Calculate SMA 20 (last 20 values)
-                sma_20 = sum(prices[-20:]) / 20
-                self.sma_levels[symbol][timeframe] = sma_20
-                
-                current_price = prices[-1]
-                position = "ABOVE" if current_price > sma_20 else "BELOW"
-                distance_pct = abs(current_price - sma_20) / sma_20 * 100
-                
-                print(f"    ✓ {timeframe}: SMA20=${sma_20:.2f}, Current=${current_price:.2f} ({position}, {distance_pct:.1f}%)")
-                self._last_positions[f"{symbol}_{timeframe}"] = current_price > sma_20
+        sma_levels = {}
+        for timeframe, prices in hist_data.items():
+            if prices and len(prices) >= 20:
+                sma_levels[timeframe] = sum(prices[-20:]) / 20
         
-        self._initialized = True
-        print(f"✓ SMA 20 initialization complete\n")
+        return sma_levels
+    
+    def _calculate_weighted_sma(self, sma_levels: Dict[str, float]) -> float:
+        """Calculate weighted average of SMA levels across timeframes."""
+        if not sma_levels:
+            return 0.0
+        
+        weights = {"daily": 0.40, "weekly": 0.35, "monthly": 0.25}
+        
+        weighted_sum = sum(
+            sma * weights.get(tf, 0)
+            for tf, sma in sma_levels.items()
+        )
+        total_weight = sum(weights.get(tf, 0) for tf in sma_levels.keys())
+        
+        return weighted_sum / total_weight if total_weight > 0 else 0.0
     
     def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio) -> Tuple[str, int]:
         """
-        Make trading decision based on price position relative to SMA 20 levels.
+        Make trading decision based on dynamically calculated SMA 20 levels.
         
         Strategy:
-        - BUY: Price is above all SMA lines (support from all timeframes)
-        - SELL: Price is below any critical SMA line (resistance signal)
+        - BUY: Price crosses above weighted SMA (support signal), only when not holding
+        - SELL: Price crosses below weighted SMA (resistance signal) or take profit/stop loss
         """
         if bid <= 0 or ask <= 0:
             return "HOLD", 0
-
-        if not self._initialized or symbol not in self.sma_levels:
+        
+        if not self.data_client:
             return "HOLD", 0
         
         if len(mid_prices) < 2:
             return "HOLD", 0
         
-        current_buy_price = ask
-        current_sell_price = bid
-        previous_price = mid_prices[-2]
-        sma_data = self.sma_levels[symbol]
-        
-        # Collect valid SMA levels for this symbol
-        valid_smas = {tf: sma for tf, sma in sma_data.items() if sma is not None}
-        
-        if not valid_smas:
-            return "HOLD", 0
-        
-        # Get the strongest support/resistance (combination of all timeframes)
-        # Weight: daily (40%), weekly (35%), monthly (25%)
-        weights = {"daily": 0.40, "weekly": 0.35, "monthly": 0.25}
-        weighted_sma = sum(
-            sma * weights.get(tf, 0)
-            for tf, sma in valid_smas.items()
-        ) / sum(weights.get(tf, 0) for tf in valid_smas.keys())
-        
-        # Check position relative to weighted SMA
-        was_above = previous_price > weighted_sma
-        is_above_buy = current_buy_price > weighted_sma
-        is_above_sell = current_sell_price > weighted_sma
-        
-        # Check position relative to each timeframe
-        daily_sma = valid_smas.get("daily")
-        weekly_sma = valid_smas.get("weekly")
-        monthly_sma = valid_smas.get("monthly")
-        
-        # === BUY SIGNALS ===
-        # Strong buy: Price crosses above the weighted SMA from below
-        if not was_above and is_above_buy:
-            print(f"    🟢 {symbol}: Price crossed ABOVE SMA (support) from ${previous_price:.2f} to ${current_buy_price:.2f}")
-            return "BUY", 1
-        
-        # Medium buy: Price bounces from daily SMA
-        if daily_sma and current_buy_price > daily_sma and previous_price <= daily_sma:
-            if weekly_sma and current_buy_price > weekly_sma * 0.95:  # Not too far below weekly
-                print(f"    🟢 {symbol}: Price bounced from daily SMA (${daily_sma:.2f})")
-                return "BUY", 1
-        
-        # === SELL SIGNALS ===
-        # Check if we have a position
+        # Check current position
         has_position = (
             symbol in portfolio.positions and portfolio.positions[symbol].qty > 0
         )
         
+        # Recalculate SMA levels dynamically
+        sma_levels = self._calculate_sma_levels(symbol)
+        if not sma_levels:
+            return "HOLD", 0
+        
+        weighted_sma = self._calculate_weighted_sma(sma_levels)
+        if weighted_sma == 0.0:
+            return "HOLD", 0
+        
+        # Detect crossover using consistent price basis
+        current_buy_price = ask
+        current_sell_price = bid
+        
+        # Get previous weighted SMA (or use current if first time)
+        previous_weighted_sma = self._previous_weighted_sma.get(symbol, weighted_sma)
+        
+        # Use mid price for crossover detection (consistent with historical data)
+        current_mid = mid_prices[-1]
+        previous_mid = mid_prices[-2]
+        
+        was_above = previous_mid > previous_weighted_sma
+        is_above = current_mid > weighted_sma
+        
+        # Store current weighted SMA for next iteration
+        self._previous_weighted_sma[symbol] = weighted_sma
+        
+        # === BUY SIGNALS (only when not holding) ===
+        if not has_position:
+            # Strong buy: Price crosses above weighted SMA
+            if not was_above and is_above and current_buy_price > weighted_sma:
+                print(f"    🟢 {symbol}: Price crossed ABOVE SMA (${weighted_sma:.2f}) - BUY at ${current_buy_price:.2f}")
+                return "BUY", 1
+            
+            # Bounce from daily SMA (when weekly is supportive)
+            daily_sma = sma_levels.get("daily")
+            weekly_sma = sma_levels.get("weekly")
+            if daily_sma and weekly_sma:
+                if previous_mid <= daily_sma and current_mid > daily_sma:
+                    if current_buy_price > weekly_sma * 0.95:  # Not too far below weekly
+                        print(f"    🟢 {symbol}: Bounced from daily SMA (${daily_sma:.2f}) - BUY at ${current_buy_price:.2f}")
+                        return "BUY", 1
+        
+        # === SELL SIGNALS (only when holding) ===
         if has_position:
-            # Get entry price
+            qty = portfolio.positions[symbol].qty
             entry_price = portfolio.positions[symbol].avg_price
             
             # Strong sell: Price crosses below weighted SMA
-            if was_above and not is_above_sell:
-                print(f"    🔴 {symbol}: Price crossed BELOW SMA (resistance) from ${previous_price:.2f} to ${current_sell_price:.2f}")
-                qty = portfolio.positions[symbol].qty
+            if was_above and not is_above and current_sell_price < weighted_sma:
+                print(f"    🔴 {symbol}: Price crossed BELOW SMA (${weighted_sma:.2f}) - SELL at ${current_sell_price:.2f}")
                 return "SELL", qty
             
             # Sell if price breaks below monthly SMA significantly
+            monthly_sma = sma_levels.get("monthly")
             if monthly_sma and current_sell_price < monthly_sma * 0.98:
-                qty = portfolio.positions[symbol].qty
-                print(f"    🔴 {symbol}: Price broke below monthly SMA (${monthly_sma:.2f})")
+                print(f"    🔴 {symbol}: Broke below monthly SMA (${monthly_sma:.2f}) - SELL at ${current_sell_price:.2f}")
                 return "SELL", qty
             
-            # Take profit: If price is significantly above entry
+            # Take profit: 5% gain
             profit_pct = (current_sell_price - entry_price) / entry_price * 100
-            if profit_pct > 5:  # 5% profit target
-                qty = portfolio.positions[symbol].qty
-                print(f"    🟡 {symbol}: Taking profit (+{profit_pct:.1f}%)")
+            if profit_pct > 5:
+                print(f"    🟡 {symbol}: Taking profit (+{profit_pct:.1f}%) - SELL at ${current_sell_price:.2f}")
                 return "SELL", qty
             
-            # Stop loss: If price is significantly below entry
-            loss_pct = (current_sell_price - entry_price) / entry_price * 100
-            if loss_pct < -3:  # 3% stop loss
-                qty = portfolio.positions[symbol].qty
-                print(f"    🟡 {symbol}: Stopping loss ({loss_pct:.1f}%)")
+            # Stop loss: -3% loss
+            if profit_pct < -3:
+                print(f"    🟡 {symbol}: Stop loss ({profit_pct:.1f}%) - SELL at ${current_sell_price:.2f}")
                 return "SELL", qty
         
         return "HOLD", 0
