@@ -73,7 +73,7 @@ from penguins import (
 from penguins.moving_average_crossover_penguin import MovingAverageCrossoverPenguin
 from penguins.rsi_mean_reversion_penguin import RSIMeanReversionPenguin
 from penguins.volatility_breakout_penguin import VolatilityBreakoutPenguin
-from penguins.sma20_multitimeframe_penguin import SMA20MultitimeframePenguin
+from penguins.sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
 
 ACTIVE_PENGUINS = [
     # BreakoutPenguin,
@@ -85,8 +85,9 @@ ACTIVE_PENGUINS = [
     # RandomPenguin,
     # RandomPenguin2,
     RSIMeanReversionPenguin,
-    SMA20MultitimeframePenguin,
+    SMA20MultiTimeframePenguin,
     SupportResistancePenguin,
     # TrendPenguin,
     # VolatilityBreakoutPenguin,
 ]
+##
