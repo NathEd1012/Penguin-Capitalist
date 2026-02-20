@@ -1,0 +1,3812 @@
+================================================================================
+SUPPORT & RESISTANCE ZONES LOG
+================================================================================
+
+Parameters:
+  - Pivot detection window: 3 bars left, 3 bars right
+  - ATR period: 14 bars
+  - Minimum bars needed: 20 bars
+  - Zone width multiplier: 0.5
+  - Minimum touches: 2
+  - Minimum Risk/Reward: 1.5
+
+Note: Zones are logged when first detected for each symbol.
+If a symbol shows 'No zones detected', it means there weren't enough
+swing highs/lows in the price history to form valid support/resistance zones.
+
+
+================================================================================
+SYMBOL: NVDA (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $186.27
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $171.40
+      Range: $170.40 - $172.40
+      Touches: 2
+      Strength Score: 2.14
+      Distance from current: $14.87 (8.0%)
+
+    Support #2:
+      Center: $177.55
+      Range: $176.95 - $178.15
+      Touches: 2
+      Strength Score: 2.10
+      Distance from current: $8.72 (4.7%)
+
+    Support #3:
+      Center: $186.52
+      Range: $185.52 - $187.52
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $0.25 (0.1%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $190.70
+      Range: $189.17 - $192.49
+      Touches: 3
+      Strength Score: 3.18
+      Distance from current: $4.43 (2.4%)
+
+    Resistance #2:
+      Center: $186.36
+      Range: $185.57 - $187.15
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $0.09 (0.0%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $186.27
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $175.06
+      Range: $173.90 - $176.23
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $11.21 (6.0%)
+
+    Support #2:
+      Center: $167.07
+      Range: $165.91 - $168.23
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $19.20 (10.3%)
+
+    Support #3:
+      Center: $94.28
+      Range: $93.12 - $95.44
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $91.99 (49.4%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $189.03
+      Range: $187.63 - $190.43
+      Touches: 2
+      Strength Score: 2.18
+      Distance from current: $2.76 (1.5%)
+
+    Resistance #2:
+      Center: $202.49
+      Range: $201.33 - $203.65
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $16.22 (8.7%)
+
+    Resistance #3:
+      Center: $182.75
+      Range: $181.59 - $183.92
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $3.52 (1.9%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $186.27
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $112.79
+      Range: $108.53 - $117.06
+      Touches: 2
+      Strength Score: 2.16
+      Distance from current: $73.48 (39.4%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $138.28
+      Range: $135.03 - $141.53
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $47.99 (25.8%)
+
+
+
+================================================================================
+SYMBOL: AAPL (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $263.96
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $246.72
+      Range: $245.71 - $247.74
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $17.23 (6.5%)
+
+    Support #2:
+      Center: $259.08
+      Range: $258.07 - $260.09
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $4.88 (1.8%)
+
+    Support #3:
+      Center: $270.82
+      Range: $269.81 - $271.83
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $6.86 (2.6%)
+
+    Support #4:
+      Center: $277.24
+      Range: $276.23 - $278.25
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $13.28 (5.0%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $278.11
+      Range: $277.10 - $279.12
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $14.15 (5.4%)
+
+    Resistance #2:
+      Center: $261.05
+      Range: $260.04 - $262.06
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $2.91 (1.1%)
+
+    Resistance #3:
+      Center: $273.90
+      Range: $272.89 - $274.91
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $9.94 (3.8%)
+
+    Resistance #4:
+      Center: $286.09
+      Range: $285.08 - $287.10
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $22.13 (8.4%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $263.96
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $245.29
+      Range: $243.51 - $247.08
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $18.66 (7.1%)
+
+    Support #2:
+      Center: $202.30
+      Range: $200.52 - $204.08
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $61.66 (23.4%)
+
+    Support #3:
+      Center: $195.30
+      Range: $193.52 - $197.08
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $68.66 (26.0%)
+
+    Support #4:
+      Center: $188.50
+      Range: $186.72 - $190.28
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $75.46 (28.6%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $278.81
+      Range: $277.03 - $280.60
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $14.86 (5.6%)
+
+    Resistance #2:
+      Center: $211.21
+      Range: $209.43 - $212.99
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $52.75 (20.0%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $263.96
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $200.64
+      Range: $197.72 - $203.56
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $63.32 (24.0%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $250.54
+      Range: $247.63 - $253.46
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $13.41 (5.1%)
+
+
+
+================================================================================
+SYMBOL: PLTR (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $134.09
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $166.62
+      Range: $165.37 - $167.87
+      Touches: 2
+      Strength Score: 2.11
+      Distance from current: $32.53 (24.3%)
+
+    Support #2:
+      Center: $130.05
+      Range: $128.65 - $131.45
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $4.04 (3.0%)
+
+    Support #3:
+      Center: $177.30
+      Range: $175.90 - $178.70
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $43.21 (32.2%)
+
+  RESISTANCE ZONES (6):
+    Resistance #1:
+      Center: $142.90
+      Range: $141.50 - $144.30
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $8.81 (6.6%)
+
+    Resistance #2:
+      Center: $157.89
+      Range: $156.49 - $159.29
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $23.80 (17.7%)
+
+    Resistance #3:
+      Center: $169.64
+      Range: $168.24 - $171.04
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $35.55 (26.5%)
+
+    Resistance #4:
+      Center: $181.72
+      Range: $180.32 - $183.12
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $47.63 (35.5%)
+
+    Resistance #5:
+      Center: $194.15
+      Range: $192.75 - $195.55
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $60.06 (44.8%)
+
+    Resistance #6:
+      Center: $187.93
+      Range: $186.53 - $189.33
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $53.84 (40.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $134.09
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $154.00
+      Range: $151.48 - $156.53
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $19.91 (14.9%)
+
+    Support #2:
+      Center: $167.87
+      Range: $165.34 - $170.39
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $33.78 (25.2%)
+
+    Support #3:
+      Center: $73.97
+      Range: $71.44 - $76.50
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $60.12 (44.8%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $196.94
+      Range: $193.41 - $200.47
+      Touches: 2
+      Strength Score: 2.18
+      Distance from current: $62.85 (46.9%)
+
+    Resistance #2:
+      Center: $184.07
+      Range: $182.35 - $185.80
+      Touches: 2
+      Strength Score: 2.12
+      Distance from current: $49.98 (37.3%)
+
+    Resistance #3:
+      Center: $137.33
+      Range: $134.80 - $139.86
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $3.24 (2.4%)
+
+    Resistance #4:
+      Center: $90.97
+      Range: $88.44 - $93.50
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $43.12 (32.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $134.09
+--------------------------------------------------------------------------------
+
+  No support or resistance zones detected for this timeframe.
+
+
+
+================================================================================
+SYMBOL: AMD (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $199.88
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $197.87
+      Range: $192.25 - $203.15
+      Touches: 3
+      Strength Score: 3.20
+      Distance from current: $2.01 (1.0%)
+
+    Support #2:
+      Center: $214.12
+      Range: $211.96 - $216.28
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $14.25 (7.1%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $220.16
+      Range: $215.88 - $223.37
+      Touches: 4
+      Strength Score: 4.23
+      Distance from current: $20.28 (10.1%)
+
+    Resistance #2:
+      Center: $259.65
+      Range: $257.49 - $261.81
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $59.77 (29.9%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $199.88
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $203.46
+      Range: $199.64 - $207.28
+      Touches: 2
+      Strength Score: 2.21
+      Distance from current: $3.59 (1.8%)
+
+    Support #2:
+      Center: $151.13
+      Range: $147.31 - $154.95
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $48.75 (24.4%)
+
+    Support #3:
+      Center: $85.74
+      Range: $81.92 - $89.56
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $114.14 (57.1%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $111.81
+      Range: $106.43 - $117.18
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $88.07 (44.1%)
+
+    Resistance #2:
+      Center: $256.11
+      Range: $252.29 - $259.93
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $56.24 (28.1%)
+
+    Resistance #3:
+      Center: $177.51
+      Range: $173.69 - $181.33
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $22.37 (11.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $199.88
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $97.33
+      Range: $91.64 - $103.02
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $102.55 (51.3%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $164.05
+      Range: $158.36 - $169.74
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $35.82 (17.9%)
+
+
+
+================================================================================
+SYMBOL: BE (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $153.51
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $136.52
+      Range: $133.40 - $139.54
+      Touches: 3
+      Strength Score: 3.24
+      Distance from current: $16.99 (11.1%)
+
+    Support #2:
+      Center: $86.80
+      Range: $84.54 - $89.06
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $66.71 (43.5%)
+
+    Support #3:
+      Center: $76.97
+      Range: $74.71 - $79.23
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $76.54 (49.9%)
+
+  RESISTANCE ZONES (5):
+    Resistance #1:
+      Center: $167.25
+      Range: $165.49 - $169.00
+      Touches: 2
+      Strength Score: 2.18
+      Distance from current: $13.74 (8.9%)
+
+    Resistance #2:
+      Center: $151.79
+      Range: $149.53 - $154.06
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $1.72 (1.1%)
+
+    Resistance #3:
+      Center: $92.22
+      Range: $89.96 - $94.48
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $61.29 (39.9%)
+
+    Resistance #4:
+      Center: $119.29
+      Range: $117.03 - $121.55
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $34.22 (22.3%)
+
+    Resistance #5:
+      Center: $109.22
+      Range: $106.95 - $111.48
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $44.29 (28.9%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $153.51
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $89.41
+      Range: $86.22 - $92.60
+      Touches: 2
+      Strength Score: 2.19
+      Distance from current: $64.10 (41.8%)
+
+    Support #2:
+      Center: $16.50
+      Range: $13.32 - $19.69
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $137.00 (89.2%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $119.29
+      Range: $116.10 - $122.48
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $34.22 (22.3%)
+
+    Resistance #2:
+      Center: $135.32
+      Range: $132.13 - $138.51
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $18.19 (11.8%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $153.51
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $13.94
+      Range: $9.60 - $18.28
+      Touches: 2
+      Strength Score: 2.18
+      Distance from current: $139.57 (90.9%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $27.50
+      Range: $23.32 - $31.68
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $126.01 (82.1%)
+
+
+
+================================================================================
+SYMBOL: MP (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $56.52
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $57.83
+      Range: $56.58 - $58.80
+      Touches: 3
+      Strength Score: 3.22
+      Distance from current: $1.31 (2.3%)
+
+    Support #2:
+      Center: $51.22
+      Range: $50.42 - $52.02
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $5.30 (9.4%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $62.26
+      Range: $61.93 - $62.80
+      Touches: 3
+      Strength Score: 3.18
+      Distance from current: $5.74 (10.2%)
+
+    Resistance #2:
+      Center: $69.43
+      Range: $68.83 - $70.03
+      Touches: 2
+      Strength Score: 2.13
+      Distance from current: $12.91 (22.8%)
+
+    Resistance #3:
+      Center: $64.59
+      Range: $64.00 - $65.19
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $8.07 (14.3%)
+
+    Resistance #4:
+      Center: $54.57
+      Range: $53.97 - $55.17
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $1.95 (3.5%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $56.52
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $54.30
+      Range: $53.36 - $55.25
+      Touches: 2
+      Strength Score: 2.20
+      Distance from current: $2.22 (3.9%)
+
+    Support #2:
+      Center: $63.05
+      Range: $62.10 - $64.00
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $6.53 (11.6%)
+
+    Support #3:
+      Center: $19.66
+      Range: $18.71 - $20.61
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $36.86 (65.2%)
+
+    Support #4:
+      Center: $22.66
+      Range: $21.71 - $23.60
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $33.87 (59.9%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $62.05
+      Range: $61.10 - $63.00
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $5.53 (9.8%)
+
+    Resistance #2:
+      Center: $80.77
+      Range: $79.82 - $81.72
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $24.25 (42.9%)
+
+    Resistance #3:
+      Center: $75.02
+      Range: $74.07 - $75.97
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $18.50 (32.7%)
+
+    Resistance #4:
+      Center: $26.32
+      Range: $25.37 - $27.27
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $30.20 (53.4%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $56.52
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $14.17
+      Range: $12.73 - $15.61
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $42.35 (74.9%)
+
+    Support #2:
+      Center: $21.82
+      Range: $20.18 - $23.46
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $34.70 (61.4%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $71.14
+      Range: $69.50 - $72.78
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $14.62 (25.9%)
+
+
+
+================================================================================
+SYMBOL: MSTR (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $124.54
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (5):
+    Support #1:
+      Center: $154.57
+      Range: $151.90 - $157.25
+      Touches: 2
+      Strength Score: 2.10
+      Distance from current: $30.03 (24.1%)
+
+    Support #2:
+      Center: $106.95
+      Range: $104.87 - $109.03
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $17.59 (14.1%)
+
+    Support #3:
+      Center: $160.28
+      Range: $158.19 - $162.36
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $35.73 (28.7%)
+
+    Support #4:
+      Center: $179.08
+      Range: $177.00 - $181.16
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $54.54 (43.8%)
+
+    Support #5:
+      Center: $171.47
+      Range: $169.39 - $173.56
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $46.93 (37.7%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $188.66
+      Range: $186.58 - $190.74
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $64.12 (51.5%)
+
+    Resistance #2:
+      Center: $138.45
+      Range: $136.37 - $140.53
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $13.91 (11.2%)
+
+    Resistance #3:
+      Center: $179.31
+      Range: $177.23 - $181.40
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $54.77 (44.0%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $124.54
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $157.25
+      Range: $155.01 - $159.49
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $32.71 (26.3%)
+
+    Support #2:
+      Center: $170.33
+      Range: $168.09 - $172.57
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $45.79 (36.8%)
+
+    Support #3:
+      Center: $369.26
+      Range: $367.02 - $371.50
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $244.72 (196.5%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $351.85
+      Range: $349.61 - $354.09
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $227.31 (182.5%)
+
+    Resistance #2:
+      Center: $434.79
+      Range: $432.55 - $437.03
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $310.25 (249.1%)
+
+    Resistance #3:
+      Center: $416.01
+      Range: $413.77 - $418.25
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $291.47 (234.0%)
+
+    Resistance #4:
+      Center: $303.98
+      Range: $301.74 - $306.22
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $179.44 (144.1%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $124.54
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $255.60
+      Range: $245.36 - $265.84
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $131.06 (105.2%)
+
+    Support #2:
+      Center: $132.47
+      Range: $122.23 - $142.71
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $7.93 (6.4%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $395.49
+      Range: $386.69 - $404.28
+      Touches: 2
+      Strength Score: 2.19
+      Distance from current: $270.94 (217.6%)
+
+    Resistance #2:
+      Center: $1614.93
+      Range: $1604.69 - $1625.17
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $1490.39 (1196.7%)
+
+
+
+================================================================================
+SYMBOL: MSFT (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $401.01
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $476.34
+      Range: $474.74 - $477.93
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $75.32 (18.8%)
+
+    Support #2:
+      Center: $393.65
+      Range: $392.10 - $395.20
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $7.37 (1.8%)
+
+    Support #3:
+      Center: $444.00
+      Range: $442.45 - $445.55
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $42.99 (10.7%)
+
+    Support #4:
+      Center: $472.80
+      Range: $471.25 - $474.35
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $71.79 (17.9%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $490.69
+      Range: $488.04 - $492.04
+      Touches: 3
+      Strength Score: 3.11
+      Distance from current: $89.68 (22.4%)
+
+    Resistance #2:
+      Center: $482.67
+      Range: $481.64 - $483.71
+      Touches: 2
+      Strength Score: 2.13
+      Distance from current: $81.66 (20.4%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $401.01
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $472.19
+      Range: $468.75 - $475.63
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $71.18 (17.7%)
+
+    Support #2:
+      Center: $511.24
+      Range: $507.80 - $514.68
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $110.23 (27.5%)
+
+    Support #3:
+      Center: $494.96
+      Range: $491.52 - $498.40
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $93.94 (23.4%)
+
+    Support #4:
+      Center: $359.81
+      Range: $356.37 - $363.25
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $41.20 (10.3%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $521.97
+      Range: $518.01 - $524.24
+      Touches: 3
+      Strength Score: 3.19
+      Distance from current: $120.95 (30.2%)
+
+    Resistance #2:
+      Center: $487.85
+      Range: $484.41 - $491.29
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $86.84 (21.7%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $401.01
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $375.03
+      Range: $368.58 - $381.48
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $25.99 (6.5%)
+
+    Support #2:
+      Center: $406.37
+      Range: $399.92 - $412.82
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $5.36 (1.3%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $533.93
+      Range: $527.48 - $540.38
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $132.91 (33.1%)
+
+    Resistance #2:
+      Center: $446.82
+      Range: $440.37 - $453.27
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $45.81 (11.4%)
+
+
+
+================================================================================
+SYMBOL: TSLA (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $406.80
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $417.83
+      Range: $416.42 - $419.23
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $11.03 (2.7%)
+
+    Support #2:
+      Center: $397.21
+      Range: $395.39 - $399.04
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $9.59 (2.4%)
+
+    Support #3:
+      Center: $431.39
+      Range: $429.57 - $433.21
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $24.59 (6.0%)
+
+    Support #4:
+      Center: $439.59
+      Range: $437.77 - $441.41
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $32.79 (8.1%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $449.10
+      Range: $447.27 - $450.92
+      Touches: 2
+      Strength Score: 2.12
+      Distance from current: $42.30 (10.4%)
+
+    Resistance #2:
+      Center: $489.28
+      Range: $487.46 - $491.10
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $82.48 (20.3%)
+
+    Resistance #3:
+      Center: $454.94
+      Range: $453.12 - $456.76
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $48.14 (11.8%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $406.80
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $298.89
+      Range: $295.11 - $302.68
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $107.91 (26.5%)
+
+    Support #2:
+      Center: $390.98
+      Range: $386.92 - $395.04
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $15.82 (3.9%)
+
+    Support #3:
+      Center: $413.48
+      Range: $409.42 - $417.54
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $6.68 (1.6%)
+
+    Support #4:
+      Center: $239.34
+      Range: $235.28 - $243.40
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $167.46 (41.2%)
+
+  RESISTANCE ZONES (5):
+    Resistance #1:
+      Center: $481.07
+      Range: $477.01 - $485.13
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $74.27 (18.3%)
+
+    Resistance #2:
+      Center: $456.51
+      Range: $452.45 - $460.57
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $49.71 (12.2%)
+
+    Resistance #3:
+      Center: $440.40
+      Range: $436.34 - $444.46
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $33.60 (8.3%)
+
+    Resistance #4:
+      Center: $349.93
+      Range: $345.87 - $353.99
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $56.87 (14.0%)
+
+    Resistance #5:
+      Center: $263.54
+      Range: $259.48 - $267.60
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $143.26 (35.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $406.80
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $259.14
+      Range: $250.08 - $268.20
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $147.66 (36.3%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $345.76
+      Range: $336.70 - $354.82
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $61.04 (15.0%)
+
+    Resistance #2:
+      Center: $404.68
+      Range: $395.62 - $413.74
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $2.12 (0.5%)
+
+
+
+================================================================================
+SYMBOL: NOC (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $731.24
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (5):
+    Support #1:
+      Center: $573.11
+      Range: $570.32 - $575.90
+      Touches: 2
+      Strength Score: 2.10
+      Distance from current: $158.13 (21.6%)
+
+    Support #2:
+      Center: $685.71
+      Range: $682.99 - $688.43
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $45.53 (6.2%)
+
+    Support #3:
+      Center: $660.48
+      Range: $657.76 - $663.20
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $70.76 (9.7%)
+
+    Support #4:
+      Center: $559.03
+      Range: $556.31 - $561.75
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $172.21 (23.6%)
+
+    Support #5:
+      Center: $544.98
+      Range: $542.26 - $547.70
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $186.26 (25.5%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $574.06
+      Range: $571.33 - $576.78
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $157.18 (21.5%)
+
+    Resistance #2:
+      Center: $709.60
+      Range: $706.88 - $712.32
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $21.64 (3.0%)
+
+    Resistance #3:
+      Center: $610.75
+      Range: $608.03 - $613.47
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $120.49 (16.5%)
+
+    Resistance #4:
+      Center: $584.58
+      Range: $581.86 - $587.30
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $146.66 (20.1%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $731.24
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $472.23
+      Range: $467.99 - $476.46
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $259.01 (35.4%)
+
+    Support #2:
+      Center: $548.83
+      Range: $544.60 - $553.06
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $182.41 (24.9%)
+
+    Support #3:
+      Center: $572.60
+      Range: $568.37 - $576.83
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $158.64 (21.7%)
+
+  RESISTANCE ZONES (5):
+    Resistance #1:
+      Center: $572.74
+      Range: $568.50 - $576.97
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $158.50 (21.7%)
+
+    Resistance #2:
+      Center: $623.98
+      Range: $619.75 - $628.21
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $107.26 (14.7%)
+
+    Resistance #3:
+      Center: $592.38
+      Range: $588.15 - $596.61
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $138.86 (19.0%)
+
+    Resistance #4:
+      Center: $516.96
+      Range: $512.73 - $521.19
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $214.28 (29.3%)
+
+    Resistance #5:
+      Center: $539.66
+      Range: $535.43 - $543.89
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $191.58 (26.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $731.24
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $461.83
+      Range: $453.85 - $469.82
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $269.41 (36.8%)
+
+    Support #2:
+      Center: $435.77
+      Range: $427.79 - $443.76
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $295.47 (40.4%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $519.99
+      Range: $511.66 - $528.31
+      Touches: 2
+      Strength Score: 2.17
+      Distance from current: $211.25 (28.9%)
+
+
+
+================================================================================
+SYMBOL: LMT (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $664.09
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (5):
+    Support #1:
+      Center: $603.15
+      Range: $600.78 - $605.52
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $60.94 (9.2%)
+
+    Support #2:
+      Center: $581.46
+      Range: $579.09 - $583.83
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $82.63 (12.4%)
+
+    Support #3:
+      Center: $496.65
+      Range: $494.28 - $499.02
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $167.44 (25.2%)
+
+    Support #4:
+      Center: $470.01
+      Range: $467.64 - $472.38
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $194.08 (29.2%)
+
+    Support #5:
+      Center: $439.07
+      Range: $436.70 - $441.44
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $225.02 (33.9%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $636.98
+      Range: $635.57 - $638.38
+      Touches: 2
+      Strength Score: 2.21
+      Distance from current: $27.12 (4.1%)
+
+    Resistance #2:
+      Center: $484.52
+      Range: $482.15 - $486.89
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $179.57 (27.0%)
+
+    Resistance #3:
+      Center: $457.57
+      Range: $455.21 - $459.94
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $206.52 (31.1%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $664.09
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $426.69
+      Range: $420.68 - $432.71
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $237.40 (35.7%)
+
+    Support #2:
+      Center: $463.43
+      Range: $458.60 - $468.26
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $200.66 (30.2%)
+
+    Support #3:
+      Center: $452.23
+      Range: $447.59 - $456.87
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $211.86 (31.9%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $481.89
+      Range: $477.86 - $485.93
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $182.20 (27.4%)
+
+    Resistance #2:
+      Center: $505.19
+      Range: $500.55 - $509.83
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $158.90 (23.9%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $664.09
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $421.29
+      Range: $413.04 - $429.54
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $242.80 (36.6%)
+
+    Support #2:
+      Center: $446.51
+      Range: $438.26 - $454.76
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $217.58 (32.8%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $482.08
+      Range: $473.83 - $490.33
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $182.01 (27.4%)
+
+    Resistance #2:
+      Center: $584.64
+      Range: $576.39 - $592.90
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $79.45 (12.0%)
+
+
+
+================================================================================
+SYMBOL: NVO (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $48.37
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $47.14
+      Range: $46.38 - $47.62
+      Touches: 3
+      Strength Score: 3.11
+      Distance from current: $1.22 (2.5%)
+
+    Support #2:
+      Center: $43.34
+      Range: $42.90 - $43.78
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $5.02 (10.4%)
+
+    Support #3:
+      Center: $57.13
+      Range: $56.69 - $57.57
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $8.77 (18.1%)
+
+    Support #4:
+      Center: $50.88
+      Range: $50.44 - $51.32
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $2.52 (5.2%)
+
+  RESISTANCE ZONES (5):
+    Resistance #1:
+      Center: $49.68
+      Range: $49.31 - $50.36
+      Touches: 3
+      Strength Score: 3.19
+      Distance from current: $1.31 (2.7%)
+
+    Resistance #2:
+      Center: $63.98
+      Range: $63.54 - $64.43
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $15.62 (32.3%)
+
+    Resistance #3:
+      Center: $62.33
+      Range: $61.89 - $62.77
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $13.96 (28.9%)
+
+    Resistance #4:
+      Center: $59.84
+      Range: $59.40 - $60.28
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $11.48 (23.7%)
+
+    Resistance #5:
+      Center: $52.53
+      Range: $52.09 - $52.98
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $4.17 (8.6%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $48.37
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $45.66
+      Range: $44.94 - $46.37
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $2.71 (5.6%)
+
+    Support #2:
+      Center: $54.91
+      Range: $54.20 - $55.63
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $6.55 (13.5%)
+
+    Support #3:
+      Center: $48.18
+      Range: $47.46 - $48.90
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $0.19 (0.4%)
+
+    Support #4:
+      Center: $58.06
+      Range: $57.34 - $58.78
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $9.70 (20.0%)
+
+  RESISTANCE ZONES (5):
+    Resistance #1:
+      Center: $61.40
+      Range: $60.68 - $62.11
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $13.03 (26.9%)
+
+    Resistance #2:
+      Center: $56.99
+      Range: $56.27 - $57.71
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $8.62 (17.8%)
+
+    Resistance #3:
+      Center: $71.72
+      Range: $71.00 - $72.44
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $23.35 (48.3%)
+
+    Resistance #4:
+      Center: $79.89
+      Range: $79.17 - $80.60
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $31.52 (65.2%)
+
+    Resistance #5:
+      Center: $69.24
+      Range: $68.52 - $69.96
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $20.87 (43.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $48.37
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $47.05
+      Range: $45.27 - $48.82
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $1.32 (2.7%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $142.69
+      Range: $140.92 - $144.46
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $94.32 (195.0%)
+
+
+
+================================================================================
+SYMBOL: GLD (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $459.14
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $424.47
+      Range: $421.27 - $427.67
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $34.67 (7.6%)
+
+    Support #2:
+      Center: $396.35
+      Range: $392.88 - $399.82
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $62.79 (13.7%)
+
+    Support #3:
+      Center: $385.38
+      Range: $381.91 - $388.85
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $73.76 (16.1%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $495.87
+      Range: $492.40 - $499.34
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $36.73 (8.0%)
+
+    Resistance #2:
+      Center: $416.67
+      Range: $413.20 - $420.14
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $42.47 (9.2%)
+
+    Resistance #3:
+      Center: $389.77
+      Range: $386.30 - $393.24
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $69.37 (15.1%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $459.14
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $297.75
+      Range: $294.24 - $301.25
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $161.39 (35.2%)
+
+    Support #2:
+      Center: $368.14
+      Range: $365.33 - $370.95
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $91.00 (19.8%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $388.62
+      Range: $385.81 - $391.43
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $70.52 (15.4%)
+
+    Resistance #2:
+      Center: $316.28
+      Range: $313.47 - $319.09
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $142.86 (31.1%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $459.14
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $302.96
+      Range: $299.01 - $306.91
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $156.18 (34.0%)
+
+    Support #2:
+      Center: $242.15
+      Range: $238.20 - $246.10
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $216.99 (47.3%)
+
+  RESISTANCE ZONES (0):
+    (none)
+
+
+
+================================================================================
+SYMBOL: SLV (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $70.47
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $65.57
+      Range: $64.44 - $66.69
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $4.91 (7.0%)
+
+    Support #2:
+      Center: $51.77
+      Range: $50.24 - $53.30
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $18.70 (26.5%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $72.42
+      Range: $71.12 - $73.72
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $1.94 (2.8%)
+
+    Resistance #2:
+      Center: $79.17
+      Range: $77.64 - $80.70
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $8.70 (12.3%)
+
+    Resistance #3:
+      Center: $105.61
+      Range: $104.08 - $107.14
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $35.14 (49.9%)
+
+    Resistance #4:
+      Center: $53.12
+      Range: $51.59 - $54.65
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $17.35 (24.6%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $70.47
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $33.11
+      Range: $31.63 - $34.59
+      Touches: 2
+      Strength Score: 2.10
+      Distance from current: $37.36 (53.0%)
+
+    Support #2:
+      Center: $28.09
+      Range: $27.07 - $29.12
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $42.38 (60.1%)
+
+    Support #3:
+      Center: $43.91
+      Range: $42.43 - $45.39
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $26.56 (37.7%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $32.02
+      Range: $30.04 - $35.02
+      Touches: 3
+      Strength Score: 3.12
+      Distance from current: $38.46 (54.6%)
+
+    Resistance #2:
+      Center: $46.95
+      Range: $45.46 - $48.43
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $23.53 (33.4%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $70.47
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $26.34
+      Range: $25.32 - $27.35
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $44.14 (62.6%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $29.80
+      Range: $28.79 - $30.81
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $40.67 (57.7%)
+
+
+
+================================================================================
+SYMBOL: PPLT (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $186.95
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $184.11
+      Range: $181.53 - $186.68
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $2.84 (1.5%)
+
+    Support #2:
+      Center: $209.11
+      Range: $206.83 - $211.39
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $22.16 (11.9%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $220.62
+      Range: $218.34 - $222.90
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $33.67 (18.0%)
+
+    Resistance #2:
+      Center: $252.32
+      Range: $250.04 - $254.61
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $65.38 (35.0%)
+
+    Resistance #3:
+      Center: $152.80
+      Range: $150.52 - $155.08
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $34.15 (18.3%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $186.95
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $137.78
+      Range: $133.48 - $142.09
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $49.16 (26.3%)
+
+    Support #2:
+      Center: $120.12
+      Range: $115.81 - $124.43
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $66.83 (35.7%)
+
+    Support #3:
+      Center: $84.10
+      Range: $79.79 - $88.41
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $102.85 (55.0%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $220.51
+      Range: $216.21 - $224.82
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $33.56 (18.0%)
+
+    Resistance #2:
+      Center: $146.43
+      Range: $142.12 - $150.74
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $40.52 (21.7%)
+
+    Resistance #3:
+      Center: $129.97
+      Range: $125.66 - $134.28
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $56.98 (30.5%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $186.95
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $84.02
+      Range: $81.47 - $86.57
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $102.93 (55.1%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $91.01
+      Range: $88.46 - $93.56
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $95.94 (51.3%)
+
+
+
+================================================================================
+SYMBOL: COPX (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $84.58
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (5):
+    Support #1:
+      Center: $81.34
+      Range: $80.53 - $82.15
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $3.24 (3.8%)
+
+    Support #2:
+      Center: $84.76
+      Range: $83.95 - $85.57
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $0.18 (0.2%)
+
+    Support #3:
+      Center: $75.62
+      Range: $74.81 - $76.43
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $8.96 (10.6%)
+
+    Support #4:
+      Center: $71.72
+      Range: $70.91 - $72.53
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $12.86 (15.2%)
+
+    Support #5:
+      Center: $66.89
+      Range: $66.08 - $67.70
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $17.69 (20.9%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $76.97
+      Range: $75.77 - $78.17
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $7.61 (9.0%)
+
+    Resistance #2:
+      Center: $94.17
+      Range: $93.36 - $94.98
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $9.59 (11.3%)
+
+    Resistance #3:
+      Center: $82.38
+      Range: $81.57 - $83.19
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $2.20 (2.6%)
+
+    Resistance #4:
+      Center: $69.16
+      Range: $68.35 - $69.97
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $15.42 (18.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $84.58
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $58.41
+      Range: $57.63 - $59.19
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $26.17 (30.9%)
+
+    Support #2:
+      Center: $42.78
+      Range: $42.00 - $43.56
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $41.80 (49.4%)
+
+    Support #3:
+      Center: $32.66
+      Range: $31.88 - $33.43
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $51.92 (61.4%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $61.82
+      Range: $61.04 - $62.60
+      Touches: 2
+      Strength Score: 2.14
+      Distance from current: $22.76 (26.9%)
+
+    Resistance #2:
+      Center: $46.42
+      Range: $45.64 - $47.20
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $38.16 (45.1%)
+
+    Resistance #3:
+      Center: $41.79
+      Range: $41.01 - $42.57
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $42.79 (50.6%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $84.58
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $37.78
+      Range: $36.83 - $38.74
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $46.80 (55.3%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $47.25
+      Range: $46.30 - $48.20
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $37.33 (44.1%)
+
+
+
+================================================================================
+SYMBOL: LIT (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $72.32
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $69.78
+      Range: $69.38 - $70.18
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $2.54 (3.5%)
+
+    Support #2:
+      Center: $62.61
+      Range: $62.20 - $63.02
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $9.71 (13.4%)
+
+    Support #3:
+      Center: $68.05
+      Range: $67.65 - $68.45
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $4.27 (5.9%)
+
+    Support #4:
+      Center: $64.82
+      Range: $64.42 - $65.22
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $7.50 (10.4%)
+
+  RESISTANCE ZONES (5):
+    Resistance #1:
+      Center: $74.99
+      Range: $74.59 - $75.39
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $2.67 (3.7%)
+
+    Resistance #2:
+      Center: $69.59
+      Range: $69.19 - $69.99
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $2.73 (3.8%)
+
+    Resistance #3:
+      Center: $67.92
+      Range: $67.52 - $68.32
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $4.40 (6.1%)
+
+    Resistance #4:
+      Center: $65.15
+      Range: $64.75 - $65.55
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $7.17 (9.9%)
+
+    Resistance #5:
+      Center: $63.49
+      Range: $63.09 - $63.89
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $8.83 (12.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $72.32
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $35.55
+      Range: $34.95 - $36.16
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $36.76 (50.8%)
+
+    Support #2:
+      Center: $60.25
+      Range: $59.70 - $60.80
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $12.07 (16.7%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $63.77
+      Range: $63.22 - $64.31
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $8.55 (11.8%)
+
+    Resistance #2:
+      Center: $38.56
+      Range: $38.01 - $39.11
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $33.76 (46.7%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $72.32
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $37.03
+      Range: $36.18 - $37.89
+      Touches: 2
+      Strength Score: 2.18
+      Distance from current: $35.28 (48.8%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $44.69
+      Range: $43.95 - $45.43
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $27.63 (38.2%)
+
+
+
+================================================================================
+SYMBOL: URTH (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $189.53
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $185.88
+      Range: $185.59 - $186.42
+      Touches: 4
+      Strength Score: 4.25
+      Distance from current: $3.65 (1.9%)
+
+    Support #2:
+      Center: $182.34
+      Range: $182.04 - $182.64
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $7.19 (3.8%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $187.82
+      Range: $187.51 - $188.12
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $1.71 (0.9%)
+
+    Resistance #2:
+      Center: $191.25
+      Range: $190.95 - $191.55
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $1.72 (0.9%)
+
+    Resistance #3:
+      Center: $190.02
+      Range: $189.72 - $190.32
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $0.49 (0.3%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $189.53
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (5):
+    Support #1:
+      Center: $178.66
+      Range: $178.13 - $179.19
+      Touches: 2
+      Strength Score: 2.16
+      Distance from current: $10.87 (5.7%)
+
+    Support #2:
+      Center: $185.13
+      Range: $184.74 - $185.53
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $4.40 (2.3%)
+
+    Support #3:
+      Center: $168.97
+      Range: $168.57 - $169.37
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $20.56 (10.8%)
+
+    Support #4:
+      Center: $162.94
+      Range: $162.54 - $163.34
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $26.59 (14.0%)
+
+    Support #5:
+      Center: $139.22
+      Range: $138.82 - $139.62
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $50.31 (26.5%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $189.56
+      Range: $189.16 - $189.96
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $0.03 (0.0%)
+
+    Resistance #2:
+      Center: $185.37
+      Range: $184.97 - $185.76
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $4.16 (2.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $189.53
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $153.13
+      Range: $152.26 - $154.01
+      Touches: 1
+      Strength Score: 1.10
+      Distance from current: $36.40 (19.2%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $161.10
+      Range: $160.22 - $161.98
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $28.43 (15.0%)
+
+
+
+================================================================================
+SYMBOL: GDXJ (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $135.26
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $121.21
+      Range: $119.68 - $122.74
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $14.05 (10.4%)
+
+    Support #2:
+      Center: $113.22
+      Range: $111.69 - $114.75
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $22.04 (16.3%)
+
+    Support #3:
+      Center: $104.50
+      Range: $102.96 - $106.03
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $30.76 (22.7%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $150.43
+      Range: $148.90 - $151.96
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $15.17 (11.2%)
+
+    Resistance #2:
+      Center: $121.68
+      Range: $120.15 - $123.21
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $13.58 (10.0%)
+
+    Resistance #3:
+      Center: $114.87
+      Range: $113.34 - $116.40
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $20.39 (15.1%)
+
+    Resistance #4:
+      Center: $109.25
+      Range: $107.72 - $110.78
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $26.01 (19.2%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $135.26
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (5):
+    Support #1:
+      Center: $65.29
+      Range: $63.32 - $67.26
+      Touches: 2
+      Strength Score: 2.10
+      Distance from current: $69.97 (51.7%)
+
+    Support #2:
+      Center: $113.22
+      Range: $111.25 - $115.19
+      Touches: 1
+      Strength Score: 1.12
+      Distance from current: $22.04 (16.3%)
+
+    Support #3:
+      Center: $93.08
+      Range: $91.11 - $95.06
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $42.17 (31.2%)
+
+    Support #4:
+      Center: $58.67
+      Range: $56.70 - $60.64
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $76.59 (56.6%)
+
+    Support #5:
+      Center: $51.20
+      Range: $49.23 - $53.17
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $84.06 (62.1%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $70.03
+      Range: $68.84 - $71.22
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $65.23 (48.2%)
+
+    Resistance #2:
+      Center: $102.97
+      Range: $101.00 - $104.94
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $32.29 (23.9%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $135.26
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $42.75
+      Range: $40.78 - $44.72
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $92.51 (68.4%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $51.56
+      Range: $49.59 - $53.53
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $83.70 (61.9%)
+
+
+
+================================================================================
+SYMBOL: SIL (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $101.33
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $82.38
+      Range: $81.74 - $83.01
+      Touches: 2
+      Strength Score: 2.09
+      Distance from current: $18.95 (18.7%)
+
+    Support #2:
+      Center: $91.92
+      Range: $90.72 - $93.13
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $9.41 (9.3%)
+
+    Support #3:
+      Center: $74.70
+      Range: $73.50 - $75.90
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $26.63 (26.3%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $114.50
+      Range: $113.29 - $115.70
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $13.17 (13.0%)
+
+    Resistance #2:
+      Center: $90.05
+      Range: $88.85 - $91.25
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $11.28 (11.1%)
+
+    Resistance #3:
+      Center: $83.42
+      Range: $82.22 - $84.62
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $17.91 (17.7%)
+
+    Resistance #4:
+      Center: $78.09
+      Range: $76.89 - $79.29
+      Touches: 1
+      Strength Score: 1.03
+      Distance from current: $23.24 (22.9%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $101.33
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $47.22
+      Range: $45.56 - $48.88
+      Touches: 2
+      Strength Score: 2.10
+      Distance from current: $54.11 (53.4%)
+
+    Support #2:
+      Center: $36.87
+      Range: $34.71 - $39.02
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $64.46 (63.6%)
+
+    Support #3:
+      Center: $64.78
+      Range: $63.12 - $66.44
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $36.55 (36.1%)
+
+  RESISTANCE ZONES (2):
+    Resistance #1:
+      Center: $73.70
+      Range: $72.04 - $75.36
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $27.63 (27.3%)
+
+    Resistance #2:
+      Center: $50.87
+      Range: $49.21 - $52.53
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $50.46 (49.8%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $101.33
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (1):
+    Support #1:
+      Center: $31.87
+      Range: $30.41 - $33.33
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $69.46 (68.5%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $38.63
+      Range: $37.17 - $40.09
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $62.70 (61.9%)
+
+
+
+================================================================================
+SYMBOL: REMX (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 59 bars
+Latest price: $88.98
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $70.43
+      Range: $69.62 - $71.24
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $18.55 (20.8%)
+
+    Support #2:
+      Center: $81.61
+      Range: $80.80 - $82.43
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $7.37 (8.3%)
+
+    Support #3:
+      Center: $89.17
+      Range: $88.36 - $89.99
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $0.19 (0.2%)
+
+    Support #4:
+      Center: $73.80
+      Range: $72.99 - $74.61
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $15.18 (17.1%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $75.50
+      Range: $74.70 - $76.83
+      Touches: 3
+      Strength Score: 3.11
+      Distance from current: $13.48 (15.2%)
+
+    Resistance #2:
+      Center: $98.49
+      Range: $97.68 - $99.30
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $9.51 (10.7%)
+
+    Resistance #3:
+      Center: $91.25
+      Range: $90.44 - $92.07
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $2.27 (2.6%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $88.98
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $35.47
+      Range: $34.46 - $36.48
+      Touches: 2
+      Strength Score: 2.08
+      Distance from current: $53.51 (60.1%)
+
+    Support #2:
+      Center: $65.07
+      Range: $64.12 - $66.02
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $23.91 (26.9%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $74.05
+      Range: $73.39 - $74.70
+      Touches: 2
+      Strength Score: 2.16
+      Distance from current: $14.94 (16.8%)
+
+    Resistance #2:
+      Center: $62.94
+      Range: $61.99 - $63.89
+      Touches: 1
+      Strength Score: 1.06
+      Distance from current: $26.04 (29.3%)
+
+    Resistance #3:
+      Center: $39.30
+      Range: $38.35 - $40.25
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $49.68 (55.8%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $88.98
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $39.53
+      Range: $38.46 - $40.60
+      Touches: 2
+      Strength Score: 2.15
+      Distance from current: $49.45 (55.6%)
+
+    Support #2:
+      Center: $36.48
+      Range: $35.41 - $37.55
+      Touches: 1
+      Strength Score: 1.11
+      Distance from current: $52.50 (59.0%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $46.65
+      Range: $45.58 - $47.72
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $42.33 (47.6%)
+
+
+
+================================================================================
+SYMBOL: PICK (HISTORICAL ANALYSIS)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: DAILY
+Data points: 58 bars
+Latest price: $60.53
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (3):
+    Support #1:
+      Center: $57.83
+      Range: $57.53 - $58.13
+      Touches: 2
+      Strength Score: 2.20
+      Distance from current: $2.70 (4.5%)
+
+    Support #2:
+      Center: $48.83
+      Range: $48.48 - $49.17
+      Touches: 2
+      Strength Score: 2.07
+      Distance from current: $11.71 (19.3%)
+
+    Support #3:
+      Center: $51.10
+      Range: $50.75 - $51.45
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $9.43 (15.6%)
+
+  RESISTANCE ZONES (4):
+    Resistance #1:
+      Center: $61.99
+      Range: $61.64 - $62.34
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $1.46 (2.4%)
+
+    Resistance #2:
+      Center: $55.14
+      Range: $54.79 - $55.49
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $5.39 (8.9%)
+
+    Resistance #3:
+      Center: $52.34
+      Range: $51.99 - $52.69
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $8.19 (13.5%)
+
+    Resistance #4:
+      Center: $50.41
+      Range: $50.06 - $50.76
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $10.12 (16.7%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: WEEKLY
+Data points: 52 bars
+Latest price: $60.53
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (4):
+    Support #1:
+      Center: $44.87
+      Range: $44.52 - $45.22
+      Touches: 1
+      Strength Score: 1.09
+      Distance from current: $15.66 (25.9%)
+
+    Support #2:
+      Center: $38.18
+      Range: $37.83 - $38.53
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $22.35 (36.9%)
+
+    Support #3:
+      Center: $35.71
+      Range: $35.36 - $36.06
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $24.82 (41.0%)
+
+    Support #4:
+      Center: $31.26
+      Range: $30.91 - $31.61
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $29.27 (48.4%)
+
+  RESISTANCE ZONES (3):
+    Resistance #1:
+      Center: $46.36
+      Range: $46.01 - $46.71
+      Touches: 1
+      Strength Score: 1.08
+      Distance from current: $14.17 (23.4%)
+
+    Resistance #2:
+      Center: $40.35
+      Range: $40.00 - $40.70
+      Touches: 1
+      Strength Score: 1.05
+      Distance from current: $20.18 (33.3%)
+
+    Resistance #3:
+      Center: $37.80
+      Range: $37.45 - $38.15
+      Touches: 1
+      Strength Score: 1.04
+      Distance from current: $22.73 (37.6%)
+
+
+--------------------------------------------------------------------------------
+TIMEFRAME: MONTHLY
+Data points: 24 bars
+Latest price: $60.53
+--------------------------------------------------------------------------------
+
+  SUPPORT ZONES (2):
+    Support #1:
+      Center: $35.12
+      Range: $34.63 - $35.60
+      Touches: 2
+      Strength Score: 2.18
+      Distance from current: $25.42 (42.0%)
+
+    Support #2:
+      Center: $39.24
+      Range: $38.76 - $39.72
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $21.29 (35.2%)
+
+  RESISTANCE ZONES (1):
+    Resistance #1:
+      Center: $43.24
+      Range: $42.76 - $43.72
+      Touches: 1
+      Strength Score: 1.07
+      Distance from current: $17.29 (28.6%)
+
+
+
+================================================================================
+SYMBOL: NVDA
+Current Price: $187.52
+ATR: $0.1993
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $186.51
+    Range: $186.47 - $186.56
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $1.00
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $187.21
+    Range: $187.16 - $187.26
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $0.31
+
+
+
+================================================================================
+SYMBOL: AAPL
+Current Price: $263.22
+ATR: $0.5639
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $263.50
+    Range: $263.36 - $263.65
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.28
+
+
+RESISTANCE ZONES (2):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $264.13
+    Range: $263.99 - $264.27
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $0.91
+
+  Resistance #2:
+    Center: $266.50
+    Range: $266.35 - $266.64
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $3.27
+
+
+
+================================================================================
+SYMBOL: PLTR
+Current Price: $132.15
+ATR: $2.2871
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $130.33
+    Range: $129.76 - $130.91
+    Touches: 2
+    Strength Score: 2.19
+    Distance from current price: $1.81
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $135.40
+    Range: $134.83 - $135.97
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $3.25
+
+
+
+================================================================================
+SYMBOL: AMD
+Current Price: $198.37
+ATR: $1.9429
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $198.16
+    Range: $197.67 - $198.65
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.21
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $203.34
+    Range: $202.85 - $203.82
+    Touches: 2
+    Strength Score: 2.22
+    Distance from current price: $4.97
+
+
+
+================================================================================
+SYMBOL: BE
+Current Price: $163.75
+ATR: $3.5807
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $163.75
+    Range: $162.86 - $164.65
+    Touches: 4
+    Strength Score: 4.39
+    Distance from current price: $0.00
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $166.33
+    Range: $165.43 - $167.23
+    Touches: 2
+    Strength Score: 2.21
+    Distance from current price: $2.57
+
+
+
+================================================================================
+SYMBOL: MP
+Current Price: $57.31
+ATR: $0.4557
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $56.73
+    Range: $56.61 - $56.84
+    Touches: 5
+    Strength Score: 5.51
+    Distance from current price: $0.59
+
+  Support #2:
+    Center: $55.62
+    Range: $55.51 - $55.74
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $1.69
+
+
+RESISTANCE ZONES (2):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $56.73
+    Range: $56.61 - $56.84
+    Touches: 3
+    Strength Score: 3.25
+    Distance from current price: $0.59
+
+  Resistance #2:
+    Center: $58.11
+    Range: $57.99 - $58.22
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.79
+
+
+
+================================================================================
+SYMBOL: MSTR
+Current Price: $127.19
+ATR: $2.0150
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $122.90
+    Range: $122.40 - $123.41
+    Touches: 2
+    Strength Score: 2.20
+    Distance from current price: $4.29
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $126.12
+    Range: $125.62 - $126.63
+    Touches: 1
+    Strength Score: 1.09
+    Distance from current price: $1.06
+
+
+
+================================================================================
+SYMBOL: MSFT
+Current Price: $401.50
+ATR: $2.0050
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $400.01
+    Range: $399.51 - $400.51
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $1.49
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $405.00
+    Range: $404.50 - $405.50
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $3.50
+
+
+
+================================================================================
+SYMBOL: TSLA
+Current Price: $409.27
+ATR: $0.7918
+================================================================================
+
+No support or resistance zones detected.
+(This can happen when there aren't enough pivot points in the price history)
+
+================================================================================
+SYMBOL: NOC
+Current Price: $731.99
+ATR: $20.7034
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $595.25
+    Range: $590.07 - $600.43
+    Touches: 3
+    Strength Score: 3.33
+    Distance from current price: $136.74
+
+  Support #2:
+    Center: $724.93
+    Range: $719.75 - $730.10
+    Touches: 1
+    Strength Score: 1.09
+    Distance from current price: $7.06
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $732.21
+    Range: $727.03 - $737.38
+    Touches: 4
+    Strength Score: 4.40
+    Distance from current price: $0.22
+
+
+
+================================================================================
+SYMBOL: LMT
+Current Price: $658.37
+ATR: $1.7954
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $649.68
+    Range: $649.23 - $650.13
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $8.69
+
+  Support #2:
+    Center: $656.99
+    Range: $656.54 - $657.44
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $1.39
+
+
+RESISTANCE ZONES (0):
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SYMBOL: NVO
+Current Price: $48.66
+ATR: $0.0504
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $48.36
+    Range: $48.35 - $48.37
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.30
+
+  Support #2:
+    Center: $48.27
+    Range: $48.25 - $48.28
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $0.39
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $48.41
+    Range: $48.40 - $48.43
+    Touches: 2
+    Strength Score: 2.18
+    Distance from current price: $0.24
+
+
+
+================================================================================
+SYMBOL: GLD
+Current Price: $459.74
+ATR: $1.4011
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $459.87
+    Range: $459.51 - $460.22
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $0.13
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $465.54
+    Range: $465.19 - $465.90
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $5.81
+
+
+
+================================================================================
+SYMBOL: SLV
+Current Price: $70.69
+ATR: $0.0818
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $70.62
+    Range: $70.60 - $70.64
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.06
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $70.80
+    Range: $70.78 - $70.82
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $0.12
+
+
+
+================================================================================
+SYMBOL: PPLT
+Current Price: $187.34
+ATR: $1.6986
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $187.29
+    Range: $186.87 - $187.71
+    Touches: 2
+    Strength Score: 2.24
+    Distance from current price: $0.05
+
+  Support #2:
+    Center: $184.99
+    Range: $184.56 - $185.41
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $2.35
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $190.06
+    Range: $189.64 - $190.48
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $2.72
+
+
+
+================================================================================
+SYMBOL: COPX
+Current Price: $85.34
+ATR: $0.8707
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $82.89
+    Range: $82.67 - $83.10
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $2.45
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $87.81
+    Range: $87.59 - $88.03
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $2.47
+
+
+
+================================================================================
+SYMBOL: LIT
+Current Price: $73.15
+ATR: $0.1154
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $72.84
+    Range: $72.81 - $72.86
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $0.31
+
+  Support #2:
+    Center: $72.35
+    Range: $72.32 - $72.38
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $0.80
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $73.07
+    Range: $73.04 - $73.10
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.08
+
+
+
+================================================================================
+SYMBOL: URTH
+Current Price: $189.75
+ATR: $0.2847
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $189.62
+    Range: $189.53 - $189.72
+    Touches: 2
+    Strength Score: 2.19
+    Distance from current price: $0.13
+
+
+RESISTANCE ZONES (1):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $191.10
+    Range: $191.02 - $191.17
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $1.35
+
+
+
+================================================================================
+SYMBOL: GDXJ
+Current Price: $136.34
+ATR: $0.4096
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $136.13
+    Range: $136.03 - $136.24
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.20
+
+
+RESISTANCE ZONES (2):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $138.41
+    Range: $138.31 - $138.51
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $2.08
+
+  Resistance #2:
+    Center: $136.57
+    Range: $136.47 - $136.67
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $0.23
+
+
+
+================================================================================
+SYMBOL: SIL
+Current Price: $102.28
+ATR: $0.2000
+================================================================================
+
+SUPPORT ZONES (1):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $101.81
+    Range: $101.76 - $101.86
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.47
+
+
+RESISTANCE ZONES (2):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $102.81
+    Range: $102.76 - $102.86
+    Touches: 1
+    Strength Score: 1.12
+    Distance from current price: $0.53
+
+  Resistance #2:
+    Center: $102.31
+    Range: $102.26 - $102.36
+    Touches: 1
+    Strength Score: 1.10
+    Distance from current price: $0.03
+
+
+
+================================================================================
+SYMBOL: REMX
+Current Price: $89.59
+ATR: $0.1244
+================================================================================
+
+SUPPORT ZONES (2):
+--------------------------------------------------------------------------------
+  Support #1:
+    Center: $89.41
+    Range: $89.38 - $89.45
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.18
+
+  Support #2:
+    Center: $89.06
+    Range: $89.03 - $89.10
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $0.53
+
+
+RESISTANCE ZONES (2):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $89.80
+    Range: $89.76 - $89.83
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.20
+
+  Resistance #2:
+    Center: $89.36
+    Range: $89.33 - $89.40
+    Touches: 1
+    Strength Score: 1.08
+    Distance from current price: $0.23
+
+
+
+================================================================================
+SYMBOL: PICK
+Current Price: $59.62
+ATR: $0.1096
+================================================================================
+
+SUPPORT ZONES (0):
+--------------------------------------------------------------------------------
+
+RESISTANCE ZONES (2):
+--------------------------------------------------------------------------------
+  Resistance #1:
+    Center: $59.71
+    Range: $59.68 - $59.74
+    Touches: 1
+    Strength Score: 1.11
+    Distance from current price: $0.09
+
+  Resistance #2:
+    Center: $59.52
+    Range: $59.49 - $59.54
+    Touches: 1
+    Strength Score: 1.09
+    Distance from current price: $0.11
+
+
