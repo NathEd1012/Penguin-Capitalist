@@ -89,6 +89,4 @@ ACTIVE_PENGUINS = [
     SupportResistancePenguin,
     # TrendPenguin,
     # VolatilityBreakoutPenguin,
-
 ]
-##
