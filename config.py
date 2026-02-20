@@ -52,7 +52,8 @@ from datetime import datetime
 PLOTS_DIR = "plots"
 os.makedirs(PLOTS_DIR, exist_ok=True)
 
-# Fixed filenames (no timestamp, gets overwritten each run)
-CAPITAL_CURVES_FILE = os.path.join(CURRENT_RUN_DIR, "capital_curves.png")
-TRADES_LOG_FILE = os.path.join(CURRENT_RUN_DIR, "trades.txt")
-CURVES_DATA_FILE = os.path.join(CURRENT_RUN_DIR, "data.json")
+# Dynamic filenames with date/time
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+CAPITAL_CURVES_FILE = os.path.join(PLOTS_DIR, f"capital_curves_{timestamp}.png")
+TRADES_LOG_FILE = f"trades_log_{timestamp}.txt"
+CURVES_DATA_FILE = f"curves_data_{timestamp}.json"
