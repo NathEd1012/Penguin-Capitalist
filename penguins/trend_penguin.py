@@ -11,12 +11,19 @@ class TrendPenguin(BasePenguin):
         """
         Buy when stock rises from previous minute, sell when it falls, else hold.
         """
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
         if len(mid_prices) < 2:
             return "HOLD", 0
 
         if mid_prices[-1] > mid_prices[-2]:
-            return "BUY", 1
+            if portfolio.cash >= ask:
+                return "BUY", 1
+            return "HOLD", 0
         elif mid_prices[-1] < mid_prices[-2]:
-            return "SELL", 1
+            if portfolio.get_position(symbol) > 0 and bid > 0:
+                return "SELL", 1
+            return "HOLD", 0
         else:
             return "HOLD", 0

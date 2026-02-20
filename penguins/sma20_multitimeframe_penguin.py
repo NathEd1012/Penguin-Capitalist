@@ -72,13 +72,17 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         - BUY: Price is above all SMA lines (support from all timeframes)
         - SELL: Price is below any critical SMA line (resistance signal)
         """
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
         if not self._initialized or symbol not in self.sma_levels:
             return "HOLD", 0
         
         if len(mid_prices) < 2:
             return "HOLD", 0
         
-        current_price = mid_prices[-1]
+        current_buy_price = ask
+        current_sell_price = bid
         previous_price = mid_prices[-2]
         sma_data = self.sma_levels[symbol]
         
@@ -98,7 +102,8 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         
         # Check position relative to weighted SMA
         was_above = previous_price > weighted_sma
-        is_above = current_price > weighted_sma
+        is_above_buy = current_buy_price > weighted_sma
+        is_above_sell = current_sell_price > weighted_sma
         
         # Check position relative to each timeframe
         daily_sma = valid_smas.get("daily")
@@ -107,13 +112,13 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         
         # === BUY SIGNALS ===
         # Strong buy: Price crosses above the weighted SMA from below
-        if not was_above and is_above:
-            print(f"    🟢 {symbol}: Price crossed ABOVE SMA (support) from ${previous_price:.2f} to ${current_price:.2f}")
+        if not was_above and is_above_buy:
+            print(f"    🟢 {symbol}: Price crossed ABOVE SMA (support) from ${previous_price:.2f} to ${current_buy_price:.2f}")
             return "BUY", 1
         
         # Medium buy: Price bounces from daily SMA
-        if daily_sma and current_price > daily_sma and previous_price <= daily_sma:
-            if weekly_sma and current_price > weekly_sma * 0.95:  # Not too far below weekly
+        if daily_sma and current_buy_price > daily_sma and previous_price <= daily_sma:
+            if weekly_sma and current_buy_price > weekly_sma * 0.95:  # Not too far below weekly
                 print(f"    🟢 {symbol}: Price bounced from daily SMA (${daily_sma:.2f})")
                 return "BUY", 1
         
@@ -128,26 +133,26 @@ class SMA20MultiTimeframePenguin(BasePenguin):
             entry_price = portfolio.positions[symbol].avg_price
             
             # Strong sell: Price crosses below weighted SMA
-            if was_above and not is_above:
-                print(f"    🔴 {symbol}: Price crossed BELOW SMA (resistance) from ${previous_price:.2f} to ${current_price:.2f}")
+            if was_above and not is_above_sell:
+                print(f"    🔴 {symbol}: Price crossed BELOW SMA (resistance) from ${previous_price:.2f} to ${current_sell_price:.2f}")
                 qty = portfolio.positions[symbol].qty
                 return "SELL", qty
             
             # Sell if price breaks below monthly SMA significantly
-            if monthly_sma and current_price < monthly_sma * 0.98:
+            if monthly_sma and current_sell_price < monthly_sma * 0.98:
                 qty = portfolio.positions[symbol].qty
                 print(f"    🔴 {symbol}: Price broke below monthly SMA (${monthly_sma:.2f})")
                 return "SELL", qty
             
             # Take profit: If price is significantly above entry
-            profit_pct = (current_price - entry_price) / entry_price * 100
+            profit_pct = (current_sell_price - entry_price) / entry_price * 100
             if profit_pct > 5:  # 5% profit target
                 qty = portfolio.positions[symbol].qty
                 print(f"    🟡 {symbol}: Taking profit (+{profit_pct:.1f}%)")
                 return "SELL", qty
             
             # Stop loss: If price is significantly below entry
-            loss_pct = (current_price - entry_price) / entry_price * 100
+            loss_pct = (current_sell_price - entry_price) / entry_price * 100
             if loss_pct < -3:  # 3% stop loss
                 qty = portfolio.positions[symbol].qty
                 print(f"    🟡 {symbol}: Stopping loss ({loss_pct:.1f}%)")

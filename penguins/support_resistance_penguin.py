@@ -60,10 +60,14 @@ class SupportResistancePenguin(BasePenguin):
         - SELL: Price near resistance zone + bearish rejection signal OR take profit
         - HOLD: No clear setup
         """
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
         if len(mid_prices) < self.left + self.right + self.atr_n:
             return "HOLD", 0
-        
-        current_price = mid_prices[-1]
+
+        current_buy_price = ask
+        current_sell_price = bid
         atr_val = self._compute_atr(mid_prices, self.atr_n)
         
         # Skip if ATR is invalid
@@ -91,13 +95,13 @@ class SupportResistancePenguin(BasePenguin):
         # Decision logic
         if not has_position:
             # Look for BUY signals
-            signal = self._check_buy_signal(current_price, mid_prices, zones, atr_val)
+            signal = self._check_buy_signal(current_buy_price, mid_prices, zones, atr_val)
             if signal:
                 return "BUY", 1
         else:
             # Look for SELL signals
             signal = self._check_sell_signal(
-                current_price, mid_prices, zones, atr_val,
+                current_sell_price, mid_prices, zones, atr_val,
                 portfolio.positions[symbol].avg_price
             )
             if signal:

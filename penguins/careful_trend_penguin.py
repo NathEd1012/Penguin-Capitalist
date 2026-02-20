@@ -13,6 +13,9 @@ class CarefulTrendPenguin(BasePenguin):
         Buy when stock has risen for buy_consecutive consecutive minutes.
         Sell when stock has fallen for sell_consecutive consecutive minutes.
         """
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
         if len(mid_prices) < max(self.buy_consecutive, self.sell_consecutive):
             return "HOLD", 0
 
@@ -24,7 +27,11 @@ class CarefulTrendPenguin(BasePenguin):
         if all_increasing:
             increase = recent_buy[-1] - recent_buy[0]
             qty = max(1, int(increase / recent_buy[-1] * 100))
-            return "BUY", qty
+            max_affordable = int(portfolio.cash // ask)
+            qty = min(qty, max_affordable)
+            if qty > 0:
+                return "BUY", qty
+            return "HOLD", 0
 
         # Check last sell_consecutive bars for sell signal
         recent_sell = mid_prices[-self.sell_consecutive :]

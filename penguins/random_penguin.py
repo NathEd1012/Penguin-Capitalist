@@ -9,6 +9,16 @@ class RandomPenguin(BasePenguin):
 
     def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """Make a random decision: BUY, SELL, or HOLD."""
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
         choice = random.choice(["BUY", "SELL", "HOLD"])
-        qty = 1 if choice in ["BUY", "SELL"] else 0
-        return choice, qty
+        if choice == "BUY":
+            if portfolio.cash >= ask:
+                return "BUY", 1
+            return "HOLD", 0
+        if choice == "SELL":
+            if portfolio.get_position(symbol) > 0 and bid > 0:
+                return "SELL", 1
+            return "HOLD", 0
+        return "HOLD", 0

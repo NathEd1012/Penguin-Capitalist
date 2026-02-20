@@ -17,6 +17,9 @@ class CopilotPenguin(BasePenguin):
         - Volatility-aware position sizing
         - Trend filtering
         """
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
         if len(mid_prices) < 20:
             return "HOLD", 0
 
@@ -49,14 +52,16 @@ class CopilotPenguin(BasePenguin):
 
         buy_signal_rsi = rsi_val < 35 and roc_short > 0 and is_uptrend
         buy_signal_momentum = roc_medium > 0.02 and rsi_val < 65
-        buy_signal_breakout = price > recent_high and roc_short > 0.005
+        buy_signal_breakout = ask > recent_high and roc_short > 0.005
 
         if (
             buy_signal_rsi or buy_signal_momentum or buy_signal_breakout
         ) and not has_position:
             # Size position based on volatility (smaller in volatile markets)
             qty = 1 if volatility > 0.05 else 2
-            return "BUY", qty
+            if portfolio.cash >= ask:
+                return "BUY", qty
+            return "HOLD", 0
 
         # ========== SELL SIGNALS ==========
         # Sell conditions:
@@ -68,7 +73,7 @@ class CopilotPenguin(BasePenguin):
         if has_position:
             entry_price = portfolio.positions[symbol].avg_price
             current_pnl_pct = (
-                (price - entry_price) / entry_price if entry_price > 0 else 0
+                (bid - entry_price) / entry_price if entry_price > 0 else 0
             )
 
             # Take profit condition
@@ -87,7 +92,7 @@ class CopilotPenguin(BasePenguin):
                 return "SELL", qty
 
             # Price breaks below support
-            if price < recent_low and roc_short < -0.005:
+            if bid < recent_low and roc_short < -0.005:
                 qty = portfolio.positions[symbol].qty
                 return "SELL", qty
 
