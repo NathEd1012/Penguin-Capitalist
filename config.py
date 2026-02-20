@@ -56,3 +56,4 @@ os.makedirs(PLOTS_DIR, exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 CAPITAL_CURVES_FILE = os.path.join(PLOTS_DIR, f"capital_curves_{timestamp}.png")
 TRADES_LOG_FILE = f"trades_log_{timestamp}.txt"
+CURVES_DATA_FILE = f"curves_data_{timestamp}.json"
