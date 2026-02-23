@@ -13,7 +13,7 @@
   },
   "CarefulTrendPenguin": {
     "wins": 0,
-    "runs": 14
+    "runs": 15
   },
   "MomentumPenguin": {
     "wins": 1,
@@ -29,15 +29,15 @@
   },
   "CopilotPenguin": {
     "wins": 3,
-    "runs": 9
+    "runs": 10
   },
   "Moving Average Crossover": {
     "wins": 0,
-    "runs": 4
+    "runs": 5
   },
   "RSI Mean Reversion": {
-    "wins": 1,
-    "runs": 4
+    "wins": 2,
+    "runs": 5
   },
   "Volatility Breakout": {
     "wins": 0,
@@ -45,10 +45,10 @@
   },
   "SMA20MultiTimeframePenguin": {
     "wins": 0,
-    "runs": 1
+    "runs": 2
   },
   "SupportResistancePenguin": {
     "wins": 0,
-    "runs": 1
+    "runs": 2
   }
 }
