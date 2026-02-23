@@ -47,17 +47,15 @@ from penguins.sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
 
 
 def synthetic_price_bar(symbol, price_history):
-    """Generate synthetic price when Alpaca has no data."""
+    """Generate synthetic price when Alpaca has no data - returns last known price."""
     if symbol not in price_history or not price_history[symbol]:
         return 100.0 + hash(symbol) % 50
     last = price_history[symbol][-1]
     # Ensure last price is valid
     if last <= 0:
         return 100.0 + hash(symbol) % 50
-    change_pct = random.gauss(0, 0.3)
-    new_price = last * (1 + change_pct / 100)
-    # Ensure minimum price of $0.01
-    return max(0.01, new_price)
+    # Return exact last price without any variance
+    return last
 
 
 def plot_capital_curves(curves, filename):
@@ -300,7 +298,72 @@ def check_consistency(portfolio, latest_prices, curve_values, max_jump_pct=0.15)
     return warnings
 
 
+def save_run_results_to_archive(run_start_time):
+    """Save completed run to both run_old/YYMMDD/HHMM/ and run_current/."""
+    run_current_dir = "run_current"
+    run_old_dir = "run_old"
+    
+    # Check if run_current has any files
+    if not os.path.exists(run_current_dir):
+        return
+    
+    files_in_current = os.listdir(run_current_dir)
+    # Filter out __pycache__ and only check for actual output files
+    output_files = [f for f in files_in_current if not f.startswith('.')]
+    
+    if not output_files:
+        return
+    
+    # Create run_old directory if it doesn't exist
+    os.makedirs(run_old_dir, exist_ok=True)
+    
+    # Create timestamped subdirectory in run_old using run start time
+    # Round time down to nearest 10-minute interval
+    date_part = run_start_time.strftime("%y%m%d")
+    rounded_minute = (run_start_time.minute // 10) * 10
+    time_part = f"{run_start_time.hour:02d}{rounded_minute:02d}"
+    
+    # Create date folder if needed
+    date_folder = os.path.join(run_old_dir, date_part)
+    os.makedirs(date_folder, exist_ok=True)
+    
+    # Create run folder with time (format: run_old/YYMMDD/HHMM/)
+    run_folder = os.path.join(date_folder, time_part)
+    
+    # If folder already exists (same 10-minute window), add a counter
+    counter = 1
+    original_run_folder = run_folder
+    while os.path.exists(run_folder):
+        run_folder = f"{original_run_folder}_{counter}"
+        counter += 1
+    
+    os.makedirs(run_folder, exist_ok=True)
+    
+    # Copy all files from run_current to the timestamped folder in run_old
+    print(f"\n💾 Saving run results...")
+    for file in output_files:
+        src = os.path.join(run_current_dir, file)
+        dst = os.path.join(run_folder, file)
+        try:
+            if os.path.isdir(src):
+                # For directories, copy contents
+                if os.path.exists(dst):
+                    shutil.rmtree(dst)
+                shutil.copytree(src, dst)
+            else:
+                # For files, copy
+                shutil.copy2(src, dst)
+            print(f"  📦 Saved: {file} → {run_folder}")
+        except Exception as e:
+            print(f"  ⚠️ Failed to save {file}: {e}")
+    
+    print(f"✅ Run saved to: {run_folder}")
+
+
 def run():
+    # Track when the run started for archiving
+    run_start_time = datetime.now()
+    
     # Load scoreboard and register penguins
     scoreboard = load_scoreboard()
 
@@ -586,8 +649,29 @@ def run():
                 s: price_history[s][-1] for s in SYMBOLS if price_history[s]
             }
 
-            # Keep portfolios intact to avoid double-counting trades on interruption
-            # Use latest prices for market value instead of force-liquidating
+            # Forced liquidation on interrupt: sell all remaining positions
+            print("\n⚡ Performing forced liquidation of all positions...")
+            for penguin in penguins:
+                portfolio = portfolios[penguin.name]
+                if not portfolio.positions:
+                    print(f"  {penguin.name}: No open positions")
+                    continue
+                
+                for symbol in list(portfolio.positions.keys()):
+                    qty = portfolio.positions[symbol]
+                    if qty > 0 and symbol in latest_prices:
+                        bid_price = latest_prices[symbol]
+                        success = portfolio.sell(symbol, bid_price, qty=qty)
+                        if success:
+                            print(f"    ✓ {penguin.name} FORCED SELL {qty} {symbol} @ ${bid_price:.2f} [liquidation]")
+                            trades_log[penguin.name].append(
+                                (minute, f"FORCED SELL {qty} {symbol} @ ${bid_price:.2f} [liquidation]")
+                            )
+
+            # Update latest prices after liquidation
+            latest_prices = {
+                s: price_history[s][-1] for s in SYMBOLS if price_history[s]
+            }
 
             # Ensure capital curve plot matches the report
             plot_capital_curves(curves, CAPITAL_CURVES_FILE)
@@ -595,6 +679,9 @@ def run():
             # Generate final PDF report
             pdf_filename = os.path.join("run_current", "report.pdf")
             create_final_report_pdf(curves, portfolios, pdf_filename, latest_prices)
+            
+            # Archive run results to both run_old and run_current
+            save_run_results_to_archive(run_start_time)
 
             sys.exit(0)
 
@@ -685,14 +772,15 @@ def run():
             price_history[s].append(mid)  # Store mid for history/charting
 
         # Let each penguin trade
+        is_final_iteration = (minute == RUN_MINUTES)
         for penguin in penguins:
             portfolio = portfolios[penguin.name]
             for s in SYMBOLS:
                 if s not in bid_ask_prices:
                     continue
                 
-                # Skip trading on synthetic data
-                if price_source.get(s) == "synthetic":
+                # Skip trading on synthetic data (except allow SELL on final iteration)
+                if price_source.get(s) == "synthetic" and not is_final_iteration:
                     continue
 
                 mid_prices = price_history[s]
@@ -708,6 +796,12 @@ def run():
                     continue
 
                 if decision == "BUY":
+                    # Do not allow BUY on synthetic data at any time
+                    if price_source.get(s) == "synthetic":
+                        print(
+                            f"    ⚠️ {penguin.name} skipped BUY {qty} {s} - synthetic data (no buying allowed)"
+                        )
+                        continue
                     # Validate price is not $0 before buying
                     if ask <= 0:
                         print(
@@ -727,6 +821,12 @@ def run():
                             (minute, f"BUY {qty} {s} @ ${ask:.2f}{source_marker}")
                         )
                 elif decision == "SELL":
+                    # Do not allow SELL on synthetic data, except on final iteration
+                    if price_source.get(s) == "synthetic" and not is_final_iteration:
+                        print(
+                            f"    ⚠️ {penguin.name} skipped SELL {qty} {s} - synthetic data (no selling except on final iteration)"
+                        )
+                        continue
                     # Validate price is not $0 before selling
                     if bid <= 0:
                         print(
@@ -805,6 +905,9 @@ def run():
     scoreboard = record_win(scoreboard, winner_name)
     save_scoreboard(scoreboard)
     print_scoreboard(scoreboard)
+    
+    # Save run results to both run_old and run_current
+    save_run_results_to_archive(run_start_time)
 
     # Save capital curves plot
     plt.figure(figsize=(12, 6))

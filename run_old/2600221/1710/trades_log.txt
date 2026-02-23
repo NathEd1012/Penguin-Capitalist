@@ -1,0 +1,1185 @@
+Penguin Trading Simulation Log
+Started: 2026-02-20 21:41:35
+Duration: 150 minutes
+Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO
+Initial Capital: $5,000.00
+
+================================================================================
+
+CarefulTrendPenguin
+  Final Value:   $1,593.74
+  PnL:           $-3,406.26  (-68.13%)
+  Total Trades:  329
+  Final Positions: 2
+  Final Cash:    $3.84
+
+  Consistency Warnings:
+    - Large jump at minute 90: -34.78% (from $3,656.64 to $2,384.96)
+    - Large jump at minute 105: +50.85% (from $2,113.03 to $3,187.57)
+    - Large jump at minute 106: -34.69% (from $3,187.57 to $2,081.70)
+    - Large jump at minute 107: +51.49% (from $2,081.70 to $3,153.67)
+    - Large jump at minute 130: -46.17% (from $3,053.13 to $1,643.55)
+    - Large jump at minute 131: +85.06% (from $1,643.55 to $3,041.51)
+    - Large jump at minute 133: -48.28% (from $3,087.62 to $1,597.07)
+
+  Trades:
+
+    Minute 0-9:
+      BUY 1 MP @ $55.70
+      SELL 1 MP @ $52.49
+      BUY 1 MSFT @ $397.17
+      SELL 1 MSFT @ $396.60
+      BUY 1 LMT @ $653.05
+      BUY 1 NVO @ $47.46
+      BUY 2 MP @ $55.61
+      BUY 1 LMT @ $653.57
+      SELL 1 NVO @ $47.43
+      SELL 2 MP @ $52.49
+      SELL 2 LMT @ $640.00
+      BUY 1 TSLA @ $410.35
+      SELL 1 TSLA @ $409.71
+      BUY 1 MSFT @ $400.00
+
+    Minute 10-19:
+      BUY 12 BE @ $168.94
+      SELL 1 MSFT @ $395.88
+      BUY 1 NVDA @ $188.34
+      BUY 1 AAPL @ $263.60
+      SELL 12 BE @ $128.14
+      BUY 3 MSTR @ $133.50
+      SELL 1 NVDA @ $188.22
+      SELL 1 AAPL @ $257.74
+      SELL 3 MSTR @ $131.49
+      BUY 1 MSFT @ $396.58
+      BUY 1 MSFT @ $400.00
+      BUY 1 AMD @ $200.50
+      SELL 2 MSFT @ $395.88
+      SELL 1 AMD @ $199.39
+      BUY 1 LMT @ $668.00
+      BUY 1 NVDA @ $188.79
+      BUY 1 TSLA @ $409.77
+      SELL 1 LMT @ $654.13
+      SELL 1 NVDA @ $188.75
+      SELL 1 TSLA @ $409.43
+      BUY 1 AAPL @ $263.73
+
+    Minute 20-29:
+      SELL 1 AAPL @ $263.45
+      BUY 1 MSFT @ $397.58
+      SELL 1 MSFT @ $395.88
+      BUY 1 NVDA @ $189.07
+      BUY 1 AAPL @ $263.88
+      BUY 1 AMD @ $199.74
+      BUY 1 TSLA @ $410.09
+      BUY 1 NVO @ $47.50
+      BUY 1 NVDA @ $189.28
+      BUY 1 AAPL @ $264.07
+      SELL 1 AMD @ $198.00
+      BUY 1 TSLA @ $410.74
+      BUY 2 LMT @ $668.00
+      BUY 1 NVO @ $47.54
+      SELL 2 NVDA @ $189.26
+      BUY 1 AAPL @ $270.34
+      BUY 1 TSLA @ $410.99
+      SELL 2 LMT @ $654.80
+      BUY 1 NVO @ $47.58
+      SELL 3 AAPL @ $257.74
+      BUY 1 TSLA @ $412.00
+      SELL 3 NVO @ $47.55
+      BUY 7 BE @ $172.00
+      SELL 4 TSLA @ $410.66
+      SELL 7 BE @ $128.14
+      BUY 1 MSFT @ $398.40
+      BUY 1 NVDA @ $189.25
+      BUY 3 MSTR @ $133.50
+      SELL 1 MSFT @ $397.00
+      SELL 1 NVDA @ $189.18
+      BUY 1 PLTR @ $135.62
+      SELL 3 MSTR @ $124.26
+
+    Minute 30-39:
+      SELL 1 PLTR @ $130.34
+      BUY 1 AAPL @ $270.34
+      BUY 1 NVDA @ $189.37
+      BUY 1 AAPL @ $270.34
+      BUY 3 MSTR @ $133.36
+      BUY 1 TSLA @ $412.29
+      BUY 1 NVO @ $47.62
+      SELL 1 NVDA @ $189.18
+      SELL 2 AAPL @ $264.31
+      SELL 3 MSTR @ $128.36
+      SELL 1 TSLA @ $411.88
+      SELL 1 NVO @ $47.58
+      BUY 1 MSFT @ $398.24
+      BUY 1 NVDA @ $189.48
+      BUY 1 AMD @ $201.11
+      BUY 1 MSFT @ $400.00
+      BUY 1 TSLA @ $412.62
+      BUY 1 LMT @ $655.06
+      BUY 1 NVO @ $47.63
+      BUY 1 NVDA @ $189.71
+      BUY 1 AMD @ $201.48
+      BUY 2 MSTR @ $133.70
+      SELL 2 MSFT @ $398.72
+      BUY 1 TSLA @ $413.01
+      BUY 1 LMT @ $668.00
+      BUY 1 NVO @ $47.67
+      SELL 2 NVDA @ $189.67
+      BUY 2 PLTR @ $136.46
+      SELL 2 AMD @ $198.00
+      SELL 2 MSTR @ $128.36
+      SELL 2 TSLA @ $412.85
+      SELL 2 NVO @ $47.65
+      SELL 2 PLTR @ $130.34
+      SELL 2 LMT @ $640.00
+
+    Minute 40-49:
+      BUY 1 AAPL @ $263.95
+      SELL 1 AAPL @ $263.83
+      BUY 1 NVDA @ $189.70
+      BUY 1 TSLA @ $412.67
+      BUY 2 LMT @ $668.00
+      SELL 1 NVDA @ $189.67
+      BUY 1 AAPL @ $264.29
+      SELL 1 TSLA @ $412.42
+      SELL 2 LMT @ $654.37
+      BUY 1 NVO @ $47.67
+      BUY 1 AAPL @ $264.31
+      BUY 4 NOC @ $722.95
+      BUY 1 NVO @ $47.69
+      SELL 2 AAPL @ $264.23
+      BUY 1 TSLA @ $412.96
+      SELL 4 NOC @ $722.26
+      SELL 2 NVO @ $47.67
+      BUY 1 TSLA @ $413.14
+      BUY 1 NVDA @ $189.89
+      BUY 1 TSLA @ $413.46
+      SELL 1 NVDA @ $189.85
+      BUY 1 AMD @ $201.54
+      BUY 1 MSFT @ $398.73
+      SELL 3 TSLA @ $413.27
+      SELL 1 AMD @ $201.35
+      BUY 1 MSFT @ $398.74
+
+    Minute 50-59:
+      BUY 1 AAPL @ $264.40
+      BUY 1 MSFT @ $400.00
+      BUY 1 NVO @ $47.69
+      SELL 1 AAPL @ $257.74
+      BUY 1 MSTR @ $134.00
+      SELL 3 MSFT @ $396.12
+      BUY 1 TSLA @ $413.39
+      BUY 1 PLTR @ $137.36
+      SELL 1 MSTR @ $131.00
+      SELL 1 TSLA @ $408.00
+      SELL 1 NVO @ $47.67
+      BUY 1 NVDA @ $190.07
+      BUY 1 AAPL @ $264.37
+      BUY 1 PLTR @ $137.36
+      BUY 1 MSFT @ $398.72
+      SELL 1 NVDA @ $189.99
+      BUY 1 AAPL @ $265.30
+      SELL 2 PLTR @ $135.97
+      BUY 1 MSFT @ $400.00
+      BUY 2 LMT @ $668.00
+      SELL 2 AAPL @ $264.26
+      SELL 2 MSFT @ $398.29
+      SELL 2 LMT @ $654.26
+      BUY 1 AAPL @ $265.30
+      BUY 1 AMD @ $200.98
+      BUY 1 MSFT @ $398.47
+      SELL 1 AAPL @ $264.00
+      SELL 1 AMD @ $200.82
+      BUY 1 MSFT @ $399.91
+
+    Minute 60-69:
+      SELL 2 MSFT @ $398.39
+      BUY 1 AAPL @ $264.07
+      BUY 1 AMD @ $200.80
+      SELL 1 AAPL @ $263.81
+      SELL 1 AMD @ $198.00
+      BUY 1 MSTR @ $134.00
+      BUY 1 MSFT @ $400.00
+      BUY 1 NVO @ $47.60
+      BUY 1 NVDA @ $189.66
+      BUY 1 AMD @ $200.46
+      BUY 2 MP @ $58.55
+      SELL 1 MSFT @ $396.12
+      BUY 1 TSLA @ $412.19
+      SELL 1 NVO @ $47.57
+      BUY 1 NVDA @ $189.77
+      SELL 1 AMD @ $200.39
+      SELL 2 MP @ $52.49
+      SELL 1 MSTR @ $131.00
+      BUY 1 TSLA @ $412.40
+      SELL 2 NVDA @ $189.71
+      BUY 1 MSFT @ $397.63
+      SELL 2 TSLA @ $412.06
+
+    Minute 70-79:
+      BUY 1 AAPL @ $263.79
+      SELL 1 MSFT @ $396.12
+      BUY 1 AAPL @ $264.01
+      BUY 1 TSLA @ $412.38
+      BUY 1 AAPL @ $264.11
+      BUY 1 AMD @ $200.71
+      BUY 1 MSTR @ $134.00
+      SELL 1 TSLA @ $408.00
+      SELL 3 AAPL @ $257.74
+      SELL 1 AMD @ $200.63
+      SELL 1 MSTR @ $131.00
+      BUY 1 TSLA @ $412.33
+      SELL 1 TSLA @ $411.86
+      BUY 1 AAPL @ $264.27
+      BUY 1 AAPL @ $265.30
+      BUY 5 MP @ $58.55
+      SELL 2 AAPL @ $264.33
+      SELL 5 MP @ $52.49
+      BUY 1 MSFT @ $400.00
+
+    Minute 80-89:
+      SELL 1 MSFT @ $396.98
+      BUY 1 NVDA @ $189.45
+      BUY 1 AAPL @ $265.30
+      BUY 5 MP @ $58.55
+      BUY 1 TSLA @ $411.44
+      BUY 1 LMT @ $668.00
+      SELL 1 NVDA @ $189.41
+      SELL 1 AAPL @ $264.57
+      BUY 1 AMD @ $200.42
+      SELL 5 MP @ $52.49
+      SELL 1 TSLA @ $411.06
+      BUY 1 LMT @ $654.92
+      BUY 1 AMD @ $200.46
+      SELL 2 LMT @ $640.00
+      SELL 2 AMD @ $200.30
+      BUY 1 NVO @ $47.58
+      BUY 1 NVO @ $47.59
+      SELL 2 NVO @ $47.57
+      BUY 8 BE @ $155.00
+      BUY 3 NOC @ $722.84
+
+    Minute 90-99:
+      SELL 8 BE @ $128.14
+      BUY 1 TSLA @ $414.00
+      SELL 1 TSLA @ $410.53
+      BUY 1 AAPL @ $264.09
+      BUY 2 MP @ $55.53
+      BUY 1 NVO @ $47.56
+      SELL 1 AAPL @ $258.58
+      SELL 2 MP @ $55.42
+      SELL 1 NVO @ $47.51
+      BUY 1 AMD @ $199.57
+      BUY 1 AMD @ $199.61
+      BUY 5 BE @ $155.00
+      SELL 2 AMD @ $198.00
+      SELL 5 BE @ $128.14
+      BUY 1 AAPL @ $263.66
+      SELL 1 AAPL @ $257.74
+      BUY 1 AMD @ $199.63
+      BUY 6 BE @ $155.00
+
+    Minute 100-109:
+      SELL 6 BE @ $146.50
+      BUY 1 NVDA @ $189.48
+      BUY 1 AAPL @ $264.01
+      BUY 2 PLTR @ $140.08
+      BUY 1 MSTR @ $134.00
+      SELL 1 NVDA @ $189.44
+      SELL 1 AAPL @ $263.89
+      SELL 1 AMD @ $200.05
+      SELL 2 PLTR @ $133.00
+      BUY 6 BE @ $155.00
+      SELL 6 BE @ $146.01
+      BUY 1 AAPL @ $264.13
+      BUY 5 MP @ $58.55
+      SELL 1 MSTR @ $130.98
+      BUY 1 NVDA @ $189.43
+      BUY 1 AAPL @ $265.30
+      SELL 5 MP @ $52.49
+      BUY 1 NVO @ $47.58
+      SELL 1 NVDA @ $189.27
+      SELL 2 AAPL @ $258.58
+      BUY 1 MSFT @ $398.00
+      SELL 1 NVO @ $47.52
+      SELL 1 MSFT @ $396.92
+      SELL 3 NOC @ $721.79
+      BUY 1 AAPL @ $264.29
+      BUY 1 MSTR @ $134.00
+
+    Minute 110-119:
+      BUY 1 AAPL @ $265.30
+      SELL 1 MSTR @ $130.50
+      SELL 2 AAPL @ $264.16
+      BUY 1 MSFT @ $397.07
+      BUY 1 NVDA @ $189.53
+      BUY 1 MSFT @ $397.23
+      BUY 1 TSLA @ $410.17
+      BUY 1 NVDA @ $189.57
+      BUY 1 AMD @ $199.53
+      BUY 1 MSFT @ $397.28
+      BUY 1 TSLA @ $410.19
+      SELL 2 NVDA @ $189.45
+      SELL 1 AMD @ $199.43
+      SELL 3 MSFT @ $397.06
+      SELL 2 TSLA @ $410.03
+      BUY 1 NVDA @ $189.76
+      BUY 1 AAPL @ $265.00
+      BUY 1 AMD @ $199.86
+      BUY 2 MP @ $55.43
+      BUY 1 MSTR @ $134.00
+      BUY 1 MSFT @ $397.61
+      BUY 1 TSLA @ $410.79
+      BUY 1 NVDA @ $189.79
+      SELL 1 AAPL @ $264.35
+      BUY 1 AMD @ $199.98
+      SELL 2 MP @ $52.49
+      SELL 1 MSTR @ $130.50
+      BUY 1 MSFT @ $397.80
+      BUY 1 TSLA @ $410.94
+      SELL 2 NVDA @ $189.70
+      SELL 2 AMD @ $199.78
+      SELL 2 MSFT @ $397.23
+      BUY 1 TSLA @ $411.09
+      BUY 1 TSLA @ $411.19
+
+    Minute 120-129:
+      BUY 1 NVDA @ $189.78
+      SELL 4 TSLA @ $411.08
+      BUY 1 NVDA @ $189.85
+      SELL 2 NVDA @ $189.76
+      BUY 5 MP @ $58.55
+      BUY 1 AAPL @ $265.30
+      SELL 5 MP @ $55.35
+      SELL 1 AAPL @ $260.00
+      BUY 1 AMD @ $200.04
+      BUY 1 MSTR @ $134.00
+      BUY 1 MSFT @ $398.00
+      SELL 1 AMD @ $199.50
+      SELL 1 MSTR @ $130.50
+      SELL 1 MSFT @ $397.30
+      BUY 4 NOC @ $723.29
+      BUY 1 NVO @ $47.53
+      SELL 1 NVO @ $47.49
+      BUY 2 MP @ $58.55
+
+    Minute 130-139:
+      SELL 2 MP @ $52.49
+      BUY 1 MSTR @ $130.94
+      SELL 1 MSTR @ $130.50
+      BUY 1 AMD @ $199.91
+      SELL 1 AMD @ $199.83
+      BUY 1 NVDA @ $189.52
+      SELL 1 NVDA @ $189.41
+      BUY 1 MSTR @ $134.00
+
+    Minute 140-149:
+      BUY 1 NVO @ $47.37
+      SELL 1 MSTR @ $128.36
+      BUY 1 NVO @ $47.41
+      SELL 2 NVO @ $47.39
+      BUY 2 MP @ $55.63
+      BUY 1 MP @ $58.55
+      SELL 3 MP @ $55.72
+      BUY 1 NVDA @ $189.65
+
+CopilotPenguin
+  Final Value:   $1,620.81
+  PnL:           $-3,379.19  (-67.58%)
+  Total Trades:  331
+  Final Positions: 3
+  Final Cash:    $1,062.75
+
+  Consistency Warnings:
+    - Large jump at minute 107: +15.14% (from $2,307.50 to $2,656.86)
+    - Large jump at minute 110: -15.64% (from $2,615.87 to $2,206.71)
+    - Large jump at minute 115: +16.69% (from $2,164.06 to $2,525.34)
+    - Large jump at minute 116: -15.07% (from $2,525.34 to $2,144.82)
+    - Large jump at minute 119: +16.87% (from $2,100.94 to $2,455.29)
+    - Large jump at minute 126: +17.28% (from $2,008.75 to $2,355.94)
+    - Large jump at minute 130: -16.23% (from $2,274.58 to $1,905.48)
+    - Large jump at minute 131: +16.70% (from $1,905.48 to $2,223.73)
+    - Large jump at minute 133: -17.11% (from $2,216.33 to $1,837.08)
+
+  Trades:
+
+    Minute 0-9:
+      BUY 2 AAPL @ $270.34
+      SELL 2 AAPL @ $263.50
+      BUY 1 BE @ $168.94
+      BUY 2 PLTR @ $135.62
+      SELL 1 BE @ $128.14
+      BUY 2 MP @ $58.55
+      SELL 2 PLTR @ $130.34
+      BUY 1 BE @ $168.94
+      SELL 2 MP @ $52.49
+      BUY 2 LMT @ $668.00
+      SELL 1 BE @ $128.14
+      SELL 2 LMT @ $653.15
+      BUY 1 BE @ $168.94
+      BUY 2 MP @ $55.38
+
+    Minute 10-19:
+      SELL 1 BE @ $149.01
+      SELL 2 MP @ $52.49
+      BUY 2 PLTR @ $134.50
+      BUY 1 MP @ $58.55
+      BUY 2 MSTR @ $133.50
+      SELL 2 PLTR @ $130.34
+      SELL 1 MP @ $55.15
+      SELL 2 MSTR @ $131.49
+      BUY 2 LMT @ $668.00
+      BUY 1 MP @ $58.55
+      BUY 2 MSFT @ $400.00
+      SELL 2 LMT @ $640.00
+      SELL 1 MP @ $52.49
+      SELL 2 MSFT @ $395.88
+      BUY 1 BE @ $168.94
+      BUY 1 MP @ $58.55
+      BUY 2 LMT @ $668.00
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      SELL 2 LMT @ $654.13
+      BUY 1 MP @ $58.55
+      BUY 2 PLTR @ $134.50
+      BUY 1 BE @ $168.94
+      SELL 1 MP @ $52.49
+      SELL 2 PLTR @ $130.34
+      SELL 1 BE @ $128.14
+
+    Minute 20-29:
+      BUY 2 PLTR @ $134.50
+      BUY 1 BE @ $168.94
+      BUY 2 MSTR @ $131.80
+      BUY 1 NOC @ $722.92
+      BUY 2 LMT @ $668.00
+      SELL 2 PLTR @ $130.34
+      SELL 1 BE @ $128.14
+      BUY 2 MP @ $58.55
+      SELL 2 MSTR @ $124.26
+      SELL 2 LMT @ $640.00
+      BUY 1 BE @ $168.94
+      SELL 2 MP @ $52.49
+      SELL 1 BE @ $128.14
+      BUY 2 LMT @ $668.00
+      BUY 2 AAPL @ $270.34
+      BUY 2 PLTR @ $135.62
+      SELL 2 LMT @ $654.80
+      SELL 2 AAPL @ $257.74
+      SELL 2 PLTR @ $130.34
+      BUY 1 BE @ $172.00
+      SELL 1 BE @ $128.14
+      BUY 2 LMT @ $668.00
+      BUY 2 PLTR @ $135.62
+      BUY 1 BE @ $172.00
+      BUY 2 MSTR @ $133.50
+      SELL 2 LMT @ $654.37
+      SELL 2 PLTR @ $134.20
+      SELL 1 BE @ $128.14
+      SELL 2 MSTR @ $124.26
+
+    Minute 30-39:
+      BUY 2 AAPL @ $270.34
+      BUY 2 AMD @ $203.00
+      BUY 1 BE @ $172.00
+      SELL 2 AAPL @ $264.70
+      SELL 2 AMD @ $200.69
+      SELL 1 BE @ $128.14
+      BUY 2 MSTR @ $133.36
+      BUY 1 BE @ $172.00
+      SELL 2 MSTR @ $128.36
+      SELL 1 BE @ $128.14
+      BUY 2 MSFT @ $400.00
+      BUY 1 BE @ $172.00
+      BUY 2 MSTR @ $133.70
+      BUY 2 LMT @ $668.00
+      BUY 2 PLTR @ $136.46
+      SELL 1 BE @ $151.20
+      SELL 2 MSTR @ $128.36
+      SELL 2 LMT @ $654.93
+      SELL 2 PLTR @ $130.34
+      BUY 2 LMT @ $668.00
+      BUY 2 PLTR @ $136.46
+      SELL 2 LMT @ $640.00
+
+    Minute 40-49:
+      SELL 2 PLTR @ $133.00
+      BUY 2 PLTR @ $137.36
+      SELL 2 MSFT @ $395.88
+      SELL 2 PLTR @ $133.00
+      BUY 1 BE @ $172.00
+      BUY 2 LMT @ $668.00
+      BUY 2 PLTR @ $137.36
+      BUY 2 AMD @ $203.00
+      SELL 1 BE @ $128.14
+      SELL 2 LMT @ $654.37
+      SELL 2 PLTR @ $133.00
+      BUY 1 BE @ $172.00
+      BUY 1 MP @ $58.55
+      BUY 2 LMT @ $668.00
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      SELL 2 LMT @ $640.00
+      SELL 2 AMD @ $198.00
+      BUY 1 BE @ $172.00
+      BUY 1 MP @ $58.55
+      BUY 2 AAPL @ $270.34
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      SELL 2 AAPL @ $264.13
+      BUY 1 BE @ $172.00
+      BUY 2 MSTR @ $134.00
+      SELL 1 BE @ $128.14
+      SELL 2 MSTR @ $131.00
+
+    Minute 50-59:
+      BUY 1 MP @ $58.55
+      BUY 2 LMT @ $668.00
+      SELL 1 MP @ $52.49
+      SELL 2 LMT @ $640.00
+      BUY 2 PLTR @ $137.36
+      BUY 1 BE @ $172.00
+      SELL 1 BE @ $128.14
+      BUY 2 MSTR @ $134.00
+      SELL 2 PLTR @ $135.97
+      BUY 1 BE @ $172.00
+      BUY 2 MP @ $58.55
+      SELL 2 MSTR @ $131.00
+      BUY 2 LMT @ $668.00
+      SELL 1 BE @ $128.14
+      SELL 2 MP @ $52.49
+      SELL 2 LMT @ $654.26
+      BUY 1 BE @ $172.00
+      BUY 2 MP @ $58.55
+      SELL 1 BE @ $149.60
+      SELL 2 MP @ $52.49
+      BUY 2 MSFT @ $399.91
+
+    Minute 60-69:
+      BUY 2 PLTR @ $137.36
+      SELL 2 PLTR @ $133.00
+      BUY 2 AMD @ $203.00
+      SELL 2 AMD @ $198.00
+      BUY 2 PLTR @ $140.08
+      BUY 2 MP @ $55.93
+      BUY 2 LMT @ $668.00
+
+    Minute 70-79:
+      SELL 2 PLTR @ $133.00
+      SELL 2 MP @ $52.49
+      SELL 2 LMT @ $640.00
+      BUY 2 PLTR @ $140.08
+      BUY 2 MP @ $58.55
+      BUY 2 AAPL @ $264.11
+      SELL 2 PLTR @ $135.98
+      SELL 2 MP @ $52.49
+      SELL 2 AAPL @ $257.74
+      BUY 2 MP @ $58.55
+      SELL 2 MP @ $52.49
+      BUY 2 PLTR @ $140.08
+      BUY 2 MSTR @ $134.00
+      SELL 2 PLTR @ $133.00
+      SELL 2 MSTR @ $131.00
+      SELL 2 MSFT @ $396.12
+      BUY 2 LMT @ $668.00
+      BUY 1 MP @ $58.55
+      BUY 2 MSTR @ $134.00
+      SELL 2 LMT @ $640.00
+      SELL 1 MP @ $52.49
+      SELL 2 MSTR @ $131.07
+
+    Minute 80-89:
+      BUY 2 MSTR @ $134.00
+      BUY 1 MP @ $58.55
+      SELL 2 MSTR @ $130.50
+      SELL 1 MP @ $52.49
+      BUY 2 LMT @ $654.92
+      BUY 1 MP @ $58.55
+      SELL 2 LMT @ $640.00
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $52.49
+      BUY 2 AMD @ $203.00
+      SELL 1 BE @ $128.14
+      BUY 1 MP @ $58.55
+      SELL 2 AMD @ $199.93
+      BUY 1 BE @ $148.82
+      SELL 1 MP @ $52.49
+      BUY 2 LMT @ $668.00
+      BUY 2 AMD @ $203.00
+      SELL 1 BE @ $128.14
+      BUY 1 MP @ $58.55
+      SELL 2 LMT @ $640.00
+      SELL 2 AMD @ $199.75
+      SELL 1 MP @ $52.49
+      BUY 2 MSTR @ $134.00
+      BUY 2 PLTR @ $140.08
+      BUY 1 BE @ $155.00
+      BUY 1 MP @ $58.55
+      SELL 2 MSTR @ $130.50
+
+    Minute 90-99:
+      SELL 2 PLTR @ $133.00
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $147.43
+      BUY 2 PLTR @ $140.08
+      BUY 2 LMT @ $668.00
+      SELL 2 PLTR @ $135.15
+      BUY 1 BE @ $155.00
+      SELL 2 LMT @ $640.00
+      SELL 1 BE @ $147.37
+      BUY 1 MP @ $58.55
+      BUY 2 LMT @ $668.00
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $55.47
+      SELL 2 LMT @ $649.00
+      SELL 1 BE @ $128.14
+      BUY 2 PLTR @ $140.08
+      SELL 2 PLTR @ $133.00
+      BUY 1 MP @ $58.55
+
+    Minute 100-109:
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $52.49
+      BUY 2 LMT @ $668.00
+      BUY 2 PLTR @ $140.08
+      SELL 1 BE @ $128.14
+      BUY 1 MP @ $58.55
+      BUY 2 MSTR @ $134.00
+      SELL 2 LMT @ $653.11
+      SELL 2 PLTR @ $135.28
+      SELL 1 MP @ $52.49
+      SELL 2 MSTR @ $130.50
+      BUY 2 MSTR @ $134.00
+      BUY 1 BE @ $155.00
+      SELL 2 MSTR @ $131.00
+      SELL 1 BE @ $145.91
+      BUY 1 MP @ $58.55
+      BUY 2 LMT @ $668.00
+      BUY 2 AAPL @ $265.30
+      SELL 1 MP @ $52.49
+      SELL 2 LMT @ $654.50
+      SELL 2 AAPL @ $258.58
+      BUY 2 PLTR @ $140.08
+      SELL 2 PLTR @ $133.00
+      BUY 1 BE @ $155.00
+      BUY 2 MSTR @ $134.00
+      BUY 2 LMT @ $668.00
+
+    Minute 110-119:
+      SELL 1 BE @ $125.21
+      BUY 1 MP @ $55.19
+      SELL 2 MSTR @ $130.50
+      SELL 2 LMT @ $649.00
+      SELL 1 MP @ $52.49
+      BUY 2 MSTR @ $134.00
+      SELL 2 MSTR @ $130.50
+      BUY 1 BE @ $155.00
+      BUY 1 MP @ $55.18
+      SELL 1 BE @ $125.21
+      SELL 1 MP @ $52.49
+      BUY 2 MP @ $55.43
+      BUY 2 LMT @ $668.00
+      BUY 1 BE @ $155.00
+      SELL 2 MP @ $52.49
+      BUY 2 MSTR @ $134.00
+      SELL 2 LMT @ $649.00
+      SELL 1 BE @ $144.50
+      BUY 1 MP @ $58.55
+      SELL 2 MSTR @ $130.50
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $55.23
+
+    Minute 120-129:
+      SELL 1 BE @ $144.50
+      BUY 1 BE @ $155.00
+      BUY 2 MSTR @ $134.00
+      SELL 1 BE @ $145.88
+      BUY 1 MP @ $58.55
+      SELL 2 MSTR @ $130.50
+      BUY 2 LMT @ $668.00
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $55.29
+      SELL 2 LMT @ $649.00
+      SELL 1 BE @ $144.50
+      BUY 1 MP @ $55.43
+      SELL 1 MP @ $55.34
+      BUY 1 MP @ $58.55
+      SELL 1 NOC @ $697.59
+      SELL 1 MP @ $55.29
+      BUY 1 NOC @ $723.29
+      BUY 1 MP @ $58.55
+      SELL 1 NOC @ $697.59
+      BUY 2 LMT @ $668.00
+      SELL 1 MP @ $55.39
+      BUY 1 NOC @ $723.29
+      SELL 2 LMT @ $649.00
+
+    Minute 130-139:
+      BUY 2 LMT @ $668.00
+      SELL 1 NOC @ $697.59
+      SELL 2 LMT @ $649.00
+      BUY 2 MP @ $58.55
+      BUY 2 MSTR @ $134.00
+      BUY 1 NOC @ $722.16
+      SELL 2 MP @ $55.41
+      SELL 2 MSTR @ $130.50
+      BUY 2 PLTR @ $141.63
+      BUY 1 BE @ $155.00
+      BUY 2 MP @ $58.55
+      SELL 2 PLTR @ $133.00
+      SELL 1 BE @ $125.21
+      SELL 2 MP @ $55.45
+      BUY 1 BE @ $155.00
+      BUY 2 MP @ $58.55
+      SELL 1 BE @ $144.68
+      SELL 2 MP @ $55.39
+
+    Minute 140-149:
+      BUY 2 PLTR @ $141.63
+      BUY 1 BE @ $155.00
+      BUY 2 MP @ $58.55
+      BUY 2 MSTR @ $134.00
+      SELL 2 PLTR @ $134.75
+      SELL 1 BE @ $145.45
+      SELL 2 MP @ $52.49
+      SELL 2 MSTR @ $128.36
+      BUY 2 PLTR @ $141.63
+      BUY 1 BE @ $155.00
+      SELL 2 PLTR @ $133.00
+      SELL 1 BE @ $125.21
+      BUY 2 PLTR @ $141.63
+      BUY 1 MP @ $58.55
+      BUY 2 MSTR @ $134.00
+      SELL 2 PLTR @ $133.00
+      SELL 1 MP @ $55.66
+      SELL 2 MSTR @ $128.36
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $146.39
+      BUY 1 MP @ $58.55
+      BUY 2 MSTR @ $134.00
+      SELL 1 MP @ $55.83
+      SELL 2 MSTR @ $131.21
+
+    Minute 150-159:
+      BUY 1 BE @ $155.00
+      BUY 1 MP @ $58.55
+
+Moving Average Crossover
+  Final Value:   $3,855.40
+  PnL:           $-1,144.60  (-22.89%)
+  Total Trades:  178
+  Final Positions: 6
+  Final Cash:    $2,299.84
+
+  Trades:
+
+    Minute 0-9:
+      BUY 1 AMD @ $199.69
+      SELL 1 AMD @ $199.40
+      BUY 1 AMD @ $199.33
+      BUY 1 BE @ $168.94
+
+    Minute 10-19:
+      SELL 1 AMD @ $199.11
+      BUY 1 LMT @ $668.00
+      BUY 1 AMD @ $200.50
+      SELL 1 AMD @ $198.74
+      BUY 1 MP @ $58.55
+      BUY 1 MSFT @ $400.00
+      BUY 1 NVO @ $47.46
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      SELL 1 MSFT @ $395.88
+      BUY 1 MP @ $58.55
+      BUY 1 MSFT @ $397.09
+      SELL 1 MP @ $52.49
+      BUY 1 NVDA @ $188.77
+      BUY 1 AAPL @ $263.68
+      BUY 1 AMD @ $200.50
+      BUY 1 MP @ $58.55
+      BUY 1 BE @ $168.94
+      SELL 1 MSFT @ $397.04
+
+    Minute 20-29:
+      BUY 1 NOC @ $722.92
+      SELL 1 AMD @ $198.00
+      SELL 1 LMT @ $640.00
+      BUY 1 PLTR @ $135.62
+      BUY 1 LMT @ $668.00
+      BUY 1 MSFT @ $397.91
+      BUY 1 TSLA @ $410.74
+      BUY 1 AMD @ $199.59
+      SELL 1 LMT @ $640.00
+      SELL 1 BE @ $128.14
+      BUY 1 LMT @ $668.00
+      BUY 1 MSTR @ $133.50
+      SELL 1 LMT @ $654.37
+
+    Minute 30-39:
+      BUY 1 LMT @ $655.06
+      SELL 1 LMT @ $640.00
+      BUY 1 BE @ $172.00
+      SELL 1 PLTR @ $130.34
+      BUY 1 LMT @ $668.00
+      SELL 1 AAPL @ $257.74
+      BUY 1 PLTR @ $136.46
+      SELL 1 BE @ $128.14
+
+    Minute 40-49:
+      SELL 1 MP @ $52.49
+      BUY 1 AAPL @ $264.31
+      BUY 1 BE @ $172.00
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+      SELL 1 LMT @ $640.00
+      BUY 1 MP @ $58.55
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+
+    Minute 50-59:
+      SELL 1 AAPL @ $258.58
+      BUY 1 BE @ $172.00
+      SELL 1 MSFT @ $398.29
+      SELL 1 TSLA @ $412.97
+      BUY 1 LMT @ $668.00
+      SELL 1 NVO @ $47.58
+      BUY 1 AAPL @ $264.09
+      BUY 1 MP @ $58.55
+      SELL 1 AMD @ $200.84
+      BUY 1 TSLA @ $412.60
+      SELL 1 PLTR @ $133.00
+      SELL 1 MSTR @ $131.00
+      SELL 1 TSLA @ $408.00
+      SELL 1 LMT @ $640.00
+
+    Minute 60-69:
+      SELL 1 NVDA @ $189.78
+      SELL 1 AAPL @ $264.04
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+
+    Minute 70-79:
+      BUY 1 PLTR @ $140.08
+      BUY 1 LMT @ $668.00
+      BUY 1 NVDA @ $189.69
+      BUY 1 MP @ $58.55
+      SELL 1 LMT @ $640.00
+      BUY 1 AAPL @ $264.23
+      BUY 1 AMD @ $200.27
+      SELL 1 MP @ $52.49
+      BUY 1 LMT @ $654.15
+      SELL 1 NVDA @ $189.41
+      SELL 1 AMD @ $200.14
+
+    Minute 80-89:
+      BUY 1 MP @ $58.55
+      BUY 1 BE @ $155.00
+      BUY 1 MSFT @ $397.25
+      SELL 1 MP @ $52.49
+      BUY 1 MP @ $58.55
+      BUY 1 MSTR @ $134.00
+      SELL 1 MSFT @ $397.18
+      BUY 1 AMD @ $203.00
+      SELL 1 MSTR @ $130.50
+      BUY 1 MSFT @ $397.22
+      SELL 1 AAPL @ $257.74
+      SELL 1 PLTR @ $133.00
+      SELL 1 MP @ $52.49
+      SELL 1 MSFT @ $396.50
+      BUY 1 NVO @ $47.59
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+
+    Minute 90-99:
+      BUY 1 MSTR @ $134.00
+      SELL 1 AMD @ $199.42
+      SELL 1 LMT @ $640.00
+      SELL 1 NVO @ $47.54
+      BUY 1 MP @ $55.53
+      BUY 1 NVO @ $47.56
+      BUY 1 MSFT @ $397.70
+      SELL 1 NVO @ $47.51
+      BUY 1 LMT @ $668.00
+      SELL 1 MSTR @ $130.50
+
+    Minute 100-109:
+      BUY 1 NVDA @ $189.48
+      BUY 1 PLTR @ $140.08
+      BUY 1 AAPL @ $263.92
+      BUY 1 AMD @ $200.12
+      SELL 1 AAPL @ $260.00
+      SELL 1 PLTR @ $133.00
+      SELL 1 BE @ $146.07
+      BUY 1 AAPL @ $264.09
+      BUY 1 PLTR @ $140.08
+      SELL 1 MP @ $55.30
+      BUY 1 MSTR @ $134.00
+      SELL 1 MSFT @ $396.87
+      BUY 1 TSLA @ $410.66
+      BUY 1 MP @ $58.55
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $52.49
+      SELL 1 MSTR @ $130.60
+      SELL 1 BE @ $125.21
+      BUY 1 NVO @ $47.54
+      SELL 1 AMD @ $198.00
+      SELL 1 TSLA @ $409.79
+
+    Minute 110-119:
+      BUY 1 PLTR @ $134.43
+      SELL 1 PLTR @ $133.00
+      BUY 1 MSTR @ $131.05
+      SELL 1 LMT @ $649.00
+      SELL 1 MSTR @ $131.12
+      BUY 1 MSFT @ $397.61
+      BUY 1 MSTR @ $134.00
+      BUY 1 TSLA @ $410.94
+      BUY 1 AMD @ $199.83
+      SELL 1 MSTR @ $130.50
+      BUY 1 LMT @ $668.00
+      BUY 1 BE @ $155.00
+      BUY 1 MP @ $55.43
+      BUY 1 MSTR @ $134.00
+
+    Minute 120-129:
+      SELL 1 NVO @ $47.53
+      SELL 1 MSTR @ $130.97
+      SELL 1 AAPL @ $257.74
+      SELL 1 LMT @ $649.00
+      BUY 1 LMT @ $668.00
+      SELL 1 TSLA @ $409.94
+
+    Minute 130-139:
+      SELL 1 NVDA @ $189.58
+      SELL 1 AMD @ $198.00
+      BUY 1 PLTR @ $135.82
+      SELL 1 MSFT @ $396.96
+      SELL 1 LMT @ $649.00
+      BUY 1 AAPL @ $265.30
+      BUY 1 LMT @ $668.00
+      SELL 1 BE @ $125.21
+      SELL 1 LMT @ $649.00
+      SELL 1 AAPL @ $263.46
+      BUY 1 MSTR @ $134.00
+      SELL 1 MSTR @ $128.36
+      BUY 1 MSTR @ $134.00
+
+    Minute 140-149:
+      BUY 1 AMD @ $199.91
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $125.21
+      BUY 1 LMT @ $668.00
+      SELL 1 MSTR @ $128.36
+      BUY 1 NVDA @ $189.62
+      SELL 1 AMD @ $199.64
+      BUY 1 TSLA @ $410.26
+      BUY 1 MP @ $58.55
+      SELL 1 LMT @ $649.00
+      SELL 1 PLTR @ $133.00
+      BUY 1 BE @ $146.43
+
+    Minute 150-159:
+      BUY 1 MSFT @ $397.13
+
+RSI Mean Reversion
+  Final Value:   $4,968.62
+  PnL:           $-31.38  (-0.63%)
+  Total Trades:  32
+  Final Positions: 8
+  Final Cash:    $3,053.38
+
+  Trades:
+
+    Minute 0-9:
+      BUY 1 BE @ $149.85
+      BUY 1 MSTR @ $132.31
+      BUY 1 MP @ $55.61
+      BUY 1 PLTR @ $133.71
+      BUY 1 LMT @ $653.57
+      BUY 1 TSLA @ $409.79
+
+    Minute 10-19:
+      BUY 1 NVDA @ $188.31
+
+    Minute 20-29:
+      SELL 1 NVDA @ $189.27
+      SELL 1 MP @ $52.49
+      SELL 1 TSLA @ $411.21
+      SELL 1 PLTR @ $134.20
+
+    Minute 40-49:
+      BUY 1 MP @ $55.67
+      SELL 1 BE @ $151.40
+
+    Minute 50-59:
+      BUY 1 NVO @ $47.59
+
+    Minute 60-69:
+      BUY 1 PLTR @ $137.36
+      BUY 1 NVDA @ $189.66
+      BUY 1 AAPL @ $263.88
+
+    Minute 70-79:
+      SELL 1 PLTR @ $135.98
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $128.14
+
+    Minute 80-89:
+      BUY 1 AMD @ $200.29
+      BUY 1 PLTR @ $135.50
+      BUY 1 TSLA @ $410.71
+
+    Minute 110-119:
+      SELL 1 NVO @ $47.62
+
+    Minute 120-129:
+      SELL 1 NVDA @ $189.84
+      SELL 1 TSLA @ $411.17
+      BUY 1 NVO @ $47.45
+
+    Minute 130-139:
+      BUY 1 BE @ $155.00
+      BUY 1 NVDA @ $189.44
+      SELL 1 PLTR @ $133.00
+
+    Minute 140-149:
+      BUY 1 TSLA @ $410.06
+      SELL 1 NVDA @ $189.82
+
+SMA20MultiTimeframePenguin
+  Final Value:   $4,192.19
+  PnL:           $-807.81  (-16.16%)
+  Total Trades:  83
+  Final Positions: 3
+  Final Cash:    $3,521.76
+
+  Trades:
+
+    Minute 0-9:
+      BUY 1 AAPL @ $270.34
+      SELL 1 AAPL @ $257.74
+      BUY 1 MP @ $55.61
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $168.94
+
+    Minute 10-19:
+      SELL 1 BE @ $149.01
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $55.15
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+
+    Minute 20-29:
+      BUY 1 NOC @ $722.92
+      BUY 1 BE @ $168.94
+      SELL 1 BE @ $128.14
+      BUY 1 AAPL @ $270.34
+      SELL 1 AAPL @ $257.74
+
+    Minute 30-39:
+      BUY 1 AAPL @ $270.34
+      SELL 1 AAPL @ $260.00
+      BUY 1 BE @ $151.65
+      SELL 1 BE @ $128.14
+
+    Minute 40-49:
+      BUY 1 BE @ $172.00
+      BUY 1 MP @ $58.55
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      BUY 1 AAPL @ $270.34
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+
+    Minute 50-59:
+      SELL 1 AAPL @ $257.74
+      BUY 1 MP @ $56.11
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $172.00
+      SELL 1 BE @ $149.60
+
+    Minute 60-69:
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $149.78
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+      BUY 1 MP @ $55.93
+
+    Minute 70-79:
+      SELL 1 MP @ $52.49
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $55.45
+
+    Minute 80-89:
+      BUY 1 AAPL @ $265.30
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+      BUY 1 MP @ $58.55
+      BUY 1 BE @ $155.00
+      SELL 1 MP @ $52.49
+      SELL 1 BE @ $128.14
+      BUY 1 BE @ $155.00
+      BUY 1 MP @ $58.55
+
+    Minute 90-99:
+      SELL 1 BE @ $128.14
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $147.43
+      BUY 1 MP @ $55.50
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $147.50
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $146.58
+      BUY 1 MP @ $58.55
+
+    Minute 100-109:
+      SELL 1 MP @ $52.49
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $146.01
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $52.49
+
+    Minute 110-119:
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $55.23
+
+    Minute 120-129:
+      BUY 1 BE @ $155.00
+      BUY 1 MP @ $58.55
+      SELL 1 BE @ $145.45
+      SELL 1 MP @ $55.29
+      BUY 1 MP @ $58.55
+      SELL 1 NOC @ $697.59
+      SELL 1 MP @ $55.29
+      BUY 1 MP @ $58.55
+      SELL 1 MP @ $55.39
+
+    Minute 130-139:
+      BUY 1 NOC @ $722.18
+
+    Minute 140-149:
+      BUY 1 MP @ $55.63
+      BUY 1 BE @ $155.00
+      SELL 1 BE @ $146.39
+      BUY 1 BE @ $155.00
+
+    Minute 150-159:
+      SELL 1 BE @ $146.71
+
+SupportResistancePenguin
+  Final Value:   $5,000.00
+  PnL:           $+0.00  (+0.00%)
+  Total Trades:  0
+  Final Positions: 0
+  Final Cash:    $5,000.00
+
+  Trades: None
+
