@@ -5,5 +5,4 @@ logs/
 **/__pycache__/
 *.pyc
 *.pyo
-run_old/Before_S&R/
-run_old/dicard/
+run_old/
