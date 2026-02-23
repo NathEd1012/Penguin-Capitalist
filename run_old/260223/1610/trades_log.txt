@@ -1,0 +1,242 @@
+Penguin Trading Simulation Log (Interrupted)
+Started: 2026-02-23 16:50:08
+Duration: 37 minutes (interrupted)
+Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO
+Initial Capital: $5,000.00
+
+================================================================================
+
+CarefulTrendPenguin
+  Current Value:   $4,951.97
+  PnL:             $-48.03  (-0.96%)
+  Total Trades:    72
+  Current Positions: 0
+  Current Cash:    $4,951.97
+
+  Trades (up to interruption):
+
+    Minute 0-9:
+      BUY 1 NVDA @ $192.03
+      BUY 1 PLTR @ $130.05
+      BUY 1 TSLA @ $403.99
+      SELL 1 NVDA @ $191.13
+      BUY 1 AAPL @ $267.00
+      SELL 1 PLTR @ $128.00
+      BUY 1 TSLA @ $403.89
+      SELL 1 AAPL @ $266.09
+      SELL 2 TSLA @ $402.50
+      BUY 1 NVO @ $40.36
+      SELL 1 NVO @ $40.29
+      BUY 1 NVDA @ $191.34
+      BUY 1 AAPL @ $266.54
+      BUY 1 AMD @ $202.00
+      BUY 1 NVDA @ $191.43
+      BUY 1 AAPL @ $266.69
+      BUY 1 AMD @ $202.00
+      BUY 1 MSFT @ $390.00
+      BUY 1 NVDA @ $191.62
+      BUY 1 AAPL @ $266.75
+      SELL 2 AMD @ $195.00
+      SELL 1 MSFT @ $387.00
+      BUY 1 TSLA @ $404.82
+
+    Minute 10-19:
+      SELL 3 NVDA @ $191.58
+      SELL 3 AAPL @ $266.70
+      BUY 1 TSLA @ $404.16
+      SELL 2 TSLA @ $402.50
+      BUY 1 NVO @ $40.23
+      BUY 1 AAPL @ $267.23
+      BUY 1 PLTR @ $135.00
+      BUY 1 MSFT @ $390.00
+      SELL 1 NVO @ $40.16
+      BUY 1 AAPL @ $267.39
+      SELL 1 MSFT @ $388.81
+      BUY 1 AAPL @ $268.00
+      SELL 3 AAPL @ $267.58
+      SELL 1 PLTR @ $129.29
+      BUY 1 NVO @ $40.17
+      BUY 1 NVDA @ $191.43
+      SELL 1 NVO @ $40.08
+      SELL 1 NVDA @ $191.29
+      BUY 1 TSLA @ $403.48
+      BUY 1 MSFT @ $388.23
+      SELL 1 TSLA @ $403.26
+      BUY 1 NVO @ $40.14
+
+    Minute 20-29:
+      BUY 1 MSFT @ $388.43
+      SELL 1 NVO @ $40.12
+      BUY 1 NVDA @ $191.39
+      BUY 1 MSFT @ $389.04
+      SELL 1 NVDA @ $190.97
+      SELL 3 MSFT @ $388.25
+      BUY 1 NVDA @ $191.33
+      SELL 1 NVDA @ $191.24
+      BUY 1 TSLA @ $402.74
+      BUY 1 MSFT @ $388.86
+      BUY 1 TSLA @ $402.93
+      BUY 1 NVDA @ $191.32
+      BUY 1 MSFT @ $388.77
+      BUY 1 TSLA @ $403.13
+
+    Minute 30-39:
+      SELL 1 NVDA @ $191.10
+      SELL 2 MSFT @ $388.55
+      SELL 3 TSLA @ $402.37
+      BUY 1 MSTR @ $131.00
+      BUY 1 MSFT @ $388.78
+      SELL 1 MSFT @ $388.34
+      BUY 1 NVDA @ $191.44
+      BUY 1 AMD @ $202.00
+      BUY 1 NVO @ $39.91
+      SELL 1 NVDA @ $191.28
+      SELL 1 AMD @ $197.14
+      SELL 1 MSTR @ $127.00
+      SELL 1 NVO @ $39.88
+
+CopilotPenguin
+  Current Value:   $4,833.03
+  PnL:             $-166.97  (-3.34%)
+  Total Trades:    37
+  Current Positions: 1
+  Current Cash:    $4,056.84
+
+  Trades (up to interruption):
+
+    Minute 0-9:
+      BUY 2 MSTR @ $131.00
+      SELL 2 MSTR @ $127.60
+      BUY 2 MSTR @ $131.00
+      SELL 2 MSTR @ $127.60
+      BUY 2 AMD @ $202.00
+      BUY 2 MP @ $57.64
+      SELL 2 AMD @ $197.90
+      BUY 2 MSTR @ $131.00
+      BUY 2 AMD @ $202.00
+      SELL 2 MSTR @ $127.60
+      SELL 2 AMD @ $195.00
+      BUY 2 MSTR @ $131.00
+      BUY 2 MSFT @ $390.00
+
+    Minute 10-19:
+      SELL 2 MSTR @ $127.60
+      BUY 2 PLTR @ $135.00
+      SELL 2 PLTR @ $130.30
+      BUY 2 AMD @ $202.00
+      SELL 2 AMD @ $198.16
+      BUY 2 AMD @ $202.00
+      SELL 2 AMD @ $195.00
+
+    Minute 20-29:
+      BUY 2 MSTR @ $131.00
+      SELL 2 MSTR @ $127.00
+      BUY 2 AMD @ $202.00
+      SELL 2 AMD @ $197.42
+      BUY 2 MSTR @ $131.00
+      SELL 2 MSTR @ $127.00
+      BUY 2 MSTR @ $131.00
+      SELL 2 MSTR @ $127.00
+
+    Minute 30-39:
+      BUY 2 MSTR @ $131.00
+      BUY 2 AMD @ $202.00
+      SELL 2 MSTR @ $127.50
+      SELL 2 AMD @ $195.00
+      SELL 2 MP @ $55.24
+      BUY 2 PLTR @ $135.00
+      BUY 2 AMD @ $202.00
+      SELL 2 PLTR @ $128.00
+      SELL 2 AMD @ $197.14
+
+Moving Average Crossover
+  Current Value:   $4,979.39
+  PnL:             $-20.61  (-0.41%)
+  Total Trades:    20
+  Current Positions: 6
+  Current Cash:    $3,753.67
+
+  Trades (up to interruption):
+
+    Minute 0-9:
+      BUY 1 AMD @ $202.00
+      BUY 1 MSTR @ $131.00
+      BUY 1 MP @ $57.64
+      BUY 1 TSLA @ $404.37
+
+    Minute 10-19:
+      BUY 1 MSFT @ $390.00
+      SELL 1 TSLA @ $402.84
+      BUY 1 NVDA @ $191.35
+      SELL 1 NVDA @ $191.40
+      SELL 1 MSTR @ $127.00
+      SELL 1 MSFT @ $387.52
+
+    Minute 20-29:
+      SELL 1 AMD @ $197.89
+      BUY 1 MSFT @ $389.04
+      BUY 1 TSLA @ $403.52
+      SELL 1 TSLA @ $402.91
+      BUY 1 AAPL @ $266.94
+
+    Minute 30-39:
+      SELL 1 AAPL @ $266.74
+      BUY 1 MSTR @ $131.00
+      BUY 1 NVDA @ $191.35
+      BUY 1 AAPL @ $267.21
+      BUY 1 AMD @ $197.21
+
+RSI Mean Reversion
+  Current Value:   $4,669.57
+  PnL:             $-330.43  (-6.61%)
+  Total Trades:    7
+  Current Positions: 7
+  Current Cash:    $2,922.36
+
+  Trades (up to interruption):
+
+    Minute 0-9:
+      BUY 1 NVDA @ $191.22
+      BUY 1 MSFT @ $388.03
+      BUY 1 NVO @ $40.29
+
+    Minute 10-19:
+      BUY 1 LMT @ $658.88
+
+    Minute 20-29:
+      BUY 1 AAPL @ $267.01
+      BUY 1 TSLA @ $402.47
+
+    Minute 30-39:
+      BUY 1 PLTR @ $129.74
+
+SMA20MultiTimeframePenguin
+  Current Value:   $4,990.97
+  PnL:             $-9.03  (-0.18%)
+  Total Trades:    3
+  Current Positions: 1
+  Current Cash:    $4,723.87
+
+  Trades (up to interruption):
+
+    Minute 0-9:
+      BUY 1 AAPL @ $267.00
+
+    Minute 20-29:
+      SELL 1 AAPL @ $258.24
+      BUY 1 AAPL @ $267.37
+
+SupportResistancePenguin
+  Current Value:   $5,000.18
+  PnL:             $+0.18  (+0.00%)
+  Total Trades:    3
+  Current Positions: 1
+  Current Cash:    $4,960.29
+
+  Trades (up to interruption):
+
+    Minute 30-39:
+      BUY 1 NVO @ $40.01
+      BUY 1 NVDA @ $191.03
+      SELL 1 NVDA @ $191.33
+

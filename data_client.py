@@ -15,6 +15,8 @@ from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.data.enums import DataFeed
 from alpaca.data.timeframe import TimeFrame
 
+from config import MAX_NO_UPDATE_MINUTES, MAX_QUOTE_AGE_SEC
+
 from data import get_timeframe_bars
 
 
@@ -62,11 +64,18 @@ class AlpacaClient:
 
         bid, ask = q.bid_price, q.ask_price
         now = datetime.now(pytz.UTC)
-        quote_time = q.timestamp if hasattr(q, "timestamp") else now
+        quote_time = q.timestamp if hasattr(q, "timestamp") else None
 
-        # Check if quote is stale (older than 5 minutes)
+        if quote_time is None:
+            print(f"  ⚠️ Quote missing timestamp for {symbol}")
+            return None, None
+
+        if quote_time.tzinfo is None:
+            quote_time = quote_time.replace(tzinfo=pytz.UTC)
+
+        # Check if quote is stale by age
         age_seconds = (now - quote_time).total_seconds()
-        if age_seconds > 300:  # 5 minutes
+        if self.market_is_open() and age_seconds > MAX_QUOTE_AGE_SEC:
             print(f"  ⚠️ Stale quote for {symbol}: {age_seconds:.0f}s old")
             return None, None
 
@@ -79,13 +88,13 @@ class AlpacaClient:
             if bid == last_bid and ask == last_ask:
                 self._no_update_count[symbol] = self._no_update_count.get(symbol, 0) + 1
 
-                # After 3 minutes of no updates during market hours, flag as stale
-                if self._no_update_count[symbol] >= 3:
+                # After N minutes of no updates during market hours, treat as stale
+                if self._no_update_count[symbol] >= MAX_NO_UPDATE_MINUTES:
                     if self.market_is_open():
                         print(
                             f"  ⚠️ No price update for {symbol} ({self._no_update_count[symbol]} min): ${bid:.2f} / ${ask:.2f}"
                         )
-                        # Don't reject yet, but warn
+                        return None, None
             else:
                 # Price changed, reset counter
                 self._no_update_count[symbol] = 0

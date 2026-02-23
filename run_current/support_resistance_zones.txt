@@ -2,6 +2,8 @@
 SUPPORT & RESISTANCE ZONES LOG
 ================================================================================
 
+Evaluated: 2026-02-23 17:12:14
+
 Parameters:
   - Pivot detection window: 3 bars left, 3 bars right
   - ATR period: 14 bars
@@ -16,263 +18,193 @@ Parameters:
 SYMBOL: NVDA (MULTI-SCALE)
 ================================================================================
 
-Current price: $189.32
+Current price: $190.10
 
-ZONES (12):
-  Zone #1 [SUPPORT]:
-    Center: $188.38
-    Range: $187.91 - $188.86
-    Touches: 44
-    Reactions: 42
-    Strength Score: 8.27
-    Scales: Intraday, Macro, Short Swing, Swing
-  Zone #2 [RESISTANCE]:
+ZONES (8):
+  Zone #1 [RESISTANCE]:
     Center: $192.52
     Range: $192.05 - $193.00
-    Touches: 13
-    Reactions: 13
-    Strength Score: 6.09
-    Scales: Macro, Swing
+    Touches: 14
+    Reactions: 14
+    Strength Score: 11.18
+    Scales: Intraday, Macro, Swing
+  Zone #2 [SUPPORT]:
+    Center: $188.44
+    Range: $187.97 - $188.92
+    Touches: 52
+    Reactions: 43
+    Strength Score: 10.16
+    Scales: Intraday, Macro, Short Swing, Swing
   Zone #3 [SUPPORT]:
-    Center: $184.35
-    Range: $184.12 - $184.57
-    Touches: 9
-    Reactions: 9
-    Strength Score: 5.06
-    Scales: Intraday, Short Swing, Swing
+    Center: $188.44
+    Range: $187.96 - $188.91
+    Touches: 24
+    Reactions: 19
+    Strength Score: 7.13
+    Scales: Intraday, Swing
   Zone #4 [SUPPORT]:
-    Center: $185.52
-    Range: $185.26 - $185.79
-    Touches: 5
-    Reactions: 5
-    Strength Score: 5.05
-    Scales: Swing
+    Center: $184.48
+    Range: $184.00 - $184.95
+    Touches: 21
+    Reactions: 17
+    Strength Score: 6.07
+    Scales: Intraday, Macro, Short Swing, Swing
   Zone #5 [SUPPORT]:
-    Center: $178.64
-    Range: $178.17 - $179.12
-    Touches: 6
-    Reactions: 5
-    Strength Score: 4.14
-    Scales: Macro, Swing
-  Zone #6 [SUPPORT]:
-    Center: $188.33
-    Range: $187.89 - $188.78
-    Touches: 15
-    Reactions: 13
-    Strength Score: 4.11
-    Scales: Intraday, Short Swing, Swing
-  Zone #7 [SUPPORT]:
-    Center: $188.11
-    Range: $188.06 - $188.15
-    Touches: 4
-    Reactions: 4
-    Strength Score: 4.09
-    Scales: Intraday
-  Zone #8 [SUPPORT]:
-    Center: $187.41
-    Range: $187.25 - $187.56
-    Touches: 4
-    Reactions: 2
-    Strength Score: 4.03
-    Scales: Swing
-  Zone #9 [SUPPORT]:
     Center: $171.01
     Range: $170.54 - $171.49
     Touches: 3
     Reactions: 3
     Strength Score: 3.15
     Scales: Macro
-  Zone #10 [PIVOT/RANGE]:
-    Center: $189.02
-    Range: $188.99 - $189.06
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.09
-    Scales: Intraday
-  Zone #11 [SUPPORT]:
+  Zone #6 [SUPPORT]:
+    Center: $179.04
+    Range: $178.56 - $179.51
+    Touches: 5
+    Reactions: 5
+    Strength Score: 3.10
+    Scales: Macro, Swing
+  Zone #7 [SUPPORT]:
+    Center: $188.02
+    Range: $187.89 - $188.15
+    Touches: 5
+    Reactions: 5
+    Strength Score: 3.10
+    Scales: Intraday, Short Swing
+  Zone #8 [SUPPORT]:
     Center: $173.21
-    Range: $173.03 - $173.40
+    Range: $172.93 - $173.49
     Touches: 2
     Reactions: 2
     Strength Score: 2.04
     Scales: Swing
-  Zone #12 [SUPPORT]:
-    Center: $183.62
-    Range: $183.58 - $183.67
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.01
-    Scales: Intraday
 
 ================================================================================
 SYMBOL: AAPL (MULTI-SCALE)
 ================================================================================
 
-Current price: $264.69
+Current price: $265.02
 
-ZONES (24):
-  Zone #1 [PIVOT/RANGE]:
-    Center: $264.28
-    Range: $264.13 - $264.44
-    Touches: 9
-    Reactions: 8
-    Strength Score: 7.22
+ZONES (18):
+  Zone #1 [SUPPORT]:
+    Center: $264.20
+    Range: $263.69 - $264.72
+    Touches: 15
+    Reactions: 12
+    Strength Score: 9.22
     Scales: Intraday, Short Swing
   Zone #2 [SUPPORT]:
     Center: $261.18
     Range: $260.73 - $261.62
-    Touches: 11
-    Reactions: 10
-    Strength Score: 5.05
+    Touches: 14
+    Reactions: 13
+    Strength Score: 5.08
     Scales: Intraday, Short Swing, Swing
-  Zone #3 [RESISTANCE]:
-    Center: $268.83
-    Range: $268.17 - $269.49
+  Zone #3 [SUPPORT]:
+    Center: $262.20
+    Range: $261.90 - $262.49
+    Touches: 11
+    Reactions: 9
+    Strength Score: 5.06
+    Scales: Intraday, Short Swing
+  Zone #4 [SUPPORT]:
+    Center: $263.18
+    Range: $262.73 - $263.63
+    Touches: 7
+    Reactions: 5
+    Strength Score: 4.17
+    Scales: Intraday, Short Swing
+  Zone #5 [RESISTANCE]:
+    Center: $268.85
+    Range: $268.18 - $269.51
     Touches: 8
     Reactions: 7
     Strength Score: 4.12
     Scales: Macro, Swing
-  Zone #4 [SUPPORT]:
-    Center: $261.92
-    Range: $261.86 - $261.98
+  Zone #6 [SUPPORT]:
+    Center: $263.31
+    Range: $263.17 - $263.44
+    Touches: 4
+    Reactions: 4
+    Strength Score: 4.08
+    Scales: Intraday
+  Zone #7 [SUPPORT]:
+    Center: $256.34
+    Range: $255.75 - $256.92
+    Touches: 4
+    Reactions: 4
+    Strength Score: 4.08
+    Scales: Swing
+  Zone #8 [SUPPORT]:
+    Center: $260.34
+    Range: $260.24 - $260.44
     Touches: 4
     Reactions: 3
     Strength Score: 4.06
     Scales: Intraday
-  Zone #5 [SUPPORT]:
+  Zone #9 [SUPPORT]:
     Center: $255.10
     Range: $254.81 - $255.39
     Touches: 4
     Reactions: 4
     Strength Score: 4.05
     Scales: Swing
-  Zone #6 [RESISTANCE]:
-    Center: $265.56
-    Range: $265.10 - $266.02
+  Zone #10 [PIVOT/RANGE]:
+    Center: $265.74
+    Range: $265.10 - $266.38
     Touches: 13
-    Reactions: 13
-    Strength Score: 4.04
-    Scales: Intraday, Short Swing, Swing
-  Zone #7 [SUPPORT]:
-    Center: $263.27
-    Range: $263.17 - $263.37
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.15
-    Scales: Intraday
-  Zone #8 [SUPPORT]:
-    Center: $260.33
-    Range: $260.24 - $260.42
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.05
-    Scales: Intraday
-  Zone #9 [SUPPORT]:
-    Center: $259.19
-    Range: $259.02 - $259.35
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.05
-    Scales: Intraday, Short Swing
-  Zone #10 [RESISTANCE]:
+    Reactions: 11
+    Strength Score: 4.03
+    Scales: Intraday, Swing
+  Zone #11 [RESISTANCE]:
     Center: $276.97
     Range: $276.41 - $277.54
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.05
-    Scales: Swing
-  Zone #11 [RESISTANCE]:
-    Center: $272.15
-    Range: $271.90 - $272.39
     Touches: 3
     Reactions: 3
     Strength Score: 3.04
     Scales: Swing
   Zone #12 [SUPPORT]:
-    Center: $262.84
-    Range: $262.80 - $262.87
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.04
-    Scales: Intraday
-  Zone #13 [SUPPORT]:
-    Center: $257.07
-    Range: $256.88 - $257.27
-    Touches: 3
-    Reactions: 3
+    Center: $259.84
+    Range: $259.58 - $260.11
+    Touches: 5
+    Reactions: 4
     Strength Score: 3.03
     Scales: Swing
-  Zone #14 [SUPPORT]:
-    Center: $259.87
-    Range: $259.61 - $260.12
-    Touches: 7
-    Reactions: 7
-    Strength Score: 3.03
-    Scales: Short Swing, Swing
-  Zone #15 [SUPPORT]:
-    Center: $263.82
-    Range: $263.73 - $263.91
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.14
-    Scales: Intraday
-  Zone #16 [PIVOT/RANGE]:
-    Center: $264.61
-    Range: $264.54 - $264.67
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.13
-    Scales: Intraday
-  Zone #17 [SUPPORT]:
-    Center: $262.32
-    Range: $262.16 - $262.47
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.12
-    Scales: Intraday, Short Swing
-  Zone #18 [SUPPORT]:
-    Center: $255.98
-    Range: $255.75 - $256.21
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.06
-    Scales: Swing
-  Zone #19 [SUPPORT]:
-    Center: $263.51
-    Range: $263.39 - $263.63
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.05
-    Scales: Short Swing
-  Zone #20 [RESISTANCE]:
-    Center: $274.25
-    Range: $274.06 - $274.43
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Swing
-  Zone #21 [RESISTANCE]:
+  Zone #13 [RESISTANCE]:
     Center: $274.75
-    Range: $274.52 - $274.97
+    Range: $274.49 - $275.00
     Touches: 2
     Reactions: 2
     Strength Score: 2.03
     Scales: Swing
-  Zone #22 [SUPPORT]:
+  Zone #14 [RESISTANCE]:
+    Center: $271.96
+    Range: $271.71 - $272.22
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.03
+    Scales: Swing
+  Zone #15 [SUPPORT]:
     Center: $258.72
     Range: $258.67 - $258.77
     Touches: 2
     Reactions: 2
-    Strength Score: 2.03
+    Strength Score: 2.02
     Scales: Intraday
-  Zone #23 [SUPPORT]:
+  Zone #16 [SUPPORT]:
+    Center: $259.09
+    Range: $258.98 - $259.19
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.02
+    Scales: Intraday
+  Zone #17 [SUPPORT]:
     Center: $245.85
-    Range: $245.63 - $246.07
+    Range: $245.59 - $246.11
     Touches: 2
     Reactions: 2
     Strength Score: 2.02
     Scales: Swing
-  Zone #24 [SUPPORT]:
+  Zone #18 [SUPPORT]:
     Center: $250.49
     Range: $250.22 - $250.76
     Touches: 2
@@ -284,262 +216,248 @@ ZONES (24):
 SYMBOL: PLTR (MULTI-SCALE)
 ================================================================================
 
-Current price: $135.23
+Current price: $128.66
 
-ZONES (21):
-  Zone #1 [SUPPORT]:
-    Center: $132.59
-    Range: $132.30 - $132.88
-    Touches: 14
-    Reactions: 12
-    Strength Score: 6.30
+ZONES (19):
+  Zone #1 [RESISTANCE]:
+    Center: $135.46
+    Range: $135.14 - $135.78
+    Touches: 24
+    Reactions: 22
+    Strength Score: 9.19
     Scales: Intraday, Short Swing, Swing
-  Zone #2 [PIVOT/RANGE]:
-    Center: $135.41
-    Range: $135.07 - $135.75
-    Touches: 22
-    Reactions: 20
-    Strength Score: 6.11
+  Zone #2 [RESISTANCE]:
+    Center: $133.02
+    Range: $132.70 - $133.34
+    Touches: 23
+    Reactions: 17
+    Strength Score: 7.27
     Scales: Intraday, Short Swing, Swing
-  Zone #3 [SUPPORT]:
-    Center: $134.36
-    Range: $134.22 - $134.50
-    Touches: 5
-    Reactions: 5
-    Strength Score: 5.26
+  Zone #3 [RESISTANCE]:
+    Center: $134.22
+    Range: $133.94 - $134.50
+    Touches: 10
+    Reactions: 9
+    Strength Score: 5.14
     Scales: Intraday
   Zone #4 [RESISTANCE]:
     Center: $176.33
-    Range: $175.99 - $176.67
+    Range: $176.01 - $176.65
     Touches: 5
     Reactions: 4
     Strength Score: 5.12
     Scales: Macro
   Zone #5 [RESISTANCE]:
     Center: $183.50
-    Range: $183.17 - $183.84
+    Range: $183.18 - $183.83
     Touches: 4
-    Reactions: 4
+    Reactions: 3
     Strength Score: 4.11
     Scales: Macro
   Zone #6 [RESISTANCE]:
-    Center: $179.94
-    Range: $179.60 - $180.28
-    Touches: 4
-    Reactions: 3
-    Strength Score: 4.03
-    Scales: Swing
-  Zone #7 [RESISTANCE]:
     Center: $166.86
-    Range: $166.52 - $167.20
+    Range: $166.54 - $167.18
     Touches: 5
     Reactions: 4
-    Strength Score: 3.13
+    Strength Score: 3.12
     Scales: Macro, Swing
-  Zone #8 [PIVOT/RANGE]:
-    Center: $135.26
-    Range: $135.19 - $135.33
+  Zone #7 [RESISTANCE]:
+    Center: $147.77
+    Range: $147.45 - $148.10
     Touches: 3
-    Reactions: 3
-    Strength Score: 3.08
-    Scales: Intraday
-  Zone #9 [SUPPORT]:
-    Center: $133.46
-    Range: $133.12 - $133.80
-    Touches: 5
+    Reactions: 2
+    Strength Score: 3.05
+    Scales: Swing
+  Zone #8 [RESISTANCE]:
+    Center: $139.32
+    Range: $139.10 - $139.53
+    Touches: 6
     Reactions: 5
-    Strength Score: 3.04
-    Scales: Intraday, Swing
-  Zone #10 [SUPPORT]:
-    Center: $134.12
-    Range: $134.04 - $134.21
-    Touches: 3
-    Reactions: 3
     Strength Score: 3.03
     Scales: Intraday
-  Zone #11 [RESISTANCE]:
-    Center: $140.00
-    Range: $139.73 - $140.26
-    Touches: 2
+  Zone #9 [RESISTANCE]:
+    Center: $179.66
+    Range: $179.41 - $179.90
+    Touches: 3
     Reactions: 2
-    Strength Score: 2.09
+    Strength Score: 3.03
     Scales: Swing
-  Zone #12 [SUPPORT]:
-    Center: $129.09
-    Range: $128.76 - $129.43
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.07
-    Scales: Intraday, Swing
+  Zone #10 [RESISTANCE]:
+    Center: $174.27
+    Range: $173.95 - $174.59
+    Touches: 3
+    Reactions: 2
+    Strength Score: 3.02
+    Scales: Swing
+  Zone #11 [RESISTANCE]:
+    Center: $180.92
+    Range: $180.60 - $181.24
+    Touches: 3
+    Reactions: 3
+    Strength Score: 3.02
+    Scales: Swing
+  Zone #12 [RESISTANCE]:
+    Center: $129.61
+    Range: $129.29 - $129.93
+    Touches: 8
+    Reactions: 8
+    Strength Score: 2.22
+    Scales: Intraday, Macro, Swing
   Zone #13 [RESISTANCE]:
+    Center: $140.00
+    Range: $139.68 - $140.32
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.08
+    Scales: Swing
+  Zone #14 [RESISTANCE]:
     Center: $193.89
-    Range: $193.55 - $194.23
+    Range: $193.57 - $194.21
     Touches: 2
     Reactions: 2
     Strength Score: 2.07
     Scales: Macro
-  Zone #14 [RESISTANCE]:
+  Zone #15 [RESISTANCE]:
     Center: $154.00
-    Range: $153.67 - $154.34
+    Range: $153.68 - $154.33
     Touches: 2
     Reactions: 2
     Strength Score: 2.04
     Scales: Macro
-  Zone #15 [SUPPORT]:
-    Center: $132.22
-    Range: $132.15 - $132.30
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Intraday
-  Zone #16 [SUPPORT]:
-    Center: $131.81
-    Range: $131.63 - $132.00
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Short Swing
-  Zone #17 [RESISTANCE]:
+  Zone #16 [RESISTANCE]:
     Center: $171.16
     Range: $170.85 - $171.47
     Touches: 2
     Reactions: 2
     Strength Score: 2.02
     Scales: Swing
-  Zone #18 [RESISTANCE]:
+  Zone #17 [RESISTANCE]:
     Center: $169.06
-    Range: $168.80 - $169.32
+    Range: $168.74 - $169.38
     Touches: 2
     Reactions: 2
     Strength Score: 2.02
     Scales: Swing
-  Zone #19 [RESISTANCE]:
-    Center: $139.48
-    Range: $139.39 - $139.58
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #20 [RESISTANCE]:
-    Center: $181.11
-    Range: $180.85 - $181.37
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #21 [RESISTANCE]:
+  Zone #18 [RESISTANCE]:
     Center: $186.03
     Range: $185.81 - $186.24
     Touches: 2
     Reactions: 2
     Strength Score: 2.02
     Scales: Swing
+  Zone #19 [RESISTANCE]:
+    Center: $132.03
+    Range: $131.92 - $132.15
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.01
+    Scales: Intraday
 
 ================================================================================
 SYMBOL: AMD (MULTI-SCALE)
 ================================================================================
 
-Current price: $200.15
+Current price: $195.47
 
-ZONES (16):
+ZONES (17):
   Zone #1 [RESISTANCE]:
-    Center: $201.28
-    Range: $200.78 - $201.78
-    Touches: 43
+    Center: $201.44
+    Range: $200.96 - $201.93
+    Touches: 44
     Reactions: 41
-    Strength Score: 8.11
+    Strength Score: 11.13
     Scales: Intraday, Macro, Short Swing, Swing
   Zone #2 [RESISTANCE]:
+    Center: $199.34
+    Range: $199.08 - $199.60
+    Touches: 8
+    Reactions: 7
+    Strength Score: 6.20
+    Scales: Intraday, Short Swing
+  Zone #3 [RESISTANCE]:
     Center: $218.75
-    Range: $218.24 - $219.25
+    Range: $218.26 - $219.23
     Touches: 11
     Reactions: 7
-    Strength Score: 4.22
+    Strength Score: 4.21
     Scales: Macro, Swing
-  Zone #3 [PIVOT/RANGE]:
-    Center: $199.84
-    Range: $199.70 - $199.98
-    Touches: 5
-    Reactions: 4
-    Strength Score: 3.19
-    Scales: Intraday
   Zone #4 [RESISTANCE]:
+    Center: $201.54
+    Range: $201.35 - $201.72
+    Touches: 10
+    Reactions: 8
+    Strength Score: 4.05
+    Scales: Intraday, Short Swing
+  Zone #5 [RESISTANCE]:
     Center: $261.61
-    Range: $261.10 - $262.11
+    Range: $261.12 - $262.09
     Touches: 3
     Reactions: 2
     Strength Score: 3.12
     Scales: Macro
-  Zone #5 [RESISTANCE]:
+  Zone #6 [RESISTANCE]:
+    Center: $199.95
+    Range: $199.66 - $200.25
+    Touches: 11
+    Reactions: 10
+    Strength Score: 3.11
+    Scales: Intraday, Short Swing
+  Zone #7 [RESISTANCE]:
     Center: $208.96
-    Range: $208.46 - $209.46
+    Range: $208.47 - $209.45
     Touches: 3
     Reactions: 2
-    Strength Score: 3.08
+    Strength Score: 3.07
     Scales: Swing
-  Zone #6 [RESISTANCE]:
-    Center: $211.63
-    Range: $211.13 - $212.13
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.05
-    Scales: Swing
-  Zone #7 [RESISTANCE]:
-    Center: $201.70
-    Range: $201.57 - $201.82
-    Touches: 7
-    Reactions: 7
-    Strength Score: 3.05
-    Scales: Intraday, Short Swing
   Zone #8 [RESISTANCE]:
+    Center: $211.63
+    Range: $211.14 - $212.12
+    Touches: 3
+    Reactions: 2
+    Strength Score: 3.05
+    Scales: Swing
+  Zone #9 [RESISTANCE]:
     Center: $251.12
-    Range: $250.62 - $251.63
+    Range: $250.64 - $251.61
     Touches: 5
     Reactions: 4
     Strength Score: 3.04
     Scales: Swing
-  Zone #9 [RESISTANCE]:
+  Zone #10 [RESISTANCE]:
     Center: $254.36
-    Range: $253.85 - $254.86
+    Range: $253.87 - $254.84
     Touches: 3
-    Reactions: 3
+    Reactions: 2
     Strength Score: 3.04
     Scales: Swing
-  Zone #10 [RESISTANCE]:
-    Center: $201.36
-    Range: $201.25 - $201.47
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.03
-    Scales: Intraday
-  Zone #11 [PIVOT/RANGE]:
-    Center: $200.19
-    Range: $200.07 - $200.32
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.10
-    Scales: Intraday, Short Swing
-  Zone #12 [RESISTANCE]:
-    Center: $204.56
-    Range: $204.42 - $204.69
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.09
-    Scales: Short Swing
-  Zone #13 [RESISTANCE]:
+  Zone #11 [RESISTANCE]:
     Center: $231.90
-    Range: $231.40 - $232.40
+    Range: $231.41 - $232.39
     Touches: 2
     Reactions: 2
     Strength Score: 2.05
     Scales: Macro
-  Zone #14 [RESISTANCE]:
+  Zone #12 [RESISTANCE]:
+    Center: $238.00
+    Range: $237.51 - $238.48
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.04
+    Scales: Macro
+  Zone #13 [RESISTANCE]:
     Center: $206.86
-    Range: $206.36 - $207.36
+    Range: $206.37 - $207.35
     Touches: 2
     Reactions: 2
     Strength Score: 2.03
     Scales: Swing
+  Zone #14 [RESISTANCE]:
+    Center: $200.97
+    Range: $200.86 - $201.07
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.03
+    Scales: Intraday
   Zone #15 [RESISTANCE]:
     Center: $252.43
     Range: $252.17 - $252.69
@@ -554,91 +472,98 @@ ZONES (16):
     Reactions: 2
     Strength Score: 2.01
     Scales: Swing
+  Zone #17 [RESISTANCE]:
+    Center: $196.16
+    Range: $196.06 - $196.25
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.01
+    Scales: Intraday
 
 ================================================================================
 SYMBOL: BE (MULTI-SCALE)
 ================================================================================
 
-Current price: $147.58
+Current price: $149.64
 
 ZONES (14):
   Zone #1 [RESISTANCE]:
-    Center: $157.62
-    Range: $157.25 - $157.99
-    Touches: 13
-    Reactions: 10
-    Strength Score: 8.10
+    Center: $158.45
+    Range: $158.08 - $158.83
+    Touches: 20
+    Reactions: 16
+    Strength Score: 7.11
     Scales: Intraday, Short Swing
-  Zone #2 [RESISTANCE]:
-    Center: $159.29
-    Range: $158.92 - $159.66
-    Touches: 9
-    Reactions: 8
-    Strength Score: 7.13
-    Scales: Intraday, Short Swing
+  Zone #2 [SUPPORT]:
+    Center: $137.55
+    Range: $137.18 - $137.92
+    Touches: 15
+    Reactions: 14
+    Strength Score: 5.10
+    Scales: Intraday, Macro, Swing
   Zone #3 [SUPPORT]:
     Center: $146.99
-    Range: $146.62 - $147.35
+    Range: $146.61 - $147.36
     Touches: 9
     Reactions: 9
     Strength Score: 5.09
     Scales: Swing
   Zone #4 [RESISTANCE]:
-    Center: $154.02
-    Range: $153.65 - $154.39
-    Touches: 15
-    Reactions: 14
-    Strength Score: 4.17
-    Scales: Intraday, Short Swing, Swing
+    Center: $153.81
+    Range: $153.43 - $154.18
+    Touches: 14
+    Reactions: 13
+    Strength Score: 4.14
+    Scales: Intraday, Short Swing
   Zone #5 [RESISTANCE]:
-    Center: $156.02
-    Range: $155.65 - $156.39
-    Touches: 15
-    Reactions: 12
-    Strength Score: 4.12
-    Scales: Intraday, Short Swing, Swing
+    Center: $156.01
+    Range: $155.64 - $156.39
+    Touches: 13
+    Reactions: 11
+    Strength Score: 4.11
+    Scales: Intraday, Swing
   Zone #6 [SUPPORT]:
-    Center: $136.47
-    Range: $136.10 - $136.84
-    Touches: 9
-    Reactions: 9
-    Strength Score: 3.23
-    Scales: Macro, Swing
-  Zone #7 [SUPPORT]:
     Center: $144.30
     Range: $144.06 - $144.55
     Touches: 3
     Reactions: 2
-    Strength Score: 3.22
+    Strength Score: 3.11
     Scales: Intraday
-  Zone #8 [SUPPORT]:
+  Zone #7 [SUPPORT]:
     Center: $88.02
-    Range: $87.65 - $88.39
+    Range: $87.65 - $88.40
     Touches: 3
     Reactions: 2
     Strength Score: 3.09
     Scales: Macro
-  Zone #9 [SUPPORT]:
-    Center: $142.08
-    Range: $141.71 - $142.45
-    Touches: 9
-    Reactions: 9
-    Strength Score: 3.06
-    Scales: Intraday, Swing
-  Zone #10 [RESISTANCE]:
+  Zone #8 [PIVOT/RANGE]:
     Center: $150.05
     Range: $149.68 - $150.42
     Touches: 3
     Reactions: 3
     Strength Score: 3.04
     Scales: Swing
-  Zone #11 [RESISTANCE]:
+  Zone #9 [RESISTANCE]:
     Center: $167.25
-    Range: $166.88 - $167.61
+    Range: $166.87 - $167.62
     Touches: 2
     Reactions: 2
-    Strength Score: 2.17
+    Strength Score: 2.16
     Scales: Macro
+  Zone #10 [RESISTANCE]:
+    Center: $152.18
+    Range: $151.94 - $152.42
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.14
+    Scales: Intraday
+  Zone #11 [SUPPORT]:
+    Center: $148.71
+    Range: $148.55 - $148.86
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.06
+    Scales: Intraday
   Zone #12 [SUPPORT]:
     Center: $132.52
     Range: $132.15 - $132.89
@@ -646,147 +571,147 @@ ZONES (14):
     Reactions: 2
     Strength Score: 2.06
     Scales: Swing
-  Zone #13 [RESISTANCE]:
-    Center: $152.71
-    Range: $152.50 - $152.92
+  Zone #13 [SUPPORT]:
+    Center: $142.94
+    Range: $142.80 - $143.08
     Touches: 2
     Reactions: 2
-    Strength Score: 2.03
+    Strength Score: 2.01
     Scales: Intraday
   Zone #14 [SUPPORT]:
     Center: $145.06
     Range: $144.91 - $145.21
     Touches: 2
     Reactions: 2
-    Strength Score: 2.02
+    Strength Score: 2.01
     Scales: Intraday
 
 ================================================================================
 SYMBOL: MP (MULTI-SCALE)
 ================================================================================
 
-Current price: $55.34
+Current price: $55.71
 
 ZONES (20):
   Zone #1 [RESISTANCE]:
-    Center: $58.45
-    Range: $58.31 - $58.59
-    Touches: 22
-    Reactions: 18
-    Strength Score: 8.17
+    Center: $58.42
+    Range: $58.28 - $58.56
+    Touches: 19
+    Reactions: 14
+    Strength Score: 6.12
     Scales: Intraday, Macro, Short Swing, Swing
   Zone #2 [RESISTANCE]:
+    Center: $55.95
+    Range: $55.81 - $56.09
+    Touches: 16
+    Reactions: 14
+    Strength Score: 5.06
+    Scales: Intraday, Macro, Short Swing, Swing
+  Zone #3 [RESISTANCE]:
     Center: $63.82
     Range: $63.68 - $63.96
     Touches: 9
     Reactions: 9
-    Strength Score: 4.26
+    Strength Score: 4.24
     Scales: Macro, Swing
-  Zone #3 [RESISTANCE]:
-    Center: $57.98
-    Range: $57.86 - $58.09
-    Touches: 8
-    Reactions: 6
-    Strength Score: 4.08
-    Scales: Intraday, Short Swing
   Zone #4 [RESISTANCE]:
-    Center: $57.67
-    Range: $57.55 - $57.79
-    Touches: 7
-    Reactions: 6
-    Strength Score: 3.14
-    Scales: Intraday, Short Swing
-  Zone #5 [SUPPORT]:
+    Center: $57.17
+    Range: $57.13 - $57.21
+    Touches: 4
+    Reactions: 4
+    Strength Score: 4.05
+    Scales: Intraday
+  Zone #5 [RESISTANCE]:
+    Center: $58.24
+    Range: $58.22 - $58.26
+    Touches: 4
+    Reactions: 2
+    Strength Score: 4.04
+    Scales: Intraday
+  Zone #6 [SUPPORT]:
     Center: $51.03
     Range: $50.89 - $51.17
     Touches: 5
     Reactions: 5
-    Strength Score: 3.11
+    Strength Score: 3.10
     Scales: Macro, Swing
-  Zone #6 [RESISTANCE]:
+  Zone #7 [PIVOT/RANGE]:
+    Center: $55.77
+    Range: $55.74 - $55.79
+    Touches: 3
+    Reactions: 3
+    Strength Score: 3.10
+    Scales: Intraday
+  Zone #8 [SUPPORT]:
+    Center: $55.15
+    Range: $55.10 - $55.20
+    Touches: 3
+    Reactions: 3
+    Strength Score: 3.08
+    Scales: Intraday
+  Zone #9 [RESISTANCE]:
     Center: $59.12
     Range: $59.05 - $59.20
     Touches: 3
     Reactions: 3
     Strength Score: 3.07
     Scales: Swing
-  Zone #7 [RESISTANCE]:
-    Center: $55.95
-    Range: $55.81 - $56.09
-    Touches: 15
-    Reactions: 15
-    Strength Score: 3.07
-    Scales: Intraday, Macro, Short Swing, Swing
-  Zone #8 [RESISTANCE]:
-    Center: $57.20
-    Range: $57.18 - $57.21
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.04
-    Scales: Intraday
-  Zone #9 [RESISTANCE]:
+  Zone #10 [RESISTANCE]:
     Center: $69.45
     Range: $69.31 - $69.59
     Touches: 5
     Reactions: 5
     Strength Score: 3.04
     Scales: Macro, Swing
-  Zone #10 [RESISTANCE]:
+  Zone #11 [RESISTANCE]:
     Center: $66.55
     Range: $66.41 - $66.69
     Touches: 3
     Reactions: 3
-    Strength Score: 3.04
+    Strength Score: 3.03
     Scales: Swing
-  Zone #11 [SUPPORT]:
-    Center: $55.12
-    Range: $55.10 - $55.14
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.10
-    Scales: Intraday
   Zone #12 [RESISTANCE]:
+    Center: $57.86
+    Range: $57.79 - $57.93
+    Touches: 7
+    Reactions: 7
+    Strength Score: 3.03
+    Scales: Intraday, Short Swing
+  Zone #13 [RESISTANCE]:
     Center: $61.99
     Range: $61.85 - $62.13
     Touches: 2
     Reactions: 2
     Strength Score: 2.06
     Scales: Macro
-  Zone #13 [RESISTANCE]:
+  Zone #14 [RESISTANCE]:
     Center: $60.57
     Range: $60.44 - $60.70
     Touches: 2
     Reactions: 2
     Strength Score: 2.06
     Scales: Swing
-  Zone #14 [RESISTANCE]:
-    Center: $55.78
-    Range: $55.76 - $55.81
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.05
-    Scales: Intraday
   Zone #15 [RESISTANCE]:
-    Center: $57.11
-    Range: $57.09 - $57.13
+    Center: $57.58
+    Range: $57.55 - $57.59
     Touches: 2
     Reactions: 2
     Strength Score: 2.04
     Scales: Intraday
   Zone #16 [RESISTANCE]:
+    Center: $57.71
+    Range: $57.69 - $57.74
+    Touches: 2
+    Reactions: 2
+    Strength Score: 2.03
+    Scales: Intraday
+  Zone #17 [RESISTANCE]:
     Center: $70.61
     Range: $70.47 - $70.75
     Touches: 2
     Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-  Zone #17 [RESISTANCE]:
-    Center: $57.83
-    Range: $57.80 - $57.86
-    Touches: 2
-    Reactions: 2
     Strength Score: 2.02
-    Scales: Intraday
+    Scales: Swing
   Zone #18 [RESISTANCE]:
     Center: $56.78
     Range: $56.76 - $56.80
@@ -796,974 +721,8 @@ ZONES (20):
     Scales: Intraday
   Zone #19 [RESISTANCE]:
     Center: $56.95
-    Range: $56.92 - $56.98
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #20 [RESISTANCE]:
-    Center: $55.66
-    Range: $55.62 - $55.70
+    Range: $56.91 - $56.99
     Touches: 2
     Reactions: 2
     Strength Score: 2.01
     Scales: Intraday
-
-================================================================================
-SYMBOL: MSTR (MULTI-SCALE)
-================================================================================
-
-Current price: $130.94
-
-ZONES (30):
-  Zone #1 [RESISTANCE]:
-    Center: $133.53
-    Range: $133.24 - $133.82
-    Touches: 7
-    Reactions: 7
-    Strength Score: 5.21
-    Scales: Intraday, Short Swing
-  Zone #2 [RESISTANCE]:
-    Center: $131.50
-    Range: $131.42 - $131.57
-    Touches: 5
-    Reactions: 5
-    Strength Score: 5.13
-    Scales: Intraday
-  Zone #3 [RESISTANCE]:
-    Center: $159.66
-    Range: $159.33 - $159.99
-    Touches: 7
-    Reactions: 7
-    Strength Score: 5.05
-    Scales: Swing
-  Zone #4 [SUPPORT]:
-    Center: $123.77
-    Range: $123.58 - $123.96
-    Touches: 6
-    Reactions: 6
-    Strength Score: 4.12
-    Scales: Intraday, Short Swing
-  Zone #5 [SUPPORT]:
-    Center: $129.71
-    Range: $129.61 - $129.81
-    Touches: 4
-    Reactions: 4
-    Strength Score: 4.03
-    Scales: Intraday
-  Zone #6 [SUPPORT]:
-    Center: $130.45
-    Range: $130.37 - $130.53
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.17
-    Scales: Intraday
-  Zone #7 [SUPPORT]:
-    Center: $128.37
-    Range: $128.04 - $128.70
-    Touches: 9
-    Reactions: 9
-    Strength Score: 3.09
-    Scales: Intraday, Short Swing, Swing
-  Zone #8 [PIVOT/RANGE]:
-    Center: $131.09
-    Range: $130.77 - $131.41
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.06
-    Scales: Short Swing, Swing
-  Zone #9 [SUPPORT]:
-    Center: $124.80
-    Range: $124.73 - $124.86
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.04
-    Scales: Intraday
-  Zone #10 [RESISTANCE]:
-    Center: $163.12
-    Range: $162.80 - $163.45
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #11 [RESISTANCE]:
-    Center: $157.81
-    Range: $157.55 - $158.07
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #12 [SUPPORT]:
-    Center: $129.18
-    Range: $129.11 - $129.25
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.02
-    Scales: Intraday
-  Zone #13 [RESISTANCE]:
-    Center: $154.57
-    Range: $154.25 - $154.90
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.10
-    Scales: Macro, Swing
-  Zone #14 [RESISTANCE]:
-    Center: $131.67
-    Range: $131.58 - $131.76
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.08
-    Scales: Intraday
-  Zone #15 [RESISTANCE]:
-    Center: $188.66
-    Range: $188.33 - $188.99
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.07
-    Scales: Macro
-  Zone #16 [SUPPORT]:
-    Center: $126.78
-    Range: $126.60 - $126.96
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.06
-    Scales: Intraday, Swing
-  Zone #17 [SUPPORT]:
-    Center: $125.41
-    Range: $125.30 - $125.52
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.06
-    Scales: Short Swing
-  Zone #18 [SUPPORT]:
-    Center: $121.59
-    Range: $121.27 - $121.92
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.05
-    Scales: Swing
-  Zone #19 [RESISTANCE]:
-    Center: $138.55
-    Range: $138.28 - $138.81
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.05
-    Scales: Swing
-  Zone #20 [RESISTANCE]:
-    Center: $282.35
-    Range: $282.02 - $282.67
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Macro
-  Zone #21 [RESISTANCE]:
-    Center: $326.79
-    Range: $326.46 - $327.12
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Macro
-  Zone #22 [SUPPORT]:
-    Center: $126.36
-    Range: $126.28 - $126.43
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Intraday
-  Zone #23 [RESISTANCE]:
-    Center: $132.22
-    Range: $132.01 - $132.42
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Short Swing
-  Zone #24 [SUPPORT]:
-    Center: $127.66
-    Range: $127.60 - $127.71
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Intraday
-  Zone #25 [SUPPORT]:
-    Center: $124.39
-    Range: $124.30 - $124.48
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #26 [SUPPORT]:
-    Center: $125.87
-    Range: $125.80 - $125.94
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #27 [RESISTANCE]:
-    Center: $166.84
-    Range: $166.51 - $167.17
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #28 [RESISTANCE]:
-    Center: $164.93
-    Range: $164.66 - $165.20
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #29 [RESISTANCE]:
-    Center: $169.89
-    Range: $169.63 - $170.16
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #30 [SUPPORT]:
-    Center: $126.11
-    Range: $126.03 - $126.18
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.01
-    Scales: Intraday
-
-================================================================================
-SYMBOL: MSFT (MULTI-SCALE)
-================================================================================
-
-Current price: $397.28
-
-ZONES (21):
-  Zone #1 [PIVOT/RANGE]:
-    Center: $397.53
-    Range: $397.31 - $397.76
-    Touches: 10
-    Reactions: 9
-    Strength Score: 6.25
-    Scales: Intraday, Short Swing
-  Zone #2 [PIVOT/RANGE]:
-    Center: $396.67
-    Range: $396.31 - $397.03
-    Touches: 16
-    Reactions: 16
-    Strength Score: 6.22
-    Scales: Intraday, Short Swing
-  Zone #3 [RESISTANCE]:
-    Center: $401.07
-    Range: $401.03 - $401.12
-    Touches: 6
-    Reactions: 5
-    Strength Score: 6.06
-    Scales: Intraday
-  Zone #4 [PIVOT/RANGE]:
-    Center: $398.09
-    Range: $397.99 - $398.19
-    Touches: 5
-    Reactions: 5
-    Strength Score: 5.09
-    Scales: Intraday
-  Zone #5 [RESISTANCE]:
-    Center: $509.25
-    Range: $508.26 - $510.25
-    Touches: 6
-    Reactions: 5
-    Strength Score: 4.08
-    Scales: Macro
-  Zone #6 [RESISTANCE]:
-    Center: $404.24
-    Range: $403.89 - $404.58
-    Touches: 4
-    Reactions: 4
-    Strength Score: 4.06
-    Scales: Short Swing
-  Zone #7 [RESISTANCE]:
-    Center: $399.41
-    Range: $398.71 - $400.12
-    Touches: 17
-    Reactions: 16
-    Strength Score: 3.23
-    Scales: Intraday, Short Swing, Swing
-  Zone #8 [RESISTANCE]:
-    Center: $473.47
-    Range: $472.47 - $474.46
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.11
-    Scales: Macro
-  Zone #9 [RESISTANCE]:
-    Center: $490.04
-    Range: $489.05 - $491.03
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.11
-    Scales: Macro
-  Zone #10 [RESISTANCE]:
-    Center: $405.94
-    Range: $405.64 - $406.23
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.09
-    Scales: Swing
-  Zone #11 [SUPPORT]:
-    Center: $395.60
-    Range: $395.55 - $395.64
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.04
-    Scales: Intraday
-  Zone #12 [PIVOT/RANGE]:
-    Center: $397.23
-    Range: $397.16 - $397.29
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.03
-    Scales: Intraday
-  Zone #13 [RESISTANCE]:
-    Center: $470.81
-    Range: $470.30 - $471.31
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #14 [RESISTANCE]:
-    Center: $401.88
-    Range: $401.56 - $402.20
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.15
-    Scales: Intraday, Swing
-  Zone #15 [PIVOT/RANGE]:
-    Center: $398.39
-    Range: $398.32 - $398.46
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Intraday
-  Zone #16 [RESISTANCE]:
-    Center: $516.71
-    Range: $515.72 - $517.71
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Macro
-  Zone #17 [RESISTANCE]:
-    Center: $400.87
-    Range: $400.80 - $400.94
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #18 [RESISTANCE]:
-    Center: $399.48
-    Range: $399.41 - $399.55
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #19 [RESISTANCE]:
-    Center: $455.03
-    Range: $454.63 - $455.42
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #20 [RESISTANCE]:
-    Center: $400.29
-    Range: $400.23 - $400.36
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #21 [RESISTANCE]:
-    Center: $479.88
-    Range: $479.57 - $480.20
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-
-================================================================================
-SYMBOL: TSLA (MULTI-SCALE)
-================================================================================
-
-Current price: $411.52
-
-ZONES (15):
-  Zone #1 [SUPPORT]:
-    Center: $409.50
-    Range: $408.48 - $410.53
-    Touches: 26
-    Reactions: 23
-    Strength Score: 6.26
-    Scales: Intraday, Short Swing, Swing
-  Zone #2 [RESISTANCE]:
-    Center: $431.16
-    Range: $430.13 - $432.19
-    Touches: 9
-    Reactions: 9
-    Strength Score: 5.14
-    Scales: Macro, Swing
-  Zone #3 [RESISTANCE]:
-    Center: $414.18
-    Range: $413.15 - $415.21
-    Touches: 34
-    Reactions: 33
-    Strength Score: 5.09
-    Scales: Intraday, Macro, Short Swing, Swing
-  Zone #4 [RESISTANCE]:
-    Center: $435.97
-    Range: $434.94 - $437.00
-    Touches: 8
-    Reactions: 7
-    Strength Score: 5.06
-    Scales: Swing
-  Zone #5 [RESISTANCE]:
-    Center: $443.88
-    Range: $443.20 - $444.55
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #6 [RESISTANCE]:
-    Center: $448.89
-    Range: $447.86 - $449.92
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.03
-    Scales: Macro, Swing
-  Zone #7 [RESISTANCE]:
-    Center: $451.64
-    Range: $451.14 - $452.14
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #8 [PIVOT/RANGE]:
-    Center: $412.60
-    Range: $412.53 - $412.68
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.02
-    Scales: Intraday
-  Zone #9 [RESISTANCE]:
-    Center: $421.28
-    Range: $420.26 - $422.31
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.08
-    Scales: Macro, Swing
-  Zone #10 [RESISTANCE]:
-    Center: $489.28
-    Range: $488.25 - $490.31
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.08
-    Scales: Macro
-  Zone #11 [SUPPORT]:
-    Center: $402.83
-    Range: $402.54 - $403.12
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.07
-    Scales: Swing
-  Zone #12 [RESISTANCE]:
-    Center: $439.82
-    Range: $438.80 - $440.85
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.06
-    Scales: Macro
-  Zone #13 [RESISTANCE]:
-    Center: $457.19
-    Range: $456.16 - $458.22
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.05
-    Scales: Macro, Swing
-  Zone #14 [SUPPORT]:
-    Center: $408.12
-    Range: $408.05 - $408.18
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.05
-    Scales: Intraday
-  Zone #15 [RESISTANCE]:
-    Center: $426.21
-    Range: $425.74 - $426.67
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-
-================================================================================
-SYMBOL: NOC (MULTI-SCALE)
-================================================================================
-
-Current price: $723.27
-
-ZONES (21):
-  Zone #1 [SUPPORT]:
-    Center: $693.70
-    Range: $692.38 - $695.01
-    Touches: 5
-    Reactions: 4
-    Strength Score: 5.13
-    Scales: Swing
-  Zone #2 [SUPPORT]:
-    Center: $573.11
-    Range: $571.30 - $574.92
-    Touches: 4
-    Reactions: 3
-    Strength Score: 4.13
-    Scales: Macro
-  Zone #3 [SUPPORT]:
-    Center: $705.36
-    Range: $703.55 - $707.17
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.13
-    Scales: Short Swing, Swing
-  Zone #4 [SUPPORT]:
-    Center: $720.65
-    Range: $720.42 - $720.88
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.11
-    Scales: Intraday, Short Swing
-  Zone #5 [SUPPORT]:
-    Center: $687.78
-    Range: $686.83 - $688.73
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.09
-    Scales: Swing
-  Zone #6 [SUPPORT]:
-    Center: $608.48
-    Range: $606.67 - $610.29
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.09
-    Scales: Macro
-  Zone #7 [SUPPORT]:
-    Center: $699.71
-    Range: $699.43 - $699.99
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.06
-    Scales: Short Swing
-  Zone #8 [SUPPORT]:
-    Center: $634.38
-    Range: $633.55 - $635.22
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #9 [SUPPORT]:
-    Center: $682.26
-    Range: $680.45 - $684.07
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.21
-    Scales: Macro, Swing
-  Zone #10 [PIVOT/RANGE]:
-    Center: $723.43
-    Range: $723.32 - $723.55
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.14
-    Scales: Intraday
-  Zone #11 [RESISTANCE]:
-    Center: $736.84
-    Range: $736.64 - $737.03
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.10
-    Scales: Intraday, Short Swing
-  Zone #12 [PIVOT/RANGE]:
-    Center: $722.62
-    Range: $722.49 - $722.76
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.09
-    Scales: Intraday
-  Zone #13 [PIVOT/RANGE]:
-    Center: $724.12
-    Range: $724.01 - $724.24
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.09
-    Scales: Intraday
-  Zone #14 [RESISTANCE]:
-    Center: $727.94
-    Range: $727.80 - $728.09
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.06
-    Scales: Intraday
-  Zone #15 [SUPPORT]:
-    Center: $676.61
-    Range: $675.66 - $677.56
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.06
-    Scales: Swing
-  Zone #16 [RESISTANCE]:
-    Center: $733.55
-    Range: $733.46 - $733.63
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Intraday
-  Zone #17 [RESISTANCE]:
-    Center: $734.63
-    Range: $734.54 - $734.71
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Intraday
-  Zone #18 [SUPPORT]:
-    Center: $665.19
-    Range: $664.24 - $666.14
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-  Zone #19 [SUPPORT]:
-    Center: $717.75
-    Range: $717.69 - $717.81
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Intraday
-  Zone #20 [SUPPORT]:
-    Center: $657.32
-    Range: $656.00 - $658.64
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #21 [SUPPORT]:
-    Center: $615.30
-    Range: $614.10 - $616.50
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-
-================================================================================
-SYMBOL: LMT (MULTI-SCALE)
-================================================================================
-
-Current price: $658.45
-
-ZONES (22):
-  Zone #1 [SUPPORT]:
-    Center: $653.38
-    Range: $653.19 - $653.58
-    Touches: 6
-    Reactions: 6
-    Strength Score: 4.16
-    Scales: Intraday
-  Zone #2 [SUPPORT]:
-    Center: $639.82
-    Range: $638.38 - $641.25
-    Touches: 4
-    Reactions: 4
-    Strength Score: 4.08
-    Scales: Swing
-  Zone #3 [SUPPORT]:
-    Center: $654.13
-    Range: $654.02 - $654.25
-    Touches: 4
-    Reactions: 3
-    Strength Score: 4.06
-    Scales: Intraday
-  Zone #4 [SUPPORT]:
-    Center: $654.93
-    Range: $654.35 - $655.50
-    Touches: 8
-    Reactions: 8
-    Strength Score: 3.18
-    Scales: Intraday, Short Swing, Swing
-  Zone #5 [SUPPORT]:
-    Center: $656.14
-    Range: $655.80 - $656.48
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.06
-    Scales: Intraday, Short Swing
-  Zone #6 [RESISTANCE]:
-    Center: $667.26
-    Range: $666.41 - $668.11
-    Touches: 6
-    Reactions: 6
-    Strength Score: 2.21
-    Scales: Intraday, Short Swing, Swing
-  Zone #7 [SUPPORT]:
-    Center: $649.04
-    Range: $647.88 - $650.21
-    Touches: 6
-    Reactions: 6
-    Strength Score: 2.14
-    Scales: Intraday, Short Swing, Swing
-  Zone #8 [PIVOT/RANGE]:
-    Center: $657.62
-    Range: $657.47 - $657.77
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.12
-    Scales: Intraday
-  Zone #9 [SUPPORT]:
-    Center: $627.60
-    Range: $626.74 - $628.47
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.07
-    Scales: Swing
-  Zone #10 [SUPPORT]:
-    Center: $471.47
-    Range: $470.01 - $472.92
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.06
-    Scales: Macro
-  Zone #11 [SUPPORT]:
-    Center: $602.00
-    Range: $600.85 - $603.15
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Swing
-  Zone #12 [RESISTANCE]:
-    Center: $664.56
-    Range: $664.42 - $664.69
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Intraday
-  Zone #13 [RESISTANCE]:
-    Center: $665.37
-    Range: $665.23 - $665.51
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Intraday
-  Zone #14 [SUPPORT]:
-    Center: $650.82
-    Range: $650.60 - $651.04
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Short Swing
-  Zone #15 [RESISTANCE]:
-    Center: $663.56
-    Range: $663.47 - $663.66
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.04
-    Scales: Intraday
-  Zone #16 [RESISTANCE]:
-    Center: $660.72
-    Range: $660.55 - $660.90
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Intraday
-  Zone #17 [SUPPORT]:
-    Center: $652.18
-    Range: $651.86 - $652.50
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Short Swing
-  Zone #18 [SUPPORT]:
-    Center: $586.13
-    Range: $585.18 - $587.09
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-  Zone #19 [SUPPORT]:
-    Center: $594.49
-    Range: $593.88 - $595.09
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-  Zone #20 [SUPPORT]:
-    Center: $576.63
-    Range: $575.82 - $577.45
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-  Zone #21 [SUPPORT]:
-    Center: $535.74
-    Range: $534.86 - $536.62
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #22 [SUPPORT]:
-    Center: $480.44
-    Range: $479.45 - $481.42
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-
-================================================================================
-SYMBOL: NVO (MULTI-SCALE)
-================================================================================
-
-Current price: $47.42
-
-ZONES (21):
-  Zone #1 [RESISTANCE]:
-    Center: $49.62
-    Range: $49.51 - $49.74
-    Touches: 17
-    Reactions: 13
-    Strength Score: 5.23
-    Scales: Intraday, Macro, Swing
-  Zone #2 [RESISTANCE]:
-    Center: $48.50
-    Range: $48.48 - $48.53
-    Touches: 5
-    Reactions: 4
-    Strength Score: 5.09
-    Scales: Intraday
-  Zone #3 [RESISTANCE]:
-    Center: $49.20
-    Range: $49.19 - $49.22
-    Touches: 4
-    Reactions: 3
-    Strength Score: 4.04
-    Scales: Intraday
-  Zone #4 [RESISTANCE]:
-    Center: $49.56
-    Range: $49.48 - $49.65
-    Touches: 5
-    Reactions: 5
-    Strength Score: 3.16
-    Scales: Short Swing, Swing
-  Zone #5 [PIVOT/RANGE]:
-    Center: $47.53
-    Range: $47.51 - $47.55
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.13
-    Scales: Intraday
-  Zone #6 [SUPPORT]:
-    Center: $47.09
-    Range: $47.08 - $47.10
-    Touches: 3
-    Reactions: 2
-    Strength Score: 3.10
-    Scales: Intraday
-  Zone #7 [SUPPORT]:
-    Center: $45.69
-    Range: $45.57 - $45.81
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.09
-    Scales: Macro
-  Zone #8 [RESISTANCE]:
-    Center: $48.65
-    Range: $48.63 - $48.66
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.05
-    Scales: Intraday
-  Zone #9 [RESISTANCE]:
-    Center: $58.85
-    Range: $58.73 - $58.97
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.04
-    Scales: Swing
-  Zone #10 [RESISTANCE]:
-    Center: $49.27
-    Range: $49.25 - $49.29
-    Touches: 5
-    Reactions: 4
-    Strength Score: 3.03
-    Scales: Intraday, Short Swing
-  Zone #11 [RESISTANCE]:
-    Center: $60.04
-    Range: $59.98 - $60.10
-    Touches: 3
-    Reactions: 3
-    Strength Score: 3.03
-    Scales: Swing
-  Zone #12 [PIVOT/RANGE]:
-    Center: $47.48
-    Range: $47.47 - $47.50
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.15
-    Scales: Intraday
-  Zone #13 [RESISTANCE]:
-    Center: $47.69
-    Range: $47.67 - $47.70
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.08
-    Scales: Intraday
-  Zone #14 [RESISTANCE]:
-    Center: $62.10
-    Range: $61.98 - $62.22
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.08
-    Scales: Macro, Swing
-  Zone #15 [RESISTANCE]:
-    Center: $48.18
-    Range: $48.09 - $48.26
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.08
-    Scales: Swing
-  Zone #16 [RESISTANCE]:
-    Center: $48.39
-    Range: $48.35 - $48.42
-    Touches: 4
-    Reactions: 4
-    Strength Score: 2.08
-    Scales: Intraday, Short Swing
-  Zone #17 [RESISTANCE]:
-    Center: $48.86
-    Range: $48.84 - $48.89
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.05
-    Scales: Short Swing
-  Zone #18 [RESISTANCE]:
-    Center: $59.72
-    Range: $59.66 - $59.78
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.03
-    Scales: Swing
-  Zone #19 [RESISTANCE]:
-    Center: $56.41
-    Range: $56.35 - $56.48
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #20 [RESISTANCE]:
-    Center: $57.77
-    Range: $57.71 - $57.84
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.02
-    Scales: Swing
-  Zone #21 [RESISTANCE]:
-    Center: $51.23
-    Range: $51.15 - $51.31
-    Touches: 2
-    Reactions: 2
-    Strength Score: 2.01
-    Scales: Swing
-

@@ -87,6 +87,8 @@ def run():
     curves = {p.name: [] for p in penguins}
     trades_log = {p.name: [] for p in penguins}  # List of (minute, trade_str) tuples
     actual_trading_minutes = 0  # Track minutes when market was actually open
+    last_values = {p.name: INITIAL_CAPITAL for p in penguins}
+    drop_alert_pct = 5.0
 
     sr_penguins = [p for p in penguins if isinstance(p, SupportResistancePenguin)]
     if sr_penguins:
@@ -205,7 +207,8 @@ def run():
                     continue
                 
                 for symbol in list(portfolio.positions.keys()):
-                    qty = portfolio.positions[symbol]
+                    position = portfolio.positions[symbol]
+                    qty = position.qty
                     if qty > 0 and symbol in latest_prices:
                         bid_price = latest_prices[symbol]
                         success = portfolio.sell(symbol, bid_price, qty=qty)
@@ -312,8 +315,28 @@ def run():
             else:
                 mid = (bid + ask) / 2
                 spread = ask - bid
-                print(f"{s}: ${bid:.2f} (real)", end="  ")
-                price_source[s] = "real"
+                spread_pct = (spread / bid * 100) if bid > 0 else 0
+                
+                # Check for stale data: price differs >10% from last known price
+                is_stale = False
+                if price_history[s]:
+                    last_price = price_history[s][-1]
+                    price_change_pct = abs(mid - last_price) / last_price * 100
+                    if price_change_pct > 10:
+                        print(f"{s}: ${bid:.2f} ⚠️ STALE ({price_change_pct:.1f}% jump)", end="  ")
+                        is_stale = True
+                
+                # Check for unrealistic spread (>5%)
+                is_wide_spread = spread_pct > 5.0
+                if is_wide_spread and not is_stale:
+                    print(f"{s}: ${bid:.2f} ⚠️ WIDE SPREAD ({spread_pct:.1f}%)", end="  ")
+                
+                # If data is suspicious, treat as synthetic (no trading except final sell)
+                if is_stale or is_wide_spread:
+                    price_source[s] = "suspicious"
+                else:
+                    print(f"{s}: ${bid:.2f}", end="  ")
+                    price_source[s] = "real"
 
             bid_ask_prices[s] = (bid, ask)
             price_history[s].append(mid)  # Store mid for history/charting
@@ -326,8 +349,8 @@ def run():
                 if s not in bid_ask_prices:
                     continue
                 
-                # Skip trading on synthetic data (except allow SELL on final iteration)
-                if price_source.get(s) == "synthetic" and not is_final_iteration:
+                # Skip trading on synthetic/suspicious data (except allow SELL on final iteration)
+                if price_source.get(s) in ["synthetic", "suspicious"] and not is_final_iteration:
                     continue
 
                 mid_prices = price_history[s]
@@ -343,10 +366,10 @@ def run():
                     continue
 
                 if decision == "BUY":
-                    # Do not allow BUY on synthetic data at any time
-                    if price_source.get(s) == "synthetic":
+                    # Do not allow BUY on synthetic/suspicious data at any time
+                    if price_source.get(s) in ["synthetic", "suspicious"]:
                         print(
-                            f"    ⚠️ {penguin.name} skipped BUY {qty} {s} - synthetic data (no buying allowed)"
+                            f"    ⚠️ {penguin.name} skipped BUY {qty} {s} - unreliable data ({price_source.get(s)})"
                         )
                         continue
                     # Validate price is not $0 before buying
@@ -368,10 +391,10 @@ def run():
                             (minute, f"BUY {qty} {s} @ ${ask:.2f}{source_marker}")
                         )
                 elif decision == "SELL":
-                    # Do not allow SELL on synthetic data, except on final iteration
-                    if price_source.get(s) == "synthetic" and not is_final_iteration:
+                    # Do not allow SELL on synthetic/suspicious data, except on final iteration
+                    if price_source.get(s) in ["synthetic", "suspicious"] and not is_final_iteration:
                         print(
-                            f"    ⚠️ {penguin.name} skipped SELL {qty} {s} - synthetic data (no selling except on final iteration)"
+                            f"    ⚠️ {penguin.name} skipped SELL {qty} {s} - unreliable data ({price_source.get(s)})"
                         )
                         continue
                     # Validate price is not $0 before selling
@@ -399,6 +422,27 @@ def run():
             p = portfolios[penguin.name]
             v = p.value(latest_prices)
             curves[penguin.name].append(v)
+
+            previous_value = last_values.get(penguin.name, v)
+            if previous_value > 0:
+                drop_pct = (v - previous_value) / previous_value * 100
+                if drop_pct <= -drop_alert_pct:
+                    print(
+                        f"  ⚠️ {penguin.name} value drop {drop_pct:.2f}% (minute {minute})"
+                    )
+                    print(f"    Cash: ${p.cash:,.2f}  Value: ${v:,.2f}")
+                    if p.positions:
+                        print("    Positions:")
+                        for symbol, pos in p.positions.items():
+                            last_price = latest_prices.get(symbol, pos.avg_price)
+                            pnl = (last_price - pos.avg_price) * pos.qty
+                            print(
+                                f"      {symbol} qty={pos.qty} avg=${pos.avg_price:.2f} last=${last_price:.2f} pnl=${pnl:+.2f}"
+                            )
+                    else:
+                        print("    Positions: none")
+
+            last_values[penguin.name] = v
 
         # Plot capital curves every 10 trading minutes
         if actual_trading_minutes % 10 == 0:

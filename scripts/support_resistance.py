@@ -1,6 +1,7 @@
 """Support & Resistance calculations and logging."""
 
 import os
+from datetime import datetime
 from data import get_timeframe_bars
 
 
@@ -29,6 +30,7 @@ def compute_and_log_support_resistance_zones(sr_penguin, symbols, scales):
         f.write("=" * 80 + "\n")
         f.write("SUPPORT & RESISTANCE ZONES LOG\n")
         f.write("=" * 80 + "\n\n")
+        f.write(f"Evaluated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         f.write("Parameters:\n")
         f.write(
             f"  - Pivot detection window: {sr_penguin.left} bars left, {sr_penguin.right} bars right\n"

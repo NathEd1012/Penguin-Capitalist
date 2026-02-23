@@ -6,94 +6,94 @@ from indicators.momentum import rsi, roc
 class CopilotPenguin(BasePenguin):
     def __init__(self):
         super().__init__("CopilotPenguin")
-        self.position_size = 1  # Track position size
         self.entry_price = {}  # Track entry prices by symbol
+        self.last_trade_index = {}  # Track last trade index by symbol
+
+        # Strategy parameters
+        self.min_bars = 50
+        self.cooldown_bars = 5
+        self.max_spread_pct = 1.0
+        self.min_trend_roc = 0.005
+        self.stop_loss_atr_mult = 1.5
+        self.take_profit_atr_mult = 2.0
 
     def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """
-        Advanced hybrid strategy combining:
-        - RSI for mean reversion (overbought/oversold)
-        - Rate of Change (ROC) for momentum confirmation
-        - Volatility-aware position sizing
-        - Trend filtering
+        Trend-following strategy with cooldown and volatility-aware exits.
         """
         if bid <= 0 or ask <= 0:
             return "HOLD", 0
 
-        if len(mid_prices) < 20:
+        if len(mid_prices) < self.min_bars:
+            return "HOLD", 0
+
+        # Avoid trading on wide spreads
+        spread_pct = (ask - bid) / bid * 100 if bid > 0 else 0
+        if spread_pct > self.max_spread_pct:
             return "HOLD", 0
 
         # Calculate indicators
         rsi_val = rsi(mid_prices, n=14)
-        roc_short = roc(mid_prices, n=3)  # Short-term momentum
-        roc_medium = roc(mid_prices, n=7)  # Medium-term momentum
+        roc_short = roc(mid_prices, n=3)
+        roc_medium = roc(mid_prices, n=7)
 
-        # Trend detection: Is price above 20-SMA?
+        # Trend detection: SMA20 above SMA50
         sma_20 = sum(mid_prices[-20:]) / 20
+        sma_50 = sum(mid_prices[-50:]) / 50
         price = mid_prices[-1]
-        is_uptrend = price > sma_20
-        is_downtrend = price < sma_20
+        is_uptrend = price > sma_20 > sma_50
 
-        # Volatility (simple measure based on price range)
+        # Volatility proxy (range over last 10 bars)
         recent_high = max(mid_prices[-10:])
         recent_low = min(mid_prices[-10:])
-        volatility = (recent_high - recent_low) / recent_low if recent_low > 0 else 0
+        atr_proxy = max(recent_high - recent_low, 0.01)
 
         # Check if we have a position
         has_position = (
             symbol in portfolio.positions and portfolio.positions[symbol].qty > 0
         )
+        position_qty = portfolio.positions[symbol].qty if has_position else 0
+
+        # Cooldown after last trade for this symbol
+        current_index = len(mid_prices)
+        last_trade_index = self.last_trade_index.get(symbol, -999)
+        in_cooldown = (current_index - last_trade_index) <= self.cooldown_bars
 
         # ========== BUY SIGNALS ==========
-        # Buy conditions:
-        # 1. RSI oversold (< 35) + positive momentum + in uptrend
-        # 2. Strong positive ROC + RSI not overbought
-        # 3. Price breaks above recent high (momentum)
+        # Trend-following entry: uptrend + positive momentum + RSI confirmation
+        buy_signal = is_uptrend and roc_medium > self.min_trend_roc and 50 <= rsi_val <= 70
 
-        buy_signal_rsi = rsi_val < 35 and roc_short > 0 and is_uptrend
-        buy_signal_momentum = roc_medium > 0.02 and rsi_val < 65
-        buy_signal_breakout = ask > recent_high and roc_short > 0.005
-
-        if (
-            buy_signal_rsi or buy_signal_momentum or buy_signal_breakout
-        ) and not has_position:
-            # Size position based on volatility (smaller in volatile markets)
-            qty = 1 if volatility > 0.05 else 2
+        if buy_signal and not has_position and not in_cooldown:
+            # Position size based on volatility proxy
+            qty = 1 if atr_proxy / price > 0.02 else 2
             if portfolio.cash >= ask:
+                self.last_trade_index[symbol] = current_index
+                self.entry_price[symbol] = ask
                 return "BUY", qty
             return "HOLD", 0
 
         # ========== SELL SIGNALS ==========
-        # Sell conditions:
-        # 1. Take profit: Price up 2%+ from entry with overbought RSI
-        # 2. Stop loss: Price down 1% from entry
-        # 3. Strong bearish momentum
-        # 4. Price breaks below support
+        # Exit conditions:
+        # 1. Volatility-based take profit
+        # 2. Volatility-based stop loss
+        # 3. Trend breaks (price below SMA20)
 
         if has_position:
             entry_price = portfolio.positions[symbol].avg_price
-            current_pnl_pct = (
-                (bid - entry_price) / entry_price if entry_price > 0 else 0
-            )
+            take_profit_price = entry_price + self.take_profit_atr_mult * atr_proxy
+            stop_loss_price = entry_price - self.stop_loss_atr_mult * atr_proxy
 
-            # Take profit condition
-            if current_pnl_pct > 0.02 and rsi_val > 70:
-                qty = portfolio.positions[symbol].qty
-                return "SELL", qty
+            if bid >= take_profit_price:
+                self.last_trade_index[symbol] = current_index
+                return "SELL", position_qty
 
-            # Stop loss condition
-            if current_pnl_pct < -0.01:
-                qty = portfolio.positions[symbol].qty
-                return "SELL", qty
+            if bid <= stop_loss_price:
+                self.last_trade_index[symbol] = current_index
+                return "SELL", position_qty
 
-            # Strong bearish momentum
-            if roc_medium < -0.02 and rsi_val > 50:
-                qty = portfolio.positions[symbol].qty
-                return "SELL", qty
-
-            # Price breaks below support
-            if bid < recent_low and roc_short < -0.005:
-                qty = portfolio.positions[symbol].qty
-                return "SELL", qty
+            # Trend break exit
+            if bid < sma_20 and roc_short < 0:
+                self.last_trade_index[symbol] = current_index
+                return "SELL", position_qty
 
         return "HOLD", 0

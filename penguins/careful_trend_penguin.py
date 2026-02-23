@@ -3,46 +3,43 @@ from penguins.base_penguin import BasePenguin
 
 
 class CarefulTrendPenguin(BasePenguin):
-    def __init__(self, buy_consecutive=3, sell_consecutive=2):
+    def __init__(self, window_minutes=5, buy_threshold=4, sell_threshold=3):
         super().__init__("CarefulTrendPenguin")
-        self.buy_consecutive = buy_consecutive
-        self.sell_consecutive = sell_consecutive
+        self.window_minutes = window_minutes
+        self.buy_threshold = buy_threshold
+        self.sell_threshold = sell_threshold
 
     def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """
-        Buy when stock has risen for buy_consecutive consecutive minutes.
-        Sell when stock has fallen for sell_consecutive consecutive minutes.
+        Buy 1 if the stock rose in at least buy_threshold of the last
+        window_minutes minutes. Sell all if it fell in at least sell_threshold
+        of the last window_minutes minutes.
         """
         if bid <= 0 or ask <= 0:
             return "HOLD", 0
 
-        if len(mid_prices) < max(self.buy_consecutive, self.sell_consecutive):
+        # Need window_minutes changes, which requires window_minutes + 1 prices
+        if len(mid_prices) < self.window_minutes + 1:
             return "HOLD", 0
 
-        # Check last buy_consecutive bars for buy signal
-        recent_buy = mid_prices[-self.buy_consecutive :]
-        all_increasing = all(
-            recent_buy[i] < recent_buy[i + 1] for i in range(len(recent_buy) - 1)
-        )
-        if all_increasing:
-            increase = recent_buy[-1] - recent_buy[0]
-            qty = max(1, int(increase / recent_buy[-1] * 100))
+        recent_window = mid_prices[-(self.window_minutes + 1) :]
+        changes = [
+            recent_window[i + 1] - recent_window[i]
+            for i in range(len(recent_window) - 1)
+        ]
+        up_minutes = sum(1 for change in changes if change > 0)
+        down_minutes = sum(1 for change in changes if change < 0)
+
+        if up_minutes >= self.buy_threshold:
             max_affordable = int(portfolio.cash // ask)
-            qty = min(qty, max_affordable)
-            if qty > 0:
-                return "BUY", qty
+            if max_affordable >= 1:
+                return "BUY", 1
             return "HOLD", 0
 
-        # Check last sell_consecutive bars for sell signal
-        recent_sell = mid_prices[-self.sell_consecutive :]
-        all_decreasing = all(
-            recent_sell[i] > recent_sell[i + 1] for i in range(len(recent_sell) - 1)
-        )
-        if all_decreasing:
+        if down_minutes >= self.sell_threshold:
             qty = portfolio.get_position(symbol)
             if qty > 0:
                 return "SELL", qty
-            else:
-                return "HOLD", 0
+            return "HOLD", 0
 
         return "HOLD", 0

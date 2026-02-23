@@ -44,6 +44,10 @@ SIMULATION_MINUTES = 60  # For backtest (kept for compatibility)
 USE_SYNTHETIC_DATA = True  # Use synthetic prices when Alpaca returns no data
 FAST_MODE = True  # Skip real-time sleep, run as fast as possible
 
+# ========== DATA QUALITY SETTINGS ==========
+MAX_QUOTE_AGE_SEC = 60  # Reject quotes older than this while market is open
+MAX_NO_UPDATE_MINUTES = 2  # Reject quotes unchanged for this many consecutive minutes
+
 # ========== OUTPUT FILES ==========
 import os
 from datetime import datetime
