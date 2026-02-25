@@ -89,6 +89,20 @@ def run():
     actual_trading_minutes = 0  # Track minutes when market was actually open
     last_values = {p.name: INITIAL_CAPITAL for p in penguins}
     drop_alert_pct = 5.0
+    circuit_breaker_threshold_pct = 10.0
+
+    def build_latest_prices(use_previous: bool = False) -> dict:
+        latest = {}
+        for s in SYMBOLS:
+            history = price_history[s]
+            price = None
+            if history:
+                idx = -2 if use_previous and len(history) >= 2 else -1
+                price = history[idx]
+            if price is None or price <= 0:
+                price = synthetic_price_bar(s, price_history)
+            latest[s] = price
+        return latest
 
     sr_penguins = [p for p in penguins if isinstance(p, SupportResistancePenguin)]
     if sr_penguins:
@@ -141,9 +155,7 @@ def run():
             f.write(f"Initial Capital: ${INITIAL_CAPITAL:,.2f}\n\n")
             f.write("=" * 80 + "\n\n")
 
-            latest_prices = {
-                s: price_history[s][-1] for s in SYMBOLS if price_history[s]
-            }
+            latest_prices = build_latest_prices()
             consistency_warnings = {
                 name: check_consistency(
                     portfolios[name],
@@ -194,9 +206,7 @@ def run():
             )
 
             # Get latest prices
-            latest_prices = {
-                s: price_history[s][-1] for s in SYMBOLS if price_history[s]
-            }
+            latest_prices = build_latest_prices()
 
             # Forced liquidation on interrupt: sell all remaining positions
             print("\n⚡ Performing forced liquidation of all positions...")
@@ -209,8 +219,10 @@ def run():
                 for symbol in list(portfolio.positions.keys()):
                     position = portfolio.positions[symbol]
                     qty = position.qty
-                    if qty > 0 and symbol in latest_prices:
-                        bid_price = latest_prices[symbol]
+                    if qty > 0:
+                        bid_price = latest_prices.get(symbol)
+                        if bid_price is None or bid_price <= 0:
+                            bid_price = synthetic_price_bar(symbol, price_history)
                         success = portfolio.sell(symbol, bid_price, qty=qty)
                         if success:
                             print(f"    ✓ {penguin.name} FORCED SELL {qty} {symbol} @ ${bid_price:.2f} [liquidation]")
@@ -219,9 +231,7 @@ def run():
                             )
 
             # Update latest prices after liquidation
-            latest_prices = {
-                s: price_history[s][-1] for s in SYMBOLS if price_history[s]
-            }
+            latest_prices = build_latest_prices()
 
             # Ensure capital curve plot matches the report
             plot_capital_curves(curves, CAPITAL_CURVES_FILE)
@@ -317,12 +327,12 @@ def run():
                 spread = ask - bid
                 spread_pct = (spread / bid * 100) if bid > 0 else 0
                 
-                # Check for stale data: price differs >10% from last known price
+                # Check for stale data: price differs >5% from last known price (one minute shouldn't move that much)
                 is_stale = False
                 if price_history[s]:
                     last_price = price_history[s][-1]
                     price_change_pct = abs(mid - last_price) / last_price * 100
-                    if price_change_pct > 10:
+                    if price_change_pct > 5:
                         print(f"{s}: ${bid:.2f} ⚠️ STALE ({price_change_pct:.1f}% jump)", end="  ")
                         is_stale = True
                 
@@ -417,7 +427,37 @@ def run():
                         )
 
         # Record portfolio values
-        latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
+        latest_prices = build_latest_prices()
+        
+        # Circuit breaker: Check if any portfolio would swing >10% in one minute (likely data error)
+        circuit_breaker_triggered = False
+        anomaly_symbol = None
+        for penguin in penguins:
+            p = portfolios[penguin.name]
+            test_value = p.value(latest_prices)
+            previous_value = last_values.get(penguin.name, test_value)
+            
+            if previous_value > 0:
+                swing_pct = abs(test_value - previous_value) / previous_value * 100
+                if swing_pct > 10.0:
+                    circuit_breaker_triggered = True
+                    # Find which position caused the swing
+                    for symbol, pos in p.positions.items():
+                        recent_price = latest_prices.get(symbol, pos.avg_price)
+                        last_bar_price = price_history[symbol][-2] if len(price_history[symbol]) >= 2 else pos.avg_price
+                        if last_bar_price > 0:
+                            price_jump_pct = abs(recent_price - last_bar_price) / last_bar_price * 100
+                            if price_jump_pct > 10.0:
+                                anomaly_symbol = symbol
+                                break
+                    break
+        
+        if circuit_breaker_triggered:
+            print(f"  🚨 CIRCUIT BREAKER: {penguin.name} would swing >10% (anomaly in {anomaly_symbol})")
+            print(f"    Using previous prices instead of this minute's data")
+            # Use previous bar's prices instead
+            latest_prices = build_latest_prices(use_previous=True)
+        
         for penguin in penguins:
             p = portfolios[penguin.name]
             v = p.value(latest_prices)
@@ -549,7 +589,7 @@ def run():
     print(f"📈 Saved final capital curves to {final_plot_path}")
 
     # Generate final PDF report with capital curves and trade summary
-    latest_prices = {s: price_history[s][-1] for s in SYMBOLS if price_history[s]}
+    latest_prices = build_latest_prices()
     pdf_filename = os.path.join("run_current", "report.pdf")
     create_final_report_pdf(curves, portfolios, pdf_filename, latest_prices)
 
@@ -607,6 +647,13 @@ def run():
             f.write("\n")
 
     print(f"📝 Saved trades log to {TRADES_LOG_FILE}")
+
+    # Save CopilotPenguin decision log (if logging enabled)
+    for penguin in penguins:
+        if hasattr(penguin, 'save_decisions_log'):
+            log_path = os.path.join(RUN_CURRENT_DIR, f"{penguin.name}_decisions.json")
+            penguin.save_decisions_log(log_path)
+            print(f"📋 Saved CopilotPenguin decision log to {log_path}")
 
     # Save curves data
     with open(CURVES_DATA_FILE, "w") as f:

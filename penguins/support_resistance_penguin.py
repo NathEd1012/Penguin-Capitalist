@@ -32,7 +32,7 @@ class SupportResistancePenguin(BasePenguin):
         atr_n: int = 14,
         zone_k: float = 0.5,
         min_touches: int = 2,
-        rr_min: float = 1.5,
+        rr_min: float = 1.0,  # Loosened from 1.5 to 1.0
         stop_m: float = 1.0,
         recency_weight: float = 0.2,
     ):
@@ -185,8 +185,8 @@ class SupportResistancePenguin(BasePenguin):
         zone_distance = abs(current_price - nearest_support["center"])
         zone_width = nearest_support["high"] - nearest_support["low"]
         
-        # Check if price is near support (within zone + small margin)
-        if zone_distance > zone_width * 0.7:
+        # Check if price is near support (loosened from 0.7 to 1.2)
+        if zone_distance > zone_width * 1.2:
             return False
         
         # Check for bullish rejection: recent candles show reversal from low
@@ -241,8 +241,8 @@ class SupportResistancePenguin(BasePenguin):
         zone_distance = abs(current_price - nearest_resistance["center"])
         zone_width = nearest_resistance["high"] - nearest_resistance["low"]
         
-        # Take profit if we reached resistance with good profit
-        if zone_distance < zone_width * 0.6:
+        # Take profit if we reached resistance (loosened from 0.6 to 1.0)
+        if zone_distance < zone_width * 1.0:
             # Check for bearish rejection or just take profit
             if len(mid_prices) >= 3:
                 recent_high = max(mid_prices[-3:])
