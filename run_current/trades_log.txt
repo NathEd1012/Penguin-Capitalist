@@ -1,179 +1,286 @@
-Penguin Trading Simulation Log (Interrupted)
-Started: 2026-02-23 17:43:05
-Duration: 31 minutes (interrupted)
-Symbols: NVDA, AAPL, PLTR, AMD, BE, MP, MSTR, MSFT, TSLA, NOC, LMT, NVO
-Initial Capital: $5,000.00
+Penguin Capitalist - Historical Backtest Log
+Generated: 2026-02-25 14:16:30
+================================================================================
+
+EXECUTION DETAILS
+--------------------------------------------------------------------------------
+
+Bar 14:
+  RSI Mean Reversion: BUY 1 BE @ $157.91
+  RSI Mean Reversion: BUY 1 MSTR @ $129.98
+
+Bar 15:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.92
+
+Bar 16:
+  RSI Mean Reversion: BUY 1 AAPL @ $259.88
+  RSI Mean Reversion: BUY 1 REMX @ $89.39
+
+Bar 18:
+  RSI Mean Reversion: BUY 1 MP @ $58.16
+
+Bar 19:
+  RSI Mean Reversion: BUY 1 COPX @ $86.07
+
+Bar 25:
+  RSI Mean Reversion: BUY 1 GDXJ @ $138.91
+
+Bar 28:
+  RSI Mean Reversion: BUY 1 SIL @ $104.10
+
+Bar 31:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.99
+
+Bar 32:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.41
+  RSI Mean Reversion: BUY 1 AMD @ $201.75
+  RSI Mean Reversion: BUY 1 LMT @ $670.68
+  RSI Mean Reversion: BUY 1 NVO @ $47.88
+  RSI Mean Reversion: BUY 1 GLD @ $462.00
+  RSI Mean Reversion: BUY 1 SLV @ $72.75
+
+Bar 33:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.02
+
+Bar 40:
+  RSI Mean Reversion: BUY 1 PPLT @ $192.61
+
+Bar 46:
+  RSI Mean Reversion: SELL 1 LMT @ $670.21
+
+Bar 47:
+  RSI Mean Reversion: SELL 1 GLD @ $462.22
+  RSI Mean Reversion: SELL 1 GDXJ @ $138.51
+
+Bar 50:
+  RSI Mean Reversion: SELL 1 SLV @ $73.04
+
+Bar 52:
+  RSI Mean Reversion: SELL 1 SIL @ $103.95
+
+Bar 53:
+  RSI Mean Reversion: BUY 1 NOC @ $741.53
+
+Bar 54:
+  RSI Mean Reversion: SELL 1 MSTR @ $128.77
+
+Bar 55:
+  RSI Mean Reversion: SELL 1 BE @ $156.19
+
+Bar 56:
+  RSI Mean Reversion: SELL 1 PPLT @ $192.81
+
+Bar 60:
+  RSI Mean Reversion: SELL 1 MP @ $57.94
+  RSI Mean Reversion: BUY 1 LMT @ $670.90
+
+Bar 62:
+  RSI Mean Reversion: SELL 1 COPX @ $85.85
+
+Bar 63:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.67
+  RSI Mean Reversion: SELL 1 TSLA @ $409.13
+
+Bar 70:
+  RSI Mean Reversion: BUY 1 BE @ $155.76
+
+Bar 73:
+  RSI Mean Reversion: BUY 1 GDXJ @ $139.00
+
+Bar 75:
+  RSI Mean Reversion: BUY 1 MP @ $57.85
+
+Bar 76:
+  RSI Mean Reversion: BUY 1 COPX @ $85.84
+
+Bar 77:
+  RSI Mean Reversion: SELL 1 NVO @ $47.76
+
+Bar 78:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.77
+
+Bar 79:
+  RSI Mean Reversion: SELL 1 LMT @ $670.03
+
+Bar 80:
+  RSI Mean Reversion: BUY 1 MSTR @ $127.83
+  RSI Mean Reversion: BUY 1 SIL @ $103.83
+
+Bar 87:
+  RSI Mean Reversion: SELL 1 BE @ $155.96
+
+Bar 89:
+  RSI Mean Reversion: SELL 1 MSTR @ $130.59
+
+Bar 90:
+  RSI Mean Reversion: BUY 1 BE @ $153.22
+  RSI Mean Reversion: BUY 1 TSLA @ $407.58
+  RSI Mean Reversion: BUY 1 LMT @ $665.88
+  RSI Mean Reversion: BUY 1 NVO @ $47.71
+  RSI Mean Reversion: SELL 1 COPX @ $86.03
+  RSI Mean Reversion: BUY 1 LIT @ $72.27
+
+Bar 91:
+  RSI Mean Reversion: SELL 1 MP @ $58.05
+  RSI Mean Reversion: SELL 1 GDXJ @ $140.21
+  RSI Mean Reversion: SELL 1 SIL @ $104.89
+
+Bar 93:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.66
+
+Bar 100:
+  RSI Mean Reversion: SELL 1 AMD @ $202.04
+
+Bar 106:
+  RSI Mean Reversion: SELL 1 REMX @ $88.80
+
+Bar 116:
+  RSI Mean Reversion: BUY 1 AMD @ $199.73
+
+Bar 121:
+  RSI Mean Reversion: SELL 1 AAPL @ $261.15
+  RSI Mean Reversion: SELL 1 NOC @ $730.85
+
+Bar 123:
+  RSI Mean Reversion: SELL 1 NVO @ $47.54
+  RSI Mean Reversion: BUY 1 GLD @ $461.56
+  RSI Mean Reversion: SELL 1 LIT @ $72.64
+
+Bar 126:
+  RSI Mean Reversion: BUY 1 SLV @ $72.39
+  RSI Mean Reversion: BUY 1 GDXJ @ $137.93
+  RSI Mean Reversion: BUY 1 SIL @ $103.69
+
+Bar 130:
+  RSI Mean Reversion: SELL 1 AMD @ $202.69
+
+Bar 133:
+  RSI Mean Reversion: BUY 1 NOC @ $718.73
+
+Bar 135:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.38
+  RSI Mean Reversion: BUY 1 MP @ $57.68
+  RSI Mean Reversion: BUY 1 MSTR @ $131.30
+
+Bar 137:
+  RSI Mean Reversion: BUY 1 PICK @ $60.61
+
+Bar 142:
+  RSI Mean Reversion: BUY 1 NVO @ $47.33
+
+Bar 145:
+  RSI Mean Reversion: SELL 1 PICK @ $60.70
+
+Bar 146:
+  RSI Mean Reversion: SELL 1 NOC @ $726.02
+  RSI Mean Reversion: SELL 1 LMT @ $660.30
+
+Bar 149:
+  RSI Mean Reversion: SELL 1 MSTR @ $133.48
+
+Bar 150:
+  RSI Mean Reversion: SELL 1 BE @ $155.79
+
+Bar 155:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.87
+  RSI Mean Reversion: BUY 1 LIT @ $72.75
+
+Bar 160:
+  RSI Mean Reversion: BUY 1 MSTR @ $132.45
+
+Bar 161:
+  RSI Mean Reversion: SELL 1 SLV @ $74.07
+
+Bar 163:
+  RSI Mean Reversion: SELL 1 AAPL @ $261.81
+
+Bar 164:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.02
+
+Bar 166:
+  RSI Mean Reversion: SELL 1 GLD @ $463.42
+
+Bar 167:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.02
+  RSI Mean Reversion: BUY 1 NOC @ $723.99
+  RSI Mean Reversion: SELL 1 SIL @ $104.02
+
+Bar 169:
+  RSI Mean Reversion: SELL 1 MSFT @ $398.13
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.71
+
+Bar 174:
+  RSI Mean Reversion: SELL 1 MP @ $57.28
+  RSI Mean Reversion: SELL 1 TSLA @ $412.38
+
+Bar 178:
+  RSI Mean Reversion: SELL 1 LIT @ $72.89
+
+Bar 180:
+  RSI Mean Reversion: BUY 1 SLV @ $73.94
+
 
 ================================================================================
 
-CarefulTrendPenguin
-  Current Value:   $4,974.20
-  PnL:             $-25.80  (-0.52%)
-  Total Trades:    62
-  Current Positions: 2
-  Current Cash:    $2,139.60
+STRATEGY SUMMARY
+--------------------------------------------------------------------------------
 
-  Trades (up to interruption):
-
-    Minute 0-9:
-      BUY 1 MP @ $57.64
-      BUY 1 AMD @ $202.00
-      BUY 1 NVO @ $39.97
-      SELL 1 MP @ $55.58
-      BUY 1 NVO @ $39.86
-      BUY 1 AAPL @ $265.57
-      BUY 1 PLTR @ $135.00
-      BUY 1 AMD @ $196.02
-      BUY 1 MSFT @ $386.22
-      BUY 1 NVO @ $39.94
-      BUY 1 NVDA @ $190.06
-      BUY 1 AAPL @ $265.52
-      BUY 1 AMD @ $196.28
-      BUY 1 MSFT @ $386.22
-      BUY 1 TSLA @ $398.11
-      BUY 1 NVO @ $40.00
-      BUY 1 NVDA @ $190.21
-      BUY 1 AMD @ $196.42
-      BUY 1 TSLA @ $398.29
-      BUY 1 NVO @ $40.09
-
-    Minute 10-19:
-      BUY 1 NVDA @ $190.22
-      BUY 1 AMD @ $196.43
-      BUY 1 MSFT @ $388.00
-      BUY 1 TSLA @ $398.48
-      BUY 1 NVDA @ $190.06
-      SELL 2 AAPL @ $266.03
-      SELL 1 PLTR @ $130.01
-      SELL 3 MSFT @ $385.80
-      BUY 1 TSLA @ $397.98
-      SELL 5 NVO @ $40.00
-      BUY 1 AAPL @ $266.34
-      SELL 4 TSLA @ $396.64
-      BUY 1 AAPL @ $267.54
-      SELL 5 AMD @ $196.45
-      BUY 1 NVDA @ $190.45
-      BUY 1 NVDA @ $190.52
-      BUY 1 AAPL @ $266.67
-      BUY 1 NVDA @ $190.50
-      BUY 1 AAPL @ $267.54
-      BUY 1 NVO @ $40.17
-      BUY 1 NVDA @ $190.67
-      BUY 1 TSLA @ $398.26
-
-    Minute 20-29:
-      BUY 1 NVDA @ $190.71
-      BUY 1 TSLA @ $398.23
-      SELL 1 NVO @ $39.93
-      BUY 1 TSLA @ $398.32
-      SELL 4 AAPL @ $266.25
-      BUY 1 NVDA @ $190.73
-      BUY 1 PLTR @ $135.00
-      BUY 1 MSFT @ $387.00
-      BUY 1 NVDA @ $190.86
-      SELL 3 TSLA @ $397.65
-      BUY 1 NVDA @ $190.89
-      SELL 1 PLTR @ $129.62
-      BUY 1 MSFT @ $386.60
-      BUY 1 NVDA @ $190.90
-      BUY 1 NVO @ $39.98
-      BUY 1 NVO @ $39.99
-      BUY 1 NVO @ $39.98
-
-    Minute 30-39:
-      BUY 1 NVDA @ $191.07
-      SELL 2 MSFT @ $385.90
-      BUY 1 NVO @ $40.05
 
 CopilotPenguin
-  Current Value:   $5,000.00
-  PnL:             $+0.00  (+0.00%)
-  Total Trades:    0
-  Current Positions: 0
-  Current Cash:    $5,000.00
+  Final Value:    $5,000.00
+  Total Return:   $0.00  (0.00%)
+  Max Drawdown:   0.00%
+  Sharpe Ratio:   0.00
+  Total Trades:   0
+  Buy Trades:     0
+  Sell Trades:    0
 
-  Trades: None
+  Recent Trades:
 
-Moving Average Crossover
-  Current Value:   $4,997.26
-  PnL:             $-2.74  (-0.05%)
-  Total Trades:    17
-  Current Positions: 5
-  Current Cash:    $4,069.03
-
-  Trades (up to interruption):
-
-    Minute 0-9:
-      BUY 1 MP @ $57.64
-      BUY 1 MSFT @ $388.00
-      BUY 1 AMD @ $202.00
-      BUY 1 NVDA @ $190.06
-      BUY 1 NVO @ $39.94
-
-    Minute 10-19:
-      BUY 1 AAPL @ $266.01
-      BUY 1 BE @ $155.00
-      SELL 1 AMD @ $194.76
-
-    Minute 20-29:
-      BUY 1 TSLA @ $398.23
-      SELL 1 MP @ $55.30
-      SELL 1 NVO @ $39.90
-      BUY 1 AMD @ $196.25
-      SELL 1 MSFT @ $386.21
-      SELL 1 AMD @ $196.04
-      SELL 1 AAPL @ $265.00
-
-    Minute 30-39:
-      BUY 1 PLTR @ $135.00
-      BUY 1 NVO @ $40.05
+--------------------------------------------------------------------------------
 
 RSI Mean Reversion
-  Current Value:   $5,002.58
-  PnL:             $+2.58  (+0.05%)
-  Total Trades:    5
-  Current Positions: 1
-  Current Cash:    $4,876.33
+  Final Value:    $5,014.20
+  Total Return:   $14.20  (0.28%)
+  Max Drawdown:   -38.52%
+  Sharpe Ratio:   0.58
+  Total Trades:   96
+  Buy Trades:     48
+  Sell Trades:    48
 
-  Trades (up to interruption):
+  Recent Trades:
+    BUY 1 AAPL @ $260.87 at 2026-02-20 15:35:00+00:00
+    BUY 1 LIT @ $72.75 at 2026-02-20 15:35:00+00:00
+    BUY 1 MSTR @ $132.45 at 2026-02-20 15:40:00+00:00
+    SELL 1 SLV @ $74.07 at 2026-02-20 15:41:00+00:00
+    SELL 1 AAPL @ $261.81 at 2026-02-20 15:43:00+00:00
+    SELL 1 NVDA @ $189.02 at 2026-02-20 15:44:00+00:00
+    SELL 1 GLD @ $463.42 at 2026-02-20 15:46:00+00:00
+    SELL 1 PLTR @ $134.02 at 2026-02-20 15:47:00+00:00
+    BUY 1 NOC @ $723.99 at 2026-02-20 15:47:00+00:00
+    SELL 1 SIL @ $104.02 at 2026-02-20 15:47:00+00:00
+    SELL 1 MSFT @ $398.13 at 2026-02-20 15:49:00+00:00
+    SELL 1 GDXJ @ $137.71 at 2026-02-20 15:49:00+00:00
+    SELL 1 MP @ $57.28 at 2026-02-20 15:54:00+00:00
+    SELL 1 TSLA @ $412.38 at 2026-02-20 15:54:00+00:00
+    SELL 1 LIT @ $72.89 at 2026-02-20 15:58:00+00:00
+    BUY 1 SLV @ $73.94 at 2026-02-20 16:00:00+00:00
+    SELL 1 NVO @ $47.49 at 2026-02-20 16:00:00+00:00
+    SELL 1 MSTR @ $133.58 at 2026-02-20 16:00:00+00:00
+    SELL 1 NOC @ $726.45 at 2026-02-20 16:00:00+00:00
+    SELL 1 SLV @ $74.15 at 2026-02-20 16:00:00+00:00
 
-    Minute 0-9:
-      BUY 1 MSTR @ $125.65
-      BUY 1 TSLA @ $398.34
-      BUY 1 AAPL @ $264.82
-
-    Minute 10-19:
-      SELL 1 AAPL @ $266.64
-
-    Minute 30-39:
-      SELL 1 TSLA @ $398.50
+--------------------------------------------------------------------------------
 
 SMA20MultiTimeframePenguin
-  Current Value:   $5,005.49
-  PnL:             $+5.49  (+0.11%)
-  Total Trades:    5
-  Current Positions: 3
-  Current Cash:    $4,519.67
+  Final Value:    $5,000.00
+  Total Return:   $0.00  (0.00%)
+  Max Drawdown:   0.00%
+  Sharpe Ratio:   0.00
+  Total Trades:   0
+  Buy Trades:     0
+  Sell Trades:    0
 
-  Trades (up to interruption):
+  Recent Trades:
 
-    Minute 0-9:
-      BUY 1 AAPL @ $267.54
-
-    Minute 10-19:
-      BUY 1 MP @ $57.64
-      BUY 1 BE @ $155.00
-      SELL 1 MP @ $55.21
-
-    Minute 20-29:
-      BUY 1 MP @ $55.36
-
-SupportResistancePenguin
-  Current Value:   $5,000.00
-  PnL:             $+0.00  (+0.00%)
-  Total Trades:    0
-  Current Positions: 0
-  Current Cash:    $5,000.00
-
-  Trades: None
-
+--------------------------------------------------------------------------------
