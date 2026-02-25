@@ -31,6 +31,9 @@ class Portfolio:
         # Track the cost basis for each position for P&L calculation
         self.cost_basis: Dict[str, float] = {}
         
+        # Track last known good price for each symbol (fallback if price data missing)
+        self.last_known_prices: Dict[str, float] = {}
+        
         # Trade history
         self.trades: List[Trade] = []
         
@@ -42,11 +45,33 @@ class Portfolio:
         return self.positions.get(symbol, 0)
     
     def get_total_value(self, current_prices: Dict[str, float]) -> float:
-        """Calculate total portfolio value (cash + positions at current prices)."""
+        """
+        Calculate total portfolio value (cash + positions at current prices).
+        Uses last-known-good price if current price is not available to prevent
+        artificial drops when price data is missing.
+        
+        Args:
+            current_prices: Dict of current symbol prices
+        
+        Returns:
+            Total portfolio value
+        """
         total = self.cash
         for symbol, quantity in self.positions.items():
-            if quantity > 0 and symbol in current_prices:
-                total += quantity * current_prices[symbol]
+            if quantity > 0:
+                # Use current price if available, otherwise fall back to last known price
+                if symbol in current_prices and current_prices[symbol] > 0:
+                    price = current_prices[symbol]
+                    self.last_known_prices[symbol] = price  # Update last known price
+                elif symbol in self.last_known_prices and self.last_known_prices[symbol] > 0:
+                    # Use previous price (carry forward)
+                    price = self.last_known_prices[symbol]
+                else:
+                    # No price available at all, skip this position
+                    continue
+                
+                total += quantity * price
+        
         return total
     
     def buy(self, symbol: str, quantity: int, price: float, timestamp: datetime) -> bool:
@@ -61,6 +86,10 @@ class Portfolio:
         
         self.cash -= cost
         self.positions[symbol] = self.positions.get(symbol, 0) + quantity
+        
+        # Track last known price for fallback valuation
+        if price > 0:
+            self.last_known_prices[symbol] = price
         
         # Update cost basis (weighted average)
         old_quantity = self.positions.get(symbol, quantity) - quantity
@@ -93,6 +122,10 @@ class Portfolio:
         
         if quantity > current_qty:
             return False
+        
+        # Track last known price for fallback valuation
+        if price > 0:
+            self.last_known_prices[symbol] = price
         
         proceeds = quantity * price - self.transaction_cost
         self.cash += proceeds
@@ -139,3 +172,78 @@ class Portfolio:
     def get_trade_count(self) -> int:
         """Get total number of trades executed."""
         return len(self.trades)
+    
+    def get_symbol_summary(self, prices: Dict[str, float] = None) -> Dict:
+        """
+        Return summary of trades per symbol, including current position info.
+        
+        Args:
+            prices: Dict of current market prices for each symbol
+        
+        Returns:
+            Dict with per-symbol trade and position statistics
+        """
+        if prices is None:
+            prices = {}
+        
+        summary = {}
+        
+        # Process all trades
+        for trade in self.trades:
+            symbol = trade.symbol
+            if symbol not in summary:
+                summary[symbol] = {
+                    "buy_count": 0,
+                    "sell_count": 0,
+                    "total_qty_bought": 0,
+                    "total_qty_sold": 0,
+                    "total_cost": 0,  # Total spent on buys
+                    "total_revenue": 0,  # Total received from sells
+                }
+            
+            if trade.action == "BUY":
+                summary[symbol]["buy_count"] += 1
+                summary[symbol]["total_qty_bought"] += trade.quantity
+                summary[symbol]["total_cost"] += trade.quantity * trade.price + self.transaction_cost
+            else:  # SELL
+                summary[symbol]["sell_count"] += 1
+                summary[symbol]["total_qty_sold"] += trade.quantity
+                summary[symbol]["total_revenue"] += trade.quantity * trade.price - self.transaction_cost
+        
+        # Ensure symbols with open positions are included
+        for symbol in self.positions:
+            if symbol not in summary:
+                summary[symbol] = {
+                    "buy_count": 0,
+                    "sell_count": 0,
+                    "total_qty_bought": 0,
+                    "total_qty_sold": 0,
+                    "total_cost": 0,
+                    "total_revenue": 0,
+                }
+        
+        # Calculate P&L for each symbol
+        for symbol in summary:
+            cost = summary[symbol]["total_cost"]
+            revenue = summary[symbol]["total_revenue"]
+            realized_pnl = revenue - cost
+            
+            position_qty = self.positions.get(symbol, 0)
+            cost_basis_price = self.cost_basis.get(symbol, 0.0)
+            market_price = prices.get(symbol) if symbol in prices else None
+            market_value = position_qty * market_price if market_price is not None else 0.0
+            unrealized_pnl = (market_price - cost_basis_price) * position_qty if market_price is not None and cost_basis_price > 0 else 0.0
+            
+            total_pnl = realized_pnl + unrealized_pnl
+            total_pnl_pct = (total_pnl / cost * 100) if cost > 0 else 0
+            
+            summary[symbol]["realized_pnl"] = realized_pnl
+            summary[symbol]["unrealized_pnl"] = unrealized_pnl
+            summary[symbol]["total_pnl"] = total_pnl
+            summary[symbol]["pnl_pct"] = total_pnl_pct
+            summary[symbol]["position_qty"] = position_qty
+            summary[symbol]["market_value"] = market_value
+            summary[symbol]["market_price"] = market_price
+        
+        return summary
+

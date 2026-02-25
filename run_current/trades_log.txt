@@ -1,37 +1,2920 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-02-25 14:16:30
+Generated: 2026-02-25 15:31:21
 ================================================================================
 
 EXECUTION DETAILS
 --------------------------------------------------------------------------------
 
 Bar 14:
-  RSI Mean Reversion: BUY 1 BE @ $157.91
-  RSI Mean Reversion: BUY 1 MSTR @ $129.98
+  RSI Mean Reversion: BUY 1 SLV @ $66.16
+  RSI Mean Reversion: BUY 1 PICK @ $58.88
 
 Bar 15:
-  RSI Mean Reversion: BUY 1 TSLA @ $411.92
+  RSI Mean Reversion: BUY 1 GLD @ $447.99
+  RSI Mean Reversion: BUY 1 COPX @ $83.24
+  RSI Mean Reversion: BUY 1 GDXJ @ $129.51
 
-Bar 16:
-  RSI Mean Reversion: BUY 1 AAPL @ $259.88
-  RSI Mean Reversion: BUY 1 REMX @ $89.39
+Bar 17:
+  RSI Mean Reversion: BUY 1 MSFT @ $395.95
 
 Bar 18:
-  RSI Mean Reversion: BUY 1 MP @ $58.16
+  RSI Mean Reversion: BUY 1 AMD @ $201.03
+  RSI Mean Reversion: BUY 1 PPLT @ $182.66
+  RSI Mean Reversion: BUY 1 SIL @ $95.85
 
 Bar 19:
-  RSI Mean Reversion: BUY 1 COPX @ $86.07
+  CopilotPenguin: BUY 2 NOC @ $705.27
+  CopilotPenguin: BUY 2 LMT @ $654.08
+  CopilotPenguin: BUY 2 NVO @ $49.26
+
+Bar 20:
+  CopilotPenguin: BUY 2 AAPL @ $259.71
+  RSI Mean Reversion: BUY 1 NVDA @ $180.43
+  RSI Mean Reversion: BUY 1 MP @ $55.09
+  RSI Mean Reversion: BUY 1 URTH @ $188.44
+
+Bar 21:
+  CopilotPenguin: BUY 2 GLD @ $448.22
+  RSI Mean Reversion: BUY 1 TSLA @ $406.26
+  RSI Mean Reversion: BUY 1 REMX @ $88.09
+
+Bar 22:
+  SMA20MultiTimeframePenguin: BUY 1 LMT @ $652.72
+
+Bar 23:
+  RSI Mean Reversion: BUY 1 MSTR @ $126.81
+
+Bar 24:
+  CopilotPenguin: BUY 2 PLTR @ $129.14
+  SupportResistancePenguin: BUY 1 NVDA @ $180.04
 
 Bar 25:
-  RSI Mean Reversion: BUY 1 GDXJ @ $138.91
+  RSI Mean Reversion: BUY 1 LIT @ $71.68
+  SMA20MultiTimeframePenguin: BUY 1 GLD @ $448.42
+  SupportResistancePenguin: BUY 1 TSLA @ $404.35
 
-Bar 28:
-  RSI Mean Reversion: BUY 1 SIL @ $104.10
+Bar 26:
+  CopilotPenguin: BUY 2 SLV @ $65.95
+
+Bar 27:
+  CopilotPenguin: BUY 2 MSTR @ $127.18
+
+Bar 29:
+  RSI Mean Reversion: BUY 1 NOC @ $703.32
+
+Bar 30:
+  CopilotPenguin: BUY 2 MP @ $55.23
+  SMA20MultiTimeframePenguin: BUY 1 PLTR @ $129.44
 
 Bar 31:
-  RSI Mean Reversion: BUY 1 NVDA @ $186.99
+  SMA20MultiTimeframePenguin: BUY 1 AAPL @ $259.31
+  SMA20MultiTimeframePenguin: BUY 1 MP @ $55.48
 
 Bar 32:
+  SMA20MultiTimeframePenguin: BUY 1 MSFT @ $396.56
+
+Bar 33:
+  SMA20MultiTimeframePenguin: BUY 1 NVDA @ $180.53
+  SMA20MultiTimeframePenguin: BUY 1 NVO @ $49.18
+  SMA20MultiTimeframePenguin: BUY 1 SLV @ $65.89
+  SMA20MultiTimeframePenguin: BUY 1 COPX @ $82.78
+  SMA20MultiTimeframePenguin: BUY 1 REMX @ $88.09
+  SMA20MultiTimeframePenguin: BUY 1 PICK @ $58.61
+
+Bar 34:
+  SMA20MultiTimeframePenguin: BUY 1 PPLT @ $182.76
+  SMA20MultiTimeframePenguin: BUY 1 GDXJ @ $128.45
+  SMA20MultiTimeframePenguin: BUY 1 SIL @ $95.14
+
+Bar 35:
+  SMA20MultiTimeframePenguin: BUY 1 MSTR @ $127.73
+  SMA20MultiTimeframePenguin: BUY 1 LIT @ $71.90
+
+Bar 36:
+  RSI Mean Reversion: SELL 1 MSFT @ $397.04
+
+Bar 40:
+  SMA20MultiTimeframePenguin: BUY 1 AMD @ $197.31
+
+Bar 42:
+  SMA20MultiTimeframePenguin: BUY 1 NOC @ $704.19
+
+Bar 44:
+  SupportResistancePenguin: BUY 1 GDXJ @ $127.19
+  SupportResistancePenguin: BUY 1 SIL @ $94.24
+
+Bar 47:
+  RSI Mean Reversion: BUY 1 LMT @ $645.91
+  RSI Mean Reversion: BUY 1 NVO @ $48.95
+  SMA20MultiTimeframePenguin: BUY 1 TSLA @ $403.52
+
+Bar 48:
+  SMA20MultiTimeframePenguin: BUY 1 URTH @ $188.49
+
+Bar 49:
+  RSI Mean Reversion: SELL 1 AMD @ $198.61
+
+Bar 57:
+  RSI Mean Reversion: SELL 1 PPLT @ $183.13
+
+Bar 60:
+  RSI Mean Reversion: BUY 1 MSFT @ $396.70
+
+Bar 61:
+  RSI Mean Reversion: BUY 1 AAPL @ $259.43
+  SupportResistancePenguin: BUY 1 AMD @ $196.83
+
+Bar 62:
+  RSI Mean Reversion: BUY 1 PLTR @ $129.17
+  RSI Mean Reversion: BUY 1 AMD @ $196.84
+
+Bar 63:
+  RSI Mean Reversion: BUY 1 PPLT @ $183.47
+  SupportResistancePenguin: BUY 1 MSFT @ $396.52
+
+Bar 73:
+  SupportResistancePenguin: BUY 1 URTH @ $187.73
+
+Bar 74:
+  RSI Mean Reversion: SELL 1 NVO @ $48.83
+
+Bar 75:
+  RSI Mean Reversion: SELL 1 AAPL @ $259.67
+
+Bar 76:
+  RSI Mean Reversion: SELL 1 MSTR @ $127.64
+  RSI Mean Reversion: SELL 1 GDXJ @ $128.03
+  RSI Mean Reversion: SELL 1 SIL @ $94.89
+
+Bar 77:
+  RSI Mean Reversion: SELL 1 AMD @ $197.95
+  RSI Mean Reversion: SELL 1 REMX @ $88.08
+
+Bar 78:
+  RSI Mean Reversion: SELL 1 GLD @ $446.98
+  RSI Mean Reversion: SELL 1 COPX @ $82.59
+  RSI Mean Reversion: SELL 1 LIT @ $71.75
+  RSI Mean Reversion: SELL 1 URTH @ $187.74
+
+Bar 81:
+  RSI Mean Reversion: SELL 1 NVDA @ $181.24
+  RSI Mean Reversion: SELL 1 PLTR @ $130.75
+  RSI Mean Reversion: SELL 1 TSLA @ $403.96
+  RSI Mean Reversion: SELL 1 LMT @ $644.93
+  SupportResistancePenguin: BUY 1 PPLT @ $182.56
+
+Bar 83:
+  RSI Mean Reversion: SELL 1 MSFT @ $397.67
+
+Bar 94:
+  RSI Mean Reversion: SELL 1 SLV @ $66.42
+  RSI Mean Reversion: SELL 1 PICK @ $58.88
+
+Bar 96:
+  RSI Mean Reversion: SELL 1 PPLT @ $183.03
+
+Bar 97:
+  RSI Mean Reversion: SELL 1 NOC @ $702.71
+
+Bar 100:
+  RSI Mean Reversion: SELL 1 MP @ $55.95
+
+Bar 118:
+  SupportResistancePenguin: BUY 1 MP @ $55.73
+
+Bar 120:
+  RSI Mean Reversion: BUY 1 NOC @ $702.35
+
+Bar 121:
+  RSI Mean Reversion: BUY 1 REMX @ $88.77
+
+Bar 122:
+  RSI Mean Reversion: BUY 1 PLTR @ $131.74
+  RSI Mean Reversion: BUY 1 MSFT @ $399.13
+
+Bar 123:
+  RSI Mean Reversion: BUY 1 URTH @ $189.18
+
+Bar 125:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.22
+
+Bar 133:
+  RSI Mean Reversion: SELL 1 URTH @ $189.11
+
+Bar 134:
+  RSI Mean Reversion: SELL 1 NOC @ $703.76
+
+Bar 139:
+  RSI Mean Reversion: BUY 1 MSTR @ $130.43
+  RSI Mean Reversion: BUY 1 NVO @ $49.34
+
+Bar 147:
+  RSI Mean Reversion: SELL 1 AAPL @ $261.25
+  RSI Mean Reversion: BUY 1 PICK @ $59.18
+
+Bar 148:
+  RSI Mean Reversion: BUY 1 SLV @ $66.41
+  RSI Mean Reversion: BUY 1 SIL @ $96.91
+
+Bar 149:
+  RSI Mean Reversion: BUY 1 GLD @ $447.95
+
+Bar 151:
+  SupportResistancePenguin: BUY 1 MSTR @ $130.12
+
+Bar 154:
+  RSI Mean Reversion: BUY 1 PPLT @ $182.95
+
+Bar 157:
+  RSI Mean Reversion: BUY 1 LIT @ $72.32
+
+Bar 160:
+  RSI Mean Reversion: BUY 1 TSLA @ $406.90
+  RSI Mean Reversion: BUY 1 LMT @ $654.22
+  RSI Mean Reversion: BUY 1 GDXJ @ $130.01
+
+Bar 161:
+  RSI Mean Reversion: BUY 1 URTH @ $189.18
+  SupportResistancePenguin: BUY 1 COPX @ $84.03
+
+Bar 170:
+  RSI Mean Reversion: SELL 1 LMT @ $654.40
+
+Bar 171:
+  RSI Mean Reversion: BUY 1 AMD @ $202.28
+  RSI Mean Reversion: BUY 1 MP @ $55.93
+
+Bar 177:
+  RSI Mean Reversion: BUY 1 NOC @ $706.14
+
+Bar 178:
+  RSI Mean Reversion: SELL 1 REMX @ $88.52
+
+Bar 179:
+  RSI Mean Reversion: SELL 1 GLD @ $446.66
+  RSI Mean Reversion: SELL 1 SLV @ $65.97
+  RSI Mean Reversion: SELL 1 GDXJ @ $130.09
+  RSI Mean Reversion: SELL 1 SIL @ $96.74
+
+Bar 180:
+  RSI Mean Reversion: SELL 1 LIT @ $72.14
+
+Bar 181:
+  RSI Mean Reversion: SELL 1 PPLT @ $182.22
+
+Bar 187:
+  RSI Mean Reversion: SELL 1 URTH @ $188.94
+
+Bar 188:
+  RSI Mean Reversion: SELL 1 PICK @ $59.18
+
+Bar 191:
+  SupportResistancePenguin: BUY 1 SLV @ $65.83
+
+Bar 192:
+  RSI Mean Reversion: BUY 1 PICK @ $59.24
+
+Bar 193:
+  RSI Mean Reversion: BUY 1 NVDA @ $184.26
+  RSI Mean Reversion: BUY 1 SLV @ $65.60
+  RSI Mean Reversion: BUY 1 COPX @ $83.88
+
+Bar 195:
+  RSI Mean Reversion: BUY 1 LMT @ $654.20
+  RSI Mean Reversion: BUY 1 PPLT @ $181.16
+
+Bar 196:
+  RSI Mean Reversion: BUY 1 URTH @ $188.90
+  SupportResistancePenguin: BUY 1 GLD @ $447.02
+
+Bar 198:
+  RSI Mean Reversion: BUY 1 REMX @ $88.32
+
+Bar 199:
+  RSI Mean Reversion: BUY 1 LIT @ $72.21
+
+Bar 209:
+  RSI Mean Reversion: SELL 1 NVDA @ $184.70
+  RSI Mean Reversion: SELL 1 AMD @ $202.37
+  RSI Mean Reversion: SELL 1 MP @ $56.01
+  RSI Mean Reversion: SELL 1 MSTR @ $129.54
+  RSI Mean Reversion: SELL 1 TSLA @ $404.96
+  RSI Mean Reversion: SELL 1 COPX @ $84.03
+
+Bar 210:
+  RSI Mean Reversion: SELL 1 SLV @ $65.84
+
+Bar 211:
+  RSI Mean Reversion: SELL 1 REMX @ $88.43
+
+Bar 212:
+  RSI Mean Reversion: SELL 1 PPLT @ $181.99
+
+Bar 218:
+  RSI Mean Reversion: SELL 1 PICK @ $59.15
+
+Bar 219:
+  RSI Mean Reversion: SELL 1 PLTR @ $130.87
+  RSI Mean Reversion: SELL 1 URTH @ $188.61
+
+Bar 222:
+  SupportResistancePenguin: BUY 1 LMT @ $651.53
+
+Bar 228:
+  RSI Mean Reversion: BUY 1 URTH @ $189.04
+
+Bar 230:
+  RSI Mean Reversion: BUY 1 PPLT @ $182.22
+
+Bar 232:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.30
+  RSI Mean Reversion: SELL 1 NOC @ $704.41
+  RSI Mean Reversion: SELL 1 NVO @ $49.28
+  RSI Mean Reversion: SELL 1 URTH @ $189.12
+
+Bar 234:
+  RSI Mean Reversion: SELL 1 LIT @ $72.32
+
+Bar 243:
+  RSI Mean Reversion: SELL 1 LMT @ $650.75
+
+Bar 247:
+  RSI Mean Reversion: SELL 1 PPLT @ $182.59
+
+Bar 270:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.56
+
+Bar 279:
+  RSI Mean Reversion: BUY 1 NOC @ $707.20
+
+Bar 280:
+  RSI Mean Reversion: BUY 1 MP @ $56.73
+  RSI Mean Reversion: BUY 1 MSTR @ $130.87
+  RSI Mean Reversion: BUY 1 GLD @ $450.43
+  RSI Mean Reversion: BUY 1 URTH @ $189.95
+
+Bar 283:
+  RSI Mean Reversion: BUY 1 SIL @ $97.78
+
+Bar 284:
+  SupportResistancePenguin: BUY 1 NOC @ $707.01
+
+Bar 286:
+  RSI Mean Reversion: BUY 1 COPX @ $84.80
+
+Bar 287:
+  RSI Mean Reversion: BUY 1 LMT @ $652.49
+
+Bar 289:
+  RSI Mean Reversion: BUY 1 AAPL @ $265.79
+
+Bar 294:
+  RSI Mean Reversion: SELL 1 URTH @ $189.74
+
+Bar 298:
+  RSI Mean Reversion: BUY 1 PICK @ $59.51
+
+Bar 303:
+  RSI Mean Reversion: BUY 1 LIT @ $72.69
+
+Bar 309:
+  RSI Mean Reversion: SELL 1 MSFT @ $397.36
+
+Bar 312:
+  RSI Mean Reversion: SELL 1 MP @ $56.87
+
+Bar 314:
+  RSI Mean Reversion: SELL 1 SIL @ $97.71
+
+Bar 317:
+  RSI Mean Reversion: BUY 1 NVO @ $49.61
+  RSI Mean Reversion: SELL 1 LIT @ $72.61
+
+Bar 320:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.46
+  RSI Mean Reversion: BUY 1 PLTR @ $133.69
+
+Bar 322:
+  RSI Mean Reversion: BUY 1 URTH @ $189.87
+
+Bar 323:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.40
+
+Bar 324:
+  RSI Mean Reversion: BUY 1 AMD @ $204.43
+  RSI Mean Reversion: BUY 1 REMX @ $89.05
+
+Bar 326:
+  RSI Mean Reversion: BUY 1 TSLA @ $412.01
+  SupportResistancePenguin: BUY 1 AAPL @ $265.69
+
+Bar 328:
+  RSI Mean Reversion: BUY 1 SIL @ $97.61
+
+Bar 331:
+  RSI Mean Reversion: BUY 1 PPLT @ $183.96
+
+Bar 332:
+  RSI Mean Reversion: BUY 1 SLV @ $66.55
+  RSI Mean Reversion: BUY 1 LIT @ $72.66
+
+Bar 335:
+  RSI Mean Reversion: SELL 1 PICK @ $59.52
+
+Bar 337:
+  RSI Mean Reversion: BUY 1 GDXJ @ $131.40
+
+Bar 339:
+  SupportResistancePenguin: BUY 1 PLTR @ $133.35
+
+Bar 341:
+  SupportResistancePenguin: BUY 1 REMX @ $88.99
+
+Bar 345:
+  RSI Mean Reversion: BUY 1 PICK @ $59.43
+
+Bar 360:
+  RSI Mean Reversion: SELL 1 PICK @ $59.40
+
+Bar 366:
+  RSI Mean Reversion: SELL 1 COPX @ $84.81
+
+Bar 370:
+  RSI Mean Reversion: SELL 1 SLV @ $66.55
+
+Bar 371:
+  RSI Mean Reversion: SELL 1 LMT @ $649.13
+
+Bar 372:
+  RSI Mean Reversion: SELL 1 REMX @ $88.95
+
+Bar 373:
+  RSI Mean Reversion: SELL 1 PPLT @ $183.14
+  RSI Mean Reversion: SELL 1 GDXJ @ $130.89
+  RSI Mean Reversion: SELL 1 SIL @ $97.12
+
+Bar 375:
+  RSI Mean Reversion: SELL 1 MSTR @ $129.02
+
+Bar 380:
+  RSI Mean Reversion: SELL 1 NOC @ $702.45
+
+Bar 381:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.59
+
+Bar 382:
+  RSI Mean Reversion: SELL 1 PLTR @ $132.92
+  RSI Mean Reversion: SELL 1 AMD @ $202.71
+  RSI Mean Reversion: SELL 1 URTH @ $189.32
+
+Bar 384:
+  RSI Mean Reversion: BUY 1 PPLT @ $182.65
+
+Bar 386:
+  RSI Mean Reversion: BUY 1 SLV @ $66.44
+  RSI Mean Reversion: BUY 1 COPX @ $84.81
+  RSI Mean Reversion: BUY 1 URTH @ $189.63
+
+Bar 392:
+  RSI Mean Reversion: BUY 1 MSTR @ $128.74
+
+Bar 394:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.82
+
+Bar 398:
+  RSI Mean Reversion: SELL 1 COPX @ $85.41
+
+Bar 402:
+  RSI Mean Reversion: SELL 1 NVO @ $49.45
+  RSI Mean Reversion: SELL 1 SLV @ $66.42
+
+Bar 404:
+  RSI Mean Reversion: BUY 1 SIL @ $97.27
+
+Bar 405:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.30
+  RSI Mean Reversion: BUY 1 AMD @ $200.55
+
+Bar 406:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.79
+
+Bar 411:
+  RSI Mean Reversion: BUY 1 MSFT @ $396.85
+
+Bar 417:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.91
+
+Bar 419:
+  RSI Mean Reversion: BUY 1 NVO @ $49.34
+
+Bar 420:
+  RSI Mean Reversion: BUY 1 PLTR @ $132.94
+
+Bar 421:
+  RSI Mean Reversion: BUY 1 COPX @ $85.11
+  RSI Mean Reversion: SELL 1 SIL @ $98.04
+
+Bar 422:
+  RSI Mean Reversion: BUY 1 SLV @ $66.62
+
+Bar 428:
+  RSI Mean Reversion: SELL 1 PPLT @ $182.77
+
+Bar 429:
+  RSI Mean Reversion: SELL 1 NVO @ $49.42
+
+Bar 438:
+  RSI Mean Reversion: SELL 1 LIT @ $72.42
+
+Bar 440:
+  RSI Mean Reversion: SELL 1 PLTR @ $132.82
+
+Bar 444:
+  RSI Mean Reversion: BUY 1 LMT @ $647.85
+  RSI Mean Reversion: SELL 1 COPX @ $85.01
+
+Bar 445:
+  RSI Mean Reversion: BUY 1 NVO @ $49.35
+  RSI Mean Reversion: BUY 1 REMX @ $88.39
+
+Bar 447:
+  RSI Mean Reversion: BUY 1 PLTR @ $132.89
+  RSI Mean Reversion: BUY 1 GDXJ @ $131.13
+
+Bar 448:
+  RSI Mean Reversion: SELL 1 MSTR @ $128.06
+
+Bar 450:
+  RSI Mean Reversion: BUY 1 SIL @ $97.52
+
+Bar 451:
+  RSI Mean Reversion: SELL 1 AMD @ $196.40
+
+Bar 464:
+  RSI Mean Reversion: SELL 1 SIL @ $98.11
+
+Bar 472:
+  RSI Mean Reversion: SELL 1 NVO @ $49.37
+
+Bar 477:
+  RSI Mean Reversion: BUY 1 NVO @ $49.39
+
+Bar 481:
+  RSI Mean Reversion: SELL 1 GLD @ $447.90
+
+Bar 486:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.68
+  RSI Mean Reversion: SELL 1 PLTR @ $132.96
+
+Bar 489:
+  RSI Mean Reversion: BUY 1 COPX @ $84.99
+
+Bar 499:
+  RSI Mean Reversion: BUY 1 SIL @ $97.78
+
+Bar 504:
+  RSI Mean Reversion: BUY 1 PLTR @ $133.11
+
+Bar 507:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.00
+
+Bar 510:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.54
+  RSI Mean Reversion: BUY 1 MSFT @ $396.68
+  RSI Mean Reversion: BUY 1 GLD @ $446.45
+
+Bar 511:
+  RSI Mean Reversion: SELL 1 GDXJ @ $130.92
+
+Bar 512:
+  RSI Mean Reversion: SELL 1 NVO @ $49.33
+
+Bar 515:
+  RSI Mean Reversion: BUY 1 MSTR @ $128.29
+
+Bar 524:
+  RSI Mean Reversion: SELL 1 GLD @ $448.28
+
+Bar 526:
+  RSI Mean Reversion: SELL 1 SLV @ $66.62
+
+Bar 527:
+  RSI Mean Reversion: BUY 1 NVO @ $49.38
+
+Bar 532:
+  RSI Mean Reversion: BUY 1 MP @ $56.86
+  RSI Mean Reversion: SELL 1 LMT @ $648.09
+
+Bar 534:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.46
+
+Bar 536:
+  RSI Mean Reversion: SELL 1 MSFT @ $395.99
+
+Bar 537:
+  RSI Mean Reversion: SELL 1 COPX @ $85.04
+
+Bar 542:
+  RSI Mean Reversion: BUY 1 AAPL @ $265.26
+
+Bar 545:
+  RSI Mean Reversion: SELL 1 NVO @ $49.40
+
+Bar 547:
+  RSI Mean Reversion: BUY 1 GLD @ $448.15
+
+Bar 549:
+  RSI Mean Reversion: BUY 1 SLV @ $66.13
+
+Bar 550:
+  RSI Mean Reversion: BUY 1 PPLT @ $182.27
+
+Bar 553:
+  RSI Mean Reversion: SELL 1 MP @ $56.81
+
+Bar 555:
+  RSI Mean Reversion: BUY 1 MP @ $56.72
+
+Bar 562:
+  RSI Mean Reversion: BUY 1 COPX @ $84.88
+
+Bar 573:
+  RSI Mean Reversion: SELL 1 TSLA @ $409.09
+  RSI Mean Reversion: BUY 1 GDXJ @ $130.62
+
+Bar 576:
+  RSI Mean Reversion: SELL 1 MP @ $56.84
+
+Bar 577:
+  RSI Mean Reversion: SELL 1 PLTR @ $132.57
+
+Bar 579:
+  RSI Mean Reversion: SELL 1 GLD @ $446.74
+
+Bar 581:
+  RSI Mean Reversion: SELL 1 MSTR @ $127.99
+
+Bar 582:
+  RSI Mean Reversion: SELL 1 COPX @ $84.82
+
+Bar 583:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.03
+
+Bar 586:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.44
+
+Bar 587:
+  RSI Mean Reversion: SELL 1 SLV @ $65.82
+
+Bar 592:
+  RSI Mean Reversion: BUY 1 MP @ $56.86
+
+Bar 594:
+  RSI Mean Reversion: BUY 1 TSLA @ $409.76
+
+Bar 597:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.31
+  RSI Mean Reversion: SELL 1 GDXJ @ $130.43
+
+Bar 601:
+  RSI Mean Reversion: BUY 1 MSTR @ $128.19
+
+Bar 602:
+  RSI Mean Reversion: SELL 1 PPLT @ $183.27
+
+Bar 603:
+  RSI Mean Reversion: BUY 1 NVO @ $49.45
+
+Bar 610:
+  RSI Mean Reversion: SELL 1 MSTR @ $128.17
+
+Bar 612:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.22
+
+Bar 615:
+  RSI Mean Reversion: BUY 1 PLTR @ $132.45
+
+Bar 616:
+  RSI Mean Reversion: BUY 1 MSFT @ $396.50
+
+Bar 620:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.35
+
+Bar 621:
+  RSI Mean Reversion: BUY 1 LMT @ $651.76
+
+Bar 628:
+  RSI Mean Reversion: BUY 1 COPX @ $84.94
+
+Bar 629:
+  RSI Mean Reversion: BUY 1 SLV @ $65.81
+  RSI Mean Reversion: SELL 1 SIL @ $97.40
+
+Bar 630:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.78
+  RSI Mean Reversion: SELL 1 MP @ $57.74
+  RSI Mean Reversion: SELL 1 MSFT @ $398.94
+  RSI Mean Reversion: SELL 1 TSLA @ $412.58
+  RSI Mean Reversion: SELL 1 SLV @ $68.59
+
+Bar 631:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.78
+
+Bar 634:
+  RSI Mean Reversion: SELL 1 COPX @ $85.81
+
+Bar 644:
+  RSI Mean Reversion: SELL 1 NVO @ $49.25
+
+Bar 656:
+  RSI Mean Reversion: BUY 1 TSLA @ $413.79
+
+Bar 657:
+  RSI Mean Reversion: BUY 1 MSTR @ $130.32
+  RSI Mean Reversion: BUY 1 PPLT @ $184.97
+  RSI Mean Reversion: BUY 1 COPX @ $86.02
+
+Bar 658:
+  RSI Mean Reversion: BUY 1 NVO @ $49.24
+
+Bar 662:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.13
+
+Bar 664:
+  RSI Mean Reversion: BUY 1 SIL @ $99.50
+
+Bar 665:
+  RSI Mean Reversion: SELL 1 MSTR @ $130.42
+  RSI Mean Reversion: SELL 1 TSLA @ $413.24
+  RSI Mean Reversion: SELL 1 COPX @ $85.97
+
+Bar 667:
+  RSI Mean Reversion: SELL 1 NVO @ $49.16
+
+Bar 668:
+  RSI Mean Reversion: BUY 1 SLV @ $68.77
+
+Bar 673:
+  RSI Mean Reversion: BUY 1 NVO @ $49.20
+
+Bar 675:
+  RSI Mean Reversion: BUY 1 AAPL @ $265.81
+  RSI Mean Reversion: SELL 1 PPLT @ $185.02
+
+Bar 676:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.14
+
+Bar 684:
+  RSI Mean Reversion: BUY 1 MSTR @ $130.48
+
+Bar 685:
+  RSI Mean Reversion: BUY 1 AMD @ $200.80
+
+Bar 686:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.28
+
+Bar 689:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.44
+
+Bar 690:
+  RSI Mean Reversion: BUY 1 MSFT @ $399.65
+
+Bar 696:
+  RSI Mean Reversion: SELL 1 NVO @ $49.14
+
+Bar 699:
+  RSI Mean Reversion: BUY 1 COPX @ $86.24
+
+Bar 700:
+  RSI Mean Reversion: SELL 1 SLV @ $69.01
+
+Bar 701:
+  RSI Mean Reversion: SELL 1 NVDA @ $188.45
+
+Bar 706:
+  RSI Mean Reversion: SELL 1 MSFT @ $399.26
+
+Bar 713:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.64
+  RSI Mean Reversion: SELL 1 AMD @ $200.32
+
+Bar 714:
+  RSI Mean Reversion: BUY 1 SLV @ $68.89
+
+Bar 716:
+  RSI Mean Reversion: BUY 1 NVO @ $49.22
+
+Bar 718:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.21
+  RSI Mean Reversion: BUY 1 GDXJ @ $133.37
+
+Bar 725:
+  RSI Mean Reversion: SELL 1 SIL @ $99.68
+
+Bar 726:
+  RSI Mean Reversion: BUY 1 GLD @ $452.38
+
+Bar 728:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.92
+
+Bar 729:
+  RSI Mean Reversion: BUY 1 MSFT @ $399.91
+
+Bar 741:
+  RSI Mean Reversion: BUY 1 MP @ $58.32
+  RSI Mean Reversion: BUY 1 TSLA @ $414.46
+
+Bar 742:
+  RSI Mean Reversion: BUY 1 AMD @ $200.41
+
+Bar 743:
+  RSI Mean Reversion: BUY 1 SIL @ $99.51
+
+Bar 747:
+  RSI Mean Reversion: BUY 1 AAPL @ $265.23
+  RSI Mean Reversion: SELL 1 GLD @ $451.47
+
+Bar 748:
+  RSI Mean Reversion: SELL 1 MSFT @ $399.16
+
+Bar 757:
+  RSI Mean Reversion: SELL 1 SIL @ $99.40
+
+Bar 768:
+  RSI Mean Reversion: SELL 1 SLV @ $68.56
+
+Bar 770:
+  RSI Mean Reversion: BUY 1 PLTR @ $136.00
+
+Bar 774:
+  RSI Mean Reversion: SELL 1 PLTR @ $136.15
+
+Bar 775:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.94
+
+Bar 777:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.97
+
+Bar 779:
+  RSI Mean Reversion: SELL 1 NVO @ $49.02
+
+Bar 780:
+  RSI Mean Reversion: SELL 1 MSTR @ $128.90
+
+Bar 781:
+  RSI Mean Reversion: SELL 1 AMD @ $199.75
+
+Bar 785:
+  RSI Mean Reversion: BUY 1 AMD @ $199.20
+
+Bar 786:
+  RSI Mean Reversion: BUY 1 AAPL @ $265.10
+
+Bar 787:
+  RSI Mean Reversion: BUY 1 MSFT @ $399.80
+
+Bar 788:
+  RSI Mean Reversion: BUY 1 GLD @ $452.20
+
+Bar 794:
+  RSI Mean Reversion: BUY 1 NVO @ $49.06
+
+Bar 799:
+  RSI Mean Reversion: SELL 1 AMD @ $199.09
+
+Bar 802:
+  RSI Mean Reversion: SELL 1 LMT @ $650.80
+
+Bar 806:
+  RSI Mean Reversion: BUY 1 SLV @ $68.36
+
+Bar 809:
+  RSI Mean Reversion: BUY 1 MSTR @ $128.99
+
+Bar 810:
+  RSI Mean Reversion: SELL 1 NVO @ $49.00
+  RSI Mean Reversion: SELL 1 GLD @ $451.35
+  RSI Mean Reversion: BUY 1 PPLT @ $185.18
+
+Bar 814:
+  RSI Mean Reversion: SELL 1 GDXJ @ $132.89
+
+Bar 816:
+  RSI Mean Reversion: SELL 1 MSTR @ $129.51
+  RSI Mean Reversion: BUY 1 SIL @ $99.12
+
+Bar 821:
+  RSI Mean Reversion: SELL 1 TSLA @ $413.49
+
+Bar 823:
+  RSI Mean Reversion: SELL 1 PPLT @ $185.81
+
+Bar 831:
+  RSI Mean Reversion: BUY 1 TSLA @ $413.66
+
+Bar 835:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.88
+
+Bar 838:
+  RSI Mean Reversion: BUY 1 AMD @ $199.81
+
+Bar 841:
+  RSI Mean Reversion: BUY 1 MSTR @ $129.13
+
+Bar 842:
+  RSI Mean Reversion: BUY 1 PLTR @ $136.95
+  RSI Mean Reversion: BUY 1 NVO @ $49.01
+  RSI Mean Reversion: BUY 1 GLD @ $452.47
+
+Bar 850:
+  RSI Mean Reversion: SELL 1 REMX @ $90.25
+
+Bar 852:
+  RSI Mean Reversion: SELL 1 GLD @ $452.60
+
+Bar 858:
+  RSI Mean Reversion: SELL 1 TSLA @ $412.05
+
+Bar 859:
+  RSI Mean Reversion: SELL 1 MSTR @ $128.99
+
+Bar 861:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.89
+
+Bar 862:
+  RSI Mean Reversion: SELL 1 MSFT @ $398.60
+
+Bar 864:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.26
+
+Bar 868:
+  RSI Mean Reversion: SELL 1 MP @ $57.63
+
+Bar 869:
+  RSI Mean Reversion: SELL 1 SIL @ $99.40
+
+Bar 870:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.88
+  RSI Mean Reversion: SELL 1 AMD @ $200.30
+  RSI Mean Reversion: BUY 1 MP @ $57.71
+  RSI Mean Reversion: BUY 1 LMT @ $649.69
+  RSI Mean Reversion: SELL 1 NVO @ $49.16
+  RSI Mean Reversion: SELL 1 SLV @ $68.60
+  RSI Mean Reversion: BUY 1 PPLT @ $185.50
+  RSI Mean Reversion: BUY 1 GDXJ @ $132.65
+  RSI Mean Reversion: BUY 1 REMX @ $90.09
+
+Bar 875:
+  RSI Mean Reversion: SELL 1 PPLT @ $186.98
+
+Bar 878:
+  RSI Mean Reversion: SELL 1 NVDA @ $188.81
+
+Bar 880:
+  RSI Mean Reversion: SELL 1 PLTR @ $137.11
+
+Bar 884:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.56
+  RSI Mean Reversion: BUY 1 AMD @ $199.22
+
+Bar 885:
+  RSI Mean Reversion: SELL 1 MP @ $57.79
+
+Bar 886:
+  RSI Mean Reversion: BUY 1 SIL @ $99.85
+
+Bar 890:
+  RSI Mean Reversion: SELL 1 COPX @ $86.09
+
+Bar 891:
+  RSI Mean Reversion: BUY 1 TSLA @ $412.05
+
+Bar 896:
+  RSI Mean Reversion: BUY 1 PPLT @ $187.73
+
+Bar 897:
+  RSI Mean Reversion: BUY 1 PLTR @ $137.04
+
+Bar 901:
+  RSI Mean Reversion: SELL 1 LMT @ $655.34
+
+Bar 906:
+  RSI Mean Reversion: SELL 1 GDXJ @ $133.72
+
+Bar 909:
+  RSI Mean Reversion: SELL 1 PPLT @ $187.86
+
+Bar 910:
+  RSI Mean Reversion: SELL 1 SIL @ $99.92
+
+Bar 912:
+  RSI Mean Reversion: BUY 1 MSFT @ $398.92
+
+Bar 914:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.89
+  RSI Mean Reversion: BUY 1 MSTR @ $128.93
+
+Bar 917:
+  RSI Mean Reversion: BUY 1 MP @ $57.58
+
+Bar 919:
+  RSI Mean Reversion: BUY 1 NVO @ $48.87
+
+Bar 920:
+  RSI Mean Reversion: BUY 1 GLD @ $455.64
+  SupportResistancePenguin: BUY 1 NVO @ $48.87
+
+Bar 922:
+  RSI Mean Reversion: BUY 1 SLV @ $69.36
+
+Bar 923:
+  RSI Mean Reversion: BUY 1 GDXJ @ $133.63
+
+Bar 924:
+  RSI Mean Reversion: BUY 1 COPX @ $86.33
+
+Bar 925:
+  RSI Mean Reversion: BUY 1 SIL @ $99.60
+  RSI Mean Reversion: SELL 1 REMX @ $90.66
+
+Bar 932:
+  RSI Mean Reversion: SELL 1 SLV @ $69.57
+  RSI Mean Reversion: BUY 1 PPLT @ $187.98
+
+Bar 936:
+  RSI Mean Reversion: SELL 1 PPLT @ $188.30
+
+Bar 938:
+  RSI Mean Reversion: SELL 1 NVDA @ $188.48
+
+Bar 939:
+  RSI Mean Reversion: SELL 1 SIL @ $99.62
+
+Bar 945:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.85
+  RSI Mean Reversion: SELL 1 NVO @ $48.75
+
+Bar 950:
+  RSI Mean Reversion: SELL 1 MSFT @ $398.29
+
+Bar 956:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.18
+
+Bar 957:
+  RSI Mean Reversion: SELL 1 GDXJ @ $133.59
+
+Bar 959:
+  RSI Mean Reversion: BUY 1 SIL @ $99.84
+  RSI Mean Reversion: BUY 1 REMX @ $90.33
+
+Bar 960:
+  RSI Mean Reversion: BUY 1 LIT @ $73.40
+  RSI Mean Reversion: SELL 1 URTH @ $189.30
+  RSI Mean Reversion: BUY 1 PICK @ $60.36
+
+Bar 962:
+  RSI Mean Reversion: SELL 1 GLD @ $456.72
+
+Bar 975:
+  RSI Mean Reversion: SELL 1 PICK @ $60.67
+
+Bar 976:
+  RSI Mean Reversion: SELL 1 PLTR @ $138.62
+  RSI Mean Reversion: SELL 1 REMX @ $90.60
+
+Bar 978:
+  RSI Mean Reversion: BUY 1 NOC @ $705.73
+
+Bar 981:
+  RSI Mean Reversion: SELL 1 AMD @ $197.96
+
+Bar 985:
+  RSI Mean Reversion: BUY 1 LMT @ $653.04
+
+Bar 988:
+  RSI Mean Reversion: SELL 1 LIT @ $73.91
+
+Bar 991:
+  RSI Mean Reversion: SELL 1 MSTR @ $129.54
+
+Bar 992:
+  RSI Mean Reversion: SELL 1 SIL @ $100.29
+
+Bar 993:
+  RSI Mean Reversion: SELL 1 MP @ $58.19
+
+Bar 1000:
+  RSI Mean Reversion: SELL 1 NOC @ $705.03
+  RSI Mean Reversion: SELL 1 LMT @ $655.84
+
+Bar 1006:
+  RSI Mean Reversion: SELL 1 COPX @ $87.47
+
+Bar 1009:
+  RSI Mean Reversion: BUY 1 PPLT @ $190.99
+
+Bar 1018:
+  RSI Mean Reversion: BUY 1 TSLA @ $413.35
+
+Bar 1021:
+  RSI Mean Reversion: BUY 1 AMD @ $199.73
+  RSI Mean Reversion: BUY 1 MSFT @ $400.04
+  RSI Mean Reversion: BUY 1 NVO @ $49.13
+
+Bar 1024:
+  RSI Mean Reversion: BUY 1 MP @ $57.96
+  RSI Mean Reversion: BUY 1 LIT @ $74.40
+
+Bar 1028:
+  RSI Mean Reversion: SELL 1 NVO @ $49.20
+
+Bar 1032:
+  RSI Mean Reversion: SELL 1 MSFT @ $400.42
+
+Bar 1034:
+  RSI Mean Reversion: SELL 1 AMD @ $200.72
+  RSI Mean Reversion: SELL 1 LIT @ $74.41
+
+Bar 1035:
+  RSI Mean Reversion: SELL 1 TSLA @ $413.62
+
+Bar 1041:
+  RSI Mean Reversion: BUY 1 LMT @ $655.51
+
+Bar 1045:
+  RSI Mean Reversion: BUY 1 MSTR @ $130.97
+
+Bar 1052:
+  RSI Mean Reversion: BUY 1 COPX @ $87.41
+
+Bar 1054:
+  RSI Mean Reversion: SELL 1 PPLT @ $190.12
+
+Bar 1063:
+  RSI Mean Reversion: BUY 1 NVO @ $49.10
+
+Bar 1066:
+  RSI Mean Reversion: BUY 1 MSFT @ $401.90
+
+Bar 1068:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.95
+  RSI Mean Reversion: BUY 1 PLTR @ $139.66
+  RSI Mean Reversion: SELL 1 MP @ $58.11
+
+Bar 1069:
+  RSI Mean Reversion: BUY 1 SIL @ $101.07
+
+Bar 1070:
+  RSI Mean Reversion: BUY 1 TSLA @ $415.04
+
+Bar 1071:
+  RSI Mean Reversion: BUY 1 URTH @ $191.07
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.94
+  RSI Mean Reversion: BUY 1 PICK @ $61.10
+
+Bar 1075:
+  RSI Mean Reversion: BUY 1 GLD @ $459.23
+
+Bar 1077:
+  RSI Mean Reversion: BUY 1 PPLT @ $189.90
+
+Bar 1082:
+  RSI Mean Reversion: BUY 1 NOC @ $707.66
+
+Bar 1084:
+  RSI Mean Reversion: SELL 1 SIL @ $101.19
+
+Bar 1086:
+  RSI Mean Reversion: SELL 1 MSFT @ $401.41
+  RSI Mean Reversion: SELL 1 GLD @ $459.31
+  RSI Mean Reversion: SELL 1 GDXJ @ $135.04
+
+Bar 1090:
+  RSI Mean Reversion: SELL 1 PPLT @ $190.23
+
+Bar 1092:
+  RSI Mean Reversion: SELL 1 NOC @ $709.75
+  RSI Mean Reversion: SELL 1 LMT @ $654.83
+
+Bar 1094:
+  RSI Mean Reversion: BUY 1 MP @ $58.19
+
+Bar 1095:
+  RSI Mean Reversion: BUY 1 AAPL @ $266.11
+
+Bar 1098:
+  RSI Mean Reversion: SELL 1 NVO @ $48.89
+
+Bar 1099:
+  RSI Mean Reversion: BUY 1 PPLT @ $189.83
+
+Bar 1103:
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.91
+
+Bar 1106:
+  RSI Mean Reversion: BUY 1 AMD @ $202.21
+
+Bar 1109:
+  RSI Mean Reversion: BUY 1 SLV @ $70.55
+  RSI Mean Reversion: BUY 1 SIL @ $101.20
+
+Bar 1111:
+  RSI Mean Reversion: BUY 1 GLD @ $460.05
+
+Bar 1112:
+  RSI Mean Reversion: BUY 1 LIT @ $74.51
+
+Bar 1114:
+  RSI Mean Reversion: BUY 1 LMT @ $654.80
+
+Bar 1116:
+  RSI Mean Reversion: SELL 1 MSTR @ $130.02
+
+Bar 1117:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.21
+  RSI Mean Reversion: SELL 1 PLTR @ $139.23
+  RSI Mean Reversion: SELL 1 AMD @ $202.49
+  RSI Mean Reversion: SELL 1 PICK @ $61.06
+
+Bar 1119:
+  RSI Mean Reversion: SELL 1 LIT @ $74.52
+
+Bar 1120:
+  RSI Mean Reversion: SELL 1 URTH @ $190.80
+
+Bar 1123:
+  RSI Mean Reversion: SELL 1 COPX @ $87.26
+
+Bar 1130:
+  RSI Mean Reversion: BUY 1 MSTR @ $129.27
+
+Bar 1131:
+  RSI Mean Reversion: SELL 1 PPLT @ $189.76
+
+Bar 1134:
+  RSI Mean Reversion: BUY 1 PICK @ $61.01
+
+Bar 1135:
+  RSI Mean Reversion: BUY 1 NOC @ $710.72
+
+Bar 1136:
+  RSI Mean Reversion: SELL 1 SLV @ $70.56
+  RSI Mean Reversion: SELL 1 PICK @ $61.03
+
+Bar 1138:
+  RSI Mean Reversion: BUY 1 COPX @ $87.32
+
+Bar 1142:
+  RSI Mean Reversion: SELL 1 NOC @ $710.43
+
+Bar 1144:
+  RSI Mean Reversion: BUY 1 AMD @ $202.57
+
+Bar 1152:
+  RSI Mean Reversion: BUY 1 PICK @ $61.09
+
+Bar 1155:
+  RSI Mean Reversion: BUY 1 URTH @ $191.05
+
+Bar 1158:
+  RSI Mean Reversion: SELL 1 LMT @ $654.35
+
+Bar 1161:
+  RSI Mean Reversion: BUY 1 LIT @ $74.49
+
+Bar 1162:
+  RSI Mean Reversion: BUY 1 NVO @ $49.22
+  RSI Mean Reversion: SELL 1 GLD @ $458.95
+
+Bar 1164:
+  RSI Mean Reversion: SELL 1 AAPL @ $265.24
+  RSI Mean Reversion: SELL 1 TSLA @ $416.01
+
+Bar 1166:
+  RSI Mean Reversion: SELL 1 COPX @ $87.27
+
+Bar 1171:
+  RSI Mean Reversion: SELL 1 MP @ $58.24
+
+Bar 1173:
+  RSI Mean Reversion: SELL 1 AMD @ $202.81
+  RSI Mean Reversion: SELL 1 URTH @ $190.92
+  RSI Mean Reversion: SELL 1 GDXJ @ $134.62
+  RSI Mean Reversion: SELL 1 SIL @ $101.10
+
+Bar 1181:
+  RSI Mean Reversion: BUY 1 PLTR @ $138.74
+
+Bar 1183:
+  RSI Mean Reversion: BUY 1 TSLA @ $415.14
+  RSI Mean Reversion: BUY 1 SLV @ $70.71
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.31
+
+Bar 1185:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.39
+  RSI Mean Reversion: BUY 1 AMD @ $202.80
+  RSI Mean Reversion: BUY 1 SIL @ $101.00
+  RSI Mean Reversion: BUY 1 REMX @ $91.91
+
+Bar 1186:
+  RSI Mean Reversion: BUY 1 COPX @ $87.32
+
+Bar 1187:
+  RSI Mean Reversion: BUY 1 GLD @ $459.76
+  RSI Mean Reversion: BUY 1 PPLT @ $190.29
+
+Bar 1189:
+  RSI Mean Reversion: BUY 1 MSFT @ $401.56
+
+Bar 1190:
+  RSI Mean Reversion: BUY 1 MP @ $58.09
+
+Bar 1194:
+  RSI Mean Reversion: BUY 1 URTH @ $191.07
+
+Bar 1197:
+  RSI Mean Reversion: BUY 1 LMT @ $655.50
+
+Bar 1199:
+  RSI Mean Reversion: BUY 1 AAPL @ $265.67
+
+Bar 1203:
+  RSI Mean Reversion: BUY 1 NOC @ $713.12
+
+Bar 1217:
+  RSI Mean Reversion: SELL 1 NOC @ $714.03
+
+Bar 1226:
+  RSI Mean Reversion: SELL 1 SIL @ $101.01
+  RSI Mean Reversion: SELL 1 REMX @ $91.62
+
+Bar 1229:
+  RSI Mean Reversion: SELL 1 PPLT @ $189.19
+
+Bar 1233:
+  RSI Mean Reversion: SELL 1 GLD @ $458.23
+
+Bar 1236:
+  RSI Mean Reversion: SELL 1 TSLA @ $413.20
+
+Bar 1247:
+  RSI Mean Reversion: BUY 1 REMX @ $91.51
+
+Bar 1248:
+  RSI Mean Reversion: BUY 1 SIL @ $100.74
+
+Bar 1250:
+  RSI Mean Reversion: SELL 1 MSFT @ $400.22
+
+Bar 1257:
+  RSI Mean Reversion: BUY 1 GLD @ $457.63
+
+Bar 1260:
+  RSI Mean Reversion: BUY 1 TSLA @ $412.60
+  RSI Mean Reversion: BUY 1 PPLT @ $188.79
+
+Bar 1266:
+  RSI Mean Reversion: BUY 1 MSFT @ $400.78
+
+Bar 1275:
+  RSI Mean Reversion: SELL 1 SLV @ $69.53
+  RSI Mean Reversion: SELL 1 SIL @ $100.59
+
+Bar 1277:
+  RSI Mean Reversion: SELL 1 NVO @ $49.15
+
+Bar 1283:
+  RSI Mean Reversion: BUY 1 SIL @ $100.37
+
+Bar 1289:
+  RSI Mean Reversion: BUY 1 SLV @ $69.50
+
+Bar 1292:
+  RSI Mean Reversion: SELL 1 LMT @ $650.06
+
+Bar 1293:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.01
+
+Bar 1306:
+  RSI Mean Reversion: BUY 1 MSTR @ $123.99
+
+Bar 1313:
+  RSI Mean Reversion: BUY 1 NOC @ $720.73
+
+Bar 1315:
+  RSI Mean Reversion: SELL 1 SLV @ $69.69
+
+Bar 1318:
+  RSI Mean Reversion: SELL 1 PICK @ $60.33
+
+Bar 1319:
+  RSI Mean Reversion: BUY 1 LMT @ $649.26
+
+Bar 1320:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.72
+  RSI Mean Reversion: SELL 1 TSLA @ $411.11
+  RSI Mean Reversion: SELL 1 PPLT @ $188.32
+
+Bar 1324:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.22
+  RSI Mean Reversion: SELL 1 AMD @ $198.25
+  RSI Mean Reversion: SELL 1 MSTR @ $124.79
+  RSI Mean Reversion: SELL 1 COPX @ $86.24
+  RSI Mean Reversion: SELL 1 GDXJ @ $133.35
+
+Bar 1325:
+  RSI Mean Reversion: SELL 1 URTH @ $189.89
+  RSI Mean Reversion: SELL 1 REMX @ $91.17
+
+Bar 1326:
+  RSI Mean Reversion: SELL 1 MP @ $57.58
+  RSI Mean Reversion: SELL 1 LIT @ $73.71
+  RSI Mean Reversion: SELL 1 SIL @ $100.23
+
+Bar 1327:
+  RSI Mean Reversion: SELL 1 GLD @ $457.52
+
+Bar 1331:
+  RSI Mean Reversion: SELL 1 MSFT @ $399.65
+
+Bar 1335:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.90
+
+Bar 1336:
+  RSI Mean Reversion: SELL 1 NOC @ $720.29
+  RSI Mean Reversion: SELL 1 LMT @ $650.09
+
+Bar 1350:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.51
+
+Bar 1353:
+  RSI Mean Reversion: BUY 1 MP @ $57.71
+  RSI Mean Reversion: BUY 1 MSTR @ $124.83
+
+Bar 1354:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.26
+
+Bar 1357:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.86
+
+Bar 1359:
+  RSI Mean Reversion: BUY 1 AMD @ $199.60
+
+Bar 1362:
+  RSI Mean Reversion: BUY 1 GDXJ @ $133.73
+
+Bar 1363:
+  RSI Mean Reversion: BUY 1 GLD @ $458.36
+  RSI Mean Reversion: BUY 1 COPX @ $86.30
+
+Bar 1371:
+  RSI Mean Reversion: SELL 1 GLD @ $457.67
+  RSI Mean Reversion: BUY 1 SIL @ $100.15
+
+Bar 1372:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.91
+
+Bar 1376:
+  RSI Mean Reversion: BUY 1 NVO @ $49.15
+
+Bar 1385:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.09
+  RSI Mean Reversion: SELL 1 MSTR @ $125.05
+
+Bar 1386:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.66
+
+Bar 1387:
+  RSI Mean Reversion: SELL 1 SIL @ $99.98
+
+Bar 1390:
+  RSI Mean Reversion: BUY 1 SLV @ $70.05
+
+Bar 1391:
+  RSI Mean Reversion: BUY 1 GLD @ $458.07
+
+Bar 1393:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.15
+  RSI Mean Reversion: SELL 1 COPX @ $86.26
+
+Bar 1395:
+  RSI Mean Reversion: SELL 1 NVO @ $49.15
+
+Bar 1398:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.36
+
+Bar 1399:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.06
+
+Bar 1405:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.90
+
+Bar 1406:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.12
+
+Bar 1407:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.75
+
+Bar 1411:
+  RSI Mean Reversion: SELL 1 MP @ $57.94
+
+Bar 1417:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.22
+
+Bar 1426:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.59
+
+Bar 1427:
+  RSI Mean Reversion: BUY 1 MP @ $57.89
+
+Bar 1431:
+  RSI Mean Reversion: BUY 1 NVO @ $49.15
+
+Bar 1433:
+  RSI Mean Reversion: SELL 1 SLV @ $69.96
+
+Bar 1434:
+  RSI Mean Reversion: SELL 1 MP @ $57.90
+
+Bar 1444:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.71
+
+Bar 1445:
+  RSI Mean Reversion: BUY 1 SLV @ $70.03
+
+Bar 1447:
+  RSI Mean Reversion: SELL 1 AMD @ $199.78
+  RSI Mean Reversion: SELL 1 GLD @ $456.99
+
+Bar 1453:
+  RSI Mean Reversion: BUY 1 GLD @ $457.96
+
+Bar 1455:
+  RSI Mean Reversion: SELL 1 GLD @ $457.17
+  RSI Mean Reversion: BUY 1 SIL @ $100.21
+
+Bar 1461:
+  RSI Mean Reversion: BUY 1 COPX @ $86.60
+
+Bar 1463:
+  RSI Mean Reversion: BUY 1 MSFT @ $400.40
+
+Bar 1470:
+  RSI Mean Reversion: SELL 1 GDXJ @ $133.94
+
+Bar 1471:
+  RSI Mean Reversion: BUY 1 GLD @ $456.37
+
+Bar 1472:
+  RSI Mean Reversion: SELL 1 SIL @ $100.41
+
+Bar 1474:
+  RSI Mean Reversion: SELL 1 SLV @ $70.27
+
+Bar 1477:
+  RSI Mean Reversion: SELL 1 NVO @ $49.14
+
+Bar 1479:
+  RSI Mean Reversion: BUY 1 MP @ $58.03
+
+Bar 1484:
+  RSI Mean Reversion: SELL 1 MSFT @ $400.63
+
+Bar 1487:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.03
+
+Bar 1489:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.26
+
+Bar 1497:
+  RSI Mean Reversion: BUY 1 SIL @ $100.25
+
+Bar 1498:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.34
+
+Bar 1499:
+  RSI Mean Reversion: SELL 1 GLD @ $457.27
+
+Bar 1506:
+  RSI Mean Reversion: BUY 1 NVO @ $49.20
+
+Bar 1508:
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.15
+
+Bar 1515:
+  RSI Mean Reversion: BUY 1 GLD @ $457.96
+  RSI Mean Reversion: BUY 1 SLV @ $69.91
+
+Bar 1516:
+  RSI Mean Reversion: BUY 1 AMD @ $200.22
+
+Bar 1519:
+  RSI Mean Reversion: SELL 1 MP @ $57.94
+
+Bar 1520:
+  RSI Mean Reversion: SELL 1 AMD @ $200.18
+
+Bar 1526:
+  RSI Mean Reversion: SELL 1 SIL @ $100.60
+
+Bar 1532:
+  RSI Mean Reversion: BUY 1 AMD @ $200.03
+
+Bar 1533:
+  RSI Mean Reversion: BUY 1 PPLT @ $187.99
+
+Bar 1535:
+  RSI Mean Reversion: BUY 1 LMT @ $651.07
+
+Bar 1538:
+  RSI Mean Reversion: SELL 1 NVO @ $49.13
+
+Bar 1539:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.25
+
+Bar 1540:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.48
+  RSI Mean Reversion: BUY 1 TSLA @ $411.01
+
+Bar 1543:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.94
+
+Bar 1549:
+  RSI Mean Reversion: SELL 1 GLD @ $456.24
+
+Bar 1552:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.15
+
+Bar 1555:
+  RSI Mean Reversion: BUY 1 MSFT @ $400.41
+
+Bar 1556:
+  RSI Mean Reversion: BUY 1 LIT @ $74.08
+
+Bar 1560:
+  RSI Mean Reversion: SELL 1 LMT @ $649.79
+
+Bar 1561:
+  RSI Mean Reversion: BUY 1 MP @ $57.96
+
+Bar 1565:
+  RSI Mean Reversion: SELL 1 GDXJ @ $133.56
+
+Bar 1573:
+  RSI Mean Reversion: SELL 1 AMD @ $199.79
+
+Bar 1575:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.05
+
+Bar 1576:
+  RSI Mean Reversion: SELL 1 MP @ $57.93
+
+Bar 1579:
+  RSI Mean Reversion: BUY 1 NVO @ $49.20
+
+Bar 1581:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.62
+  RSI Mean Reversion: BUY 1 GLD @ $456.30
+
+Bar 1588:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.59
+
+Bar 1590:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.02
+  RSI Mean Reversion: SELL 1 MSFT @ $400.59
+  RSI Mean Reversion: SELL 1 TSLA @ $410.68
+  RSI Mean Reversion: SELL 1 GLD @ $460.39
+  RSI Mean Reversion: SELL 1 SLV @ $71.60
+
+Bar 1591:
+  RSI Mean Reversion: SELL 1 NVDA @ $188.17
+
+Bar 1604:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.52
+  RSI Mean Reversion: BUY 1 AMD @ $200.65
+
+Bar 1610:
+  RSI Mean Reversion: BUY 1 GLD @ $461.05
+  RSI Mean Reversion: SELL 1 COPX @ $86.43
+
+Bar 1611:
+  RSI Mean Reversion: BUY 1 GDXJ @ $135.39
+
+Bar 1615:
+  RSI Mean Reversion: BUY 1 SLV @ $71.53
+
+Bar 1617:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.15
+
+Bar 1626:
+  RSI Mean Reversion: BUY 1 MP @ $58.11
+  RSI Mean Reversion: BUY 1 MSFT @ $400.45
+  RSI Mean Reversion: BUY 1 TSLA @ $410.21
+
+Bar 1627:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.64
+
+Bar 1632:
+  RSI Mean Reversion: BUY 1 COPX @ $86.14
+
+Bar 1637:
+  RSI Mean Reversion: SELL 1 PPLT @ $189.06
+
+Bar 1640:
+  RSI Mean Reversion: SELL 1 SLV @ $71.29
+
+Bar 1641:
+  RSI Mean Reversion: SELL 1 GLD @ $459.53
+
+Bar 1650:
+  RSI Mean Reversion: BUY 1 GLD @ $459.46
+  RSI Mean Reversion: SELL 1 GDXJ @ $134.71
+
+Bar 1651:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.37
+
+Bar 1652:
+  RSI Mean Reversion: SELL 1 MSFT @ $399.86
+
+Bar 1653:
+  RSI Mean Reversion: SELL 1 AAPL @ $262.91
+  RSI Mean Reversion: SELL 1 PLTR @ $134.07
+  RSI Mean Reversion: SELL 1 COPX @ $86.02
+
+Bar 1654:
+  RSI Mean Reversion: BUY 1 SLV @ $71.15
+
+Bar 1659:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.38
+  RSI Mean Reversion: BUY 1 PLTR @ $134.28
+  RSI Mean Reversion: BUY 1 MSFT @ $400.39
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.41
+
+Bar 1663:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.09
+
+Bar 1665:
+  RSI Mean Reversion: BUY 1 COPX @ $85.93
+
+Bar 1667:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.23
+
+Bar 1675:
+  RSI Mean Reversion: SELL 1 SLV @ $71.10
+
+Bar 1680:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.34
+
+Bar 1681:
+  RSI Mean Reversion: BUY 1 SLV @ $70.88
+
+Bar 1684:
+  RSI Mean Reversion: SELL 1 GDXJ @ $134.46
+
+Bar 1687:
+  RSI Mean Reversion: SELL 1 AMD @ $198.50
+
+Bar 1690:
+  RSI Mean Reversion: SELL 1 GLD @ $458.65
+
+Bar 1693:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.37
+  RSI Mean Reversion: SELL 1 TSLA @ $407.79
+
+Bar 1696:
+  RSI Mean Reversion: SELL 1 NVO @ $48.68
+
+Bar 1698:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.99
+
+Bar 1699:
+  RSI Mean Reversion: SELL 1 MSFT @ $400.02
+
+Bar 1707:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.42
+
+Bar 1710:
+  RSI Mean Reversion: BUY 1 NVO @ $48.70
+
+Bar 1711:
+  RSI Mean Reversion: BUY 1 TSLA @ $407.56
+
+Bar 1712:
+  RSI Mean Reversion: BUY 1 PLTR @ $133.93
+
+Bar 1716:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.22
+  RSI Mean Reversion: SELL 1 COPX @ $85.66
+
+Bar 1719:
+  RSI Mean Reversion: SELL 1 SLV @ $71.09
+
+Bar 1720:
+  RSI Mean Reversion: SELL 1 MP @ $57.59
+  RSI Mean Reversion: SELL 1 NVO @ $48.70
+
+Bar 1721:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.06
+
+Bar 1726:
+  RSI Mean Reversion: SELL 1 AAPL @ $262.68
+
+Bar 1727:
+  RSI Mean Reversion: BUY 1 SLV @ $70.79
+
+Bar 1728:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.06
+
+Bar 1734:
+  RSI Mean Reversion: BUY 1 GLD @ $458.66
+
+Bar 1737:
+  RSI Mean Reversion: BUY 1 PPLT @ $188.86
+
+Bar 1739:
+  RSI Mean Reversion: BUY 1 MSFT @ $401.24
+
+Bar 1741:
+  RSI Mean Reversion: SELL 1 TSLA @ $408.23
+
+Bar 1744:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.11
+
+Bar 1746:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.37
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.60
+
+Bar 1759:
+  RSI Mean Reversion: BUY 1 LMT @ $654.63
+
+Bar 1761:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.30
+  RSI Mean Reversion: BUY 1 PLTR @ $134.13
+
+Bar 1763:
+  RSI Mean Reversion: BUY 1 SIL @ $100.57
+
+Bar 1770:
+  RSI Mean Reversion: SELL 1 AAPL @ $262.59
+
+Bar 1771:
+  RSI Mean Reversion: BUY 1 AMD @ $199.34
+
+Bar 1772:
+  RSI Mean Reversion: BUY 1 TSLA @ $407.62
+
+Bar 1780:
+  RSI Mean Reversion: BUY 1 COPX @ $85.69
+
+Bar 1785:
+  RSI Mean Reversion: SELL 1 AMD @ $199.42
+
+Bar 1788:
+  RSI Mean Reversion: BUY 1 NOC @ $729.90
+
+Bar 1789:
+  RSI Mean Reversion: BUY 1 MP @ $57.62
+  RSI Mean Reversion: SELL 1 MSFT @ $400.10
+  RSI Mean Reversion: BUY 1 PICK @ $60.40
+
+Bar 1792:
+  RSI Mean Reversion: SELL 1 MSTR @ $124.64
+
+Bar 1793:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.22
+  RSI Mean Reversion: SELL 1 SLV @ $70.43
+
+Bar 1795:
+  RSI Mean Reversion: SELL 1 GLD @ $457.74
+
+Bar 1796:
+  RSI Mean Reversion: SELL 1 TSLA @ $408.04
+
+Bar 1800:
+  RSI Mean Reversion: SELL 1 GDXJ @ $134.24
+
+Bar 1803:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.95
+
+Bar 1807:
+  RSI Mean Reversion: SELL 1 LMT @ $654.35
+
+Bar 1808:
+  RSI Mean Reversion: BUY 1 NVO @ $48.85
+
+Bar 1810:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.26
+
+Bar 1812:
+  RSI Mean Reversion: BUY 1 TSLA @ $408.43
+
+Bar 1814:
+  RSI Mean Reversion: BUY 1 GLD @ $458.55
+
+Bar 1815:
+  RSI Mean Reversion: SELL 1 AAPL @ $262.84
+
+Bar 1817:
+  RSI Mean Reversion: SELL 1 MP @ $57.82
+  RSI Mean Reversion: BUY 1 MSFT @ $401.18
+
+Bar 1818:
+  RSI Mean Reversion: SELL 1 PPLT @ $188.46
+
+Bar 1824:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.55
+  RSI Mean Reversion: BUY 1 PLTR @ $133.95
+
+Bar 1825:
+  RSI Mean Reversion: BUY 1 MSTR @ $125.02
+
+Bar 1826:
+  RSI Mean Reversion: BUY 1 REMX @ $90.62
+
+Bar 1828:
+  RSI Mean Reversion: BUY 1 GDXJ @ $134.29
+
+Bar 1830:
+  RSI Mean Reversion: BUY 1 AMD @ $200.70
+  RSI Mean Reversion: BUY 1 LMT @ $654.68
+  RSI Mean Reversion: SELL 1 NVO @ $48.73
+  RSI Mean Reversion: SELL 1 COPX @ $86.43
+  RSI Mean Reversion: SELL 1 LIT @ $73.77
+  RSI Mean Reversion: SELL 1 SIL @ $101.57
+
+Bar 1831:
+  RSI Mean Reversion: SELL 1 MSTR @ $125.70
+  RSI Mean Reversion: SELL 1 GLD @ $458.57
+  RSI Mean Reversion: SELL 1 GDXJ @ $135.61
+
+Bar 1832:
+  RSI Mean Reversion: SELL 1 PLTR @ $136.05
+  RSI Mean Reversion: SELL 1 AMD @ $201.06
+
+Bar 1844:
+  RSI Mean Reversion: BUY 1 SLV @ $70.55
+  RSI Mean Reversion: BUY 1 COPX @ $85.56
+
+Bar 1845:
+  RSI Mean Reversion: BUY 1 NVO @ $48.77
+
+Bar 1846:
+  RSI Mean Reversion: BUY 1 PLTR @ $133.23
+  RSI Mean Reversion: BUY 1 PPLT @ $187.19
+
+Bar 1847:
+  RSI Mean Reversion: BUY 1 MSTR @ $124.40
+
+Bar 1849:
+  RSI Mean Reversion: BUY 1 MP @ $57.79
+  RSI Mean Reversion: SELL 1 LMT @ $658.25
+
+Bar 1853:
+  RSI Mean Reversion: SELL 1 SLV @ $70.70
+  RSI Mean Reversion: BUY 1 LIT @ $73.57
+
+Bar 1854:
+  RSI Mean Reversion: BUY 1 AAPL @ $262.70
+
+Bar 1862:
+  RSI Mean Reversion: BUY 1 GDXJ @ $133.77
+
+Bar 1866:
+  RSI Mean Reversion: SELL 1 TSLA @ $407.80
+  RSI Mean Reversion: SELL 1 PPLT @ $186.86
+
+Bar 1867:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.34
+  RSI Mean Reversion: SELL 1 MSFT @ $399.96
+
+Bar 1869:
+  RSI Mean Reversion: SELL 1 MP @ $57.60
+
+Bar 1870:
+  RSI Mean Reversion: SELL 1 COPX @ $85.42
+
+Bar 1878:
+  RSI Mean Reversion: SELL 1 NOC @ $728.21
+
+Bar 1880:
+  RSI Mean Reversion: SELL 1 GDXJ @ $134.12
+
+Bar 1885:
+  RSI Mean Reversion: BUY 1 LMT @ $657.65
+
+Bar 1888:
+  RSI Mean Reversion: SELL 1 NVO @ $48.64
+
+Bar 1891:
+  RSI Mean Reversion: BUY 1 MP @ $57.49
+
+Bar 1892:
+  RSI Mean Reversion: BUY 1 TSLA @ $407.66
+
+Bar 1893:
+  RSI Mean Reversion: BUY 1 NOC @ $727.73
+
+Bar 1894:
+  RSI Mean Reversion: BUY 1 GLD @ $458.46
+  RSI Mean Reversion: BUY 1 SLV @ $70.84
+
+Bar 1896:
+  RSI Mean Reversion: BUY 1 AMD @ $199.95
+
+Bar 1899:
+  RSI Mean Reversion: BUY 1 COPX @ $85.19
+
+Bar 1900:
+  RSI Mean Reversion: BUY 1 GDXJ @ $133.80
+
+Bar 1903:
+  RSI Mean Reversion: BUY 1 NVO @ $48.70
+
+Bar 1910:
+  RSI Mean Reversion: SELL 1 MP @ $57.36
+
+Bar 1913:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.79
+
+Bar 1915:
+  RSI Mean Reversion: SELL 1 AMD @ $199.97
+
+Bar 1918:
+  RSI Mean Reversion: BUY 1 PLTR @ $132.49
+
+Bar 1919:
+  RSI Mean Reversion: BUY 1 SIL @ $100.16
+
+Bar 1920:
+  RSI Mean Reversion: BUY 1 MP @ $56.30
+  RSI Mean Reversion: SELL 1 NVO @ $48.67
+  RSI Mean Reversion: BUY 1 URTH @ $189.75
+
+Bar 1923:
+  RSI Mean Reversion: SELL 1 NOC @ $731.27
+  RSI Mean Reversion: BUY 1 PPLT @ $187.50
+
+Bar 1925:
+  RSI Mean Reversion: BUY 1 NVO @ $48.39
+
+Bar 1927:
+  RSI Mean Reversion: SELL 1 LMT @ $663.90
+
+Bar 1933:
+  SupportResistancePenguin: BUY 1 PICK @ $59.29
+
+Bar 1934:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.30
+  RSI Mean Reversion: SELL 1 MSTR @ $124.52
+  RSI Mean Reversion: SELL 1 GLD @ $458.34
+  RSI Mean Reversion: SELL 1 GDXJ @ $134.94
+  RSI Mean Reversion: SELL 1 SIL @ $101.22
+
+Bar 1935:
+  RSI Mean Reversion: BUY 1 NVDA @ $185.88
+
+Bar 1941:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.72
+
+Bar 1945:
+  RSI Mean Reversion: BUY 1 LMT @ $663.09
+  RSI Mean Reversion: SELL 1 SLV @ $70.63
+  RSI Mean Reversion: SELL 1 COPX @ $84.92
+  RSI Mean Reversion: SELL 1 PICK @ $59.43
+
+Bar 1947:
+  RSI Mean Reversion: SELL 1 LIT @ $72.56
+
+Bar 1949:
+  RSI Mean Reversion: SELL 1 TSLA @ $408.24
+
+Bar 1951:
+  RSI Mean Reversion: SELL 1 MP @ $57.33
+
+Bar 1953:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.25
+  RSI Mean Reversion: SELL 1 NVO @ $48.62
+
+Bar 1957:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.54
+
+Bar 1959:
+  RSI Mean Reversion: BUY 1 NOC @ $728.33
+
+Bar 1968:
+  RSI Mean Reversion: BUY 1 MSFT @ $402.32
+
+Bar 1971:
+  RSI Mean Reversion: BUY 1 MSTR @ $123.44
+
+Bar 1972:
+  RSI Mean Reversion: SELL 1 NOC @ $733.40
+  RSI Mean Reversion: SELL 1 LMT @ $662.86
+
+Bar 1978:
+  RSI Mean Reversion: SELL 1 PPLT @ $187.90
+
+Bar 1985:
+  RSI Mean Reversion: SELL 1 MSTR @ $124.69
+  RSI Mean Reversion: SELL 1 URTH @ $189.85
+  RSI Mean Reversion: SELL 1 REMX @ $90.12
+
+Bar 1988:
+  RSI Mean Reversion: BUY 1 NVO @ $48.57
+
+Bar 1992:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.60
+
+Bar 1998:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.00
+  RSI Mean Reversion: BUY 1 GLD @ $461.23
+
+Bar 1999:
+  RSI Mean Reversion: BUY 1 SLV @ $71.20
+
+Bar 2001:
+  RSI Mean Reversion: BUY 1 LIT @ $73.07
+
+Bar 2003:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.99
+  RSI Mean Reversion: BUY 1 PPLT @ $188.53
+  RSI Mean Reversion: BUY 1 URTH @ $189.93
+  RSI Mean Reversion: BUY 1 REMX @ $89.76
+
+Bar 2005:
+  RSI Mean Reversion: BUY 1 MP @ $57.48
+
+Bar 2006:
+  RSI Mean Reversion: BUY 1 AMD @ $202.61
+
+Bar 2013:
+  RSI Mean Reversion: BUY 1 PICK @ $59.97
+
+Bar 2021:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.47
+
+Bar 2027:
+  RSI Mean Reversion: SELL 1 NVO @ $48.48
+  RSI Mean Reversion: SELL 1 LIT @ $73.11
+
+Bar 2029:
+  RSI Mean Reversion: SELL 1 URTH @ $189.81
+
+Bar 2030:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.55
+  RSI Mean Reversion: SELL 1 AAPL @ $263.95
+  RSI Mean Reversion: SELL 1 PLTR @ $135.06
+  RSI Mean Reversion: SELL 1 MSFT @ $400.52
+
+Bar 2034:
+  RSI Mean Reversion: BUY 1 SIL @ $102.54
+
+Bar 2036:
+  RSI Mean Reversion: BUY 1 COPX @ $85.38
+  RSI Mean Reversion: BUY 1 GDXJ @ $136.83
+
+Bar 2039:
+  RSI Mean Reversion: BUY 1 MSTR @ $123.98
+
+Bar 2043:
+  RSI Mean Reversion: BUY 1 MSFT @ $400.16
+
+Bar 2045:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.69
+
+Bar 2049:
+  RSI Mean Reversion: SELL 1 SIL @ $102.62
+
+Bar 2051:
+  RSI Mean Reversion: SELL 1 MSTR @ $124.77
+  RSI Mean Reversion: SELL 1 GLD @ $459.67
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.08
+
+Bar 2052:
+  RSI Mean Reversion: SELL 1 PICK @ $59.89
+
+Bar 2054:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.01
+  RSI Mean Reversion: BUY 1 NOC @ $737.86
+
+Bar 2056:
+  RSI Mean Reversion: BUY 1 NVO @ $48.54
+
+Bar 2057:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.62
+  RSI Mean Reversion: BUY 1 LMT @ $666.80
+
+Bar 2058:
+  RSI Mean Reversion: BUY 1 TSLA @ $413.17
+
+Bar 2059:
+  RSI Mean Reversion: BUY 1 LIT @ $73.13
+  RSI Mean Reversion: BUY 1 URTH @ $189.66
+
+Bar 2061:
+  RSI Mean Reversion: BUY 1 GDXJ @ $136.67
+
+Bar 2062:
+  RSI Mean Reversion: BUY 1 SIL @ $102.35
+
+Bar 2066:
+  RSI Mean Reversion: BUY 1 GLD @ $459.62
+
+Bar 2068:
+  RSI Mean Reversion: BUY 1 PICK @ $59.82
+
+Bar 2081:
+  RSI Mean Reversion: SELL 1 TSLA @ $413.53
+
+Bar 2087:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.05
+
+Bar 2088:
+  RSI Mean Reversion: SELL 1 NVO @ $48.44
+  RSI Mean Reversion: SELL 1 COPX @ $85.41
+  RSI Mean Reversion: SELL 1 PICK @ $59.84
+
+Bar 2089:
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.12
+  RSI Mean Reversion: SELL 1 SIL @ $102.40
+
+Bar 2090:
+  RSI Mean Reversion: SELL 1 URTH @ $189.55
+  RSI Mean Reversion: SELL 1 REMX @ $89.42
+
+Bar 2092:
+  RSI Mean Reversion: SELL 1 MP @ $57.55
+
+Bar 2093:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.74
+  RSI Mean Reversion: SELL 1 PLTR @ $135.03
+  RSI Mean Reversion: SELL 1 SLV @ $70.58
+  RSI Mean Reversion: SELL 1 PPLT @ $187.30
+
+Bar 2094:
+  RSI Mean Reversion: SELL 1 LIT @ $72.99
+
+Bar 2101:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.40
+  RSI Mean Reversion: BUY 1 MSTR @ $125.91
+
+Bar 2103:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.57
+  RSI Mean Reversion: BUY 1 TSLA @ $413.70
+  RSI Mean Reversion: SELL 1 NOC @ $735.65
+
+Bar 2105:
+  RSI Mean Reversion: BUY 1 AAPL @ $262.91
+
+Bar 2107:
+  RSI Mean Reversion: BUY 1 MP @ $57.42
+  RSI Mean Reversion: BUY 1 NVO @ $48.47
+  RSI Mean Reversion: BUY 1 GDXJ @ $136.96
+  RSI Mean Reversion: BUY 1 PICK @ $59.85
+
+Bar 2108:
+  RSI Mean Reversion: BUY 1 REMX @ $89.37
+
+Bar 2115:
+  RSI Mean Reversion: BUY 1 LIT @ $73.00
+
+Bar 2117:
+  RSI Mean Reversion: BUY 1 URTH @ $189.68
+
+Bar 2118:
+  RSI Mean Reversion: BUY 1 SLV @ $70.56
+
+Bar 2122:
+  RSI Mean Reversion: BUY 1 NOC @ $735.21
+  RSI Mean Reversion: BUY 1 PPLT @ $187.17
+
+Bar 2129:
+  RSI Mean Reversion: SELL 1 NVO @ $48.40
+
+Bar 2140:
+  RSI Mean Reversion: SELL 1 AMD @ $201.05
+
+Bar 2141:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.12
+
+Bar 2144:
+  RSI Mean Reversion: SELL 1 MSTR @ $126.23
+
+Bar 2145:
+  RSI Mean Reversion: SELL 1 URTH @ $189.28
+
+Bar 2146:
+  RSI Mean Reversion: SELL 1 REMX @ $89.23
+
+Bar 2151:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.20
+
+Bar 2157:
+  RSI Mean Reversion: BUY 1 AMD @ $201.07
+  RSI Mean Reversion: BUY 1 SIL @ $102.01
+
+Bar 2162:
+  RSI Mean Reversion: SELL 1 LIT @ $72.76
+
+Bar 2169:
+  RSI Mean Reversion: SELL 1 MP @ $57.37
+  RSI Mean Reversion: SELL 1 PICK @ $59.73
+
+Bar 2177:
+  RSI Mean Reversion: SELL 1 TSLA @ $409.93
+
+Bar 2183:
+  RSI Mean Reversion: SELL 1 NOC @ $731.73
+  RSI Mean Reversion: SELL 1 PPLT @ $186.57
+
+Bar 2186:
+  RSI Mean Reversion: SELL 1 AMD @ $200.96
+
+Bar 2188:
+  RSI Mean Reversion: SELL 1 AAPL @ $261.84
+
+Bar 2194:
+  RSI Mean Reversion: SELL 1 NVDA @ $186.52
+  RSI Mean Reversion: SELL 1 LMT @ $663.34
+
+Bar 2195:
+  RSI Mean Reversion: SELL 1 MSFT @ $397.88
+
+Bar 2199:
+  RSI Mean Reversion: SELL 1 GLD @ $457.88
+  RSI Mean Reversion: SELL 1 SLV @ $70.54
+  RSI Mean Reversion: SELL 1 GDXJ @ $136.35
+  RSI Mean Reversion: SELL 1 SIL @ $101.80
+
+Bar 2203:
+  RSI Mean Reversion: BUY 1 AAPL @ $261.91
+
+Bar 2204:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.06
+
+Bar 2214:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.94
+
+Bar 2219:
+  RSI Mean Reversion: BUY 1 URTH @ $189.75
+
+Bar 2220:
+  RSI Mean Reversion: BUY 1 NVO @ $48.58
+
+Bar 2223:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.98
+
+Bar 2226:
+  RSI Mean Reversion: BUY 1 GLD @ $458.65
+  RSI Mean Reversion: BUY 1 COPX @ $85.65
+
+Bar 2228:
+  RSI Mean Reversion: BUY 1 SLV @ $70.56
+  RSI Mean Reversion: BUY 1 PPLT @ $187.07
+
+Bar 2229:
+  RSI Mean Reversion: BUY 1 PLTR @ $133.71
+  RSI Mean Reversion: BUY 1 MSTR @ $126.46
+  RSI Mean Reversion: BUY 1 LIT @ $72.86
+  RSI Mean Reversion: BUY 1 REMX @ $89.53
+
+Bar 2236:
+  RSI Mean Reversion: BUY 1 AMD @ $202.24
+
+Bar 2239:
+  RSI Mean Reversion: BUY 1 PICK @ $59.99
+
+Bar 2243:
+  RSI Mean Reversion: SELL 1 GLD @ $457.68
+
+Bar 2245:
+  RSI Mean Reversion: SELL 1 PICK @ $59.89
+
+Bar 2246:
+  RSI Mean Reversion: SELL 1 MSTR @ $127.37
+
+Bar 2250:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.14
+  RSI Mean Reversion: SELL 1 TSLA @ $409.78
+  RSI Mean Reversion: SELL 1 SLV @ $70.50
+
+Bar 2251:
+  RSI Mean Reversion: SELL 1 COPX @ $85.72
+  RSI Mean Reversion: SELL 1 REMX @ $89.71
+
+Bar 2252:
+  RSI Mean Reversion: SELL 1 LIT @ $72.95
+  RSI Mean Reversion: SELL 1 URTH @ $189.36
+
+Bar 2253:
+  RSI Mean Reversion: SELL 1 AMD @ $202.93
+
+Bar 2256:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.92
+
+Bar 2261:
+  RSI Mean Reversion: SELL 1 AAPL @ $260.78
+
+Bar 2262:
+  RSI Mean Reversion: SELL 1 PPLT @ $186.89
+
+Bar 2266:
+  RSI Mean Reversion: BUY 1 MSTR @ $126.93
+
+Bar 2267:
+  RSI Mean Reversion: BUY 1 AMD @ $202.32
+
+Bar 2278:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.40
+
+Bar 2285:
+  RSI Mean Reversion: SELL 1 MSTR @ $127.83
+
+Bar 2286:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.86
+
+Bar 2292:
+  RSI Mean Reversion: BUY 1 LIT @ $73.10
+
+Bar 2297:
+  RSI Mean Reversion: SELL 1 TSLA @ $411.15
+
+Bar 2305:
+  RSI Mean Reversion: SELL 1 AMD @ $202.65
+  RSI Mean Reversion: BUY 1 MP @ $58.59
+
+Bar 2316:
+  RSI Mean Reversion: BUY 1 MSTR @ $129.34
+
+Bar 2324:
+  RSI Mean Reversion: BUY 1 GDXJ @ $137.90
+
+Bar 2325:
+  RSI Mean Reversion: BUY 1 PPLT @ $186.58
+
+Bar 2327:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.95
+
+Bar 2332:
+  RSI Mean Reversion: BUY 1 GLD @ $459.09
+
+Bar 2339:
+  RSI Mean Reversion: SELL 1 PPLT @ $187.62
+
+Bar 2340:
+  RSI Mean Reversion: BUY 1 SLV @ $70.92
+
+Bar 2341:
+  RSI Mean Reversion: SELL 1 NVO @ $48.38
+
+Bar 2342:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.75
+
+Bar 2350:
+  RSI Mean Reversion: BUY 1 MSFT @ $398.59
+
+Bar 2354:
+  RSI Mean Reversion: SELL 1 GLD @ $458.73
+
+Bar 2355:
+  RSI Mean Reversion: BUY 1 AMD @ $203.03
+
+Bar 2357:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.67
+
+Bar 2359:
+  RSI Mean Reversion: BUY 1 SIL @ $103.21
+
+Bar 2364:
+  RSI Mean Reversion: BUY 1 COPX @ $85.92
+
+Bar 2367:
+  RSI Mean Reversion: BUY 1 NVO @ $48.43
+
+Bar 2368:
+  RSI Mean Reversion: SELL 1 AAPL @ $260.09
+
+Bar 2369:
+  RSI Mean Reversion: BUY 1 LMT @ $669.01
+  RSI Mean Reversion: SELL 1 SLV @ $71.00
+
+Bar 2370:
+  RSI Mean Reversion: SELL 1 MP @ $58.50
+
+Bar 2371:
+  RSI Mean Reversion: SELL 1 TSLA @ $411.19
+
+Bar 2378:
+  RSI Mean Reversion: SELL 1 SIL @ $102.96
+
+Bar 2379:
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.61
+
+Bar 2384:
+  RSI Mean Reversion: BUY 1 MP @ $58.47
+
+Bar 2385:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.56
+
+Bar 2388:
+  RSI Mean Reversion: BUY 1 SIL @ $102.07
+
+Bar 2391:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.78
+
+Bar 2392:
+  RSI Mean Reversion: SELL 1 MSTR @ $128.44
+
+Bar 2395:
+  RSI Mean Reversion: BUY 1 GDXJ @ $137.49
+
+Bar 2405:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.09
+
+Bar 2406:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.74
+  RSI Mean Reversion: SELL 1 AMD @ $202.80
+
+Bar 2408:
+  RSI Mean Reversion: BUY 1 SLV @ $71.17
+
+Bar 2412:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.68
+
+Bar 2417:
+  RSI Mean Reversion: SELL 1 AAPL @ $260.24
+  RSI Mean Reversion: SELL 1 MSFT @ $397.59
+
+Bar 2421:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.41
+
+Bar 2422:
+  RSI Mean Reversion: BUY 1 MSFT @ $398.32
+
+Bar 2423:
+  RSI Mean Reversion: SELL 1 LMT @ $668.43
+
+Bar 2427:
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.70
+
+Bar 2428:
+  RSI Mean Reversion: BUY 1 AMD @ $203.05
+
+Bar 2430:
+  RSI Mean Reversion: SELL 1 SLV @ $71.20
+
+Bar 2437:
+  RSI Mean Reversion: SELL 1 COPX @ $85.81
+
+Bar 2438:
+  RSI Mean Reversion: BUY 1 COPX @ $85.64
+
+Bar 2444:
+  RSI Mean Reversion: BUY 1 SLV @ $70.98
+
+Bar 2448:
+  RSI Mean Reversion: BUY 1 LMT @ $669.67
+
+Bar 2452:
+  RSI Mean Reversion: BUY 1 GDXJ @ $137.91
+
+Bar 2457:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.66
+  RSI Mean Reversion: SELL 1 AMD @ $202.75
+  RSI Mean Reversion: SELL 1 TSLA @ $410.88
+
+Bar 2460:
+  RSI Mean Reversion: SELL 1 NVO @ $48.37
+
+Bar 2466:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.36
+  RSI Mean Reversion: SELL 1 MSFT @ $398.10
+
+Bar 2474:
+  RSI Mean Reversion: SELL 1 COPX @ $86.00
+
+Bar 2475:
+  RSI Mean Reversion: BUY 1 NVO @ $48.41
+
+Bar 2476:
+  RSI Mean Reversion: SELL 1 LMT @ $668.81
+
+Bar 2478:
+  RSI Mean Reversion: BUY 1 LMT @ $670.00
+
+Bar 2480:
+  RSI Mean Reversion: SELL 1 MP @ $58.44
+
+Bar 2483:
+  RSI Mean Reversion: BUY 1 GLD @ $459.19
+
+Bar 2485:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.55
+
+Bar 2488:
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.48
+
+Bar 2489:
+  RSI Mean Reversion: BUY 1 MSTR @ $128.73
+
+Bar 2490:
+  RSI Mean Reversion: BUY 1 COPX @ $86.02
+  RSI Mean Reversion: BUY 1 GDXJ @ $137.19
+
+Bar 2497:
+  RSI Mean Reversion: SELL 1 LMT @ $668.78
+
+Bar 2502:
+  RSI Mean Reversion: SELL 1 GLD @ $458.54
+
+Bar 2505:
+  RSI Mean Reversion: BUY 1 MP @ $58.46
+  RSI Mean Reversion: SELL 1 MSTR @ $128.85
+  RSI Mean Reversion: SELL 1 SLV @ $70.79
+
+Bar 2516:
+  RSI Mean Reversion: BUY 1 SLV @ $70.69
+
+Bar 2517:
+  RSI Mean Reversion: BUY 1 LMT @ $669.18
+
+Bar 2523:
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.61
+
+Bar 2525:
+  RSI Mean Reversion: SELL 1 COPX @ $86.00
+
+Bar 2526:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.50
+
+Bar 2528:
+  RSI Mean Reversion: SELL 1 SLV @ $70.78
+
+Bar 2531:
+  RSI Mean Reversion: SELL 1 LMT @ $670.11
+
+Bar 2532:
+  RSI Mean Reversion: BUY 1 GDXJ @ $137.54
+
+Bar 2537:
+  RSI Mean Reversion: BUY 1 NVDA @ $187.87
+
+Bar 2538:
+  RSI Mean Reversion: BUY 1 MSTR @ $129.35
+
+Bar 2546:
+  RSI Mean Reversion: BUY 1 LMT @ $670.67
+
+Bar 2548:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.69
+  RSI Mean Reversion: SELL 1 NVO @ $48.40
+
+Bar 2549:
+  RSI Mean Reversion: SELL 1 GDXJ @ $137.71
+
+Bar 2550:
+  RSI Mean Reversion: SELL 1 MSTR @ $130.59
+  RSI Mean Reversion: SELL 1 SIL @ $103.55
+
+Bar 2556:
+  RSI Mean Reversion: SELL 1 MP @ $58.35
+
+Bar 2566:
+  RSI Mean Reversion: BUY 1 REMX @ $89.29
+
+Bar 2570:
+  RSI Mean Reversion: BUY 1 NVO @ $48.39
+
+Bar 2577:
+  RSI Mean Reversion: BUY 1 SLV @ $73.13
+
+Bar 2579:
+  RSI Mean Reversion: BUY 1 SIL @ $104.69
+
+Bar 2580:
+  RSI Mean Reversion: BUY 1 GLD @ $462.98
+
+Bar 2585:
+  RSI Mean Reversion: BUY 1 PLTR @ $136.24
+  RSI Mean Reversion: BUY 1 MSFT @ $400.37
+
+Bar 2587:
+  RSI Mean Reversion: BUY 1 AAPL @ $261.39
+  RSI Mean Reversion: BUY 1 GDXJ @ $139.58
+
+Bar 2594:
+  RSI Mean Reversion: BUY 1 AMD @ $204.35
+  RSI Mean Reversion: BUY 1 TSLA @ $413.09
+
+Bar 2599:
+  RSI Mean Reversion: SELL 1 GLD @ $462.14
+
+Bar 2608:
+  RSI Mean Reversion: SELL 1 LMT @ $670.34
+  RSI Mean Reversion: BUY 1 GLD @ $462.56
+
+Bar 2611:
+  RSI Mean Reversion: SELL 1 NVO @ $48.18
+
+Bar 2617:
+  RSI Mean Reversion: SELL 1 AMD @ $203.89
+  RSI Mean Reversion: BUY 1 NVO @ $48.15
+
+Bar 2626:
+  RSI Mean Reversion: SELL 1 TSLA @ $412.16
+  RSI Mean Reversion: SELL 1 SLV @ $73.01
+  RSI Mean Reversion: SELL 1 GDXJ @ $139.31
+
+Bar 2627:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.57
+
+Bar 2628:
+  RSI Mean Reversion: SELL 1 SIL @ $104.45
+
+Bar 2629:
+  RSI Mean Reversion: SELL 1 GLD @ $462.00
+
+Bar 2632:
+  RSI Mean Reversion: BUY 1 AMD @ $204.07
+
+Bar 2633:
+  RSI Mean Reversion: BUY 1 MP @ $58.57
+
+Bar 2634:
+  RSI Mean Reversion: BUY 1 COPX @ $86.75
+
+Bar 2644:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.59
+
+Bar 2648:
+  RSI Mean Reversion: SELL 1 AAPL @ $260.69
+
+Bar 2650:
+  RSI Mean Reversion: BUY 1 MSTR @ $132.86
+
+Bar 2656:
+  RSI Mean Reversion: BUY 1 AAPL @ $261.15
+
+Bar 2669:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.74
+  RSI Mean Reversion: BUY 1 TSLA @ $412.55
+  RSI Mean Reversion: BUY 1 NOC @ $742.53
+
+Bar 2670:
+  RSI Mean Reversion: BUY 1 LMT @ $670.51
+  RSI Mean Reversion: SELL 1 COPX @ $86.59
+  RSI Mean Reversion: BUY 1 SIL @ $104.57
+
+Bar 2688:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.81
+  RSI Mean Reversion: BUY 1 GLD @ $462.78
+
+Bar 2689:
+  RSI Mean Reversion: SELL 1 AAPL @ $259.89
+
+Bar 2693:
+  RSI Mean Reversion: BUY 1 SLV @ $73.13
+
+Bar 2694:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.36
+
+Bar 2698:
+  RSI Mean Reversion: SELL 1 NVO @ $47.90
+
+Bar 2706:
+  RSI Mean Reversion: SELL 1 MSFT @ $398.45
+
+Bar 2707:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.06
+
+Bar 2708:
+  RSI Mean Reversion: SELL 1 AAPL @ $259.95
+
+Bar 2710:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.00
+
+Bar 2711:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.46
+  RSI Mean Reversion: BUY 1 MSFT @ $399.00
+
+Bar 2714:
+  RSI Mean Reversion: BUY 1 GDXJ @ $139.18
+
+Bar 2715:
+  RSI Mean Reversion: BUY 1 COPX @ $86.39
+
+Bar 2721:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.83
+
+Bar 2724:
+  RSI Mean Reversion: BUY 1 PPLT @ $192.19
+
+Bar 2729:
+  RSI Mean Reversion: SELL 1 SLV @ $72.86
+
+Bar 2730:
+  RSI Mean Reversion: SELL 1 NOC @ $738.37
+
+Bar 2741:
+  RSI Mean Reversion: BUY 1 NVO @ $48.02
+
+Bar 2742:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.84
+
+Bar 2745:
+  RSI Mean Reversion: SELL 1 AAPL @ $259.75
+  RSI Mean Reversion: SELL 1 MSTR @ $130.56
+
+Bar 2747:
+  RSI Mean Reversion: BUY 1 SLV @ $72.87
+
+Bar 2753:
+  RSI Mean Reversion: BUY 1 AAPL @ $260.01
+
+Bar 2757:
+  RSI Mean Reversion: BUY 1 MSTR @ $130.13
+
+Bar 2758:
+  RSI Mean Reversion: SELL 1 LMT @ $668.83
+
+Bar 2760:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.83
+
+Bar 2764:
+  RSI Mean Reversion: SELL 1 NVO @ $47.85
+
+Bar 2766:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.37
+
+Bar 2767:
+  RSI Mean Reversion: SELL 1 GDXJ @ $138.42
+
+Bar 2770:
+  RSI Mean Reversion: SELL 1 SIL @ $103.78
+
+Bar 2774:
+  RSI Mean Reversion: SELL 1 GLD @ $461.39
+  RSI Mean Reversion: SELL 1 SLV @ $72.76
+
+Bar 2775:
+  RSI Mean Reversion: SELL 1 PPLT @ $192.47
+
+Bar 2782:
+  RSI Mean Reversion: SELL 1 MP @ $58.34
+
+Bar 2783:
+  RSI Mean Reversion: SELL 1 NVDA @ $187.25
+  RSI Mean Reversion: SELL 1 AMD @ $202.10
+  RSI Mean Reversion: SELL 1 MSTR @ $130.36
+
+Bar 2786:
+  RSI Mean Reversion: SELL 1 AAPL @ $259.48
+
+Bar 2790:
+  RSI Mean Reversion: BUY 1 SLV @ $71.42
+  RSI Mean Reversion: BUY 1 PPLT @ $188.99
+  RSI Mean Reversion: SELL 1 COPX @ $86.50
+  RSI Mean Reversion: BUY 1 SIL @ $103.80
+  RSI Mean Reversion: SELL 1 REMX @ $89.88
+
+Bar 2791:
+  RSI Mean Reversion: SELL 1 TSLA @ $412.26
+  RSI Mean Reversion: BUY 1 GLD @ $460.40
+  RSI Mean Reversion: BUY 1 GDXJ @ $138.52
+
+Bar 2795:
+  RSI Mean Reversion: BUY 1 MSTR @ $129.96
+
+Bar 2804:
+  RSI Mean Reversion: SELL 1 SLV @ $72.83
+  RSI Mean Reversion: SELL 1 SIL @ $103.97
+
+Bar 2805:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.92
+  RSI Mean Reversion: SELL 1 GLD @ $461.43
+
+Bar 2806:
+  RSI Mean Reversion: BUY 1 AAPL @ $259.88
+  RSI Mean Reversion: SELL 1 PPLT @ $192.81
+  RSI Mean Reversion: BUY 1 REMX @ $89.39
+
+Bar 2808:
+  RSI Mean Reversion: BUY 1 MP @ $58.16
+
+Bar 2809:
+  RSI Mean Reversion: BUY 1 COPX @ $86.07
+  RSI Mean Reversion: SELL 1 GDXJ @ $138.77
+
+Bar 2815:
+  RSI Mean Reversion: BUY 1 GDXJ @ $138.91
+
+Bar 2818:
+  RSI Mean Reversion: BUY 1 SIL @ $104.10
+
+Bar 2821:
+  RSI Mean Reversion: BUY 1 NVDA @ $186.99
+
+Bar 2822:
   RSI Mean Reversion: BUY 1 PLTR @ $134.41
   RSI Mean Reversion: BUY 1 AMD @ $201.75
   RSI Mean Reversion: BUY 1 LMT @ $670.68
@@ -39,185 +2922,805 @@ Bar 32:
   RSI Mean Reversion: BUY 1 GLD @ $462.00
   RSI Mean Reversion: BUY 1 SLV @ $72.75
 
-Bar 33:
-  RSI Mean Reversion: BUY 1 MSFT @ $397.02
-
-Bar 40:
+Bar 2830:
   RSI Mean Reversion: BUY 1 PPLT @ $192.61
 
-Bar 46:
+Bar 2836:
   RSI Mean Reversion: SELL 1 LMT @ $670.21
 
-Bar 47:
+Bar 2837:
   RSI Mean Reversion: SELL 1 GLD @ $462.22
   RSI Mean Reversion: SELL 1 GDXJ @ $138.51
 
-Bar 50:
+Bar 2840:
   RSI Mean Reversion: SELL 1 SLV @ $73.04
 
-Bar 52:
+Bar 2842:
   RSI Mean Reversion: SELL 1 SIL @ $103.95
 
-Bar 53:
+Bar 2843:
   RSI Mean Reversion: BUY 1 NOC @ $741.53
 
-Bar 54:
+Bar 2844:
   RSI Mean Reversion: SELL 1 MSTR @ $128.77
 
-Bar 55:
-  RSI Mean Reversion: SELL 1 BE @ $156.19
-
-Bar 56:
+Bar 2846:
   RSI Mean Reversion: SELL 1 PPLT @ $192.81
 
-Bar 60:
+Bar 2850:
   RSI Mean Reversion: SELL 1 MP @ $57.94
   RSI Mean Reversion: BUY 1 LMT @ $670.90
 
-Bar 62:
+Bar 2852:
   RSI Mean Reversion: SELL 1 COPX @ $85.85
 
-Bar 63:
+Bar 2853:
   RSI Mean Reversion: SELL 1 NVDA @ $186.67
   RSI Mean Reversion: SELL 1 TSLA @ $409.13
 
-Bar 70:
-  RSI Mean Reversion: BUY 1 BE @ $155.76
-
-Bar 73:
+Bar 2863:
   RSI Mean Reversion: BUY 1 GDXJ @ $139.00
 
-Bar 75:
+Bar 2865:
   RSI Mean Reversion: BUY 1 MP @ $57.85
 
-Bar 76:
+Bar 2866:
   RSI Mean Reversion: BUY 1 COPX @ $85.84
 
-Bar 77:
+Bar 2867:
   RSI Mean Reversion: SELL 1 NVO @ $47.76
 
-Bar 78:
+Bar 2868:
   RSI Mean Reversion: BUY 1 NVDA @ $186.77
 
-Bar 79:
+Bar 2869:
   RSI Mean Reversion: SELL 1 LMT @ $670.03
 
-Bar 80:
+Bar 2870:
   RSI Mean Reversion: BUY 1 MSTR @ $127.83
   RSI Mean Reversion: BUY 1 SIL @ $103.83
 
-Bar 87:
-  RSI Mean Reversion: SELL 1 BE @ $155.96
-
-Bar 89:
+Bar 2879:
   RSI Mean Reversion: SELL 1 MSTR @ $130.59
 
-Bar 90:
-  RSI Mean Reversion: BUY 1 BE @ $153.22
+Bar 2880:
   RSI Mean Reversion: BUY 1 TSLA @ $407.58
   RSI Mean Reversion: BUY 1 LMT @ $665.88
   RSI Mean Reversion: BUY 1 NVO @ $47.71
   RSI Mean Reversion: SELL 1 COPX @ $86.03
-  RSI Mean Reversion: BUY 1 LIT @ $72.27
+  RSI Mean Reversion: BUY 1 URTH @ $189.73
+  RSI Mean Reversion: BUY 1 PICK @ $60.30
 
-Bar 91:
+Bar 2881:
   RSI Mean Reversion: SELL 1 MP @ $58.05
   RSI Mean Reversion: SELL 1 GDXJ @ $140.21
   RSI Mean Reversion: SELL 1 SIL @ $104.89
 
-Bar 93:
+Bar 2883:
   RSI Mean Reversion: SELL 1 NVDA @ $187.66
 
-Bar 100:
+Bar 2890:
   RSI Mean Reversion: SELL 1 AMD @ $202.04
 
-Bar 106:
+Bar 2895:
+  RSI Mean Reversion: SELL 1 URTH @ $189.80
+
+Bar 2896:
   RSI Mean Reversion: SELL 1 REMX @ $88.80
 
-Bar 116:
+Bar 2906:
   RSI Mean Reversion: BUY 1 AMD @ $199.73
 
-Bar 121:
+Bar 2911:
   RSI Mean Reversion: SELL 1 AAPL @ $261.15
   RSI Mean Reversion: SELL 1 NOC @ $730.85
+  RSI Mean Reversion: SELL 1 PICK @ $60.94
 
-Bar 123:
+Bar 2913:
   RSI Mean Reversion: SELL 1 NVO @ $47.54
   RSI Mean Reversion: BUY 1 GLD @ $461.56
   RSI Mean Reversion: SELL 1 LIT @ $72.64
 
-Bar 126:
+Bar 2916:
   RSI Mean Reversion: BUY 1 SLV @ $72.39
   RSI Mean Reversion: BUY 1 GDXJ @ $137.93
   RSI Mean Reversion: BUY 1 SIL @ $103.69
 
-Bar 130:
+Bar 2920:
   RSI Mean Reversion: SELL 1 AMD @ $202.69
 
-Bar 133:
+Bar 2923:
   RSI Mean Reversion: BUY 1 NOC @ $718.73
 
-Bar 135:
+Bar 2925:
   RSI Mean Reversion: BUY 1 NVDA @ $187.38
   RSI Mean Reversion: BUY 1 MP @ $57.68
   RSI Mean Reversion: BUY 1 MSTR @ $131.30
 
-Bar 137:
+Bar 2927:
   RSI Mean Reversion: BUY 1 PICK @ $60.61
 
-Bar 142:
+Bar 2932:
   RSI Mean Reversion: BUY 1 NVO @ $47.33
 
-Bar 145:
+Bar 2935:
   RSI Mean Reversion: SELL 1 PICK @ $60.70
 
-Bar 146:
+Bar 2936:
   RSI Mean Reversion: SELL 1 NOC @ $726.02
   RSI Mean Reversion: SELL 1 LMT @ $660.30
 
-Bar 149:
+Bar 2939:
   RSI Mean Reversion: SELL 1 MSTR @ $133.48
 
-Bar 150:
-  RSI Mean Reversion: SELL 1 BE @ $155.79
-
-Bar 155:
+Bar 2945:
   RSI Mean Reversion: BUY 1 AAPL @ $260.87
   RSI Mean Reversion: BUY 1 LIT @ $72.75
 
-Bar 160:
+Bar 2950:
   RSI Mean Reversion: BUY 1 MSTR @ $132.45
 
-Bar 161:
+Bar 2951:
   RSI Mean Reversion: SELL 1 SLV @ $74.07
 
-Bar 163:
+Bar 2953:
   RSI Mean Reversion: SELL 1 AAPL @ $261.81
 
-Bar 164:
+Bar 2954:
   RSI Mean Reversion: SELL 1 NVDA @ $189.02
 
-Bar 166:
+Bar 2956:
   RSI Mean Reversion: SELL 1 GLD @ $463.42
 
-Bar 167:
+Bar 2957:
   RSI Mean Reversion: SELL 1 PLTR @ $134.02
   RSI Mean Reversion: BUY 1 NOC @ $723.99
   RSI Mean Reversion: SELL 1 SIL @ $104.02
 
-Bar 169:
+Bar 2959:
   RSI Mean Reversion: SELL 1 MSFT @ $398.13
   RSI Mean Reversion: SELL 1 GDXJ @ $137.71
 
-Bar 174:
+Bar 2964:
   RSI Mean Reversion: SELL 1 MP @ $57.28
   RSI Mean Reversion: SELL 1 TSLA @ $412.38
 
-Bar 178:
+Bar 2968:
   RSI Mean Reversion: SELL 1 LIT @ $72.89
 
-Bar 180:
+Bar 2970:
   RSI Mean Reversion: BUY 1 SLV @ $73.94
+
+Bar 2973:
+  RSI Mean Reversion: SELL 1 MSTR @ $134.08
+  RSI Mean Reversion: BUY 1 PPLT @ $194.86
+
+Bar 2980:
+  RSI Mean Reversion: BUY 1 LMT @ $658.12
+
+Bar 2983:
+  RSI Mean Reversion: BUY 1 MSFT @ $398.34
+
+Bar 2985:
+  RSI Mean Reversion: BUY 1 AMD @ $203.02
+  RSI Mean Reversion: BUY 1 TSLA @ $411.95
+
+Bar 2986:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.59
+  RSI Mean Reversion: BUY 1 MSTR @ $133.09
+  RSI Mean Reversion: BUY 1 URTH @ $191.02
+
+Bar 2991:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.05
+
+Bar 2992:
+  RSI Mean Reversion: BUY 1 LIT @ $72.87
+  RSI Mean Reversion: BUY 1 PICK @ $60.66
+
+Bar 2993:
+  RSI Mean Reversion: BUY 1 REMX @ $88.85
+
+Bar 2994:
+  RSI Mean Reversion: SELL 1 PPLT @ $194.56
+
+Bar 2995:
+  RSI Mean Reversion: BUY 1 AAPL @ $261.86
+  RSI Mean Reversion: BUY 1 MP @ $56.86
+  RSI Mean Reversion: BUY 1 COPX @ $87.22
+
+Bar 3003:
+  RSI Mean Reversion: SELL 1 SLV @ $74.58
+
+Bar 3008:
+  RSI Mean Reversion: SELL 1 NVO @ $47.40
+
+Bar 3009:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.47
+  RSI Mean Reversion: SELL 1 AAPL @ $262.87
+  RSI Mean Reversion: SELL 1 PLTR @ $134.72
+  RSI Mean Reversion: SELL 1 URTH @ $190.74
+
+Bar 3010:
+  RSI Mean Reversion: SELL 1 REMX @ $88.94
+
+Bar 3011:
+  RSI Mean Reversion: SELL 1 MSFT @ $398.16
+  RSI Mean Reversion: SELL 1 LIT @ $72.81
+
+Bar 3013:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.69
+
+Bar 3015:
+  RSI Mean Reversion: SELL 1 PICK @ $60.68
+
+Bar 3020:
+  RSI Mean Reversion: SELL 1 LMT @ $655.70
+
+Bar 3022:
+  RSI Mean Reversion: SELL 1 COPX @ $87.68
+
+Bar 3030:
+  RSI Mean Reversion: BUY 1 NVO @ $47.30
+
+Bar 3031:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.82
+
+Bar 3034:
+  RSI Mean Reversion: BUY 1 URTH @ $191.12
+
+Bar 3036:
+  RSI Mean Reversion: BUY 1 PLTR @ $134.46
+
+Bar 3037:
+  RSI Mean Reversion: BUY 1 AAPL @ $263.66
+  RSI Mean Reversion: BUY 1 MSFT @ $398.85
+
+Bar 3039:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.43
+
+Bar 3040:
+  RSI Mean Reversion: BUY 1 LIT @ $72.77
+  RSI Mean Reversion: BUY 1 REMX @ $88.89
+
+Bar 3044:
+  RSI Mean Reversion: BUY 1 LMT @ $652.82
+  RSI Mean Reversion: BUY 1 PICK @ $60.71
+
+Bar 3046:
+  RSI Mean Reversion: BUY 1 PPLT @ $195.15
+
+Bar 3050:
+  RSI Mean Reversion: BUY 1 GLD @ $465.14
+  RSI Mean Reversion: BUY 1 SLV @ $74.26
+  RSI Mean Reversion: BUY 1 COPX @ $87.53
+  RSI Mean Reversion: BUY 1 GDXJ @ $139.03
+  RSI Mean Reversion: BUY 1 SIL @ $104.72
+
+Bar 3063:
+  RSI Mean Reversion: SELL 1 SLV @ $74.71
+  RSI Mean Reversion: SELL 1 LIT @ $72.54
+  RSI Mean Reversion: SELL 1 URTH @ $190.18
+
+Bar 3064:
+  RSI Mean Reversion: SELL 1 PPLT @ $194.73
+  RSI Mean Reversion: SELL 1 PICK @ $60.62
+
+Bar 3065:
+  RSI Mean Reversion: SELL 1 GLD @ $465.08
+
+Bar 3068:
+  RSI Mean Reversion: SELL 1 GDXJ @ $139.52
+  RSI Mean Reversion: SELL 1 SIL @ $105.14
+
+Bar 3075:
+  RSI Mean Reversion: SELL 1 MSTR @ $131.60
+  RSI Mean Reversion: SELL 1 COPX @ $87.71
+
+Bar 3080:
+  RSI Mean Reversion: SELL 1 TSLA @ $408.21
+
+Bar 3082:
+  RSI Mean Reversion: SELL 1 AAPL @ $262.58
+  RSI Mean Reversion: SELL 1 NVO @ $47.26
+
+Bar 3083:
+  RSI Mean Reversion: SELL 1 REMX @ $88.56
+
+Bar 3090:
+  RSI Mean Reversion: SELL 1 NVDA @ $188.62
+  RSI Mean Reversion: SELL 1 PLTR @ $134.14
+
+Bar 3091:
+  RSI Mean Reversion: SELL 1 MP @ $55.60
+
+Bar 3095:
+  RSI Mean Reversion: SELL 1 LMT @ $651.88
+
+Bar 3098:
+  RSI Mean Reversion: BUY 1 GLD @ $466.29
+
+Bar 3099:
+  RSI Mean Reversion: SELL 1 NOC @ $722.13
+  RSI Mean Reversion: BUY 1 PPLT @ $196.11
+
+Bar 3103:
+  RSI Mean Reversion: BUY 1 MSTR @ $132.24
+
+Bar 3104:
+  RSI Mean Reversion: BUY 1 PLTR @ $133.70
+  RSI Mean Reversion: BUY 1 URTH @ $190.79
+
+Bar 3107:
+  RSI Mean Reversion: BUY 1 SLV @ $74.79
+
+Bar 3109:
+  RSI Mean Reversion: BUY 1 GDXJ @ $140.19
+  RSI Mean Reversion: BUY 1 REMX @ $88.62
+
+Bar 3110:
+  RSI Mean Reversion: BUY 1 NVDA @ $188.51
+  RSI Mean Reversion: BUY 1 LIT @ $72.86
+  RSI Mean Reversion: BUY 1 SIL @ $105.84
+  RSI Mean Reversion: BUY 1 PICK @ $60.80
+
+Bar 3111:
+  RSI Mean Reversion: BUY 1 MP @ $55.24
+  RSI Mean Reversion: BUY 1 COPX @ $87.93
+
+Bar 3121:
+  RSI Mean Reversion: SELL 1 NVDA @ $188.93
+  RSI Mean Reversion: SELL 1 MSFT @ $397.21
+  RSI Mean Reversion: SELL 1 COPX @ $88.08
+
+Bar 3123:
+  RSI Mean Reversion: SELL 1 PPLT @ $196.09
+  RSI Mean Reversion: SELL 1 URTH @ $190.89
+
+Bar 3124:
+  RSI Mean Reversion: SELL 1 PLTR @ $133.62
+  RSI Mean Reversion: SELL 1 MSTR @ $132.56
+
+Bar 3128:
+  RSI Mean Reversion: SELL 1 PICK @ $60.95
+
+Bar 3133:
+  RSI Mean Reversion: SELL 1 AMD @ $200.49
+
+Bar 3134:
+  RSI Mean Reversion: SELL 1 REMX @ $88.81
+
+Bar 3139:
+  RSI Mean Reversion: SELL 1 GLD @ $465.72
+  RSI Mean Reversion: SELL 1 SLV @ $74.94
+  RSI Mean Reversion: SELL 1 LIT @ $73.01
+  RSI Mean Reversion: SELL 1 GDXJ @ $140.34
+  RSI Mean Reversion: SELL 1 SIL @ $106.17
+
+Bar 3141:
+  RSI Mean Reversion: BUY 1 NOC @ $723.55
+
+Bar 3147:
+  RSI Mean Reversion: SELL 1 MP @ $55.99
+
+Bar 3158:
+  RSI Mean Reversion: BUY 1 NVO @ $47.62
+
+Bar 3160:
+  RSI Mean Reversion: BUY 1 AMD @ $200.98
+  RSI Mean Reversion: BUY 1 TSLA @ $412.75
+
+Bar 3161:
+  RSI Mean Reversion: BUY 1 URTH @ $191.34
+
+Bar 3162:
+  RSI Mean Reversion: BUY 1 MSFT @ $398.17
+
+Bar 3164:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.14
+  RSI Mean Reversion: BUY 1 MSTR @ $132.65
+
+Bar 3165:
+  RSI Mean Reversion: BUY 1 LMT @ $653.69
+
+Bar 3167:
+  RSI Mean Reversion: BUY 1 SLV @ $75.04
+
+Bar 3176:
+  RSI Mean Reversion: BUY 1 MP @ $55.61
+
+Bar 3177:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.36
+
+Bar 3178:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.99
+
+Bar 3179:
+  RSI Mean Reversion: BUY 1 COPX @ $88.62
+
+Bar 3184:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.39
+
+Bar 3187:
+  RSI Mean Reversion: SELL 1 LMT @ $654.68
+
+Bar 3189:
+  RSI Mean Reversion: BUY 1 REMX @ $88.80
+
+Bar 3190:
+  RSI Mean Reversion: SELL 1 COPX @ $88.74
+
+Bar 3191:
+  RSI Mean Reversion: SELL 1 MSFT @ $397.39
+
+Bar 3193:
+  RSI Mean Reversion: SELL 1 SLV @ $75.11
+
+Bar 3194:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.16
+
+Bar 3199:
+  RSI Mean Reversion: BUY 1 LMT @ $654.20
+
+Bar 3201:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.21
+
+Bar 3203:
+  RSI Mean Reversion: SELL 1 NOC @ $721.96
+
+Bar 3204:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.51
+
+Bar 3207:
+  RSI Mean Reversion: SELL 1 LMT @ $654.70
+
+Bar 3208:
+  RSI Mean Reversion: BUY 1 COPX @ $88.64
+  RSI Mean Reversion: BUY 1 LIT @ $73.16
+
+Bar 3210:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.96
+  RSI Mean Reversion: BUY 1 SIL @ $106.60
+
+Bar 3215:
+  RSI Mean Reversion: SELL 1 NVO @ $47.59
+
+Bar 3219:
+  RSI Mean Reversion: SELL 1 SIL @ $106.98
+
+Bar 3220:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.80
+  RSI Mean Reversion: SELL 1 URTH @ $190.96
+
+Bar 3221:
+  RSI Mean Reversion: SELL 1 REMX @ $88.72
+
+Bar 3222:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.97
+  RSI Mean Reversion: SELL 1 COPX @ $88.81
+
+Bar 3223:
+  RSI Mean Reversion: SELL 1 AMD @ $199.78
+
+Bar 3229:
+  RSI Mean Reversion: BUY 1 NVO @ $47.49
+
+Bar 3230:
+  RSI Mean Reversion: BUY 1 TSLA @ $410.27
+
+Bar 3231:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.08
+
+Bar 3234:
+  RSI Mean Reversion: BUY 1 NOC @ $722.01
+
+Bar 3236:
+  RSI Mean Reversion: BUY 1 URTH @ $191.19
+
+Bar 3237:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.66
+  RSI Mean Reversion: BUY 1 PLTR @ $134.69
+
+Bar 3241:
+  RSI Mean Reversion: SELL 1 MP @ $55.53
+
+Bar 3243:
+  RSI Mean Reversion: SELL 1 LIT @ $73.09
+
+Bar 3248:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.61
+
+Bar 3249:
+  RSI Mean Reversion: SELL 1 MSTR @ $131.11
+
+Bar 3250:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.44
+
+Bar 3251:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.08
+  RSI Mean Reversion: BUY 1 LIT @ $73.08
+
+Bar 3253:
+  RSI Mean Reversion: SELL 1 MSFT @ $397.02
+  RSI Mean Reversion: SELL 1 URTH @ $190.93
+
+Bar 3256:
+  RSI Mean Reversion: SELL 1 AAPL @ $263.57
+
+Bar 3263:
+  RSI Mean Reversion: BUY 1 PICK @ $61.47
+
+Bar 3268:
+  RSI Mean Reversion: BUY 1 MSTR @ $131.09
+
+Bar 3270:
+  RSI Mean Reversion: SELL 1 NOC @ $722.84
+
+Bar 3279:
+  RSI Mean Reversion: BUY 1 SIL @ $106.91
+
+Bar 3280:
+  RSI Mean Reversion: BUY 1 SLV @ $76.33
+  RSI Mean Reversion: BUY 1 GDXJ @ $141.84
+
+Bar 3288:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.81
+  RSI Mean Reversion: BUY 1 REMX @ $88.99
+
+Bar 3289:
+  RSI Mean Reversion: SELL 1 LIT @ $73.06
+
+Bar 3292:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.71
+
+Bar 3297:
+  RSI Mean Reversion: BUY 1 LIT @ $73.02
+
+Bar 3298:
+  RSI Mean Reversion: BUY 1 MP @ $55.40
+
+Bar 3299:
+  RSI Mean Reversion: SELL 1 MP @ $55.31
+  RSI Mean Reversion: SELL 1 SLV @ $76.37
+
+Bar 3304:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.13
+
+Bar 3306:
+  RSI Mean Reversion: BUY 1 PPLT @ $196.29
+
+Bar 3308:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.84
+
+Bar 3311:
+  RSI Mean Reversion: SELL 1 NVO @ $47.39
+  RSI Mean Reversion: SELL 1 LIT @ $72.89
+
+Bar 3312:
+  RSI Mean Reversion: SELL 1 MSTR @ $130.82
+  RSI Mean Reversion: BUY 1 MSFT @ $397.40
+
+Bar 3319:
+  RSI Mean Reversion: BUY 1 LMT @ $660.36
+
+Bar 3320:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.78
+
+Bar 3333:
+  RSI Mean Reversion: SELL 1 LMT @ $659.05
+
+Bar 3336:
+  RSI Mean Reversion: SELL 1 PLTR @ $135.06
+  RSI Mean Reversion: BUY 1 COPX @ $89.23
+
+Bar 3339:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.52
+  RSI Mean Reversion: SELL 1 TSLA @ $410.94
+
+Bar 3345:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.50
+
+Bar 3352:
+  RSI Mean Reversion: BUY 1 LMT @ $659.56
+  RSI Mean Reversion: BUY 1 NVO @ $47.49
+
+Bar 3353:
+  RSI Mean Reversion: SELL 1 GDXJ @ $141.72
+
+Bar 3356:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.09
+
+Bar 3359:
+  RSI Mean Reversion: BUY 1 MSTR @ $130.65
+  RSI Mean Reversion: SELL 1 SIL @ $107.66
+
+Bar 3365:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.94
+  RSI Mean Reversion: BUY 1 NOC @ $724.72
+
+Bar 3367:
+  RSI Mean Reversion: SELL 1 COPX @ $89.05
+
+Bar 3370:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.88
+
+Bar 3372:
+  RSI Mean Reversion: BUY 1 MP @ $55.48
+
+Bar 3375:
+  RSI Mean Reversion: BUY 1 AMD @ $200.04
+
+Bar 3377:
+  RSI Mean Reversion: BUY 1 SLV @ $76.88
+
+Bar 3378:
+  RSI Mean Reversion: BUY 1 NVDA @ $189.94
+
+Bar 3380:
+  RSI Mean Reversion: SELL 1 MSTR @ $131.22
+
+Bar 3381:
+  RSI Mean Reversion: SELL 1 MP @ $55.34
+
+Bar 3384:
+  RSI Mean Reversion: BUY 1 MSFT @ $397.49
+
+Bar 3389:
+  RSI Mean Reversion: SELL 1 NVDA @ $189.78
+
+Bar 3391:
+  RSI Mean Reversion: BUY 1 SIL @ $107.11
+
+Bar 3393:
+  RSI Mean Reversion: BUY 1 GLD @ $469.97
+  RSI Mean Reversion: BUY 1 GDXJ @ $141.70
+
+Bar 3396:
+  RSI Mean Reversion: SELL 1 NVO @ $47.40
+
+Bar 3398:
+  RSI Mean Reversion: BUY 1 COPX @ $88.89
+
+Bar 3399:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.13
+
+Bar 3400:
+  RSI Mean Reversion: BUY 1 NVO @ $47.49
+
+Bar 3403:
+  RSI Mean Reversion: SELL 1 SLV @ $76.81
+
+Bar 3405:
+  RSI Mean Reversion: SELL 1 SIL @ $107.54
+
+Bar 3409:
+  RSI Mean Reversion: SELL 1 NOC @ $724.27
+
+Bar 3412:
+  RSI Mean Reversion: BUY 1 MP @ $55.47
+
+Bar 3414:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.97
+
+Bar 3419:
+  RSI Mean Reversion: BUY 1 MSTR @ $131.23
+
+Bar 3421:
+  RSI Mean Reversion: SELL 1 COPX @ $88.73
+
+Bar 3422:
+  RSI Mean Reversion: SELL 1 AMD @ $199.80
+
+Bar 3423:
+  RSI Mean Reversion: SELL 1 AAPL @ $264.14
+
+Bar 3426:
+  RSI Mean Reversion: SELL 1 MSTR @ $131.33
+
+Bar 3427:
+  RSI Mean Reversion: BUY 1 NOC @ $725.62
+
+Bar 3428:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.09
+
+Bar 3432:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.78
+  RSI Mean Reversion: SELL 1 NVO @ $47.42
+  RSI Mean Reversion: SELL 1 GLD @ $469.25
+
+Bar 3434:
+  RSI Mean Reversion: BUY 1 SLV @ $76.83
+
+Bar 3435:
+  RSI Mean Reversion: BUY 1 SIL @ $107.11
+
+Bar 3436:
+  RSI Mean Reversion: BUY 1 AMD @ $200.06
+
+Bar 3437:
+  RSI Mean Reversion: SELL 1 MP @ $55.55
+  RSI Mean Reversion: SELL 1 GDXJ @ $141.70
+
+Bar 3439:
+  RSI Mean Reversion: SELL 1 LMT @ $658.04
+
+Bar 3440:
+  RSI Mean Reversion: BUY 1 MSTR @ $131.34
+
+Bar 3443:
+  RSI Mean Reversion: SELL 1 MSFT @ $396.94
+  RSI Mean Reversion: SELL 1 TSLA @ $410.94
+
+Bar 3446:
+  RSI Mean Reversion: BUY 1 NVO @ $47.50
+
+Bar 3447:
+  RSI Mean Reversion: SELL 1 NOC @ $724.27
+
+Bar 3451:
+  RSI Mean Reversion: BUY 1 MP @ $55.44
+
+Bar 3453:
+  RSI Mean Reversion: SELL 1 SIL @ $107.58
+
+Bar 3456:
+  RSI Mean Reversion: BUY 1 GLD @ $469.97
+
+Bar 3461:
+  RSI Mean Reversion: BUY 1 TSLA @ $411.64
+
+Bar 3466:
+  RSI Mean Reversion: BUY 1 SIL @ $107.61
+
+Bar 3468:
+  RSI Mean Reversion: SELL 1 NVO @ $47.40
+
+Bar 3472:
+  RSI Mean Reversion: SELL 1 PLTR @ $134.88
+
+Bar 3475:
+  RSI Mean Reversion: BUY 1 AAPL @ $264.57
+  RSI Mean Reversion: SELL 1 SLV @ $76.69
+
+Bar 3476:
+  RSI Mean Reversion: SELL 1 REMX @ $88.41
+
+Bar 3479:
+  RSI Mean Reversion: BUY 1 PLTR @ $135.08
+  RSI Mean Reversion: BUY 1 MSFT @ $397.58
+
+Bar 3480:
+  RSI Mean Reversion: SELL 1 GLD @ $469.33
+
+Bar 3483:
+  RSI Mean Reversion: SELL 1 PPLT @ $196.80
+
+Bar 3486:
+  RSI Mean Reversion: SELL 1 MP @ $55.62
+
+Bar 3491:
+  RSI Mean Reversion: SELL 1 AMD @ $199.69
+
+Bar 3493:
+  RSI Mean Reversion: BUY 1 GLD @ $469.94
+
+Bar 3494:
+  RSI Mean Reversion: BUY 1 NOC @ $725.53
+
+Bar 3495:
+  RSI Mean Reversion: BUY 1 LMT @ $659.16
+
+Bar 3502:
+  RSI Mean Reversion: SELL 1 GLD @ $469.94
+  RSI Mean Reversion: BUY 1 PPLT @ $196.69
+
+Bar 3504:
+  RSI Mean Reversion: SELL 1 SIL @ $107.69
+
+Bar 3507:
+  RSI Mean Reversion: SELL 1 TSLA @ $410.85
+
+Bar 3508:
+  RSI Mean Reversion: BUY 1 AMD @ $199.99
 
 
 ================================================================================
@@ -227,60 +3730,131 @@ STRATEGY SUMMARY
 
 
 CopilotPenguin
-  Final Value:    $5,000.00
-  Total Return:   $0.00  (0.00%)
-  Max Drawdown:   0.00%
-  Sharpe Ratio:   0.00
-  Total Trades:   0
-  Buy Trades:     0
-  Sell Trades:    0
+  Final Value:    $5,138.12
+  Total Return:   $138.12  (2.76%)
+  Max Drawdown:   -1.81%
+  Sharpe Ratio:   0.29
+  Total Trades:   18
+  Buy Trades:     9
+  Sell Trades:    9
 
   Recent Trades:
+    BUY 2 NOC @ $705.27 at 2026-02-17 14:49:00+00:00
+    BUY 2 LMT @ $654.08 at 2026-02-17 14:49:00+00:00
+    BUY 2 NVO @ $49.26 at 2026-02-17 14:49:00+00:00
+    BUY 2 AAPL @ $259.71 at 2026-02-17 14:50:00+00:00
+    BUY 2 GLD @ $448.22 at 2026-02-17 14:51:00+00:00
+    BUY 2 PLTR @ $129.14 at 2026-02-17 14:54:00+00:00
+    BUY 2 SLV @ $65.95 at 2026-02-17 14:56:00+00:00
+    BUY 2 MSTR @ $127.18 at 2026-02-17 14:57:00+00:00
+    BUY 2 MP @ $55.23 at 2026-02-17 15:00:00+00:00
+    SELL 2 NOC @ $724.53 at 2026-02-21 00:59:00+00:00
+    SELL 2 LMT @ $658.22 at 2026-02-21 00:59:00+00:00
+    SELL 2 NVO @ $47.46 at 2026-02-21 00:59:00+00:00
+    SELL 2 AAPL @ $264.42 at 2026-02-21 00:59:00+00:00
+    SELL 2 GLD @ $470.53 at 2026-02-21 00:59:00+00:00
+    SELL 2 PLTR @ $134.64 at 2026-02-21 00:59:00+00:00
+    SELL 2 SLV @ $76.83 at 2026-02-21 00:59:00+00:00
+    SELL 2 MSTR @ $130.88 at 2026-02-21 00:59:00+00:00
+    SELL 2 MP @ $55.58 at 2026-02-21 00:59:00+00:00
 
 --------------------------------------------------------------------------------
 
 RSI Mean Reversion
-  Final Value:    $5,014.20
-  Total Return:   $14.20  (0.28%)
-  Max Drawdown:   -38.52%
-  Sharpe Ratio:   0.58
-  Total Trades:   96
-  Buy Trades:     48
-  Sell Trades:    48
+  Final Value:    $4,861.32
+  Total Return:   $-138.68  (-2.77%)
+  Max Drawdown:   -2.92%
+  Sharpe Ratio:   -0.53
+  Total Trades:   1474
+  Buy Trades:     737
+  Sell Trades:    737
 
   Recent Trades:
-    BUY 1 AAPL @ $260.87 at 2026-02-20 15:35:00+00:00
-    BUY 1 LIT @ $72.75 at 2026-02-20 15:35:00+00:00
-    BUY 1 MSTR @ $132.45 at 2026-02-20 15:40:00+00:00
-    SELL 1 SLV @ $74.07 at 2026-02-20 15:41:00+00:00
-    SELL 1 AAPL @ $261.81 at 2026-02-20 15:43:00+00:00
-    SELL 1 NVDA @ $189.02 at 2026-02-20 15:44:00+00:00
-    SELL 1 GLD @ $463.42 at 2026-02-20 15:46:00+00:00
-    SELL 1 PLTR @ $134.02 at 2026-02-20 15:47:00+00:00
-    BUY 1 NOC @ $723.99 at 2026-02-20 15:47:00+00:00
-    SELL 1 SIL @ $104.02 at 2026-02-20 15:47:00+00:00
-    SELL 1 MSFT @ $398.13 at 2026-02-20 15:49:00+00:00
-    SELL 1 GDXJ @ $137.71 at 2026-02-20 15:49:00+00:00
-    SELL 1 MP @ $57.28 at 2026-02-20 15:54:00+00:00
-    SELL 1 TSLA @ $412.38 at 2026-02-20 15:54:00+00:00
-    SELL 1 LIT @ $72.89 at 2026-02-20 15:58:00+00:00
-    BUY 1 SLV @ $73.94 at 2026-02-20 16:00:00+00:00
-    SELL 1 NVO @ $47.49 at 2026-02-20 16:00:00+00:00
-    SELL 1 MSTR @ $133.58 at 2026-02-20 16:00:00+00:00
-    SELL 1 NOC @ $726.45 at 2026-02-20 16:00:00+00:00
-    SELL 1 SLV @ $74.15 at 2026-02-20 16:00:00+00:00
+    SELL 1 PPLT @ $196.80 at 2026-02-21 00:33:00+00:00
+    SELL 1 MP @ $55.62 at 2026-02-21 00:36:00+00:00
+    SELL 1 AMD @ $199.69 at 2026-02-21 00:41:00+00:00
+    BUY 1 GLD @ $469.94 at 2026-02-21 00:43:00+00:00
+    BUY 1 NOC @ $725.53 at 2026-02-21 00:44:00+00:00
+    BUY 1 LMT @ $659.16 at 2026-02-21 00:45:00+00:00
+    SELL 1 GLD @ $469.94 at 2026-02-21 00:52:00+00:00
+    BUY 1 PPLT @ $196.69 at 2026-02-21 00:52:00+00:00
+    SELL 1 SIL @ $107.69 at 2026-02-21 00:54:00+00:00
+    SELL 1 TSLA @ $410.85 at 2026-02-21 00:57:00+00:00
+    BUY 1 AMD @ $199.99 at 2026-02-21 00:58:00+00:00
+    SELL 1 PICK @ $61.44 at 2026-02-21 00:59:00+00:00
+    SELL 1 MSTR @ $130.88 at 2026-02-21 00:59:00+00:00
+    SELL 1 AAPL @ $264.42 at 2026-02-21 00:59:00+00:00
+    SELL 1 PLTR @ $134.64 at 2026-02-21 00:59:00+00:00
+    SELL 1 MSFT @ $397.10 at 2026-02-21 00:59:00+00:00
+    SELL 1 NOC @ $724.53 at 2026-02-21 00:59:00+00:00
+    SELL 1 LMT @ $658.22 at 2026-02-21 00:59:00+00:00
+    SELL 1 PPLT @ $196.59 at 2026-02-21 00:59:00+00:00
+    SELL 1 AMD @ $199.90 at 2026-02-21 00:59:00+00:00
 
 --------------------------------------------------------------------------------
 
 SMA20MultiTimeframePenguin
-  Final Value:    $5,000.00
-  Total Return:   $0.00  (0.00%)
-  Max Drawdown:   0.00%
-  Sharpe Ratio:   0.00
-  Total Trades:   0
-  Buy Trades:     0
-  Sell Trades:    0
+  Final Value:    $5,144.38
+  Total Return:   $144.38  (2.89%)
+  Max Drawdown:   -1.18%
+  Sharpe Ratio:   0.35
+  Total Trades:   42
+  Buy Trades:     21
+  Sell Trades:    21
 
   Recent Trades:
+    SELL 1 GLD @ $470.53 at 2026-02-21 00:59:00+00:00
+    SELL 1 PLTR @ $134.64 at 2026-02-21 00:59:00+00:00
+    SELL 1 AAPL @ $264.42 at 2026-02-21 00:59:00+00:00
+    SELL 1 MP @ $55.58 at 2026-02-21 00:59:00+00:00
+    SELL 1 MSFT @ $397.10 at 2026-02-21 00:59:00+00:00
+    SELL 1 NVDA @ $189.97 at 2026-02-21 00:59:00+00:00
+    SELL 1 NVO @ $47.46 at 2026-02-21 00:59:00+00:00
+    SELL 1 SLV @ $76.83 at 2026-02-21 00:59:00+00:00
+    SELL 1 COPX @ $89.16 at 2026-02-21 00:59:00+00:00
+    SELL 1 REMX @ $88.50 at 2026-02-21 00:59:00+00:00
+    SELL 1 PICK @ $61.44 at 2026-02-21 00:59:00+00:00
+    SELL 1 PPLT @ $196.59 at 2026-02-21 00:59:00+00:00
+    SELL 1 GDXJ @ $142.00 at 2026-02-21 00:59:00+00:00
+    SELL 1 SIL @ $107.75 at 2026-02-21 00:59:00+00:00
+    SELL 1 MSTR @ $130.88 at 2026-02-21 00:59:00+00:00
+    SELL 1 LIT @ $72.96 at 2026-02-21 00:59:00+00:00
+    SELL 1 AMD @ $199.90 at 2026-02-21 00:59:00+00:00
+    SELL 1 NOC @ $724.53 at 2026-02-21 00:59:00+00:00
+    SELL 1 TSLA @ $411.20 at 2026-02-21 00:59:00+00:00
+    SELL 1 URTH @ $191.19 at 2026-02-21 00:59:00+00:00
+
+--------------------------------------------------------------------------------
+
+SupportResistancePenguin
+  Final Value:    $5,131.01
+  Total Return:   $131.01  (2.62%)
+  Max Drawdown:   -1.17%
+  Sharpe Ratio:   0.33
+  Total Trades:   40
+  Buy Trades:     20
+  Sell Trades:    20
+
+  Recent Trades:
+    SELL 1 NVDA @ $189.97 at 2026-02-21 00:59:00+00:00
+    SELL 1 TSLA @ $411.20 at 2026-02-21 00:59:00+00:00
+    SELL 1 GDXJ @ $142.00 at 2026-02-21 00:59:00+00:00
+    SELL 1 SIL @ $107.75 at 2026-02-21 00:59:00+00:00
+    SELL 1 AMD @ $199.90 at 2026-02-21 00:59:00+00:00
+    SELL 1 MSFT @ $397.10 at 2026-02-21 00:59:00+00:00
+    SELL 1 URTH @ $191.19 at 2026-02-21 00:59:00+00:00
+    SELL 1 PPLT @ $196.59 at 2026-02-21 00:59:00+00:00
+    SELL 1 MP @ $55.58 at 2026-02-21 00:59:00+00:00
+    SELL 1 MSTR @ $130.88 at 2026-02-21 00:59:00+00:00
+    SELL 1 COPX @ $89.16 at 2026-02-21 00:59:00+00:00
+    SELL 1 SLV @ $76.83 at 2026-02-21 00:59:00+00:00
+    SELL 1 GLD @ $470.53 at 2026-02-21 00:59:00+00:00
+    SELL 1 LMT @ $658.22 at 2026-02-21 00:59:00+00:00
+    SELL 1 NOC @ $724.53 at 2026-02-21 00:59:00+00:00
+    SELL 1 AAPL @ $264.42 at 2026-02-21 00:59:00+00:00
+    SELL 1 PLTR @ $134.64 at 2026-02-21 00:59:00+00:00
+    SELL 1 REMX @ $88.50 at 2026-02-21 00:59:00+00:00
+    SELL 1 NVO @ $47.46 at 2026-02-21 00:59:00+00:00
+    SELL 1 PICK @ $61.44 at 2026-02-21 00:59:00+00:00
 
 --------------------------------------------------------------------------------

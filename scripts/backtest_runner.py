@@ -15,47 +15,40 @@ from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
+from scripts.validation import check_consistency
+from scripts.support_resistance import compute_and_log_support_resistance_zones
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
     TRANSACTION_COST,
-    BAR_TIMEFRAME_MINUTES,
-    Run_start,
-    NUM_BARS_TO_BACKTEST,
+    START_DATE,
+    STOP_DATE,
+    BINNING,
     ACTIVE_PENGUINS,
 )
 
 
-def parse_datetime_config(dt_int: int) -> datetime:
+def parse_datetime_string(dt_str: str) -> datetime:
     """
-    Parse datetime from config format YYYYMMDD_HHMM (as integer).
-    Example: 202602201630 -> 2026-02-20 16:30 CET
+    Parse datetime from config format string.
+    
+    Accepts:
+    - ISO format: "2026-02-20 14:30:00"
+    - With timezone: "2026-02-20 14:30:00+01:00"
+    
+    Assumes UTC if no timezone specified.
     """
-    dt_str = str(dt_int).zfill(12)  # Pad to 12 digits: YYYYMMDDHHMM
+    # Try parsing with timezone first
+    for fmt in ["%Y-%m-%d %H:%M:%S%z", "%Y-%m-%d %H:%M:%S"]:
+        try:
+            dt = datetime.strptime(dt_str.strip(), fmt)
+            if dt.tzinfo is None:
+                dt = pytz.UTC.localize(dt)
+            return dt
+        except ValueError:
+            continue
     
-    year = int(dt_str[0:4])
-    month = int(dt_str[4:6])
-    day = int(dt_str[6:8])
-    hour = int(dt_str[8:10])
-    minute = int(dt_str[10:12])
-    
-    # CET timezone
-    cet = pytz.timezone('Europe/Berlin')
-    dt = cet.localize(datetime(year, month, day, hour, minute))
-    return dt
-
-
-def calculate_bars_end_datetime(start: datetime, num_bars: int, minutes_per_bar: int) -> datetime:
-    """Calculate end datetime based on number of bars."""
-    from datetime import timedelta
-    return start + timedelta(minutes=num_bars * minutes_per_bar)
-
-
-def generate_timeframe_string(start_dt: datetime, end_dt: datetime) -> str:
-    """Generate a timeframe string for directory naming (e.g., '2026-02-20_1400-1600')."""
-    start_str = start_dt.strftime('%Y-%m-%d_%H%M')
-    end_str = end_dt.strftime('%H%M')
-    return f"{start_str}-{end_str}"
+    raise ValueError(f"Cannot parse datetime: {dt_str}")
 
 
 def get_next_run_number(run_old_dir: Path) -> int:
@@ -84,8 +77,8 @@ def get_next_run_number(run_old_dir: Path) -> int:
 def run_backtest(
     symbols: List[str],
     start_datetime: datetime,
-    num_bars: int,
-    timeframe_minutes: int,
+    end_datetime: datetime,
+    binning: str,
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
@@ -95,9 +88,9 @@ def run_backtest(
     
     Args:
         symbols: List of symbols to trade
-        start_datetime: Start datetime (CET)
-        num_bars: Number of bars to simulate
-        timeframe_minutes: Minutes per bar
+        start_datetime: Start datetime (UTC)
+        end_datetime: End datetime (UTC)
+        binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
         initial_capital: Initial capital
         transaction_cost: Transaction cost per trade
         penguin_classes: List of penguin strategy classes
@@ -106,24 +99,22 @@ def run_backtest(
         Dict[penguin_name] = (portfolio, metrics)
     """
     
-    # Convert start datetime to UTC for Alpaca API
+    # Ensure both datetimes are UTC
     if start_datetime.tzinfo is None:
-        start_datetime = pytz.timezone('Europe/Berlin').localize(start_datetime)
-    start_datetime_utc = start_datetime.astimezone(pytz.UTC)
+        start_datetime = pytz.UTC.localize(start_datetime)
+    if end_datetime.tzinfo is None:
+        end_datetime = pytz.UTC.localize(end_datetime)
     
-    # Calculate end datetime
-    end_datetime_utc = calculate_bars_end_datetime(
-        start_datetime_utc,
-        num_bars,
-        timeframe_minutes
-    )
+    # Convert to UTC if needed
+    start_datetime_utc = start_datetime.astimezone(pytz.UTC)
+    end_datetime_utc = end_datetime.astimezone(pytz.UTC)
     
     print(f"\n{'='*80}")
     print(f"BACKTEST CONFIGURATION")
     print(f"{'='*80}")
-    print(f"Start Time (CET):  {start_datetime}")
+    print(f"Start Time (UTC):  {start_datetime_utc}")
     print(f"End Time (UTC):    {end_datetime_utc}")
-    print(f"Duration:          ~{num_bars} bars × {timeframe_minutes} minutes")
+    print(f"Binning:           {binning}")
     print(f"Initial Capital:   ${initial_capital:,.2f}")
     print(f"Transaction Cost:  ${transaction_cost:.2f}")
     print(f"Symbols:           {len(symbols)}")
@@ -133,12 +124,14 @@ def run_backtest(
     print("Step 1: Loading historical data from Alpaca...")
     loader = DataLoader()
     try:
-        data = loader.load_bars(
+        data, sparse_warning = loader.load_bars(
             symbols,
             start_datetime_utc,
             end_datetime_utc,
-            timeframe_minutes
+            binning
         )
+        if sparse_warning:
+            print(sparse_warning)
     except Exception as e:
         print(f"Error loading data: {e}")
         print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
@@ -170,13 +163,12 @@ def run_backtest(
     penguins = {}
     
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
-    for penguin_class in penguin_classes:
+    for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
             penguin = penguin_class()
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
             penguins[pen_name] = penguin
-            print(f"  ✓ {pen_name}")
         except Exception as e:
             print(f"  ✗ {penguin_class.__name__}: {e}")
     
@@ -258,9 +250,9 @@ def run_backtest(
             portfolio.add_value_snapshot(value)
     
     # Sell all positions at end - use average price from last 10 bars to avoid unrealistic jumps
-    print("\nClosing all positions...\n")
+    print("\nClosing all positions...")
     
-    for penguin_name, portfolio in portfolios.items():
+    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
         # For each position, close using average price of last few bars
         for symbol, quantity in list(portfolio.positions.items()):
             if quantity > 0:
@@ -286,9 +278,9 @@ def run_backtest(
         portfolio.add_value_snapshot(final_value)
     
     # Calculate metrics
-    print("Calculating performance metrics...")
+    print("\nCalculating performance metrics...")
     results = {}
-    for penguin_name, portfolio in portfolios.items():
+    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Computing metrics"):
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     
@@ -297,11 +289,15 @@ def run_backtest(
 
 def main():
     """Main entry point."""
-    # Parse config
-    start_dt = parse_datetime_config(Run_start)
-    
-    # Number of bars to simulate (from config)
-    num_bars = NUM_BARS_TO_BACKTEST
+    # Parse config dates
+    try:
+        start_dt = parse_datetime_string(START_DATE)
+        end_dt = parse_datetime_string(STOP_DATE)
+    except ValueError as e:
+        print(f"Error parsing config dates: {e}")
+        print(f"  START_DATE: {START_DATE}")
+        print(f"  STOP_DATE: {STOP_DATE}")
+        sys.exit(1)
     
     print("\n" + "="*80)
     print("PENGUIN CAPITALIST - HISTORICAL BACKTEST")
@@ -311,8 +307,8 @@ def main():
     results, trades_by_bar = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
-        num_bars=num_bars,
-        timeframe_minutes=BAR_TIMEFRAME_MINUTES,
+        end_datetime=end_dt,
+        binning=BINNING,
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
@@ -342,16 +338,78 @@ def main():
     archive_plot = archive_dir / "capital_curves.png"
     current_plot = current_dir / "capital_curves.png"
     
-    Evaluator.plot_capital_curves(results, archive_plot)
-    Evaluator.plot_capital_curves(results, current_plot)
+    # Get number of bars from first portfolio
+    num_bars = None
+    for portfolio, _ in results.values():
+        num_bars = len(portfolio.value_history)
+        break
+    
+    Evaluator.plot_capital_curves(results, archive_plot, num_bars, BINNING)
+    Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING)
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
-    archive_pdf = archive_dir / "backtest_report.pdf"
-    current_pdf = current_dir / "backtest_report.pdf"
+    archive_pdf = archive_dir / "report.pdf"
+    current_pdf = current_dir / "report.pdf"
     
-    Evaluator.generate_pdf_report(results, archive_pdf, archive_plot)
-    Evaluator.generate_pdf_report(results, current_pdf, current_plot)
+    Evaluator.generate_pdf_report(results, archive_pdf, archive_plot, num_bars, BINNING)
+    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING)
+    
+    # Validate consistency (check for price jumps)
+    print("\nValidating consistency...")
+    try:
+        # Collect latest prices and curve values for validation
+        latest_prices = {}
+        curve_values = {}
+        for penguin_name, (portfolio, metrics) in results.items():
+            if portfolio.trades:
+                # Get latest price for each symbol from last trade
+                for trade in portfolio.trades:
+                    latest_prices[trade.symbol] = trade.price
+            curve_values[penguin_name] = portfolio.value_history
+        
+        # Run consistency checks
+        warnings = check_consistency(
+            results=results,
+            max_jump_pct=0.15
+        )
+        
+        if warnings:
+            print(f"\n⚠️  Consistency warnings detected ({len(warnings)}):")
+            for warning in warnings[:5]:  # Show first 5 warnings
+                print(f"  - {warning}")
+            if len(warnings) > 5:
+                print(f"  ... and {len(warnings) - 5} more")
+            
+            # Save warnings to file
+            archive_warnings = archive_dir / "consistency_warnings.txt"
+            current_warnings = current_dir / "consistency_warnings.txt"
+            for warnings_file in [archive_warnings, current_warnings]:
+                with open(warnings_file, 'w') as f:
+                    f.write("Consistency Check Warnings\n")
+                    f.write("="*60 + "\n\n")
+                    for warning in warnings:
+                        f.write(f"• {warning}\n")
+        else:
+            print("✅ All consistency checks passed")
+    except Exception as e:
+        print(f"⚠️  Consistency validation error: {e}")
+    
+    # Generate Support & Resistance zones
+    print("\nAnalyzing support and resistance zones...")
+    try:
+        # Collect symbol prices from trades
+        symbol_prices = defaultdict(list)
+        for penguin_name, (portfolio, metrics) in results.items():
+            for trade in portfolio.trades:
+                symbol_prices[trade.symbol].append(trade.price)
+        
+        # Compute S&R zones for archive and current
+        compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
+        compute_and_log_support_resistance_zones(symbol_prices, str(current_dir))
+        print("✅ S&R zones computed and saved")
+    except Exception as e:
+        print(f"⚠️  S&R analysis error: {e}")
     
     print(f"\n✅ Backtest complete!")
     print(f"\nArchive saved to:  {archive_dir}")
@@ -359,13 +417,17 @@ def main():
     print(f"  - curves_data.json")
     print(f"  - metrics_summary.json")
     print(f"  - trades_log.txt")
-    print(f"  - backtest_report.pdf")
+    print(f"  - report.pdf")
+    print(f"  - consistency_warnings.txt (if warnings)")
+    print(f"  - support_resistance_zones.txt")
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - capital_curves.png")
     print(f"  - curves_data.json")
     print(f"  - metrics_summary.json")
     print(f"  - trades_log.txt")
-    print(f"  - backtest_report.pdf")
+    print(f"  - report.pdf")
+    print(f"  - consistency_warnings.txt (if warnings)")
+    print(f"  - support_resistance_zones.txt")
     print(f"\n{'='*80}")
     print(f"Run #{next_run_num} archived")
 

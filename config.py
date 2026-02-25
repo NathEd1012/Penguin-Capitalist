@@ -4,7 +4,7 @@ SYMBOLS = [
     "AAPL",
     "PLTR",
     "AMD",
-    "BE",
+    #"BE",
     "MP",
     "MSTR",
     "MSFT",
@@ -30,12 +30,13 @@ SYMBOLS = [
 INITIAL_CAPITAL = 5000.0
 TRANSACTION_COST = 0
 
-# ========== TIMING SETTINGS ==========
-BAR_TIMEFRAME_MINUTES = 1  # 1-minute bars
+# ========== BACKTEST TIMING SETTINGS ==========
+# ISO format dates (YYYY-MM-DD HH:MM:SS in UTC or market timezone)
+START_DATE = "2026-02-17 14:30:00"  # Feb 20, 2026 at 2:30 PM UTC (9:30 AM EST)
+STOP_DATE = "2026-02-21 23:50:00"   # Feb 21, 2026 at 11:50 PM UTC (market close + after hours)
 
-# ========== BACKTEST SETTINGS ==========
-Run_start = 202602201400  # Start time: Feb 20, 2026 at 2:00 PM CET (YYYYMMDD_HHMM as integer)
-NUM_BARS_TO_BACKTEST = 180  # Number of bars to simulate (e.g., 180 = 3 hours of 1-min bars)
+# Binning/timeframe for bars: "1m", "5m", "15m", "1h", "1d", etc.
+BINNING = "1m"
 
 # ========== ACTIVE PENGUINS ==========
 from penguins import (
@@ -65,7 +66,7 @@ ACTIVE_PENGUINS = [
     #RandomPenguin2,
     RSIMeanReversionPenguin,
     SMA20MultiTimeframePenguin,
-    #SupportResistancePenguin,
+    SupportResistancePenguin,
     #TrendPenguin,
     #VolatilityBreakoutPenguin,
 ]

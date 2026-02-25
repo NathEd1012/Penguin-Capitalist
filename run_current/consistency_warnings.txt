@@ -1,0 +1,19 @@
+Consistency Check Warnings
+============================================================
+
+• [CopilotPenguin] Detected 15 suspicious price jumps > 15%
+•   Trade #2 (NVO): -92.47% ($654.08 → $49.26)
+•   Trade #3 (AAPL): +427.19% ($49.26 → $259.71)
+•   Trade #4 (GLD): +72.58% ($259.71 → $448.22)
+• [RSI Mean Reversion] Detected 1318 suspicious price jumps > 15%
+•   Trade #2 (GLD): +660.86% ($58.88 → $447.99)
+•   Trade #3 (COPX): -81.42% ($447.99 → $83.24)
+•   Trade #4 (GDXJ): +55.58% ($83.24 → $129.51)
+• [SMA20MultiTimeframePenguin] Detected 39 suspicious price jumps > 15%
+•   Trade #1 (GLD): -31.30% ($652.72 → $448.42)
+•   Trade #2 (PLTR): -71.13% ($448.42 → $129.44)
+•   Trade #3 (AAPL): +100.33% ($129.44 → $259.31)
+• [SupportResistancePenguin] Detected 34 suspicious price jumps > 15%
+•   Trade #1 (TSLA): +124.59% ($180.04 → $404.35)
+•   Trade #2 (GDXJ): -68.55% ($404.35 → $127.19)
+•   Trade #3 (SIL): -25.90% ($127.19 → $94.24)

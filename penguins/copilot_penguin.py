@@ -10,10 +10,10 @@ class CopilotPenguin(BasePenguin):
         self.last_trade_index = {}  # Track last trade index by symbol
 
         # Strategy parameters
-        self.min_bars = 50
-        self.cooldown_bars = 5
-        self.max_spread_pct = 1.0
-        self.min_trend_roc = 0.005
+        self.min_bars = 20  # Reduced from 50
+        self.cooldown_bars = 3  # Reduced from 5
+        self.max_spread_pct = 2.0  # Increased from 1.0
+        self.min_trend_roc = 0.0001  # Much more relaxed from 0.005
         self.stop_loss_atr_mult = 1.5
         self.take_profit_atr_mult = 2.0
 
@@ -33,9 +33,9 @@ class CopilotPenguin(BasePenguin):
             return "HOLD", 0
 
         # Calculate indicators
-        rsi_val = rsi(mid_prices, n=14)
-        roc_short = roc(mid_prices, n=3)
-        roc_medium = roc(mid_prices, n=7)
+        rsi_val = rsi(mid_prices, period=14)
+        roc_short = roc(mid_prices, period=3)
+        roc_medium = roc(mid_prices, period=7)
 
         # Trend detection: SMA20 above SMA50
         sma_20 = sum(mid_prices[-20:]) / 20
@@ -60,8 +60,8 @@ class CopilotPenguin(BasePenguin):
         in_cooldown = (current_index - last_trade_index) <= self.cooldown_bars
 
         # ========== BUY SIGNALS ==========
-        # Trend-following entry: uptrend + positive momentum + RSI confirmation
-        buy_signal = is_uptrend and roc_medium > self.min_trend_roc and 50 <= rsi_val <= 70
+        # Very relaxed entry: Just need positive momentum + RSI not extreme
+        buy_signal = roc_medium > self.min_trend_roc and 30 <= rsi_val <= 80
 
         if buy_signal and not has_position and not in_cooldown:
             # Position size based on volatility proxy

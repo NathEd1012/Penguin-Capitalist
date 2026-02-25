@@ -7,6 +7,7 @@ from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
 import pytz
 from dotenv import load_dotenv
+from tqdm import tqdm
 
 # Load environment variables from .env file
 load_dotenv()
@@ -36,13 +37,38 @@ class DataLoader:
         
         self.client = StockHistoricalDataClient(api_key, secret_key)
     
+    def _binning_to_timeframe(self, binning: str) -> Tuple[TimeFrame, int]:
+        """
+        Convert binning string to Alpaca TimeFrame and minutes.
+        
+        Args:
+            binning: String like "1m", "5m", "15m", "1h", "1d"
+        
+        Returns:
+            (TimeFrame, minutes_per_bar)
+        """
+        binning = binning.strip().lower()
+        
+        if binning == "1m":
+            return TimeFrame.Minute, 1
+        elif binning == "5m":
+            return TimeFrame.FiveMin, 5
+        elif binning == "15m":
+            return TimeFrame.FifteenMin, 15
+        elif binning == "1h":
+            return TimeFrame.Hour, 60
+        elif binning == "1d":
+            return TimeFrame.Day, 1440
+        else:
+            raise ValueError(f"Unsupported binning: {binning}. Use '1m', '5m', '15m', '1h', or '1d'")
+    
     def load_bars(
         self,
         symbols: List[str],
         start_date: datetime,
         end_date: datetime,
-        timeframe_minutes: int = 1,
-    ) -> Dict[str, Dict]:
+        binning: str = "1m",
+    ) -> Tuple[Dict[str, Dict], str]:
         """
         Load historical bars for symbols.
         
@@ -50,22 +76,14 @@ class DataLoader:
             symbols: List of stock symbols
             start_date: Start datetime
             end_date: End datetime
-            timeframe_minutes: Minutes per bar (1, 5, 15, 60, etc.)
+            binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
         
         Returns:
-            Dict[symbol][timestamp] = bar data (o, h, l, c, v)
+            (data_dict, warning_message)
+            - data_dict: Dict[symbol][timestamp] = bar data (o, h, l, c, v)
+            - warning_message: String with info about actual data range if sparse
         """
-        # Map minutes to TimeFrame
-        if timeframe_minutes == 1:
-            tf = TimeFrame.Minute
-        elif timeframe_minutes == 5:
-            tf = TimeFrame.FiveMin
-        elif timeframe_minutes == 15:
-            tf = TimeFrame.FifteenMin
-        elif timeframe_minutes == 60:
-            tf = TimeFrame.Hour
-        else:
-            raise ValueError(f"Unsupported timeframe: {timeframe_minutes} minutes")
+        tf, minutes_per_bar = self._binning_to_timeframe(binning)
         
         request = StockBarsRequest(
             symbol_or_symbols=symbols,
@@ -80,7 +98,8 @@ class DataLoader:
         
         # Organize data by symbol and timestamp
         data = {}
-        for symbol in symbols:
+        all_timestamps = set()
+        for symbol in tqdm(symbols, desc="Organizing data"):
             data[symbol] = {}
             if symbol in bars.df.index.get_level_values(0):
                 symbol_data = bars.df.xs(symbol, level=0)
@@ -95,8 +114,24 @@ class DataLoader:
                         'close': float(row['close']),
                         'volume': int(row['volume']),
                     }
+                    all_timestamps.add(timestamp)
         
-        return data
+        # Check for data sparseness and generate warning if needed
+        warning_msg = ""
+        if all_timestamps:
+            actual_start = min(all_timestamps)
+            actual_end = max(all_timestamps)
+            
+            # Check if actual data range differs significantly from requested range
+            if actual_start > start_date or actual_end < end_date:
+                warning_msg = (
+                    f"\n⚠️  DATA SPARSENESS WARNING:\n"
+                    f"   Requested: {start_date} to {end_date}\n"
+                    f"   Actual:    {actual_start} to {actual_end}\n"
+                    f"   (Using only the {len(all_timestamps)} available timestamps)\n"
+                )
+        
+        return data, warning_msg
     
     def detect_stale_data(
         self,
