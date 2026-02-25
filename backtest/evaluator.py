@@ -81,6 +81,8 @@ class Evaluator:
         output_file: Path,
         num_bars: int = None,
         binning: str = "1m",
+        start_date: str = None,
+        stop_date: str = None,
     ):
         """
         Plot capital curves for all strategies with overall average line.
@@ -90,6 +92,8 @@ class Evaluator:
             output_file: Path to save PNG
             num_bars: Number of bars (optional, extracted from portfolio if not provided)
             binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
+            start_date: Start date string for x-axis
+            stop_date: Stop date string for x-axis
         """
         # Convert results format to curves dict
         curves = {}
@@ -101,7 +105,7 @@ class Evaluator:
             num_bars = len(list(curves.values())[0])
         
         # Use plotting module
-        plot_capital_curves(curves, str(output_file), num_bars, binning)
+        plot_capital_curves(curves, str(output_file), num_bars, binning, start_date, stop_date)
     
     @staticmethod
     def save_results(
@@ -237,6 +241,8 @@ class Evaluator:
         plot_file: Path = None,
         num_bars: int = None,
         binning: str = "1m",
+        start_date: str = None,
+        stop_date: str = None,
     ):
         """
         Generate a comprehensive PDF report with capital curves and detailed trade summaries.
@@ -247,6 +253,8 @@ class Evaluator:
             plot_file: Path to capital curves PNG (optional, not used in this format)
             num_bars: Number of bars (optional, extracted from portfolio if not provided)
             binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
+            start_date: Start date string for x-axis
+            stop_date: Stop date string for x-axis
         """
         # Convert results to individual dicts for plotting module
         curves = {}
@@ -267,5 +275,5 @@ class Evaluator:
             num_bars = len(list(curves.values())[0])
         
         # Use plotting module to generate PDF with detailed trade summaries
-        create_final_report_pdf(curves, portfolios, str(output_file), latest_prices, num_bars, binning)
+        create_final_report_pdf(curves, portfolios, str(output_file), latest_prices, num_bars, binning, start_date, stop_date)
 

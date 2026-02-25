@@ -32,7 +32,7 @@ TRANSACTION_COST = 0
 
 # ========== BACKTEST TIMING SETTINGS ==========
 # ISO format dates (YYYY-MM-DD HH:MM:SS in UTC or market timezone)
-START_DATE = "2026-02-17 14:30:00"  # Feb 20, 2026 at 2:30 PM UTC (9:30 AM EST)
+START_DATE = "2026-01-17 14:30:00"  # Feb 20, 2026 at 2:30 PM UTC (9:30 AM EST)
 STOP_DATE = "2026-02-21 23:50:00"   # Feb 21, 2026 at 11:50 PM UTC (market close + after hours)
 
 # Binning/timeframe for bars: "1m", "5m", "15m", "1h", "1d", etc.

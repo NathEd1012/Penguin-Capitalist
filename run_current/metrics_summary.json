@@ -1,42 +1,42 @@
 {
   "CopilotPenguin": {
-    "total_return": 138.12,
-    "return_pct": 2.76,
-    "max_drawdown": -1.81,
-    "sharpe_ratio": 0.29,
-    "total_trades": 18,
-    "buy_trades": 9,
-    "sell_trades": 9,
-    "final_value": 5138.12
+    "total_return": 233.82,
+    "return_pct": 4.68,
+    "max_drawdown": -8.96,
+    "sharpe_ratio": 0.08,
+    "total_trades": 14,
+    "buy_trades": 7,
+    "sell_trades": 7,
+    "final_value": 5233.82
   },
   "RSI Mean Reversion": {
-    "total_return": -138.68,
-    "return_pct": -2.77,
-    "max_drawdown": -2.92,
+    "total_return": -639.87,
+    "return_pct": -12.8,
+    "max_drawdown": -13.0,
     "sharpe_ratio": -0.53,
-    "total_trades": 1474,
-    "buy_trades": 737,
-    "sell_trades": 737,
-    "final_value": 4861.32
+    "total_trades": 3308,
+    "buy_trades": 1654,
+    "sell_trades": 1654,
+    "final_value": 4360.13
   },
   "SMA20MultiTimeframePenguin": {
-    "total_return": 144.38,
-    "return_pct": 2.89,
-    "max_drawdown": -1.18,
-    "sharpe_ratio": 0.35,
-    "total_trades": 42,
-    "buy_trades": 21,
-    "sell_trades": 21,
-    "final_value": 5144.38
+    "total_return": 116.84,
+    "return_pct": 2.34,
+    "max_drawdown": -4.67,
+    "sharpe_ratio": 0.07,
+    "total_trades": 14,
+    "buy_trades": 7,
+    "sell_trades": 7,
+    "final_value": 5116.84
   },
   "SupportResistancePenguin": {
-    "total_return": 131.01,
-    "return_pct": 2.62,
-    "max_drawdown": -1.17,
-    "sharpe_ratio": 0.33,
-    "total_trades": 40,
-    "buy_trades": 20,
-    "sell_trades": 20,
-    "final_value": 5131.01
+    "total_return": 115.72,
+    "return_pct": 2.31,
+    "max_drawdown": -4.67,
+    "sharpe_ratio": 0.07,
+    "total_trades": 14,
+    "buy_trades": 7,
+    "sell_trades": 7,
+    "final_value": 5115.72
   }
 }

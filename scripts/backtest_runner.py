@@ -344,16 +344,16 @@ def main():
         num_bars = len(portfolio.value_history)
         break
     
-    Evaluator.plot_capital_curves(results, archive_plot, num_bars, BINNING)
-    Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING)
+    Evaluator.plot_capital_curves(results, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE)
+    Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING, START_DATE, STOP_DATE)
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
     archive_pdf = archive_dir / "report.pdf"
     current_pdf = current_dir / "report.pdf"
     
-    Evaluator.generate_pdf_report(results, archive_pdf, archive_plot, num_bars, BINNING)
-    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING)
+    Evaluator.generate_pdf_report(results, archive_pdf, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE)
+    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE)
     
     # Validate consistency (check for price jumps)
     print("\nValidating consistency...")
