@@ -1,5 +1,5 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-02-25 15:58:07
+Generated: 2026-02-26 15:03:26
 ================================================================================
 
 EXECUTION DETAILS
@@ -18,23 +18,14 @@ Bar 20:
   RSI Mean Reversion: BUY 1 GLD @ $434.73
   SMA20MultiTimeframePenguin: BUY 1 AAPL @ $252.07
 
-Bar 21:
-  CopilotPenguin: BUY 2 AAPL @ $252.00
-  CopilotPenguin: BUY 2 GLD @ $434.91
-
 Bar 22:
   SMA20MultiTimeframePenguin: BUY 1 AMD @ $224.22
   SMA20MultiTimeframePenguin: BUY 1 GLD @ $435.04
 
-Bar 23:
-  CopilotPenguin: BUY 2 AMD @ $224.41
-
 Bar 26:
-  CopilotPenguin: BUY 2 LMT @ $579.51
   SMA20MultiTimeframePenguin: BUY 1 LMT @ $579.51
 
 Bar 27:
-  CopilotPenguin: BUY 2 GDXJ @ $134.61
   SMA20MultiTimeframePenguin: BUY 1 GDXJ @ $134.61
 
 Bar 28:
@@ -44,9 +35,6 @@ Bar 28:
 Bar 29:
   RSI Mean Reversion: SELL 1 GDXJ @ $134.50
   SMA20MultiTimeframePenguin: BUY 1 LIT @ $69.68
-
-Bar 31:
-  CopilotPenguin: BUY 2 COPX @ $81.86
 
 Bar 32:
   RSI Mean Reversion: BUY 1 AMD @ $222.57
@@ -101,11 +89,18 @@ Bar 111:
   RSI Mean Reversion: BUY 1 COPX @ $81.67
 
 Bar 122:
+  CopilotPenguin: BUY 2 AMD @ $226.23
   RSI Mean Reversion: SELL 1 AAPL @ $251.75
   RSI Mean Reversion: SELL 1 GLD @ $434.13
 
+Bar 124:
+  CopilotPenguin: BUY 2 COPX @ $81.79
+
 Bar 126:
   RSI Mean Reversion: BUY 1 GLD @ $434.66
+
+Bar 136:
+  CopilotPenguin: BUY 2 AAPL @ $252.82
 
 Bar 140:
   RSI Mean Reversion: SELL 1 GLD @ $434.28
@@ -185,9 +180,6 @@ Bar 279:
 Bar 280:
   RSI Mean Reversion: BUY 1 LMT @ $579.58
 
-Bar 286:
-  CopilotPenguin: BUY 2 LIT @ $69.25
-
 Bar 289:
   RSI Mean Reversion: SELL 1 GDXJ @ $133.77
 
@@ -208,11 +200,15 @@ Bar 322:
   RSI Mean Reversion: BUY 1 LIT @ $69.11
 
 Bar 329:
+  CopilotPenguin: BUY 3 LIT @ $69.53
   RSI Mean Reversion: SELL 1 AAPL @ $254.23
   RSI Mean Reversion: SELL 1 AMD @ $229.77
 
 Bar 336:
   RSI Mean Reversion: SELL 1 LIT @ $69.67
+
+Bar 341:
+  CopilotPenguin: BUY 3 LMT @ $584.48
 
 Bar 346:
   RSI Mean Reversion: BUY 1 AMD @ $228.14
@@ -226,6 +222,9 @@ Bar 360:
 
 Bar 363:
   RSI Mean Reversion: BUY 1 AAPL @ $251.81
+
+Bar 373:
+  CopilotPenguin: BUY 2 GDXJ @ $134.97
 
 Bar 377:
   RSI Mean Reversion: BUY 1 GDXJ @ $133.95
@@ -245,6 +244,9 @@ Bar 414:
 
 Bar 429:
   RSI Mean Reversion: SELL 1 AMD @ $238.51
+
+Bar 430:
+  CopilotPenguin: BUY 2 GLD @ $436.42
 
 Bar 458:
   RSI Mean Reversion: SELL 1 AAPL @ $251.26
@@ -9268,29 +9270,29 @@ STRATEGY SUMMARY
 
 
 CopilotPenguin
-  Final Value:    $5,233.82
-  Total Return:   $233.82  (4.68%)
-  Max Drawdown:   -8.96%
+  Final Value:    $5,287.91
+  Total Return:   $287.91  (5.76%)
+  Max Drawdown:   -9.71%
   Sharpe Ratio:   0.08
   Total Trades:   14
   Buy Trades:     7
   Sell Trades:    7
 
   Recent Trades:
-    BUY 2 AAPL @ $252.00 at 2026-01-20 09:21:00+00:00
-    BUY 2 GLD @ $434.91 at 2026-01-20 09:21:00+00:00
-    BUY 2 AMD @ $224.41 at 2026-01-20 09:23:00+00:00
-    BUY 2 LMT @ $579.51 at 2026-01-20 09:26:00+00:00
-    BUY 2 GDXJ @ $134.61 at 2026-01-20 09:27:00+00:00
-    BUY 2 COPX @ $81.86 at 2026-01-20 09:31:00+00:00
-    BUY 2 LIT @ $69.25 at 2026-01-20 13:47:00+00:00
-    SELL 2 AAPL @ $264.42 at 2026-02-21 00:59:00+00:00
-    SELL 2 GLD @ $470.53 at 2026-02-21 00:59:00+00:00
+    BUY 2 AMD @ $226.23 at 2026-01-20 11:02:00+00:00
+    BUY 2 COPX @ $81.79 at 2026-01-20 11:04:00+00:00
+    BUY 2 AAPL @ $252.82 at 2026-01-20 11:16:00+00:00
+    BUY 3 LIT @ $69.53 at 2026-01-20 14:30:00+00:00
+    BUY 3 LMT @ $584.48 at 2026-01-20 14:42:00+00:00
+    BUY 2 GDXJ @ $134.97 at 2026-01-20 15:14:00+00:00
+    BUY 2 GLD @ $436.42 at 2026-01-20 16:11:00+00:00
     SELL 2 AMD @ $199.90 at 2026-02-21 00:59:00+00:00
-    SELL 2 LMT @ $654.50 at 2026-02-21 00:59:00+00:00
-    SELL 2 GDXJ @ $142.00 at 2026-02-21 00:59:00+00:00
     SELL 2 COPX @ $89.16 at 2026-02-21 00:59:00+00:00
-    SELL 2 LIT @ $72.96 at 2026-02-21 00:59:00+00:00
+    SELL 2 AAPL @ $264.42 at 2026-02-21 00:59:00+00:00
+    SELL 3 LIT @ $72.96 at 2026-02-21 00:59:00+00:00
+    SELL 3 LMT @ $654.50 at 2026-02-21 00:59:00+00:00
+    SELL 2 GDXJ @ $142.00 at 2026-02-21 00:59:00+00:00
+    SELL 2 GLD @ $470.53 at 2026-02-21 00:59:00+00:00
 
 --------------------------------------------------------------------------------
 

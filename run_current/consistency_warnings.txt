@@ -2,9 +2,9 @@ Consistency Check Warnings
 ============================================================
 
 • [CopilotPenguin] Detected 13 suspicious price jumps > 15%
-•   Trade #1 (GLD): +72.58% ($252.00 → $434.91)
-•   Trade #2 (AMD): -48.40% ($434.91 → $224.41)
-•   Trade #3 (LMT): +158.23% ($224.41 → $579.51)
+•   Trade #1 (COPX): -63.85% ($226.23 → $81.79)
+•   Trade #2 (AAPL): +209.11% ($81.79 → $252.82)
+•   Trade #3 (LIT): -72.50% ($252.82 → $69.53)
 • [RSI Mean Reversion] Detected 2964 suspicious price jumps > 15%
 •   Trade #1 (LMT): +330.45% ($134.53 → $579.10)
 •   Trade #2 (COPX): -85.85% ($579.10 → $81.93)

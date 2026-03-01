@@ -1,13 +1,13 @@
 {
   "CopilotPenguin": {
-    "total_return": 233.82,
-    "return_pct": 4.68,
-    "max_drawdown": -8.96,
+    "total_return": 287.91,
+    "return_pct": 5.76,
+    "max_drawdown": -9.71,
     "sharpe_ratio": 0.08,
     "total_trades": 14,
     "buy_trades": 7,
     "sell_trades": 7,
-    "final_value": 5233.82
+    "final_value": 5287.91
   },
   "RSI Mean Reversion": {
     "total_return": -639.87,
