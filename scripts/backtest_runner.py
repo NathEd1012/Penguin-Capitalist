@@ -1,7 +1,7 @@
 """Main backtest runner - executes historical backtests for all penguins."""
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
 from collections import defaultdict
@@ -25,6 +25,7 @@ from config import (
     STOP_DATE,
     BINNING,
     ACTIVE_PENGUINS,
+    SAVE_TO_RUN_OLD,
 )
 
 
@@ -35,13 +36,22 @@ def parse_datetime_string(dt_str: str) -> datetime:
     Accepts:
     - ISO format: "2026-02-20 14:30:00"
     - With timezone: "2026-02-20 14:30:00+01:00"
+    - Special keyword: "TODAY" (resolves to yesterday at 23:50:00 UTC to avoid recent SIP data restrictions)
     
     Assumes UTC if no timezone specified.
     """
+    dt_str = dt_str.strip()
+    
+    # Handle special keyword "TODAY"
+    if dt_str.upper() == "TODAY":
+        # Use yesterday at 23:50 UTC to avoid recent SIP data restrictions
+        yesterday = datetime.now(pytz.UTC).replace(hour=23, minute=50, second=0, microsecond=0) - timedelta(days=1)
+        return yesterday
+    
     # Try parsing with timezone first
     for fmt in ["%Y-%m-%d %H:%M:%S%z", "%Y-%m-%d %H:%M:%S"]:
         try:
-            dt = datetime.strptime(dt_str.strip(), fmt)
+            dt = datetime.strptime(dt_str, fmt)
             if dt.tzinfo is None:
                 dt = pytz.UTC.localize(dt)
             return dt
@@ -53,7 +63,8 @@ def parse_datetime_string(dt_str: str) -> datetime:
 
 def get_next_run_number(run_old_dir: Path) -> int:
     """Get the next run number for archives (e.g., run1, run2, run3, ...)."""
-    date_dir = run_old_dir / "260225"
+    current_date = datetime.now().strftime("%y%m%d")
+    date_dir = run_old_dir / current_date
     date_dir.mkdir(parents=True, exist_ok=True)
     
     # Find all existing run folders
@@ -82,7 +93,7 @@ def run_backtest(
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
-) -> Dict[str, Tuple[Portfolio, Dict]]:
+) -> Tuple[Dict[str, Tuple[Portfolio, Dict]], Dict, List[datetime]]:
     """
     Run historical backtest.
     
@@ -284,7 +295,7 @@ def run_backtest(
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     
-    return results, trades_by_bar
+    return results, trades_by_bar, sorted_timestamps
 
 
 def main():
@@ -304,7 +315,7 @@ def main():
     print("="*80)
     
     # Run backtest
-    results, trades_by_bar = run_backtest(
+    results, trades_by_bar, bar_timestamps = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -323,19 +334,27 @@ def main():
     
     # Create archive and current directories
     base_dir = Path(__file__).parent.parent
-    run_old_base = base_dir / "run_old"
-    
-    # Get next run number
-    next_run_num = get_next_run_number(run_old_base)
-    archive_dir = run_old_base / "260225" / f"run{next_run_num}"
     current_dir = base_dir / "run_current"
     
-    # Save results to both locations
-    Evaluator.save_results(results, archive_dir, current_dir, trades_by_bar)
+    # Conditionally set up archive directory based on config
+    if SAVE_TO_RUN_OLD:
+        run_old_base = base_dir / "run_old"
+        next_run_num = get_next_run_number(run_old_base)
+        current_date = datetime.now().strftime("%y%m%d")
+        archive_dir = run_old_base / current_date / f"run{next_run_num}"
+        archived_run_num = next_run_num
+    else:
+        archive_dir = None
+        archived_run_num = None
+    
+    # Save results to both locations (or only current if SAVE_TO_RUN_OLD is False)
+    if archive_dir:
+        Evaluator.save_results(results, archive_dir, current_dir, trades_by_bar)
+    else:
+        Evaluator.save_results(results, current_dir, current_dir, trades_by_bar)
     
     # Generate plots
     print("\nGenerating visualization...")
-    archive_plot = archive_dir / "capital_curves.png"
     current_plot = current_dir / "capital_curves.png"
     
     # Get number of bars from first portfolio
@@ -344,16 +363,21 @@ def main():
         num_bars = len(portfolio.value_history)
         break
     
-    Evaluator.plot_capital_curves(results, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE)
-    Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING, START_DATE, STOP_DATE)
+    if archive_dir:
+        archive_plot = archive_dir / "capital_curves.png"
+        Evaluator.plot_capital_curves(results, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
+    
+    Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
-    archive_pdf = archive_dir / "report.pdf"
     current_pdf = current_dir / "report.pdf"
     
-    Evaluator.generate_pdf_report(results, archive_pdf, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE)
-    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE)
+    if archive_dir:
+        archive_pdf = archive_dir / "report.pdf"
+        Evaluator.generate_pdf_report(results, archive_pdf, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
+    
+    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
     
     # Validate consistency (check for price jumps)
     print("\nValidating consistency...")
@@ -382,9 +406,13 @@ def main():
                 print(f"  ... and {len(warnings) - 5} more")
             
             # Save warnings to file
-            archive_warnings = archive_dir / "consistency_warnings.txt"
             current_warnings = current_dir / "consistency_warnings.txt"
-            for warnings_file in [archive_warnings, current_warnings]:
+            files_to_write = [current_warnings]
+            if archive_dir:
+                archive_warnings = archive_dir / "consistency_warnings.txt"
+                files_to_write.insert(0, archive_warnings)
+            
+            for warnings_file in files_to_write:
                 with open(warnings_file, 'w') as f:
                     f.write("Consistency Check Warnings\n")
                     f.write("="*60 + "\n\n")
@@ -404,22 +432,26 @@ def main():
             for trade in portfolio.trades:
                 symbol_prices[trade.symbol].append(trade.price)
         
-        # Compute S&R zones for archive and current
-        compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
+        # Compute S&R zones for current (and archive if enabled)
         compute_and_log_support_resistance_zones(symbol_prices, str(current_dir))
+        if archive_dir:
+            compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
         print("✅ S&R zones computed and saved")
     except Exception as e:
         print(f"⚠️  S&R analysis error: {e}")
     
     print(f"\n✅ Backtest complete!")
-    print(f"\nArchive saved to:  {archive_dir}")
-    print(f"  - capital_curves.png")
-    print(f"  - curves_data.json")
-    print(f"  - metrics_summary.json")
-    print(f"  - trades_log.txt")
-    print(f"  - report.pdf")
-    print(f"  - consistency_warnings.txt (if warnings)")
-    print(f"  - support_resistance_zones.txt")
+    
+    if archive_dir:
+        print(f"\nArchive saved to:  {archive_dir}")
+        print(f"  - capital_curves.png")
+        print(f"  - curves_data.json")
+        print(f"  - metrics_summary.json")
+        print(f"  - trades_log.txt")
+        print(f"  - report.pdf")
+        print(f"  - consistency_warnings.txt (if warnings)")
+        print(f"  - support_resistance_zones.txt")
+    
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - capital_curves.png")
     print(f"  - curves_data.json")
@@ -428,8 +460,12 @@ def main():
     print(f"  - report.pdf")
     print(f"  - consistency_warnings.txt (if warnings)")
     print(f"  - support_resistance_zones.txt")
+    
     print(f"\n{'='*80}")
-    print(f"Run #{next_run_num} archived")
+    if archive_dir:
+        print(f"Run #{archived_run_num} archived")
+    else:
+        print("Run updated (not archived - SAVE_TO_RUN_OLD is False)")
 
 
 if __name__ == "__main__":

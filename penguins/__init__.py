@@ -8,6 +8,10 @@ from .trend_penguin import TrendPenguin
 from .careful_trend_penguin import CarefulTrendPenguin
 from .copilot_penguin import CopilotPenguin
 from .support_resistance_penguin import SupportResistancePenguin
+from .moving_average_crossover_penguin import MovingAverageCrossoverPenguin
+from .rsi_mean_reversion_penguin import RSIMeanReversionPenguin
+from .sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
+from .volatility_breakout_penguin import VolatilityBreakoutPenguin
 
 __all__ = [
     "BasePenguin",
@@ -20,4 +24,8 @@ __all__ = [
     "CarefulTrendPenguin",
     "CopilotPenguin",
     "SupportResistancePenguin",
+    "MovingAverageCrossoverPenguin",
+    "RSIMeanReversionPenguin",
+    "SMA20MultiTimeframePenguin",
+    "VolatilityBreakoutPenguin",
 ]

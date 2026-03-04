@@ -19,7 +19,53 @@ def _parse_datetime_string(dt_str: str) -> datetime:
     raise ValueError(f"Cannot parse datetime: {dt_str}")
 
 
-def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None):
+def _build_ticks_from_timestamps(bar_timestamps, num_bars):
+    """Build x-axis ticks/labels from actual bar timestamps (weekends naturally excluded)."""
+    if not bar_timestamps:
+        interval = max(1, num_bars // 10)
+        x_ticks = list(range(1, num_bars + 1, interval))
+        if num_bars > 0 and x_ticks[-1] != num_bars:
+            x_ticks.append(num_bars)
+        x_labels = [f"Bar {i}" for i in x_ticks]
+        return x_ticks, x_labels
+
+    total_bars = min(num_bars, len(bar_timestamps)) if num_bars else len(bar_timestamps)
+    if total_bars <= 0:
+        return [], []
+
+    first_dt = bar_timestamps[0]
+    last_dt = bar_timestamps[total_bars - 1]
+    span_minutes = max(1, int((last_dt - first_dt).total_seconds() // 60))
+
+    if span_minutes <= 120:
+        label_fmt = "%H:%M"
+    elif span_minutes <= 1440:
+        label_fmt = "%b %d\n%H:%M"
+    else:
+        label_fmt = "%b %d"
+
+    interval = max(1, total_bars // 10)
+    tick_indices = list(range(0, total_bars, interval))
+    if tick_indices[-1] != total_bars - 1:
+        tick_indices.append(total_bars - 1)
+
+    x_ticks = []
+    x_labels = []
+    prev_month = None
+    for idx in tick_indices:
+        dt = bar_timestamps[idx]
+        label = dt.strftime(label_fmt)
+        if "%b %d" in label_fmt:
+            if prev_month is not None and prev_month != dt.month:
+                label = label + "\n" + "━" * 6
+            prev_month = dt.month
+        x_ticks.append(idx + 1)
+        x_labels.append(label)
+
+    return x_ticks, x_labels
+
+
+def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
     """
     Plot and save capital curves with smart x-axis showing actual dates/times.
     
@@ -45,7 +91,9 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     x_ticks = []
     x_labels = []
     
-    if start_date_str and stop_date_str:
+    if bar_timestamps:
+        x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
+    elif start_date_str and stop_date_str:
         try:
             start_dt = _parse_datetime_string(start_date_str)
             stop_dt = _parse_datetime_string(stop_date_str)
@@ -126,33 +174,33 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         x_ticks = list(range(0, num_bars + 1, interval))
         x_labels = [f"Bar {i}" for i in x_ticks]
     
-    # Plot curves
+    # Plot curves with transparency (SMA20 last for foreground)
+    line_colors = {}
     for name, vals in curves.items():
-        plt.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2.5)
-
-    # Calculate and plot overall average capital
-    if curves:
-        curve_values = list(curves.values())
-        num_penguins = len(curve_values)
-        overall_avg = [
-            sum(vals[i] for vals in curve_values) / num_penguins
-            for i in range(len(curve_values[0]))
-        ]
-        plt.plot(
-            range(1, len(overall_avg) + 1),
-            overall_avg,
-            marker=None,
-            label="Overall Average Capital",
-            linewidth=3,
-            color="black",
-            linestyle="--",
-        )
+        if name != "SMA20MultiTimeframePenguin":
+            line = plt.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2.5, alpha=0.7)
+            line_colors[name] = line[0].get_color()
+    
+    # Plot SMA20 last so it appears in foreground
+    if "SMA20MultiTimeframePenguin" in curves:
+        vals = curves["SMA20MultiTimeframePenguin"]
+        line = plt.plot(range(1, len(vals) + 1), vals, label="SMA20MultiTimeframePenguin", linewidth=2.5, alpha=0.7)
+        line_colors["SMA20MultiTimeframePenguin"] = line[0].get_color()
+    
+    # Add text labels at the end of each curve on the right side
+    for name, vals in curves.items():
+        if vals:
+            final_x = len(vals)
+            final_y = vals[-1]
+            color = line_colors.get(name, "black")
+            plt.text(final_x + 50, final_y, f" {name}", fontsize=8, va="center", 
+                    bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3, edgecolor="none"))
 
     plt.axhline(
         y=INITIAL_CAPITAL,
         color="gray",
         linestyle="--",
-        alpha=0.5,
+        alpha=0.7,
         label="Initial Capital",
     )
     
@@ -162,13 +210,15 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     plt.title("Penguin Capital Curves")
     plt.legend(loc='best', fontsize=9)
     plt.grid(True, alpha=0.3)
+    # Extend x-axis to accommodate right-side labels
+    plt.xlim(left=0, right=len(next(iter(curves.values()), [])) * 1.15)
     plt.tight_layout()
     plt.savefig(filename, dpi=100)
     print(f"📈 Saved capital curves plot to {filename}")
     plt.close()
 
 
-def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None):
+def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
     """
     Create comprehensive PDF report with capital curves and per-symbol trade summaries.
     
@@ -198,7 +248,10 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
     x_labels = []
     x_label_text = "Time"
     
-    if start_date_str and stop_date_str:
+    if bar_timestamps:
+        x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
+        x_label_text = "Date / Time"
+    elif start_date_str and stop_date_str:
         try:
             start_dt = _parse_datetime_string(start_date_str)
             stop_dt = _parse_datetime_string(stop_date_str)
@@ -282,35 +335,35 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         x_labels = [f"Bar {i}" for i in x_ticks]
     
     with PdfPages(filename) as pdf:
-        # Page 1: Capital Curves with Overall Average
+        # Page 1: Capital Curves
         fig, ax = plt.subplots(figsize=(12, 8))
 
+        line_colors = {}
         for name, vals in curves.items():
-            ax.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2)
-
-        # Calculate and plot overall average capital
-        if curves:
-            curve_values = list(curves.values())
-            num_penguins = len(curve_values)
-            overall_avg = [
-                sum(vals[i] for vals in curve_values) / num_penguins
-                for i in range(len(curve_values[0]))
-            ]
-            ax.plot(
-                range(1, len(overall_avg) + 1),
-                overall_avg,
-                marker=None,
-                label="Overall Average Capital",
-                linewidth=2.5,
-                color="black",
-                linestyle="--",
-            )
+            if name != "SMA20MultiTimeframePenguin":
+                line = ax.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2, alpha=0.7)
+                line_colors[name] = line[0].get_color()
+        
+        # Plot SMA20 last so it appears in foreground
+        if "SMA20MultiTimeframePenguin" in curves:
+            vals = curves["SMA20MultiTimeframePenguin"]
+            line = ax.plot(range(1, len(vals) + 1), vals, label="SMA20MultiTimeframePenguin", linewidth=2, alpha=0.7)
+            line_colors["SMA20MultiTimeframePenguin"] = line[0].get_color()
+        
+        # Add text labels at the end of each curve on the right side
+        for name, vals in curves.items():
+            if vals:
+                final_x = len(vals)
+                final_y = vals[-1]
+                color = line_colors.get(name, "black")
+                ax.text(final_x + 50, final_y, f" {name}", fontsize=8, va="center", 
+                       bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3, edgecolor="none"))
 
         ax.axhline(
             y=INITIAL_CAPITAL,
             color="gray",
             linestyle="--",
-            alpha=0.5,
+            alpha=0.7,
             label="Initial Capital",
         )
         ax.set_xticks(x_ticks)
@@ -320,6 +373,10 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         ax.set_title("Penguin Capital Curves")
         ax.legend(fontsize=9, loc='best')
         ax.grid(True, alpha=0.3)
+        # Extend x-axis to accommodate right-side labels
+        if curves:
+            max_len = max(len(vals) for vals in curves.values())
+            ax.set_xlim(left=0, right=max_len * 1.15)
 
         plt.tight_layout()
         pdf.savefig(fig, bbox_inches="tight")

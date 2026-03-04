@@ -83,6 +83,7 @@ class Evaluator:
         binning: str = "1m",
         start_date: str = None,
         stop_date: str = None,
+        bar_timestamps: List[datetime] = None,
     ):
         """
         Plot capital curves for all strategies with overall average line.
@@ -105,7 +106,7 @@ class Evaluator:
             num_bars = len(list(curves.values())[0])
         
         # Use plotting module
-        plot_capital_curves(curves, str(output_file), num_bars, binning, start_date, stop_date)
+        plot_capital_curves(curves, str(output_file), num_bars, binning, start_date, stop_date, bar_timestamps)
     
     @staticmethod
     def save_results(
@@ -243,6 +244,7 @@ class Evaluator:
         binning: str = "1m",
         start_date: str = None,
         stop_date: str = None,
+        bar_timestamps: List[datetime] = None,
     ):
         """
         Generate a comprehensive PDF report with capital curves and detailed trade summaries.
@@ -275,5 +277,15 @@ class Evaluator:
             num_bars = len(list(curves.values())[0])
         
         # Use plotting module to generate PDF with detailed trade summaries
-        create_final_report_pdf(curves, portfolios, str(output_file), latest_prices, num_bars, binning, start_date, stop_date)
+        create_final_report_pdf(
+            curves,
+            portfolios,
+            str(output_file),
+            latest_prices,
+            num_bars,
+            binning,
+            start_date,
+            stop_date,
+            bar_timestamps,
+        )
 

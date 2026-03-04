@@ -33,10 +33,14 @@ TRANSACTION_COST = 0
 # ========== BACKTEST TIMING SETTINGS ==========
 # ISO format dates (YYYY-MM-DD HH:MM:SS in UTC or market timezone)
 START_DATE = "2026-01-17 14:30:00"  # Feb 20, 2026 at 2:30 PM UTC (9:30 AM EST)
-STOP_DATE = "2026-02-21 23:50:00"   # Feb 21, 2026 at 11:50 PM UTC (market close + after hours)
+STOP_DATE = "TODAY" #"2026-03-01 23:50:00"   # Feb 21, 2026 at 11:50 PM UTC (market close + after hours)
 
 # Binning/timeframe for bars: "1m", "5m", "15m", "1h", "1d", etc.
 BINNING = "1m"
+
+# ========== RUN ARCHIVING SETTINGS ==========
+# Whether to save runs to run_old directory (set False to only update run_current)
+SAVE_TO_RUN_OLD = False
 
 # ========== ACTIVE PENGUINS ==========
 from penguins import (
@@ -44,16 +48,16 @@ from penguins import (
     CarefulTrendPenguin,
     CopilotPenguin,
     MeanReversionPenguin,
+    MovingAverageCrossoverPenguin,
     MomentumPenguin,
     RandomPenguin,
     RandomPenguin2,
+    RSIMeanReversionPenguin,
+    SMA20MultiTimeframePenguin,
     SupportResistancePenguin,
     TrendPenguin,
+    VolatilityBreakoutPenguin,
 )
-from penguins.moving_average_crossover_penguin import MovingAverageCrossoverPenguin
-from penguins.rsi_mean_reversion_penguin import RSIMeanReversionPenguin
-from penguins.volatility_breakout_penguin import VolatilityBreakoutPenguin
-from penguins.sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
 
 ACTIVE_PENGUINS = [
     #BreakoutPenguin,
@@ -64,7 +68,7 @@ ACTIVE_PENGUINS = [
     #MovingAverageCrossoverPenguin,
     #RandomPenguin,
     #RandomPenguin2,
-    RSIMeanReversionPenguin,
+    #RSIMeanReversionPenguin,
     SMA20MultiTimeframePenguin,
     SupportResistancePenguin,
     #TrendPenguin,
