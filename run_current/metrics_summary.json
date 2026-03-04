@@ -20,13 +20,13 @@
     "final_value": 5016.44
   },
   "SupportResistancePenguin": {
-    "total_return": 16.84,
-    "return_pct": 0.34,
-    "max_drawdown": -3.86,
+    "total_return": 19.08,
+    "return_pct": 0.38,
+    "max_drawdown": -3.85,
     "sharpe_ratio": 0.01,
     "total_trades": 10,
     "buy_trades": 5,
     "sell_trades": 5,
-    "final_value": 5016.84
+    "final_value": 5019.08
   }
 }

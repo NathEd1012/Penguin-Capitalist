@@ -10,6 +10,6 @@ Consistency Check Warnings
 •   Trade #2 (COPX): -39.53% ($134.67 → $81.44)
 •   Trade #3 (AAPL): +209.24% ($81.44 → $251.85)
 • [SupportResistancePenguin] Detected 8 suspicious price jumps > 15%
-•   Trade #2 (GLD): +72.76% ($251.59 → $434.64)
-•   Trade #3 (COPX): -81.17% ($434.64 → $81.86)
-•   Trade #4 (GDXJ): +64.88% ($81.86 → $134.97)
+•   Trade #1 (AMD): -48.87% ($434.73 → $222.28)
+•   Trade #3 (GDXJ): -46.61% ($251.61 → $134.32)
+•   Trade #4 (COPX): -39.25% ($134.32 → $81.60)
