@@ -142,7 +142,7 @@ The spread model is **ready to integrate** into the backtest engine:
 ### Minimal Changes Needed:
 ```python
 # In backtest/evaluator.py __init__:
-from backtest.synthetic_spread_model import SyntheticSpreadModel
+from scripts.synthetic_spread_model import SyntheticSpreadModel
 self.spread_model = SyntheticSpreadModel()
 
 # In execute_trade():

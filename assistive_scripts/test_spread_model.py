@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from backtest.synthetic_spread_model import SyntheticSpreadModel
+from scripts.synthetic_spread_model import SyntheticSpreadModel
 from datetime import datetime, timedelta
 import pytz
 

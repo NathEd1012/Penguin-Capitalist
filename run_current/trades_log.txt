@@ -1,54 +1,18 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-03-04 12:31:06
+Generated: 2026-03-04 12:41:39
 ================================================================================
 
 EXECUTION DETAILS
 --------------------------------------------------------------------------------
 
-Bar 20:
-  SupportResistancePenguin: BUY 1 GLD @ $434.34
+Bar 79:
+  SMA20MultiTimeframePenguin: BUY 1 AAPL @ $231.32
 
-Bar 43:
-  SupportResistancePenguin: BUY 1 AMD @ $222.08
+Bar 154:
+  SupportResistancePenguin: BUY 1 AAPL @ $229.69
 
-Bar 62:
-  SupportResistancePenguin: BUY 1 AAPL @ $251.39
-
-Bar 72:
-  SMA20MultiTimeframePenguin: BUY 1 AMD @ $224.02
-
-Bar 75:
-  SMA20MultiTimeframePenguin: BUY 1 GDXJ @ $134.55
-
-Bar 78:
-  SMA20MultiTimeframePenguin: BUY 1 COPX @ $81.37
-
-Bar 86:
-  SMA20MultiTimeframePenguin: BUY 1 AAPL @ $251.63
-
-Bar 110:
-  SMA20MultiTimeframePenguin: BUY 1 GLD @ $434.61
-
-Bar 122:
-  CopilotPenguin: BUY 2 AMD @ $226.02
-
-Bar 124:
-  CopilotPenguin: BUY 2 COPX @ $81.72
-
-Bar 136:
-  CopilotPenguin: BUY 2 AAPL @ $252.60
-
-Bar 188:
-  SupportResistancePenguin: BUY 1 GDXJ @ $134.20
-
-Bar 249:
-  SupportResistancePenguin: BUY 1 COPX @ $81.53
-
-Bar 373:
-  CopilotPenguin: BUY 2 GDXJ @ $134.85
-
-Bar 430:
-  CopilotPenguin: BUY 2 GLD @ $436.02
+Bar 805:
+  CopilotPenguin: BUY 2 AAPL @ $225.97
 
 
 ================================================================================
@@ -58,70 +22,46 @@ STRATEGY SUMMARY
 
 
 CopilotPenguin
-  Final Value:    $5,024.85
-  Total Return:   $24.85  (0.50%)
-  Max Drawdown:   -7.50%
-  Sharpe Ratio:   0.01
-  Total Trades:   10
-  Buy Trades:     5
-  Sell Trades:    5
+  Final Value:    $4,978.92
+  Total Return:   $-21.08  (-0.42%)
+  Max Drawdown:   -3.23%
+  Sharpe Ratio:   -0.01
+  Total Trades:   2
+  Buy Trades:     1
+  Sell Trades:    1
 
   Recent Trades:
-    BUY 2 AMD @ $226.02 at 2026-01-20 11:02:00+00:00
-    BUY 2 COPX @ $81.72 at 2026-01-20 11:04:00+00:00
-    BUY 2 AAPL @ $252.60 at 2026-01-20 11:16:00+00:00
-    BUY 2 GDXJ @ $134.85 at 2026-01-20 15:14:00+00:00
-    BUY 2 GLD @ $436.02 at 2026-01-20 16:11:00+00:00
-    SELL 2 AMD @ $190.54 at 2026-03-03 23:50:00+00:00
-    SELL 2 COPX @ $87.20 at 2026-03-03 23:50:00+00:00
-    SELL 2 AAPL @ $263.71 at 2026-03-03 23:50:00+00:00
-    SELL 2 GDXJ @ $142.66 at 2026-03-03 23:50:00+00:00
-    SELL 2 GLD @ $459.53 at 2026-03-03 23:50:00+00:00
+    BUY 2 AAPL @ $225.97 at 2025-01-21 13:52:00+00:00
+    SELL 2 AAPL @ $215.43 at 2025-07-23 13:13:00+00:00
 
 --------------------------------------------------------------------------------
 
 SMA20MultiTimeframePenguin
-  Final Value:    $5,017.45
-  Total Return:   $17.45  (0.35%)
-  Max Drawdown:   -3.85%
-  Sharpe Ratio:   0.01
-  Total Trades:   10
-  Buy Trades:     5
-  Sell Trades:    5
+  Final Value:    $4,984.11
+  Total Return:   $-15.89  (-0.32%)
+  Max Drawdown:   -1.62%
+  Sharpe Ratio:   -0.01
+  Total Trades:   2
+  Buy Trades:     1
+  Sell Trades:    1
 
   Recent Trades:
-    BUY 1 AMD @ $224.02 at 2026-01-20 10:12:00+00:00
-    BUY 1 GDXJ @ $134.55 at 2026-01-20 10:15:00+00:00
-    BUY 1 COPX @ $81.37 at 2026-01-20 10:18:00+00:00
-    BUY 1 AAPL @ $251.63 at 2026-01-20 10:26:00+00:00
-    BUY 1 GLD @ $434.61 at 2026-01-20 10:50:00+00:00
-    SELL 1 AMD @ $190.54 at 2026-03-03 23:50:00+00:00
-    SELL 1 GDXJ @ $142.66 at 2026-03-03 23:50:00+00:00
-    SELL 1 COPX @ $87.20 at 2026-03-03 23:50:00+00:00
-    SELL 1 AAPL @ $263.71 at 2026-03-03 23:50:00+00:00
-    SELL 1 GLD @ $459.53 at 2026-03-03 23:50:00+00:00
+    BUY 1 AAPL @ $231.32 at 2025-01-17 15:49:00+00:00
+    SELL 1 AAPL @ $215.43 at 2025-07-23 13:13:00+00:00
 
 --------------------------------------------------------------------------------
 
 SupportResistancePenguin
-  Final Value:    $5,020.09
-  Total Return:   $20.09  (0.40%)
-  Max Drawdown:   -3.85%
-  Sharpe Ratio:   0.01
-  Total Trades:   10
-  Buy Trades:     5
-  Sell Trades:    5
+  Final Value:    $4,985.74
+  Total Return:   $-14.26  (-0.29%)
+  Max Drawdown:   -1.62%
+  Sharpe Ratio:   -0.01
+  Total Trades:   2
+  Buy Trades:     1
+  Sell Trades:    1
 
   Recent Trades:
-    BUY 1 GLD @ $434.34 at 2026-01-20 09:20:00+00:00
-    BUY 1 AMD @ $222.08 at 2026-01-20 09:43:00+00:00
-    BUY 1 AAPL @ $251.39 at 2026-01-20 10:02:00+00:00
-    BUY 1 GDXJ @ $134.20 at 2026-01-20 12:09:00+00:00
-    BUY 1 COPX @ $81.53 at 2026-01-20 13:10:00+00:00
-    SELL 1 GLD @ $459.53 at 2026-03-03 23:50:00+00:00
-    SELL 1 AMD @ $190.54 at 2026-03-03 23:50:00+00:00
-    SELL 1 AAPL @ $263.71 at 2026-03-03 23:50:00+00:00
-    SELL 1 GDXJ @ $142.66 at 2026-03-03 23:50:00+00:00
-    SELL 1 COPX @ $87.20 at 2026-03-03 23:50:00+00:00
+    BUY 1 AAPL @ $229.69 at 2025-01-17 17:04:00+00:00
+    SELL 1 AAPL @ $215.43 at 2025-07-23 13:13:00+00:00
 
 --------------------------------------------------------------------------------

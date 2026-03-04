@@ -9,7 +9,7 @@ Performance: 870K+ candles/second
 INSTALLATION & BASIC USAGE
 ========================================================================
 
-from backtest.synthetic_spread_model import SyntheticSpreadModel
+from scripts.synthetic_spread_model import SyntheticSpreadModel
 
 # Initialize (use defaults for Alpaca US stocks)
 model = SyntheticSpreadModel()

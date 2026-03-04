@@ -15,7 +15,7 @@ from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
-from backtest.synthetic_spread_model import SyntheticSpreadModel
+from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from config import (
@@ -236,12 +236,15 @@ def run_backtest(
                 mid_price = bar['close']
                 high = bar['high']
                 low = bar['low']
+                volume = bar.get('volume', 0)
                 
                 bid, ask, spread = spread_model.get_bid_ask(
                     mid_price=mid_price,
                     high=high,
                     low=low,
-                    timestamp=timestamp
+                    timestamp=timestamp,
+                    volume=volume,
+                    symbol=symbol
                 )
                 
                 try:

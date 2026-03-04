@@ -40,7 +40,7 @@ BINNING = "1m"
 
 # ========== RUN ARCHIVING SETTINGS ==========
 # Whether to save runs to run_old directory (set False to only update run_current)
-SAVE_TO_RUN_OLD = False
+SAVE_TO_RUN_OLD = True
 
 # ========== ACTIVE PENGUINS ==========
 from penguins import (
