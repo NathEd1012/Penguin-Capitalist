@@ -486,4 +486,44 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             pdf.savefig(fig, bbox_inches="tight")
             plt.close()
 
+            # Add individual plot for this penguin on the next page
+            if penguin_name in curves:
+                fig, ax = plt.subplots(figsize=(12, 8))
+                
+                vals = curves[penguin_name]
+                # Use the same color from the first plot
+                color = line_colors.get(penguin_name, None)
+                line = ax.plot(range(1, len(vals) + 1), vals, label=penguin_name, linewidth=2, alpha=0.8, color=color)
+                
+                # Add text label at the end of the curve
+                if vals:
+                    final_x = len(vals)
+                    final_y = vals[-1]
+                    actual_color = line[0].get_color()
+                    ax.text(final_x + 50, final_y, f" {penguin_name}", fontsize=9, va="center", 
+                           bbox=dict(boxstyle="round,pad=0.3", facecolor=actual_color, alpha=0.3, edgecolor="none"))
+                
+                ax.axhline(
+                    y=INITIAL_CAPITAL,
+                    color="gray",
+                    linestyle="--",
+                    alpha=0.7,
+                    label="Initial Capital",
+                )
+                ax.set_xticks(x_ticks)
+                ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=9)
+                ax.set_xlabel(x_label_text)
+                ax.set_ylabel("Total Capital ($)")
+                ax.set_title(f"Capital Curve: {penguin_name}")
+                ax.legend(fontsize=10, loc='best')
+                ax.grid(True, alpha=0.3)
+                
+                # Extend x-axis to accommodate right-side label
+                if vals:
+                    ax.set_xlim(left=0, right=len(vals) * 1.15)
+                
+                plt.tight_layout()
+                pdf.savefig(fig, bbox_inches="tight")
+                plt.close()
+
     print(f"📄 Final report saved to {filename}")

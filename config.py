@@ -32,7 +32,7 @@ TRANSACTION_COST = 0
 
 # ========== BACKTEST TIMING SETTINGS ==========
 # ISO format dates (YYYY-MM-DD HH:MM:SS in UTC or market timezone)
-START_DATE = "2026-01-17 14:30:00"  # Feb 20, 2026 at 2:30 PM UTC (9:30 AM EST)
+START_DATE = "2026-02-01 14:30:00"  # Feb 20, 2026 at 2:30 PM UTC (9:30 AM EST)
 STOP_DATE = "TODAY" #"2026-03-01 23:50:00"   # Feb 21, 2026 at 11:50 PM UTC (market close + after hours)
 
 # Binning/timeframe for bars: "1m", "5m", "15m", "1h", "1d", etc.
@@ -40,7 +40,7 @@ BINNING = "1m"
 
 # ========== RUN ARCHIVING SETTINGS ==========
 # Whether to save runs to run_old directory (set False to only update run_current)
-SAVE_TO_RUN_OLD = True
+SAVE_TO_RUN_OLD = 0 #Boolean
 
 # ========== ACTIVE PENGUINS ==========
 from penguins import (
@@ -50,6 +50,7 @@ from penguins import (
     MeanReversionPenguin,
     MovingAverageCrossoverPenguin,
     MomentumPenguin,
+    MSCIWorldPenguin,
     RandomPenguin,
     RandomPenguin2,
     RSIMeanReversionPenguin,
@@ -66,6 +67,7 @@ ACTIVE_PENGUINS = [
     #MeanReversionPenguin,
     #MomentumPenguin,
     #MovingAverageCrossoverPenguin,
+    #MSCIWorldPenguin,
     #RandomPenguin,
     #RandomPenguin2,
     #RSIMeanReversionPenguin,
