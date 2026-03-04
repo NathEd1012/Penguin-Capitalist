@@ -1,32 +1,32 @@
 {
   "CopilotPenguin": {
-    "total_return": 22.81,
-    "return_pct": 0.46,
+    "total_return": 24.85,
+    "return_pct": 0.5,
     "max_drawdown": -7.5,
     "sharpe_ratio": 0.01,
     "total_trades": 10,
     "buy_trades": 5,
     "sell_trades": 5,
-    "final_value": 5022.81
+    "final_value": 5024.85
   },
   "SMA20MultiTimeframePenguin": {
-    "total_return": 16.44,
-    "return_pct": 0.33,
-    "max_drawdown": -3.86,
-    "sharpe_ratio": 0.01,
-    "total_trades": 10,
-    "buy_trades": 5,
-    "sell_trades": 5,
-    "final_value": 5016.44
-  },
-  "SupportResistancePenguin": {
-    "total_return": 19.08,
-    "return_pct": 0.38,
+    "total_return": 17.45,
+    "return_pct": 0.35,
     "max_drawdown": -3.85,
     "sharpe_ratio": 0.01,
     "total_trades": 10,
     "buy_trades": 5,
     "sell_trades": 5,
-    "final_value": 5019.08
+    "final_value": 5017.45
+  },
+  "SupportResistancePenguin": {
+    "total_return": 20.09,
+    "return_pct": 0.4,
+    "max_drawdown": -3.85,
+    "sharpe_ratio": 0.01,
+    "total_trades": 10,
+    "buy_trades": 5,
+    "sell_trades": 5,
+    "final_value": 5020.09
   }
 }

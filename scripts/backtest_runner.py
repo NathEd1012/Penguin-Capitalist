@@ -15,6 +15,7 @@ from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
+from backtest.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from config import (
@@ -173,6 +174,9 @@ def run_backtest(
     portfolios = {}
     penguins = {}
     
+    # Initialize synthetic spread model for realistic bid/ask
+    spread_model = SyntheticSpreadModel()
+    
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
     for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
@@ -227,10 +231,18 @@ def run_backtest(
                 if len(mid_prices) < 10:  # Need minimum history
                     continue
                 
-                # Get bid/ask (use close ± small spread)
-                close = current_prices[symbol]
-                bid = close * 0.999
-                ask = close * 1.001
+                # Get bid/ask with realistic synthetic spread
+                bar = data[symbol][timestamp]
+                mid_price = bar['close']
+                high = bar['high']
+                low = bar['low']
+                
+                bid, ask, spread = spread_model.get_bid_ask(
+                    mid_price=mid_price,
+                    high=high,
+                    low=low,
+                    timestamp=timestamp
+                )
                 
                 try:
                     action, quantity = penguin.decide(
