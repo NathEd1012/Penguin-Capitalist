@@ -6,7 +6,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
-from alpaca.data.timeframe import TimeFrame
+from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 
 from market_data.base_provider import BaseProvider
 
@@ -17,8 +17,8 @@ class AlpacaProvider(BaseProvider):
     # Timeframe mapping
     TIMEFRAME_MAP = {
         "1m": TimeFrame.Minute,
-        "5m": TimeFrame.FiveMin,
-        "15m": TimeFrame.FifteenMin,
+        "5m": TimeFrame(5, TimeFrameUnit.Minute),
+        "15m": TimeFrame(15, TimeFrameUnit.Minute),
         "1h": TimeFrame.Hour,
         "1d": TimeFrame.Day,
     }
