@@ -3,12 +3,13 @@
 import sys
 from pathlib import Path
 import json
-sys.path.insert(0, str(Path(__file__).parent))
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR))
 
 # Load metrics and trades data
-metrics_file = Path("run_current/metrics_summary.json")
-trades_file = Path("run_current/trades_log.txt")
-curves_file = Path("run_current/curves_data.json")
+metrics_file = BASE_DIR / "run_current/metrics_summary.json"
+trades_file = BASE_DIR / "run_current/trades_log.txt"
+curves_file = BASE_DIR / "run_current/curves_data.json"
 
 print("=" * 80)
 print("COPILOT PENGUIN - DETAILED EVALUATION")

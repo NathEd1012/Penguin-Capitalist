@@ -2,13 +2,15 @@
 import json
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Load curves data to get bar count
-curves_file = Path("run_current/curves_data.json")
+curves_file = BASE_DIR / "run_current/curves_data.json"
 with open(curves_file, 'r') as f:
     curves = json.load(f)
 
 # Load all metrics to see what symbols CarefulTrendPenguin held
-metrics_file = Path("run_current/metrics_summary.json")
+metrics_file = BASE_DIR / "run_current/metrics_summary.json"
 with open(metrics_file, 'r') as f:
     metrics = json.load(f)
 

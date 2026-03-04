@@ -2,7 +2,7 @@
 """Check what historical data fields are available from Alpaca."""
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from datetime import datetime
 from backtest.data_loader import DataLoader

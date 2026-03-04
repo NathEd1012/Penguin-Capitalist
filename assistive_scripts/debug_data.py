@@ -1,6 +1,10 @@
 """Debug script to check data quality from Alpaca."""
 from datetime import datetime, timedelta
+import sys
+from pathlib import Path
 import pytz
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from backtest.data_loader import DataLoader
 
 cet = pytz.timezone('Europe/Berlin')
@@ -13,12 +17,15 @@ end_utc = end.astimezone(pytz.UTC)
 print(f"Loading data from {start_utc} to {end_utc}\n")
 
 loader = DataLoader()
-data = loader.load_bars(
+data, warning = loader.load_bars(
     ["AAPL", "NVDA", "MSFT"],
     start_utc,
     end_utc,
     1
 )
+
+if warning:
+    print(warning)
 
 for symbol, bars in data.items():
     print(f"{symbol}: {len(bars)} bars")

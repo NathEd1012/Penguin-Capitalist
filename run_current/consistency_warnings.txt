@@ -5,10 +5,10 @@ Consistency Check Warnings
 •   Trade #1 (COPX): -63.85% ($226.23 → $81.79)
 •   Trade #2 (AAPL): +209.11% ($81.79 → $252.82)
 •   Trade #3 (GDXJ): -46.61% ($252.82 → $134.97)
-• [SMA20MultiTimeframePenguin] Detected 8 suspicious price jumps > 15%
-•   Trade #2 (GLD): +94.02% ($224.22 → $435.04)
-•   Trade #3 (GDXJ): -69.06% ($435.04 → $134.61)
-•   Trade #4 (COPX): -39.46% ($134.61 → $81.49)
+• [SMA20MultiTimeframePenguin] Detected 9 suspicious price jumps > 15%
+•   Trade #1 (GDXJ): -39.94% ($224.22 → $134.67)
+•   Trade #2 (COPX): -39.53% ($134.67 → $81.44)
+•   Trade #3 (AAPL): +209.24% ($81.44 → $251.85)
 • [SupportResistancePenguin] Detected 8 suspicious price jumps > 15%
 •   Trade #2 (GLD): +72.76% ($251.59 → $434.64)
 •   Trade #3 (COPX): -81.17% ($434.64 → $81.86)

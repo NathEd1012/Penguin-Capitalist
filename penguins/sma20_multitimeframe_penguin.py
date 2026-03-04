@@ -19,40 +19,20 @@ class SMA20MultiTimeframePenguin(BasePenguin):
     
     def __init__(self):
         super().__init__("SMA20MultiTimeframePenguin")
-        self.data_client = None
-        self._previous_weighted_sma: Dict[str, float] = {}
-        
-    def initialize_sma_levels(self, symbols: List[str], data_client):
-        """
-        Store data client reference for dynamic SMA calculation.
-        Call this once at the start of the simulation.
-        """
-        self.data_client = data_client
-        print(f"\n📊 {self.name}: Initialized for dynamic multi-timeframe SMA calculation\n")
-    
-    def _calculate_sma_levels(self, symbol: str) -> Dict[str, float]:
-        """Calculate current SMA 20 levels from fresh historical data."""
-        if not self.data_client:
-            return {}
-        
-        try:
-            hist_data = self.data_client.get_multi_timeframe_history(symbol)
-        except Exception:
-            return {}
-        
-        sma_levels = {}
-        for timeframe, prices in hist_data.items():
-            if prices and len(prices) >= 20:
-                sma_levels[timeframe] = sum(prices[-20:]) / 20
-        
-        return sma_levels
+        self.timeframe_steps = {
+            "base": 1,
+            "mid": 3,
+            "long": 6,
+        }
+        self.cross_tolerance = 0.0015
+        self.sma_length = 12
     
     def _calculate_weighted_sma(self, sma_levels: Dict[str, float]) -> float:
         """Calculate weighted average of SMA levels across timeframes."""
         if not sma_levels:
             return 0.0
-        
-        weights = {"daily": 0.40, "weekly": 0.35, "monthly": 0.25}
+
+        weights = {"base": 0.55, "mid": 0.30, "long": 0.15}
         
         weighted_sum = sum(
             sma * weights.get(tf, 0)
@@ -61,6 +41,22 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         total_weight = sum(weights.get(tf, 0) for tf in sma_levels.keys())
         
         return weighted_sum / total_weight if total_weight > 0 else 0.0
+
+    def _calculate_sma_levels(self, prices: List[float]) -> Dict[str, float]:
+        """Calculate SMA20 levels on multiple compressed timeframes from one price series."""
+        sma_levels: Dict[str, float] = {}
+
+        for timeframe_name, step in self.timeframe_steps.items():
+            needed = self.sma_length * step
+            if len(prices) < needed:
+                continue
+
+            window = prices[-needed:]
+            compressed = window[step - 1::step]
+            if len(compressed) >= self.sma_length:
+                sma_levels[timeframe_name] = sum(compressed[-self.sma_length:]) / self.sma_length
+
+        return sma_levels
     
     def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio) -> Tuple[str, int]:
         """
@@ -73,7 +69,9 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         if bid <= 0 or ask <= 0:
             return "HOLD", 0
         
-        if len(mid_prices) < 21:  # Need 20 bars to calculate SMA + 1 for current
+        max_step = max(self.timeframe_steps.values())
+        min_required = self.sma_length * max_step + 1
+        if len(mid_prices) < min_required:
             return "HOLD", 0
         
         # Check current position
@@ -81,27 +79,39 @@ class SMA20MultiTimeframePenguin(BasePenguin):
             symbol in portfolio.positions and portfolio.positions[symbol].qty > 0
         )
         
-        # Calculate SMA 20 from available price data
-        sma_20 = sum(mid_prices[-20:]) / 20
-        
-        # Get previous SMA 20 (or use current if first time)
-        previous_sma_20 = self._previous_weighted_sma.get(symbol, sma_20)
+        # Calculate weighted multi-timeframe SMA (current and previous bar context)
+        sma_levels_current = self._calculate_sma_levels(mid_prices)
+        sma_levels_previous = self._calculate_sma_levels(mid_prices[:-1])
+
+        if not sma_levels_current or not sma_levels_previous:
+            return "HOLD", 0
+
+        weighted_sma = self._calculate_weighted_sma(sma_levels_current)
+        previous_weighted_sma = self._calculate_weighted_sma(sma_levels_previous)
         
         # Use mid price for crossover detection
         current_mid = mid_prices[-1]
         previous_mid = mid_prices[-2] if len(mid_prices) >= 2 else mid_prices[-1]
         
-        was_above = previous_mid > previous_sma_20
-        is_above = current_mid > sma_20
+        upper_prev = previous_weighted_sma * (1 + self.cross_tolerance)
+        lower_prev = previous_weighted_sma * (1 - self.cross_tolerance)
+        upper_now = weighted_sma * (1 + self.cross_tolerance)
+        lower_now = weighted_sma * (1 - self.cross_tolerance)
+
+        was_above = previous_mid > upper_prev
+        was_below = previous_mid < lower_prev
+        is_above = current_mid > upper_now
+        is_below = current_mid < lower_now
         
-        # Store current SMA 20 for next iteration
-        self._previous_weighted_sma[symbol] = sma_20
-        
+        short_momentum = (current_mid - previous_mid) / previous_mid if previous_mid > 0 else 0
+
         # === BUY SIGNALS (only when not holding) ===
         if not has_position:
-            # Buy: Price crosses above SMA 20
-            if not was_above and is_above:
-                if ask > sma_20:  # Confirm we can buy above SMA
+            # Buy: either clean cross-up OR already above MTF trend with positive momentum
+            cross_up = was_below and is_above
+            trend_follow_entry = current_mid > weighted_sma and short_momentum > 0.0005
+            if cross_up or trend_follow_entry:
+                if ask > weighted_sma:  # Confirm buy above weighted trend level
                     return "BUY", 1
         
         # === SELL SIGNALS (only when holding) ===
@@ -110,7 +120,9 @@ class SMA20MultiTimeframePenguin(BasePenguin):
             entry_price = portfolio.positions[symbol].avg_price
             
             # Sell: Price crosses below SMA 20
-            if was_above and not is_above:
+            cross_down = was_above and is_below
+            trend_break = current_mid < weighted_sma and short_momentum < -0.0005
+            if cross_down or trend_break:
                 return "SELL", qty
             
             # Take profit: 5% gain

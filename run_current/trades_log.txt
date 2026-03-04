@@ -1,31 +1,33 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-03-04 10:32:24
+Generated: 2026-03-04 11:29:38
 ================================================================================
 
 EXECUTION DETAILS
 --------------------------------------------------------------------------------
 
-Bar 20:
-  SMA20MultiTimeframePenguin: BUY 1 AAPL @ $252.07
-
-Bar 22:
-  SMA20MultiTimeframePenguin: BUY 1 AMD @ $224.22
-  SMA20MultiTimeframePenguin: BUY 1 GLD @ $435.04
-
-Bar 27:
-  SMA20MultiTimeframePenguin: BUY 1 GDXJ @ $134.61
-
 Bar 28:
   SupportResistancePenguin: BUY 1 AMD @ $223.72
-
-Bar 53:
-  SMA20MultiTimeframePenguin: BUY 1 COPX @ $81.49
 
 Bar 61:
   SupportResistancePenguin: BUY 1 AAPL @ $251.59
 
+Bar 72:
+  SMA20MultiTimeframePenguin: BUY 1 AMD @ $224.22
+
+Bar 75:
+  SMA20MultiTimeframePenguin: BUY 1 GDXJ @ $134.67
+
+Bar 78:
+  SMA20MultiTimeframePenguin: BUY 1 COPX @ $81.44
+
+Bar 86:
+  SMA20MultiTimeframePenguin: BUY 1 AAPL @ $251.85
+
 Bar 109:
   SupportResistancePenguin: BUY 1 GLD @ $434.64
+
+Bar 110:
+  SMA20MultiTimeframePenguin: BUY 1 GLD @ $435.00
 
 Bar 122:
   CopilotPenguin: BUY 2 AMD @ $226.23
@@ -79,8 +81,8 @@ CopilotPenguin
 --------------------------------------------------------------------------------
 
 SMA20MultiTimeframePenguin
-  Final Value:    $5,016.19
-  Total Return:   $16.19  (0.32%)
+  Final Value:    $5,016.44
+  Total Return:   $16.44  (0.33%)
   Max Drawdown:   -3.86%
   Sharpe Ratio:   0.01
   Total Trades:   10
@@ -88,16 +90,16 @@ SMA20MultiTimeframePenguin
   Sell Trades:    5
 
   Recent Trades:
-    BUY 1 AAPL @ $252.07 at 2026-01-20 09:20:00+00:00
-    BUY 1 AMD @ $224.22 at 2026-01-20 09:22:00+00:00
-    BUY 1 GLD @ $435.04 at 2026-01-20 09:22:00+00:00
-    BUY 1 GDXJ @ $134.61 at 2026-01-20 09:27:00+00:00
-    BUY 1 COPX @ $81.49 at 2026-01-20 09:53:00+00:00
-    SELL 1 AAPL @ $263.71 at 2026-03-03 23:50:00+00:00
+    BUY 1 AMD @ $224.22 at 2026-01-20 10:12:00+00:00
+    BUY 1 GDXJ @ $134.67 at 2026-01-20 10:15:00+00:00
+    BUY 1 COPX @ $81.44 at 2026-01-20 10:18:00+00:00
+    BUY 1 AAPL @ $251.85 at 2026-01-20 10:26:00+00:00
+    BUY 1 GLD @ $435.00 at 2026-01-20 10:50:00+00:00
     SELL 1 AMD @ $190.54 at 2026-03-03 23:50:00+00:00
-    SELL 1 GLD @ $459.53 at 2026-03-03 23:50:00+00:00
     SELL 1 GDXJ @ $142.66 at 2026-03-03 23:50:00+00:00
     SELL 1 COPX @ $87.20 at 2026-03-03 23:50:00+00:00
+    SELL 1 AAPL @ $263.71 at 2026-03-03 23:50:00+00:00
+    SELL 1 GLD @ $459.53 at 2026-03-03 23:50:00+00:00
 
 --------------------------------------------------------------------------------
 

@@ -2,8 +2,10 @@
 import json
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Load curves data
-curves_file = Path("run_current/curves_data.json")
+curves_file = BASE_DIR / "run_current/curves_data.json"
 with open(curves_file, 'r') as f:
     curves = json.load(f)
 
