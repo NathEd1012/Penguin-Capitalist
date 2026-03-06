@@ -8,14 +8,16 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from market_data import get_bars
+from market_data.twelvedata_provider import TwelveDataProvider
 from datetime import datetime, timedelta
 import pytz
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.patches import Rectangle
+from matplotlib.backends.backend_pdf import PdfPages
 import logging
+import math
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -35,22 +37,28 @@ active_penguin_names = [p.__name__ for p in ACTIVE_PENGUINS]
 print(f"\nActive Penguins: {', '.join(active_penguin_names)}\n")
 print(f"Trading {len(SYMBOLS)} symbols")
 
-# Date range: use historical data (2025 full year - confirmed available)
-start = datetime(2025, 1, 1, tzinfo=pytz.UTC)
+# Date range: last 2 trading days of 2025
+start = datetime(2025, 12, 29, tzinfo=pytz.UTC)
 end = datetime(2025, 12, 31, tzinfo=pytz.UTC)
 
-print(f"Date range: {start.date()} to {end.date()} (historical data)")
+print(f"Date range: {start.date()} to {end.date()} (2 days of data)")
 print()
+
+try:
+    data_provider = TwelveDataProvider()
+except ValueError as e:
+    print(f"ERROR: {e}")
+    sys.exit(1)
 
 # Fetch data for all symbols
 data = {}
 successful = []
 failed = []
 
-print("Fetching historical data...")
+print("Fetching historical data from Twelve Data...")
 for symbol in SYMBOLS:
     try:
-        df = get_bars(symbol, start, end, "1d")
+        df = data_provider.get_bars(symbol, start, end, "1m")
         if len(df) > 0:
             data[symbol] = df
             successful.append(symbol)
@@ -72,83 +80,13 @@ if not successful:
 plot_dir = Path("assistive_scripts/market_data_plots")
 plot_dir.mkdir(exist_ok=True)
 
-print(f"\nGenerating plots in {plot_dir}/...")
+print(f"\nGenerating PDF with plots...")
 
-# Generate individual plots for each successful symbol
-for symbol in successful:
-    df = data[symbol]
-    
-    # Create figure with 2 subplots: candlestick + volume
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 8), 
-                                    gridspec_kw={'height_ratios': [3, 1]},
-                                    sharex=True)
-    
-    # Plot candlestick chart
-    width = 0.6
-    width2 = 0.1
-    
-    for idx, row in df.iterrows():
-        ts = mdates.date2num(row['timestamp'])
-        open_price = row['open']
-        close_price = row['close']
-        high_price = row['high']
-        low_price = row['low']
-        
-        # Color: green for up, red for down
-        color = 'green' if close_price >= open_price else 'red'
-        
-        # Wick (high-low line)
-        ax1.plot([ts, ts], [low_price, high_price], color=color, linewidth=0.5)
-        
-        # Body (open-close rectangle)
-        height = abs(close_price - open_price)
-        bottom = min(open_price, close_price)
-        rect = Rectangle((ts - width/2, bottom), width, height, 
-                         facecolor=color, edgecolor=color, alpha=0.8)
-        ax1.add_patch(rect)
-    
-    # Volume bars
-    colors_vol = ['green' if df.iloc[i]['close'] >= df.iloc[i]['open'] else 'red' 
-                  for i in range(len(df))]
-    ax2.bar(mdates.date2num(df['timestamp']), df['volume'], 
-            width=width2, color=colors_vol, alpha=0.6)
-    
-    # Format axes
-    ax1.set_ylabel('Price ($)', fontsize=10)
-    ax1.set_title(f"{symbol} - Yearly Candlestick Chart", fontsize=12, fontweight='bold')
-    ax1.grid(True, alpha=0.3)
-    ax1.yaxis.label.set_color('black')
-    
-    ax2.set_ylabel('Volume', fontsize=10)
-    ax2.set_xlabel('Date', fontsize=10)
-    ax2.grid(True, alpha=0.3, axis='y')
-    
-    # Format x-axis dates
-    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-    ax1.xaxis.set_major_locator(mdates.MonthLocator(interval=2))
-    plt.setp(ax1.xaxis.get_majorticklabels(), rotation=45, ha='right')
-    
-    # Add statistics
-    stats_text = (
-        f"Close: ${df['close'].iloc[-1]:.2f} | "
-        f"High: ${df['high'].max():.2f} | "
-        f"Low: ${df['low'].min():.2f} | "
-        f"Avg Vol: {df['volume'].mean()/1e6:.1f}M"
-    )
-    fig.text(0.5, 0.02, stats_text, ha='center', fontsize=9, style='italic')
-    
-    plt.tight_layout(rect=[0, 0.03, 1, 1])
-    
-    # Save plot
-    plot_file = plot_dir / f"{symbol}_yearly.png"
-    plt.savefig(plot_file, dpi=100, bbox_inches='tight')
-    plt.close()
-    
-    print(f"  ✓ Saved {plot_file.name}")
+# Create PDF file
+pdf_path = plot_dir / "market_data_plots.pdf"
 
-# Generate summary plot - all symbols on one page (grid)
-if len(successful) > 0:
-    import math
+with PdfPages(pdf_path) as pdf:
+    # === PAGE 1: Summary plot - all symbols on one page (grid) ===
     cols = 3
     rows = math.ceil(len(successful) / cols)
     fig, axes = plt.subplots(rows, cols, figsize=(16, 4*rows))
@@ -171,29 +109,67 @@ if len(successful) > 0:
         ax.grid(True, alpha=0.3)
         ax.legend(fontsize=8, loc='best')
         
-        # Format x-axis
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
-        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
+        # Format x-axis (hourly for intraday data)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d %H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=12))
         plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, fontsize=7)
     
     # Hide unused subplots
     for idx in range(len(successful), len(axes)):
         axes[idx].set_visible(False)
     
-    fig.suptitle(f'Yearly Performance - {len(successful)} Symbols', 
+    fig.suptitle(f'Market Data - {len(successful)} Symbols Overview', 
                  fontsize=14, fontweight='bold', y=0.995)
     plt.tight_layout()
-    
-    summary_file = plot_dir / "summary_all_symbols.png"
-    plt.savefig(summary_file, dpi=100, bbox_inches='tight')
+    pdf.savefig(fig, bbox_inches='tight')
     plt.close()
+    print(f"  ✓ Added summary page")
     
-    print(f"  ✓ Saved {summary_file.name}")
+    # === PAGES 2+: Individual plots for each symbol ===
+    for symbol in successful:
+        df = data[symbol]
+        
+        # Create figure with closing price and high/low
+        fig, ax = plt.subplots(figsize=(14, 6))
+        
+        # Plot closing price
+        ax.plot(mdates.date2num(df['timestamp']), df['close'], 
+                color='steelblue', linewidth=2.5, label='Close', zorder=3)
+        
+        # Add high/low as shaded area
+        ax.fill_between(mdates.date2num(df['timestamp']), df['low'], df['high'],
+                        alpha=0.2, color='gray', label='High-Low Range')
+        
+        # Format axes
+        ax.set_title(f"{symbol} - Detailed View", fontsize=14, fontweight='bold')
+        ax.set_ylabel('Price ($)', fontsize=12)
+        ax.set_xlabel('Time', fontsize=12)
+        ax.grid(True, alpha=0.3)
+        ax.legend(fontsize=11, loc='best')
+        
+        # Format x-axis (hourly for intraday data)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d %H:%M'))
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=6))
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
+        
+        # Add statistics
+        stats_text = (
+            f"Close: ${df['close'].iloc[-1]:.2f} | "
+            f"High: ${df['high'].max():.2f} | "
+            f"Low: ${df['low'].min():.2f} | "
+            f"Avg Vol: {df['volume'].mean()/1e6:.1f}M"
+        )
+        fig.text(0.5, 0.02, stats_text, ha='center', fontsize=10, style='italic')
+        
+        plt.tight_layout(rect=[0, 0.03, 1, 1])
+        pdf.savefig(fig, bbox_inches='tight')
+        plt.close()
+        print(f"  ✓ Added {symbol}")
 
 print()
 print("=" * 80)
-print(f"✅ Plots generated successfully!")
-print(f"   Location: {plot_dir.resolve()}")
+print(f"✅ PDF generated successfully!")
+print(f"   Location: {pdf_path.resolve()}")
 print(f"   Symbols plotted: {len(successful)}/{len(SYMBOLS)}")
 print("=" * 80)
 

@@ -1,5 +1,6 @@
 """Twelve Data market data provider for global assets."""
 import os
+from pathlib import Path
 from datetime import datetime
 import time
 import requests
@@ -29,9 +30,10 @@ class TwelveDataProvider(BaseProvider):
     
     def __init__(self):
         """Initialize Twelve Data client with API key from .env."""
-        load_dotenv()
-        
-        self.api_key = os.environ.get("TWELVE_DATA_API_KEY")
+        env_path = Path(__file__).resolve().parent.parent / ".env"
+        load_dotenv(dotenv_path=env_path)
+
+        self.api_key = (os.environ.get("TWELVE_DATA_API_KEY") or "").strip().strip('"').strip("'")
         if not self.api_key:
             raise ValueError(
                 "Missing Twelve Data API key. Set TWELVE_DATA_API_KEY in .env"

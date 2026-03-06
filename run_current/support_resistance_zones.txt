@@ -2,7 +2,7 @@
 SUPPORT & RESISTANCE ZONES ANALYSIS
 ================================================================================
 
-Evaluated: 2026-03-04 14:05:36
+Evaluated: 2026-03-04 19:05:34
 
 Method:
   - Identifies local highs and lows in price history
@@ -82,7 +82,7 @@ Total bars analyzed: 6
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $  432.44  (Touches:   2  Distance:  +8.18%)
+  S1: $  432.43  (Touches:   2  Distance:  +8.18%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
@@ -122,13 +122,13 @@ RESISTANCE LEVELS:
 SYMBOL: MP
 ================================================================================
 Current Price: $61.45
-Price Range: $57.91 - $61.74
+Price Range: $57.91 - $61.75
 Total bars analyzed: 6
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
   S1: $   57.91  (Touches:   1  Distance:  +5.76%)
-  S2: $   60.82  (Touches:   1  Distance:  +1.03%)
+  S2: $   60.81  (Touches:   1  Distance:  +1.03%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------

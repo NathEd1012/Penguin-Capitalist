@@ -2,11 +2,11 @@ Consistency Check Warnings
 ============================================================
 
 • [CopilotPenguin] Detected 15 suspicious price jumps > 15%
-•   Trade #1 (COPX): -80.70% ($432.63 → $83.51)
+•   Trade #1 (COPX): -80.70% ($432.62 → $83.51)
 •   Trade #2 (GDXJ): +47.30% ($83.51 → $123.00)
 •   Trade #3 (AMD): +88.08% ($123.00 → $231.34)
 • [SMA20MultiTimeframePenguin] Detected 17 suspicious price jumps > 15%
-•   Trade #1 (COPX): -80.71% ($434.19 → $83.77)
+•   Trade #1 (COPX): -80.71% ($434.18 → $83.77)
 •   Trade #2 (GDXJ): +46.84% ($83.77 → $123.01)
 •   Trade #3 (MP): -52.92% ($123.01 → $57.91)
 • [SupportResistancePenguin] Detected 16 suspicious price jumps > 15%
