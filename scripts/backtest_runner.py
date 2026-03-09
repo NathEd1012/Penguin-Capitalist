@@ -18,6 +18,7 @@ from backtest.evaluator import Evaluator
 from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
+from scripts.plotting import plot_multitimeframe_sr_history
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
@@ -94,7 +95,7 @@ def run_backtest(
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
-) -> Tuple[Dict[str, Tuple[Portfolio, Dict]], Dict, List[datetime]]:
+) -> Tuple[Dict[str, Tuple[Portfolio, Dict]], Dict, List[datetime], Dict[str, Dict]]:
     """
     Run historical backtest.
     
@@ -226,8 +227,9 @@ def run_backtest(
                 if symbol not in current_prices:
                     continue
                 
-                # Get mid prices for analysis (last 100 bars)
-                mid_prices = price_history[symbol][-100:]
+                # Get full available history for analysis.
+                # This is required for long-horizon multi-timeframe strategies.
+                mid_prices = price_history[symbol]
                 if len(mid_prices) < 10:  # Need minimum history
                     continue
                 
@@ -310,7 +312,12 @@ def run_backtest(
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     
-    return results, trades_by_bar, sorted_timestamps
+    sr_histories = {}
+    for penguin_name, penguin in penguins.items():
+        if hasattr(penguin, "export_sr_history"):
+            sr_histories[penguin_name] = penguin.export_sr_history()
+
+    return results, trades_by_bar, sorted_timestamps, sr_histories
 
 
 def main():
@@ -330,7 +337,7 @@ def main():
     print("="*80)
     
     # Run backtest
-    results, trades_by_bar, bar_timestamps = run_backtest(
+    results, trades_by_bar, bar_timestamps, sr_histories = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -454,6 +461,32 @@ def main():
         print("✅ S&R zones computed and saved")
     except Exception as e:
         print(f"⚠️  S&R analysis error: {e}")
+
+    # Generate multitimeframe S/R line plots (if available)
+    print("\nGenerating multitimeframe S&R line plots...")
+    try:
+        for penguin_name, history_by_symbol in sr_histories.items():
+            if not history_by_symbol:
+                continue
+
+            current_sr_dir = current_dir / f"{penguin_name}_sr_lines"
+            created_current = plot_multitimeframe_sr_history(
+                history_by_symbol,
+                current_sr_dir,
+                bar_timestamps,
+            )
+
+            if archive_dir:
+                archive_sr_dir = archive_dir / f"{penguin_name}_sr_lines"
+                plot_multitimeframe_sr_history(
+                    history_by_symbol,
+                    archive_sr_dir,
+                    bar_timestamps,
+                )
+
+            print(f"✅ {penguin_name}: generated {len(created_current)} S&R line plot(s)")
+    except Exception as e:
+        print(f"⚠️  Multitimeframe S&R plotting error: {e}")
     
     print(f"\n✅ Backtest complete!")
     

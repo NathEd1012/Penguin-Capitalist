@@ -52,7 +52,7 @@ class SMA20MultiTimeframePenguin(BasePenguin):
                 continue
 
             window = prices[-needed:]
-            compressed = window[step - 1::step]
+            compressed = window[::step]
             if len(compressed) >= self.sma_length:
                 sma_levels[timeframe_name] = sum(compressed[-self.sma_length:]) / self.sma_length
 
@@ -105,14 +105,13 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         
         short_momentum = (current_mid - previous_mid) / previous_mid if previous_mid > 0 else 0
 
-        # === BUY SIGNALS (only when not holding) ===
-        if not has_position:
-            # Buy: either clean cross-up OR already above MTF trend with positive momentum
-            cross_up = was_below and is_above
-            trend_follow_entry = current_mid > weighted_sma and short_momentum > 0.0005
-            if cross_up or trend_follow_entry:
-                if ask > weighted_sma:  # Confirm buy above weighted trend level
-                    return "BUY", 1
+        # === BUY SIGNALS ===
+        # Allow adding to an existing position on repeated buy signals.
+        cross_up = was_below and is_above
+        trend_follow_entry = current_mid > weighted_sma and short_momentum > 0.0005
+        if cross_up or trend_follow_entry:
+            if ask > weighted_sma:  # Confirm buy above weighted trend level
+                return "BUY", 1
         
         # === SELL SIGNALS (only when holding) ===
         if has_position:

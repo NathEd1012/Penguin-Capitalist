@@ -1,6 +1,56 @@
-"""Expanded trading symbol universe organized by category."""
+"""Trading symbol configuration for backtesting.
 
-SYMBOLS = {
+This module contains:
+1. ACTIVE_SYMBOLS - The current list of symbols used for backtesting
+2. SYMBOL_CATEGORIES - Organized categorization of available symbols
+3. Helper lists for different market segments
+"""
+
+# ========== ACTIVE SYMBOLS FOR BACKTESTING ==========
+# This is the primary list used by the backtest engine
+# Modify this list to change which symbols are traded
+
+ACTIVE_SYMBOLS = [
+    # Tech giants & growth
+    "NVDA",   # Nvidia
+    "AAPL",   # Apple
+    "PLTR",   # Palantir
+    "AMD",    # Advanced Micro Devices
+    "MSTR",   # MicroStrategy (Bitcoin proxy)
+    "MSFT",   # Microsoft
+    "TSLA",   # Tesla
+    
+    # Materials & Mining
+    "MP",     # MP Materials (rare earths)
+    
+    # Defense
+    "NOC",    # Northrop Grumman
+    "LMT",    # Lockheed Martin
+    
+    # International
+    "NVO",    # Novo Nordisk (Denmark)
+    
+    # --- ETFs / Commodity ETFs ---
+    "GLD",    # Gold
+    "SLV",    # Silver
+    "PPLT",   # Platinum
+    "COPX",   # Copper miners
+    "JO",     # Coffee
+    "LIT",    # Lithium & Battery Tech
+    "URTH",   # MSCI World
+    "GDXJ",   # Junior gold miners
+    "SIL",    # Silver miners
+    "REMX",   # Rare earth / critical metals
+    "PICK",   # Global metals & mining
+]
+
+# Legacy alias for compatibility
+SYMBOLS_LIST = ACTIVE_SYMBOLS
+
+# ========== SYMBOL CATEGORIES ==========
+# Organized categorization for selective backtesting or analysis
+
+SYMBOL_CATEGORIES = {
     "tech": [
         "NVDA",    # Nvidia
         "AAPL",    # Apple
@@ -58,21 +108,37 @@ SYMBOLS = {
     ],
 }
 
-# Flatten all symbols into a single list for convenient access
+# ========== DERIVED SYMBOL LISTS ==========
+
+# Flatten all categorized symbols into a single list
 ALL_SYMBOLS = []
-for category in SYMBOLS.values():
+for category in SYMBOL_CATEGORIES.values():
     ALL_SYMBOLS.extend(category)
 
 # Remove duplicates while preserving order
 ALL_SYMBOLS = list(dict.fromkeys(ALL_SYMBOLS))
 
-# Category-specific lists for selective backtesting
-US_EQUITIES = SYMBOLS["tech"] + SYMBOLS["defense"] + SYMBOLS["alt_assets"]
-INTERNATIONAL_EQUITIES = SYMBOLS["international"]
-ETFS = SYMBOLS["miners"] + SYMBOLS["commodities"] + SYMBOLS["macro_etfs"]
+# Category-specific lists for selective backtesting or analysis
+US_EQUITIES = (
+    SYMBOL_CATEGORIES["tech"] + 
+    SYMBOL_CATEGORIES["defense"] + 
+    SYMBOL_CATEGORIES["alt_assets"]
+)
+INTERNATIONAL_EQUITIES = SYMBOL_CATEGORIES["international"]
+ETFS = (
+    SYMBOL_CATEGORIES["miners"] + 
+    SYMBOL_CATEGORIES["commodities"] + 
+    SYMBOL_CATEGORIES["macro_etfs"]
+)
+
+# Backwards compatibility alias
+SYMBOLS = SYMBOL_CATEGORIES
 
 __all__ = [
-    "SYMBOLS",
+    "ACTIVE_SYMBOLS",
+    "SYMBOLS_LIST",
+    "SYMBOL_CATEGORIES",
+    "SYMBOLS",  # Alias for backwards compatibility
     "ALL_SYMBOLS",
     "US_EQUITIES",
     "INTERNATIONAL_EQUITIES",

@@ -93,12 +93,12 @@ class SupportResistancePenguin(BasePenguin):
         )
         
         # Decision logic
-        if not has_position:
-            # Look for BUY signals
-            signal = self._check_buy_signal(current_buy_price, mid_prices, zones, atr_val)
-            if signal:
-                return "BUY", 1
-        else:
+        # Allow adding to an existing position on repeated buy signals.
+        signal = self._check_buy_signal(current_buy_price, mid_prices, zones, atr_val)
+        if signal and portfolio.cash >= current_buy_price:
+            return "BUY", 1
+
+        if has_position:
             # Look for SELL signals
             signal = self._check_sell_signal(
                 current_sell_price, mid_prices, zones, atr_val,

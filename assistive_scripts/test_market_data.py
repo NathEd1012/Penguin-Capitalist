@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-"""
-Test market data system and plot all active trading stocks.
-Fetches 1 year of historical data and generates yearly candlestick + volume charts.
-"""
+"""Test market data system and plot active trading stocks."""
 
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from market_data.twelvedata_provider import TwelveDataProvider
+from market_data import get_bars, init_router
 from datetime import datetime, timedelta
 import pytz
 import pandas as pd
@@ -45,7 +42,7 @@ print(f"Date range: {start.date()} to {end.date()} (2 days of data)")
 print()
 
 try:
-    data_provider = TwelveDataProvider()
+    init_router(use_cache=True, cache_dir="data_cache")
 except ValueError as e:
     print(f"ERROR: {e}")
     sys.exit(1)
@@ -55,10 +52,10 @@ data = {}
 successful = []
 failed = []
 
-print("Fetching historical data from Twelve Data...")
+print("Fetching historical data from Alpaca via provider router...")
 for symbol in SYMBOLS:
     try:
-        df = data_provider.get_bars(symbol, start, end, "1m")
+        df = get_bars(symbol, start, end, "1m")
         if len(df) > 0:
             data[symbol] = df
             successful.append(symbol)

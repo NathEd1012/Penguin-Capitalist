@@ -163,15 +163,14 @@ class SupportResistancePenguin(BasePenguin):
         momentum = (recent_prices[-1] - recent_prices[0]) / recent_prices[0] if recent_prices[0] != 0 else 0
         
         # === BUY SIGNALS ===
-        if not has_position:
-            # Buy when price is near support with upward momentum
-            near_support = distance_to_support < 0.20  # Within 20% of support
-            bouncing_up = current_price > previous_price
-            has_momentum = momentum > 0.0001
-            
-            if near_support and bouncing_up and has_momentum:
-                if portfolio.cash >= ask:
-                    return "BUY", 1
+        # Allow adding to an existing position on repeated buy signals.
+        near_support = distance_to_support < 0.20  # Within 20% of support
+        bouncing_up = current_price > previous_price
+        has_momentum = momentum > 0.0001
+        
+        if near_support and bouncing_up and has_momentum:
+            if portfolio.cash >= ask:
+                return "BUY", 1
         
         # === SELL SIGNALS ===
         if has_position:

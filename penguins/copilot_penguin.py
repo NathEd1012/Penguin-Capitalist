@@ -56,10 +56,8 @@ class CopilotPenguin(BasePenguin):
         )
         position_qty = portfolio.positions[symbol].qty if has_position else 0
 
-        # Cooldown after last trade for this symbol
+        # Current index for bookkeeping when recording trades
         current_index = len(mid_prices)
-        last_trade_index = self.last_trade_index.get(symbol, -999)
-        in_cooldown = (current_index - last_trade_index) <= self.cooldown_bars
 
         # ========== BUY SIGNALS ==========
         # Improved entry: Strong momentum + healthy RSI + confirmed uptrend
@@ -67,7 +65,7 @@ class CopilotPenguin(BasePenguin):
         healthy_rsi = 40 <= rsi_val <= 70  # Avoid overbought/oversold
         buy_signal = strong_momentum and healthy_rsi and is_uptrend
 
-        if buy_signal and not has_position and not in_cooldown:
+        if buy_signal:
             # Dynamic position sizing based on signal strength
             # Stronger signals (higher ROC + centered RSI) get larger positions
             rsi_strength = 1.0 - abs(rsi_val - 55) / 55  # Peak at RSI=55

@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from datetime import datetime, timedelta
+from pathlib import Path
 import pytz
 from config import INITIAL_CAPITAL
 
@@ -218,6 +219,106 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     plt.close()
 
 
+def plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timestamps=None):
+    """
+    Plot per-symbol price and multi-timeframe S/R lines for the full run.
+
+    Args:
+        sr_history_by_symbol: Dict[symbol] = [snapshot dict per bar]
+        output_dir: Directory for generated PNG files
+        bar_timestamps: Optional list of datetime timestamps for x-axis labels
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    tf_colors = {
+        "1y": "#1f77b4",
+        "3m": "#ff7f0e",
+        "1m": "#2ca02c",
+        "1w": "#d62728",
+        "1d": "#9467bd",
+    }
+
+    created_files = []
+
+    for symbol, snapshots in sorted(sr_history_by_symbol.items()):
+        if not snapshots:
+            continue
+
+        n = len(snapshots)
+        x = list(range(1, n + 1))
+        prices = [row.get("price") for row in snapshots]
+
+        plt.figure(figsize=(15, 8))
+        plt.plot(x, prices, color="black", linewidth=1.8, alpha=0.9, label="Price")
+
+        for tf_name in ["1y", "3m", "1m", "1w", "1d"]:
+            color = tf_colors[tf_name]
+
+            # Range-extremes style keys.
+            support_key = f"{tf_name}_support"
+            resistance_key = f"{tf_name}_resistance"
+            if support_key in snapshots[0] or resistance_key in snapshots[0]:
+                support_series = [row.get(support_key) for row in snapshots]
+                resistance_series = [row.get(resistance_key) for row in snapshots]
+
+                plt.plot(
+                    x,
+                    support_series,
+                    linestyle="--",
+                    linewidth=1.4,
+                    color=color,
+                    alpha=0.8,
+                    label=f"{tf_name} support",
+                )
+                plt.plot(
+                    x,
+                    resistance_series,
+                    linestyle="-",
+                    linewidth=1.4,
+                    color=color,
+                    alpha=0.8,
+                    label=f"{tf_name} resistance",
+                )
+
+            # Reaction-line style keys (up to 5 lines per timeframe).
+            for i in range(1, 6):
+                line_key = f"{tf_name}_line_{i}"
+                if line_key not in snapshots[0]:
+                    continue
+
+                line_series = [row.get(line_key) for row in snapshots]
+                plt.plot(
+                    x,
+                    line_series,
+                    linestyle=":",
+                    linewidth=max(0.8, 1.6 - 0.2 * (i - 1)),
+                    color=color,
+                    alpha=max(0.35, 0.8 - 0.12 * (i - 1)),
+                    label=f"{tf_name} line {i}",
+                )
+
+        x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, n)
+        if x_ticks and x_labels:
+            plt.xticks(x_ticks, x_labels, rotation=45, ha="right", fontsize=9)
+            plt.xlabel("Date / Time")
+        else:
+            plt.xlabel("Bar")
+
+        plt.ylabel("Price ($)")
+        plt.title(f"{symbol} - Multitimeframe S/R Lines")
+        plt.grid(True, alpha=0.25)
+        plt.legend(loc="best", fontsize=8, ncol=2)
+        plt.tight_layout()
+
+        out_file = output_dir / f"{symbol}_multitimeframe_sr.png"
+        plt.savefig(out_file, dpi=120)
+        plt.close()
+        created_files.append(str(out_file))
+
+    return created_files
+
+
 def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
     """
     Create comprehensive PDF report with capital curves and per-symbol trade summaries.
@@ -404,10 +505,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             table_data = [
                 [
                     "Symbol",
-                    "Buy Cnt",
-                    "Sell Cnt",
-                    "Pos Qty",
-                    "Market Value",
+                    "Trade Cnt",
                     "Total Cost",
                     "Total Revenue",
                     "Total PnL",
@@ -416,19 +514,21 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             ]
 
             total_pnl = 0
+            total_buy_count = 0
+            total_sell_count = 0
             for symbol in sorted(summary.keys()):
                 s = summary[symbol]
                 pnl = s["total_pnl"]
                 pnl_pct = s["pnl_pct"]
+                trade_cnt = s["buy_count"] + s["sell_count"]
                 total_pnl += pnl
+                total_buy_count += s["buy_count"]
+                total_sell_count += s["sell_count"]
 
                 table_data.append(
                     [
                         symbol,
-                        str(s["buy_count"]),
-                        str(s["sell_count"]),
-                        str(s["position_qty"]),
-                        f"${s['market_value']:,.2f}",
+                        str(trade_cnt),
                         f"${s['total_cost']:,.2f}",
                         f"${s['total_revenue']:,.2f}",
                         f"${pnl:,.2f}",
@@ -443,9 +543,6 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     "",
                     "",
                     "",
-                    f"${market_value:,.2f}",
-                    "",
-                    "",
                     f"${total_pnl:,.2f}",
                     "",
                 ]
@@ -455,7 +552,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 cellText=table_data,
                 cellLoc="center",
                 loc="center",
-                colWidths=[0.09, 0.08, 0.08, 0.08, 0.13, 0.13, 0.13, 0.12, 0.09],
+                colWidths=[0.15, 0.12, 0.20, 0.20, 0.18, 0.15],
             )
             table.auto_set_font_size(False)
             table.set_fontsize(9)
@@ -478,7 +575,9 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             summary_text = (
                 f"Cash: ${cash:,.2f}    "
                 f"Market Value: ${market_value:,.2f}    "
-                f"Total Value: ${total_value:,.2f}"
+                f"Total Value: ${total_value:,.2f}    "
+                f"Buys: {total_buy_count}    "
+                f"Sells: {total_sell_count}"
             )
             fig.text(0.5, 0.93, summary_text, ha="center", fontsize=11)
 

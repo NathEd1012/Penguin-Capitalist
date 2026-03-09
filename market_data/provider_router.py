@@ -1,4 +1,4 @@
-"""Provider router with intelligent provider selection and fallback logic."""
+"""Provider router with caching for Alpaca market data."""
 import logging
 from datetime import datetime
 from typing import Optional
@@ -6,7 +6,6 @@ import pandas as pd
 
 from market_data.base_provider import BaseProvider
 from market_data.alpaca_provider import AlpacaProvider
-from market_data.twelvedata_provider import TwelveDataProvider
 from market_data.cache import DataCache
 
 logger = logging.getLogger(__name__)
@@ -14,12 +13,7 @@ logger = logging.getLogger(__name__)
 
 class ProviderRouter:
     """
-    Intelligent router that selects the best provider based on symbol and handles fallback.
-    
-    Strategy:
-    1. US tickers → try Alpaca first, fallback to Twelve Data
-    2. Non-US tickers → use Twelve Data directly
-    3. Cache results to avoid API limits
+    Router that serves Alpaca data with optional disk cache.
     """
     
     def __init__(self, use_cache: bool = True, cache_dir: str = "data_cache"):
@@ -34,7 +28,6 @@ class ProviderRouter:
         self.cache = DataCache(cache_dir) if use_cache else None
         
         self.alpaca_client: Optional[AlpacaProvider] = None
-        self.twelvedata_client: Optional[TwelveDataProvider] = None
         
         self._init_providers()
     
@@ -46,11 +39,8 @@ class ProviderRouter:
         except ValueError as e:
             logger.warning(f"Alpaca provider not available: {e}")
         
-        try:
-            self.twelvedata_client = TwelveDataProvider()
-            logger.info("Twelve Data provider initialized")
-        except ValueError as e:
-            logger.warning(f"Twelve Data provider not available: {e}")
+        if not self.alpaca_client:
+            logger.warning("Alpaca provider not available")
     
     def get_bars(
         self,
@@ -63,7 +53,7 @@ class ProviderRouter:
         Fetch bars with intelligent provider selection and fallback.
         
         Args:
-            symbol: Stock symbol (e.g., "AAPL", "ASML.AMS")
+            symbol: Stock symbol (e.g., "AAPL")
             start: Start datetime (UTC)
             end: End datetime (UTC)
             timeframe: Candle interval ("1m", "5m", "15m", "1h", "1d")
@@ -72,7 +62,7 @@ class ProviderRouter:
             Standardized DataFrame with OHLCV data
         
         Raises:
-            RuntimeError: If all providers fail
+            RuntimeError: If Alpaca is unavailable or request fails
         """
         # Try cache first
         if self.use_cache and self.cache:
@@ -81,36 +71,20 @@ class ProviderRouter:
                 logger.debug(f"Cache hit for {symbol} {timeframe}")
                 return cached
         
-        # Determine provider strategy
-        is_us = AlpacaProvider.is_us_ticker(symbol)
-        
-        if is_us and self.alpaca_client:
-            logger.debug(f"Trying Alpaca for US ticker {symbol}")
-            try:
-                df = self.alpaca_client.get_bars(symbol, start, end, timeframe)
-                if not df.empty:
-                    if self.use_cache:
-                        self.cache.save_cache(symbol, timeframe, df)
-                    return df
-            except RuntimeError as e:
-                logger.warning(f"Alpaca failed for {symbol}: {e}. Trying Twelve Data...")
-        
-        # Fallback to Twelve Data
-        if self.twelvedata_client:
-            logger.debug(f"Trying Twelve Data for {symbol}")
-            try:
-                df = self.twelvedata_client.get_bars(symbol, start, end, timeframe)
-                if not df.empty:
-                    if self.use_cache:
-                        self.cache.save_cache(symbol, timeframe, df)
-                    return df
-            except RuntimeError as e:
-                logger.warning(f"Twelve Data failed for {symbol}: {e}")
-        
-        raise RuntimeError(
-            f"Could not fetch data for {symbol} from any provider. "
-            f"Ensure API credentials are set and timeframe {timeframe} is supported."
-        )
+        if not self.alpaca_client:
+            raise RuntimeError("Alpaca provider is not available. Check API credentials.")
+
+        logger.debug(f"Fetching {symbol} from Alpaca")
+        try:
+            df = self.alpaca_client.get_bars(symbol, start, end, timeframe)
+            if not df.empty and self.use_cache and self.cache:
+                self.cache.save_cache(symbol, timeframe, df)
+            return df
+        except RuntimeError as e:
+            raise RuntimeError(
+                f"Could not fetch data for {symbol} from Alpaca: {e}. "
+                f"Ensure credentials are set and timeframe {timeframe} is supported."
+            )
 
 
 # Global router instance

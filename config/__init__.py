@@ -1,42 +1,68 @@
-"""Configuration module for Penguin Capitalist."""
-import importlib.util
-from pathlib import Path
+"""Configuration module for Penguin Capitalist.
 
-# Load root config.py as a module to avoid circular import
-root_config_path = Path(__file__).resolve().parent.parent / "config.py"
-spec = importlib.util.spec_from_file_location("root_config", root_config_path)
-root_config = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(root_config)
+This module consolidates all configuration settings from:
+- config/symbols.py - Trading symbols and symbol categories
+- config/portfolio.py - Portfolio capital and transaction costs
+- config/backtest.py - Backtest timing and execution settings
+- config/strategies.py - Active trading strategies (penguins)
 
-# Re-export all config constants from root config.py
-SYMBOLS = root_config.SYMBOLS
-INITIAL_CAPITAL = root_config.INITIAL_CAPITAL
-TRANSACTION_COST = root_config.TRANSACTION_COST
-START_DATE = root_config.START_DATE
-STOP_DATE = root_config.STOP_DATE
-BINNING = root_config.BINNING
-SAVE_TO_RUN_OLD = root_config.SAVE_TO_RUN_OLD
-ACTIVE_PENGUINS = root_config.ACTIVE_PENGUINS
+Import from this module anywhere in the codebase:
+    from config import SYMBOLS, INITIAL_CAPITAL, START_DATE, ACTIVE_PENGUINS
+"""
 
-# Also export symbol categories from config/symbols.py
+# ========== SYMBOL CONFIGURATION ==========
 from config.symbols import (
+    ACTIVE_SYMBOLS,
+    SYMBOLS_LIST,
+    SYMBOL_CATEGORIES,
+    SYMBOLS,  # Alias for SYMBOL_CATEGORIES
     ALL_SYMBOLS,
     US_EQUITIES,
     INTERNATIONAL_EQUITIES,
     ETFS,
 )
 
+# Legacy alias: SYMBOLS refers to the active list for backtesting
+# Override the dict from symbols.py with the active list for compatibility
+SYMBOLS = ACTIVE_SYMBOLS
+
+# ========== PORTFOLIO CONFIGURATION ==========
+from config.portfolio import (
+    INITIAL_CAPITAL,
+    TRANSACTION_COST,
+)
+
+# ========== BACKTEST CONFIGURATION ==========
+from config.backtest import (
+    START_DATE,
+    STOP_DATE,
+    BINNING,
+    SAVE_TO_RUN_OLD,
+)
+
+# ========== STRATEGY CONFIGURATION ==========
+from config.strategies import (
+    ACTIVE_PENGUINS,
+)
+
+# ========== EXPORTS ==========
 __all__ = [
-    "SYMBOLS",
-    "INITIAL_CAPITAL",
-    "TRANSACTION_COST",
-    "START_DATE",
-    "STOP_DATE",
-    "BINNING",
-    "SAVE_TO_RUN_OLD",
-    "ACTIVE_PENGUINS",
-    "ALL_SYMBOLS",
-    "US_EQUITIES",
-    "INTERNATIONAL_EQUITIES",
-    "ETFS",
+    # Active trading configuration
+    "SYMBOLS",              # Active symbols list for backtesting
+    "ACTIVE_SYMBOLS",       # Explicit active symbols
+    "SYMBOLS_LIST",         # Alias
+    "INITIAL_CAPITAL",      # Starting capital (USD)
+    "TRANSACTION_COST",     # Cost per trade (USD)
+    "START_DATE",           # Backtest start datetime
+    "STOP_DATE",            # Backtest end datetime
+    "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
+    "SAVE_TO_RUN_OLD",      # Archive completed runs
+    "ACTIVE_PENGUINS",      # List of active strategy classes
+    
+    # Symbol categorization
+    "SYMBOL_CATEGORIES",    # Dict of symbol categories
+    "ALL_SYMBOLS",          # All available symbols flattened
+    "US_EQUITIES",          # US equity symbols
+    "INTERNATIONAL_EQUITIES",  # International equity symbols
+    "ETFS",                 # ETF symbols
 ]
