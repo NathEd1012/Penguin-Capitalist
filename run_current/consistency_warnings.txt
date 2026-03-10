@@ -1,11 +1,19 @@
 Consistency Check Warnings
 ============================================================
 
-• [SMA20MultiTimeframePenguin] Detected 38 suspicious price jumps > 15%
-•   Trade #1 (SLV): -82.82% ($434.19 → $74.61)
-•   Trade #3 (GDXJ): +46.84% ($83.77 → $123.01)
-•   Trade #4 (PLTR): +18.63% ($123.01 → $145.92)
-• [RSI Mean Reversion] Detected 10030 suspicious price jumps > 15%
-•   Trade #1 (LMT): +242.78% ($183.66 → $629.56)
-•   Trade #2 (PPLT): -70.29% ($629.56 → $187.04)
-•   Trade #5 (MSFT): +127.44% ($187.76 → $427.06)
+• [MultitimeframeReactionSRPenguin] Detected 18982 suspicious price jumps > 15%
+•   Trade #1 (LIT): +26.54% ($51.76 → $65.50)
+•   Trade #2 (GDXJ): +79.18% ($65.50 → $117.36)
+•   Trade #4 (TSLA): +291.45% ($117.41 → $459.61)
+• [SMA20MultiTimeframePenguin] Detected 40 suspicious price jumps > 15%
+•   Trade #1 (SLV): -56.88% ($156.71 → $67.57)
+•   Trade #2 (MP): -23.47% ($67.57 → $51.71)
+•   Trade #3 (PPLT): +276.45% ($51.71 → $194.67)
+• [CopilotPenguin] Detected 32 suspicious price jumps > 15%
+•   Trade #1 (PPLT): +24.43% ($156.01 → $194.12)
+•   Trade #2 (MP): -73.47% ($194.12 → $51.50)
+•   Trade #3 (TSLA): +787.68% ($51.50 → $457.18)
+• [RSI Mean Reversion] Detected 18190 suspicious price jumps > 15%
+•   Trade #1 (NVDA): -52.87% ($403.22 → $190.04)
+•   Trade #3 (NVO): -76.22% ($218.04 → $51.85)
+•   Trade #4 (AMD): +320.53% ($51.85 → $218.06)

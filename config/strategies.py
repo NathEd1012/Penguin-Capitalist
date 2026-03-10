@@ -28,12 +28,12 @@ from penguins import (
 ACTIVE_PENGUINS = [
 
     #SupportResistancePenguin,           # Single timeframe S/R
-    #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
+    MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
     
     SMA20MultiTimeframePenguin,         # SMA-20 with multi-timeframe confirmation
     # MovingAverageCrossoverPenguin,    # Classic MA crossover
     
-    #CopilotPenguin,                     # AI-assisted strategy
+    CopilotPenguin,                     # AI-assisted strategy
  
     # MomentumPenguin,                  # Pure momentum following
     # TrendPenguin,                     # Trend following
