@@ -1,52 +1,52 @@
 {
   "SupportResistancePenguin": {
-    "total_return": -11.44,
-    "return_pct": -0.16,
-    "max_drawdown": -1.28,
-    "sharpe_ratio": -0.01,
-    "total_trades": 8,
-    "buy_trades": 4,
-    "sell_trades": 4,
-    "final_value": 6988.56
+    "total_return": 269.93,
+    "return_pct": 3.86,
+    "max_drawdown": -9.13,
+    "sharpe_ratio": 0.04,
+    "total_trades": 44,
+    "buy_trades": 22,
+    "sell_trades": 22,
+    "final_value": 7269.93
   },
   "MultitimeframeReactionSRPenguin": {
-    "total_return": -10.72,
-    "return_pct": -0.15,
-    "max_drawdown": -1.28,
-    "sharpe_ratio": -0.01,
-    "total_trades": 8,
-    "buy_trades": 4,
-    "sell_trades": 4,
-    "final_value": 6989.28
+    "total_return": -2346.38,
+    "return_pct": -33.52,
+    "max_drawdown": -35.72,
+    "sharpe_ratio": -0.29,
+    "total_trades": 22783,
+    "buy_trades": 14801,
+    "sell_trades": 7982,
+    "final_value": 4653.62
   },
   "SMA20MultiTimeframePenguin": {
-    "total_return": -11.33,
-    "return_pct": -0.16,
-    "max_drawdown": -1.28,
-    "sharpe_ratio": -0.01,
-    "total_trades": 8,
-    "buy_trades": 4,
-    "sell_trades": 4,
-    "final_value": 6988.67
+    "total_return": 276.28,
+    "return_pct": 3.95,
+    "max_drawdown": -9.12,
+    "sharpe_ratio": 0.05,
+    "total_trades": 44,
+    "buy_trades": 22,
+    "sell_trades": 22,
+    "final_value": 7276.28
   },
   "CopilotPenguin": {
-    "total_return": -65.82,
-    "return_pct": -0.94,
-    "max_drawdown": -3.49,
-    "sharpe_ratio": -0.02,
-    "total_trades": 8,
-    "buy_trades": 4,
-    "sell_trades": 4,
-    "final_value": 6934.18
+    "total_return": 548.19,
+    "return_pct": 7.83,
+    "max_drawdown": -13.78,
+    "sharpe_ratio": 0.06,
+    "total_trades": 38,
+    "buy_trades": 19,
+    "sell_trades": 19,
+    "final_value": 7548.19
   },
   "SP500Penguin": {
-    "total_return": 0.0,
-    "return_pct": 0.0,
-    "max_drawdown": 0.0,
-    "sharpe_ratio": 0.0,
-    "total_trades": 0,
-    "buy_trades": 0,
-    "sell_trades": 0,
-    "final_value": 7000.0
+    "total_return": -110.84,
+    "return_pct": -1.58,
+    "max_drawdown": -5.36,
+    "sharpe_ratio": -0.01,
+    "total_trades": 2,
+    "buy_trades": 1,
+    "sell_trades": 1,
+    "final_value": 6889.16
   }
 }

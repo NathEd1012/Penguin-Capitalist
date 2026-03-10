@@ -26,54 +26,27 @@ from penguins import (
 # Each strategy will be tested in parallel on the same data
 
 ACTIVE_PENGUINS = [
-    # ─────────────────────────────────────────────────────
-    # TECHNICAL ANALYSIS STRATEGIES
-    # ─────────────────────────────────────────────────────
+
+    #SupportResistancePenguin,           # Single timeframe S/R
+    #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
     
-    # Support/Resistance based strategies
-    SupportResistancePenguin,           # Single timeframe S/R
-    MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
-    # MultitimeframeRangeSRPenguin,     # Previous min/max range-extremes approach
-    
-    # Moving Average strategies
     SMA20MultiTimeframePenguin,         # SMA-20 with multi-timeframe confirmation
     # MovingAverageCrossoverPenguin,    # Classic MA crossover
     
-    # AI/ML assisted
-    CopilotPenguin,                     # AI-assisted strategy
-    
-    # ─────────────────────────────────────────────────────
-    # MOMENTUM & TREND STRATEGIES
-    # ─────────────────────────────────────────────────────
-    
+    #CopilotPenguin,                     # AI-assisted strategy
+ 
     # MomentumPenguin,                  # Pure momentum following
     # TrendPenguin,                     # Trend following
     # CarefulTrendPenguin,              # Conservative trend with filters
-    
-    # ─────────────────────────────────────────────────────
-    # MEAN REVERSION STRATEGIES
-    # ─────────────────────────────────────────────────────
-    
+
     # MeanReversionPenguin,             # Basic mean reversion
-    # RSIMeanReversionPenguin,          # RSI-based mean reversion
-    
-    # ─────────────────────────────────────────────────────
-    # BREAKOUT STRATEGIES
-    # ─────────────────────────────────────────────────────
-    
+    RSIMeanReversionPenguin,          # RSI-based mean reversion
+  
     # BreakoutPenguin,                  # Price breakout detection
     # VolatilityBreakoutPenguin,        # Volatility-based breakouts
-    
-    # ─────────────────────────────────────────────────────
-    # BUY & HOLD / BENCHMARKS
-    # ─────────────────────────────────────────────────────
-    
-    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
-    
-    # ─────────────────────────────────────────────────────
-    # RANDOM / CONTROL STRATEGIES
-    # ─────────────────────────────────────────────────────
-    
+
+    #SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
+
     # RandomPenguin,                    # Random trading (control)
     # RandomPenguin2,                   # Alternative random implementation
 ]

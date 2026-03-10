@@ -14,6 +14,7 @@ from penguins.base_penguin import BasePenguin
 
 class MultitimeframeReactionSRPenguin(BasePenguin):
     """Decision model using reaction-based S/R levels from indicators."""
+    USES_SR_LINES = True
 
     def __init__(
         self,
@@ -27,6 +28,7 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
         self.cluster_tolerance_pct = cluster_tolerance_pct
         self.touch_tolerance_pct = touch_tolerance_pct
         self.max_levels_per_timeframe = max_levels_per_timeframe
+        self.record_history = True
 
         self.timeframes = dict(DEFAULT_TIMEFRAMES)
 
@@ -66,14 +68,15 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
             cluster_tolerance_pct=self.cluster_tolerance_pct,
             max_levels_per_timeframe=self.max_levels_per_timeframe,
         )
-        record_reaction_snapshot(
-            cache=self.cache,
-            sr_history=self.sr_history,
-            symbol=symbol,
-            current_price=current_price,
-            timeframes=self.timeframes,
-            max_levels_per_timeframe=self.max_levels_per_timeframe,
-        )
+        if self.record_history:
+            record_reaction_snapshot(
+                cache=self.cache,
+                sr_history=self.sr_history,
+                symbol=symbol,
+                current_price=current_price,
+                timeframes=self.timeframes,
+                max_levels_per_timeframe=self.max_levels_per_timeframe,
+            )
 
         nearest_line = nearest_reaction_level(self.cache, symbol, current_price)
         

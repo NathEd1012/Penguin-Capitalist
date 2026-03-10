@@ -1,5 +1,6 @@
 """Data loader for historical market data from Alpaca."""
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Tuple, Optional
 from alpaca.data.historical import StockHistoricalDataClient
@@ -84,37 +85,61 @@ class DataLoader:
             - warning_message: String with info about actual data range if sparse
         """
         tf, minutes_per_bar = self._binning_to_timeframe(binning)
-        
-        request = StockBarsRequest(
-            symbol_or_symbols=symbols,
-            timeframe=tf,
-            start=start_date,
-            end=end_date,
-            limit=100000,
-        )
-        
-        print(f"Fetching data for {len(symbols)} symbols from {start_date} to {end_date}...")
-        bars = self.client.get_stock_bars(request)
-        
-        # Organize data by symbol and timestamp
-        data = {}
-        all_timestamps = set()
-        for symbol in tqdm(symbols, desc="Organizing data"):
-            data[symbol] = {}
+
+        def _fetch_symbol(symbol: str) -> Dict:
+            """Fetch bars for one symbol to avoid cross-symbol limit capping."""
+            request = StockBarsRequest(
+                symbol_or_symbols=[symbol],
+                timeframe=tf,
+                start=start_date,
+                end=end_date,
+                limit=100000,
+            )
+
+            bars = self.client.get_stock_bars(request)
+            symbol_rows: Dict = {}
+            if bars.df.empty:
+                return symbol_rows
+
+            # Alpaca usually returns MultiIndex (symbol, timestamp).
             if symbol in bars.df.index.get_level_values(0):
                 symbol_data = bars.df.xs(symbol, level=0)
-                for timestamp, row in symbol_data.iterrows():
-                    # Ensure timezone-aware timestamp
-                    if timestamp.tzinfo is None:
-                        timestamp = timestamp.replace(tzinfo=pytz.UTC)
-                    data[symbol][timestamp] = {
-                        'open': float(row['open']),
-                        'high': float(row['high']),
-                        'low': float(row['low']),
-                        'close': float(row['close']),
-                        'volume': int(row['volume']),
-                    }
-                    all_timestamps.add(timestamp)
+            else:
+                # Fallback for single-index return shapes.
+                symbol_data = bars.df
+
+            for timestamp, row in symbol_data.iterrows():
+                if timestamp.tzinfo is None:
+                    timestamp = timestamp.replace(tzinfo=pytz.UTC)
+                symbol_rows[timestamp] = {
+                    "open": float(row["open"]),
+                    "high": float(row["high"]),
+                    "low": float(row["low"]),
+                    "close": float(row["close"]),
+                    "volume": int(row["volume"]),
+                }
+
+            return symbol_rows
+        
+        print(f"Fetching data for {len(symbols)} symbols from {start_date} to {end_date}...")
+
+        data = {symbol: {} for symbol in symbols}
+        all_timestamps = set()
+
+        # Parallelize network-bound requests for noticeably faster loading.
+        max_workers = min(6, max(1, len(symbols)))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {executor.submit(_fetch_symbol, symbol): symbol for symbol in symbols}
+            for future in tqdm(as_completed(futures), total=len(futures), desc="Fetching/organizing data"):
+                symbol = futures[future]
+                try:
+                    symbol_rows = future.result()
+                except Exception:
+                    # Keep symbol empty if API call failed; stale-data filter will handle it.
+                    symbol_rows = {}
+
+                data[symbol] = symbol_rows
+                all_timestamps.update(symbol_rows.keys())
         
         # Check for data sparseness and generate warning if needed
         warning_msg = ""

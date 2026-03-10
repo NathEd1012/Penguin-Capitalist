@@ -13,6 +13,7 @@ class SupportResistancePenguin(BasePenguin):
     - 1 year, 3 months, 1 month, 1 week, 1 day
     Levels persist and are reused, not recalculated every bar.
     """
+    USES_SR_LINES = True
     
     def __init__(
         self,

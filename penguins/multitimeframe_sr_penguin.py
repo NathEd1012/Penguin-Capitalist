@@ -13,6 +13,7 @@ from penguins.base_penguin import BasePenguin
 
 class MultitimeframeRangeSRPenguin(BasePenguin):
     """Decision model using range-based multi-timeframe S/R levels from indicators."""
+    USES_SR_LINES = True
     
     def __init__(
         self,
@@ -20,6 +21,7 @@ class MultitimeframeRangeSRPenguin(BasePenguin):
     ):
         super().__init__("MultitimeframeRangeSRPenguin")
         self.recalc_threshold_pct = recalc_threshold_pct
+        self.record_history = True
         self.timeframes = dict(DEFAULT_TIMEFRAMES)
         self.cache: Dict[str, Dict] = {}
         self.sr_history: Dict[str, List[Dict[str, Optional[float]]]] = {}
@@ -59,13 +61,14 @@ class MultitimeframeRangeSRPenguin(BasePenguin):
             timeframes=self.timeframes,
             recalc_threshold_pct=self.recalc_threshold_pct,
         )
-        record_range_sr_snapshot(
-            cache=self.cache,
-            sr_history=self.sr_history,
-            symbol=symbol,
-            current_price=current_price,
-            timeframes=self.timeframes,
-        )
+        if self.record_history:
+            record_range_sr_snapshot(
+                cache=self.cache,
+                sr_history=self.sr_history,
+                symbol=symbol,
+                current_price=current_price,
+                timeframes=self.timeframes,
+            )
 
         signals = get_range_sr_signals(self.cache, symbol, current_price)
         

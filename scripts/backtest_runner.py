@@ -123,6 +123,22 @@ def run_backtest(
     start_datetime_utc = start_datetime.astimezone(pytz.UTC)
     end_datetime_utc = end_datetime.astimezone(pytz.UTC)
     
+    # Determine required symbols from active penguins when possible.
+    # If every active penguin declares TRADED_SYMBOLS, we only load that union.
+    # If at least one penguin is unrestricted, keep the full configured symbol list.
+    restricted_sets = []
+    for penguin_class in penguin_classes:
+        traded = getattr(penguin_class, "TRADED_SYMBOLS", None)
+        if traded is None:
+            restricted_sets = []
+            break
+        restricted_sets.append(set(traded))
+
+    if restricted_sets and len(restricted_sets) == len(penguin_classes):
+        requested_symbols = sorted(set().union(*restricted_sets).intersection(set(symbols)))
+        if requested_symbols:
+            symbols = requested_symbols
+
     print(f"\n{'='*80}")
     print(f"BACKTEST CONFIGURATION")
     print(f"{'='*80}")
@@ -183,11 +199,17 @@ def run_backtest(
     for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
             penguin = penguin_class()
+            if hasattr(penguin, "record_history"):
+                penguin.record_history = bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
             penguins[pen_name] = penguin
         except Exception as e:
             print(f"  ✗ {penguin_class.__name__}: {e}")
+
+    sr_penguin_names = {
+        name for name, penguin in penguins.items() if getattr(penguin, "USES_SR_LINES", False)
+    }
     
     # Run simulation
     print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
@@ -221,10 +243,28 @@ def run_backtest(
                 price_history[symbol].append(current_prices.get(symbol, 0))
         
         # Let each penguin make decisions
+        quotes = {}
+        for symbol in current_prices:
+            bar = data[symbol][timestamp]
+            bid, ask, _ = spread_model.get_bid_ask(
+                mid_price=bar["close"],
+                high=bar["high"],
+                low=bar["low"],
+                timestamp=timestamp,
+                volume=bar.get("volume", 0),
+                symbol=symbol,
+            )
+            quotes[symbol] = (bid, ask)
+
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
+            penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
+            if penguin_symbols is not None:
+                symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
+            else:
+                symbols_for_penguin = symbols
             
-            for symbol in symbols:
+            for symbol in symbols_for_penguin:
                 if symbol not in current_prices:
                     continue
                 
@@ -234,21 +274,7 @@ def run_backtest(
                 if len(mid_prices) < 10:  # Need minimum history
                     continue
                 
-                # Get bid/ask with realistic synthetic spread
-                bar = data[symbol][timestamp]
-                mid_price = bar['close']
-                high = bar['high']
-                low = bar['low']
-                volume = bar.get('volume', 0)
-                
-                bid, ask, spread = spread_model.get_bid_ask(
-                    mid_price=mid_price,
-                    high=high,
-                    low=low,
-                    timestamp=timestamp,
-                    volume=volume,
-                    symbol=symbol
-                )
+                bid, ask = quotes[symbol]
                 
                 try:
                     action, quantity = penguin.decide(
@@ -447,21 +473,26 @@ def main():
         print(f"⚠️  Consistency validation error: {e}")
     
     # Generate Support & Resistance zones
-    print("\nAnalyzing support and resistance zones...")
-    try:
-        # Collect symbol prices from trades
-        symbol_prices = defaultdict(list)
-        for penguin_name, (portfolio, metrics) in results.items():
-            for trade in portfolio.trades:
-                symbol_prices[trade.symbol].append(trade.price)
-        
-        # Compute S&R zones for current (and archive if enabled)
-        compute_and_log_support_resistance_zones(symbol_prices, str(current_dir))
-        if archive_dir:
-            compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
-        print("✅ S&R zones computed and saved")
-    except Exception as e:
-        print(f"⚠️  S&R analysis error: {e}")
+    if sr_penguin_names:
+        print("\nAnalyzing support and resistance zones...")
+        try:
+            # Collect symbol prices only from active S/R-based strategies.
+            symbol_prices = defaultdict(list)
+            for penguin_name, (portfolio, metrics) in results.items():
+                if penguin_name not in sr_penguin_names:
+                    continue
+                for trade in portfolio.trades:
+                    symbol_prices[trade.symbol].append(trade.price)
+
+            # Compute S&R zones for current (and archive if enabled)
+            compute_and_log_support_resistance_zones(symbol_prices, str(current_dir))
+            if archive_dir:
+                compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
+            print("✅ S&R zones computed and saved")
+        except Exception as e:
+            print(f"⚠️  S&R analysis error: {e}")
+    else:
+        print("\nSkipping support and resistance zone analysis (no active S/R-based strategies)")
 
     # Generate multitimeframe S/R line plots (if enabled)
     if ENABLE_ADDITIONAL_PLOTS:
