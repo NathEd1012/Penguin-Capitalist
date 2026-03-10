@@ -4,6 +4,8 @@ from indicators.momentum import roc
 
 
 class MomentumPenguin(BasePenguin):
+    LOOKBACK_BARS = 30  # Needs ROC period 5 + margin
+    
     def __init__(self):
         super().__init__("MomentumPenguin")
 

@@ -45,7 +45,7 @@ ACTIVE_PENGUINS = [
     # BreakoutPenguin,                  # Price breakout detection
     # VolatilityBreakoutPenguin,        # Volatility-based breakouts
 
-    #SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
+    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
 
     # RandomPenguin,                    # Random trading (control)
     # RandomPenguin2,                   # Alternative random implementation

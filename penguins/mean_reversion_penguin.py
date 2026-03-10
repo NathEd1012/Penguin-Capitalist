@@ -4,6 +4,8 @@ from indicators.momentum import rsi
 
 
 class MeanReversionPenguin(BasePenguin):
+    LOOKBACK_BARS = 30  # Needs RSI period 14 + margin
+    
     def __init__(self):
         super().__init__("MeanReversionPenguin")
 

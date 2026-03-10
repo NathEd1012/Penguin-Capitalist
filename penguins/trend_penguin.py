@@ -3,6 +3,8 @@ from penguins.base_penguin import BasePenguin
 
 
 class TrendPenguin(BasePenguin):
+    LOOKBACK_BARS = 10  # Needs only 2 bars for comparison
+    
     def __init__(self, lookback=3):
         super().__init__("TrendPenguin")
         self.lookback = lookback

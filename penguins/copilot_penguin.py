@@ -4,6 +4,8 @@ from indicators.momentum import rsi, roc
 
 
 class CopilotPenguin(BasePenguin):
+    LOOKBACK_BARS = 100  # Needs min_bars 50 + margin
+    
     def __init__(self):
         super().__init__("CopilotPenguin")
         self.entry_price = {}  # Track entry prices by symbol

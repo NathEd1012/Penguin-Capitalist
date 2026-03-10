@@ -15,6 +15,7 @@ from penguins.base_penguin import BasePenguin
 class MultitimeframeReactionSRPenguin(BasePenguin):
     """Decision model using reaction-based S/R levels from indicators."""
     USES_SR_LINES = True
+    LOOKBACK_BARS = 100000  # Needs full history for multi-year timeframes (1y max)
 
     def __init__(
         self,

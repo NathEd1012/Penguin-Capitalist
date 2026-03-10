@@ -3,6 +3,8 @@ from penguins.base_penguin import BasePenguin
 
 
 class CarefulTrendPenguin(BasePenguin):
+    LOOKBACK_BARS = 20  # Needs window_minutes + 1 (default 6)
+    
     def __init__(self, window_minutes=5, buy_threshold=4, sell_threshold=3):
         super().__init__("CarefulTrendPenguin")
         self.window_minutes = window_minutes

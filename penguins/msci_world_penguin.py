@@ -5,6 +5,7 @@ from penguins.base_penguin import BasePenguin
 class SP500Penguin(BasePenguin):
     """Buy and hold SPY - invest all capital once and hold."""
     TRADED_SYMBOLS = {"SPY"}
+    LOOKBACK_BARS = 10  # Doesn't need history
     
     def __init__(self):
         super().__init__("SP500Penguin")

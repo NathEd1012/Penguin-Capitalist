@@ -14,6 +14,7 @@ class SupportResistancePenguin(BasePenguin):
     Levels persist and are reused, not recalculated every bar.
     """
     USES_SR_LINES = True
+    LOOKBACK_BARS = 100000  # Needs full history for multi-year timeframes (1y max)
     
     def __init__(
         self,

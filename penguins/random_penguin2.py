@@ -4,6 +4,8 @@ from penguins.base_penguin import BasePenguin
 
 
 class RandomPenguin2(BasePenguin):
+    LOOKBACK_BARS = 10  # Doesn't need history, but minimum allocated
+    
     def __init__(self):
         super().__init__("RandomPenguin2")
 

@@ -14,6 +14,7 @@ from penguins.base_penguin import BasePenguin
 class MultitimeframeRangeSRPenguin(BasePenguin):
     """Decision model using range-based multi-timeframe S/R levels from indicators."""
     USES_SR_LINES = True
+    LOOKBACK_BARS = 100000  # Needs full history for multi-year timeframes (1y max)
     
     def __init__(
         self,

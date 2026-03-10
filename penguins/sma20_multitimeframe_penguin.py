@@ -16,6 +16,7 @@ class SMA20MultiTimeframePenguin(BasePenguin):
     - BUY: Price crosses above weighted SMA (support signal), only when not holding
     - SELL: Price crosses below weighted SMA (resistance signal) or take profit/stop loss
     """
+    LOOKBACK_BARS = 100  # Only needs last 100 bars for SMA calculations
     
     def __init__(self):
         super().__init__("SMA20MultiTimeframePenguin")
