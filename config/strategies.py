@@ -10,7 +10,7 @@ from penguins import (
     MultitimeframeReactionSRPenguin,
     MovingAverageCrossoverPenguin,
     MomentumPenguin,
-    MSCIWorldPenguin,
+    SP500Penguin,
     RandomPenguin,
     RandomPenguin2,
     RSIMeanReversionPenguin,
@@ -68,7 +68,7 @@ ACTIVE_PENGUINS = [
     # BUY & HOLD / BENCHMARKS
     # ─────────────────────────────────────────────────────
     
-    # MSCIWorldPenguin,                 # Buy & hold MSCI World ETF benchmark
+    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
     
     # ─────────────────────────────────────────────────────
     # RANDOM / CONTROL STRATEGIES

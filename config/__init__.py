@@ -38,6 +38,7 @@ from config.backtest import (
     STOP_DATE,
     BINNING,
     SAVE_TO_RUN_OLD,
+    ENABLE_ADDITIONAL_PLOTS,
 )
 
 # ========== STRATEGY CONFIGURATION ==========
@@ -57,6 +58,7 @@ __all__ = [
     "STOP_DATE",            # Backtest end datetime
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
     "SAVE_TO_RUN_OLD",      # Archive completed runs
+    "ENABLE_ADDITIONAL_PLOTS",  # Toggle optional extra plots
     "ACTIVE_PENGUINS",      # List of active strategy classes
     
     # Symbol categorization

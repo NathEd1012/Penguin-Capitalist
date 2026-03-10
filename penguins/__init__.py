@@ -15,7 +15,7 @@ from .moving_average_crossover_penguin import MovingAverageCrossoverPenguin
 from .rsi_mean_reversion_penguin import RSIMeanReversionPenguin
 from .sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
 from .volatility_breakout_penguin import VolatilityBreakoutPenguin
-from .msci_world_penguin import MSCIWorldPenguin
+from .msci_world_penguin import SP500Penguin, MSCIWorldPenguin
 
 __all__ = [
     "BasePenguin",
@@ -35,5 +35,6 @@ __all__ = [
     "RSIMeanReversionPenguin",
     "SMA20MultiTimeframePenguin",
     "VolatilityBreakoutPenguin",
+    "SP500Penguin",
     "MSCIWorldPenguin",
 ]

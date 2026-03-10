@@ -12,6 +12,7 @@ This module contains:
 
 ACTIVE_SYMBOLS = [
     # Tech giants & growth
+    "SPY",    # S&P 500 ETF benchmark
     "NVDA",   # Nvidia
     "AAPL",   # Apple
     "PLTR",   # Palantir

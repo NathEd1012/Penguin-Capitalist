@@ -6,7 +6,7 @@
 # Examples:
 #   "2026-01-03 10:30:00"  - Specific datetime
 #   "2026-01-03"           - Defaults to 00:00:00
-START_DATE = "2026-02-28 10:30:00"
+START_DATE = "2026-01-01 10:30:00"
 
 # Stop date for backtest
 # Special keyword "TODAY" resolves to yesterday at 23:50 UTC 
@@ -30,11 +30,18 @@ BINNING = "1m"
 # Whether to save completed runs to run_old/ directory
 # True  - Archive each run with timestamp (for historical comparison)
 # False - Only update run_current/ (saves disk space)
-SAVE_TO_RUN_OLD = True
+SAVE_TO_RUN_OLD = False
+
+# ========== OPTIONAL ADDITIONAL PLOTS ==========
+# Controls extra visualization outputs like multitimeframe S/R line PNGs + combined PDF.
+# True  - Generate additional plot folders and a combined PDF
+# False - Skip all additional plotting
+ENABLE_ADDITIONAL_PLOTS = 0
 
 __all__ = [
     "START_DATE",
     "STOP_DATE",
     "BINNING",
     "SAVE_TO_RUN_OLD",
+    "ENABLE_ADDITIONAL_PLOTS",
 ]

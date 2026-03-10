@@ -18,7 +18,7 @@ from backtest.evaluator import Evaluator
 from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
-from scripts.plotting import plot_multitimeframe_sr_history
+from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
@@ -28,6 +28,7 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
+    ENABLE_ADDITIONAL_PLOTS,
 )
 
 
@@ -462,31 +463,51 @@ def main():
     except Exception as e:
         print(f"⚠️  S&R analysis error: {e}")
 
-    # Generate multitimeframe S/R line plots (if available)
-    print("\nGenerating multitimeframe S&R line plots...")
-    try:
-        for penguin_name, history_by_symbol in sr_histories.items():
-            if not history_by_symbol:
-                continue
+    # Generate multitimeframe S/R line plots (if enabled)
+    if ENABLE_ADDITIONAL_PLOTS:
+        print("\nGenerating multitimeframe S/R line plots...")
+        try:
+            current_pngs = []
+            archive_pngs = []
 
-            current_sr_dir = current_dir / f"{penguin_name}_sr_lines"
-            created_current = plot_multitimeframe_sr_history(
-                history_by_symbol,
-                current_sr_dir,
-                bar_timestamps,
-            )
+            for penguin_name, history_by_symbol in sr_histories.items():
+                if not history_by_symbol:
+                    continue
 
-            if archive_dir:
-                archive_sr_dir = archive_dir / f"{penguin_name}_sr_lines"
-                plot_multitimeframe_sr_history(
+                current_sr_dir = current_dir / f"{penguin_name}_sr_lines"
+                created_current = plot_multitimeframe_sr_history(
                     history_by_symbol,
-                    archive_sr_dir,
+                    current_sr_dir,
                     bar_timestamps,
                 )
+                current_pngs.extend(created_current)
 
-            print(f"✅ {penguin_name}: generated {len(created_current)} S&R line plot(s)")
-    except Exception as e:
-        print(f"⚠️  Multitimeframe S&R plotting error: {e}")
+                if archive_dir:
+                    archive_sr_dir = archive_dir / f"{penguin_name}_sr_lines"
+                    created_archive = plot_multitimeframe_sr_history(
+                        history_by_symbol,
+                        archive_sr_dir,
+                        bar_timestamps,
+                    )
+                    archive_pngs.extend(created_archive)
+
+                print(f"✅ {penguin_name}: generated {len(created_current)} S&R line plot(s)")
+
+            # Create one combined PDF containing all multitimeframe PNG plots.
+            if current_pngs:
+                current_sr_pdf = current_dir / "multitimeframe_sr_plots.pdf"
+                create_png_gallery_pdf(current_pngs, current_sr_pdf)
+                print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
+
+            if archive_dir and archive_pngs:
+                archive_sr_pdf = archive_dir / "multitimeframe_sr_plots.pdf"
+                create_png_gallery_pdf(archive_pngs, archive_sr_pdf)
+                print(f"✅ Combined multitimeframe PDF (archive): {archive_sr_pdf}")
+
+        except Exception as e:
+            print(f"⚠️  Multitimeframe S&R plotting error: {e}")
+    else:
+        print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
     
     print(f"\n✅ Backtest complete!")
     

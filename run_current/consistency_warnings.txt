@@ -1,19 +1,19 @@
 Consistency Check Warnings
 ============================================================
 
-• [CopilotPenguin] Detected 15 suspicious price jumps > 15%
-•   Trade #1 (COPX): -80.42% ($452.56 → $88.60)
-•   Trade #2 (AMD): +183.94% ($88.60 → $251.57)
-•   Trade #3 (MP): -75.51% ($251.57 → $61.61)
-• [MultitimeframeReactionSRPenguin] Detected 15 suspicious price jumps > 15%
-•   Trade #1 (GLD): -28.65% ($631.05 → $450.25)
-•   Trade #2 (LIT): -84.08% ($450.25 → $71.68)
-•   Trade #3 (GDXJ): +83.48% ($71.68 → $131.52)
-• [SMA20MultiTimeframePenguin] Detected 14 suspicious price jumps > 15%
-•   Trade #1 (AAPL): +336.51% ($61.35 → $267.81)
-•   Trade #3 (GLD): +79.96% ($250.95 → $451.61)
-•   Trade #4 (COPX): -80.42% ($451.61 → $88.45)
-• [SupportResistancePenguin] Detected 13 suspicious price jumps > 15%
-•   Trade #2 (MP): -75.53% ($250.51 → $61.30)
-•   Trade #3 (GDXJ): +115.67% ($61.30 → $132.22)
-•   Trade #4 (GLD): +242.30% ($132.22 → $452.58)
+• [SupportResistancePenguin] Detected 7 suspicious price jumps > 15%
+•   Trade #1 (GDXJ): -57.01% ($273.35 → $117.50)
+•   Trade #2 (AMD): +85.61% ($117.50 → $218.09)
+•   Trade #3 (COPX): -66.23% ($218.09 → $73.65)
+• [MultitimeframeReactionSRPenguin] Detected 7 suspicious price jumps > 15%
+•   Trade #1 (AMD): +85.66% ($117.36 → $217.89)
+•   Trade #2 (AAPL): +25.15% ($217.89 → $272.69)
+•   Trade #3 (COPX): -72.89% ($272.69 → $73.93)
+• [SMA20MultiTimeframePenguin] Detected 7 suspicious price jumps > 15%
+•   Trade #1 (AMD): +85.34% ($117.59 → $217.94)
+•   Trade #2 (COPX): -66.23% ($217.94 → $73.60)
+•   Trade #3 (AAPL): +271.41% ($73.60 → $273.35)
+• [CopilotPenguin] Detected 7 suspicious price jumps > 15%
+•   Trade #1 (AMD): +205.46% ($73.63 → $224.91)
+•   Trade #2 (AAPL): +23.46% ($224.91 → $277.67)
+•   Trade #3 (GDXJ): -59.80% ($277.67 → $111.63)

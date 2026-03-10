@@ -2,16 +2,16 @@
 from penguins.base_penguin import BasePenguin
 
 
-class MSCIWorldPenguin(BasePenguin):
-    """Buy and hold AAPL - invest all capital once and hold."""
+class SP500Penguin(BasePenguin):
+    """Buy and hold SPY - invest all capital once and hold."""
     
     def __init__(self):
-        super().__init__("MSCIWorldPenguin")
+        super().__init__("SP500Penguin")
         self.invested = False  # Track if we've already invested
     
     def decide(self, symbol, mid_prices, bid, ask, portfolio):
         """
-        Invest all capital into AAPL on first opportunity, then hold.
+        Invest all capital into SPY on first opportunity, then hold.
         
         Args:
             symbol: Stock symbol
@@ -23,8 +23,8 @@ class MSCIWorldPenguin(BasePenguin):
         Returns:
             (BUY | HOLD, quantity)
         """
-        # Only trade AAPL (market benchmark)
-        if symbol != "AAPL":
+        # Only trade SPY (S&P 500 benchmark)
+        if symbol != "SPY":
             return "HOLD", 0
         
         # Invalid prices
@@ -40,3 +40,8 @@ class MSCIWorldPenguin(BasePenguin):
         
         # Otherwise, hold forever
         return "HOLD", 0
+
+
+
+# Backwards compatibility alias
+MSCIWorldPenguin = SP500Penguin

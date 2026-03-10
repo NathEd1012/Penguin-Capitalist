@@ -319,6 +319,34 @@ def plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timesta
     return created_files
 
 
+def create_png_gallery_pdf(png_files, output_pdf, page_title_prefix="Multitimeframe S/R"):
+    """Combine many PNG files into a single multi-page PDF."""
+    if not png_files:
+        return None
+
+    output_pdf = Path(output_pdf)
+    output_pdf.parent.mkdir(parents=True, exist_ok=True)
+
+    # Keep ordering stable and predictable.
+    sorted_pngs = sorted([Path(p) for p in png_files], key=lambda p: p.name.lower())
+
+    with PdfPages(output_pdf) as pdf:
+        for png_path in sorted_pngs:
+            if not png_path.exists():
+                continue
+
+            img = plt.imread(png_path)
+
+            fig, ax = plt.subplots(figsize=(14, 8))
+            ax.imshow(img)
+            ax.axis("off")
+            ax.set_title(f"{page_title_prefix}: {png_path.stem}", fontsize=12)
+            pdf.savefig(fig, bbox_inches="tight")
+            plt.close(fig)
+
+    return str(output_pdf)
+
+
 def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
     """
     Create comprehensive PDF report with capital curves and per-symbol trade summaries.
@@ -505,7 +533,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             table_data = [
                 [
                     "Symbol",
-                    "Trade Cnt",
+                    "Buy Cnt",
                     "Total Cost",
                     "Total Revenue",
                     "Total PnL",
@@ -520,7 +548,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 s = summary[symbol]
                 pnl = s["total_pnl"]
                 pnl_pct = s["pnl_pct"]
-                trade_cnt = s["buy_count"] + s["sell_count"]
+                buy_cnt = s["buy_count"]
                 total_pnl += pnl
                 total_buy_count += s["buy_count"]
                 total_sell_count += s["sell_count"]
@@ -528,7 +556,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 table_data.append(
                     [
                         symbol,
-                        str(trade_cnt),
+                        str(buy_cnt),
                         f"${s['total_cost']:,.2f}",
                         f"${s['total_revenue']:,.2f}",
                         f"${pnl:,.2f}",
