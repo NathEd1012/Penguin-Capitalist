@@ -52,11 +52,9 @@ class CopilotPenguin(BasePenguin):
         recent_low = min(mid_prices[-10:])
         atr_proxy = max(recent_high - recent_low, 0.01)
 
-        # Check if we have a position
-        has_position = (
-            symbol in portfolio.positions and portfolio.positions[symbol].qty > 0
-        )
-        position_qty = portfolio.positions[symbol].qty if has_position else 0
+        # Portfolio stores positions as symbol -> int quantity.
+        position_qty = portfolio.get_position(symbol)
+        has_position = position_qty > 0
 
         # Current index for bookkeeping when recording trades
         current_index = len(mid_prices)
@@ -99,7 +97,9 @@ class CopilotPenguin(BasePenguin):
         # 4. Momentum reversal exit
 
         if has_position:
-            entry_price = portfolio.positions[symbol].avg_price
+            entry_price = portfolio.cost_basis.get(symbol, 0.0)
+            if entry_price <= 0:
+                return "HOLD", 0
             take_profit_price = entry_price + self.take_profit_atr_mult * atr_proxy
             initial_stop_loss = entry_price - self.stop_loss_atr_mult * atr_proxy
             

@@ -150,11 +150,9 @@ class SupportResistancePenguin(BasePenguin):
         if support >= resistance:
             return "HOLD", 0
         
-        # Check position status
-        has_position = (
-            symbol in portfolio.positions and
-            portfolio.positions[symbol].qty > 0
-        )
+        # Portfolio stores positions as symbol -> int quantity.
+        position_qty = portfolio.get_position(symbol)
+        has_position = position_qty > 0
         
         # Calculate price zones
         price_range = resistance - support
@@ -176,8 +174,10 @@ class SupportResistancePenguin(BasePenguin):
         
         # === SELL SIGNALS ===
         if has_position:
-            qty = portfolio.positions[symbol].qty
-            entry_price = portfolio.positions[symbol].avg_price
+            qty = position_qty
+            entry_price = portfolio.cost_basis.get(symbol, 0.0)
+            if entry_price <= 0:
+                return "HOLD", 0
             
             # Sell on break below support
             if current_price < support and previous_price >= support:

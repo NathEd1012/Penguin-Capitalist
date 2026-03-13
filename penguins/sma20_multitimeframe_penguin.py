@@ -75,10 +75,9 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         if len(mid_prices) < min_required:
             return "HOLD", 0
         
-        # Check current position
-        has_position = (
-            symbol in portfolio.positions and portfolio.positions[symbol].qty > 0
-        )
+        # Portfolio stores positions as symbol -> int quantity.
+        position_qty = portfolio.get_position(symbol)
+        has_position = position_qty > 0
         
         # Calculate weighted multi-timeframe SMA (current and previous bar context)
         sma_levels_current = self._calculate_sma_levels(mid_prices)
@@ -116,8 +115,8 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         
         # === SELL SIGNALS (only when holding) ===
         if has_position:
-            qty = portfolio.positions[symbol].qty
-            entry_price = portfolio.positions[symbol].avg_price
+            qty = position_qty
+            entry_price = portfolio.cost_basis.get(symbol, 0.0)
             
             # Sell: Price crosses below SMA 20
             cross_down = was_above and is_below
@@ -126,6 +125,8 @@ class SMA20MultiTimeframePenguin(BasePenguin):
                 return "SELL", qty
             
             # Take profit: 5% gain
+            if entry_price <= 0:
+                return "HOLD", 0
             profit_pct = (bid - entry_price) / entry_price * 100
             if profit_pct > 5:
                 return "SELL", qty

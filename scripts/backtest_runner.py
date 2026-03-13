@@ -290,6 +290,13 @@ def run_backtest(
                         ask,
                         portfolio
                     )
+
+                    # Always size SPY buys to the maximum affordable quantity.
+                    if action == "BUY" and symbol == "SPY" and ask > 0:
+                        max_affordable_qty = int(
+                            max(portfolio.cash - portfolio.transaction_cost, 0) // ask
+                        )
+                        quantity = max_affordable_qty
                     
                     if action == "BUY" and quantity > 0:
                         if portfolio.buy(symbol, quantity, ask, timestamp):

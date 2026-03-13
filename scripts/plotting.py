@@ -533,7 +533,8 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             table_data = [
                 [
                     "Symbol",
-                    "Buy Cnt",
+                    "Buy/Sell Cnt",
+                    "Shares",
                     "Total Cost",
                     "Total Revenue",
                     "Total PnL",
@@ -544,19 +545,24 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             total_pnl = 0
             total_buy_count = 0
             total_sell_count = 0
+            total_shares_bought = 0
             for symbol in sorted(summary.keys()):
                 s = summary[symbol]
                 pnl = s["total_pnl"]
                 pnl_pct = s["pnl_pct"]
                 buy_cnt = s["buy_count"]
+                sell_cnt = s["sell_count"]
+                shares_bought = s["total_qty_bought"]
                 total_pnl += pnl
-                total_buy_count += s["buy_count"]
-                total_sell_count += s["sell_count"]
+                total_buy_count += buy_cnt
+                total_sell_count += sell_cnt
+                total_shares_bought += shares_bought
 
                 table_data.append(
                     [
                         symbol,
-                        str(buy_cnt),
+                        f"{buy_cnt}/{sell_cnt}",
+                        str(shares_bought),
                         f"${s['total_cost']:,.2f}",
                         f"${s['total_revenue']:,.2f}",
                         f"${pnl:,.2f}",
@@ -569,6 +575,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 [
                     "TOTAL",
                     "",
+                    str(total_shares_bought),
                     "",
                     "",
                     f"${total_pnl:,.2f}",
@@ -580,7 +587,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 cellText=table_data,
                 cellLoc="center",
                 loc="center",
-                colWidths=[0.15, 0.12, 0.20, 0.20, 0.18, 0.15],
+                colWidths=[0.14, 0.14, 0.09, 0.18, 0.18, 0.15, 0.12],
             )
             table.auto_set_font_size(False)
             table.set_fontsize(9)
@@ -599,17 +606,19 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             title = f"Trade Summary: {penguin_name}"
             fig.suptitle(title, fontsize=14, weight="bold", y=0.98)
 
-            # Portfolio totals at the top
-            summary_text = (
-                f"Cash: ${cash:,.2f}    "
-                f"Market Value: ${market_value:,.2f}    "
-                f"Total Value: ${total_value:,.2f}    "
-                f"Buys: {total_buy_count}    "
-                f"Sells: {total_sell_count}"
-            )
-            fig.text(0.5, 0.93, summary_text, ha="center", fontsize=11)
+            # Portfolio totals at the top in fixed columns to avoid text overlap.
+            summary_items = [
+                f"Cash: ${cash:,.2f}",
+                f"Market Value: ${market_value:,.2f}",
+                f"Total Value: ${total_value:,.2f}",
+                f"Buys: {total_buy_count}",
+                f"Sells: {total_sell_count}",
+            ]
+            summary_x_positions = [0.08, 0.30, 0.52, 0.78, 0.92]
+            for x_pos, item in zip(summary_x_positions, summary_items):
+                fig.text(x_pos, 0.935, item, ha="center", va="center", fontsize=10, weight="semibold")
 
-            plt.tight_layout()
+            plt.tight_layout(rect=[0, 0, 1, 0.88])
             pdf.savefig(fig, bbox_inches="tight")
             plt.close()
 

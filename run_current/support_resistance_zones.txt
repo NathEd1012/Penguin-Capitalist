@@ -2,7 +2,7 @@
 SUPPORT & RESISTANCE ZONES ANALYSIS
 ================================================================================
 
-Evaluated: 2026-03-10 20:45:32
+Evaluated: 2026-03-12 14:49:11
 
 Method:
   - Identifies local highs and lows in price history
@@ -15,675 +15,647 @@ Method:
 ================================================================================
 SYMBOL: AAPL
 ================================================================================
-Current Price: $260.40
-Price Range: $245.46 - $279.79
-Total bars analyzed: 793
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  259.11  (Touches:  98  Distance:  +0.49%)
-  S2: $  263.41  (Touches:  35  Distance:  -1.16%)
-  S3: $  274.95  (Touches:  35  Distance:  -5.59%)
-  S4: $  270.47  (Touches:  34  Distance:  -3.87%)
-  S5: $  255.07  (Touches:  28  Distance:  +2.05%)
-  S6: $  248.34  (Touches:  19  Distance:  +4.63%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  262.02  (Touches:  81  Distance:  +0.62%)
-  R2: $  257.57  (Touches:  66  Distance:  -1.08%)
-  R3: $  272.93  (Touches:  42  Distance:  +4.81%)
-  R4: $  277.32  (Touches:  20  Distance:  +6.50%)
-  R5: $  267.35  (Touches:  19  Distance:  +2.67%)
-  R6: $  249.47  (Touches:  18  Distance:  -4.20%)
-
-================================================================================
-SYMBOL: AMD
-================================================================================
-Current Price: $201.23
-Price Range: $187.41 - $265.02
-Total bars analyzed: 1362
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  200.94  (Touches:  70  Distance:  +0.15%)
-  S2: $  205.44  (Touches:  48  Distance:  -2.09%)
-  S3: $  197.16  (Touches:  35  Distance:  +2.02%)
-  S4: $  214.05  (Touches:  33  Distance:  -6.37%)
-  S5: $  253.57  (Touches:  28  Distance: -26.01%)
-  S6: $  209.21  (Touches:  24  Distance:  -3.96%)
-  S7: $  193.08  (Touches:  21  Distance:  +4.05%)
-  S8: $  232.90  (Touches:  21  Distance: -15.74%)
-  S9: $  249.26  (Touches:  19  Distance: -23.87%)
-  S10: $  217.91  (Touches:  18  Distance:  -8.29%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  201.80  (Touches:  74  Distance:  +0.28%)
-  R2: $  206.14  (Touches:  39  Distance:  +2.44%)
-  R3: $  197.99  (Touches:  30  Distance:  -1.61%)
-  R4: $  209.52  (Touches:  30  Distance:  +4.12%)
-  R5: $  255.09  (Touches:  29  Distance: +26.76%)
-  R6: $  214.18  (Touches:  27  Distance:  +6.43%)
-  R7: $  217.98  (Touches:  24  Distance:  +8.32%)
-  R8: $  250.26  (Touches:  22  Distance: +24.36%)
-  R9: $  233.16  (Touches:  21  Distance: +15.86%)
-  R10: $  193.90  (Touches:  20  Distance:  -3.65%)
-
-================================================================================
-SYMBOL: COPX
-================================================================================
-Current Price: $82.80
-Price Range: $72.58 - $98.32
-Total bars analyzed: 1048
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $   81.89  (Touches:  41  Distance:  +1.09%)
-  S2: $   85.21  (Touches:  40  Distance:  -2.92%)
-  S3: $   87.11  (Touches:  37  Distance:  -5.22%)
-  S4: $   88.95  (Touches:  37  Distance:  -7.43%)
-  S5: $   83.64  (Touches:  22  Distance:  -1.02%)
-  S6: $   80.15  (Touches:  19  Distance:  +3.20%)
-  S7: $   90.70  (Touches:  19  Distance:  -9.55%)
-  S8: $   77.00  (Touches:  18  Distance:  +6.99%)
-  S9: $   94.47  (Touches:  15  Distance: -14.10%)
-  S10: $   92.89  (Touches:  13  Distance: -12.20%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $   82.27  (Touches:  36  Distance:  -0.63%)
-  R2: $   89.24  (Touches:  36  Distance:  +7.78%)
-  R3: $   87.52  (Touches:  35  Distance:  +5.70%)
-  R4: $   84.23  (Touches:  34  Distance:  +1.73%)
-  R5: $   85.79  (Touches:  33  Distance:  +3.62%)
-  R6: $   91.04  (Touches:  23  Distance:  +9.96%)
-  R7: $   80.48  (Touches:  22  Distance:  -2.80%)
-  R8: $   93.48  (Touches:  18  Distance: +12.90%)
-  R9: $   77.34  (Touches:  16  Distance:  -6.59%)
-  R10: $   78.86  (Touches:  12  Distance:  -4.75%)
-
-================================================================================
-SYMBOL: GDXJ
-================================================================================
-Current Price: $137.17
-Price Range: $110.53 - $161.11
-Total bars analyzed: 1199
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  126.64  (Touches:  54  Distance:  +7.68%)
-  S2: $  134.81  (Touches:  48  Distance:  +1.72%)
-  S3: $  132.26  (Touches:  40  Distance:  +3.58%)
-  S4: $  143.24  (Touches:  23  Distance:  -4.43%)
-  S5: $  140.40  (Touches:  20  Distance:  -2.35%)
-  S6: $  137.39  (Touches:  19  Distance:  -0.16%)
-  S7: $  146.80  (Touches:  17  Distance:  -7.02%)
-  S8: $  149.17  (Touches:  17  Distance:  -8.75%)
-  S9: $  118.54  (Touches:  15  Distance: +13.58%)
-  S10: $  152.36  (Touches:  15  Distance: -11.07%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  134.25  (Touches:  47  Distance:  -2.13%)
-  R2: $  126.61  (Touches:  45  Distance:  -7.70%)
-  R3: $  136.59  (Touches:  37  Distance:  -0.43%)
-  R4: $  143.37  (Touches:  27  Distance:  +4.52%)
-  R5: $  132.05  (Touches:  25  Distance:  -3.74%)
-  R6: $  128.21  (Touches:  22  Distance:  -6.54%)
-  R7: $  149.99  (Touches:  21  Distance:  +9.35%)
-  R8: $  140.21  (Touches:  19  Distance:  +2.21%)
-  R9: $  147.26  (Touches:  18  Distance:  +7.35%)
-  R10: $  153.27  (Touches:  16  Distance: +11.74%)
-
-================================================================================
-SYMBOL: GLD
-================================================================================
-Current Price: $466.04
-Price Range: $398.13 - $510.73
-Total bars analyzed: 694
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  464.42  (Touches:  39  Distance:  +0.35%)
-  S2: $  471.71  (Touches:  37  Distance:  -1.22%)
-  S3: $  454.34  (Touches:  32  Distance:  +2.51%)
-  S4: $  446.10  (Touches:  29  Distance:  +4.28%)
-  S5: $  423.57  (Touches:  25  Distance:  +9.11%)
-  S6: $  484.72  (Touches:  17  Distance:  -4.01%)
-  S7: $  410.35  (Touches:  10  Distance: +11.95%)
-  S8: $  432.76  (Touches:   8  Distance:  +7.14%)
-  S9: $  498.99  (Touches:   2  Distance:  -7.07%)
-  S10: $  506.30  (Touches:   2  Distance:  -8.64%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  467.73  (Touches:  53  Distance:  +0.36%)
-  R2: $  448.43  (Touches:  31  Distance:  -3.78%)
-  R3: $  456.97  (Touches:  31  Distance:  -1.95%)
-  R4: $  475.41  (Touches:  22  Distance:  +2.01%)
-  R5: $  424.20  (Touches:  21  Distance:  -8.98%)
-  R6: $  485.74  (Touches:  16  Distance:  +4.23%)
-  R7: $  411.47  (Touches:  10  Distance: -11.71%)
-  R8: $  434.76  (Touches:  10  Distance:  -6.71%)
-  R9: $  495.53  (Touches:   4  Distance:  +6.33%)
-  R10: $  507.97  (Touches:   4  Distance:  +9.00%)
-
-================================================================================
-SYMBOL: LIT
-================================================================================
-Current Price: $71.27
-Price Range: $65.50 - $78.52
-Total bars analyzed: 527
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $   72.15  (Touches:  35  Distance:  -1.23%)
-  S2: $   70.70  (Touches:  32  Distance:  +0.80%)
-  S3: $   69.47  (Touches:  30  Distance:  +2.53%)
-  S4: $   73.82  (Touches:  25  Distance:  -3.58%)
-  S5: $   68.11  (Touches:  13  Distance:  +4.44%)
-  S6: $   75.35  (Touches:  10  Distance:  -5.72%)
-  S7: $   77.65  (Touches:   3  Distance:  -8.95%)
-  S8: $   66.08  (Touches:   2  Distance:  +7.28%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $   70.19  (Touches:  37  Distance:  -1.51%)
-  R2: $   71.50  (Touches:  33  Distance:  +0.32%)
-  R3: $   72.86  (Touches:  27  Distance:  +2.24%)
-  R4: $   74.33  (Touches:  21  Distance:  +4.29%)
-  R5: $   68.55  (Touches:  15  Distance:  -3.81%)
-  R6: $   75.64  (Touches:  12  Distance:  +6.13%)
-  R7: $   78.05  (Touches:   4  Distance:  +9.51%)
-  R8: $   65.93  (Touches:   1  Distance:  -7.49%)
-
-================================================================================
-SYMBOL: LMT
-================================================================================
-Current Price: $659.95
-Price Range: $478.29 - $704.14
-Total bars analyzed: 539
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  633.27  (Touches:  25  Distance:  +4.04%)
-  S2: $  658.90  (Touches:  22  Distance:  +0.16%)
-  S3: $  648.19  (Touches:  19  Distance:  +1.78%)
-  S4: $  577.46  (Touches:  16  Distance: +12.50%)
-  S5: $  526.81  (Touches:  14  Distance: +20.17%)
-  S6: $  538.65  (Touches:  11  Distance: +18.38%)
-  S7: $  507.84  (Touches:   8  Distance: +23.05%)
-  S8: $  552.23  (Touches:   7  Distance: +16.32%)
-  S9: $  585.56  (Touches:   7  Distance: +11.27%)
-  S10: $  620.45  (Touches:   7  Distance:  +5.99%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  658.55  (Touches:  30  Distance:  -0.21%)
-  R2: $  633.33  (Touches:  24  Distance:  -4.03%)
-  R3: $  528.77  (Touches:  15  Distance: -19.88%)
-  R4: $  579.46  (Touches:  15  Distance: -12.20%)
-  R5: $  644.31  (Touches:  13  Distance:  -2.37%)
-  R6: $  537.85  (Touches:  11  Distance: -18.50%)
-  R7: $  587.94  (Touches:   9  Distance: -10.91%)
-  R8: $  509.31  (Touches:   8  Distance: -22.83%)
-  R9: $  550.26  (Touches:   7  Distance: -16.62%)
-  R10: $  671.89  (Touches:   7  Distance:  +1.81%)
-
-================================================================================
-SYMBOL: MP
-================================================================================
-Current Price: $59.86
-Price Range: $51.34 - $73.36
-Total bars analyzed: 2245
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $   58.66  (Touches:  99  Distance:  +2.00%)
-  S2: $   61.29  (Touches:  93  Distance:  -2.38%)
-  S3: $   57.58  (Touches:  90  Distance:  +3.81%)
-  S4: $   62.53  (Touches:  59  Distance:  -4.46%)
-  S5: $   60.00  (Touches:  57  Distance:  -0.23%)
-  S6: $   56.60  (Touches:  50  Distance:  +5.44%)
-  S7: $   68.32  (Touches:  45  Distance: -14.14%)
-  S8: $   55.24  (Touches:  31  Distance:  +7.72%)
-  S9: $   65.17  (Touches:  30  Distance:  -8.87%)
-  S10: $   63.67  (Touches:  28  Distance:  -6.36%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $   58.75  (Touches:  99  Distance:  -1.85%)
-  R2: $   57.57  (Touches:  80  Distance:  -3.82%)
-  R3: $   62.42  (Touches:  77  Distance:  +4.27%)
-  R4: $   61.35  (Touches:  76  Distance:  +2.49%)
-  R5: $   60.01  (Touches:  55  Distance:  +0.25%)
-  R6: $   68.97  (Touches:  51  Distance: +15.22%)
-  R7: $   63.50  (Touches:  40  Distance:  +6.08%)
-  R8: $   55.54  (Touches:  32  Distance:  -7.22%)
-  R9: $   65.03  (Touches:  30  Distance:  +8.64%)
-  R10: $   56.60  (Touches:  23  Distance:  -5.44%)
-
-================================================================================
-SYMBOL: MSFT
-================================================================================
-Current Price: $405.82
-Price Range: $383.75 - $488.32
-Total bars analyzed: 678
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  403.14  (Touches:  52  Distance:  +0.66%)
-  S2: $  396.24  (Touches:  39  Distance:  +2.36%)
-  S3: $  411.12  (Touches:  25  Distance:  -1.31%)
-  S4: $  479.44  (Touches:  20  Distance: -18.14%)
-  S5: $  470.75  (Touches:  18  Distance: -16.00%)
-  S6: $  450.53  (Touches:  14  Distance: -11.02%)
-  S7: $  421.97  (Touches:  11  Distance:  -3.98%)
-  S8: $  429.82  (Touches:   9  Distance:  -5.91%)
-  S9: $  387.47  (Touches:   8  Distance:  +4.52%)
-  S10: $  459.86  (Touches:   8  Distance: -13.32%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  404.41  (Touches:  48  Distance:  -0.35%)
-  R2: $  398.10  (Touches:  39  Distance:  -1.90%)
-  R3: $  412.39  (Touches:  29  Distance:  +1.62%)
-  R4: $  480.19  (Touches:  23  Distance: +18.33%)
-  R5: $  470.33  (Touches:  16  Distance: +15.89%)
-  R6: $  452.50  (Touches:  13  Distance: +11.50%)
-  R7: $  432.73  (Touches:  11  Distance:  +6.63%)
-  R8: $  423.76  (Touches:  10  Distance:  +4.42%)
-  R9: $  460.79  (Touches:   7  Distance: +13.55%)
-  R10: $  388.29  (Touches:   6  Distance:  -4.32%)
-
-================================================================================
-SYMBOL: MSTR
-================================================================================
-Current Price: $137.89
-Price Range: $101.48 - $187.47
-Total bars analyzed: 1990
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  163.14  (Touches:  68  Distance: -18.31%)
-  S2: $  159.92  (Touches:  67  Distance: -15.97%)
-  S3: $  129.46  (Touches:  54  Distance:  +6.12%)
-  S4: $  124.57  (Touches:  46  Distance:  +9.67%)
-  S5: $  126.88  (Touches:  46  Distance:  +7.99%)
-  S6: $  132.55  (Touches:  45  Distance:  +3.88%)
-  S7: $  135.03  (Touches:  39  Distance:  +2.08%)
-  S8: $  137.65  (Touches:  30  Distance:  +0.18%)
-  S9: $  157.04  (Touches:  29  Distance: -13.89%)
-  S10: $  121.68  (Touches:  23  Distance: +11.75%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  164.21  (Touches:  68  Distance: +19.09%)
-  R2: $  161.03  (Touches:  64  Distance: +16.78%)
-  R3: $  130.00  (Touches:  56  Distance:  -5.73%)
-  R4: $  135.41  (Touches:  47  Distance:  -1.80%)
-  R5: $  124.98  (Touches:  44  Distance:  -9.36%)
-  R6: $  138.38  (Touches:  44  Distance:  +0.35%)
-  R7: $  133.01  (Touches:  38  Distance:  -3.54%)
-  R8: $  127.35  (Touches:  36  Distance:  -7.65%)
-  R9: $  157.91  (Touches:  28  Distance: +14.52%)
-  R10: $  167.20  (Touches:  24  Distance: +21.25%)
-
-================================================================================
-SYMBOL: NOC
-================================================================================
-Current Price: $750.32
-Price Range: $568.62 - $773.44
-Total bars analyzed: 503
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  685.26  (Touches:  33  Distance:  +8.67%)
-  S2: $  726.23  (Touches:  21  Distance:  +3.21%)
-  S3: $  612.81  (Touches:  18  Distance: +18.33%)
-  S4: $  698.51  (Touches:  18  Distance:  +6.90%)
-  S5: $  657.42  (Touches:  17  Distance: +12.38%)
-  S6: $  625.88  (Touches:  10  Distance: +16.58%)
-  S7: $  712.63  (Touches:   9  Distance:  +5.02%)
-  S8: $  668.36  (Touches:   7  Distance: +10.92%)
-  S9: $  739.26  (Touches:   6  Distance:  +1.47%)
-  S10: $  753.80  (Touches:   6  Distance:  -0.46%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  690.30  (Touches:  31  Distance:  -8.00%)
-  R2: $  729.76  (Touches:  22  Distance:  -2.74%)
-  R3: $  615.29  (Touches:  18  Distance: -18.00%)
-  R4: $  660.22  (Touches:  17  Distance: -12.01%)
-  R5: $  704.19  (Touches:  16  Distance:  -6.15%)
-  R6: $  628.97  (Touches:  12  Distance: -16.17%)
-  R7: $  673.42  (Touches:  12  Distance: -10.25%)
-  R8: $  751.68  (Touches:   9  Distance:  +0.18%)
-  R9: $  714.97  (Touches:   8  Distance:  -4.71%)
-  R10: $  768.11  (Touches:   6  Distance:  +2.37%)
-
-================================================================================
-SYMBOL: NVDA
-================================================================================
-Current Price: $181.63
-Price Range: $170.30 - $198.56
-Total bars analyzed: 1065
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  186.76  (Touches: 101  Distance:  -2.82%)
-  S2: $  189.99  (Touches:  78  Distance:  -4.60%)
-  S3: $  182.53  (Touches:  51  Distance:  -0.50%)
-  S4: $  179.22  (Touches:  42  Distance:  +1.33%)
-  S5: $  176.00  (Touches:  21  Distance:  +3.09%)
-  S6: $  193.14  (Touches:  12  Distance:  -6.34%)
-  S7: $  171.68  (Touches:   7  Distance:  +5.48%)
-  S8: $  197.03  (Touches:   4  Distance:  -8.48%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  188.17  (Touches: 111  Distance:  +3.60%)
-  R2: $  191.78  (Touches:  64  Distance:  +5.59%)
-  R3: $  180.91  (Touches:  56  Distance:  -0.39%)
-  R4: $  184.66  (Touches:  49  Distance:  +1.67%)
-  R5: $  177.00  (Touches:  26  Distance:  -2.55%)
-  R6: $  197.60  (Touches:   8  Distance:  +8.79%)
-  R7: $  172.05  (Touches:   4  Distance:  -5.27%)
-
-================================================================================
-SYMBOL: NVO
-================================================================================
-Current Price: $39.74
-Price Range: $36.15 - $64.29
-Total bars analyzed: 1311
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $   59.19  (Touches:  53  Distance: -48.95%)
-  S2: $   48.49  (Touches:  44  Distance: -22.02%)
-  S3: $   49.39  (Touches:  41  Distance: -24.29%)
-  S4: $   38.16  (Touches:  35  Distance:  +3.96%)
-  S5: $   37.43  (Touches:  27  Distance:  +5.80%)
-  S6: $   38.79  (Touches:  27  Distance:  +2.38%)
-  S7: $   57.88  (Touches:  27  Distance: -45.65%)
-  S8: $   47.42  (Touches:  23  Distance: -19.34%)
-  S9: $   56.80  (Touches:  22  Distance: -42.94%)
-  S10: $   60.29  (Touches:  15  Distance: -51.72%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $   59.53  (Touches:  44  Distance: +49.82%)
-  R2: $   48.75  (Touches:  39  Distance: +22.68%)
-  R3: $   49.54  (Touches:  38  Distance: +24.67%)
-  R4: $   37.63  (Touches:  37  Distance:  -5.31%)
-  R5: $   39.00  (Touches:  29  Distance:  -1.85%)
-  R6: $   47.71  (Touches:  26  Distance: +20.06%)
-  R7: $   57.20  (Touches:  26  Distance: +43.94%)
-  R8: $   58.51  (Touches:  24  Distance: +47.24%)
-  R9: $   38.43  (Touches:  23  Distance:  -3.29%)
-  R10: $   60.58  (Touches:  18  Distance: +52.45%)
-
-================================================================================
-SYMBOL: PICK
-================================================================================
-Current Price: $57.19
-Price Range: $51.87 - $67.01
-Total bars analyzed: 486
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $   60.84  (Touches:  34  Distance:  -6.39%)
-  S2: $   58.28  (Touches:  16  Distance:  -1.91%)
-  S3: $   59.82  (Touches:  14  Distance:  -4.61%)
-  S4: $   55.91  (Touches:  13  Distance:  +2.24%)
-  S5: $   61.84  (Touches:  13  Distance:  -8.13%)
-  S6: $   63.62  (Touches:  10  Distance: -11.24%)
-  S7: $   53.49  (Touches:   9  Distance:  +6.46%)
-  S8: $   57.22  (Touches:   9  Distance:  -0.05%)
-  S9: $   54.32  (Touches:   5  Distance:  +5.02%)
-  S10: $   52.11  (Touches:   4  Distance:  +8.89%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $   60.99  (Touches:  32  Distance:  +6.66%)
-  R2: $   62.08  (Touches:  21  Distance:  +8.56%)
-  R3: $   58.32  (Touches:  19  Distance:  +1.98%)
-  R4: $   60.02  (Touches:  13  Distance:  +4.95%)
-  R5: $   54.09  (Touches:  11  Distance:  -5.41%)
-  R6: $   56.95  (Touches:   9  Distance:  -0.42%)
-  R7: $   63.69  (Touches:   8  Distance: +11.36%)
-  R8: $   55.79  (Touches:   7  Distance:  -2.44%)
-  R9: $   64.60  (Touches:   5  Distance: +12.96%)
-  R10: $   52.55  (Touches:   4  Distance:  -8.11%)
-
-================================================================================
-SYMBOL: PLTR
-================================================================================
-Current Price: $154.54
-Price Range: $125.41 - $186.16
-Total bars analyzed: 1402
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  134.53  (Touches:  68  Distance: +12.95%)
-  S2: $  178.30  (Touches:  42  Distance: -15.38%)
-  S3: $  129.06  (Touches:  39  Distance: +16.49%)
-  S4: $  167.55  (Touches:  35  Distance:  -8.42%)
-  S5: $  136.83  (Touches:  26  Distance: +11.46%)
-  S6: $  174.36  (Touches:  23  Distance: -12.83%)
-  S7: $  145.97  (Touches:  20  Distance:  +5.54%)
-  S8: $  149.07  (Touches:  19  Distance:  +3.54%)
-  S9: $  152.46  (Touches:  19  Distance:  +1.35%)
-  S10: $  142.34  (Touches:  17  Distance:  +7.89%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  136.61  (Touches:  51  Distance: -11.60%)
-  R2: $  134.50  (Touches:  47  Distance: -12.96%)
-  R3: $  179.23  (Touches:  44  Distance: +15.98%)
-  R4: $  168.71  (Touches:  31  Distance:  +9.17%)
-  R5: $  129.06  (Touches:  26  Distance: -16.48%)
-  R6: $  131.13  (Touches:  23  Distance: -15.15%)
-  R7: $  155.34  (Touches:  22  Distance:  +0.52%)
-  R8: $  175.07  (Touches:  21  Distance: +13.29%)
-  R9: $  146.28  (Touches:  20  Distance:  -5.34%)
-  R10: $  165.63  (Touches:  18  Distance:  +7.18%)
-
-================================================================================
-SYMBOL: PPLT
-================================================================================
-Current Price: $198.10
-Price Range: $169.98 - $262.23
-Total bars analyzed: 1333
-
-SUPPORT LEVELS:
---------------------------------------------------------------------------------
-  S1: $  193.05  (Touches:  59  Distance:  +2.55%)
-  S2: $  206.12  (Touches:  45  Distance:  -4.05%)
-  S3: $  189.77  (Touches:  43  Distance:  +4.20%)
-  S4: $  209.64  (Touches:  41  Distance:  -5.82%)
-  S5: $  213.72  (Touches:  32  Distance:  -7.88%)
-  S6: $  218.12  (Touches:  26  Distance: -10.11%)
-  S7: $  200.93  (Touches:  19  Distance:  -1.43%)
-  S8: $  239.41  (Touches:  18  Distance: -20.85%)
-  S9: $  235.28  (Touches:  16  Distance: -18.77%)
-  S10: $  181.71  (Touches:  14  Distance:  +8.27%)
-
-RESISTANCE LEVELS:
---------------------------------------------------------------------------------
-  R1: $  193.24  (Touches:  60  Distance:  -2.45%)
-  R2: $  209.82  (Touches:  50  Distance:  +5.92%)
-  R3: $  214.66  (Touches:  37  Distance:  +8.36%)
-  R4: $  206.44  (Touches:  34  Distance:  +4.21%)
-  R5: $  189.96  (Touches:  31  Distance:  -4.11%)
-  R6: $  196.84  (Touches:  30  Distance:  -0.64%)
-  R7: $  218.62  (Touches:  26  Distance: +10.36%)
-  R8: $  202.03  (Touches:  17  Distance:  +1.98%)
-  R9: $  243.87  (Touches:  17  Distance: +23.10%)
-  R10: $  238.87  (Touches:  16  Distance: +20.58%)
-
-================================================================================
-SYMBOL: REMX
-================================================================================
-Current Price: $94.08
-Price Range: $75.06 - $103.96
+Current Price: $258.78
+Price Range: $245.46 - $280.38
 Total bars analyzed: 953
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $   89.48  (Touches:  60  Distance:  +4.88%)
-  S2: $   87.75  (Touches:  39  Distance:  +6.73%)
-  S3: $   93.09  (Touches:  26  Distance:  +1.05%)
-  S4: $   95.69  (Touches:  26  Distance:  -1.72%)
-  S5: $   84.16  (Touches:  23  Distance: +10.54%)
-  S6: $   91.05  (Touches:  23  Distance:  +3.22%)
-  S7: $   82.55  (Touches:  21  Distance: +12.26%)
-  S8: $   85.78  (Touches:  21  Distance:  +8.82%)
-  S9: $   97.23  (Touches:  21  Distance:  -3.34%)
-  S10: $   99.73  (Touches:  12  Distance:  -6.01%)
+  S1: $  258.95  (Touches: 113  Distance:  -0.07%)
+  S2: $  263.10  (Touches:  50  Distance:  -1.67%)
+  S3: $  270.57  (Touches:  41  Distance:  -4.56%)
+  S4: $  275.13  (Touches:  37  Distance:  -6.32%)
+  S5: $  254.52  (Touches:  32  Distance:  +1.65%)
+  S6: $  248.27  (Touches:  21  Distance:  +4.06%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
-  R1: $   89.66  (Touches:  65  Distance:  -4.69%)
-  R2: $   97.17  (Touches:  34  Distance:  +3.28%)
-  R3: $   87.90  (Touches:  29  Distance:  -6.57%)
-  R4: $   91.33  (Touches:  29  Distance:  -2.92%)
-  R5: $   93.43  (Touches:  24  Distance:  -0.69%)
-  R6: $   84.13  (Touches:  23  Distance: -10.57%)
-  R7: $   85.83  (Touches:  20  Distance:  -8.77%)
-  R8: $   95.18  (Touches:  14  Distance:  +1.17%)
-  R9: $   99.58  (Touches:  14  Distance:  +5.84%)
-  R10: $   82.66  (Touches:  13  Distance: -12.14%)
+  R1: $  259.60  (Touches: 106  Distance:  +0.32%)
+  R2: $  263.88  (Touches:  60  Distance:  +1.97%)
+  R3: $  271.36  (Touches:  41  Distance:  +4.86%)
+  R4: $  276.13  (Touches:  36  Distance:  +6.70%)
+  R5: $  255.32  (Touches:  26  Distance:  -1.34%)
+  R6: $  249.46  (Touches:  21  Distance:  -3.60%)
+  R7: $  280.02  (Touches:   2  Distance:  +8.21%)
+
+================================================================================
+SYMBOL: AMD
+================================================================================
+Current Price: $201.90
+Price Range: $187.41 - $265.02
+Total bars analyzed: 1654
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  201.04  (Touches:  92  Distance:  +0.43%)
+  S2: $  205.10  (Touches:  66  Distance:  -1.58%)
+  S3: $  197.21  (Touches:  41  Distance:  +2.33%)
+  S4: $  213.99  (Touches:  38  Distance:  -5.98%)
+  S5: $  253.62  (Touches:  32  Distance: -25.61%)
+  S6: $  209.16  (Touches:  27  Distance:  -3.59%)
+  S7: $  192.98  (Touches:  26  Distance:  +4.42%)
+  S8: $  248.96  (Touches:  25  Distance: -23.31%)
+  S9: $  232.95  (Touches:  22  Distance: -15.37%)
+  S10: $  217.95  (Touches:  21  Distance:  -7.95%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  201.77  (Touches:  95  Distance:  -0.07%)
+  R2: $  205.61  (Touches:  62  Distance:  +1.83%)
+  R3: $  197.99  (Touches:  34  Distance:  -1.94%)
+  R4: $  214.16  (Touches:  34  Distance:  +6.07%)
+  R5: $  209.30  (Touches:  32  Distance:  +3.66%)
+  R6: $  255.05  (Touches:  32  Distance: +26.32%)
+  R7: $  250.12  (Touches:  29  Distance: +23.88%)
+  R8: $  217.91  (Touches:  26  Distance:  +7.93%)
+  R9: $  193.86  (Touches:  23  Distance:  -3.98%)
+  R10: $  223.28  (Touches:  21  Distance: +10.59%)
+
+================================================================================
+SYMBOL: COPX
+================================================================================
+Current Price: $81.51
+Price Range: $72.58 - $98.32
+Total bars analyzed: 1233
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $   81.95  (Touches:  53  Distance:  -0.54%)
+  S2: $   85.22  (Touches:  43  Distance:  -4.56%)
+  S3: $   88.93  (Touches:  42  Distance:  -9.11%)
+  S4: $   83.56  (Touches:  39  Distance:  -2.51%)
+  S5: $   87.18  (Touches:  39  Distance:  -6.97%)
+  S6: $   80.18  (Touches:  27  Distance:  +1.63%)
+  S7: $   90.77  (Touches:  21  Distance: -11.37%)
+  S8: $   76.96  (Touches:  19  Distance:  +5.58%)
+  S9: $   94.54  (Touches:  15  Distance: -15.99%)
+  S10: $   92.91  (Touches:  13  Distance: -13.99%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $   84.09  (Touches:  51  Distance:  +3.17%)
+  R2: $   82.31  (Touches:  47  Distance:  +0.98%)
+  R3: $   87.62  (Touches:  43  Distance:  +7.50%)
+  R4: $   89.29  (Touches:  37  Distance:  +9.55%)
+  R5: $   85.75  (Touches:  34  Distance:  +5.20%)
+  R6: $   80.47  (Touches:  28  Distance:  -1.27%)
+  R7: $   91.11  (Touches:  25  Distance: +11.79%)
+  R8: $   77.39  (Touches:  17  Distance:  -5.06%)
+  R9: $   93.43  (Touches:  17  Distance: +14.63%)
+  R10: $   78.86  (Touches:  12  Distance:  -3.25%)
+
+================================================================================
+SYMBOL: GDXJ
+================================================================================
+Current Price: $133.57
+Price Range: $110.53 - $161.11
+Total bars analyzed: 1415
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  134.71  (Touches:  62  Distance:  -0.85%)
+  S2: $  126.61  (Touches:  58  Distance:  +5.22%)
+  S3: $  132.33  (Touches:  46  Distance:  +0.93%)
+  S4: $  137.58  (Touches:  31  Distance:  -3.00%)
+  S5: $  140.44  (Touches:  28  Distance:  -5.14%)
+  S6: $  147.16  (Touches:  28  Distance: -10.17%)
+  S7: $  143.48  (Touches:  25  Distance:  -7.42%)
+  S8: $  150.33  (Touches:  23  Distance: -12.54%)
+  S9: $  118.69  (Touches:  19  Distance: +11.14%)
+  S10: $  123.85  (Touches:  15  Distance:  +7.28%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  134.20  (Touches:  58  Distance:  +0.47%)
+  R2: $  126.62  (Touches:  49  Distance:  -5.20%)
+  R3: $  136.46  (Touches:  48  Distance:  +2.16%)
+  R4: $  148.25  (Touches:  30  Distance: +10.98%)
+  R5: $  139.72  (Touches:  29  Distance:  +4.60%)
+  R6: $  132.03  (Touches:  26  Distance:  -1.16%)
+  R7: $  142.62  (Touches:  26  Distance:  +6.78%)
+  R8: $  151.41  (Touches:  25  Distance: +13.35%)
+  R9: $  128.26  (Touches:  23  Distance:  -3.98%)
+  R10: $  123.14  (Touches:  15  Distance:  -7.81%)
+
+================================================================================
+SYMBOL: GLD
+================================================================================
+Current Price: $471.38
+Price Range: $398.13 - $510.73
+Total bars analyzed: 893
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  471.14  (Touches:  64  Distance:  +0.05%)
+  S2: $  463.25  (Touches:  53  Distance:  +1.72%)
+  S3: $  452.24  (Touches:  36  Distance:  +4.06%)
+  S4: $  444.99  (Touches:  32  Distance:  +5.60%)
+  S5: $  423.62  (Touches:  28  Distance: +10.13%)
+  S6: $  482.88  (Touches:  19  Distance:  -2.44%)
+  S7: $  410.35  (Touches:  10  Distance: +12.95%)
+  S8: $  432.85  (Touches:   9  Distance:  +8.17%)
+  S9: $  488.77  (Touches:   6  Distance:  -3.69%)
+  S10: $  403.20  (Touches:   3  Distance: +14.46%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  472.67  (Touches:  60  Distance:  +0.27%)
+  R2: $  464.86  (Touches:  54  Distance:  -1.38%)
+  R3: $  454.30  (Touches:  38  Distance:  -3.62%)
+  R4: $  446.38  (Touches:  30  Distance:  -5.30%)
+  R5: $  424.26  (Touches:  24  Distance: -10.00%)
+  R6: $  483.23  (Touches:  23  Distance:  +2.51%)
+  R7: $  410.75  (Touches:  12  Distance: -12.86%)
+  R8: $  434.76  (Touches:  11  Distance:  -7.77%)
+  R9: $  493.17  (Touches:   7  Distance:  +4.62%)
+  R10: $  507.97  (Touches:   4  Distance:  +7.76%)
+
+================================================================================
+SYMBOL: LIT
+================================================================================
+Current Price: $71.49
+Price Range: $65.50 - $78.52
+Total bars analyzed: 641
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $   72.18  (Touches:  48  Distance:  -0.97%)
+  S2: $   70.70  (Touches:  40  Distance:  +1.10%)
+  S3: $   69.50  (Touches:  34  Distance:  +2.78%)
+  S4: $   73.70  (Touches:  34  Distance:  -3.10%)
+  S5: $   75.35  (Touches:  14  Distance:  -5.40%)
+  S6: $   68.11  (Touches:  13  Distance:  +4.73%)
+  S7: $   66.04  (Touches:   3  Distance:  +7.62%)
+  S8: $   77.65  (Touches:   3  Distance:  -8.62%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $   72.78  (Touches:  49  Distance:  +1.82%)
+  R2: $   70.14  (Touches:  41  Distance:  -1.89%)
+  R3: $   71.30  (Touches:  38  Distance:  -0.26%)
+  R4: $   74.25  (Touches:  24  Distance:  +3.87%)
+  R5: $   75.54  (Touches:  17  Distance:  +5.68%)
+  R6: $   68.56  (Touches:  15  Distance:  -4.09%)
+  R7: $   78.05  (Touches:   4  Distance:  +9.18%)
+  R8: $   65.95  (Touches:   2  Distance:  -7.74%)
+
+================================================================================
+SYMBOL: MP
+================================================================================
+Current Price: $60.98
+Price Range: $51.34 - $73.36
+Total bars analyzed: 2512
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $   61.24  (Touches: 124  Distance:  -0.44%)
+  S2: $   58.68  (Touches: 108  Distance:  +3.77%)
+  S3: $   57.58  (Touches: 101  Distance:  +5.57%)
+  S4: $   62.53  (Touches:  66  Distance:  -2.55%)
+  S5: $   59.99  (Touches:  60  Distance:  +1.61%)
+  S6: $   56.58  (Touches:  55  Distance:  +7.20%)
+  S7: $   68.32  (Touches:  49  Distance: -12.05%)
+  S8: $   55.24  (Touches:  34  Distance:  +9.41%)
+  S9: $   65.17  (Touches:  30  Distance:  -6.88%)
+  S10: $   69.46  (Touches:  30  Distance: -13.92%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $   58.77  (Touches: 111  Distance:  -3.63%)
+  R2: $   61.30  (Touches: 101  Distance:  +0.53%)
+  R3: $   57.61  (Touches:  88  Distance:  -5.52%)
+  R4: $   62.39  (Touches:  88  Distance:  +2.32%)
+  R5: $   60.00  (Touches:  54  Distance:  -1.60%)
+  R6: $   68.94  (Touches:  54  Distance: +13.06%)
+  R7: $   63.45  (Touches:  41  Distance:  +4.05%)
+  R8: $   55.53  (Touches:  35  Distance:  -8.93%)
+  R9: $   65.01  (Touches:  32  Distance:  +6.61%)
+  R10: $   56.62  (Touches:  28  Distance:  -7.14%)
+
+================================================================================
+SYMBOL: MSFT
+================================================================================
+Current Price: $403.53
+Price Range: $383.75 - $488.32
+Total bars analyzed: 906
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  403.65  (Touches:  74  Distance:  -0.03%)
+  S2: $  396.59  (Touches:  48  Distance:  +1.72%)
+  S3: $  410.80  (Touches:  40  Distance:  -1.80%)
+  S4: $  479.13  (Touches:  25  Distance: -18.73%)
+  S5: $  450.80  (Touches:  20  Distance: -11.71%)
+  S6: $  469.91  (Touches:  17  Distance: -16.45%)
+  S7: $  421.63  (Touches:  14  Distance:  -4.48%)
+  S8: $  387.67  (Touches:  10  Distance:  +3.93%)
+  S9: $  429.93  (Touches:  10  Distance:  -6.54%)
+  S10: $  459.68  (Touches:   8  Distance: -13.91%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  405.18  (Touches:  73  Distance:  +0.41%)
+  R2: $  398.54  (Touches:  46  Distance:  -1.24%)
+  R3: $  412.15  (Touches:  43  Distance:  +2.14%)
+  R4: $  480.22  (Touches:  26  Distance: +19.00%)
+  R5: $  452.19  (Touches:  20  Distance: +12.06%)
+  R6: $  470.34  (Touches:  16  Distance: +16.55%)
+  R7: $  433.29  (Touches:  14  Distance:  +7.38%)
+  R8: $  423.58  (Touches:  12  Distance:  +4.97%)
+  R9: $  389.53  (Touches:  10  Distance:  -3.47%)
+  R10: $  461.81  (Touches:   8  Distance: +14.44%)
+
+================================================================================
+SYMBOL: MSTR
+================================================================================
+Current Price: $136.69
+Price Range: $101.48 - $187.47
+Total bars analyzed: 2384
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  159.96  (Touches:  74  Distance: -17.02%)
+  S2: $  163.15  (Touches:  73  Distance: -19.36%)
+  S3: $  137.68  (Touches:  64  Distance:  -0.73%)
+  S4: $  129.49  (Touches:  62  Distance:  +5.27%)
+  S5: $  134.79  (Touches:  59  Distance:  +1.39%)
+  S6: $  132.59  (Touches:  55  Distance:  +3.00%)
+  S7: $  124.57  (Touches:  52  Distance:  +8.87%)
+  S8: $  126.86  (Touches:  49  Distance:  +7.19%)
+  S9: $  140.02  (Touches:  35  Distance:  -2.43%)
+  S10: $  157.07  (Touches:  32  Distance: -14.91%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  164.16  (Touches:  73  Distance: +20.10%)
+  R2: $  138.19  (Touches:  72  Distance:  +1.09%)
+  R3: $  160.95  (Touches:  71  Distance: +17.75%)
+  R4: $  130.06  (Touches:  64  Distance:  -4.85%)
+  R5: $  133.21  (Touches:  57  Distance:  -2.55%)
+  R6: $  135.32  (Touches:  55  Distance:  -1.00%)
+  R7: $  124.98  (Touches:  51  Distance:  -8.57%)
+  R8: $  127.39  (Touches:  39  Distance:  -6.80%)
+  R9: $  140.62  (Touches:  35  Distance:  +2.88%)
+  R10: $  157.91  (Touches:  31  Distance: +15.52%)
+
+================================================================================
+SYMBOL: NOC
+================================================================================
+Current Price: $738.42
+Price Range: $568.62 - $775.28
+Total bars analyzed: 744
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  689.01  (Touches:  42  Distance:  +6.69%)
+  S2: $  730.93  (Touches:  31  Distance:  +1.01%)
+  S3: $  659.47  (Touches:  24  Distance: +10.69%)
+  S4: $  703.93  (Touches:  21  Distance:  +4.67%)
+  S5: $  719.06  (Touches:  17  Distance:  +2.62%)
+  S6: $  616.23  (Touches:  15  Distance: +16.55%)
+  S7: $  747.45  (Touches:  15  Distance:  -1.22%)
+  S8: $  631.06  (Touches:  14  Distance: +14.54%)
+  S9: $  675.59  (Touches:  13  Distance:  +8.51%)
+  S10: $  609.31  (Touches:  10  Distance: +17.49%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  729.45  (Touches:  34  Distance:  -1.22%)
+  R2: $  688.89  (Touches:  32  Distance:  -6.71%)
+  R3: $  699.30  (Touches:  25  Distance:  -5.30%)
+  R4: $  659.38  (Touches:  19  Distance: -10.70%)
+  R5: $  613.58  (Touches:  18  Distance: -16.91%)
+  R6: $  712.04  (Touches:  18  Distance:  -3.57%)
+  R7: $  746.16  (Touches:  17  Distance:  +1.05%)
+  R8: $  670.51  (Touches:  14  Distance:  -9.20%)
+  R9: $  624.85  (Touches:  13  Distance: -15.38%)
+  R10: $  760.52  (Touches:  12  Distance:  +2.99%)
+
+================================================================================
+SYMBOL: NVDA
+================================================================================
+Current Price: $184.56
+Price Range: $170.30 - $198.56
+Total bars analyzed: 1261
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  186.79  (Touches: 115  Distance:  -1.21%)
+  S2: $  190.10  (Touches:  87  Distance:  -3.00%)
+  S3: $  182.77  (Touches:  63  Distance:  +0.97%)
+  S4: $  179.32  (Touches:  52  Distance:  +2.84%)
+  S5: $  176.03  (Touches:  24  Distance:  +4.62%)
+  S6: $  193.29  (Touches:  10  Distance:  -4.73%)
+  S7: $  171.81  (Touches:   9  Distance:  +6.91%)
+  S8: $  197.04  (Touches:   5  Distance:  -6.76%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  188.20  (Touches: 125  Distance:  +1.97%)
+  R2: $  191.75  (Touches:  67  Distance:  +3.89%)
+  R3: $  184.61  (Touches:  66  Distance:  +0.03%)
+  R4: $  180.83  (Touches:  63  Distance:  -2.03%)
+  R5: $  177.10  (Touches:  30  Distance:  -4.04%)
+  R6: $  197.55  (Touches:   9  Distance:  +7.04%)
+  R7: $  172.23  (Touches:   6  Distance:  -6.68%)
+
+================================================================================
+SYMBOL: NVO
+================================================================================
+Current Price: $38.53
+Price Range: $35.91 - $64.29
+Total bars analyzed: 1473
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $   38.56  (Touches:  59  Distance:  -0.08%)
+  S2: $   59.19  (Touches:  53  Distance: -53.62%)
+  S3: $   48.47  (Touches:  47  Distance: -25.79%)
+  S4: $   49.41  (Touches:  46  Distance: -28.24%)
+  S5: $   37.69  (Touches:  36  Distance:  +2.17%)
+  S6: $   57.88  (Touches:  27  Distance: -50.21%)
+  S7: $   47.42  (Touches:  25  Distance: -23.06%)
+  S8: $   56.80  (Touches:  22  Distance: -47.42%)
+  S9: $   60.34  (Touches:  19  Distance: -56.60%)
+  S10: $   63.20  (Touches:  17  Distance: -64.02%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $   59.56  (Touches:  46  Distance: +54.58%)
+  R2: $   38.95  (Touches:  44  Distance:  +1.09%)
+  R3: $   49.54  (Touches:  44  Distance: +28.57%)
+  R4: $   48.72  (Touches:  41  Distance: +26.46%)
+  R5: $   37.64  (Touches:  35  Distance:  -2.31%)
+  R6: $   38.47  (Touches:  31  Distance:  -0.17%)
+  R7: $   47.69  (Touches:  28  Distance: +23.77%)
+  R8: $   57.20  (Touches:  26  Distance: +48.45%)
+  R9: $   58.51  (Touches:  24  Distance: +51.85%)
+  R10: $   60.62  (Touches:  20  Distance: +57.34%)
+
+================================================================================
+SYMBOL: PICK
+================================================================================
+Current Price: $58.79
+Price Range: $51.87 - $64.80
+Total bars analyzed: 589
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $   60.84  (Touches:  38  Distance:  -3.49%)
+  S2: $   58.37  (Touches:  27  Distance:  +0.72%)
+  S3: $   59.69  (Touches:  18  Distance:  -1.54%)
+  S4: $   61.91  (Touches:  18  Distance:  -5.31%)
+  S5: $   55.91  (Touches:  13  Distance:  +4.90%)
+  S6: $   57.12  (Touches:  12  Distance:  +2.83%)
+  S7: $   53.49  (Touches:   9  Distance:  +9.01%)
+  S8: $   63.48  (Touches:   9  Distance:  -7.98%)
+  S9: $   52.14  (Touches:   5  Distance: +11.31%)
+  S10: $   54.32  (Touches:   5  Distance:  +7.60%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $   60.83  (Touches:  39  Distance:  +3.46%)
+  R2: $   61.98  (Touches:  28  Distance:  +5.43%)
+  R3: $   58.41  (Touches:  27  Distance:  -0.64%)
+  R4: $   59.51  (Touches:  15  Distance:  +1.23%)
+  R5: $   54.09  (Touches:  11  Distance:  -7.99%)
+  R6: $   56.90  (Touches:  11  Distance:  -3.21%)
+  R7: $   64.41  (Touches:  10  Distance:  +9.56%)
+  R8: $   55.79  (Touches:   7  Distance:  -5.10%)
+  R9: $   63.42  (Touches:   7  Distance:  +7.88%)
+  R10: $   52.50  (Touches:   5  Distance: -10.70%)
+
+================================================================================
+SYMBOL: PLTR
+================================================================================
+Current Price: $150.53
+Price Range: $125.41 - $186.16
+Total bars analyzed: 1704
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  134.57  (Touches:  84  Distance: +10.60%)
+  S2: $  178.27  (Touches:  45  Distance: -18.43%)
+  S3: $  129.17  (Touches:  44  Distance: +14.19%)
+  S4: $  167.63  (Touches:  41  Distance: -11.36%)
+  S5: $  152.12  (Touches:  35  Distance:  -1.06%)
+  S6: $  149.54  (Touches:  34  Distance:  +0.66%)
+  S7: $  136.85  (Touches:  32  Distance:  +9.08%)
+  S8: $  174.41  (Touches:  28  Distance: -15.87%)
+  S9: $  146.13  (Touches:  23  Distance:  +2.92%)
+  S10: $  154.86  (Touches:  22  Distance:  -2.88%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  136.60  (Touches:  62  Distance:  -9.25%)
+  R2: $  134.55  (Touches:  56  Distance: -10.61%)
+  R3: $  179.17  (Touches:  47  Distance: +19.03%)
+  R4: $  152.12  (Touches:  37  Distance:  +1.06%)
+  R5: $  168.65  (Touches:  36  Distance: +12.04%)
+  R6: $  131.16  (Touches:  30  Distance: -12.87%)
+  R7: $  129.09  (Touches:  29  Distance: -14.24%)
+  R8: $  155.29  (Touches:  29  Distance:  +3.16%)
+  R9: $  149.74  (Touches:  27  Distance:  -0.53%)
+  R10: $  175.08  (Touches:  26  Distance: +16.31%)
+
+================================================================================
+SYMBOL: PPLT
+================================================================================
+Current Price: $198.03
+Price Range: $169.98 - $262.23
+Total bars analyzed: 1604
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $  192.74  (Touches:  67  Distance:  +2.67%)
+  S2: $  208.84  (Touches:  51  Distance:  -5.46%)
+  S3: $  189.57  (Touches:  49  Distance:  +4.28%)
+  S4: $  205.36  (Touches:  43  Distance:  -3.70%)
+  S5: $  213.49  (Touches:  41  Distance:  -7.81%)
+  S6: $  237.43  (Touches:  30  Distance: -19.90%)
+  S7: $  217.64  (Touches:  27  Distance:  -9.90%)
+  S8: $  196.43  (Touches:  26  Distance:  +0.81%)
+  S9: $  200.52  (Touches:  26  Distance:  -1.26%)
+  S10: $  181.48  (Touches:  18  Distance:  +8.36%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $  193.25  (Touches:  70  Distance:  -2.41%)
+  R2: $  209.45  (Touches:  57  Distance:  +5.77%)
+  R3: $  214.55  (Touches:  44  Distance:  +8.34%)
+  R4: $  205.63  (Touches:  39  Distance:  +3.84%)
+  R5: $  189.92  (Touches:  38  Distance:  -4.10%)
+  R6: $  196.93  (Touches:  38  Distance:  -0.56%)
+  R7: $  218.46  (Touches:  30  Distance: +10.31%)
+  R8: $  201.28  (Touches:  26  Distance:  +1.64%)
+  R9: $  238.35  (Touches:  26  Distance: +20.36%)
+  R10: $  243.75  (Touches:  16  Distance: +23.09%)
+
+================================================================================
+SYMBOL: REMX
+================================================================================
+Current Price: $96.25
+Price Range: $75.06 - $103.96
+Total bars analyzed: 1142
+
+SUPPORT LEVELS:
+--------------------------------------------------------------------------------
+  S1: $   89.45  (Touches:  63  Distance:  +7.06%)
+  S2: $   87.73  (Touches:  43  Distance:  +8.85%)
+  S3: $   96.92  (Touches:  43  Distance:  -0.70%)
+  S4: $   93.12  (Touches:  32  Distance:  +3.25%)
+  S5: $   91.04  (Touches:  29  Distance:  +5.41%)
+  S6: $   84.08  (Touches:  26  Distance: +12.64%)
+  S7: $   85.74  (Touches:  26  Distance: +10.91%)
+  S8: $   95.49  (Touches:  24  Distance:  +0.79%)
+  S9: $   82.54  (Touches:  21  Distance: +14.24%)
+  S10: $   99.30  (Touches:  19  Distance:  -3.17%)
+
+RESISTANCE LEVELS:
+--------------------------------------------------------------------------------
+  R1: $   89.65  (Touches:  66  Distance:  -6.86%)
+  R2: $   97.12  (Touches:  52  Distance:  +0.90%)
+  R3: $   91.39  (Touches:  35  Distance:  -5.05%)
+  R4: $   87.94  (Touches:  34  Distance:  -8.63%)
+  R5: $   93.45  (Touches:  29  Distance:  -2.91%)
+  R6: $   84.15  (Touches:  25  Distance: -12.57%)
+  R7: $   85.81  (Touches:  25  Distance: -10.85%)
+  R8: $   99.35  (Touches:  23  Distance:  +3.22%)
+  R9: $   95.16  (Touches:  14  Distance:  -1.13%)
+  R10: $   82.66  (Touches:  13  Distance: -14.12%)
 
 ================================================================================
 SYMBOL: SIL
 ================================================================================
-Current Price: $102.16
+Current Price: $101.58
 Price Range: $81.15 - $122.22
-Total bars analyzed: 1389
+Total bars analyzed: 1655
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $  102.59  (Touches:  50  Distance:  -0.42%)
-  S2: $   94.49  (Touches:  41  Distance:  +7.51%)
-  S3: $  100.84  (Touches:  36  Distance:  +1.29%)
-  S4: $  109.51  (Touches:  34  Distance:  -7.19%)
-  S5: $   96.71  (Touches:  28  Distance:  +5.34%)
-  S6: $  106.84  (Touches:  24  Distance:  -4.58%)
-  S7: $  111.36  (Touches:  22  Distance:  -9.01%)
-  S8: $  113.99  (Touches:  22  Distance: -11.58%)
-  S9: $   86.61  (Touches:  20  Distance: +15.22%)
-  S10: $   98.73  (Touches:  20  Distance:  +3.35%)
+  S1: $  102.66  (Touches:  71  Distance:  -1.06%)
+  S2: $  100.82  (Touches:  51  Distance:  +0.75%)
+  S3: $   94.46  (Touches:  50  Distance:  +7.01%)
+  S4: $   96.73  (Touches:  36  Distance:  +4.77%)
+  S5: $  109.48  (Touches:  35  Distance:  -7.78%)
+  S6: $  106.87  (Touches:  34  Distance:  -5.21%)
+  S7: $  115.88  (Touches:  26  Distance: -14.08%)
+  S8: $   98.74  (Touches:  25  Distance:  +2.80%)
+  S9: $  111.26  (Touches:  24  Distance:  -9.53%)
+  S10: $  113.71  (Touches:  22  Distance: -11.94%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
-  R1: $  101.74  (Touches:  49  Distance:  -0.41%)
-  R2: $  103.50  (Touches:  44  Distance:  +1.31%)
-  R3: $  110.38  (Touches:  37  Distance:  +8.05%)
-  R4: $   95.11  (Touches:  36  Distance:  -6.90%)
-  R5: $  114.97  (Touches:  27  Distance: +12.54%)
-  R6: $   97.38  (Touches:  25  Distance:  -4.68%)
-  R7: $   86.37  (Touches:  22  Distance: -15.45%)
-  R8: $   93.63  (Touches:  21  Distance:  -8.35%)
-  R9: $   99.50  (Touches:  18  Distance:  -2.60%)
-  R10: $  105.89  (Touches:  18  Distance:  +3.65%)
+  R1: $  102.92  (Touches:  75  Distance:  +1.32%)
+  R2: $   94.67  (Touches:  48  Distance:  -6.80%)
+  R3: $  101.03  (Touches:  45  Distance:  -0.54%)
+  R4: $  111.33  (Touches:  34  Distance:  +9.60%)
+  R5: $   96.83  (Touches:  31  Distance:  -4.68%)
+  R6: $  104.91  (Touches:  29  Distance:  +3.28%)
+  R7: $  107.24  (Touches:  29  Distance:  +5.57%)
+  R8: $  116.35  (Touches:  27  Distance: +14.54%)
+  R9: $  109.72  (Touches:  25  Distance:  +8.02%)
+  R10: $   98.64  (Touches:  24  Distance:  -2.90%)
 
 ================================================================================
 SYMBOL: SLV
 ================================================================================
-Current Price: $79.32
+Current Price: $77.04
 Price Range: $59.07 - $108.16
-Total bars analyzed: 2003
+Total bars analyzed: 2248
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $   74.44  (Touches:  78  Distance:  +6.16%)
-  S2: $   78.90  (Touches:  74  Distance:  +0.53%)
-  S3: $   75.72  (Touches:  65  Distance:  +4.54%)
-  S4: $   67.16  (Touches:  37  Distance: +15.33%)
-  S5: $   69.92  (Touches:  37  Distance: +11.85%)
-  S6: $   80.62  (Touches:  36  Distance:  -1.63%)
-  S7: $   82.14  (Touches:  26  Distance:  -3.55%)
-  S8: $   71.19  (Touches:  23  Distance: +10.26%)
-  S9: $   72.78  (Touches:  22  Distance:  +8.25%)
-  S10: $   77.32  (Touches:  22  Distance:  +2.53%)
+  S1: $   78.86  (Touches:  83  Distance:  -2.35%)
+  S2: $   74.44  (Touches:  81  Distance:  +3.38%)
+  S3: $   75.74  (Touches:  72  Distance:  +1.69%)
+  S4: $   80.48  (Touches:  50  Distance:  -4.46%)
+  S5: $   67.15  (Touches:  45  Distance: +12.84%)
+  S6: $   69.94  (Touches:  38  Distance:  +9.23%)
+  S7: $   77.23  (Touches:  32  Distance:  -0.23%)
+  S8: $   71.15  (Touches:  26  Distance:  +7.66%)
+  S9: $   82.08  (Touches:  26  Distance:  -6.53%)
+  S10: $   68.50  (Touches:  25  Distance: +11.09%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
-  R1: $   75.98  (Touches:  79  Distance:  -4.21%)
-  R2: $   79.19  (Touches:  72  Distance:  -0.17%)
-  R3: $   74.65  (Touches:  63  Distance:  -5.89%)
-  R4: $   80.86  (Touches:  38  Distance:  +1.93%)
-  R5: $   70.23  (Touches:  36  Distance: -11.46%)
-  R6: $   67.37  (Touches:  32  Distance: -15.07%)
-  R7: $   77.54  (Touches:  27  Distance:  -2.24%)
-  R8: $   82.39  (Touches:  27  Distance:  +3.87%)
-  R9: $   85.91  (Touches:  25  Distance:  +8.30%)
-  R10: $   72.99  (Touches:  23  Distance:  -7.99%)
+  R1: $   75.96  (Touches:  87  Distance:  -1.41%)
+  R2: $   79.18  (Touches:  84  Distance:  +2.77%)
+  R3: $   74.61  (Touches:  66  Distance:  -3.16%)
+  R4: $   80.80  (Touches:  51  Distance:  +4.88%)
+  R5: $   67.35  (Touches:  39  Distance: -12.58%)
+  R6: $   77.50  (Touches:  39  Distance:  +0.59%)
+  R7: $   70.27  (Touches:  38  Distance:  -8.80%)
+  R8: $   85.87  (Touches:  28  Distance: +11.46%)
+  R9: $   82.40  (Touches:  27  Distance:  +6.95%)
+  R10: $   68.73  (Touches:  26  Distance: -10.79%)
 
 ================================================================================
 SYMBOL: SPY
 ================================================================================
-Current Price: $671.78
-Price Range: $671.78 - $697.51
-Total bars analyzed: 154
+Current Price: $676.11
+Price Range: $660.11 - $697.51
+Total bars analyzed: 261
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $  679.31  (Touches:  31  Distance:  -1.12%)
-  S2: $  690.00  (Touches:  14  Distance:  -2.71%)
+  S1: $  679.35  (Touches:  55  Distance:  -0.48%)
+  S2: $  690.88  (Touches:  16  Distance:  -2.18%)
+  S3: $  667.23  (Touches:   6  Distance:  +1.31%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
-  R1: $  682.34  (Touches:  29  Distance:  +1.57%)
-  R2: $  693.11  (Touches:  16  Distance:  +3.18%)
+  R1: $  685.39  (Touches:  47  Distance:  +1.37%)
+  R2: $  674.99  (Touches:  20  Distance:  -0.17%)
+  R3: $  694.82  (Touches:  10  Distance:  +2.77%)
 
 ================================================================================
 SYMBOL: TSLA
 ================================================================================
-Current Price: $396.97
+Current Price: $406.06
 Price Range: $384.47 - $459.65
-Total bars analyzed: 920
+Total bars analyzed: 1260
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $  411.90  (Touches:  49  Distance:  -3.76%)
-  S2: $  421.94  (Touches:  44  Distance:  -6.29%)
-  S3: $  438.43  (Touches:  40  Distance: -10.44%)
-  S4: $  404.52  (Touches:  39  Distance:  -1.90%)
-  S5: $  430.60  (Touches:  29  Distance:  -8.47%)
-  S6: $  396.22  (Touches:  26  Distance:  +0.19%)
-  S7: $  447.67  (Touches:  21  Distance: -12.77%)
-  S8: $  390.11  (Touches:  11  Distance:  +1.73%)
-  S9: $  455.93  (Touches:   7  Distance: -14.85%)
+  S1: $  403.94  (Touches:  64  Distance:  +0.52%)
+  S2: $  411.60  (Touches:  63  Distance:  -1.36%)
+  S3: $  421.33  (Touches:  56  Distance:  -3.76%)
+  S4: $  438.02  (Touches:  55  Distance:  -7.87%)
+  S5: $  396.66  (Touches:  45  Distance:  +2.31%)
+  S6: $  429.74  (Touches:  39  Distance:  -5.83%)
+  S7: $  447.33  (Touches:  26  Distance: -10.16%)
+  S8: $  389.91  (Touches:  13  Distance:  +3.98%)
+  S9: $  455.42  (Touches:   8  Distance: -12.16%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
-  R1: $  412.36  (Touches:  47  Distance:  +3.88%)
-  R2: $  404.74  (Touches:  46  Distance:  +1.96%)
-  R3: $  438.76  (Touches:  45  Distance: +10.53%)
-  R4: $  421.73  (Touches:  35  Distance:  +6.24%)
-  R5: $  429.43  (Touches:  34  Distance:  +8.18%)
-  R6: $  448.42  (Touches:  28  Distance: +12.96%)
-  R7: $  394.96  (Touches:  23  Distance:  -0.51%)
-  R8: $  457.21  (Touches:   8  Distance: +15.17%)
+  R1: $  410.42  (Touches:  76  Distance:  +1.08%)
+  R2: $  402.20  (Touches:  61  Distance:  -0.95%)
+  R3: $  436.39  (Touches:  53  Distance:  +7.47%)
+  R4: $  426.51  (Touches:  50  Distance:  +5.04%)
+  R5: $  419.11  (Touches:  40  Distance:  +3.22%)
+  R6: $  443.88  (Touches:  34  Distance:  +9.31%)
+  R7: $  394.48  (Touches:  28  Distance:  -2.85%)
+  R8: $  451.96  (Touches:  24  Distance: +11.30%)
+  R9: $  459.50  (Touches:   2  Distance: +13.16%)
 
 ================================================================================
 SYMBOL: URTH
 ================================================================================
-Current Price: $186.45
-Price Range: $184.40 - $194.77
-Total bars analyzed: 133
+Current Price: $185.92
+Price Range: $182.57 - $194.77
+Total bars analyzed: 202
 
 SUPPORT LEVELS:
 --------------------------------------------------------------------------------
-  S1: $  189.44  (Touches:  22  Distance:  -1.60%)
-  S2: $  185.78  (Touches:  11  Distance:  +0.36%)
-  S3: $  192.31  (Touches:   2  Distance:  -3.14%)
+  S1: $  188.59  (Touches:  28  Distance:  -1.43%)
+  S2: $  185.01  (Touches:  17  Distance:  +0.49%)
+  S3: $  190.75  (Touches:  13  Distance:  -2.60%)
 
 RESISTANCE LEVELS:
 --------------------------------------------------------------------------------
-  R1: $  190.21  (Touches:  24  Distance:  +2.02%)
-  R2: $  185.86  (Touches:   6  Distance:  -0.31%)
-  R3: $  193.44  (Touches:   4  Distance:  +3.75%)
+  R1: $  189.07  (Touches:  27  Distance:  +1.69%)
+  R2: $  191.48  (Touches:  17  Distance:  +2.99%)
+  R3: $  185.23  (Touches:  11  Distance:  -0.37%)
+  R4: $  194.77  (Touches:   1  Distance:  +4.76%)

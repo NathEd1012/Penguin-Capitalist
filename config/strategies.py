@@ -27,7 +27,7 @@ from penguins import (
 
 ACTIVE_PENGUINS = [
 
-    #SupportResistancePenguin,           # Single timeframe S/R
+    SupportResistancePenguin,           # Single timeframe S/R
     MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
     
     SMA20MultiTimeframePenguin,         # SMA-20 with multi-timeframe confirmation
