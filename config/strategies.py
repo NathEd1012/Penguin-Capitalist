@@ -14,7 +14,7 @@ from penguins import (
     RandomPenguin,
     RandomPenguin2,
     RSIMeanReversionPenguin,
-    SMA20MultiTimeframePenguin,
+    SMA20Penguin,
     SupportResistancePenguin,
     TrendPenguin,
     VolatilityBreakoutPenguin,
@@ -28,9 +28,9 @@ from penguins import (
 ACTIVE_PENGUINS = [
 
     SupportResistancePenguin,           # Single timeframe S/R
-    MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
+    #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
     
-    SMA20MultiTimeframePenguin,         # SMA-20 with multi-timeframe confirmation
+    SMA20Penguin,                       # SMA-20 crossover
     # MovingAverageCrossoverPenguin,    # Classic MA crossover
     
     CopilotPenguin,                     # AI-assisted strategy

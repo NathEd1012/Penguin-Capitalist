@@ -13,7 +13,7 @@ from .multitimeframe_sr_penguin import MultitimeframeRangeSRPenguin
 from .multitimeframe_reaction_sr_penguin import MultitimeframeReactionSRPenguin
 from .moving_average_crossover_penguin import MovingAverageCrossoverPenguin
 from .rsi_mean_reversion_penguin import RSIMeanReversionPenguin
-from .sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
+from .sma20_penguin import SMA20MultiTimeframePenguin, SMA20Penguin
 from .volatility_breakout_penguin import VolatilityBreakoutPenguin
 from .msci_world_penguin import SP500Penguin, MSCIWorldPenguin
 
@@ -34,6 +34,7 @@ __all__ = [
     "MovingAverageCrossoverPenguin",
     "RSIMeanReversionPenguin",
     "SMA20MultiTimeframePenguin",
+    "SMA20Penguin",
     "VolatilityBreakoutPenguin",
     "SP500Penguin",
     "MSCIWorldPenguin",

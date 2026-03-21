@@ -175,18 +175,19 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         x_ticks = list(range(0, num_bars + 1, interval))
         x_labels = [f"Bar {i}" for i in x_ticks]
     
-    # Plot curves with transparency (SMA20 last for foreground)
+    # Plot curves with transparency (SMA20 strategy plotted last for foreground)
+    sma20_name = "SMA20MultiTimeframePenguin" if "SMA20MultiTimeframePenguin" in curves else "SMA20Penguin"
     line_colors = {}
     for name, vals in curves.items():
-        if name != "SMA20MultiTimeframePenguin":
+        if name != sma20_name:
             line = plt.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2.5, alpha=0.7)
             line_colors[name] = line[0].get_color()
     
-    # Plot SMA20 last so it appears in foreground
-    if "SMA20MultiTimeframePenguin" in curves:
-        vals = curves["SMA20MultiTimeframePenguin"]
-        line = plt.plot(range(1, len(vals) + 1), vals, label="SMA20MultiTimeframePenguin", linewidth=2.5, alpha=0.7)
-        line_colors["SMA20MultiTimeframePenguin"] = line[0].get_color()
+    # Plot SMA20 strategy last so it appears in foreground
+    if sma20_name in curves:
+        vals = curves[sma20_name]
+        line = plt.plot(range(1, len(vals) + 1), vals, label=sma20_name, linewidth=2.5, alpha=0.7)
+        line_colors[sma20_name] = line[0].get_color()
     
     # Add text labels at the end of each curve on the right side
     for name, vals in curves.items():
@@ -467,17 +468,18 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         # Page 1: Capital Curves
         fig, ax = plt.subplots(figsize=(12, 8))
 
+        sma20_name = "SMA20MultiTimeframePenguin" if "SMA20MultiTimeframePenguin" in curves else "SMA20Penguin"
         line_colors = {}
         for name, vals in curves.items():
-            if name != "SMA20MultiTimeframePenguin":
+            if name != sma20_name:
                 line = ax.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2, alpha=0.7)
                 line_colors[name] = line[0].get_color()
         
-        # Plot SMA20 last so it appears in foreground
-        if "SMA20MultiTimeframePenguin" in curves:
-            vals = curves["SMA20MultiTimeframePenguin"]
-            line = ax.plot(range(1, len(vals) + 1), vals, label="SMA20MultiTimeframePenguin", linewidth=2, alpha=0.7)
-            line_colors["SMA20MultiTimeframePenguin"] = line[0].get_color()
+        # Plot SMA20 strategy last so it appears in foreground
+        if sma20_name in curves:
+            vals = curves[sma20_name]
+            line = ax.plot(range(1, len(vals) + 1), vals, label=sma20_name, linewidth=2, alpha=0.7)
+            line_colors[sma20_name] = line[0].get_color()
         
         # Add text labels at the end of each curve on the right side
         for name, vals in curves.items():
