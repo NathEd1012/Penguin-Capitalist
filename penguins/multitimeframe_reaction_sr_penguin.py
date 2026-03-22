@@ -41,6 +41,23 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
         
         # Track when positions were entered (for time-based exit)
         self._position_entry_bar: Dict[str, int] = {}
+        
+        # Precomputed reaction levels (set via set_precomputed_levels)
+        # Format: {symbol: [list of dicts, one per bar]}
+        self._precomputed_levels: Dict[str, List[Dict[str, List[float]]]] = {}
+        self._current_bar_index: int = 0
+
+    def set_precomputed_levels(
+        self,
+        precomputed: Dict[str, List[Dict[str, List[float]]]],
+    ) -> None:
+        """Set precomputed reaction levels and initialize bar tracking."""
+        self._precomputed_levels = precomputed
+        self._current_bar_index = 0
+
+    def _advance_bar(self) -> None:
+        """Increment bar counter for precomputed level lookup."""
+        self._current_bar_index += 1
 
     def export_sr_history(self) -> Dict[str, List[Dict[str, Optional[float]]]]:
         return self.sr_history
@@ -60,15 +77,38 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
         current_price = mid_prices[-1]
         previous_price = mid_prices[-2]
 
-        update_reaction_level_cache(
-            cache=self.cache,
-            symbol=symbol,
-            mid_prices=mid_prices,
-            timeframes=self.timeframes,
-            recalc_threshold_pct=self.recalc_threshold_pct,
-            cluster_tolerance_pct=self.cluster_tolerance_pct,
-            max_levels_per_timeframe=self.max_levels_per_timeframe,
-        )
+        # Use precomputed levels if available
+        if self._precomputed_levels and symbol in self._precomputed_levels:
+            precomp = self._precomputed_levels[symbol]
+            if self._current_bar_index < len(precomp):
+                bar_levels = precomp[self._current_bar_index]
+                # Populate cache from precomputed data for snapshot recording
+                if symbol not in self.cache:
+                    self.cache[symbol] = {"levels": {}, "last_bar_count": {}}
+                self.cache[symbol]["levels"] = bar_levels
+            else:
+                # Fallback: compute on-the-fly if precomputed data exhausted
+                update_reaction_level_cache(
+                    cache=self.cache,
+                    symbol=symbol,
+                    mid_prices=mid_prices,
+                    timeframes=self.timeframes,
+                    recalc_threshold_pct=self.recalc_threshold_pct,
+                    cluster_tolerance_pct=self.cluster_tolerance_pct,
+                    max_levels_per_timeframe=self.max_levels_per_timeframe,
+                )
+        else:
+            # No precomputed data: compute on-the-fly (original behavior)
+            update_reaction_level_cache(
+                cache=self.cache,
+                symbol=symbol,
+                mid_prices=mid_prices,
+                timeframes=self.timeframes,
+                recalc_threshold_pct=self.recalc_threshold_pct,
+                cluster_tolerance_pct=self.cluster_tolerance_pct,
+                max_levels_per_timeframe=self.max_levels_per_timeframe,
+            )
+        
         if self.record_history:
             record_reaction_snapshot(
                 cache=self.cache,

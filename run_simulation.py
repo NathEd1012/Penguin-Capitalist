@@ -20,6 +20,7 @@ from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
+from indicators import precompute_reaction_levels_for_full_history, DEFAULT_TIMEFRAMES
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
@@ -212,6 +213,33 @@ def run_backtest(
         name for name, penguin in penguins.items() if getattr(penguin, "USES_SR_LINES", False)
     }
     
+    # Precompute multiframe S/R levels if any M/F S/R strategies are active
+    if sr_penguin_names:
+        print(f"\nStep 3b: Precomputing multiframe S/R levels for {len(sr_penguin_names)} strategy(ies)...")
+        precomputed_sr_data = {}
+        
+        for symbol in tqdm(symbols, desc="Precomputing S/R levels"):
+            # Extract close prices for this symbol
+            symbol_data = data[symbol]
+            prices = [symbol_data[ts]['close'] for ts in sorted_timestamps if ts in symbol_data]
+            
+            if len(prices) > 0:
+                # Precompute reaction levels using full history
+                precomputed_sr_data[symbol] = precompute_reaction_levels_for_full_history(
+                    prices=prices,
+                    timeframes=DEFAULT_TIMEFRAMES,
+                    cluster_tolerance_pct=0.006,
+                    max_levels_per_timeframe=3,
+                )
+        
+        # Set precomputed data on all S/R-using penguins
+        for penguin_name in sr_penguin_names:
+            penguin = penguins[penguin_name]
+            if hasattr(penguin, "set_precomputed_levels"):
+                penguin.set_precomputed_levels(precomputed_sr_data)
+        
+        print(f"  ✓ Precomputed S/R levels for {len(precomputed_sr_data)} symbols\n")
+    
     # Run simulation
     print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
     
@@ -310,6 +338,12 @@ def run_backtest(
             # Record portfolio value
             value = portfolio.get_total_value(current_prices)
             portfolio.add_value_snapshot(value)
+        
+        # Advance bar index for S/R penguins using precomputed levels
+        for penguin_name in sr_penguin_names:
+            penguin = penguins[penguin_name]
+            if hasattr(penguin, "_advance_bar"):
+                penguin._advance_bar()
     
     # Sell all positions at end - use average price from last 10 bars to avoid unrealistic jumps
     print("\nClosing all positions...")

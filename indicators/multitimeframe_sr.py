@@ -272,3 +272,52 @@ def record_reaction_snapshot(
             row[key] = levels[i] if i < len(levels) else None
 
     sr_history[symbol].append(row)
+
+
+def precompute_reaction_levels_for_full_history(
+    prices: List[float],
+    timeframes: Dict[str, Tuple[int, int]],
+    cluster_tolerance_pct: float = 0.006,
+    max_levels_per_timeframe: int = 3,
+) -> List[Dict[str, List[float]]]:
+    """
+    Precompute reaction levels for all bars using full available history.
+    
+    Args:
+        prices: List of all price points (e.g., close prices for entire backtest period)
+        timeframes: Dict mapping tf_name to (lookback_bars, candle_size)
+        cluster_tolerance_pct: Clustering tolerance
+        max_levels_per_timeframe: Max levels to keep per timeframe
+    
+    Returns:
+        List of dicts, one per bar, with timeframe -> [levels] mapping
+        Index 0 corresponds to bar 0, etc.
+    """
+    num_bars = len(prices)
+    result: List[Dict[str, List[float]]] = []
+    
+    for bar_idx in range(num_bars):
+        row: Dict[str, List[float]] = {}
+        
+        # For this bar, use history up to this point
+        history_up_to_bar = prices[:bar_idx + 1]
+        
+        for tf_name, (lookback_bars, candle_size) in timeframes.items():
+            # Get prices for this timeframe's lookback window
+            if len(history_up_to_bar) < lookback_bars:
+                prices_for_tf = history_up_to_bar
+            else:
+                prices_for_tf = history_up_to_bar[-lookback_bars:]
+            
+            # Compute reaction levels
+            levels = compute_reaction_levels(
+                prices_for_tf,
+                candle_size,
+                cluster_tolerance_pct,
+                max_levels_per_timeframe,
+            )
+            row[tf_name] = levels
+        
+        result.append(row)
+    
+    return result

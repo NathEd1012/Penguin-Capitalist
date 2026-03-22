@@ -76,7 +76,7 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
 def _build_timespan_text(start_date_str=None, stop_date_str=None, bar_timestamps=None, num_bars=None):
     """Build a human-readable timespan string for chart/report titles."""
     def _fmt_dt(dt: datetime) -> str:
-        return dt.strftime("%Y-%m-%d %H:%M")
+        return dt.strftime("%y-%m-%d")
 
     if bar_timestamps:
         total_bars = min(num_bars, len(bar_timestamps)) if num_bars else len(bar_timestamps)
@@ -311,24 +311,27 @@ def plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timesta
                 support_series = [row.get(support_key) for row in snapshots]
                 resistance_series = [row.get(resistance_key) for row in snapshots]
 
-                plt.plot(
-                    x,
-                    support_series,
-                    linestyle="--",
-                    linewidth=1.4,
-                    color=color,
-                    alpha=0.8,
-                    label=f"{tf_name} support",
-                )
-                plt.plot(
-                    x,
-                    resistance_series,
-                    linestyle="-",
-                    linewidth=1.4,
-                    color=color,
-                    alpha=0.8,
-                    label=f"{tf_name} resistance",
-                )
+                # Only plot if all values are valid (no None/0 values)
+                if all(v is not None and v > 0 for v in support_series):
+                    plt.plot(
+                        x,
+                        support_series,
+                        linestyle="--",
+                        linewidth=1.4,
+                        color=color,
+                        alpha=0.8,
+                        label=f"{tf_name} support",
+                    )
+                if all(v is not None and v > 0 for v in resistance_series):
+                    plt.plot(
+                        x,
+                        resistance_series,
+                        linestyle="-",
+                        linewidth=1.4,
+                        color=color,
+                        alpha=0.8,
+                        label=f"{tf_name} resistance",
+                    )
 
             # Reaction-line style keys (up to 5 lines per timeframe).
             for i in range(1, 6):
@@ -337,15 +340,18 @@ def plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timesta
                     continue
 
                 line_series = [row.get(line_key) for row in snapshots]
-                plt.plot(
-                    x,
-                    line_series,
-                    linestyle=":",
-                    linewidth=max(0.8, 1.6 - 0.2 * (i - 1)),
-                    color=color,
-                    alpha=max(0.35, 0.8 - 0.12 * (i - 1)),
-                    label=f"{tf_name} line {i}",
-                )
+                
+                # Only plot if all values are valid (no None/0 values)
+                if all(v is not None and v > 0 for v in line_series):
+                    plt.plot(
+                        x,
+                        line_series,
+                        linestyle=":",
+                        linewidth=max(0.8, 1.6 - 0.2 * (i - 1)),
+                        color=color,
+                        alpha=max(0.35, 0.8 - 0.12 * (i - 1)),
+                        label=f"{tf_name} line {i}",
+                    )
 
         x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, n)
         if x_ticks and x_labels:
