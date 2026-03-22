@@ -7,6 +7,13 @@ import pytz
 from config import INITIAL_CAPITAL
 
 
+def _display_strategy_name(name: str) -> str:
+    """Normalize strategy names for plot/report labels."""
+    if name == "SMA20MultiTimeframePenguin":
+        return "SMA20Penguin"
+    return name
+
+
 def _parse_datetime_string(dt_str: str) -> datetime:
     """Parse datetime from config format string."""
     for fmt in ["%Y-%m-%d %H:%M:%S%z", "%Y-%m-%d %H:%M:%S"]:
@@ -66,6 +73,30 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
     return x_ticks, x_labels
 
 
+def _build_timespan_text(start_date_str=None, stop_date_str=None, bar_timestamps=None, num_bars=None):
+    """Build a human-readable timespan string for chart/report titles."""
+    def _fmt_dt(dt: datetime) -> str:
+        return dt.strftime("%Y-%m-%d %H:%M")
+
+    if bar_timestamps:
+        total_bars = min(num_bars, len(bar_timestamps)) if num_bars else len(bar_timestamps)
+        if total_bars > 0:
+            start_dt = bar_timestamps[0]
+            stop_dt = bar_timestamps[total_bars - 1]
+            return f"{_fmt_dt(start_dt)} to {_fmt_dt(stop_dt)}"
+
+    if start_date_str and stop_date_str:
+        try:
+            start_dt = _parse_datetime_string(start_date_str)
+            stop_dt = _parse_datetime_string(stop_date_str)
+            return f"{_fmt_dt(start_dt)} to {_fmt_dt(stop_dt)}"
+        except Exception:
+            # Keep title useful even if parsing fails.
+            return f"{start_date_str.strip()} to {stop_date_str.strip()}"
+
+    return ""
+
+
 def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
     """
     Plot and save capital curves with smart x-axis showing actual dates/times.
@@ -78,7 +109,8 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         start_date_str: Start date string (e.g., "2026-02-20 14:30:00")
         stop_date_str: Stop date string (e.g., "2026-02-21 23:50:00")
     """
-    plt.figure(figsize=(14, 6))
+    # Match PDF page-1 styling so PNG and report look consistent.
+    plt.figure(figsize=(12, 8))
     
     # Determine x-axis based on actual dates and number of bars
     if num_bars is None:
@@ -91,9 +123,11 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     # Parse actual start/stop dates if provided
     x_ticks = []
     x_labels = []
+    x_label_text = "Time"
     
     if bar_timestamps:
         x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
+        x_label_text = "Date / Time"
     elif start_date_str and stop_date_str:
         try:
             start_dt = _parse_datetime_string(start_date_str)
@@ -155,6 +189,8 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
                     if label:
                         x_ticks.append(num_bars + 1)
                         x_labels.append(label)
+
+            x_label_text = "Date / Time"
         
         except Exception as e:
             # Fallback to simple scaling if date parsing fails
@@ -168,17 +204,36 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         x_labels = [f"Bar {i}" for i in x_ticks]
     
     # Plot curves with transparency (SMA20 strategy plotted last for foreground)
+    sp500_name = "SP500Penguin"
     sma20_name = "SMA20MultiTimeframePenguin" if "SMA20MultiTimeframePenguin" in curves else "SMA20Penguin"
     line_colors = {}
+
+    # Draw SP500 first so it stays in the background.
+    if sp500_name in curves:
+        vals = curves[sp500_name]
+        display_name = _display_strategy_name(sp500_name)
+        line = plt.plot(
+            range(1, len(vals) + 1),
+            vals,
+            label=display_name,
+            linewidth=2,
+            color="black",
+            alpha=1.0,
+            zorder=1,
+        )
+        line_colors[sp500_name] = line[0].get_color()
+
     for name, vals in curves.items():
-        if name != sma20_name:
-            line = plt.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2.5, alpha=0.7)
+        if name not in (sma20_name, sp500_name):
+            display_name = _display_strategy_name(name)
+            line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
             line_colors[name] = line[0].get_color()
     
     # Plot SMA20 strategy last so it appears in foreground
     if sma20_name in curves:
         vals = curves[sma20_name]
-        line = plt.plot(range(1, len(vals) + 1), vals, label=sma20_name, linewidth=2.5, alpha=0.7)
+        display_name = _display_strategy_name(sma20_name)
+        line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
         line_colors[sma20_name] = line[0].get_color()
     
     # Add text labels at the end of each curve on the right side
@@ -187,7 +242,8 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
             final_x = len(vals)
             final_y = vals[-1]
             color = line_colors.get(name, "black")
-            plt.text(final_x + 50, final_y, f" {name}", fontsize=8, va="center", 
+            display_name = _display_strategy_name(name)
+            plt.text(final_x + 50, final_y, f" {display_name}", fontsize=8, va="center", 
                     bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3, edgecolor="none"))
 
     plt.axhline(
@@ -199,7 +255,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     )
     
     plt.xticks(x_ticks, x_labels, rotation=45, ha='right', fontsize=9)
-    plt.xlabel("Date / Time")
+    plt.xlabel(x_label_text)
     plt.ylabel("Total Capital ($)")
     plt.title("Penguin Capital Curves")
     plt.legend(loc='best', fontsize=9)
@@ -207,7 +263,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     # Extend x-axis to accommodate right-side labels
     plt.xlim(left=0, right=len(next(iter(curves.values()), [])) * 1.15)
     plt.tight_layout()
-    plt.savefig(filename, dpi=100)
+    plt.savefig(filename, dpi=120, bbox_inches="tight")
     print(f"📈 Saved capital curves plot to {filename}")
     plt.close()
 
@@ -448,21 +504,42 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         x_ticks = list(range(0, num_bars + 1, interval))
         x_labels = [f"Bar {i}" for i in x_ticks]
     
+    timespan_text = _build_timespan_text(start_date_str, stop_date_str, bar_timestamps, num_bars)
+
     with PdfPages(filename) as pdf:
         # Page 1: Capital Curves
         fig, ax = plt.subplots(figsize=(12, 8))
 
+        sp500_name = "SP500Penguin"
         sma20_name = "SMA20MultiTimeframePenguin" if "SMA20MultiTimeframePenguin" in curves else "SMA20Penguin"
         line_colors = {}
+
+        # Draw SP500 first so it stays in the background.
+        if sp500_name in curves:
+            vals = curves[sp500_name]
+            display_name = _display_strategy_name(sp500_name)
+            line = ax.plot(
+                range(1, len(vals) + 1),
+                vals,
+                label=display_name,
+                linewidth=2,
+                color="black",
+                alpha=1.0,
+                zorder=1,
+            )
+            line_colors[sp500_name] = line[0].get_color()
+
         for name, vals in curves.items():
-            if name != sma20_name:
-                line = ax.plot(range(1, len(vals) + 1), vals, label=name, linewidth=2, alpha=0.7)
+            if name not in (sma20_name, sp500_name):
+                display_name = _display_strategy_name(name)
+                line = ax.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
                 line_colors[name] = line[0].get_color()
         
         # Plot SMA20 strategy last so it appears in foreground
         if sma20_name in curves:
             vals = curves[sma20_name]
-            line = ax.plot(range(1, len(vals) + 1), vals, label=sma20_name, linewidth=2, alpha=0.7)
+            display_name = _display_strategy_name(sma20_name)
+            line = ax.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
             line_colors[sma20_name] = line[0].get_color()
         
         # Add text labels at the end of each curve on the right side
@@ -471,7 +548,8 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 final_x = len(vals)
                 final_y = vals[-1]
                 color = line_colors.get(name, "black")
-                ax.text(final_x + 50, final_y, f" {name}", fontsize=8, va="center", 
+                display_name = _display_strategy_name(name)
+                ax.text(final_x + 50, final_y, f" {display_name}", fontsize=8, va="center", 
                        bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3, edgecolor="none"))
 
         ax.axhline(
@@ -485,7 +563,10 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=9)
         ax.set_xlabel(x_label_text)
         ax.set_ylabel("Total Capital ($)")
-        ax.set_title("Penguin Capital Curves")
+        page1_title = "Penguin Capital Curves"
+        if timespan_text:
+            page1_title = f"{page1_title} ({timespan_text})"
+        ax.set_title(page1_title)
         ax.legend(fontsize=9, loc='best')
         ax.grid(True, alpha=0.3)
         # Extend x-axis to accommodate right-side labels
@@ -500,6 +581,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         # Pages 2+: Trade Summary Table for each Penguin
         for penguin_name in sorted(portfolios.keys()):
             portfolio = portfolios[penguin_name]
+            display_penguin_name = _display_strategy_name(penguin_name)
             
             fig = plt.figure(figsize=(12, 10))
             ax = fig.add_subplot(111)
@@ -589,7 +671,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 table[(len(table_data) - 1, i)].set_facecolor("#E7E6E6")
                 table[(len(table_data) - 1, i)].set_text_props(weight="bold")
 
-            title = f"Trade Summary: {penguin_name}"
+            title = f"Trade Summary: {display_penguin_name}"
             fig.suptitle(title, fontsize=14, weight="bold", y=0.98)
 
             # Portfolio totals at the top in fixed columns to avoid text overlap.
@@ -615,14 +697,14 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 vals = curves[penguin_name]
                 # Use the same color from the first plot
                 color = line_colors.get(penguin_name, None)
-                line = ax.plot(range(1, len(vals) + 1), vals, label=penguin_name, linewidth=2, alpha=0.8, color=color)
+                line = ax.plot(range(1, len(vals) + 1), vals, label=display_penguin_name, linewidth=2, alpha=0.8, color=color)
                 
                 # Add text label at the end of the curve
                 if vals:
                     final_x = len(vals)
                     final_y = vals[-1]
                     actual_color = line[0].get_color()
-                    ax.text(final_x + 50, final_y, f" {penguin_name}", fontsize=9, va="center", 
+                    ax.text(final_x + 50, final_y, f" {display_penguin_name}", fontsize=9, va="center", 
                            bbox=dict(boxstyle="round,pad=0.3", facecolor=actual_color, alpha=0.3, edgecolor="none"))
                 
                 ax.axhline(
@@ -636,7 +718,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=9)
                 ax.set_xlabel(x_label_text)
                 ax.set_ylabel("Total Capital ($)")
-                ax.set_title(f"Capital Curve: {penguin_name}")
+                ax.set_title(f"Capital Curve: {display_penguin_name}")
                 ax.legend(fontsize=10, loc='best')
                 ax.grid(True, alpha=0.3)
                 

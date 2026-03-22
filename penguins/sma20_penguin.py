@@ -156,3 +156,146 @@ class SMA20MultiTimeframePenguin(SMA20Penguin):
     """Backward-compatible alias for historical imports/config."""
 
     pass
+
+
+class SMA20AdvancedPenguin(SMA20Penguin):
+    """
+    Advanced SMA20 strategy with strength-based position sizing.
+
+    Keeps the same robust entry/exit logic as SMA20Penguin, but when a bullish
+    crossover is especially strong it buys more than one share.
+    """
+
+    def __init__(
+        self,
+        fast_sma_length: int = PRIMARY_SMA_LENGTH,
+        trend_sma_length: int = None,
+        min_distance_pct: float = 0.002,
+        stop_loss_pct: float = 0.03,
+        max_buy_qty: int = 4,
+        reserve_cash_pct: float = 0.15,
+        strong_distance_pct: float = 0.008,
+    ):
+        super().__init__(
+            fast_sma_length=fast_sma_length,
+            trend_sma_length=trend_sma_length,
+            min_distance_pct=min_distance_pct,
+            stop_loss_pct=stop_loss_pct,
+        )
+        self.name = "SMA20AdvancedPenguin"
+        self.max_buy_qty = max_buy_qty
+        self.reserve_cash_pct = reserve_cash_pct
+        self.strong_distance_pct = strong_distance_pct
+
+    def _compute_fast_sma_previous(self, prices: List[float]) -> float:
+        return sum(prices[-(self.fast_sma_length + 1):-1]) / self.fast_sma_length
+
+    def _entry_strength_score(
+        self,
+        current_mid: float,
+        fast_sma_now: float,
+        trend_sma_now: float,
+        fast_sma_prev: float,
+    ) -> int:
+        score = 0
+
+        if fast_sma_now > 0:
+            dist_fast = (current_mid - fast_sma_now) / fast_sma_now
+            if dist_fast >= self.min_distance_pct:
+                score += 1
+            if dist_fast >= self.strong_distance_pct:
+                score += 1
+
+        if trend_sma_now > 0:
+            dist_trend = (current_mid - trend_sma_now) / trend_sma_now
+            if dist_trend >= 0.005:
+                score += 1
+            if dist_trend >= 0.012:
+                score += 1
+
+        if fast_sma_prev > 0:
+            fast_sma_slope = (fast_sma_now - fast_sma_prev) / fast_sma_prev
+            if fast_sma_slope > 0:
+                score += 1
+            if fast_sma_slope >= 0.002:
+                score += 1
+
+        return score
+
+    def _target_buy_qty(self, score: int) -> int:
+        if score >= 5:
+            return min(self.max_buy_qty, 4)
+        if score >= 3:
+            return min(self.max_buy_qty, 3)
+        if score >= 2:
+            return min(self.max_buy_qty, 2)
+        return 1
+
+    def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio) -> Tuple[str, int]:
+        """Return (action, quantity) using robust SMA logic with dynamic buy size."""
+        if bid <= 0 or ask <= 0:
+            return "HOLD", 0
+
+        min_required = max(self.trend_sma_length, self.fast_sma_length + 2)
+        if len(mid_prices) < min_required:
+            return "HOLD", 0
+
+        position_qty = portfolio.get_position(symbol)
+        has_position = position_qty > 0
+
+        current_mid = mid_prices[-1]
+        fast_sma_now = self._compute_sma(mid_prices, self.fast_sma_length)
+        trend_sma_now = self._compute_sma(mid_prices, self.trend_sma_length)
+
+        if not has_position and symbol in self._entry_prices:
+            self._entry_prices.pop(symbol, None)
+            self._highest_prices_since_entry.pop(symbol, None)
+
+        if has_position and symbol not in self._entry_prices:
+            self._entry_prices[symbol] = current_mid
+            self._highest_prices_since_entry[symbol] = current_mid
+
+        if has_position:
+            previous_high = self._highest_prices_since_entry.get(symbol, current_mid)
+            current_high = max(previous_high, current_mid)
+            self._highest_prices_since_entry[symbol] = current_high
+
+            if self._hit_stop_loss(current_high, bid):
+                self._entry_prices.pop(symbol, None)
+                self._highest_prices_since_entry.pop(symbol, None)
+                return "SELL", position_qty
+
+            if self._crossed_down_confirmed(mid_prices, self.fast_sma_length):
+                self._entry_prices.pop(symbol, None)
+                self._highest_prices_since_entry.pop(symbol, None)
+                return "SELL", position_qty
+
+            return "HOLD", 0
+
+        crossed_up_confirmed = self._crossed_up_confirmed(mid_prices, self.fast_sma_length)
+        passes_trend = self._passes_trend_filter(current_mid, trend_sma_now)
+        passes_distance = self._passes_distance_filter(current_mid, fast_sma_now)
+
+        if crossed_up_confirmed and passes_trend and passes_distance:
+            fast_sma_prev = self._compute_fast_sma_previous(mid_prices)
+            score = self._entry_strength_score(
+                current_mid=current_mid,
+                fast_sma_now=fast_sma_now,
+                trend_sma_now=trend_sma_now,
+                fast_sma_prev=fast_sma_prev,
+            )
+
+            target_qty = self._target_buy_qty(score)
+            available_cash = max(0.0, portfolio.cash)
+            deployable_cash = available_cash * (1.0 - self.reserve_cash_pct)
+            affordable_qty = int(deployable_cash // ask)
+
+            buy_qty = min(target_qty, affordable_qty)
+            if buy_qty <= 0:
+                return "HOLD", 0
+
+            self._entry_prices[symbol] = ask
+            self._highest_prices_since_entry[symbol] = current_mid
+            return "BUY", buy_qty
+
+        return "HOLD", 0

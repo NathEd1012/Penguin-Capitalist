@@ -1,72 +1,32 @@
 {
-  "MinMaxSRPenguin": {
-    "total_return": -1757.73,
-    "return_pct": -17.58,
-    "max_drawdown": -21.85,
-    "sharpe_ratio": -0.03,
-    "total_trades": 91508,
-    "buy_trades": 69391,
-    "sell_trades": 22117,
-    "final_value": 8242.27
+  "MultitimeframeRangeSRPenguin": {
+    "total_return": -1500.07,
+    "return_pct": -15.0,
+    "max_drawdown": -17.34,
+    "sharpe_ratio": -0.09,
+    "total_trades": 9554,
+    "buy_trades": 7797,
+    "sell_trades": 1757,
+    "final_value": 8499.93
   },
-  "SMA20MultiTimeframePenguin": {
-    "total_return": -1277.91,
-    "return_pct": -12.78,
-    "max_drawdown": -12.87,
-    "sharpe_ratio": -0.14,
-    "total_trades": 24982,
-    "buy_trades": 12491,
-    "sell_trades": 12491,
-    "final_value": 8722.09
-  },
-  "CopilotPenguin": {
-    "total_return": 590.19,
-    "return_pct": 5.9,
-    "max_drawdown": -13.39,
-    "sharpe_ratio": 0.02,
-    "total_trades": 130352,
-    "buy_trades": 65176,
-    "sell_trades": 65176,
-    "final_value": 10590.19
-  },
-  "MomentumPenguin": {
-    "total_return": -1496.12,
-    "return_pct": -14.96,
-    "max_drawdown": -29.37,
-    "sharpe_ratio": -0.01,
-    "total_trades": 22544,
-    "buy_trades": 11284,
-    "sell_trades": 11260,
-    "final_value": 8503.88
-  },
-  "Mean Reversion (RSI Alias)": {
-    "total_return": 3182.49,
-    "return_pct": 31.82,
-    "max_drawdown": -22.08,
-    "sharpe_ratio": 0.03,
-    "total_trades": 217705,
-    "buy_trades": 168438,
-    "sell_trades": 49267,
-    "final_value": 13182.49
-  },
-  "RSI Mean Reversion (Legacy)": {
-    "total_return": -265.11,
-    "return_pct": -2.65,
-    "max_drawdown": -23.68,
-    "sharpe_ratio": 0.0,
-    "total_trades": 261075,
-    "buy_trades": 208254,
-    "sell_trades": 52821,
-    "final_value": 9734.89
+  "MultitimeframeReactionSRPenguin": {
+    "total_return": -3698.55,
+    "return_pct": -36.99,
+    "max_drawdown": -38.65,
+    "sharpe_ratio": -0.33,
+    "total_trades": 30238,
+    "buy_trades": 20169,
+    "sell_trades": 10069,
+    "final_value": 6301.45
   },
   "SP500Penguin": {
-    "total_return": 1020.02,
-    "return_pct": 10.2,
-    "max_drawdown": -20.13,
-    "sharpe_ratio": 0.02,
+    "total_return": -410.19,
+    "return_pct": -4.1,
+    "max_drawdown": -7.3,
+    "sharpe_ratio": -0.03,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 11020.02
+    "final_value": 9589.81
   }
 }

@@ -3,12 +3,14 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Tuple, Optional
+import pandas as pd
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
 import pytz
 from dotenv import load_dotenv
 from tqdm import tqdm
+from market_data.cache import DataCache
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,6 +39,8 @@ class DataLoader:
             )
         
         self.client = StockHistoricalDataClient(api_key, secret_key)
+        # Repeated runs with identical ranges should be served from disk cache.
+        self.cache = DataCache("data_cache")
     
     def _binning_to_timeframe(self, binning: str) -> Tuple[TimeFrame, int]:
         """
@@ -87,47 +91,112 @@ class DataLoader:
         tf, minutes_per_bar = self._binning_to_timeframe(binning)
 
         def _fetch_symbol(symbol: str) -> Dict:
-            symbol_rows: Dict = {}
-            # Avoid API truncation at 100k bars by requesting in time chunks.
-            # Keep each chunk safely below the hard bar cap.
-            chunk_bars_target = 90000
-            chunk_minutes = max(minutes_per_bar, minutes_per_bar * chunk_bars_target)
-            chunk_delta = timedelta(minutes=chunk_minutes)
+            def _df_to_symbol_rows(df: Optional[pd.DataFrame]) -> Dict:
+                out: Dict = {}
+                if df is None or df.empty:
+                    return out
+                for row in df.itertuples(index=False):
+                    ts = row.timestamp
+                    if ts.tzinfo is None:
+                        ts = ts.replace(tzinfo=pytz.UTC)
+                    out[ts] = {
+                        "open": float(row.open),
+                        "high": float(row.high),
+                        "low": float(row.low),
+                        "close": float(row.close),
+                        "volume": int(row.volume),
+                    }
+                return out
 
-            window_start = start_date
-            while window_start < end_date:
-                window_end = min(window_start + chunk_delta, end_date)
+            def _fetch_range(range_start: datetime, range_end: datetime) -> Dict:
+                fetched_rows: Dict = {}
+                if range_start > range_end:
+                    return fetched_rows
 
-                request = StockBarsRequest(
-                    symbol_or_symbols=[symbol],
-                    timeframe=tf,
-                    start=window_start,
-                    end=window_end,
-                    limit=100000,
-                )
+                # Avoid API truncation at 100k bars by requesting in time chunks.
+                chunk_bars_target = 90000
+                chunk_minutes = max(minutes_per_bar, minutes_per_bar * chunk_bars_target)
+                chunk_delta = timedelta(minutes=chunk_minutes)
 
-                bars = self.client.get_stock_bars(request)
-                if not bars.df.empty:
-                    # Alpaca usually returns MultiIndex (symbol, timestamp).
-                    if symbol in bars.df.index.get_level_values(0):
-                        symbol_data = bars.df.xs(symbol, level=0)
-                    else:
-                        # Fallback for single-index return shapes.
-                        symbol_data = bars.df
+                window_start = range_start
+                while window_start <= range_end:
+                    window_end = min(window_start + chunk_delta, range_end)
 
-                    for timestamp, row in symbol_data.iterrows():
-                        if timestamp.tzinfo is None:
-                            timestamp = timestamp.replace(tzinfo=pytz.UTC)
-                        symbol_rows[timestamp] = {
-                            "open": float(row["open"]),
-                            "high": float(row["high"]),
-                            "low": float(row["low"]),
-                            "close": float(row["close"]),
-                            "volume": int(row["volume"]),
+                    request = StockBarsRequest(
+                        symbol_or_symbols=[symbol],
+                        timeframe=tf,
+                        start=window_start,
+                        end=window_end,
+                        limit=100000,
+                    )
+
+                    bars = self.client.get_stock_bars(request)
+                    if not bars.df.empty:
+                        # Alpaca usually returns MultiIndex (symbol, timestamp).
+                        if symbol in bars.df.index.get_level_values(0):
+                            symbol_data = bars.df.xs(symbol, level=0)
+                        else:
+                            # Fallback for single-index return shapes.
+                            symbol_data = bars.df
+
+                        for timestamp, row in symbol_data.iterrows():
+                            if timestamp.tzinfo is None:
+                                timestamp = timestamp.replace(tzinfo=pytz.UTC)
+                            fetched_rows[timestamp] = {
+                                "open": float(row["open"]),
+                                "high": float(row["high"]),
+                                "low": float(row["low"]),
+                                "close": float(row["close"]),
+                                "volume": int(row["volume"]),
+                            }
+
+                    # Advance by one bar to avoid infinite loops on inclusive boundaries.
+                    window_start = window_end + timedelta(minutes=minutes_per_bar)
+
+                return fetched_rows
+
+            cache_bounds = self.cache.get_cache_bounds(symbol, binning)
+            cached_slice_df = self.cache.get_cached_slice(symbol, binning, start_date, end_date)
+            symbol_rows = _df_to_symbol_rows(cached_slice_df)
+
+            missing_rows: Dict = {}
+            if cache_bounds is None:
+                # No cache available: fetch requested range.
+                missing_rows.update(_fetch_range(start_date, end_date))
+            else:
+                cache_start, cache_end = cache_bounds
+                # Fetch missing head segment.
+                if start_date < cache_start:
+                    head_end = min(end_date, cache_start)
+                    missing_rows.update(_fetch_range(start_date, head_end))
+                # Fetch missing tail segment.
+                if end_date > cache_end:
+                    tail_start = max(start_date, cache_end)
+                    missing_rows.update(_fetch_range(tail_start, end_date))
+
+            symbol_rows.update(missing_rows)
+
+            # Persist only newly fetched rows so cache grows incrementally.
+            if missing_rows:
+                fetched_df = pd.DataFrame(
+                    [
+                        {
+                            "timestamp": ts,
+                            "open": row["open"],
+                            "high": row["high"],
+                            "low": row["low"],
+                            "close": row["close"],
+                            "volume": row["volume"],
                         }
-
-                # Advance by one bar to avoid infinite loops on inclusive boundaries.
-                window_start = window_end + timedelta(minutes=minutes_per_bar)
+                        for ts, row in missing_rows.items()
+                    ]
+                )
+                fetched_df = fetched_df.sort_values("timestamp").reset_index(drop=True)
+                existing_df = self.cache.load_cache(symbol, binning)
+                if existing_df is None or existing_df.empty:
+                    self.cache.save_cache(symbol, binning, fetched_df)
+                else:
+                    self.cache.merge_cache_and_new_data(symbol, binning, existing_df, fetched_df)
 
             return symbol_rows
         
@@ -136,8 +205,8 @@ class DataLoader:
         data = {symbol: {} for symbol in symbols}
         all_timestamps = set()
 
-        # Parallelize network-bound requests for noticeably faster loading.
-        max_workers = min(6, max(1, len(symbols)))
+        # Too much parallelism triggers provider-side throttling on repeated runs.
+        max_workers = min(4, max(1, len(symbols)))
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {executor.submit(_fetch_symbol, symbol): symbol for symbol in symbols}
             for future in tqdm(as_completed(futures), total=len(futures), desc="Fetching/organizing data"):

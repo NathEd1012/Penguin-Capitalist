@@ -2,7 +2,7 @@ from penguins.base_penguin import BasePenguin
 from indicators.momentum import rsi, sma
 
 
-class RSIMeanReversionImprovedPenguin(BasePenguin):
+class RSIMeanReversionAdvancedPenguin(BasePenguin):
     LOOKBACK_BARS = 60  # RSI + optional weak collapse guard context
 
     def __init__(
@@ -16,7 +16,7 @@ class RSIMeanReversionImprovedPenguin(BasePenguin):
         collapse_sma_period=50,
         collapse_threshold_pct=0.12,
     ):
-        super().__init__("improved RSI MeanReversion")
+        super().__init__("RSI MeanReversion Advanced")
         self.rsi_period = rsi_period
         self.oversold = oversold
         self.overbought = overbought
@@ -93,19 +93,18 @@ class RSIMeanReversionImprovedPenguin(BasePenguin):
 
         return "HOLD", 0
 
-
-# Alias for backward compatibility with existing imports
-class RSIMeanReversionPenguin(RSIMeanReversionImprovedPenguin):
-    """Backward-compatible alias for the improved RSI mean-reversion strategy."""
+# Alias for backward compatibility with existing imports.
+class RSIMeanReversionPenguin(RSIMeanReversionAdvancedPenguin):
+    """Backward-compatible alias for the advanced RSI mean-reversion strategy."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = "RSI Mean Reversion"
+        self.name = "RSI MeanReversion Advanced"
 
 
-class MeanReversionPenguin(RSIMeanReversionImprovedPenguin):
+class MeanReversionPenguin(RSIMeanReversionAdvancedPenguin):
     """Backward-compatible alias used by configuration imports."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = "Mean Reversion (RSI Alias)"
+        self.name = "RSI MeanReversion"

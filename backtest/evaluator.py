@@ -111,7 +111,7 @@ class Evaluator:
     @staticmethod
     def save_results(
         results: Dict[str, Tuple[Portfolio, Dict]],
-        archive_dir: Path,
+        archive_dir: Path | None,
         current_dir: Path,
         trades_by_bar: Dict = None,
     ):
@@ -120,18 +120,20 @@ class Evaluator:
         
         Args:
             results: Dict[penguin_name] = (portfolio, metrics)
-            archive_dir: Archive directory path (timestamped)
+            archive_dir: Archive directory path (timestamped) or None
             current_dir: Current run directory path (always latest)
             trades_by_bar: Dict[bar_idx] = [trade_strings] for detailed logging
         """
-        archive_dir = Path(archive_dir)
+        archive_dir = Path(archive_dir) if archive_dir is not None else None
         current_dir = Path(current_dir)
-        
-        archive_dir.mkdir(parents=True, exist_ok=True)
+
+        if archive_dir is not None:
+            archive_dir.mkdir(parents=True, exist_ok=True)
         current_dir.mkdir(parents=True, exist_ok=True)
-        
-        
-        output_dirs = [archive_dir, current_dir]
+
+        output_dirs = [current_dir]
+        if archive_dir is not None:
+            output_dirs.insert(0, archive_dir)
         
         # Prepare data to save
         curves_data = {}
@@ -194,7 +196,8 @@ class Evaluator:
                 f.write(trades_content)
         
         print(f"\nSaved results to:")
-        print(f"  Archive:   {archive_dir}")
+        if archive_dir is not None:
+            print(f"  Archive:   {archive_dir}")
         print(f"  Current:   {current_dir}")
     
     @staticmethod

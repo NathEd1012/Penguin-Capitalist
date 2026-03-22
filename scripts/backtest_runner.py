@@ -1,5 +1,6 @@
 """Main backtest runner - executes historical backtests for all penguins."""
 import os
+import shutil
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -414,11 +415,8 @@ def main():
         archive_dir = None
         archived_run_num = None
     
-    # Save results to both locations (or only current if SAVE_TO_RUN_OLD is False)
-    if archive_dir:
-        Evaluator.save_results(results, archive_dir, current_artifacts_dir, trades_by_bar)
-    else:
-        Evaluator.save_results(results, current_artifacts_dir, current_artifacts_dir, trades_by_bar)
+    # Always write run_current first.
+    Evaluator.save_results(results, None, current_artifacts_dir, trades_by_bar)
     
     # Generate plots
     print("\nGenerating visualization...")
@@ -430,19 +428,11 @@ def main():
         num_bars = len(portfolio.value_history)
         break
     
-    if archive_dir:
-        archive_plot = archive_dir / "capital_curves.png"
-        Evaluator.plot_capital_curves(results, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
-    
     Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
     current_pdf = current_dir / "report.pdf"
-    
-    if archive_dir:
-        archive_pdf = archive_dir / "report.pdf"
-        Evaluator.generate_pdf_report(results, archive_pdf, archive_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
     
     Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
     
@@ -474,17 +464,11 @@ def main():
             
             # Save warnings to file
             current_warnings = current_artifacts_dir / "consistency_warnings.txt"
-            files_to_write = [current_warnings]
-            if archive_dir:
-                archive_warnings = archive_dir / "consistency_warnings.txt"
-                files_to_write.insert(0, archive_warnings)
-            
-            for warnings_file in files_to_write:
-                with open(warnings_file, 'w') as f:
-                    f.write("Consistency Check Warnings\n")
-                    f.write("="*60 + "\n\n")
-                    for warning in warnings:
-                        f.write(f"• {warning}\n")
+            with open(current_warnings, 'w') as f:
+                f.write("Consistency Check Warnings\n")
+                f.write("="*60 + "\n\n")
+                for warning in warnings:
+                    f.write(f"• {warning}\n")
         else:
             print("✅ All consistency checks passed")
     except Exception as e:
@@ -502,10 +486,8 @@ def main():
                 for trade in portfolio.trades:
                     symbol_prices[trade.symbol].append(trade.price)
 
-            # Compute S&R zones for current (and archive if enabled)
+            # Compute S&R zones for current run.
             compute_and_log_support_resistance_zones(symbol_prices, str(current_artifacts_dir))
-            if archive_dir:
-                compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
             print("✅ S&R zones computed and saved")
         except Exception as e:
             print(f"⚠️  S&R analysis error: {e}")
@@ -517,7 +499,6 @@ def main():
         print("\nGenerating multitimeframe S/R line plots...")
         try:
             current_pngs = []
-            archive_pngs = []
 
             for penguin_name, history_by_symbol in sr_histories.items():
                 if not history_by_symbol:
@@ -531,15 +512,6 @@ def main():
                 )
                 current_pngs.extend(created_current)
 
-                if archive_dir:
-                    archive_sr_dir = archive_dir / f"{penguin_name}_sr_lines"
-                    created_archive = plot_multitimeframe_sr_history(
-                        history_by_symbol,
-                        archive_sr_dir,
-                        bar_timestamps,
-                    )
-                    archive_pngs.extend(created_archive)
-
                 print(f"✅ {penguin_name}: generated {len(created_current)} S&R line plot(s)")
 
             # Create one combined PDF containing all multitimeframe PNG plots.
@@ -548,27 +520,27 @@ def main():
                 create_png_gallery_pdf(current_pngs, current_sr_pdf)
                 print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
 
-            if archive_dir and archive_pngs:
-                archive_sr_pdf = archive_dir / "multitimeframe_sr_plots.pdf"
-                create_png_gallery_pdf(archive_pngs, archive_sr_pdf)
-                print(f"✅ Combined multitimeframe PDF (archive): {archive_sr_pdf}")
-
         except Exception as e:
             print(f"⚠️  Multitimeframe S&R plotting error: {e}")
     else:
         print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
     
+    # Mirror run_current into run_old only after current run is fully written.
+    if archive_dir:
+        archive_dir.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(current_dir, archive_dir)
+
     print(f"\n✅ Backtest complete!")
     
     if archive_dir:
         print(f"\nArchive saved to:  {archive_dir}")
-        print(f"  - capital_curves.png")
-        print(f"  - curves_data.json")
-        print(f"  - metrics_summary.json")
-        print(f"  - trades_log.txt")
         print(f"  - report.pdf")
-        print(f"  - consistency_warnings.txt (if warnings)")
-        print(f"  - support_resistance_zones.txt")
+        print(f"  - artifacts/capital_curves.png")
+        print(f"  - artifacts/curves_data.json")
+        print(f"  - artifacts/metrics_summary.json")
+        print(f"  - artifacts/trades_log.txt")
+        print(f"  - artifacts/consistency_warnings.txt (if warnings)")
+        print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
