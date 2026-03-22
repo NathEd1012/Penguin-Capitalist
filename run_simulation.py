@@ -543,7 +543,7 @@ def main():
 
             # Create one combined PDF containing all multitimeframe PNG plots.
             if current_pngs:
-                current_sr_pdf = current_artifacts_dir / "multitimeframe_sr_plots.pdf"
+                current_sr_pdf = current_dir / "multitimeframe_sr_plots.pdf"
                 create_png_gallery_pdf(current_pngs, current_sr_pdf)
                 print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
 

@@ -36,7 +36,7 @@ SAVE_TO_RUN_OLD = 1 #False
 # Controls extra visualization outputs like multitimeframe S/R line PNGs + combined PDF.
 # True  - Generate additional plot folders and a combined PDF
 # False - Skip all additional plotting
-ENABLE_ADDITIONAL_PLOTS = 0 #True
+ENABLE_ADDITIONAL_PLOTS = 1
 
 __all__ = [
     "START_DATE",
