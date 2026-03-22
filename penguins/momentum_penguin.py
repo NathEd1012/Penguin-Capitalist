@@ -17,5 +17,6 @@ class MomentumPenguin(BasePenguin):
         if r > 0.01 and portfolio.cash >= ask:
             return "BUY", 1
         if r < -0.01 and portfolio.get_position(symbol) > 0 and bid > 0:
+            qty = portfolio.get_position(symbol)    
             return "SELL", 1
         return "HOLD", 0

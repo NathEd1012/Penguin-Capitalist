@@ -87,37 +87,47 @@ class DataLoader:
         tf, minutes_per_bar = self._binning_to_timeframe(binning)
 
         def _fetch_symbol(symbol: str) -> Dict:
-            """Fetch bars for one symbol to avoid cross-symbol limit capping."""
-            request = StockBarsRequest(
-                symbol_or_symbols=[symbol],
-                timeframe=tf,
-                start=start_date,
-                end=end_date,
-                limit=100000,
-            )
-
-            bars = self.client.get_stock_bars(request)
             symbol_rows: Dict = {}
-            if bars.df.empty:
-                return symbol_rows
+            # Avoid API truncation at 100k bars by requesting in time chunks.
+            # Keep each chunk safely below the hard bar cap.
+            chunk_bars_target = 90000
+            chunk_minutes = max(minutes_per_bar, minutes_per_bar * chunk_bars_target)
+            chunk_delta = timedelta(minutes=chunk_minutes)
 
-            # Alpaca usually returns MultiIndex (symbol, timestamp).
-            if symbol in bars.df.index.get_level_values(0):
-                symbol_data = bars.df.xs(symbol, level=0)
-            else:
-                # Fallback for single-index return shapes.
-                symbol_data = bars.df
+            window_start = start_date
+            while window_start < end_date:
+                window_end = min(window_start + chunk_delta, end_date)
 
-            for timestamp, row in symbol_data.iterrows():
-                if timestamp.tzinfo is None:
-                    timestamp = timestamp.replace(tzinfo=pytz.UTC)
-                symbol_rows[timestamp] = {
-                    "open": float(row["open"]),
-                    "high": float(row["high"]),
-                    "low": float(row["low"]),
-                    "close": float(row["close"]),
-                    "volume": int(row["volume"]),
-                }
+                request = StockBarsRequest(
+                    symbol_or_symbols=[symbol],
+                    timeframe=tf,
+                    start=window_start,
+                    end=window_end,
+                    limit=100000,
+                )
+
+                bars = self.client.get_stock_bars(request)
+                if not bars.df.empty:
+                    # Alpaca usually returns MultiIndex (symbol, timestamp).
+                    if symbol in bars.df.index.get_level_values(0):
+                        symbol_data = bars.df.xs(symbol, level=0)
+                    else:
+                        # Fallback for single-index return shapes.
+                        symbol_data = bars.df
+
+                    for timestamp, row in symbol_data.iterrows():
+                        if timestamp.tzinfo is None:
+                            timestamp = timestamp.replace(tzinfo=pytz.UTC)
+                        symbol_rows[timestamp] = {
+                            "open": float(row["open"]),
+                            "high": float(row["high"]),
+                            "low": float(row["low"]),
+                            "close": float(row["close"]),
+                            "volume": int(row["volume"]),
+                        }
+
+                # Advance by one bar to avoid infinite loops on inclusive boundaries.
+                window_start = window_end + timedelta(minutes=minutes_per_bar)
 
             return symbol_rows
         

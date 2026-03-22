@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from penguins.support_resistance_penguin import SupportResistancePenguin
+from penguins.minmax_sr20_penguin import SupportResistancePenguin
 
 # Generate realistic price data (trending down then up)
 print("Generating realistic price scenario...")

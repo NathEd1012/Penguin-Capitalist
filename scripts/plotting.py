@@ -21,7 +21,7 @@ def _parse_datetime_string(dt_str: str) -> datetime:
 
 
 def _build_ticks_from_timestamps(bar_timestamps, num_bars):
-    """Build x-axis ticks/labels from actual bar timestamps (weekends naturally excluded)."""
+    """Build x-axis ticks/labels from actual bar timestamps (weekends naturally excluded). Only show underlined month boundaries."""
     if not bar_timestamps:
         interval = max(1, num_bars // 10)
         x_ticks = list(range(1, num_bars + 1, interval))
@@ -55,13 +55,13 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
     prev_month = None
     for idx in tick_indices:
         dt = bar_timestamps[idx]
-        label = dt.strftime(label_fmt)
+        # Only keep labels with underline (month boundaries)
         if "%b %d" in label_fmt:
             if prev_month is not None and prev_month != dt.month:
-                label = label + "\n" + "━" * 6
+                label = dt.strftime(label_fmt) + "\n" + "━" * 6
+                x_ticks.append(idx + 1)
+                x_labels.append(label)
             prev_month = dt.month
-        x_ticks.append(idx + 1)
-        x_labels.append(label)
 
     return x_ticks, x_labels
 
@@ -121,7 +121,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
                 time_fmt = None
                 date_fmt = "%b %d"
             
-            # Generate tick positions
+            # Generate tick positions - only keep underlined month boundaries
             current_dt = start_dt
             bar_idx = 0
             prev_month = None
@@ -135,34 +135,26 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
                     date_str = current_dt.strftime(date_fmt)
                     current_month = current_dt.month
                     
-                    # Highlight month changes
+                    # Only keep month boundaries with underline
                     if prev_month is not None and prev_month != current_month:
                         label = date_str + "\n" + "━" * len(date_fmt)
-                    else:
-                        label = date_str
+                        x_ticks.append(bar_position)
+                        x_labels.append(label)
                     prev_month = current_month
-                
-                if time_fmt:
-                    time_str = current_dt.strftime(time_fmt)
-                    label = time_str if not label else label + "\n" + time_str
-                
-                x_ticks.append(bar_position)
-                x_labels.append(label)
                 
                 # Move to next interval
                 current_dt += timedelta(minutes=interval_minutes)
                 bar_idx += interval_minutes // minutes_per_bar
             
-            # Always add the end date
+            # Always add the end date if it's a month boundary
             if not x_ticks or x_ticks[-1] != num_bars + 1:
                 end_dt = stop_dt
-                date_str = end_dt.strftime(date_fmt) if date_fmt else ""
-                time_str = end_dt.strftime(time_fmt) if time_fmt else ""
-                label = date_str
-                if time_str:
-                    label = (date_str + "\n" + time_str) if date_str else time_str
-                x_ticks.append(num_bars + 1)
-                x_labels.append(label)
+                if prev_month is not None and prev_month != end_dt.month:
+                    date_str = end_dt.strftime(date_fmt) if date_fmt else ""
+                    label = date_str + "\n" + "━" * len(date_fmt) if date_fmt else ""
+                    if label:
+                        x_ticks.append(num_bars + 1)
+                        x_labels.append(label)
         
         except Exception as e:
             # Fallback to simple scaling if date parsing fails
@@ -408,7 +400,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 time_fmt = None
                 date_fmt = "%b %d"
             
-            # Generate tick positions
+            # Generate tick positions - only keep underlined month boundaries
             current_dt = start_dt
             bar_idx = 0
             prev_month = None
@@ -422,34 +414,26 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     date_str = current_dt.strftime(date_fmt)
                     current_month = current_dt.month
                     
-                    # Highlight month changes
+                    # Only keep month boundaries with underline
                     if prev_month is not None and prev_month != current_month:
                         label = date_str + "\n" + "━" * len(date_fmt)
-                    else:
-                        label = date_str
+                        x_ticks.append(bar_position)
+                        x_labels.append(label)
                     prev_month = current_month
-                
-                if time_fmt:
-                    time_str = current_dt.strftime(time_fmt)
-                    label = time_str if not label else label + "\n" + time_str
-                
-                x_ticks.append(bar_position)
-                x_labels.append(label)
                 
                 # Move to next interval
                 current_dt += timedelta(minutes=interval_minutes)
                 bar_idx += interval_minutes // minutes_per_bar
             
-            # Always add the end date
+            # Always add the end date if it's a month boundary
             if not x_ticks or x_ticks[-1] != num_bars + 1:
                 end_dt = stop_dt
-                date_str = end_dt.strftime(date_fmt) if date_fmt else ""
-                time_str = end_dt.strftime(time_fmt) if time_fmt else ""
-                label = date_str
-                if time_str:
-                    label = (date_str + "\n" + time_str) if date_str else time_str
-                x_ticks.append(num_bars + 1)
-                x_labels.append(label)
+                if prev_month is not None and prev_month != end_dt.month:
+                    date_str = end_dt.strftime(date_fmt) if date_fmt else ""
+                    label = date_str + "\n" + "━" * len(date_fmt) if date_fmt else ""
+                    if label:
+                        x_ticks.append(num_bars + 1)
+                        x_labels.append(label)
                 
             x_label_text = "Date / Time"
         

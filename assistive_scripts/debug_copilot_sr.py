@@ -9,7 +9,7 @@ from backtest.data_loader import DataLoader
 from config import SYMBOLS, START_DATE, STOP_DATE, BINNING, INITIAL_CAPITAL, TRANSACTION_COST
 from backtest.portfolio import Portfolio
 from penguins.copilot_penguin import CopilotPenguin
-from penguins.support_resistance_penguin import SupportResistancePenguin
+from penguins.minmax_sr20_penguin import SupportResistancePenguin
 import pytz
 from collections import defaultdict
 

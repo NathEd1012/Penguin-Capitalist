@@ -393,6 +393,8 @@ def main():
     # Create archive and current directories
     base_dir = Path(__file__).parent
     current_dir = base_dir / "run_current"
+    current_artifacts_dir = current_dir / "artifacts"
+    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
     
     # Conditionally set up archive directory based on config
     if SAVE_TO_RUN_OLD:
@@ -407,13 +409,13 @@ def main():
     
     # Save results to both locations (or only current if SAVE_TO_RUN_OLD is False)
     if archive_dir:
-        Evaluator.save_results(results, archive_dir, current_dir, trades_by_bar)
+        Evaluator.save_results(results, archive_dir, current_artifacts_dir, trades_by_bar)
     else:
-        Evaluator.save_results(results, current_dir, current_dir, trades_by_bar)
+        Evaluator.save_results(results, current_artifacts_dir, current_artifacts_dir, trades_by_bar)
     
     # Generate plots
     print("\nGenerating visualization...")
-    current_plot = current_dir / "capital_curves.png"
+    current_plot = current_artifacts_dir / "capital_curves.png"
     
     # Get number of bars from first portfolio
     num_bars = None
@@ -464,7 +466,7 @@ def main():
                 print(f"  ... and {len(warnings) - 5} more")
             
             # Save warnings to file
-            current_warnings = current_dir / "consistency_warnings.txt"
+            current_warnings = current_artifacts_dir / "consistency_warnings.txt"
             files_to_write = [current_warnings]
             if archive_dir:
                 archive_warnings = archive_dir / "consistency_warnings.txt"
@@ -494,7 +496,7 @@ def main():
                     symbol_prices[trade.symbol].append(trade.price)
 
             # Compute S&R zones for current (and archive if enabled)
-            compute_and_log_support_resistance_zones(symbol_prices, str(current_dir))
+            compute_and_log_support_resistance_zones(symbol_prices, str(current_artifacts_dir))
             if archive_dir:
                 compute_and_log_support_resistance_zones(symbol_prices, str(archive_dir))
             print("✅ S&R zones computed and saved")
@@ -514,7 +516,7 @@ def main():
                 if not history_by_symbol:
                     continue
 
-                current_sr_dir = current_dir / f"{penguin_name}_sr_lines"
+                current_sr_dir = current_artifacts_dir / f"{penguin_name}_sr_lines"
                 created_current = plot_multitimeframe_sr_history(
                     history_by_symbol,
                     current_sr_dir,
@@ -535,7 +537,7 @@ def main():
 
             # Create one combined PDF containing all multitimeframe PNG plots.
             if current_pngs:
-                current_sr_pdf = current_dir / "multitimeframe_sr_plots.pdf"
+                current_sr_pdf = current_artifacts_dir / "multitimeframe_sr_plots.pdf"
                 create_png_gallery_pdf(current_pngs, current_sr_pdf)
                 print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
 
@@ -562,13 +564,13 @@ def main():
         print(f"  - support_resistance_zones.txt")
     
     print(f"\nCurrent run saved to: {current_dir}")
-    print(f"  - capital_curves.png")
-    print(f"  - curves_data.json")
-    print(f"  - metrics_summary.json")
-    print(f"  - trades_log.txt")
     print(f"  - report.pdf")
-    print(f"  - consistency_warnings.txt (if warnings)")
-    print(f"  - support_resistance_zones.txt")
+    print(f"  - artifacts/capital_curves.png")
+    print(f"  - artifacts/curves_data.json")
+    print(f"  - artifacts/metrics_summary.json")
+    print(f"  - artifacts/trades_log.txt")
+    print(f"  - artifacts/consistency_warnings.txt (if warnings)")
+    print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\n{'='*80}")
     if archive_dir:

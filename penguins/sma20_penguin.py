@@ -2,8 +2,12 @@
 from typing import Dict, List, Tuple
 from penguins.base_penguin import BasePenguin
 
+# Change this single value to run as SMA20 / SMA50 / SMA100 strategy.
+PRIMARY_SMA_LENGTH = 20
+TREND_SMA_MULTIPLIER = 2.5
 
-class SMA20MultiTimeframePenguin(BasePenguin):
+
+class SMA20Penguin(BasePenguin):
     """
     Improved SMA(20) crossover strategy with light robustness filters.
 
@@ -20,14 +24,18 @@ class SMA20MultiTimeframePenguin(BasePenguin):
 
     def __init__(
         self,
-        fast_sma_length: int = 20,
-        trend_sma_length: int = 50,
+        fast_sma_length: int = PRIMARY_SMA_LENGTH,
+        trend_sma_length: int = None,
         min_distance_pct: float = 0.002,
         stop_loss_pct: float = 0.03,
     ):
         super().__init__("SMA20MultiTimeframePenguin")
         self.fast_sma_length = fast_sma_length
-        self.trend_sma_length = trend_sma_length
+        self.trend_sma_length = (
+            trend_sma_length
+            if trend_sma_length is not None
+            else max(self.fast_sma_length + 1, int(round(self.fast_sma_length * TREND_SMA_MULTIPLIER)))
+        )
         self.min_distance_pct = min_distance_pct
         self.stop_loss_pct = stop_loss_pct
 
@@ -144,7 +152,7 @@ class SMA20MultiTimeframePenguin(BasePenguin):
         return "HOLD", 0
 
 
-class SMA20Penguin(SMA20MultiTimeframePenguin):
-    """Compatibility alias for existing imports/configuration."""
+class SMA20MultiTimeframePenguin(SMA20Penguin):
+    """Backward-compatible alias for historical imports/config."""
 
     pass
