@@ -99,6 +99,6 @@ for bar_idx, timestamp in enumerate(sorted_timestamps[:100]):
 
 print("\n" + "=" * 80)
 print("\nKey Issues:")
-print("- SMA20MultiTimeframePenguin: initialize_sma_levels() never called (data_client remains None)")
+print("- SMA20Penguin: initialize_sma_levels() never called (data_client remains None)")
 print("- CopilotPenguin: Requires SMA20 > SMA50 + momentum > 0.005 + RSI 50-70 (strict conditions)")
 print("- SupportResistancePenguin: Needs 20 bars minimum (3+3+14)")

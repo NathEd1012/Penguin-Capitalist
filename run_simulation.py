@@ -19,8 +19,11 @@ from backtest.evaluator import Evaluator
 from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
-from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
-from indicators import precompute_reaction_levels_for_full_history, DEFAULT_TIMEFRAMES
+from scripts.multiframe import (
+    build_sr_strategy_sets,
+    precompute_multiframe_levels,
+    set_precomputed_levels_on_penguins,
+)
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
@@ -98,7 +101,13 @@ def run_backtest(
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
-) -> Tuple[Dict[str, Tuple[Portfolio, Dict]], Dict, List[datetime], Dict[str, Dict]]:
+) -> Tuple[
+    Dict[str, Tuple[Portfolio, Dict]],
+    Dict,
+    List[datetime],
+    Dict[str, Dict],
+    Dict[str, List[Tuple[datetime, float]]],
+]:
     """
     Run historical backtest.
     
@@ -190,6 +199,12 @@ def run_backtest(
     sorted_timestamps = sorted(all_timestamps)
     print(f"\n  Total bars across all symbols: {len(sorted_timestamps)}")
     
+    # Build close-price series for post-run analytics (e.g., SMA exports).
+    symbol_close_series: Dict[str, List[Tuple[datetime, float]]] = {}
+    for symbol in symbols:
+        ts_sorted = sorted(data[symbol].keys())
+        symbol_close_series[symbol] = [(ts, float(data[symbol][ts]["close"])) for ts in ts_sorted]
+
     # Initialize portfolios and penguins
     portfolios = {}
     penguins = {}
@@ -209,34 +224,15 @@ def run_backtest(
         except Exception as e:
             print(f"  ✗ {penguin_class.__name__}: {e}")
 
-    sr_penguin_names = {
-        name for name, penguin in penguins.items() if getattr(penguin, "USES_SR_LINES", False)
-    }
+    sr_penguin_names, precompute_sr_penguin_names = build_sr_strategy_sets(penguins)
     
-    # Precompute multiframe S/R levels if any M/F S/R strategies are active
-    if sr_penguin_names:
-        print(f"\nStep 3b: Precomputing multiframe S/R levels for {len(sr_penguin_names)} strategy(ies)...")
-        precomputed_sr_data = {}
-        
-        for symbol in tqdm(symbols, desc="Precomputing S/R levels"):
-            # Extract close prices for this symbol
-            symbol_data = data[symbol]
-            prices = [symbol_data[ts]['close'] for ts in sorted_timestamps if ts in symbol_data]
-            
-            if len(prices) > 0:
-                # Precompute reaction levels using full history
-                precomputed_sr_data[symbol] = precompute_reaction_levels_for_full_history(
-                    prices=prices,
-                    timeframes=DEFAULT_TIMEFRAMES,
-                    cluster_tolerance_pct=0.006,
-                    max_levels_per_timeframe=3,
-                )
+    # Precompute multiframe S/R levels only for strategies that explicitly require it.
+    if precompute_sr_penguin_names:
+        print(f"\nStep 3b: Precomputing multiframe S/R levels for {len(precompute_sr_penguin_names)} strategy(ies)...")
+        precomputed_sr_data = precompute_multiframe_levels(data, symbols, sorted_timestamps)
         
         # Set precomputed data on all S/R-using penguins
-        for penguin_name in sr_penguin_names:
-            penguin = penguins[penguin_name]
-            if hasattr(penguin, "set_precomputed_levels"):
-                penguin.set_precomputed_levels(precomputed_sr_data)
+        set_precomputed_levels_on_penguins(penguins, precompute_sr_penguin_names, precomputed_sr_data)
         
         print(f"  ✓ Precomputed S/R levels for {len(precomputed_sr_data)} symbols\n")
     
@@ -310,6 +306,9 @@ def run_backtest(
                 mid_prices = full_history[-lookback_bars:] if len(full_history) > lookback_bars else full_history
                 
                 bid, ask = quotes[symbol]
+
+                if hasattr(penguin, "set_current_timestamp"):
+                    penguin.set_current_timestamp(timestamp)
                 
                 try:
                     action, quantity = penguin.decide(
@@ -385,7 +384,7 @@ def run_backtest(
         if hasattr(penguin, "export_sr_history"):
             sr_histories[penguin_name] = penguin.export_sr_history()
 
-    return results, trades_by_bar, sorted_timestamps, sr_histories
+    return results, trades_by_bar, sorted_timestamps, sr_histories, symbol_close_series
 
 
 def main():
@@ -405,7 +404,7 @@ def main():
     print("="*80)
     
     # Run backtest
-    results, trades_by_bar, bar_timestamps, sr_histories = run_backtest(
+    results, trades_by_bar, bar_timestamps, sr_histories, _symbol_close_series = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -444,6 +443,9 @@ def main():
     
     # Always write run_current first.
     Evaluator.save_results(results, None, current_artifacts_dir, trades_by_bar)
+
+    # SMA artifact export intentionally disabled.
+    print("\nSkipping SMA artifact export (no sma folder requested)")
     
     # Generate plots
     print("\nGenerating visualization...")
@@ -523,32 +525,7 @@ def main():
 
     # Generate multitimeframe S/R line plots (if enabled)
     if ENABLE_ADDITIONAL_PLOTS:
-        print("\nGenerating multitimeframe S/R line plots...")
-        try:
-            current_pngs = []
-
-            for penguin_name, history_by_symbol in sr_histories.items():
-                if not history_by_symbol:
-                    continue
-
-                current_sr_dir = current_artifacts_dir / f"{penguin_name}_sr_lines"
-                created_current = plot_multitimeframe_sr_history(
-                    history_by_symbol,
-                    current_sr_dir,
-                    bar_timestamps,
-                )
-                current_pngs.extend(created_current)
-
-                print(f"✅ {penguin_name}: generated {len(created_current)} S&R line plot(s)")
-
-            # Create one combined PDF containing all multitimeframe PNG plots.
-            if current_pngs:
-                current_sr_pdf = current_dir / "multitimeframe_sr_plots.pdf"
-                create_png_gallery_pdf(current_pngs, current_sr_pdf)
-                print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
-
-        except Exception as e:
-            print(f"⚠️  Multitimeframe S&R plotting error: {e}")
+        print("\nSkipping multitimeframe S/R PNG generation (no sr_lines folders requested)")
     else:
         print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
     

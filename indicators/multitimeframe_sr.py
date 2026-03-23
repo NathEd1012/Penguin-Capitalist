@@ -257,12 +257,15 @@ def record_reaction_snapshot(
     current_price: float,
     timeframes: Dict[str, Tuple[int, int]],
     max_levels_per_timeframe: int,
+    snapshot_timestamp=None,
 ) -> None:
     """Store one plotting snapshot with current reaction lines."""
     if symbol not in sr_history:
         sr_history[symbol] = []
 
     row: Dict[str, Optional[float]] = {"price": current_price}
+    if snapshot_timestamp is not None:
+        row["timestamp"] = snapshot_timestamp
     symbol_levels = cache.get(symbol, {}).get("levels", {})
 
     for tf_name in timeframes.keys():

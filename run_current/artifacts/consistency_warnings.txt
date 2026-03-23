@@ -1,7 +1,0 @@
-Consistency Check Warnings
-============================================================
-
-• [MultitimeframeReactionSRPenguin] Detected 21005 suspicious price jumps > 15%
-•   Trade #1 (SPY): +1264.55% ($50.28 → $686.09)
-•   Trade #2 (NVDA): -72.39% ($686.09 → $189.46)
-•   Trade #3 (AAPL): +44.26% ($189.46 → $273.31)

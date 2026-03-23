@@ -5,12 +5,14 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import pytz
 from config import INITIAL_CAPITAL
+from scripts.multiframe import (
+    plot_multitimeframe_sr_history as _plot_multitimeframe_sr_history,
+    create_multiframe_png_gallery_pdf as _create_multiframe_png_gallery_pdf,
+)
 
 
 def _display_strategy_name(name: str) -> str:
     """Normalize strategy names for plot/report labels."""
-    if name == "SMA20MultiTimeframePenguin":
-        return "SMA20Penguin"
     return name
 
 
@@ -57,18 +59,9 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
     if tick_indices[-1] != total_bars - 1:
         tick_indices.append(total_bars - 1)
 
-    x_ticks = []
-    x_labels = []
-    prev_month = None
-    for idx in tick_indices:
-        dt = bar_timestamps[idx]
-        # Only keep labels with underline (month boundaries)
-        if "%b %d" in label_fmt:
-            if prev_month is not None and prev_month != dt.month:
-                label = dt.strftime(label_fmt) + "\n" + "━" * 6
-                x_ticks.append(idx + 1)
-                x_labels.append(label)
-            prev_month = dt.month
+    # Always build date/time ticks at regular intervals for deterministic axes.
+    x_ticks = [idx + 1 for idx in tick_indices]
+    x_labels = [bar_timestamps[idx].strftime(label_fmt) for idx in tick_indices]
 
     return x_ticks, x_labels
 
@@ -205,7 +198,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     
     # Plot curves with transparency (SMA20 strategy plotted last for foreground)
     sp500_name = "SP500Penguin"
-    sma20_name = "SMA20MultiTimeframePenguin" if "SMA20MultiTimeframePenguin" in curves else "SMA20Penguin"
+    sma20_name = "SMA20Penguin"
     line_colors = {}
 
     # Draw SP500 first so it stays in the background.
@@ -269,137 +262,14 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
 
 
 def plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timestamps=None):
-    """
-    Plot per-symbol price and multi-timeframe S/R lines for the full run.
-
-    Args:
-        sr_history_by_symbol: Dict[symbol] = [snapshot dict per bar]
-        output_dir: Directory for generated PNG files
-        bar_timestamps: Optional list of datetime timestamps for x-axis labels
-    """
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    tf_colors = {
-        "1y": "#1f77b4",
-        "3m": "#ff7f0e",
-        "1m": "#2ca02c",
-        "1w": "#d62728",
-        "1d": "#9467bd",
-    }
-
-    created_files = []
-
-    for symbol, snapshots in sorted(sr_history_by_symbol.items()):
-        if not snapshots:
-            continue
-
-        n = len(snapshots)
-        x = list(range(1, n + 1))
-        prices = [row.get("price") for row in snapshots]
-
-        plt.figure(figsize=(15, 8))
-        plt.plot(x, prices, color="black", linewidth=1.8, alpha=0.9, label="Price")
-
-        for tf_name in ["1y", "3m", "1m", "1w", "1d"]:
-            color = tf_colors[tf_name]
-
-            # Range-extremes style keys.
-            support_key = f"{tf_name}_support"
-            resistance_key = f"{tf_name}_resistance"
-            if support_key in snapshots[0] or resistance_key in snapshots[0]:
-                support_series = [row.get(support_key) for row in snapshots]
-                resistance_series = [row.get(resistance_key) for row in snapshots]
-
-                # Only plot if all values are valid (no None/0 values)
-                if all(v is not None and v > 0 for v in support_series):
-                    plt.plot(
-                        x,
-                        support_series,
-                        linestyle="--",
-                        linewidth=1.4,
-                        color=color,
-                        alpha=0.8,
-                        label=f"{tf_name} support",
-                    )
-                if all(v is not None and v > 0 for v in resistance_series):
-                    plt.plot(
-                        x,
-                        resistance_series,
-                        linestyle="-",
-                        linewidth=1.4,
-                        color=color,
-                        alpha=0.8,
-                        label=f"{tf_name} resistance",
-                    )
-
-            # Reaction-line style keys (up to 5 lines per timeframe).
-            for i in range(1, 6):
-                line_key = f"{tf_name}_line_{i}"
-                if line_key not in snapshots[0]:
-                    continue
-
-                line_series = [row.get(line_key) for row in snapshots]
-                
-                # Only plot if all values are valid (no None/0 values)
-                if all(v is not None and v > 0 for v in line_series):
-                    plt.plot(
-                        x,
-                        line_series,
-                        linestyle=":",
-                        linewidth=max(0.8, 1.6 - 0.2 * (i - 1)),
-                        color=color,
-                        alpha=max(0.35, 0.8 - 0.12 * (i - 1)),
-                        label=f"{tf_name} line {i}",
-                    )
-
-        x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, n)
-        if x_ticks and x_labels:
-            plt.xticks(x_ticks, x_labels, rotation=45, ha="right", fontsize=9)
-            plt.xlabel("Date / Time")
-        else:
-            plt.xlabel("Bar")
-
-        plt.ylabel("Price ($)")
-        plt.title(f"{symbol} - Multitimeframe S/R Lines")
-        plt.grid(True, alpha=0.25)
-        plt.legend(loc="best", fontsize=8, ncol=2)
-        plt.tight_layout()
-
-        out_file = output_dir / f"{symbol}_multitimeframe_sr.png"
-        plt.savefig(out_file, dpi=120)
-        plt.close()
-        created_files.append(str(out_file))
-
-    return created_files
+    """Compatibility wrapper for centralized multiframe plotting logic."""
+    return _plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timestamps)
 
 
 def create_png_gallery_pdf(png_files, output_pdf, page_title_prefix="Multitimeframe S/R"):
-    """Combine many PNG files into a single multi-page PDF."""
-    if not png_files:
-        return None
-
-    output_pdf = Path(output_pdf)
-    output_pdf.parent.mkdir(parents=True, exist_ok=True)
-
-    # Keep ordering stable and predictable.
-    sorted_pngs = sorted([Path(p) for p in png_files], key=lambda p: p.name.lower())
-
-    with PdfPages(output_pdf) as pdf:
-        for png_path in sorted_pngs:
-            if not png_path.exists():
-                continue
-
-            img = plt.imread(png_path)
-
-            fig, ax = plt.subplots(figsize=(14, 8))
-            ax.imshow(img)
-            ax.axis("off")
-            ax.set_title(f"{page_title_prefix}: {png_path.stem}", fontsize=12)
-            pdf.savefig(fig, bbox_inches="tight")
-            plt.close(fig)
-
-    return str(output_pdf)
+    """Compatibility wrapper for centralized multiframe gallery PDF logic."""
+    _ = page_title_prefix  # kept for backward-compatible signature
+    return _create_multiframe_png_gallery_pdf(png_files, output_pdf)
 
 
 def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
@@ -517,7 +387,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         fig, ax = plt.subplots(figsize=(12, 8))
 
         sp500_name = "SP500Penguin"
-        sma20_name = "SMA20MultiTimeframePenguin" if "SMA20MultiTimeframePenguin" in curves else "SMA20Penguin"
+        sma20_name = "SMA20Penguin"
         line_colors = {}
 
         # Draw SP500 first so it stays in the background.

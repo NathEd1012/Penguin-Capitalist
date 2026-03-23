@@ -5,11 +5,11 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from penguins.minmax_sr20_penguin import SupportResistancePenguin
+from penguins.minmax_sr20_penguin import MinMaxSRPenguin
 import random
 
 # Create strategy instance
-sr = SupportResistancePenguin()
+sr = MinMaxSRPenguin()
 
 # Generate synthetic price data (1 year of 1-minute bars)
 print("Generating synthetic price data...")

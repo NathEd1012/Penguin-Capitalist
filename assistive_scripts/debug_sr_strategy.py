@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from penguins.minmax_sr20_penguin import SupportResistancePenguin
+from penguins.minmax_sr20_penguin import MinMaxSRPenguin
 
 # Generate realistic price data (trending down then up)
 print("Generating realistic price scenario...")
@@ -35,7 +35,7 @@ print(f"  Price range: {min(prices):.2f} - {max(prices):.2f}")
 print(f"  Recent 10 prices: {[f'{p:.2f}' for p in prices[-10:]]}")
 
 # Test strategy through time
-sr = SupportResistancePenguin()
+sr = MinMaxSRPenguin()
 print("\n" + "="*70)
 print("Simulating strategy decisions through time...")
 print("="*70 + "\n")

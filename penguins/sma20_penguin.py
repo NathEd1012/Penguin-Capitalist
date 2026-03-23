@@ -29,7 +29,7 @@ class SMA20Penguin(BasePenguin):
         min_distance_pct: float = 0.002,
         stop_loss_pct: float = 0.03,
     ):
-        super().__init__("SMA20MultiTimeframePenguin")
+        super().__init__("SMA20Penguin")
         self.fast_sma_length = fast_sma_length
         self.trend_sma_length = (
             trend_sma_length
@@ -151,11 +151,6 @@ class SMA20Penguin(BasePenguin):
 
         return "HOLD", 0
 
-
-class SMA20MultiTimeframePenguin(SMA20Penguin):
-    """Backward-compatible alias for historical imports/config."""
-
-    pass
 
 
 class SMA20AdvancedPenguin(SMA20Penguin):

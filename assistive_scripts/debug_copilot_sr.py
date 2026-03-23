@@ -9,7 +9,7 @@ from backtest.data_loader import DataLoader
 from config import SYMBOLS, START_DATE, STOP_DATE, BINNING, INITIAL_CAPITAL, TRANSACTION_COST
 from backtest.portfolio import Portfolio
 from penguins.copilot_penguin import CopilotPenguin
-from penguins.minmax_sr20_penguin import SupportResistancePenguin
+from penguins.minmax_sr20_penguin import MinMaxSRPenguin
 import pytz
 from collections import defaultdict
 
@@ -38,7 +38,7 @@ print(f"Valid symbols: {len(valid_symbols)}\n")
 
 # Initialize strategies
 copilot = CopilotPenguin()
-sr = SupportResistancePenguin()
+sr = MinMaxSRPenguin()
 
 copilot_portfolio = Portfolio(INITIAL_CAPITAL, TRANSACTION_COST)
 sr_portfolio = Portfolio(INITIAL_CAPITAL, TRANSACTION_COST)

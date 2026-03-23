@@ -6,7 +6,7 @@ class RSIMeanReversionPenguin(BasePenguin):
     LOOKBACK_BARS = 30  # Only needs last 30 bars for RSI calculation
     
     def __init__(self, rsi_period=14, oversold=30, overbought=70):
-        super().__init__("RSI Mean Reversion (Legacy)")
+        super().__init__("RSIMeanReversionPenguin")
         self.rsi_period = rsi_period
         self.oversold = oversold
         self.overbought = overbought

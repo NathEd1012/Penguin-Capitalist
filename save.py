@@ -4,6 +4,7 @@
 Usage examples:
   python save.py --abcd
   python save.py abcd
+	python save.py --rep abcd
 """
 
 from __future__ import annotations
@@ -13,23 +14,32 @@ import sys
 from pathlib import Path
 
 
-def _parse_run_name(argv: list[str]) -> str:
+def _validate_name(name: str) -> str:
+	run_name = name.strip()
+	if not run_name:
+		raise ValueError("Name is empty.")
+
+	allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
+	if any(ch not in allowed for ch in run_name):
+		raise ValueError("Name may only contain letters, numbers, '-' and '_'.")
+
+	return run_name
+
+
+def _parse_args(argv: list[str]) -> tuple[str, str]:
+	"""Return (mode, name), where mode is 'snapshot' or 'report'."""
 	if len(argv) < 2:
-		raise ValueError("Missing run name. Example: python save.py --abcd")
+		raise ValueError("Missing arguments. Examples: python save.py abcd | python save.py --rep abcd")
+
+	if argv[1] == "--rep":
+		if len(argv) < 3:
+			raise ValueError("Missing report name. Example: python save.py --rep abcd")
+		return "report", _validate_name(argv[2])
 
 	raw = argv[1].strip()
 	if raw.startswith("--"):
 		raw = raw[2:]
-
-	run_name = raw.strip()
-	if not run_name:
-		raise ValueError("Run name is empty. Example: python save.py --abcd")
-
-	allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
-	if any(ch not in allowed for ch in run_name):
-		raise ValueError("Run name may only contain letters, numbers, '-' and '_'.")
-
-	return run_name
+	return "snapshot", _validate_name(raw)
 
 
 def _collect_files(run_current_dir: Path) -> list[Path]:
@@ -57,7 +67,7 @@ def _collect_files(run_current_dir: Path) -> list[Path]:
 
 def main() -> int:
 	try:
-		run_name = _parse_run_name(sys.argv)
+		mode, name = _parse_args(sys.argv)
 	except ValueError as exc:
 		print(f"Error: {exc}")
 		return 1
@@ -69,7 +79,24 @@ def main() -> int:
 		return 1
 
 	destination_root = project_root / "run_interesting"
-	destination_dir = destination_root / run_name
+
+	if mode == "report":
+		report_source = run_current_dir / "report.pdf"
+		if not report_source.exists():
+			print(f"Error: Missing report file: {report_source}")
+			return 1
+
+		destination_root.mkdir(parents=True, exist_ok=True)
+		report_target = destination_root / f"{name}.pdf"
+		if report_target.exists():
+			print(f"Error: Destination already exists: {report_target}")
+			return 1
+
+		shutil.copy2(report_source, report_target)
+		print(f"Saved report to: {report_target}")
+		return 0
+
+	destination_dir = destination_root / name
 
 	if destination_dir.exists():
 		print(f"Error: Destination already exists: {destination_dir}")

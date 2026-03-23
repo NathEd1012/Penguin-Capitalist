@@ -16,7 +16,7 @@ class RSIMeanReversionAdvancedPenguin(BasePenguin):
         collapse_sma_period=50,
         collapse_threshold_pct=0.12,
     ):
-        super().__init__("RSI MeanReversion Advanced")
+        super().__init__("RSIMeanReversionAdvancedPenguin")
         self.rsi_period = rsi_period
         self.oversold = oversold
         self.overbought = overbought
@@ -93,18 +93,3 @@ class RSIMeanReversionAdvancedPenguin(BasePenguin):
 
         return "HOLD", 0
 
-# Alias for backward compatibility with existing imports.
-class RSIMeanReversionPenguin(RSIMeanReversionAdvancedPenguin):
-    """Backward-compatible alias for the advanced RSI mean-reversion strategy."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = "RSI MeanReversion Advanced"
-
-
-class MeanReversionPenguin(RSIMeanReversionAdvancedPenguin):
-    """Backward-compatible alias used by configuration imports."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = "RSI MeanReversion"

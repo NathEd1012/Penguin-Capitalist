@@ -46,6 +46,7 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
         # Format: {symbol: [list of dicts, one per bar]}
         self._precomputed_levels: Dict[str, List[Dict[str, List[float]]]] = {}
         self._current_bar_index: int = 0
+        self._current_timestamp = None
 
     def set_precomputed_levels(
         self,
@@ -58,6 +59,10 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
     def _advance_bar(self) -> None:
         """Increment bar counter for precomputed level lookup."""
         self._current_bar_index += 1
+
+    def set_current_timestamp(self, timestamp) -> None:
+        """Set current bar timestamp for history snapshots."""
+        self._current_timestamp = timestamp
 
     def export_sr_history(self) -> Dict[str, List[Dict[str, Optional[float]]]]:
         return self.sr_history
@@ -117,6 +122,7 @@ class MultitimeframeReactionSRPenguin(BasePenguin):
                 current_price=current_price,
                 timeframes=self.timeframes,
                 max_levels_per_timeframe=self.max_levels_per_timeframe,
+                snapshot_timestamp=self._current_timestamp,
             )
 
         nearest_line = nearest_reaction_level(self.cache, symbol, current_price)

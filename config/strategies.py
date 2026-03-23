@@ -3,13 +3,12 @@
 # Import all available penguin strategies
 from penguins import (
     CopilotPenguin,
-    MeanReversionPenguin,
-    MultitimeframeRangeSRPenguin,
-    MultitimeframeReactionSRPenguin,
+    RSIMeanReversionPenguin,
+    RSIMeanReversionAdvancedPenguin,
+    SRMultiframePenguin,
     MinMaxSRPenguin,
     MomentumPenguin,
     SP500Penguin,
-    RSIMeanReversionPenguin,
     SMA20AdvancedPenguin,
     SMA20Penguin,
 )
@@ -21,11 +20,14 @@ from penguins import (
 
 ACTIVE_PENGUINS = [
 
-    #MinMaxSRPenguin,           # Single timeframe S/R
-    MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
+    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
+
+    #MinMaxSRPenguin,           # Single timeframe S/R#
+    #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
+    SRMultiframePenguin,                 # Placeholder: trigger multiframe plotting, no decisions yet
     
-    # SMA20Penguin,                       # SMA-X crossover
-    # SMA20AdvancedPenguin,               # SMA-X crossover with dynamic buy sizing
+    #SMA20Penguin,                       # SMA-X crossover
+    #SMA20AdvancedPenguin,               # SMA-X crossover with dynamic buy sizing
     ### MovingAverageCrossoverPenguin,    # Classic MA crossover
     
     #CopilotPenguin,                     # AI-assisted strategy
@@ -34,13 +36,12 @@ ACTIVE_PENGUINS = [
     ### TrendPenguin,                     # Trend following
     ### CarefulTrendPenguin,              # Conservative trend with filters
 
-    #MeanReversionPenguin,             # RSI MeanReversion
-    #RSIMeanReversionPenguin,          # RSI MeanReversion Advanced
+    #RSIMeanReversionPenguin,             # RSI MeanReversion
+    #RSIMeanReversionAdvancedPenguin,     # RSI MeanReversion Advanced
   
     ### BreakoutPenguin,                    # Price breakout detection
     ### VolatilityBreakoutPenguin,          # Volatility-based breakouts
 
-    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
 
     ### RandomPenguin,                    # Random trading (control)
     ### RandomPenguin2,                   # Alternative random implementation

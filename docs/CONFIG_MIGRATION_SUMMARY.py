@@ -69,7 +69,7 @@ config/strategies.py
   • ACTIVE_PENGUINS (4 strategies currently active):
     - SupportResistancePenguin
     - MultitimeframeReactionSRPenguin
-    - SMA20MultiTimeframePenguin
+    - SMA20Penguin
     - CopilotPenguin
 
 ================================================================================

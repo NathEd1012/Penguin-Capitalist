@@ -14,6 +14,7 @@ class MinMaxSRPenguin(BasePenguin):
     Uses recent rolling support/resistance levels for immediate decisions.
     """
     USES_SR_LINES = True
+    REQUIRES_SR_PRECOMPUTE = False
     LOOKBACK_BARS = PRIMARY_SR_LOOKBACK
     
     def __init__(
@@ -122,8 +123,3 @@ class MinMaxSRPenguin(BasePenguin):
         
         return "HOLD", 0
 
-
-class SupportResistancePenguin(MinMaxSRPenguin):
-    """Compatibility alias for older imports."""
-
-    pass

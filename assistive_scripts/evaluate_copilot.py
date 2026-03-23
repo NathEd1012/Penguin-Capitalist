@@ -159,8 +159,8 @@ if 'CopilotPenguin' in metrics:
     
     print("\n⚖️ COMPARISON WITH OTHER STRATEGIES")
     print("-" * 80)
-    strategies = ['CopilotPenguin', 'SMA20MultiTimeframePenguin', 
-                  'SupportResistancePenguin', 'RSI Mean Reversion']
+    strategies = ['CopilotPenguin', 'SMA20Penguin',
+                  'MinMaxSRPenguin', 'RSIMeanReversionPenguin']
     
     for strat in strategies:
         if strat in metrics:
