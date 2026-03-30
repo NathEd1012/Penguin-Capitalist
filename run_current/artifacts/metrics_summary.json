@@ -1,13 +1,13 @@
 {
   "SP500Penguin": {
-    "total_return": -410.19,
-    "return_pct": -4.1,
-    "max_drawdown": -7.3,
-    "sharpe_ratio": -0.03,
+    "total_return": -124.77,
+    "return_pct": -1.25,
+    "max_drawdown": -9.09,
+    "sharpe_ratio": -0.0,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 9589.81
+    "final_value": 9875.23
   },
   "SR_Multiframe_Penguin": {
     "total_return": 0.0,

@@ -1,12 +1,12 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-03-23 12:57:18
+Generated: 2026-03-30 12:38:16
 ================================================================================
 
 EXECUTION DETAILS
 --------------------------------------------------------------------------------
 
-Bar 11:
-  SP500Penguin: BUY 14 SPY @ $682.89
+Bar 9:
+  SP500Penguin: BUY 15 SPY @ $641.33
 
 
 ================================================================================
@@ -16,17 +16,17 @@ STRATEGY SUMMARY
 
 
 SP500Penguin
-  Final Value:    $9,589.81
-  Total Return:   $-410.19  (-4.10%)
-  Max Drawdown:   -7.30%
-  Sharpe Ratio:   -0.03
+  Final Value:    $9,875.23
+  Total Return:   $-124.77  (-1.25%)
+  Max Drawdown:   -9.09%
+  Sharpe Ratio:   -0.00
   Total Trades:   2
   Buy Trades:     1
   Sell Trades:    1
 
   Recent Trades:
-    BUY 14 SPY @ $682.89 at 2026-01-01 00:11:00+00:00
-    SELL 14 SPY @ $653.59 at 2026-03-20 23:59:00+00:00
+    BUY 15 SPY @ $641.33 at 2025-09-02 08:09:00+00:00
+    SELL 15 SPY @ $633.01 at 2026-03-27 23:59:00+00:00
 
 --------------------------------------------------------------------------------
 

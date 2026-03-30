@@ -6,7 +6,6 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
 from collections import defaultdict
-import pytz
 import numpy as np
 
 # Add project root to path
@@ -23,6 +22,7 @@ from scripts.multiframe import (
     build_sr_strategy_sets,
     precompute_multiframe_levels,
     set_precomputed_levels_on_penguins,
+    create_sr_multiframe_pdf_direct,
 )
 from config import (
     SYMBOLS,
@@ -53,7 +53,7 @@ def parse_datetime_string(dt_str: str) -> datetime:
     # Handle special keyword "TODAY"
     if dt_str.upper() == "TODAY":
         # Use yesterday at 23:50 UTC to avoid recent SIP data restrictions
-        yesterday = datetime.now(pytz.UTC).replace(hour=23, minute=50, second=0, microsecond=0) - timedelta(days=1)
+        yesterday = datetime.now(timezone.utc).replace(hour=23, minute=50, second=0, microsecond=0) - timedelta(days=1)
         return yesterday
     
     # Try parsing with timezone first
@@ -61,7 +61,7 @@ def parse_datetime_string(dt_str: str) -> datetime:
         try:
             dt = datetime.strptime(dt_str, fmt)
             if dt.tzinfo is None:
-                dt = pytz.UTC.localize(dt)
+                dt = dt.replace(tzinfo=timezone.utc)
             return dt
         except ValueError:
             continue
@@ -126,13 +126,13 @@ def run_backtest(
     
     # Ensure both datetimes are UTC
     if start_datetime.tzinfo is None:
-        start_datetime = pytz.UTC.localize(start_datetime)
+        start_datetime = start_datetime.replace(tzinfo=timezone.utc)
     if end_datetime.tzinfo is None:
-        end_datetime = pytz.UTC.localize(end_datetime)
+        end_datetime = end_datetime.replace(tzinfo=timezone.utc)
     
     # Convert to UTC if needed
-    start_datetime_utc = start_datetime.astimezone(pytz.UTC)
-    end_datetime_utc = end_datetime.astimezone(pytz.UTC)
+    start_datetime_utc = start_datetime.astimezone(timezone.utc)
+    end_datetime_utc = end_datetime.astimezone(timezone.utc)
     
     # Determine required symbols from active penguins when possible.
     # If every active penguin declares TRADED_SYMBOLS, we only load that union.
@@ -217,7 +217,7 @@ def run_backtest(
         try:
             penguin = penguin_class()
             if hasattr(penguin, "record_history"):
-                penguin.record_history = bool(ENABLE_ADDITIONAL_PLOTS)
+                penguin.record_history = bool(getattr(penguin, "USES_SR_LINES", False)) or bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
             penguins[pen_name] = penguin
@@ -528,6 +528,28 @@ def main():
         print("\nSkipping multitimeframe S/R PNG generation (no sr_lines folders requested)")
     else:
         print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
+
+    # Always generate SR multiframe PDF directly from recorded S/R history.
+    if sr_histories:
+        print("\nGenerating SR multiframe PDF...")
+        try:
+            combined_history = {}
+            for _penguin_name, history_by_symbol in sr_histories.items():
+                if history_by_symbol:
+                    combined_history.update(history_by_symbol)
+
+            if combined_history:
+                current_sr_pdf = current_dir / "SR_Multiframe_plots.pdf"
+                create_sr_multiframe_pdf_direct(
+                    combined_history,
+                    current_sr_pdf,
+                    bar_timestamps,
+                )
+                print(f"✅ SR multiframe PDF: {current_sr_pdf}")
+            else:
+                print("⚠️  No SR history data available for SR multiframe PDF")
+        except Exception as e:
+            print(f"⚠️  SR multiframe PDF error: {e}")
     
     # Mirror run_current into run_old only after current run is fully written.
     if archive_dir:

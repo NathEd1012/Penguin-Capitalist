@@ -39,6 +39,11 @@ from config.backtest import (
     BINNING,
     SAVE_TO_RUN_OLD,
     ENABLE_ADDITIONAL_PLOTS,
+    EXTREMA_WINDOWS,
+    FIT_PRE_SMOOTH_WINDOW,
+    EXTREMA_CLUSTER_THRESHOLD_PCT,
+    EXTREMA_MIN_TOUCHES,
+    EXTREMA_MERGE_BAR_GAP,
     SMA_WINDOWS,
     SMA_PRE_SMOOTH_WINDOW,
     SMA_EXTREMA_CLUSTER_THRESHOLD_PCT,
@@ -64,11 +69,16 @@ __all__ = [
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
     "SAVE_TO_RUN_OLD",      # Archive completed runs
     "ENABLE_ADDITIONAL_PLOTS",  # Toggle optional extra plots
-    "SMA_WINDOWS",          # SMA windows exported for each symbol
-    "SMA_PRE_SMOOTH_WINDOW",  # Pre-smoothing window applied before SMA_WINDOWS
-    "SMA_EXTREMA_CLUSTER_THRESHOLD_PCT",  # SMA extrema clustering tolerance
-    "SMA_EXTREMA_MIN_TOUCHES",  # Minimum extrema touches for horizontal levels
-    "SMA_EXTREMA_MERGE_BAR_GAP",  # Merge nearby extrema into one touch event
+    "EXTREMA_WINDOWS",      # Window widths for local-extrema fitting
+    "FIT_PRE_SMOOTH_WINDOW",  # Optional pre-smooth window for fit exports
+    "EXTREMA_CLUSTER_THRESHOLD_PCT",  # Extrema clustering tolerance
+    "EXTREMA_MIN_TOUCHES",  # Minimum extrema touches for horizontal levels
+    "EXTREMA_MERGE_BAR_GAP",  # Merge nearby extrema into one touch event
+    "SMA_WINDOWS",          # Legacy alias for EXTREMA_WINDOWS
+    "SMA_PRE_SMOOTH_WINDOW",  # Legacy alias for FIT_PRE_SMOOTH_WINDOW
+    "SMA_EXTREMA_CLUSTER_THRESHOLD_PCT",  # Legacy alias for EXTREMA_CLUSTER_THRESHOLD_PCT
+    "SMA_EXTREMA_MIN_TOUCHES",  # Legacy alias for EXTREMA_MIN_TOUCHES
+    "SMA_EXTREMA_MERGE_BAR_GAP",  # Legacy alias for EXTREMA_MERGE_BAR_GAP
     "ACTIVE_PENGUINS",      # List of active strategy classes
     
     # Symbol categorization

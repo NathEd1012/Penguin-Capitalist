@@ -1,0 +1,31 @@
+Consistency Check Warnings
+============================================================
+
+• [MinMaxSRPenguin] Detected 2098 suspicious price jumps > 15%
+•   Trade #1 (SPY): +167.57% ($209.78 → $561.31)
+•   Trade #4 (AAPL): -62.52% ($560.93 → $210.25)
+•   Trade #5 (SPY): +167.14% ($210.25 → $561.67)
+• [SMA20Penguin] Detected 124 suspicious price jumps > 15%
+•   Trade #2 (NVDA): -46.07% ($211.16 → $113.88)
+•   Trade #4 (AAPL): +81.70% ($113.94 → $207.03)
+•   Trade #5 (SPY): +170.97% ($207.03 → $561.00)
+• [SMA20AdvancedPenguin] Detected 124 suspicious price jumps > 15%
+•   Trade #2 (NVDA): -46.07% ($211.16 → $113.88)
+•   Trade #4 (AAPL): +81.70% ($113.94 → $207.03)
+•   Trade #5 (SPY): +170.97% ($207.03 → $561.00)
+• [CopilotPenguin] Detected 3236 suspicious price jumps > 15%
+•   Trade #2 (SPY): +167.29% ($210.11 → $561.61)
+•   Trade #4 (AAPL): -62.65% ($561.97 → $209.92)
+•   Trade #5 (SPY): +167.39% ($209.92 → $561.30)
+• [MomentumPenguin] Detected 71 suspicious price jumps > 15%
+•   Trade #5 (AAPL): +82.44% ($114.72 → $209.29)
+•   Trade #7 (NVDA): -45.64% ($206.61 → $112.32)
+•   Trade #8 (AAPL): +84.33% ($112.32 → $207.03)
+• [RSIMeanReversionPenguin] Detected 9685 suspicious price jumps > 15%
+•   Trade #2 (NVDA): -46.17% ($209.51 → $112.78)
+•   Trade #6 (AAPL): +85.84% ($112.99 → $209.97)
+•   Trade #8 (SPY): +167.29% ($210.11 → $561.61)
+• [RSIMeanReversionAdvancedPenguin] Detected 7723 suspicious price jumps > 15%
+•   Trade #2 (SPY): +167.29% ($210.11 → $561.61)
+•   Trade #5 (AAPL): -62.65% ($561.97 → $209.92)
+•   Trade #7 (SPY): +167.62% ($209.74 → $561.30)

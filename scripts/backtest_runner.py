@@ -20,6 +20,7 @@ from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
+from scripts.multiframe import create_sr_multiframe_pdf_direct
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
@@ -259,6 +260,11 @@ def run_backtest(
 
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
+            
+            # Set current timestamp for S/R penguins that track history
+            if hasattr(penguin, "set_current_timestamp"):
+                penguin.set_current_timestamp(timestamp)
+            
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
@@ -524,6 +530,27 @@ def main():
             print(f"⚠️  Multitimeframe S&R plotting error: {e}")
     else:
         print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
+    
+    # Always create PDF from SR history (even if PNG generation was skipped)
+    if sr_histories:
+        print("\nGenerating SR multiframe PDF...")
+        try:
+            # Combine all penguin histories into one PDF
+            combined_history = {}
+            for penguin_name, history_by_symbol in sr_histories.items():
+                if history_by_symbol:
+                    combined_history.update(history_by_symbol)
+            
+            if combined_history:
+                current_sr_pdf = current_dir / "SR_Multiframe_plots.pdf"
+                create_sr_multiframe_pdf_direct(
+                    combined_history,
+                    current_sr_pdf,
+                    bar_timestamps,
+                )
+                print(f"✅ SR multiframe PDF: {current_sr_pdf}")
+        except Exception as e:
+            print(f"⚠️  SR multiframe PDF error: {e}")
     
     # Mirror run_current into run_old only after current run is fully written.
     if archive_dir:
