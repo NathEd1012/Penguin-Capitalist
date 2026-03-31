@@ -22,22 +22,22 @@ ACTIVE_PENGUINS = [
 
     SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
 
-    #MinMaxSRPenguin,           # Single timeframe S/R#
+    MinMaxSRPenguin,           # Single timeframe S/R#
     #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
-    SRMultiframePenguin,                 # Placeholder: trigger multiframe plotting, no decisions yet
+    #SRMultiframePenguin,                 # Placeholder: trigger multiframe plotting, no decisions yet
     
-    #SMA20Penguin,                       # SMA-X crossover
-    #SMA20AdvancedPenguin,               # SMA-X crossover with dynamic buy sizing
+    SMA20Penguin,                       # SMA-X crossover
+    SMA20AdvancedPenguin,               # SMA-X crossover with dynamic buy sizing
     ### MovingAverageCrossoverPenguin,    # Classic MA crossover
     
-    #CopilotPenguin,                     # AI-assisted strategy
+    CopilotPenguin,                     # AI-assisted strategy
  
-    #MomentumPenguin,                  # Pure momentum following
+    MomentumPenguin,                  # Pure momentum following
     ### TrendPenguin,                     # Trend following
     ### CarefulTrendPenguin,              # Conservative trend with filters
 
-    #RSIMeanReversionPenguin,             # RSI MeanReversion
-    #RSIMeanReversionAdvancedPenguin,     # RSI MeanReversion Advanced
+    RSIMeanReversionPenguin,             # RSI MeanReversion
+    RSIMeanReversionAdvancedPenguin,     # RSI MeanReversion Advanced
   
     ### BreakoutPenguin,                    # Price breakout detection
     ### VolatilityBreakoutPenguin,          # Volatility-based breakouts

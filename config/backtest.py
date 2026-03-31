@@ -6,7 +6,7 @@
 # Examples:
 #   "2026-01-03 10:30:00"  - Specific datetime
 #   "2026-01-03"           - Defaults to 00:00:00
-START_DATE = "2025-09-01 0:00:00"
+START_DATE = "2025-01-01 0:00:00"
 
 # Stop date for backtest
 # Special keyword "TODAY" resolves to yesterday at 23:50 UTC 

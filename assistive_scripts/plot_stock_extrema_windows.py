@@ -32,6 +32,10 @@ from market_data import get_bars, init_router
 
 ALIGNMENT_THRESHOLD_PCT = 0.006
 MAX_FITTED_LINES = 8
+DEFAULT_ANCHOR_LEVELS = 5
+ANCHOR_LEVEL_MARKER_SIZE = 40
+ANCHOR_OUTSIDE_PADDING_RATIO = 0.20
+END_DATE_LOOKBACK_DAYS = 14
 
 
 @dataclass(frozen=True)
@@ -85,6 +89,34 @@ def _fetch_bars_with_retry(symbol: str, start: datetime, end: datetime, timefram
         start_retry = end_retry - duration
         print(f"[{symbol} {timeframe}] Recent SIP restriction detected; retrying with end={end_retry.isoformat()}")
         return get_bars(symbol, start_retry, end_retry, timeframe)
+
+
+def _resolve_end_datetime_with_data(
+    symbol: str,
+    requested_end_dt: datetime,
+    probe_timeframe: str = "1m",
+    max_lookback_days: int = END_DATE_LOOKBACK_DAYS,
+) -> datetime:
+    """Resolve to the most recent full UTC day that still has market data."""
+    requested_day_start = requested_end_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    for day_offset in range(max_lookback_days + 1):
+        candidate_day_start = requested_day_start - timedelta(days=day_offset)
+        candidate_day_end_exclusive = candidate_day_start + timedelta(days=1)
+        probe_df = _fetch_bars_with_retry(symbol, candidate_day_start, candidate_day_end_exclusive, probe_timeframe)
+        if not probe_df.empty:
+            resolved_end = candidate_day_end_exclusive - timedelta(seconds=1)
+            if day_offset > 0:
+                print(
+                    f"[{symbol}] No data at requested end date; shifted anchor back {day_offset} day(s) "
+                    f"to {candidate_day_start.date().isoformat()} (full day)"
+                )
+            return resolved_end
+
+    raise RuntimeError(
+        f"No {probe_timeframe} data for {symbol} within {max_lookback_days} day(s) before "
+        f"{requested_end_dt.isoformat()}"
+    )
 
 
 def _choose_bin_size(n_bars: int) -> int:
@@ -177,6 +209,7 @@ def _find_aligned_groups_from_anchor(
     close: pd.Series,
     candidate_indices: list[int],
     anchor_idx: int,
+    anchor_y: float | None = None,
     threshold_pct_of_range: float = 0.015,
     min_points: int = 3,
 ) -> list[list[int]]:
@@ -195,7 +228,8 @@ def _find_aligned_groups_from_anchor(
     if anchor_idx < 0 or anchor_idx >= n:
         return []
 
-    anchor_y = float(close.iloc[anchor_idx])
+    if anchor_y is None:
+        anchor_y = float(close.iloc[anchor_idx])
 
     pts = sorted(set(i for i in candidate_indices if 0 <= i < n and i != anchor_idx))
     if len(pts) < min_points:
@@ -314,7 +348,25 @@ def _format_axis(ax: plt.Axes, timeframe: str):
         tick.set_ha("right")
 
 
-def _plot_span_page(pdf: PdfPages, symbol: str, span_cfg: SpanConfig, end_dt: datetime):
+def _build_anchor_levels(low_value: float, high_value: float, level_count: int) -> list[float]:
+    """Build evenly spaced anchor levels including low and high values."""
+    if level_count <= 1:
+        return [high_value]
+
+    if np.isclose(high_value, low_value):
+        return [high_value]
+
+    # Return descending levels: high -> low.
+    return list(np.linspace(high_value, low_value, num=level_count, dtype=float))
+
+
+def _plot_span_page(
+    pdf: PdfPages,
+    symbol: str,
+    span_cfg: SpanConfig,
+    end_dt: datetime,
+    anchor_level_count: int,
+):
     start_dt = end_dt - span_cfg.delta
     df = _fetch_bars_with_retry(symbol, start_dt, end_dt, span_cfg.timeframe)
 
@@ -334,28 +386,51 @@ def _plot_span_page(pdf: PdfPages, symbol: str, span_cfg: SpanConfig, end_dt: da
     mins, maxs = _find_extrema_by_bar_buckets(close, bucket_bars=span_cfg.bucket_bars)
     extrema_mode = f"bucket ({span_cfg.bucket_bars} bars)"
 
-    candidate_points = sorted(set(mins + maxs))
+    latest_idx = len(close) - 1
+    candidate_points = sorted(set(i for i in (mins + maxs) if i < latest_idx))
     last_min_idx = max(mins) if mins else None
     last_max_idx = max(maxs) if maxs else None
 
-    anchor_indices: list[int] = []
-    if last_min_idx is not None:
-        anchor_indices.append(last_min_idx)
-    if last_max_idx is not None and last_max_idx not in anchor_indices:
-        anchor_indices.append(last_max_idx)
+    anchor_idx = latest_idx
+    anchor_levels: list[float] = []
+    anchor_low_used: float | None = None
+    anchor_high_used: float | None = None
+    if last_min_idx is not None and last_max_idx is not None:
+        last_min_value = float(close.iloc[last_min_idx])
+        last_max_value = float(close.iloc[last_max_idx])
+        current_price = float(close.iloc[latest_idx])
+        lo = min(last_min_value, last_max_value)
+        hi = max(last_min_value, last_max_value)
+
+        # If current price is outside the last min/max range, extend by a
+        # padding ratio beyond current price instead of clamping at price.
+        if current_price < lo:
+            width_to_max = max(1e-9, hi - current_price)
+            anchor_low_used = current_price - (ANCHOR_OUTSIDE_PADDING_RATIO * width_to_max)
+            anchor_high_used = hi
+        elif current_price > hi:
+            width_to_min = max(1e-9, current_price - lo)
+            anchor_low_used = lo
+            anchor_high_used = current_price + (ANCHOR_OUTSIDE_PADDING_RATIO * width_to_min)
+        else:
+            anchor_low_used = lo
+            anchor_high_used = hi
+
+        anchor_levels = _build_anchor_levels(anchor_low_used, anchor_high_used, anchor_level_count)
 
     aligned_groups: list[list[int]] = []
-    for anchor_idx in anchor_indices:
+    for anchor_y in anchor_levels:
         groups_for_anchor = _find_aligned_groups_from_anchor(
             close,
             candidate_points,
             anchor_idx=anchor_idx,
+            anchor_y=anchor_y,
             threshold_pct_of_range=ALIGNMENT_THRESHOLD_PCT,
             min_points=3,
         )
         aligned_groups.extend(groups_for_anchor)
 
-    # De-duplicate groups across both anchors.
+    # De-duplicate groups across all anchor levels.
     dedup: dict[tuple[int, ...], list[int]] = {}
     for grp in aligned_groups:
         dedup[tuple(sorted(set(grp)))] = sorted(set(grp))
@@ -394,6 +469,20 @@ def _plot_span_page(pdf: PdfPages, symbol: str, span_cfg: SpanConfig, end_dt: da
             zorder=3,
         )
 
+    if anchor_levels:
+        anchor_timestamps = [timestamps.iloc[anchor_idx]] * len(anchor_levels)
+        ax.scatter(
+            anchor_timestamps,
+            anchor_levels,
+            marker="D",
+            s=ANCHOR_LEVEL_MARKER_SIZE,
+            facecolors="#ffbf00",
+            edgecolors="black",
+            linewidths=0.8,
+            label=f"Current-Date Anchor Levels ({len(anchor_levels)})",
+            zorder=5,
+        )
+
     if global_low_visible:
         ax.scatter(
             timestamps.iloc[global_low_idx],
@@ -424,7 +513,7 @@ def _plot_span_page(pdf: PdfPages, symbol: str, span_cfg: SpanConfig, end_dt: da
         timestamps,
         close,
         aligned_groups,
-        anchor_indices=anchor_indices,
+        anchor_indices=[anchor_idx],
     )
 
     ax.set_title(
@@ -440,16 +529,22 @@ def _plot_span_page(pdf: PdfPages, symbol: str, span_cfg: SpanConfig, end_dt: da
     _format_axis(ax, span_cfg.timeframe)
 
     stats = (
-        f"Bars: {len(df)}\n"
-        f"Start: {timestamps.iloc[0].strftime('%Y-%m-%d %H:%M')}\n"
-        f"End:   {timestamps.iloc[-1].strftime('%Y-%m-%d %H:%M')}\n"
-        f"Minima: {len(mins)}\n"
-        f"Maxima: {len(maxs)}\n"
-        f"Aligned Lines: {fitted_line_count}\n"
-        f"Anchor Min: {last_min_idx if last_min_idx is not None else '-'}\n"
-        f"Anchor Max: {last_max_idx if last_max_idx is not None else '-'}\n"
-        f"Low: {close.iloc[global_low_idx]:.2f}\n"
-        f"High: {close.iloc[global_high_idx]:.2f}"
+        (f"Last Min: {close.iloc[last_min_idx]:.2f}\n" if last_min_idx is not None else "Last Min: -\n")
+        + (f"Last Max: {close.iloc[last_max_idx]:.2f}\n" if last_max_idx is not None else "Last Max: -\n")
+        + (
+            f"Bars: {len(df)}\n"
+            f"Start: {timestamps.iloc[0].strftime('%Y-%m-%d %H:%M')}\n"
+            f"End:   {timestamps.iloc[-1].strftime('%Y-%m-%d %H:%M')}\n"
+            f"Minima: {len(mins)}\n"
+            f"Maxima: {len(maxs)}\n"
+            f"Aligned Lines: {fitted_line_count}\n"
+            f"Anchor Levels: {len(anchor_levels)}\n"
+            f"Low: {close.iloc[global_low_idx]:.2f}\n"
+            f"High: {close.iloc[global_high_idx]:.2f}\n"
+            f"Current: {close.iloc[latest_idx]:.2f}\n"
+        )
+        + (f"Anchor Low Used: {anchor_low_used:.2f}" if anchor_low_used is not None else "Anchor Low Used: -")
+        + (f"\nAnchor High Used: {anchor_high_used:.2f}" if anchor_high_used is not None else "\nAnchor High Used: -")
     )
     ax.text(
         0.012,
@@ -469,6 +564,7 @@ def _plot_span_page(pdf: PdfPages, symbol: str, span_cfg: SpanConfig, end_dt: da
         f"[{span_cfg.label}] TF={span_cfg.timeframe}, bars={len(df)}, "
         f"mode={extrema_mode}, minima={len(mins)}, maxima={len(maxs)}, "
         f"aligned_lines={fitted_line_count}, "
+        f"anchor_levels={len(anchor_levels)}, "
         f"low={close.iloc[global_low_idx]:.2f} ({'shown' if global_low_visible else 'hidden@corner'}), "
         f"high={close.iloc[global_high_idx]:.2f} ({'shown' if global_high_visible else 'hidden@corner'})"
     )
@@ -486,6 +582,12 @@ def main():
         help="Anchor end date/time (UTC). Examples: '2026-03-24', '2026-03-24 23:50:00+00:00'.",
     )
     parser.add_argument(
+        "--anchor-level-count",
+        type=int,
+        default=DEFAULT_ANCHOR_LEVELS,
+        help="How many current-date anchor levels to use between last max and min (>=2 recommended).",
+    )
+    parser.add_argument(
         "--output",
         type=str,
         default=None,
@@ -495,19 +597,24 @@ def main():
 
     symbol = args.symbol.strip().upper()
     end_dt = _parse_end_datetime(args.end_date)
+    anchor_level_count = max(1, int(args.anchor_level_count))
 
     output_path = Path(args.output) if args.output else Path("run_current") / f"{symbol}_extrema_windows.pdf"
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     init_router(use_cache=True, cache_dir="data_cache")
 
+    resolved_end_dt = _resolve_end_datetime_with_data(symbol, end_dt)
+
     print(f"Generating extrema PDF for {symbol}")
-    print(f"Anchor end datetime (UTC): {end_dt.isoformat()}")
+    print(f"Requested end datetime (UTC): {end_dt.isoformat()}")
+    print(f"Resolved end datetime (UTC):  {resolved_end_dt.isoformat()}")
+    print(f"Current-date anchor levels: {anchor_level_count}")
     print(f"Output: {output_path}")
 
     with PdfPages(output_path) as pdf:
         for span_cfg in SPAN_CONFIGS:
-            _plot_span_page(pdf, symbol, span_cfg, end_dt)
+            _plot_span_page(pdf, symbol, span_cfg, resolved_end_dt, anchor_level_count)
 
     print(f"Saved PDF: {output_path}")
 

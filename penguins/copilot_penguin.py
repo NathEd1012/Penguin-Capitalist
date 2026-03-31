@@ -9,16 +9,24 @@ class CopilotPenguin(BasePenguin):
     def __init__(self):
         super().__init__("CopilotPenguin")
         self.entry_bar = {}
+        self.last_exit_bar = {}
         self.highest_price_since_entry = {}
         self.entry_mode = {}
+        self.entry_momentum_trust = {}
 
-        self.min_bars = 55
+        self.min_bars = 80
         self.max_spread_pct = 1.8
-        self.max_holding_bars = 48
-        self.max_position_size = 2
+        self.max_holding_bars = 60
+        self.min_holding_bars = 3
+        self.cooldown_bars = 8
+        self.max_position_size = 1
+
+    @staticmethod
+    def _clamp(value, lo, hi):
+        return max(lo, min(hi, value))
 
     def decide(self, symbol, mid_prices, bid, ask, portfolio):
-        """Adaptive hybrid: buy RSI pullbacks with regime-aware exits."""
+        """Adaptive hybrid: dynamically trust momentum vs mean reversion by regime."""
         if bid <= 0 or ask <= 0:
             return "HOLD", 0
 
@@ -43,8 +51,28 @@ class CopilotPenguin(BasePenguin):
         range_20 = max(recent_20) - min(recent_20)
         range_pct = (range_20 / price) if price > 0 else 0
 
-        is_trending = price > sma_50 and sma_20 > sma_50 and roc_long > 0.01
-        is_weak_tape = roc_long < -0.01 or price < sma_50 * 0.985
+        trend_strength = 0.0
+        if price > sma_20:
+            trend_strength += 0.30
+        if sma_20 > sma_50:
+            trend_strength += 0.25
+        trend_strength += 0.45 * self._clamp((roc_long - 0.002) / 0.04, 0.0, 1.0)
+
+        weakness = 0.0
+        if price < sma_20:
+            weakness += 0.25
+        if sma_20 < sma_50:
+            weakness += 0.25
+        weakness += 0.50 * self._clamp((-roc_long - 0.002) / 0.04, 0.0, 1.0)
+
+        flatness = self._clamp(1.0 - (abs(roc_long) / 0.02), 0.0, 1.0)
+
+        momentum_trust = 0.55 + (0.45 * trend_strength) - (0.55 * weakness) - (0.10 * flatness)
+        momentum_trust = self._clamp(momentum_trust, 0.10, 0.90)
+        mean_reversion_trust = 1.0 - momentum_trust
+
+        is_trending = trend_strength >= 0.55
+        is_weak_tape = weakness >= 0.55
 
         position_qty = portfolio.get_position(symbol)
         has_position = position_qty > 0
@@ -54,19 +82,70 @@ class CopilotPenguin(BasePenguin):
             self.entry_bar.pop(symbol, None)
             self.highest_price_since_entry.pop(symbol, None)
             self.entry_mode.pop(symbol, None)
+            self.entry_momentum_trust.pop(symbol, None)
+            self.last_exit_bar[symbol] = current_index
 
         if not has_position:
-            oversold_threshold = 38 if is_trending else (26 if is_weak_tape else 31)
-            dip_signal = rsi_val <= oversold_threshold and roc_short < 0
-            trend_pullback = is_trending and rsi_val < 46 and roc_short < 0
+            bars_since_exit = current_index - self.last_exit_bar.get(symbol, -10_000)
+            if bars_since_exit < self.cooldown_bars:
+                return "HOLD", 0
 
-            if dip_signal or trend_pullback:
+            oversold_threshold = 24 + (12 * mean_reversion_trust)
+            if is_weak_tape:
+                oversold_threshold -= 2
+
+            mean_revert_score = 0
+            if rsi_val <= oversold_threshold:
+                mean_revert_score += 1
+            if rsi_fast < 22:
+                mean_revert_score += 1
+            if roc_short < -0.003:
+                mean_revert_score += 1
+            if range_pct < 0.11:
+                mean_revert_score += 1
+            if flatness > 0.35 or is_weak_tape:
+                mean_revert_score += 1
+
+            momentum_score = 0
+            if trend_strength > 0.55:
+                momentum_score += 1
+            if roc_short > 0.005:
+                momentum_score += 1
+            if price > sma_20:
+                momentum_score += 1
+            if 52 <= rsi_val <= 68:
+                momentum_score += 1
+            if roc_long > 0.010:
+                momentum_score += 1
+
+            mean_revert_conf = (mean_revert_score / 5.0) * mean_reversion_trust
+            momentum_conf = (momentum_score / 5.0) * momentum_trust
+            best_conf = max(mean_revert_conf, momentum_conf)
+
+            if best_conf >= 0.50:
+                if momentum_conf > mean_revert_conf + 0.05:
+                    mode = "momentum"
+                    confidence = momentum_conf
+                elif mean_revert_conf > momentum_conf + 0.05:
+                    mode = "mean_revert"
+                    confidence = mean_revert_conf
+                else:
+                    mode = "blended"
+                    confidence = best_conf
+
+                if mode == "momentum" and momentum_score < 4:
+                    return "HOLD", 0
+                if mode != "momentum" and mean_revert_score < 4:
+                    return "HOLD", 0
+
                 conviction = 0
-                if rsi_val <= oversold_threshold - 4:
+                if confidence >= 0.50:
                     conviction += 1
-                if rsi_fast < 20:
+                if confidence >= 0.65:
                     conviction += 1
-                if range_pct < 0.10:
+                if mode == "momentum" and roc_short > 0.01:
+                    conviction += 1
+                if mode != "momentum" and rsi_val <= oversold_threshold - 3:
                     conviction += 1
 
                 target_qty = 1 + int(conviction >= 2)
@@ -77,7 +156,8 @@ class CopilotPenguin(BasePenguin):
                 if buy_qty > 0:
                     self.entry_bar[symbol] = current_index
                     self.highest_price_since_entry[symbol] = bid
-                    self.entry_mode[symbol] = "trend_pullback" if trend_pullback else "mean_revert"
+                    self.entry_mode[symbol] = mode
+                    self.entry_momentum_trust[symbol] = momentum_trust
                     return "BUY", buy_qty
 
             return "HOLD", 0
@@ -89,7 +169,8 @@ class CopilotPenguin(BasePenguin):
 
             bars_held = current_index - self.entry_bar.get(symbol, current_index)
             pnl_pct = ((bid - entry_price) / entry_price) if entry_price > 0 else 0
-            mode = self.entry_mode.get(symbol, "mean_revert")
+            mode = self.entry_mode.get(symbol, "blended")
+            entry_trust = self.entry_momentum_trust.get(symbol, momentum_trust)
 
             self.highest_price_since_entry[symbol] = max(
                 self.highest_price_since_entry.get(symbol, bid),
@@ -100,26 +181,54 @@ class CopilotPenguin(BasePenguin):
                 _cleanup_state()
                 return "SELL", position_qty
 
-            stop_loss = -0.018 if mode == "mean_revert" else -0.022
+            if bars_held < self.min_holding_bars and pnl_pct > -0.010:
+                return "HOLD", 0
+
+            if mode == "momentum":
+                stop_loss = -0.020 - (0.010 * entry_trust)
+            elif mode == "mean_revert":
+                stop_loss = -0.014 - (0.006 * (1.0 - entry_trust))
+            else:
+                stop_loss = -0.018
+
             if pnl_pct <= stop_loss:
                 _cleanup_state()
                 return "SELL", position_qty
 
-            if rsi_val >= 71:
+            if mode == "momentum" and rsi_val >= 74 and pnl_pct > 0:
                 _cleanup_state()
                 return "SELL", position_qty
 
-            profit_target = 0.012 if mode == "mean_revert" else 0.018
+            if mode != "momentum" and rsi_val >= 63:
+                _cleanup_state()
+                return "SELL", position_qty
+
+            if mode == "momentum":
+                profit_target = 0.018 + (0.016 * entry_trust)
+            elif mode == "mean_revert":
+                profit_target = 0.007 + (0.006 * (1.0 - entry_trust))
+            else:
+                profit_target = 0.014
+
             if pnl_pct >= profit_target and rsi_val >= 56:
                 _cleanup_state()
                 return "SELL", position_qty
 
-            if is_weak_tape and pnl_pct > 0 and rsi_val >= 52:
+            if mode == "momentum" and momentum_trust < 0.35 and pnl_pct > 0:
+                _cleanup_state()
+                return "SELL", position_qty
+
+            if mode != "momentum" and is_weak_tape and pnl_pct > 0 and rsi_val >= 52:
                 _cleanup_state()
                 return "SELL", position_qty
 
             if pnl_pct > 0.008:
-                trail_gap = 0.007 if is_trending else 0.005
+                if mode == "momentum":
+                    trail_gap = 0.006 + (0.008 * entry_trust)
+                elif mode == "mean_revert":
+                    trail_gap = 0.004 + (0.003 * (1.0 - entry_trust))
+                else:
+                    trail_gap = 0.006
                 trailing_stop = self.highest_price_since_entry[symbol] * (1 - trail_gap)
                 if bid <= trailing_stop:
                     _cleanup_state()

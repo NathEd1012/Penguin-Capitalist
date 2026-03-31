@@ -15,7 +15,6 @@ ACTIVE_SYMBOLS = [
     "SPY",    # S&P 500 ETF benchmark
     "NVDA",   # Nvidia
     "AAPL",   # Apple
-    """
     "PLTR",   # Palantir
     "AMD",    # Advanced Micro Devices
     "MSTR",   # MicroStrategy (Bitcoin proxy)
@@ -44,7 +43,6 @@ ACTIVE_SYMBOLS = [
     "SIL",    # Silver miners
     "REMX",   # Rare earth / critical metals
     "PICK",   # Global metals & mining
-    """
 ]
 
 # Legacy alias for compatibility
