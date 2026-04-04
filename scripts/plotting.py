@@ -16,6 +16,20 @@ def _display_strategy_name(name: str) -> str:
     return name
 
 
+def _strategy_parameter_text(strategy_name: str) -> str | None:
+    """Return a short parameter summary for RSI strategies."""
+    rsi_parameter_map = {
+        "RSIMeanReversionPenguin": "RSI period=14 | oversold=30 | overbought=70 | cooldown=none",
+        "RSIMeanReversionPenguinStrict1": "RSI period=14 | oversold=29 | overbought=71 | cooldown=0",
+        "RSIMeanReversionPenguinStrict2": "RSI period=14 | oversold=26 | overbought=71 | cooldown=0",
+        "RSIMeanReversionAdvancedPenguin": (
+            "RSI period=14 | oversold=30 | overbought=70 | stop_loss=0.10 | "
+            "max_buy_size=3 | collapse_filter=False"
+        ),
+    }
+    return rsi_parameter_map.get(strategy_name)
+
+
 def _parse_datetime_string(dt_str: str) -> datetime:
     """Parse datetime from config format string."""
     for fmt in ["%Y-%m-%d %H:%M:%S%z", "%Y-%m-%d %H:%M:%S"]:
@@ -458,6 +472,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         for penguin_name in sorted(portfolios.keys()):
             portfolio = portfolios[penguin_name]
             display_penguin_name = _display_strategy_name(penguin_name)
+            parameter_text = _strategy_parameter_text(penguin_name)
             
             fig = plt.figure(figsize=(12, 10))
             ax = fig.add_subplot(111)
@@ -562,7 +577,18 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             for x_pos, item in zip(summary_x_positions, summary_items):
                 fig.text(x_pos, 0.935, item, ha="center", va="center", fontsize=10, weight="semibold")
 
-            plt.tight_layout(rect=[0, 0, 1, 0.88])
+            if parameter_text:
+                fig.text(
+                    0.5,
+                    0.905,
+                    parameter_text,
+                    ha="center",
+                    va="center",
+                    fontsize=9,
+                    style="italic",
+                )
+
+            plt.tight_layout(rect=[0, 0, 1, 0.86])
             pdf.savefig(fig, bbox_inches="tight")
             plt.close()
 

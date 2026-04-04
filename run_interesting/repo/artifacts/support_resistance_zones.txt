@@ -1,0 +1,12 @@
+================================================================================
+SUPPORT & RESISTANCE ZONES ANALYSIS
+================================================================================
+
+Evaluated: 2026-03-30 12:38:17
+
+Method:
+  - Identifies local highs and lows in price history
+  - Local minimum = support (price bounced upward)
+  - Local maximum = resistance (price bounced downward)
+  - Clusters nearby levels within 2% tolerance
+  - Sorts by strength (frequency of touches)

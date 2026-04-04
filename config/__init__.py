@@ -1,7 +1,7 @@
 """Configuration module for Penguin Capitalist.
 
 This module consolidates all configuration settings from:
-- config/symbols.py - Trading symbols and symbol categories
+- config/symbols.py - Trading symbols and active list selection
 - config/portfolio.py - Portfolio capital and transaction costs
 - config/backtest.py - Backtest timing and execution settings
 - config/strategies.py - Active trading strategies (penguins)
@@ -12,18 +12,17 @@ Import from this module anywhere in the codebase:
 
 # ========== SYMBOL CONFIGURATION ==========
 from config.symbols import (
+    ACTIVE_SYMBOL_LIST,
+    SYMBOL_LIST_1,
+    SYMBOL_LIST_2,
+    SYMBOL_LIST_3,
+    SYMBOL_LISTS,
     ACTIVE_SYMBOLS,
     SYMBOLS_LIST,
-    SYMBOL_CATEGORIES,
-    SYMBOLS,  # Alias for SYMBOL_CATEGORIES
-    ALL_SYMBOLS,
-    US_EQUITIES,
-    INTERNATIONAL_EQUITIES,
-    ETFS,
+    SYMBOLS,
 )
 
-# Legacy alias: SYMBOLS refers to the active list for backtesting
-# Override the dict from symbols.py with the active list for compatibility
+# Keep alias explicit at package level for compatibility.
 SYMBOLS = ACTIVE_SYMBOLS
 
 # ========== PORTFOLIO CONFIGURATION ==========
@@ -60,6 +59,11 @@ from config.strategies import (
 __all__ = [
     # Active trading configuration
     "SYMBOLS",              # Active symbols list for backtesting
+    "ACTIVE_SYMBOL_LIST",   # Selected list key (LIST_1/LIST_2/LIST_3)
+    "SYMBOL_LIST_1",        # Small-cap list
+    "SYMBOL_LIST_2",        # Full list
+    "SYMBOL_LIST_3",        # Custom list
+    "SYMBOL_LISTS",         # Mapping of selectable lists
     "ACTIVE_SYMBOLS",       # Explicit active symbols
     "SYMBOLS_LIST",         # Alias
     "INITIAL_CAPITAL",      # Starting capital (USD)
@@ -81,10 +85,4 @@ __all__ = [
     "SMA_EXTREMA_MERGE_BAR_GAP",  # Legacy alias for EXTREMA_MERGE_BAR_GAP
     "ACTIVE_PENGUINS",      # List of active strategy classes
     
-    # Symbol categorization
-    "SYMBOL_CATEGORIES",    # Dict of symbol categories
-    "ALL_SYMBOLS",          # All available symbols flattened
-    "US_EQUITIES",          # US equity symbols
-    "INTERNATIONAL_EQUITIES",  # International equity symbols
-    "ETFS",                 # ETF symbols
 ]

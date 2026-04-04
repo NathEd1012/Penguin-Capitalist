@@ -2,15 +2,10 @@
 
 # Import all available penguin strategies
 from penguins import (
-    CopilotPenguin,
+    SP500,
     RSIMeanReversionPenguin,
-    RSIMeanReversionAdvancedPenguin,
-    SRMultiframePenguin,
-    MinMaxSRPenguin,
-    MomentumPenguin,
-    SP500Penguin,
-    SMA20AdvancedPenguin,
-    SMA20Penguin,
+    RSIMeanReversionPenguinStrict1,
+    RSIMeanReversionPenguinStrict2,
 )
 
 # ========== ACTIVE PENGUINS ==========
@@ -19,32 +14,10 @@ from penguins import (
 # Each strategy will be tested in parallel on the same data
 
 ACTIVE_PENGUINS = [
-
-    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
-
-    MinMaxSRPenguin,           # Single timeframe S/R#
-    #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
-    #SRMultiframePenguin,                 # Placeholder: trigger multiframe plotting, no decisions yet
-    
-    SMA20Penguin,                       # SMA-X crossover
-    SMA20AdvancedPenguin,               # SMA-X crossover with dynamic buy sizing
-    ### MovingAverageCrossoverPenguin,    # Classic MA crossover
-    
-    CopilotPenguin,                     # AI-assisted strategy
- 
-    MomentumPenguin,                  # Pure momentum following
-    ### TrendPenguin,                     # Trend following
-    ### CarefulTrendPenguin,              # Conservative trend with filters
-
-    RSIMeanReversionPenguin,             # RSI MeanReversion
-    RSIMeanReversionAdvancedPenguin,     # RSI MeanReversion Advanced
-  
-    ### BreakoutPenguin,                    # Price breakout detection
-    ### VolatilityBreakoutPenguin,          # Volatility-based breakouts
-
-
-    ### RandomPenguin,                    # Random trading (control)
-    ### RandomPenguin2,                   # Alternative random implementation
+    SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
+    RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
+    RSIMeanReversionPenguinStrict1,     # Strict RSI with crossing + cooldown
+    RSIMeanReversionPenguinStrict2,     # Very strict RSI with longer cooldown
 ]
 
 __all__ = [

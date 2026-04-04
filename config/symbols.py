@@ -8,9 +8,21 @@ This module contains:
 
 # ========== ACTIVE SYMBOLS FOR BACKTESTING ==========
 # This is the primary list used by the backtest engine
-# Modify this list to change which symbols are traded
+# Choose active list by changing just this variable:
+# "LIST_1" | "LIST_2" | "LIST_3"
+ACTIVE_SYMBOL_LIST = "LIST_2"
 
-ACTIVE_SYMBOLS = [
+# List 1: 5 large-cap stocks
+SYMBOL_LIST_1 = [
+    "NVDA",   # Nvidia
+    "AAPL",   # Apple
+    "MSFT",   # Microsoft
+    "AMZN",   # Amazon
+    "TSLA",   # Tesla
+]
+
+# List 2: current full ticker set (previous ACTIVE_SYMBOLS)
+SYMBOL_LIST_2 = [
     # Tech giants & growth
     "SPY",    # S&P 500 ETF benchmark
     "NVDA",   # Nvidia
@@ -20,17 +32,17 @@ ACTIVE_SYMBOLS = [
     "MSTR",   # MicroStrategy (Bitcoin proxy)
     "MSFT",   # Microsoft
     "TSLA",   # Tesla
-    
+
     # Materials & Mining
     "MP",     # MP Materials (rare earths)
-    
+
     # Defense
     "NOC",    # Northrop Grumman
     "LMT",    # Lockheed Martin
-    
+
     # International
     "NVO",    # Novo Nordisk (Denmark)
-    
+
     # --- ETFs / Commodity ETFs ---
     "GLD",    # Gold
     "SLV",    # Silver
@@ -45,103 +57,36 @@ ACTIVE_SYMBOLS = [
     "PICK",   # Global metals & mining
 ]
 
+# List 3: intentionally empty for custom manual additions
+SYMBOL_LIST_3 = []
+
+SYMBOL_LISTS = {
+    "LIST_1": SYMBOL_LIST_1,
+    "LIST_2": SYMBOL_LIST_2,
+    "LIST_3": SYMBOL_LIST_3,
+}
+
+if ACTIVE_SYMBOL_LIST not in SYMBOL_LISTS:
+    raise ValueError(
+        f"Unknown ACTIVE_SYMBOL_LIST='{ACTIVE_SYMBOL_LIST}'. "
+        f"Use one of: {', '.join(SYMBOL_LISTS.keys())}."
+    )
+
+ACTIVE_SYMBOLS = SYMBOL_LISTS[ACTIVE_SYMBOL_LIST]
+
 # Legacy alias for compatibility
 SYMBOLS_LIST = ACTIVE_SYMBOLS
 
-# ========== SYMBOL CATEGORIES ==========
-# Organized categorization for selective backtesting or analysis
-
-SYMBOL_CATEGORIES = {
-    "tech": [
-        "NVDA",    # Nvidia
-        "AAPL",    # Apple
-        "MSFT",    # Microsoft
-        "AMD",     # Advanced Micro Devices
-        "TSLA",    # Tesla
-        "GOOGL",   # Google/Alphabet
-        "META",    # Meta
-        "AMZN",    # Amazon
-    ],
-    
-    "defense": [
-        "NOC",     # Northrop Grumman
-        "LMT",     # Lockheed Martin
-        "RTX",     # Raytheon Technologies
-        "GD",      # General Dynamics
-    ],
-    
-    "alt_assets": [
-        "MSTR",    # MicroStrategy (Bitcoin proxy)
-        "MP",      # MP Materials (rare earths)
-        "PLTR",    # Palantir
-    ],
-    
-    "international": [
-        "NVO",     # Novo Nordisk (Denmark)
-        "ASML",    # ASML (Netherlands)
-        "TSM",     # TSMC (Taiwan)
-        "BABA",    # Alibaba (China)
-    ],
-    
-    "miners": [
-        "COPX",    # Copper miners ETF
-        "PICK",    # Global metals & mining ETF
-        "REMX",    # Rare earth / critical metals ETF
-        "GDXJ",    # Junior gold miners ETF
-        "SIL",     # Silver miners ETF
-    ],
-    
-    "commodities": [
-        "GLD",     # Gold ETF
-        "SLV",     # Silver ETF
-        "PPLT",    # Platinum ETF
-        "JO",      # Coffee ETF
-        "LIT",     # Lithium & Battery Tech ETF
-    ],
-    
-    "macro_etfs": [
-        "SPY",     # S&P 500
-        "QQQ",     # Nasdaq 100
-        "IWM",     # Russell 2000 (Small Cap)
-        "TLT",     # Long-term Treasuries
-        "DBC",     # Commodities
-        "URTH",    # MSCI World (global equities)
-    ],
-}
-
-# ========== DERIVED SYMBOL LISTS ==========
-
-# Flatten all categorized symbols into a single list
-ALL_SYMBOLS = []
-for category in SYMBOL_CATEGORIES.values():
-    ALL_SYMBOLS.extend(category)
-
-# Remove duplicates while preserving order
-ALL_SYMBOLS = list(dict.fromkeys(ALL_SYMBOLS))
-
-# Category-specific lists for selective backtesting or analysis
-US_EQUITIES = (
-    SYMBOL_CATEGORIES["tech"] + 
-    SYMBOL_CATEGORIES["defense"] + 
-    SYMBOL_CATEGORIES["alt_assets"]
-)
-INTERNATIONAL_EQUITIES = SYMBOL_CATEGORIES["international"]
-ETFS = (
-    SYMBOL_CATEGORIES["miners"] + 
-    SYMBOL_CATEGORIES["commodities"] + 
-    SYMBOL_CATEGORIES["macro_etfs"]
-)
-
-# Backwards compatibility alias
-SYMBOLS = SYMBOL_CATEGORIES
+# Backwards compatibility alias: keep SYMBOLS as active trading list.
+SYMBOLS = ACTIVE_SYMBOLS
 
 __all__ = [
+    "ACTIVE_SYMBOL_LIST",
+    "SYMBOL_LIST_1",
+    "SYMBOL_LIST_2",
+    "SYMBOL_LIST_3",
+    "SYMBOL_LISTS",
     "ACTIVE_SYMBOLS",
     "SYMBOLS_LIST",
-    "SYMBOL_CATEGORIES",
     "SYMBOLS",  # Alias for backwards compatibility
-    "ALL_SYMBOLS",
-    "US_EQUITIES",
-    "INTERNATIONAL_EQUITIES",
-    "ETFS",
 ]

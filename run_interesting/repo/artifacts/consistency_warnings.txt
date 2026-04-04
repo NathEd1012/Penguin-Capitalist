@@ -1,0 +1,15 @@
+Consistency Check Warnings
+============================================================
+
+• [RSIMeanReversionPenguin] Detected 69490 suspicious price jumps > 15%
+•   Trade #1 (MSTR): +498.40% ($44.32 → $265.20)
+•   Trade #2 (SLV): -83.29% ($265.20 → $44.32)
+•   Trade #4 (GDXJ): +112.20% ($44.31 → $94.02)
+• [RSIMeanReversionPenguinStrict1] Detected 39306 suspicious price jumps > 15%
+•   Trade #1 (MSTR): +498.40% ($44.32 → $265.20)
+•   Trade #2 (GDXJ): -64.55% ($265.20 → $94.02)
+•   Trade #3 (GLD): +292.87% ($94.02 → $369.39)
+• [RSIMeanReversionPenguinStrict2] Detected 21449 suspicious price jumps > 15%
+•   Trade #1 (GLD): +292.87% ($94.02 → $369.39)
+•   Trade #2 (SLV): -88.01% ($369.39 → $44.30)
+•   Trade #3 (LMT): +1010.68% ($44.30 → $492.02)

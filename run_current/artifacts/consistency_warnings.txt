@@ -1,31 +1,15 @@
 Consistency Check Warnings
 ============================================================
 
-• [MinMaxSRPenguin] Detected 73515 suspicious price jumps > 15%
-•   Trade #5 (AAPL): -39.09% ($411.69 → $250.75)
-•   Trade #7 (NVO): -64.76% ($250.58 → $88.30)
-•   Trade #8 (TSLA): +362.94% ($88.30 → $408.76)
-• [SMA20Penguin] Detected 19686 suspicious price jumps > 15%
-•   Trade #1 (AMD): -58.38% ($292.40 → $121.71)
-•   Trade #2 (SPY): +384.12% ($121.71 → $589.20)
-•   Trade #3 (AAPL): -57.35% ($589.20 → $251.27)
-• [SMA20AdvancedPenguin] Detected 19637 suspicious price jumps > 15%
-•   Trade #1 (AMD): -58.38% ($292.40 → $121.71)
-•   Trade #2 (SPY): +384.12% ($121.71 → $589.20)
-•   Trade #3 (AAPL): -57.35% ($589.20 → $251.27)
-• [CopilotPenguin] Detected 36 suspicious price jumps > 15%
-•   Trade #1 (MSTR): +151.22% ($122.14 → $306.84)
-•   Trade #2 (TSLA): +33.86% ($306.84 → $410.72)
-•   Trade #3 (LIT): -90.15% ($410.72 → $40.47)
-• [MomentumPenguin] Detected 13457 suspicious price jumps > 15%
-•   Trade #1 (AMD): +58.97% ($76.56 → $121.71)
-•   Trade #2 (MSTR): +150.87% ($121.71 → $305.33)
-•   Trade #3 (TSLA): +34.87% ($305.33 → $411.79)
-• [RSIMeanReversionPenguin] Detected 218705 suspicious price jumps > 15%
+• [RSIMeanReversionPenguin] Detected 220813 suspicious price jumps > 15%
 •   Trade #1 (AMD): -79.48% ($586.51 → $120.37)
 •   Trade #3 (TSLA): +234.50% ($120.37 → $402.64)
 •   Trade #4 (SPY): +45.70% ($402.64 → $586.63)
-• [RSIMeanReversionAdvancedPenguin] Detected 179501 suspicious price jumps > 15%
-•   Trade #3 (SPY): +45.98% ($401.85 → $586.63)
-•   Trade #4 (SLV): -95.51% ($586.63 → $26.34)
-•   Trade #5 (SPY): +2135.68% ($26.34 → $588.77)
+• [RSIMeanReversionPenguinStrict1] Detected 220813 suspicious price jumps > 15%
+•   Trade #1 (AMD): -79.48% ($586.51 → $120.37)
+•   Trade #3 (TSLA): +234.50% ($120.37 → $402.64)
+•   Trade #4 (SPY): +45.70% ($402.64 → $586.63)
+• [RSIMeanReversionPenguinStrict2] Detected 118616 suspicious price jumps > 15%
+•   Trade #2 (MP): -97.33% ($586.63 → $15.67)
+•   Trade #3 (AAPL): +1497.98% ($15.67 → $250.45)
+•   Trade #4 (MSFT): +68.34% ($250.45 → $421.62)

@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Dict, List, Tuple
 from pathlib import Path
 from backtest.portfolio import Portfolio
-from scripts.plotting import plot_capital_curves, create_final_report_pdf
+from scripts.plotting import plot_capital_curves, create_final_report_pdf, _strategy_parameter_text
 
 
 class Evaluator:
@@ -167,6 +167,9 @@ class Evaluator:
         
         for penguin_name, (portfolio, metrics) in results.items():
             trades_content += f"\n{penguin_name}\n"
+            parameter_text = _strategy_parameter_text(penguin_name)
+            if parameter_text:
+                trades_content += f"  Params:        {parameter_text}\n"
             trades_content += f"  Final Value:    ${metrics['final_value']:,.2f}\n"
             trades_content += f"  Total Return:   ${metrics['total_return']:,.2f}  ({metrics['return_pct']:.2f}%)\n"
             trades_content += f"  Max Drawdown:   {metrics['max_drawdown']:.2f}%\n"
@@ -227,6 +230,9 @@ class Evaluator:
                 f"{metrics['total_trades']:>10} "
                 f"{metrics['sharpe_ratio']:>10.2f}"
             )
+            parameter_text = _strategy_parameter_text(penguin_name)
+            if parameter_text:
+                print(f"{'':<35} {parameter_text}")
         
         print("=" * 100)
         
