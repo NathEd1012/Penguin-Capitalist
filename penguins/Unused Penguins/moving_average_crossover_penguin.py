@@ -3,8 +3,6 @@ from indicators.statsistics import sma, ema
 
 
 class MovingAverageCrossoverPenguin(BasePenguin):
-    LOOKBACK_BARS = 50  # Needs slow_period (20) + margin
-    
     def __init__(self, fast_period=5, slow_period=20, use_ema=False):
         super().__init__("Moving Average Crossover")
         self.fast_period = fast_period

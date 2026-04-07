@@ -3,8 +3,6 @@ import numpy as np
 
 
 class VolatilityBreakoutPenguin(BasePenguin):
-    LOOKBACK_BARS = 50  # Needs period 20 + margin
-    
     def __init__(self, period=20, std_mult=2):
         super().__init__("Volatility Breakout")
         self.period = period

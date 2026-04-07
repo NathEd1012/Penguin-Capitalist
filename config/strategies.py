@@ -3,48 +3,36 @@
 # Import all available penguin strategies
 from penguins import (
     CopilotPenguin,
-    RSIMeanReversionPenguin,
-    RSIMeanReversionAdvancedPenguin,
-    SRMultiframePenguin,
-    MinMaxSRPenguin,
     MomentumPenguin,
-    SP500Penguin,
-    SMA20AdvancedPenguin,
+    MinMaxSRPenguin,
+    SRMultiframePenguin,
     SMA20Penguin,
+    SMA20AdvancedPenguin,
+    SP500,
+    RSIMeanReversionPenguin,
+    RSIMeanReversionPenguinStrict1,
+    RSIMeanReversionPenguinStrict2,
+    RSIMeanReversionAdvancedPenguin,
 )
-
 # ========== ACTIVE PENGUINS ==========
 # List of penguin strategy classes to run in the backtest
 # Comment out strategies you don't want to run
 # Each strategy will be tested in parallel on the same data
 
 ACTIVE_PENGUINS = [
+    SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
+    RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
+    RSIMeanReversionPenguinStrict1,     # RSI Mean Reversion variant 1
+    RSIMeanReversionPenguinStrict2,     # RSI Mean Reversion variant 2
 
-    SP500Penguin,                       # Buy & hold S&P 500 ETF benchmark (SPY)
-
-    #MinMaxSRPenguin,           # Single timeframe S/R#
-    #MultitimeframeReactionSRPenguin,    # Multi-TF S/R with reaction logic
-    SRMultiframePenguin,                 # Placeholder: trigger multiframe plotting, no decisions yet
-    
-    #SMA20Penguin,                       # SMA-X crossover
-    #SMA20AdvancedPenguin,               # SMA-X crossover with dynamic buy sizing
-    ### MovingAverageCrossoverPenguin,    # Classic MA crossover
-    
-    #CopilotPenguin,                     # AI-assisted strategy
- 
-    #MomentumPenguin,                  # Pure momentum following
-    ### TrendPenguin,                     # Trend following
-    ### CarefulTrendPenguin,              # Conservative trend with filters
-
-    #RSIMeanReversionPenguin,             # RSI MeanReversion
-    #RSIMeanReversionAdvancedPenguin,     # RSI MeanReversion Advanced
-  
-    ### BreakoutPenguin,                    # Price breakout detection
-    ### VolatilityBreakoutPenguin,          # Volatility-based breakouts
-
-
-    ### RandomPenguin,                    # Random trading (control)
-    ### RandomPenguin2,                   # Alternative random implementation
+    # CopilotPenguin,                   # AI-assisted strategy
+    MomentumPenguin,                  # Pure momentum following
+    MinMaxSRPenguin,                  # Single timeframe S/R
+    # SRMultiframePenguin,              # Multiframe S/R placeholder
+    # MultitimeframeReactionSRPenguin,  # Multi-TF reaction S/R
+    SMA20Penguin,                     # SMA crossover
+    # SMA20AdvancedPenguin,             # SMA crossover with sizing
+    # RSIMeanReversionAdvancedPenguin,  # Advanced RSI mean reversion
 ]
 
 __all__ = [

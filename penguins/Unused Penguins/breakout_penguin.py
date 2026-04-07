@@ -3,8 +3,6 @@ from penguins.base_penguin import BasePenguin
 
 
 class BreakoutPenguin(BasePenguin):
-    LOOKBACK_BARS = 50  # Needs 20-bar lookback + margin
-    
     def __init__(self, lookback=20):
         super().__init__("BreakoutPenguin")
         self.lookback = lookback
