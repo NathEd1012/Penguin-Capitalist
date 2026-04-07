@@ -4,6 +4,10 @@ from backtest.portfolio import Portfolio
 
 
 class BasePenguin(ABC):
+    """Base class for all trading strategies."""
+    # Default lookback window: can be overridden by subclasses
+    LOOKBACK_BARS = 1000
+    
     def __init__(self, name: str):
         self.name = name
 

@@ -1,25 +1,22 @@
 from .base_penguin import BasePenguin
 from .momentum_penguin import MomentumPenguin
-from .mean_reversion_penguin import MeanReversionPenguin
-from .breakout_penguin import BreakoutPenguin
-from .random_penguin import RandomPenguin
-from .random_penguin2 import RandomPenguin2
-from .trend_penguin import TrendPenguin
-from .careful_trend_penguin import CarefulTrendPenguin
+from .rsi_mr_penguin import RSIMeanReversionPenguin
+from .rsi_mr_advanced_penguin import RSIMeanReversionAdvancedPenguin
 from .copilot_penguin import CopilotPenguin
-from .support_resistance_penguin import SupportResistancePenguin
-from .simple_sr_penguin import SimpleSRPenguin
+from .minmax_sr20_penguin import MinMaxSRPenguin
+from .sr_multiframe_penguin import SRMultiframePenguin
+from .sma20_penguin import SMA20AdvancedPenguin, SMA20Penguin
+from .SP500_penguin import SP500Penguin
 
 __all__ = [
     "BasePenguin",
     "MomentumPenguin",
-    "MeanReversionPenguin",
-    "BreakoutPenguin",
-    "RandomPenguin",
-    "RandomPenguin2",
-    "TrendPenguin",
-    "CarefulTrendPenguin",
+    "RSIMeanReversionPenguin",
+    "RSIMeanReversionAdvancedPenguin",
     "CopilotPenguin",
-    "SupportResistancePenguin",
-    "SimpleSRPenguin",
+    "MinMaxSRPenguin",
+    "SRMultiframePenguin",
+    "SMA20AdvancedPenguin",
+    "SMA20Penguin",
+    "SP500Penguin",
 ]
