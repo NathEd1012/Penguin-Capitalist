@@ -7,14 +7,21 @@ NOTE: This check is most useful during market hours (9:30 AM - 4:00 PM ET).
       Outside these hours, all quotes will appear stale.
 
 Usage:
-    python check_quote_freshness.py              # Single snapshot
-    python check_quote_freshness.py --monitor    # Monitor for 5 minutes, checking every 30 seconds
+    python scripts/assistive/check_quote_freshness.py              # Single snapshot
+    python scripts/assistive/check_quote_freshness.py --monitor    # Monitor for 5 minutes, checking every 30 seconds
 """
 
 import sys
 import time
 from datetime import datetime
+from pathlib import Path
+
 import pytz
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from data_client import AlpacaClient
 from config import SYMBOLS
 
@@ -205,7 +212,7 @@ def check_quote_freshness():
         monitor_prices(client, duration_minutes=5, interval_seconds=30)
     elif market_open:
         print(f"\n💡 Run with --monitor flag to track price changes over 5 minutes:")
-        print(f"   python check_quote_freshness.py --monitor")
+        print(f"   python scripts/assistive/check_quote_freshness.py --monitor")
 
 
 if __name__ == "__main__":

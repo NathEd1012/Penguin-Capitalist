@@ -1,9 +1,26 @@
 from datetime import datetime, timedelta
 import pytz
+import re
 
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
 from alpaca.data.enums import DataFeed
+
+
+def _format_data_api_error(exc: Exception) -> str:
+    """Return a concise, user-friendly data API error message."""
+    text = str(exc).strip()
+    lower = text.lower()
+
+    if "401" in lower or "authorization required" in lower:
+        return "401 Unauthorized (check ALPACA_API_KEY/ALPACA_SECRET_KEY and account access)."
+
+    if "<html" in lower or "<body" in lower:
+        cleaned = re.sub(r"<[^>]+>", " ", text)
+        cleaned = " ".join(cleaned.split())
+        return cleaned[:180] if cleaned else "Data provider returned an HTML error response."
+
+    return text[:180] if text else "Unknown data API error."
 
 
 def get_minute_bars(
@@ -27,7 +44,10 @@ def get_minute_bars(
         feed=DataFeed.IEX,
     )
 
-    bars = client.data.get_stock_bars(req)
+    try:
+        bars = client.data.get_stock_bars(req)
+    except Exception as exc:
+        raise RuntimeError(_format_data_api_error(exc)) from exc
     bars_map = _normalize_bars_map(_extract_bars_map(bars))
 
     # Normalize to {symbol: [close prices]}
@@ -64,7 +84,10 @@ def get_timeframe_bars(
         feed=DataFeed.IEX,
     )
 
-    bars_resp = client.data.get_stock_bars(req)
+    try:
+        bars_resp = client.data.get_stock_bars(req)
+    except Exception as exc:
+        raise RuntimeError(_format_data_api_error(exc)) from exc
     bars_map = _normalize_bars_map(_extract_bars_map(bars_resp))
 
     symbols_upper = [s.upper() for s in symbols]

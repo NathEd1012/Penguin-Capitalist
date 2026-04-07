@@ -30,10 +30,16 @@ SYMBOLS = ACTIVE_SYMBOLS
 from config.portfolio import (
     INITIAL_CAPITAL,
     TRANSACTION_COST,
+    ENABLE_TRANSACTION_COSTS,
 )
 
 # ========== BACKTEST CONFIGURATION ==========
 from config.backtest import (
+    BAR_TIMEFRAME_MINUTES,
+    RUN_MINUTES,
+    SIMULATION_MINUTES,
+    USE_SYNTHETIC_DATA,
+    FAST_MODE,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -51,6 +57,22 @@ from config.strategies import (
     ACTIVE_PENGUINS,
 )
 
+# ========== DATA QUALITY SETTINGS ==========
+MAX_QUOTE_AGE_SEC = 30
+MAX_NO_UPDATE_MINUTES = 1
+
+# ========== OUTPUT FILES ==========
+import os
+
+PLOTS_DIR = "plots"
+RUN_CURRENT_DIR = "run_current"
+os.makedirs(PLOTS_DIR, exist_ok=True)
+os.makedirs(RUN_CURRENT_DIR, exist_ok=True)
+
+CAPITAL_CURVES_FILE = os.path.join(RUN_CURRENT_DIR, "capital_curves.png")
+TRADES_LOG_FILE = os.path.join(RUN_CURRENT_DIR, "trades_log.txt")
+CURVES_DATA_FILE = os.path.join(RUN_CURRENT_DIR, "curves_data.json")
+
 # ========== EXPORTS ==========
 __all__ = [
     # Active trading configuration
@@ -59,6 +81,12 @@ __all__ = [
     "SYMBOLS_LIST",         # Alias
     "INITIAL_CAPITAL",      # Starting capital (USD)
     "TRANSACTION_COST",     # Cost per trade (USD)
+    "ENABLE_TRANSACTION_COSTS",  # Apply fees in simulation
+    "BAR_TIMEFRAME_MINUTES",  # Minute timeframe for bar loop
+    "RUN_MINUTES",          # Total runtime in minutes
+    "SIMULATION_MINUTES",   # Legacy alias for runtime in minutes
+    "USE_SYNTHETIC_DATA",   # Enable synthetic fallback prices
+    "FAST_MODE",            # Skip realtime sleeping where supported
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
@@ -70,6 +98,12 @@ __all__ = [
     "SMA_EXTREMA_MIN_TOUCHES",  # Minimum extrema touches for horizontal levels
     "SMA_EXTREMA_MERGE_BAR_GAP",  # Merge nearby extrema into one touch event
     "ACTIVE_PENGUINS",      # List of active strategy classes
+    "MAX_QUOTE_AGE_SEC",    # Reject overly stale quotes
+    "MAX_NO_UPDATE_MINUTES",  # Reject quotes unchanged for too long
+    "PLOTS_DIR",            # Plot output directory
+    "CAPITAL_CURVES_FILE",  # Capital curve image output
+    "TRADES_LOG_FILE",      # Trade log output file
+    "CURVES_DATA_FILE",     # JSON curve data output
     
     # Symbol categorization
     "SYMBOL_CATEGORIES",    # Dict of symbol categories

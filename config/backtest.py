@@ -1,29 +1,21 @@
-"""Backtest timing and execution configuration."""
+"""In-time simulation and plotting configuration."""
 
-# ========== BACKTEST TIMING SETTINGS ==========
+# ========== IN-TIME SIMULATION SETTINGS ==========
+# This branch runs time-based simulation loops (minutes), not date-ranged backtests.
 
-# Start date for backtest (ISO format: YYYY-MM-DD HH:MM:SS in UTC)
-# Examples:
-#   "2026-01-03 10:30:00"  - Specific datetime
-#   "2026-01-03"           - Defaults to 00:00:00
-START_DATE = "2026-01-01 0:00:00"
+BAR_TIMEFRAME_MINUTES = 1
+RUN_MINUTES = 180
+SIMULATION_MINUTES = RUN_MINUTES
 
-# Stop date for backtest
-# Special keyword "TODAY" resolves to yesterday at 23:50 UTC 
-# (to avoid Alpaca recent SIP data restrictions)
-# Examples:
-#   "TODAY"                - Use yesterday's end-of-day
-#   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATE = "TODAY"
+# Use synthetic fallback prices when quote/bar fetch fails.
+USE_SYNTHETIC_DATA = True
 
-# ========== TIMEFRAME / BINNING ==========
-# Candle interval for bars
-# Supported values: "1m", "5m", "15m", "1h", "1d"
-#   "1m"  - 1-minute bars (highest granularity, more data)
-#   "5m"  - 5-minute bars
-#   "15m" - 15-minute bars
-#   "1h"  - 1-hour bars
-#   "1d"  - Daily bars (lowest granularity, less data)
+# When True, loop can skip real-time sleeping (if used by runner logic).
+FAST_MODE = True
+
+# Legacy keys kept for compatibility with older modules/docs.
+START_DATE = None
+STOP_DATE = None
 BINNING = "1m"
 
 # ========== RUN ARCHIVING SETTINGS ==========
@@ -55,6 +47,11 @@ SMA_EXTREMA_MIN_TOUCHES = 3
 SMA_EXTREMA_MERGE_BAR_GAP = 5
 
 __all__ = [
+    "BAR_TIMEFRAME_MINUTES",
+    "RUN_MINUTES",
+    "SIMULATION_MINUTES",
+    "USE_SYNTHETIC_DATA",
+    "FAST_MODE",
     "START_DATE",
     "STOP_DATE",
     "BINNING",

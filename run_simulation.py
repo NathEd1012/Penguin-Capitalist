@@ -38,8 +38,17 @@ from data.scoreboard import (
     print_scoreboard,
 )
 
-from penguins import SupportResistancePenguin
-from penguins.sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
+try:
+    from penguins import SupportResistancePenguin
+except Exception:
+    class SupportResistancePenguin:  # type: ignore
+        pass
+
+try:
+    from penguins.sma20_multitimeframe_penguin import SMA20MultiTimeframePenguin
+except Exception:
+    class SMA20MultiTimeframePenguin:  # type: ignore
+        pass
 
 # Import utility modules from scripts
 from scripts import (

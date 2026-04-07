@@ -1,14 +1,14 @@
-# penguins/random_penguin2.py
+# penguins/random_penguin.py
 import random
 from penguins.base_penguin import BasePenguin
 
 
-class RandomPenguin2(BasePenguin):
+class RandomPenguin(BasePenguin):
     def __init__(self):
-        super().__init__("RandomPenguin2")
+        super().__init__("RandomPenguin")
 
     def decide(self, symbol, mid_prices, bid, ask, portfolio):
-        """Make a random decision: BUY, SELL, or HOLD (same as RandomPenguin)."""
+        """Make a random decision: BUY, SELL, or HOLD."""
         if bid <= 0 or ask <= 0:
             return "HOLD", 0
 

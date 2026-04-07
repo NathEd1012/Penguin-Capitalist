@@ -2,7 +2,7 @@
 Evaluate CopilotPenguin: Analyze decisions and performance from a run.
 
 Usage:
-    python evaluate_copilot.py [log_file] [--failed-only] [--limit N]
+    python scripts/assistive/evaluate_copilot.py [log_file] [--failed-only] [--limit N]
     
     log_file: Path to copilot_penguin_decisions.json (default: run_current/)
     --failed-only: Show only losing trades
@@ -12,6 +12,10 @@ import sys
 import json
 from pathlib import Path
 from typing import List, Dict, Any
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 
 def load_log(path: str) -> Dict[str, Any]:

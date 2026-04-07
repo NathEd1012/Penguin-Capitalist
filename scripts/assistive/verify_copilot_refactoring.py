@@ -5,6 +5,10 @@ Quick verification that CopilotPenguin refactoring is working correctly.
 import sys
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 def test_imports():
     """Test that all imports work."""
     print("Testing imports...")
@@ -168,7 +172,7 @@ def main():
         print("\nTo run the simulation:")
         print("  python run_simulation.py")
         print("\nTo evaluate CopilotPenguin performance:")
-        print("  python evaluate_copilot.py")
+        print("  python scripts/assistive/evaluate_copilot.py")
         print("=" * 70)
         return 0
     else:
