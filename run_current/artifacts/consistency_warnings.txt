@@ -1,15 +1,15 @@
 Consistency Check Warnings
 ============================================================
 
-• [RSIMeanReversionPenguin] Detected 220813 suspicious price jumps > 15%
-•   Trade #1 (AMD): -79.48% ($586.51 → $120.37)
-•   Trade #3 (TSLA): +234.50% ($120.37 → $402.64)
-•   Trade #4 (SPY): +45.70% ($402.64 → $586.63)
-• [RSIMeanReversionPenguinStrict1] Detected 220813 suspicious price jumps > 15%
-•   Trade #1 (AMD): -79.48% ($586.51 → $120.37)
-•   Trade #3 (TSLA): +234.50% ($120.37 → $402.64)
-•   Trade #4 (SPY): +45.70% ($402.64 → $586.63)
-• [RSIMeanReversionPenguinStrict2] Detected 118616 suspicious price jumps > 15%
-•   Trade #2 (MP): -97.33% ($586.63 → $15.67)
-•   Trade #3 (AAPL): +1497.98% ($15.67 → $250.45)
-•   Trade #4 (MSFT): +68.34% ($250.45 → $421.62)
+• [RSIMeanReversionPenguin] Detected 46713 suspicious price jumps > 15%
+•   Trade #1 (TSLA): +141.11% ($186.42 → $449.46)
+•   Trade #2 (NVDA): -58.54% ($449.46 → $186.36)
+•   Trade #3 (TSLA): +141.15% ($186.36 → $449.41)
+• [RSIMeanReversionPenguinStrict1] Detected 25997 suspicious price jumps > 15%
+•   Trade #1 (TSLA): +141.11% ($186.42 → $449.46)
+•   Trade #2 (NVDA): -58.54% ($449.46 → $186.36)
+•   Trade #3 (TSLA): +141.15% ($186.36 → $449.41)
+• [RSIMeanReversionPenguinStrict2] Detected 13647 suspicious price jumps > 15%
+•   Trade #1 (NVDA): -58.54% ($449.46 → $186.36)
+•   Trade #2 (TSLA): +141.15% ($186.36 → $449.41)
+•   Trade #3 (NVDA): -58.53% ($449.41 → $186.38)
