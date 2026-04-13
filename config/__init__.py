@@ -16,6 +16,7 @@ from config.symbols import (
     SYMBOL_LIST_1,
     SYMBOL_LIST_2,
     SYMBOL_LIST_3,
+    SYMBOL_LIST_4,
     SYMBOL_LISTS,
     ACTIVE_SYMBOLS,
     SYMBOLS_LIST,
@@ -59,10 +60,11 @@ from config.strategies import (
 __all__ = [
     # Active trading configuration
     "SYMBOLS",              # Active symbols list for backtesting
-    "ACTIVE_SYMBOL_LIST",   # Selected list key (LIST_1/LIST_2/LIST_3)
+    "ACTIVE_SYMBOL_LIST",   # Selected list key (LIST_1/LIST_2/LIST_3/LIST_4)
     "SYMBOL_LIST_1",        # Small-cap list
     "SYMBOL_LIST_2",        # Full list
     "SYMBOL_LIST_3",        # Custom list
+    "SYMBOL_LIST_4",        # Expanded universe list
     "SYMBOL_LISTS",         # Mapping of selectable lists
     "ACTIVE_SYMBOLS",       # Explicit active symbols
     "SYMBOLS_LIST",         # Alias

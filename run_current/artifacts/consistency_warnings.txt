@@ -1,15 +1,19 @@
 Consistency Check Warnings
 ============================================================
 
-• [RSIMeanReversionPenguin] Detected 46713 suspicious price jumps > 15%
+• [RSIMeanReversionPenguin] Detected 258478 suspicious price jumps > 15%
 •   Trade #1 (TSLA): +141.11% ($186.42 → $449.46)
 •   Trade #2 (NVDA): -58.54% ($449.46 → $186.36)
 •   Trade #3 (TSLA): +141.15% ($186.36 → $449.41)
-• [RSIMeanReversionPenguinStrict1] Detected 25997 suspicious price jumps > 15%
-•   Trade #1 (TSLA): +141.11% ($186.42 → $449.46)
-•   Trade #2 (NVDA): -58.54% ($449.46 → $186.36)
-•   Trade #3 (TSLA): +141.15% ($186.36 → $449.41)
-• [RSIMeanReversionPenguinStrict2] Detected 13647 suspicious price jumps > 15%
-•   Trade #1 (NVDA): -58.54% ($449.46 → $186.36)
-•   Trade #2 (TSLA): +141.15% ($186.36 → $449.41)
-•   Trade #3 (NVDA): -58.53% ($449.41 → $186.38)
+• [RSI Mean Reversion Selective] Detected 139 suspicious price jumps > 15%
+•   Trade #1 (BE): +12465.81% ($0.72 → $90.50)
+•   Trade #2 (MU): +225.53% ($90.50 → $294.62)
+•   Trade #3 (MARA): -96.86% ($294.62 → $9.24)
+• [Smart RSI Confluence] Detected 59 suspicious price jumps > 15%
+•   Trade #2 (VERI): -94.74% ($90.26 → $4.75)
+•   Trade #3 (BBAI): +19.37% ($4.75 → $5.67)
+•   Trade #4 (MCHP): +1052.03% ($5.67 → $65.33)
+• [MomentumPenguin] Detected 42695 suspicious price jumps > 15%
+•   Trade #2 (QQQ): +13244.02% ($4.65 → $620.62)
+•   Trade #3 (XLK): -76.52% ($620.62 → $145.71)
+•   Trade #4 (NVDA): +30.03% ($145.71 → $189.46)

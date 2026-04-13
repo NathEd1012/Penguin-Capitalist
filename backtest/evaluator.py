@@ -254,6 +254,7 @@ class Evaluator:
         start_date: str = None,
         stop_date: str = None,
         bar_timestamps: List[datetime] = None,
+        artifacts_dir: Path = None,
     ):
         """
         Generate a comprehensive PDF report with capital curves and detailed trade summaries.
@@ -266,6 +267,7 @@ class Evaluator:
             binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
             start_date: Start date string for x-axis
             stop_date: Stop date string for x-axis
+            artifacts_dir: Directory to save summary data files (optional)
         """
         # Convert results to individual dicts for plotting module
         curves = {}
@@ -296,5 +298,6 @@ class Evaluator:
             start_date,
             stop_date,
             bar_timestamps,
+            artifacts_dir,
         )
 

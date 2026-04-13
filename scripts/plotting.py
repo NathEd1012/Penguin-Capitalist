@@ -4,6 +4,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from datetime import datetime, timedelta
 from pathlib import Path
 import pytz
+import csv
 from config import INITIAL_CAPITAL
 from scripts.multiframe import (
     plot_multitimeframe_sr_history as _plot_multitimeframe_sr_history,
@@ -13,7 +14,10 @@ from scripts.multiframe import (
 
 def _display_strategy_name(name: str) -> str:
     """Normalize strategy names for plot/report labels."""
-    return name
+    display_name_map = {
+        "SP500Penguin": "SP500",
+    }
+    return display_name_map.get(name, name)
 
 
 def _strategy_parameter_text(strategy_name: str) -> str | None:
@@ -22,12 +26,63 @@ def _strategy_parameter_text(strategy_name: str) -> str | None:
         "RSIMeanReversionPenguin": "RSI period=14 | oversold=30 | overbought=70 | cooldown=none",
         "RSIMeanReversionPenguinStrict1": "RSI period=14 | oversold=29 | overbought=71 | cooldown=0",
         "RSIMeanReversionPenguinStrict2": "RSI period=14 | oversold=26 | overbought=71 | cooldown=0",
-        "RSIMeanReversionAdvancedPenguin": (
-            "RSI period=14 | oversold=30 | overbought=70 | stop_loss=0.10 | "
-            "max_buy_size=3 | collapse_filter=False"
-        ),
+        "RSIMeanReversionReducedPenguin": "RSI period=14 | adaptive boundaries | target=1-10 trades/day",
+        "RSIMeanReversionMomentumPenguin": "RSI period=14 | 3-stage momentum | RISING(35/80) FALLING(25/65) HOLDING(30/70)",
     }
     return rsi_parameter_map.get(strategy_name)
+
+
+def _save_strategy_summary_to_artifacts(
+    internal_name: str,
+    display_name: str,
+    summary: dict,
+    cash: float,
+    market_value: float,
+    total_value: float,
+    total_buy_count: int,
+    total_sell_count: int,
+    total_pnl: float,
+    artifacts_dir,
+):
+    """Save strategy summary data to a text file in artifacts directory."""
+    artifacts_path = Path(artifacts_dir)
+    artifacts_path.mkdir(parents=True, exist_ok=True)
+    
+    # Save as CSV for easy import into spreadsheets
+    csv_file = artifacts_path / f"{internal_name}_summary.csv"
+    
+    with open(csv_file, 'w', newline='') as f:
+        writer = csv.writer(f)
+        
+        # Header with strategy info
+        writer.writerow([f"Strategy Summary: {display_name}"])
+        writer.writerow([])
+        
+        # Portfolio totals
+        writer.writerow(["Portfolio Totals"])
+        writer.writerow(["Cash", f"${cash:,.2f}"])
+        writer.writerow(["Market Value", f"${market_value:,.2f}"])
+        writer.writerow(["Total Value", f"${total_value:,.2f}"])
+        writer.writerow(["Total Buy Count", total_buy_count])
+        writer.writerow(["Total Sell Count", total_sell_count])
+        writer.writerow(["Total PnL", f"${total_pnl:,.2f}"])
+        writer.writerow([])
+        
+        # Per-symbol summary
+        writer.writerow(["Symbol", "Buy Count", "Sell Count", "Shares Bought", "Total Cost", "Total Revenue", "Total PnL", "PnL %"])
+        for symbol in sorted(summary.keys()):
+            s = summary[symbol]
+            writer.writerow([
+                symbol,
+                s["buy_count"],
+                s["sell_count"],
+                s["total_qty_bought"],
+                f"${s['total_cost']:,.2f}",
+                f"${s['total_revenue']:,.2f}",
+                f"${s['total_pnl']:,.2f}",
+                f"{s['pnl_pct']:+.2f}%",
+            ])
+
 
 
 def _parse_datetime_string(dt_str: str) -> datetime:
@@ -286,7 +341,7 @@ def create_png_gallery_pdf(png_files, output_pdf, page_title_prefix="Multitimefr
     return _create_multiframe_png_gallery_pdf(png_files, output_pdf)
 
 
-def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
+def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None, artifacts_dir=None):
     """
     Create comprehensive PDF report with capital curves and per-symbol trade summaries.
     
@@ -299,6 +354,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
         start_date_str: Start date string for x-axis
         stop_date_str: Stop date string for x-axis
+        artifacts_dir: Directory to save summary data files (optional)
     """
     if latest_prices is None:
         latest_prices = {}
@@ -468,17 +524,12 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         pdf.savefig(fig, bbox_inches="tight")
         plt.close()
 
-        # Pages 2+: Trade Summary Table for each Penguin
+        # Pages 2+: Individual plots with summary info above (tables moved to artifacts)
         for penguin_name in sorted(portfolios.keys()):
             portfolio = portfolios[penguin_name]
             display_penguin_name = _display_strategy_name(penguin_name)
             parameter_text = _strategy_parameter_text(penguin_name)
             
-            fig = plt.figure(figsize=(12, 10))
-            ax = fig.add_subplot(111)
-            ax.axis("tight")
-            ax.axis("off")
-
             summary = portfolio.get_symbol_summary(latest_prices)
 
             cash = portfolio.cash
@@ -488,19 +539,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     market_value += pos_qty * latest_prices[symbol]
             total_value = cash + market_value
 
-            # Build table data
-            table_data = [
-                [
-                    "Symbol",
-                    "Buy/Sell Cnt",
-                    "Shares",
-                    "Total Cost",
-                    "Total Revenue",
-                    "Total PnL",
-                    "PnL %",
-                ]
-            ]
-
+            # Calculate totals for display
             total_pnl = 0
             total_buy_count = 0
             total_sell_count = 0
@@ -508,7 +547,6 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             for symbol in sorted(summary.keys()):
                 s = summary[symbol]
                 pnl = s["total_pnl"]
-                pnl_pct = s["pnl_pct"]
                 buy_cnt = s["buy_count"]
                 sell_cnt = s["sell_count"]
                 shares_bought = s["total_qty_bought"]
@@ -517,82 +555,22 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 total_sell_count += sell_cnt
                 total_shares_bought += shares_bought
 
-                table_data.append(
-                    [
-                        symbol,
-                        f"{buy_cnt}/{sell_cnt}",
-                        str(shares_bought),
-                        f"${s['total_cost']:,.2f}",
-                        f"${s['total_revenue']:,.2f}",
-                        f"${pnl:,.2f}",
-                        f"{pnl_pct:+.2f}%",
-                    ]
+            # Save summary data to artifacts
+            if artifacts_dir:
+                _save_strategy_summary_to_artifacts(
+                    penguin_name,
+                    display_penguin_name,
+                    summary,
+                    cash,
+                    market_value,
+                    total_value,
+                    total_buy_count,
+                    total_sell_count,
+                    total_pnl,
+                    artifacts_dir,
                 )
 
-            # Add total row
-            table_data.append(
-                [
-                    "TOTAL",
-                    "",
-                    str(total_shares_bought),
-                    "",
-                    "",
-                    f"${total_pnl:,.2f}",
-                    "",
-                ]
-            )
-
-            table = ax.table(
-                cellText=table_data,
-                cellLoc="center",
-                loc="center",
-                colWidths=[0.14, 0.14, 0.09, 0.18, 0.18, 0.15, 0.12],
-            )
-            table.auto_set_font_size(False)
-            table.set_fontsize(9)
-            table.scale(1, 2)
-
-            # Style header row
-            for i in range(len(table_data[0])):
-                table[(0, i)].set_facecolor("#4472C4")
-                table[(0, i)].set_text_props(weight="bold", color="white")
-
-            # Style total row
-            for i in range(len(table_data[0])):
-                table[(len(table_data) - 1, i)].set_facecolor("#E7E6E6")
-                table[(len(table_data) - 1, i)].set_text_props(weight="bold")
-
-            title = f"Trade Summary: {display_penguin_name}"
-            fig.suptitle(title, fontsize=14, weight="bold", y=0.98)
-
-            # Portfolio totals at the top in fixed columns to avoid text overlap.
-            summary_items = [
-                f"Cash: ${cash:,.2f}",
-                f"Market Value: ${market_value:,.2f}",
-                f"Total Value: ${total_value:,.2f}",
-                f"Buys: {total_buy_count}",
-                f"Sells: {total_sell_count}",
-            ]
-            summary_x_positions = [0.08, 0.30, 0.52, 0.78, 0.92]
-            for x_pos, item in zip(summary_x_positions, summary_items):
-                fig.text(x_pos, 0.935, item, ha="center", va="center", fontsize=10, weight="semibold")
-
-            if parameter_text:
-                fig.text(
-                    0.5,
-                    0.905,
-                    parameter_text,
-                    ha="center",
-                    va="center",
-                    fontsize=9,
-                    style="italic",
-                )
-
-            plt.tight_layout(rect=[0, 0, 1, 0.86])
-            pdf.savefig(fig, bbox_inches="tight")
-            plt.close()
-
-            # Add individual plot for this penguin on the next page
+            # Create individual plot page with summary info above
             if penguin_name in curves:
                 fig, ax = plt.subplots(figsize=(12, 8))
                 
@@ -628,7 +606,20 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 if vals:
                     ax.set_xlim(left=0, right=len(vals) * 1.15)
                 
-                plt.tight_layout()
+                # Add summary text above the plot
+                summary_text_lines = [
+                    f"Cash: ${cash:,.2f}  |  Market Value: ${market_value:,.2f}  |  Total Value: ${total_value:,.2f}",
+                    f"Buys: {total_buy_count}  |  Sells: {total_sell_count}",
+                ]
+                if parameter_text:
+                    summary_text_lines.append(parameter_text)
+                
+                summary_text = "\n".join(summary_text_lines)
+                fig.text(0.5, 0.98, summary_text, ha="center", va="top", fontsize=9, 
+                        wrap=True, family="monospace", bbox=dict(boxstyle="round,pad=0.5", 
+                        facecolor="lightyellow", alpha=0.3, edgecolor="gray"))
+                
+                plt.tight_layout(rect=[0, 0, 1, 0.94])
                 pdf.savefig(fig, bbox_inches="tight")
                 plt.close()
 

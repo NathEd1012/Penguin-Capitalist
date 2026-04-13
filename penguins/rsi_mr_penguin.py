@@ -70,9 +70,9 @@ class RSIMeanReversionPenguinStrict1(_RSIMeanReversionStrictBase):
     def __init__(self):
         super().__init__(
             name="RSIMeanReversionPenguinStrict1",
-            rsi_period=14,
+            rsi_period=30,
             oversold=30,
-            overbought=80,
+            overbought=70,
             cooldown_bars=0,
         )
 
@@ -83,8 +83,8 @@ class RSIMeanReversionPenguinStrict2(_RSIMeanReversionStrictBase):
     def __init__(self):
         super().__init__(
             name="RSIMeanReversionPenguinStrict2",
-            rsi_period=14,
-            oversold=10,
-            overbought=75,
+            rsi_period=10,
+            oversold=30,
+            overbought=70,
             cooldown_bars=0,
         )

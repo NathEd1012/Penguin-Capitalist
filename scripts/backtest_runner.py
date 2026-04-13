@@ -440,7 +440,7 @@ def main():
     print("\nGenerating PDF report...")
     current_pdf = current_dir / "report.pdf"
     
-    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
+    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps, current_artifacts_dir)
     
     # Validate consistency (check for price jumps)
     print("\nValidating consistency...")

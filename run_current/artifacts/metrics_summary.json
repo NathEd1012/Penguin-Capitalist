@@ -1,42 +1,52 @@
 {
   "SP500Penguin": {
-    "total_return": -345.35,
-    "return_pct": -3.45,
+    "total_return": -32.06,
+    "return_pct": -0.32,
     "max_drawdown": -9.44,
-    "sharpe_ratio": -0.02,
+    "sharpe_ratio": 0.0,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 9654.65
+    "final_value": 9967.94
   },
   "RSIMeanReversionPenguin": {
-    "total_return": 1349.74,
-    "return_pct": 13.5,
-    "max_drawdown": -6.65,
-    "sharpe_ratio": 0.07,
-    "total_trades": 56883,
-    "buy_trades": 45158,
-    "sell_trades": 11725,
-    "final_value": 11349.74
+    "total_return": 5765.81,
+    "return_pct": 57.66,
+    "max_drawdown": -7.79,
+    "sharpe_ratio": 0.28,
+    "total_trades": 281454,
+    "buy_trades": 198129,
+    "sell_trades": 83325,
+    "final_value": 15765.81
   },
-  "RSIMeanReversionPenguinStrict1": {
-    "total_return": 89.18,
-    "return_pct": 0.89,
-    "max_drawdown": -14.93,
-    "sharpe_ratio": 0.01,
-    "total_trades": 32397,
-    "buy_trades": 25539,
-    "sell_trades": 6858,
-    "final_value": 10089.18
+  "RSI Mean Reversion Selective": {
+    "total_return": 662.66,
+    "return_pct": 6.63,
+    "max_drawdown": -13.32,
+    "sharpe_ratio": 0.04,
+    "total_trades": 148,
+    "buy_trades": 74,
+    "sell_trades": 74,
+    "final_value": 10662.66
   },
-  "RSIMeanReversionPenguinStrict2": {
-    "total_return": 1255.49,
-    "return_pct": 12.55,
-    "max_drawdown": -5.48,
-    "sharpe_ratio": 0.11,
-    "total_trades": 18200,
-    "buy_trades": 13531,
-    "sell_trades": 4669,
-    "final_value": 11255.49
+  "Smart RSI Confluence": {
+    "total_return": 1128.57,
+    "return_pct": 11.29,
+    "max_drawdown": -14.35,
+    "sharpe_ratio": 0.05,
+    "total_trades": 66,
+    "buy_trades": 33,
+    "sell_trades": 33,
+    "final_value": 11128.57
+  },
+  "MomentumPenguin": {
+    "total_return": -2442.25,
+    "return_pct": -24.42,
+    "max_drawdown": -29.01,
+    "sharpe_ratio": -0.17,
+    "total_trades": 50221,
+    "buy_trades": 25253,
+    "sell_trades": 24968,
+    "final_value": 7557.75
   }
 }
