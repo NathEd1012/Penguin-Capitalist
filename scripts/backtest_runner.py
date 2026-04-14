@@ -260,11 +260,11 @@ def run_backtest(
 
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
-            
-            # Set current timestamp for S/R penguins that track history
+
             if hasattr(penguin, "set_current_timestamp"):
                 penguin.set_current_timestamp(timestamp)
             
+            # Set current timestamp for S/R penguins that track history
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]

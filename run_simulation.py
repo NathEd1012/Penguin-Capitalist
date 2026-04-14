@@ -283,6 +283,9 @@ def run_backtest(
 
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
+            
+            if hasattr(penguin, "set_current_timestamp"):
+                penguin.set_current_timestamp(timestamp)
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
@@ -306,9 +309,6 @@ def run_backtest(
                 mid_prices = full_history[-lookback_bars:] if len(full_history) > lookback_bars else full_history
                 
                 bid, ask = quotes[symbol]
-
-                if hasattr(penguin, "set_current_timestamp"):
-                    penguin.set_current_timestamp(timestamp)
                 
                 try:
                     action, quantity = penguin.decide(
