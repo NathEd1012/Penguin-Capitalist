@@ -10,20 +10,7 @@ class RSIMeanReversionReducedPenguin(BasePenguin):
     """
     LOOKBACK_BARS = 30  # Only needs last 30 bars for RSI calculation
     
-    # LIST 2: Trade only these symbols
-    TRADED_SYMBOLS = {
-        # Tech giants & growth
-        "SPY", "NVDA", "AAPL", "PLTR", "AMD", "MSTR", "MSFT", "TSLA",
-        # Materials & Mining
-        "MP",
-        # Defense
-        "NOC", "LMT",
-        # International
-        "NVO",
-        # ETFs / Commodity ETFs
-        "GLD", "SLV", "PPLT", "COPX", "JO", "LIT", "URTH", "GDXJ", "SIL", "REMX", "PICK",
-    }
-    
+
     def __init__(self, rsi_period=14, target_trades_min=1, target_trades_max=10):
         super().__init__("RSIMeanReversionReducedPenguin")
         self.rsi_period = rsi_period
