@@ -1,19 +1,25 @@
 Consistency Check Warnings
 ============================================================
 
-• [RSIMeanReversionPenguin] Detected 258478 suspicious price jumps > 15%
-•   Trade #1 (TSLA): +141.11% ($186.42 → $449.46)
-•   Trade #2 (NVDA): -58.54% ($449.46 → $186.36)
-•   Trade #3 (TSLA): +141.15% ($186.36 → $449.41)
-• [RSI Mean Reversion Selective] Detected 139 suspicious price jumps > 15%
-•   Trade #1 (BE): +12465.81% ($0.72 → $90.50)
-•   Trade #2 (MU): +225.53% ($90.50 → $294.62)
-•   Trade #3 (MARA): -96.86% ($294.62 → $9.24)
-• [Smart RSI Confluence] Detected 59 suspicious price jumps > 15%
-•   Trade #2 (VERI): -94.74% ($90.26 → $4.75)
-•   Trade #3 (BBAI): +19.37% ($4.75 → $5.67)
-•   Trade #4 (MCHP): +1052.03% ($5.67 → $65.33)
-• [MomentumPenguin] Detected 42695 suspicious price jumps > 15%
-•   Trade #2 (QQQ): +13244.02% ($4.65 → $620.62)
-•   Trade #3 (XLK): -76.52% ($620.62 → $145.71)
-•   Trade #4 (NVDA): +30.03% ($145.71 → $189.46)
+• [SP500Penguin] Detected 1 suspicious price jumps > 15%
+•   Trade #1 (SPY): +16.04% ($586.51 → $680.60)
+• [RSIMeanReversionPenguin] Detected 1840587 suspicious price jumps > 15%
+•   Trade #1 (F): -98.32% ($586.51 → $9.88)
+•   Trade #2 (UBER): +510.56% ($9.88 → $60.33)
+•   Trade #3 (PFE): -56.15% ($60.33 → $26.46)
+• [RSI Mean Reversion Selective] Detected 166 suspicious price jumps > 15%
+•   Trade #1 (SPCE): +27.06% ($4.62 → $5.87)
+•   Trade #2 (OPEN): -72.58% ($5.87 → $1.61)
+•   Trade #3 (VERI): +105.62% ($1.61 → $3.31)
+• [Smart RSI Confluence] Detected 117 suspicious price jumps > 15%
+•   Trade #1 (RUN): -60.77% ($23.96 → $9.40)
+•   Trade #2 (MP): +70.11% ($9.40 → $15.99)
+•   Trade #3 (AMD): +662.95% ($15.99 → $122.01)
+• [CopilotPenguin] Detected 529 suspicious price jumps > 15%
+•   Trade #1 (AMD): -70.26% ($410.72 → $122.14)
+•   Trade #2 (SOFI): -87.66% ($122.14 → $15.07)
+•   Trade #3 (PLUG): -85.47% ($15.07 → $2.19)
+• [MomentumPenguin] Detected 195934 suspicious price jumps > 15%
+•   Trade #1 (TSLA): +6756.75% ($6.01 → $411.79)
+•   Trade #2 (AVGO): -42.93% ($411.79 → $235.01)
+•   Trade #3 (AMD): -48.21% ($235.01 → $121.71)

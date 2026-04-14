@@ -1,52 +1,62 @@
 {
   "SP500Penguin": {
-    "total_return": -32.06,
-    "return_pct": -0.32,
-    "max_drawdown": -9.44,
-    "sharpe_ratio": 0.0,
+    "total_return": 1599.48,
+    "return_pct": 15.99,
+    "max_drawdown": -21.23,
+    "sharpe_ratio": 0.02,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 9967.94
+    "final_value": 11599.48
   },
   "RSIMeanReversionPenguin": {
-    "total_return": 5765.81,
-    "return_pct": 57.66,
-    "max_drawdown": -7.79,
-    "sharpe_ratio": 0.28,
-    "total_trades": 281454,
-    "buy_trades": 198129,
-    "sell_trades": 83325,
-    "final_value": 15765.81
+    "total_return": 48886.74,
+    "return_pct": 488.87,
+    "max_drawdown": -9.42,
+    "sharpe_ratio": 0.26,
+    "total_trades": 2001141,
+    "buy_trades": 1490438,
+    "sell_trades": 510703,
+    "final_value": 58886.74
   },
   "RSI Mean Reversion Selective": {
-    "total_return": 662.66,
-    "return_pct": 6.63,
-    "max_drawdown": -13.32,
-    "sharpe_ratio": 0.04,
-    "total_trades": 148,
-    "buy_trades": 74,
-    "sell_trades": 74,
-    "final_value": 10662.66
+    "total_return": 2984.13,
+    "return_pct": 29.84,
+    "max_drawdown": -24.55,
+    "sharpe_ratio": 0.03,
+    "total_trades": 186,
+    "buy_trades": 93,
+    "sell_trades": 93,
+    "final_value": 12984.13
   },
   "Smart RSI Confluence": {
-    "total_return": 1128.57,
-    "return_pct": 11.29,
-    "max_drawdown": -14.35,
-    "sharpe_ratio": 0.05,
-    "total_trades": 66,
-    "buy_trades": 33,
-    "sell_trades": 33,
-    "final_value": 11128.57
+    "total_return": 3590.79,
+    "return_pct": 35.91,
+    "max_drawdown": -32.29,
+    "sharpe_ratio": 0.03,
+    "total_trades": 122,
+    "buy_trades": 61,
+    "sell_trades": 61,
+    "final_value": 13590.79
+  },
+  "CopilotPenguin": {
+    "total_return": -562.8,
+    "return_pct": -5.63,
+    "max_drawdown": -10.72,
+    "sharpe_ratio": -0.03,
+    "total_trades": 628,
+    "buy_trades": 314,
+    "sell_trades": 314,
+    "final_value": 9437.2
   },
   "MomentumPenguin": {
-    "total_return": -2442.25,
-    "return_pct": -24.42,
-    "max_drawdown": -29.01,
-    "sharpe_ratio": -0.17,
-    "total_trades": 50221,
-    "buy_trades": 25253,
-    "sell_trades": 24968,
-    "final_value": 7557.75
+    "total_return": -7277.74,
+    "return_pct": -72.78,
+    "max_drawdown": -73.81,
+    "sharpe_ratio": -0.16,
+    "total_trades": 238876,
+    "buy_trades": 119518,
+    "sell_trades": 119358,
+    "final_value": 2722.26
   }
 }

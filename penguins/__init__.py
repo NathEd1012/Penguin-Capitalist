@@ -7,7 +7,7 @@ from .rsi_mr_penguin import (
 )
 from .rsi_mr_reduced_penguin import RSIMeanReversionReducedPenguin
 from .rsi_mr_momentum_penguin import RSIMeanReversionMomentumPenguin
-from .chat_penguin import RSIMeanReversionSelectivePenguin
+from .rsi_mr_selective import RSIMeanReversionSelectivePenguin
 from .chat2_penguin import SmartRSIConfluencePenguin
 from .copilot_penguin import CopilotPenguin
 from .minmax_sr20_penguin import MinMaxSRPenguin
