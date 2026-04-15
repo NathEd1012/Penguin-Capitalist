@@ -1,13 +1,11 @@
 Consistency Check Warnings
 ============================================================
 
-• [SP500Penguin] Detected 1 suspicious price jumps > 15%
-•   Trade #1 (SPY): +17.07% ($586.51 → $686.64)
-• [RSI Mean Reversion Selective] Detected 164 suspicious price jumps > 15%
-•   Trade #1 (SPCE): +27.06% ($4.62 → $5.87)
-•   Trade #2 (OPEN): -72.58% ($5.87 → $1.61)
-•   Trade #3 (VERI): +105.62% ($1.61 → $3.31)
-• [Smart RSI Confluence] Detected 117 suspicious price jumps > 15%
-•   Trade #1 (RUN): -60.77% ($23.96 → $9.40)
-•   Trade #2 (MP): +70.11% ($9.40 → $15.99)
-•   Trade #3 (AMD): +662.95% ($15.99 → $122.01)
+• [RSI Mean Reversion Selective] Detected 184 suspicious price jumps > 15%
+•   Trade #1 (NIO): -59.69% ($11.04 → $4.45)
+•   Trade #2 (XPEV): +357.52% ($4.45 → $20.36)
+•   Trade #3 (LI): +39.74% ($20.36 → $28.45)
+• [Smart RSI Confluence] Detected 101 suspicious price jumps > 15%
+•   Trade #1 (SOUN): +96.31% ($5.68 → $11.15)
+•   Trade #2 (BABA): +1097.13% ($11.15 → $133.51)
+•   Trade #3 (NU): -91.72% ($133.51 → $11.05)

@@ -14,6 +14,7 @@ from .minmax_sr20_penguin import MinMaxSRPenguin
 from .sr_multiframe_penguin import SRMultiframePenguin
 from .sma20_penguin import SMA20AdvancedPenguin, SMA20Penguin
 from .SP500 import SP500
+from .SP500x2 import SP500x2
 
 __all__ = [
     "BasePenguin",
@@ -31,4 +32,5 @@ __all__ = [
     "SMA20AdvancedPenguin",
     "SMA20Penguin",
     "SP500",
+    "SP500x2",
 ]

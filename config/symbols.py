@@ -197,7 +197,7 @@ SYMBOL_LIST_4 = [
 ]
 SYMBOL_LIST_5 = [
 # ===== INDEX / MACRO =====
-"SPY","QQQ","IWM","DIA","XLK","XLF","XLE","XLV","XLI","XLP",
+"SPY","SSO","QQQ","IWM","DIA","XLK","XLF","XLE","XLV","XLI","XLP",
 
 # ===== BIG TECH / PLATFORMS =====
 "AAPL","MSFT","NVDA","AMZN","GOOGL","META","TSLA","AVGO","ORCL","ADBE",

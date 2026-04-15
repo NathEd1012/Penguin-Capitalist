@@ -6,7 +6,7 @@
 # Examples:
 #   "2026-01-03 10:30:00"  - Specific datetime
 #   "2026-01-03"           - Defaults to 00:00:00
-START_DATE = "2025-01-01 0:00:00"
+START_DATE = "2025-03-01 0:00:00"
 
 # Stop date for backtest
 # Special keyword "TODAY" resolves to yesterday at 23:50 UTC 
@@ -14,7 +14,7 @@ START_DATE = "2025-01-01 0:00:00"
 # Examples:
 #   "TODAY"                - Use yesterday's end-of-day
 #   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATE = "TODAY" #"2025-08-01 0:00:00" #"TODAY"
+STOP_DATE = "2025-06-01 0:00:00" #"TODAY" #"2025-08-01 0:00:00" #"TODAY"
 
 # ========== TIMEFRAME / BINNING ==========
 # Candle interval for bars

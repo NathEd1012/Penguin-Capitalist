@@ -1,12 +1,12 @@
-Strategy Summary: SP500
+Strategy Summary: SP500x2
 
 Portfolio Totals
-Cash,"$9,908.33"
+Cash,"$9,431.06"
 Market Value,$0.00
-Total Value,"$9,908.33"
+Total Value,"$9,431.06"
 Total Buy Count,1
 Total Sell Count,1
-Total PnL,$-91.67
+Total PnL,$-568.94
 
 Symbol,Buy Count,Sell Count,Shares Bought,Total Cost,Total Revenue,Total PnL,PnL %
-SPY,1,1,16,"$9,504.00","$9,412.32",$-91.67,-0.96%
+SSO,1,1,106,"$9,950.15","$9,381.21",$-568.94,-5.72%

@@ -16,8 +16,19 @@ from market_data.cache import DataCache
 load_dotenv()
 
 
+SSO_SPLIT_ADJUSTMENT_EFFECTIVE = datetime(2025, 11, 20, 9, 0, tzinfo=pytz.UTC)
+SSO_SPLIT_ADJUSTMENT_FACTOR = 2.0
+
+
 class DataLoader:
     """Load historical OHLCV data from Alpaca."""
+
+    PRICE_ADJUSTMENTS = {
+        "SSO": (
+            SSO_SPLIT_ADJUSTMENT_EFFECTIVE,
+            SSO_SPLIT_ADJUSTMENT_FACTOR,
+        ),
+    }
     
     def __init__(self):
         """Initialize Alpaca data client."""
@@ -66,6 +77,45 @@ class DataLoader:
             return TimeFrame.Day, 1440
         else:
             raise ValueError(f"Unsupported binning: {binning}. Use '1m', '5m', '15m', '1h', or '1d'")
+
+    def _apply_price_adjustments(self, symbol: str, rows: Dict) -> Dict:
+        """Apply known split adjustments so the historical series stays on one scale."""
+        adjustment = self.PRICE_ADJUSTMENTS.get(symbol)
+        if adjustment is None or not rows:
+            return rows
+
+        effective_ts, factor = adjustment
+        adjusted_rows: Dict = {}
+        for timestamp, row in rows.items():
+            adjusted_row = dict(row)
+            if timestamp >= effective_ts:
+                adjusted_row["open"] *= factor
+                adjusted_row["high"] *= factor
+                adjusted_row["low"] *= factor
+                adjusted_row["close"] *= factor
+            adjusted_rows[timestamp] = adjusted_row
+
+        return adjusted_rows
+
+    @staticmethod
+    def _rows_to_dataframe(rows: Dict) -> pd.DataFrame:
+        """Convert timestamp keyed OHLCV rows into a DataFrame."""
+        if not rows:
+            return pd.DataFrame(columns=["timestamp", "open", "high", "low", "close", "volume"])
+
+        return pd.DataFrame(
+            [
+                {
+                    "timestamp": ts,
+                    "open": row["open"],
+                    "high": row["high"],
+                    "low": row["low"],
+                    "close": row["close"],
+                    "volume": row["volume"],
+                }
+                for ts, row in rows.items()
+            ]
+        ).sort_values("timestamp").reset_index(drop=True)
     
     def load_bars(
         self,
@@ -175,30 +225,25 @@ class DataLoader:
                     missing_rows.update(_fetch_range(tail_start, end_date))
 
             symbol_rows.update(missing_rows)
+            adjusted_rows = self._apply_price_adjustments(symbol, symbol_rows)
 
             # Persist only newly fetched rows so cache grows incrementally.
             if missing_rows:
-                fetched_df = pd.DataFrame(
-                    [
-                        {
-                            "timestamp": ts,
-                            "open": row["open"],
-                            "high": row["high"],
-                            "low": row["low"],
-                            "close": row["close"],
-                            "volume": row["volume"],
-                        }
-                        for ts, row in missing_rows.items()
-                    ]
-                )
-                fetched_df = fetched_df.sort_values("timestamp").reset_index(drop=True)
+                fetched_df = self._rows_to_dataframe({
+                    ts: adjusted_rows[ts]
+                    for ts in missing_rows.keys()
+                })
                 existing_df = self.cache.load_cache(symbol, binning)
-                if existing_df is None or existing_df.empty:
+
+                # Store adjusted price series on disk for split-sensitive symbols.
+                if symbol in self.PRICE_ADJUSTMENTS:
+                    self.cache.save_cache(symbol, binning, self._rows_to_dataframe(adjusted_rows))
+                elif existing_df is None or existing_df.empty:
                     self.cache.save_cache(symbol, binning, fetched_df)
                 else:
                     self.cache.merge_cache_and_new_data(symbol, binning, existing_df, fetched_df)
 
-            return symbol_rows
+            return adjusted_rows
         
         print(f"Fetching data for {len(symbols)} symbols from {start_date} to {end_date}...")
 

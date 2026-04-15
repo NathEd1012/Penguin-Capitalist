@@ -16,6 +16,7 @@ def _display_strategy_name(name: str) -> str:
     """Normalize strategy names for plot/report labels."""
     display_name_map = {
         "SP500Penguin": "SP500",
+        "SP500x2Penguin": "SP500x2",
     }
     return display_name_map.get(name, name)
 

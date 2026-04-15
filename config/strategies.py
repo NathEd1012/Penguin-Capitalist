@@ -9,6 +9,7 @@ from penguins import (
     SMA20Penguin,
     SMA20AdvancedPenguin,
     SP500,
+    SP500x2,
     RSIMeanReversionPenguin,
     RSIMeanReversionPenguinStrict1,
     RSIMeanReversionPenguinStrict2,
@@ -26,6 +27,7 @@ from penguins.multitimeframe_reaction_sr_penguin import MultitimeframeReactionSR
 
 ACTIVE_PENGUINS = [
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
+    SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
     #RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
     # RSIMeanReversionPenguinStrict1,     # RSI Mean Reversion variant 1
     # RSIMeanReversionPenguinStrict2,     # RSI Mean Reversion variant 2
