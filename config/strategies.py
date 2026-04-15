@@ -26,7 +26,7 @@ from penguins.multitimeframe_reaction_sr_penguin import MultitimeframeReactionSR
 
 ACTIVE_PENGUINS = [
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
-    RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
+    #RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
     # RSIMeanReversionPenguinStrict1,     # RSI Mean Reversion variant 1
     # RSIMeanReversionPenguinStrict2,     # RSI Mean Reversion variant 2
     #RSIMeanReversionReducedPenguin,     # Adaptive RSI - targets 1-10 trades/day (LIST 2 symbols)
@@ -34,8 +34,8 @@ ACTIVE_PENGUINS = [
     RSIMeanReversionSelectivePenguin,   # Low-frequency high-quality RSI mean reversion
     SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
 
-    CopilotPenguin,                    # AI-assisted strategy
-    MomentumPenguin,                  # Pure momentum following
+    # CopilotPenguin,                    # AI-assisted strategy
+    #MomentumPenguin,                  # Pure momentum following
     # MinMaxSRPenguin,                  # Single timeframe S/R
     # SRMultiframePenguin,              # Multiframe S/R placeholder
     # MultitimeframeReactionSRPenguin,  # Multi-TF reaction S/R
