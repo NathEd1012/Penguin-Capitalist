@@ -17,13 +17,12 @@ from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.synthetic_spread_model import SyntheticSpreadModel
 from scripts.validation import check_consistency
-from scripts.support_resistance import compute_and_log_support_resistance_zones
 from scripts.multiframe import (
     build_sr_strategy_sets,
     precompute_multiframe_levels,
     set_precomputed_levels_on_penguins,
-    create_sr_multiframe_pdf_direct,
 )
+from assistive_scripts.generate_sr_reports import generate_sr_analysis
 from config import (
     SYMBOLS,
     INITIAL_CAPITAL,
@@ -503,53 +502,15 @@ def main():
     except Exception as e:
         print(f"⚠️  Consistency validation error: {e}")
     
-    # Generate Support & Resistance zones
-    if sr_penguin_names:
-        print("\nAnalyzing support and resistance zones...")
-        try:
-            # Collect symbol prices only from active S/R-based strategies.
-            symbol_prices = defaultdict(list)
-            for penguin_name, (portfolio, metrics) in results.items():
-                if penguin_name not in sr_penguin_names:
-                    continue
-                for trade in portfolio.trades:
-                    symbol_prices[trade.symbol].append(trade.price)
-
-            # Compute S&R zones for current run.
-            compute_and_log_support_resistance_zones(symbol_prices, str(current_artifacts_dir))
-            print("✅ S&R zones computed and saved")
-        except Exception as e:
-            print(f"⚠️  S&R analysis error: {e}")
-    else:
-        print("\nSkipping support and resistance zone analysis (no active S/R-based strategies)")
-
-    # Generate multitimeframe S/R line plots (if enabled)
-    if ENABLE_ADDITIONAL_PLOTS:
-        print("\nSkipping multitimeframe S/R PNG generation (no sr_lines folders requested)")
-    else:
-        print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
-
-    # Always generate SR multiframe PDF directly from recorded S/R history.
-    if sr_histories:
-        print("\nGenerating SR multiframe PDF...")
-        try:
-            combined_history = {}
-            for _penguin_name, history_by_symbol in sr_histories.items():
-                if history_by_symbol:
-                    combined_history.update(history_by_symbol)
-
-            if combined_history:
-                current_sr_pdf = current_dir / "SR_Multiframe_plots.pdf"
-                create_sr_multiframe_pdf_direct(
-                    combined_history,
-                    current_sr_pdf,
-                    bar_timestamps,
-                )
-                print(f"✅ SR multiframe PDF: {current_sr_pdf}")
-            else:
-                print("⚠️  No SR history data available for SR multiframe PDF")
-        except Exception as e:
-            print(f"⚠️  SR multiframe PDF error: {e}")
+    # Generate Support & Resistance analysis reports
+    generate_sr_analysis(
+        results=results,
+        sr_histories=sr_histories,
+        sr_penguin_names=sr_penguin_names,
+        bar_timestamps=bar_timestamps,
+        artifacts_dir=current_artifacts_dir,
+        enable_additional_plots=ENABLE_ADDITIONAL_PLOTS,
+    )
     
     # Mirror run_current into run_old only after current run is fully written.
     if archive_dir:
