@@ -1,0 +1,19 @@
+Consistency Check Warnings
+============================================================
+
+• [SP500Penguin] Detected 1 suspicious price jumps > 15%
+•   Trade #1 (SPY): +48.99% ($476.22 → $709.51)
+• [SP500x2Penguin] Detected 1 suspicious price jumps > 15%
+•   Trade #1 (SSO): +88.52% ($65.27 → $123.05)
+• [RSI Mean Reversion Selective] Detected 209 suspicious price jumps > 15%
+•   Trade #1 (CAN): -98.31% ($150.51 → $2.55)
+•   Trade #2 (RKLB): +118.07% ($2.55 → $5.56)
+•   Trade #3 (RIOT): +209.51% ($5.56 → $17.21)
+• [Smart RSI Confluence] Detected 110 suspicious price jumps > 15%
+•   Trade #1 (RKLB): -96.31% ($150.51 → $5.56)
+•   Trade #2 (MARA): +379.28% ($5.56 → $26.65)
+•   Trade #3 (RIOT): -35.76% ($26.65 → $17.12)
+• [Smart RSI Confluence] Detected 3 suspicious portfolio value jumps > 15%
+•   Bar 105553: -15.48% ($14,073.26 → $11,894.95)
+•   Bar 144736: -21.00% ($10,237.54 → $8,087.54)
+•   Bar 451349: -15.63% ($12,511.19 → $10,556.05)

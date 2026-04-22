@@ -19,6 +19,7 @@ SYMBOL_LIST_1 = [
     "MSFT",   # Microsoft
     "AMZN",   # Amazon
     "TSLA",   # Tesla
+    "SPY",    # S&P 500 ETF benchmark
 ]
 
 # List 2: current full ticker set (previous ACTIVE_SYMBOLS)

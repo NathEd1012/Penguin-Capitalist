@@ -24,6 +24,7 @@ class Portfolio:
         self.initial_capital = initial_capital
         self.cash = initial_capital
         self.transaction_cost = transaction_cost
+        self.max_leverage = 1.0
         
         # Positions: symbol -> quantity
         self.positions: Dict[str, int] = {}
@@ -79,10 +80,35 @@ class Portfolio:
         Execute a buy order.
         Returns True if successful, False if insufficient cash.
         """
-        cost = quantity * price + self.transaction_cost
-        
-        if cost > self.cash:
+        if quantity <= 0 or price <= 0:
             return False
+
+        cost = quantity * price + self.transaction_cost
+
+        if self.max_leverage <= 1.0:
+            if cost > self.cash:
+                return False
+        else:
+            # With leverage enabled, allow negative cash as long as gross exposure
+            # stays within equity * max_leverage after the trade.
+            current_position_value = 0.0
+            for pos_symbol, pos_qty in self.positions.items():
+                if pos_qty <= 0:
+                    continue
+                if pos_symbol == symbol:
+                    pos_price = price
+                else:
+                    pos_price = self.last_known_prices.get(pos_symbol, 0.0)
+                if pos_price > 0:
+                    current_position_value += pos_qty * pos_price
+
+            new_cash = self.cash - cost
+            new_position_value = current_position_value + quantity * price
+            new_equity = new_cash + new_position_value
+            max_allowed_exposure = max(0.0, new_equity) * self.max_leverage
+
+            if new_position_value > max_allowed_exposure:
+                return False
         
         self.cash -= cost
         self.positions[symbol] = self.positions.get(symbol, 0) + quantity

@@ -1,13 +1,14 @@
 """Validation and consistency checking utilities for detecting data quality issues."""
 
 
-def check_consistency(results, max_jump_pct=0.15):
+def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None):
     """
     Validate backtesting results for data quality issues and suspicious patterns.
     
     Args:
         results: Dict[penguin_name] = (Portfolio, metrics_dict)
         max_jump_pct: Maximum allowed jump percentage (default 15%)
+        bar_timestamps: List of datetime objects for each bar (optional)
     
     Returns:
         List of warning strings
@@ -82,8 +83,10 @@ def check_consistency(results, max_jump_pct=0.15):
                     f"suspicious price jumps > {max_jump_pct*100:.0f}%"
                 )
                 for jump in suspicious_jumps[:3]:  # Show first 3
+                    trade = portfolio.trades[jump['trade_idx']]
+                    date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
                     warnings.append(
-                        f"  Trade #{jump['trade_idx']} ({jump['symbol']}): "
+                        f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
                         f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f})"
                     )
         
@@ -112,8 +115,10 @@ def check_consistency(results, max_jump_pct=0.15):
                     f"suspicious portfolio value jumps > {max_jump_pct*100:.0f}%"
                 )
                 for jump in value_jumps[:3]:  # Show first 3
+                    bar_idx = jump['bar']
+                    date_str = bar_timestamps[bar_idx].strftime('%Y-%m-%d %H:%M:%S') if bar_timestamps and bar_idx < len(bar_timestamps) else 'N/A'
                     warnings.append(
-                        f"  Bar {jump['bar']}: "
+                        f"  Bar {bar_idx} @ {date_str}: "
                         f"{jump['pct']:+.2%} (${jump['prev']:,.2f} → ${jump['curr']:,.2f})"
                     )
     

@@ -84,6 +84,7 @@ class Evaluator:
         start_date: str = None,
         stop_date: str = None,
         bar_timestamps: List[datetime] = None,
+        symbol_list_name: str = None,
     ):
         """
         Plot capital curves for all strategies with overall average line.
@@ -106,7 +107,16 @@ class Evaluator:
             num_bars = len(list(curves.values())[0])
         
         # Use plotting module
-        plot_capital_curves(curves, str(output_file), num_bars, binning, start_date, stop_date, bar_timestamps)
+        plot_capital_curves(
+            curves,
+            str(output_file),
+            num_bars,
+            binning,
+            start_date,
+            stop_date,
+            bar_timestamps,
+            symbol_list_name,
+        )
     
     @staticmethod
     def save_results(
@@ -114,6 +124,7 @@ class Evaluator:
         archive_dir: Path | None,
         current_dir: Path,
         trades_by_bar: Dict = None,
+        bar_timestamps: List = None,
     ):
         """
         Save backtest results to both archive and current directories.
@@ -123,6 +134,7 @@ class Evaluator:
             archive_dir: Archive directory path (timestamped) or None
             current_dir: Current run directory path (always latest)
             trades_by_bar: Dict[bar_idx] = [trade_strings] for detailed logging
+            bar_timestamps: List of datetime objects for each bar (optional)
         """
         archive_dir = Path(archive_dir) if archive_dir is not None else None
         current_dir = Path(current_dir)
@@ -155,7 +167,10 @@ class Evaluator:
             
             for bar_idx, trades in sorted(trades_by_bar.items()):
                 if trades:
-                    trades_content += f"Bar {bar_idx}:\n"
+                    date_str = ""
+                    if bar_timestamps and bar_idx < len(bar_timestamps):
+                        date_str = f" @ {bar_timestamps[bar_idx].strftime('%Y-%m-%d %H:%M:%S')}"
+                    trades_content += f"Bar {bar_idx}{date_str}:\n"
                     for trade in trades:
                         trades_content += f"{trade}\n"
                     trades_content += "\n"
@@ -255,6 +270,7 @@ class Evaluator:
         stop_date: str = None,
         bar_timestamps: List[datetime] = None,
         artifacts_dir: Path = None,
+        symbol_list_name: str = None,
     ):
         """
         Generate a comprehensive PDF report with capital curves and detailed trade summaries.
@@ -299,5 +315,6 @@ class Evaluator:
             stop_date,
             bar_timestamps,
             artifacts_dir,
+            symbol_list_name,
         )
 

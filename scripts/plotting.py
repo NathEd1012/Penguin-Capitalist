@@ -100,7 +100,12 @@ def _parse_datetime_string(dt_str: str) -> datetime:
 
 
 def _build_ticks_from_timestamps(bar_timestamps, num_bars):
-    """Build x-axis ticks/labels from actual bar timestamps (weekends naturally excluded). Only show underlined month boundaries."""
+    """
+    Build x-axis ticks/labels from actual bar timestamps.
+    - For spans <= 60 days: Show ticks every 7 days, format "DD Mon"
+    - For spans 60-365 days: Show ticks every month, format "Mon" or "Mon YYYY" for January
+    - For spans > 365 days: Show ticks every 3 months, format "Mon" or "Mon YYYY" for January
+    """
     if not bar_timestamps:
         interval = max(1, num_bars // 10)
         x_ticks = list(range(1, num_bars + 1, interval))
@@ -115,24 +120,74 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
 
     first_dt = bar_timestamps[0]
     last_dt = bar_timestamps[total_bars - 1]
-    span_minutes = max(1, int((last_dt - first_dt).total_seconds() // 60))
-
-    if span_minutes <= 120:
-        label_fmt = "%H:%M"
-    elif span_minutes <= 1440:
-        label_fmt = "%b %d\n%H:%M"
+    
+    # Calculate span in days
+    span_days = (last_dt - first_dt).days
+    
+    # Determine tick placement strategy
+    tick_dates = []
+    
+    if span_days <= 60:
+        # Small span: show ticks every 7 days
+        current_date = first_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+        while current_date <= last_dt:
+            tick_dates.append(current_date)
+            current_date = current_date + timedelta(days=7)
+    elif span_days <= 365:
+        # Medium span (up to 1 year): show only the 1st of each month
+        current_date = first_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        while current_date <= last_dt:
+            tick_dates.append(current_date)
+            # Move to the 1st of next month
+            if current_date.month == 12:
+                current_date = current_date.replace(year=current_date.year + 1, month=1)
+            else:
+                current_date = current_date.replace(month=current_date.month + 1)
     else:
-        label_fmt = "%b %d"
-
-    interval = max(1, total_bars // 10)
-    tick_indices = list(range(0, total_bars, interval))
-    if tick_indices[-1] != total_bars - 1:
-        tick_indices.append(total_bars - 1)
-
-    # Always build date/time ticks at regular intervals for deterministic axes.
+        # Large span: show only every 3 months (quarterly)
+        current_date = first_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        while current_date <= last_dt:
+            tick_dates.append(current_date)
+            # Move to the same day 3 months later
+            new_month = current_date.month + 3
+            new_year = current_date.year
+            if new_month > 12:
+                new_month -= 12
+                new_year += 1
+            current_date = current_date.replace(year=new_year, month=new_month)
+    
+    # Find the bar indices closest to each tick date
+    tick_indices = []
+    for tick_date in tick_dates:
+        closest_idx = 0
+        min_diff = abs((bar_timestamps[0] - tick_date).total_seconds())
+        for i in range(total_bars):
+            diff = abs((bar_timestamps[i] - tick_date).total_seconds())
+            if diff < min_diff:
+                min_diff = diff
+                closest_idx = i
+        if closest_idx not in tick_indices:
+            tick_indices.append(closest_idx)
+    
+    # Sort indices
+    tick_indices.sort()
+    
+    # Build labels with appropriate format
+    # Only show year for January, otherwise just month
     x_ticks = [idx + 1 for idx in tick_indices]
-    x_labels = [bar_timestamps[idx].strftime(label_fmt) for idx in tick_indices]
-
+    x_labels = []
+    for idx in tick_indices:
+        dt = bar_timestamps[idx]
+        if span_days <= 60:
+            # Short span: always show day and month
+            x_labels.append(dt.strftime('%d %b'))
+        else:
+            # Medium/long span: show year only for January
+            if dt.month == 1:
+                x_labels.append(dt.strftime('%b %Y'))
+            else:
+                x_labels.append(dt.strftime('%b'))
+    
     return x_ticks, x_labels
 
 
@@ -160,7 +215,7 @@ def _build_timespan_text(start_date_str=None, stop_date_str=None, bar_timestamps
     return ""
 
 
-def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None):
+def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None, symbol_list_name=None):
     """
     Plot and save capital curves with smart x-axis showing actual dates/times.
     
@@ -320,7 +375,10 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     plt.xticks(x_ticks, x_labels, rotation=45, ha='right', fontsize=9)
     plt.xlabel(x_label_text)
     plt.ylabel("Total Capital ($)")
-    plt.title("Penguin Capital Curves")
+    title = "Penguin Capital Curves"
+    if symbol_list_name:
+        title = f"{title} ({symbol_list_name})"
+    plt.title(title)
     plt.legend(loc='best', fontsize=9)
     plt.grid(True, alpha=0.3)
     # Extend x-axis to accommodate right-side labels
@@ -342,7 +400,7 @@ def create_png_gallery_pdf(png_files, output_pdf, page_title_prefix="Multitimefr
     return _create_multiframe_png_gallery_pdf(png_files, output_pdf)
 
 
-def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None, artifacts_dir=None):
+def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None, artifacts_dir=None, symbol_list_name=None):
     """
     Create comprehensive PDF report with capital curves and per-symbol trade summaries.
     
@@ -511,6 +569,8 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         ax.set_xlabel(x_label_text)
         ax.set_ylabel("Total Capital ($)")
         page1_title = "Penguin Capital Curves"
+        if symbol_list_name:
+            page1_title = f"{page1_title} ({symbol_list_name})"
         if timespan_text:
             page1_title = f"{page1_title} ({timespan_text})"
         ax.set_title(page1_title)
@@ -599,7 +659,10 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=9)
                 ax.set_xlabel(x_label_text)
                 ax.set_ylabel("Total Capital ($)")
-                ax.set_title(f"Capital Curve: {display_penguin_name}")
+                individual_title = f"Capital Curve: {display_penguin_name}"
+                if symbol_list_name:
+                    individual_title = f"{individual_title} ({symbol_list_name})"
+                ax.set_title(individual_title)
                 ax.legend(fontsize=10, loc='best')
                 ax.grid(True, alpha=0.3)
                 

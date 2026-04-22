@@ -23,6 +23,7 @@ from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_
 from scripts.multiframe import create_sr_multiframe_pdf_direct
 from config import (
     SYMBOLS,
+    ACTIVE_SYMBOL_LIST,
     INITIAL_CAPITAL,
     TRANSACTION_COST,
     START_DATE,
@@ -205,6 +206,7 @@ def run_backtest(
                 penguin.record_history = bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
+            portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
             penguins[pen_name] = penguin
         except Exception as e:
             print(f"  ✗ {penguin_class.__name__}: {e}")
@@ -281,7 +283,10 @@ def run_backtest(
                 # Pass only necessary price history window to penguin.
                 # This dramatically improves performance for large backtests.
                 full_history = price_history[symbol]
-                if len(full_history) < 10:  # Need minimum history
+                
+                # Only enforce minimum history requirement if penguin explicitly needs it
+                min_history_required = getattr(penguin, "MIN_HISTORY_REQUIRED", 0)
+                if len(full_history) < min_history_required:
                     continue
                 
                 # Slice only the last lookback_bars from history
@@ -298,8 +303,8 @@ def run_backtest(
                         portfolio
                     )
 
-                    # Always size SPY buys to the maximum affordable quantity.
-                    if action == "BUY" and symbol == "SPY" and ask > 0:
+                    # For non-leveraged SPY strategies, cap quantity to cash affordability.
+                    if action == "BUY" and symbol == "SPY" and ask > 0 and portfolio.max_leverage <= 1.0:
                         max_affordable_qty = int(
                             max(portfolio.cash - portfolio.transaction_cost, 0) // ask
                         )
@@ -422,7 +427,7 @@ def main():
         archived_run_num = None
     
     # Always write run_current first.
-    Evaluator.save_results(results, None, current_artifacts_dir, trades_by_bar)
+    Evaluator.save_results(results, None, current_artifacts_dir, trades_by_bar, bar_timestamps)
     
     # Generate plots
     print("\nGenerating visualization...")
@@ -434,13 +439,33 @@ def main():
         num_bars = len(portfolio.value_history)
         break
     
-    Evaluator.plot_capital_curves(results, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps)
+    Evaluator.plot_capital_curves(
+        results,
+        current_plot,
+        num_bars,
+        BINNING,
+        START_DATE,
+        STOP_DATE,
+        bar_timestamps,
+        ACTIVE_SYMBOL_LIST,
+    )
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
     current_pdf = current_dir / "report.pdf"
     
-    Evaluator.generate_pdf_report(results, current_pdf, current_plot, num_bars, BINNING, START_DATE, STOP_DATE, bar_timestamps, current_artifacts_dir)
+    Evaluator.generate_pdf_report(
+        results,
+        current_pdf,
+        current_plot,
+        num_bars,
+        BINNING,
+        START_DATE,
+        STOP_DATE,
+        bar_timestamps,
+        current_artifacts_dir,
+        ACTIVE_SYMBOL_LIST,
+    )
     
     # Validate consistency (check for price jumps)
     print("\nValidating consistency...")
@@ -458,7 +483,8 @@ def main():
         # Run consistency checks
         warnings = check_consistency(
             results=results,
-            max_jump_pct=0.15
+            max_jump_pct=0.15,
+            bar_timestamps=bar_timestamps
         )
         
         if warnings:
