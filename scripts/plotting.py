@@ -45,12 +45,14 @@ def _save_strategy_summary_to_artifacts(
     total_pnl: float,
     artifacts_dir,
 ):
-    """Save strategy summary data to a text file in artifacts directory."""
+    """Save strategy summary data to a CSV file in artifacts/csv directory."""
     artifacts_path = Path(artifacts_dir)
     artifacts_path.mkdir(parents=True, exist_ok=True)
     
     # Save as CSV for easy import into spreadsheets
-    csv_file = artifacts_path / f"{internal_name}_summary.csv"
+    csv_dir = artifacts_path / "csv"
+    csv_dir.mkdir(parents=True, exist_ok=True)
+    csv_file = csv_dir / f"{internal_name}_summary.csv"
     
     with open(csv_file, 'w', newline='') as f:
         writer = csv.writer(f)

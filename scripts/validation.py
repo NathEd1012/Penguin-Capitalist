@@ -1,5 +1,7 @@
 """Validation and consistency checking utilities for detecting data quality issues."""
 
+from corporate_actions import has_corporate_action_near
+
 
 def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None):
     """
@@ -60,6 +62,7 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None):
         if len(portfolio.trades) > 1:
             trade_prices = [trade.price for trade in portfolio.trades]
             suspicious_jumps = []
+            skipped_corporate_action_jumps = 0
             
             for i in range(1, len(trade_prices)):
                 prev_price = trade_prices[i-1]
@@ -69,13 +72,29 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None):
                     price_pct = (curr_price - prev_price) / prev_price
                     
                     if abs(price_pct) > max_jump_pct:
+                        trade = portfolio.trades[i]
+                        if has_corporate_action_near(
+                            symbol=trade.symbol,
+                            timestamp=trade.timestamp,
+                            window_days=2,
+                            action_types={"split", "reverse_split"},
+                        ):
+                            skipped_corporate_action_jumps += 1
+                            continue
+
                         suspicious_jumps.append({
                             'trade_idx': i,
-                            'symbol': portfolio.trades[i].symbol,
+                            'symbol': trade.symbol,
                             'pct': price_pct,
                             'prev': prev_price,
                             'curr': curr_price,
                         })
+
+            if skipped_corporate_action_jumps:
+                warnings.append(
+                    f"[{penguin_name}] Ignored {skipped_corporate_action_jumps} "
+                    "jump(s) near known corporate-action dates"
+                )
             
             if suspicious_jumps:
                 warnings.append(

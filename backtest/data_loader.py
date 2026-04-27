@@ -11,24 +11,13 @@ import pytz
 from dotenv import load_dotenv
 from tqdm import tqdm
 from market_data.cache import DataCache
+from corporate_actions import get_price_adjustment_events
 
 # Load environment variables from .env file
 load_dotenv()
 
-
-SSO_SPLIT_ADJUSTMENT_EFFECTIVE = datetime(2025, 11, 20, 9, 0, tzinfo=pytz.UTC)
-SSO_SPLIT_ADJUSTMENT_FACTOR = 2.0
-
-
 class DataLoader:
     """Load historical OHLCV data from Alpaca."""
-
-    PRICE_ADJUSTMENTS = {
-        "SSO": (
-            SSO_SPLIT_ADJUSTMENT_EFFECTIVE,
-            SSO_SPLIT_ADJUSTMENT_FACTOR,
-        ),
-    }
     
     def __init__(self):
         """Initialize Alpaca data client."""
@@ -80,19 +69,25 @@ class DataLoader:
 
     def _apply_price_adjustments(self, symbol: str, rows: Dict) -> Dict:
         """Apply known split adjustments so the historical series stays on one scale."""
-        adjustment = self.PRICE_ADJUSTMENTS.get(symbol)
-        if adjustment is None or not rows:
+        adjustments = get_price_adjustment_events(symbol)
+        if not adjustments or not rows:
             return rows
 
-        effective_ts, factor = adjustment
         adjusted_rows: Dict = {}
         for timestamp, row in rows.items():
             adjusted_row = dict(row)
-            if timestamp >= effective_ts:
-                adjusted_row["open"] *= factor
-                adjusted_row["high"] *= factor
-                adjusted_row["low"] *= factor
-                adjusted_row["close"] *= factor
+
+            cumulative_factor = 1.0
+            for effective_ts, factor, _event in adjustments:
+                if timestamp >= effective_ts:
+                    cumulative_factor *= factor
+
+            if cumulative_factor != 1.0:
+                adjusted_row["open"] *= cumulative_factor
+                adjusted_row["high"] *= cumulative_factor
+                adjusted_row["low"] *= cumulative_factor
+                adjusted_row["close"] *= cumulative_factor
+
             adjusted_rows[timestamp] = adjusted_row
 
         return adjusted_rows
@@ -227,18 +222,12 @@ class DataLoader:
             symbol_rows.update(missing_rows)
             adjusted_rows = self._apply_price_adjustments(symbol, symbol_rows)
 
-            # Persist only newly fetched rows so cache grows incrementally.
+            # Persist only newly fetched raw rows so cache grows incrementally.
             if missing_rows:
-                fetched_df = self._rows_to_dataframe({
-                    ts: adjusted_rows[ts]
-                    for ts in missing_rows.keys()
-                })
+                fetched_df = self._rows_to_dataframe(missing_rows)
                 existing_df = self.cache.load_cache(symbol, binning)
 
-                # Store adjusted price series on disk for split-sensitive symbols.
-                if symbol in self.PRICE_ADJUSTMENTS:
-                    self.cache.save_cache(symbol, binning, self._rows_to_dataframe(adjusted_rows))
-                elif existing_df is None or existing_df.empty:
+                if existing_df is None or existing_df.empty:
                     self.cache.save_cache(symbol, binning, fetched_df)
                 else:
                     self.cache.merge_cache_and_new_data(symbol, binning, existing_df, fetched_df)
