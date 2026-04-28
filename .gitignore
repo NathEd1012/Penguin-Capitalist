@@ -1,8 +1,11 @@
 venvPeng/
-runs/
 plots/
 logs/
 **/__pycache__/
 *.pyc
 *.pyo
 run_old/
+run_interesting/
+assistive_scripts/
+data_cache/
+a_docs/

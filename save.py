@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
 """Save current run artifacts to a named folder under run_interesting/.
 
 Usage examples:
-  python save.py --abcd
-  python save.py abcd
-	python save.py --rep abcd
+  python n_save.py --abcd
+  python n_save.py abcd
+	python n_save.py --rep abcd
 """
 
 from __future__ import annotations
@@ -29,11 +28,11 @@ def _validate_name(name: str) -> str:
 def _parse_args(argv: list[str]) -> tuple[str, str]:
 	"""Return (mode, name), where mode is 'snapshot' or 'report'."""
 	if len(argv) < 2:
-		raise ValueError("Missing arguments. Examples: python save.py abcd | python save.py --rep abcd")
+		raise ValueError("Missing arguments. Examples: python n_save.py abcd | python n_save.py --rep abcd")
 
 	if argv[1] == "--rep":
 		if len(argv) < 3:
-			raise ValueError("Missing report name. Example: python save.py --rep abcd")
+			raise ValueError("Missing report name. Example: python n_save.py --rep abcd")
 		return "report", _validate_name(argv[2])
 
 	raw = argv[1].strip()
@@ -118,7 +117,7 @@ def main() -> int:
 		copied += 1
 
 	print(f"Saved run snapshot to: {destination_dir}")
-	print(f"Copied files: {copied}")
+	print(f"Copied {copied} file(s).")
 	return 0
 
 

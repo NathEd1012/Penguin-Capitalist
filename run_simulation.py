@@ -22,7 +22,7 @@ from scripts.multiframe import (
     precompute_multiframe_levels,
     set_precomputed_levels_on_penguins,
 )
-from assistive_scripts.generate_sr_reports import generate_sr_analysis
+from scripts.generate_sr_reports import generate_sr_analysis
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
