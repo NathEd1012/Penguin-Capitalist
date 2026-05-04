@@ -1,275 +1,330 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-05-04 15:25:38
+Generated: 2026-05-04 17:24:35
 ================================================================================
 
 EXECUTION DETAILS
 --------------------------------------------------------------------------------
 
-Bar 0 @ 2026-01-01 00:00:00:
-  SP500Penguin: BUY 14 SPY @ $682.75
-  SP500x2Penguin: BUY 29 SPY @ $682.75
+Bar 0 @ 2024-01-02 09:00:00:
+  SP500Penguin: BUY 20 SPY @ $476.36
+  SP500x2Penguin: BUY 41 SPY @ $476.36
 
-Bar 99 @ 2026-01-02 09:39:00:
-  Smart RSI Confluence: BUY 2 UBER @ $82.41
-  Smart RSI Confluence: BUY 2 BE @ $90.26
+Bar 99 @ 2024-01-02 10:39:00:
+  RSI Mean Reversion Selective: BUY 1 CVX @ $150.51
+  RSI Mean Reversion Selective: BUY 1 CAN @ $2.55
+  Smart RSI Confluence: BUY 2 CVX @ $150.51
 
-Bar 100 @ 2026-01-02 09:40:00:
-  Smart RSI Confluence: BUY 2 VERI @ $4.75
+Bar 103 @ 2024-01-02 10:43:00:
+  RSI Mean Reversion Selective: BUY 1 RKLB @ $5.56
+  Smart RSI Confluence: BUY 2 RKLB @ $5.56
 
-Bar 101 @ 2026-01-02 09:41:00:
-  Smart RSI Confluence: BUY 2 BBAI @ $5.67
+Bar 108 @ 2024-01-02 10:48:00:
+  RSI Mean Reversion Selective: BUY 1 RIOT @ $17.21
 
-Bar 102 @ 2026-01-02 09:42:00:
-  Smart RSI Confluence: BUY 2 MCHP @ $65.33
+Bar 109 @ 2024-01-02 10:49:00:
+  RSI Mean Reversion Selective: BUY 1 GREE @ $7.65
 
-Bar 104 @ 2026-01-02 09:44:00:
-  Smart RSI Confluence: BUY 2 AMD @ $218.02
-  Smart RSI Confluence: BUY 2 COIN @ $231.03
+Bar 111 @ 2024-01-02 10:51:00:
+  RSI Mean Reversion Selective: BUY 1 MARA @ $26.60
 
-Bar 105 @ 2026-01-02 09:45:00:
-  Smart RSI Confluence: BUY 2 TSM @ $311.61
+Bar 112 @ 2024-01-02 10:52:00:
+  RSI Mean Reversion Selective: BUY 1 NTLA @ $31.00
 
-Bar 106 @ 2026-01-02 09:46:00:
-  Smart RSI Confluence: BUY 2 BABA @ $152.60
+Bar 117 @ 2024-01-02 10:57:00:
+  Smart RSI Confluence: BUY 2 MARA @ $26.65
 
-Bar 109 @ 2026-01-02 09:49:00:
-  Smart RSI Confluence: BUY 2 JD @ $29.42
+Bar 118 @ 2024-01-02 10:58:00:
+  Smart RSI Confluence: BUY 2 RIOT @ $17.12
 
-Bar 126 @ 2026-01-02 10:06:00:
-  RSI Mean Reversion Selective: BUY 1 CAN @ $0.72
+Bar 119 @ 2024-01-02 10:59:00:
+  RSI Mean Reversion Selective: BUY 1 KHC @ $37.01
+  Smart RSI Confluence: BUY 2 CAN @ $2.55
 
-Bar 132 @ 2026-01-02 10:12:00:
-  RSI Mean Reversion Selective: BUY 1 BE @ $90.50
+Bar 132 @ 2024-01-02 11:12:00:
+  Smart RSI Confluence: BUY 2 BLDP @ $3.76
 
-Bar 149 @ 2026-01-02 10:29:00:
-  RSI Mean Reversion Selective: BUY 1 MU @ $294.62
+Bar 142 @ 2024-01-02 11:22:00:
+  Smart RSI Confluence: BUY 2 AFRM @ $48.95
 
-Bar 159 @ 2026-01-02 10:39:00:
-  RSI Mean Reversion Selective: BUY 1 MARA @ $9.24
+Bar 143 @ 2024-01-02 11:23:00:
+  Smart RSI Confluence: BUY 2 TSLA @ $3697.76
 
-Bar 161 @ 2026-01-02 10:41:00:
-  RSI Mean Reversion Selective: BUY 1 JD @ $29.67
+Bar 144 @ 2024-01-02 11:24:00:
+  Smart RSI Confluence: BUY 2 UPST @ $39.66
 
-Bar 183 @ 2026-01-02 11:03:00:
-  RSI Mean Reversion Selective: BUY 1 FCEL @ $7.51
+Bar 147 @ 2024-01-02 11:27:00:
+  Smart RSI Confluence: BUY 2 COIN @ $183.20
 
-Bar 226 @ 2026-01-02 11:46:00:
-  RSI Mean Reversion Selective: BUY 1 XPEV @ $20.33
+Bar 900 @ 2024-01-03 00:00:00:
+  RSI Mean Reversion Selective: BUY 1 SNAP @ $16.06
+  RSI Mean Reversion Selective: BUY 1 RDFN @ $9.88
 
-Bar 240 @ 2026-01-02 12:00:00:
-  RSI Mean Reversion Selective: BUY 1 RKLB @ $71.56
+Bar 906 @ 2024-01-03 00:06:00:
+  RSI Mean Reversion Selective: BUY 1 SPCE @ $2.38
 
-Bar 960 @ 2026-01-03 00:00:00:
-  Smart RSI Confluence: BUY 2 RBLX @ $81.22
+Bar 908 @ 2024-01-03 00:08:00:
+  Smart RSI Confluence: BUY 2 XOM @ $102.38
 
-Bar 961 @ 2026-01-03 00:01:00:
-  Smart RSI Confluence: BUY 2 SOFI @ $27.49
+Bar 910 @ 2024-01-03 00:10:00:
+  RSI Mean Reversion Selective: BUY 1 W @ $58.27
 
-Bar 967 @ 2026-01-03 00:07:00:
-  Smart RSI Confluence: BUY 2 SPCE @ $3.32
+Bar 912 @ 2024-01-03 00:12:00:
+  Smart RSI Confluence: BUY 2 MRNA @ $115.01
 
-Bar 968 @ 2026-01-03 00:08:00:
-  RSI Mean Reversion Selective: BUY 1 NTLA @ $9.16
+Bar 913 @ 2024-01-03 00:13:00:
+  RSI Mean Reversion Selective: BUY 1 FCEL @ $1.54
 
-Bar 975 @ 2026-01-03 00:15:00:
-  Smart RSI Confluence: BUY 2 NVDA @ $1889.37
+Bar 915 @ 2024-01-03 00:15:00:
+  Smart RSI Confluence: BUY 2 SQ @ $72.10
+  Smart RSI Confluence: BUY 2 BBAI @ $2.00
 
-Bar 979 @ 2026-01-03 00:19:00:
-  Smart RSI Confluence: BUY 2 DKNG @ $35.65
+Bar 917 @ 2024-01-03 00:17:00:
+  Smart RSI Confluence: BUY 2 BABA @ $74.75
 
-Bar 980 @ 2026-01-03 00:20:00:
-  RSI Mean Reversion Selective: BUY 1 SQM @ $69.09
+Bar 921 @ 2024-01-03 00:21:00:
+  Smart RSI Confluence: BUY 2 FCEL @ $1.54
 
-Bar 981 @ 2026-01-03 00:21:00:
-  RSI Mean Reversion Selective: BUY 1 SPCE @ $3.32
+Bar 943 @ 2024-01-03 00:43:00:
+  RSI Mean Reversion Selective: BUY 1 BILL @ $77.36
 
-Bar 984 @ 2026-01-03 00:24:00:
-  Smart RSI Confluence: BUY 2 QQQ @ $613.57
+Bar 946 @ 2024-01-03 00:46:00:
+  Smart RSI Confluence: BUY 2 PYPL @ $61.58
 
-Bar 985 @ 2026-01-03 00:25:00:
-  Smart RSI Confluence: BUY 2 RIOT @ $14.24
+Bar 950 @ 2024-01-03 00:50:00:
+  RSI Mean Reversion Selective: BUY 1 OKTA @ $86.02
 
-Bar 988 @ 2026-01-03 00:28:00:
-  Smart RSI Confluence: BUY 2 PLTR @ $169.83
+Bar 951 @ 2024-01-03 00:51:00:
+  Smart RSI Confluence: BUY 2 RDFN @ $9.87
 
-Bar 999 @ 2026-01-03 00:39:00:
-  Smart RSI Confluence: BUY 2 MARA @ $9.93
+Bar 957 @ 2024-01-03 00:57:00:
+  RSI Mean Reversion Selective: BUY 1 BLUE @ $1.45
 
-Bar 1000 @ 2026-01-03 00:40:00:
-  Smart RSI Confluence: BUY 2 NTLA @ $9.27
+Bar 963 @ 2024-01-03 09:03:00:
+  Smart RSI Confluence: BUY 2 BLUE @ $1.48
+  Smart RSI Confluence: BUY 2 SPCE @ $2.39
 
-Bar 1004 @ 2026-01-03 00:44:00:
-  RSI Mean Reversion Selective: BUY 1 EDIT @ $2.02
+Bar 1861 @ 2024-01-04 00:01:00:
+  Smart RSI Confluence: BUY 2 DNA @ $1.56
 
-Bar 1020 @ 2026-01-05 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 ADBE @ $330.95
-  RSI Mean Reversion Selective: BUY 1 NIO @ $5.01
-  RSI Mean Reversion Selective: BUY 1 LI @ $17.13
-  Smart RSI Confluence: BUY 2 XLE @ $48.05
-  Smart RSI Confluence: BUY 2 AMAT @ $272.58
-  Smart RSI Confluence: BUY 2 MU @ $324.87
-  Smart RSI Confluence: BUY 1 GD @ $344.67
-  Smart RSI Confluence: BUY 2 XOM @ $127.58
-  Smart RSI Confluence: BUY 2 CAN @ $0.81
+Bar 1874 @ 2024-01-04 00:14:00:
+  Smart RSI Confluence: BUY 2 GREE @ $6.10
 
-Bar 1021 @ 2026-01-05 09:01:00:
-  Smart RSI Confluence: BUY 2 PLUG @ $2.27
-  Smart RSI Confluence: BUY 1 SOUN @ $10.74
+Bar 1878 @ 2024-01-04 00:18:00:
+  RSI Mean Reversion Selective: BUY 1 HOOD @ $11.73
 
-Bar 1034 @ 2026-01-05 09:14:00:
-  RSI Mean Reversion Selective: BUY 1 XLE @ $47.63
+Bar 1879 @ 2024-01-04 00:19:00:
+  RSI Mean Reversion Selective: BUY 1 DNA @ $1.55
 
-Bar 1035 @ 2026-01-05 09:15:00:
-  RSI Mean Reversion Selective: BUY 1 RTX @ $186.74
+Bar 1880 @ 2024-01-04 00:20:00:
+  RSI Mean Reversion Selective: BUY 1 MSTR @ $634.18
 
-Bar 1037 @ 2026-01-05 09:17:00:
-  RSI Mean Reversion Selective: BUY 1 DVN @ $38.11
+Bar 1884 @ 2024-01-04 00:24:00:
+  RSI Mean Reversion Selective: BUY 1 BE @ $13.87
 
-Bar 1038 @ 2026-01-05 09:18:00:
-  RSI Mean Reversion Selective: BUY 1 PLTR @ $174.29
+Bar 1890 @ 2024-01-04 00:30:00:
+  RSI Mean Reversion Selective: BUY 1 DOW @ $55.06
 
-Bar 1039 @ 2026-01-05 09:19:00:
-  RSI Mean Reversion Selective: BUY 1 HAL @ $31.53
+Bar 1901 @ 2024-01-04 00:41:00:
+  Smart RSI Confluence: BUY 2 RSI @ $3.99
 
-Bar 1182 @ 2026-01-05 11:42:00:
-  Smart RSI Confluence: BUY 1 GREE @ $1.67
+Bar 1910 @ 2024-01-04 00:50:00:
+  RSI Mean Reversion Selective: BUY 1 SOUN @ $1.98
 
-Bar 1920 @ 2026-01-06 00:00:00:
-  RSI Mean Reversion Selective: BUY 1 MCHP @ $68.54
+Bar 1915 @ 2024-01-04 00:55:00:
+  RSI Mean Reversion Selective: BUY 1 ADM @ $73.01
 
-Bar 1938 @ 2026-01-06 00:18:00:
-  RSI Mean Reversion Selective: BUY 1 NXPI @ $226.56
+Bar 1919 @ 2024-01-04 00:59:00:
+  RSI Mean Reversion Selective: BUY 1 BLDP @ $3.59
+  Smart RSI Confluence: BUY 2 SOUN @ $2.00
 
-Bar 1947 @ 2026-01-06 00:27:00:
-  RSI Mean Reversion Selective: BUY 1 LCID @ $11.72
+Bar 1920 @ 2024-01-04 09:00:00:
+  Smart RSI Confluence: BUY 2 ORCL @ $105.99
+  Smart RSI Confluence: BUY 2 MU @ $83.77
+  Smart RSI Confluence: BUY 2 DOCU @ $55.91
+  Smart RSI Confluence: BUY 2 NVO @ $105.80
 
-Bar 1950 @ 2026-01-06 00:30:00:
-  RSI Mean Reversion Selective: BUY 1 LRCX @ $193.29
+Bar 1922 @ 2024-01-04 09:02:00:
+  Smart RSI Confluence: BUY 2 OPEN @ $4.06
 
-Bar 1961 @ 2026-01-06 00:41:00:
-  RSI Mean Reversion Selective: BUY 1 VLO @ $180.46
+Bar 1923 @ 2024-01-04 09:03:00:
+  Smart RSI Confluence: BUY 1 PLTR @ $16.22
 
-Bar 1969 @ 2026-01-06 00:49:00:
-  RSI Mean Reversion Selective: BUY 1 PSX @ $138.76
+Bar 2821 @ 2024-01-05 00:01:00:
+  RSI Mean Reversion Selective: BUY 1 LAC @ $6.12
 
-Bar 1971 @ 2026-01-06 00:51:00:
-  RSI Mean Reversion Selective: BUY 1 ALB @ $145.45
-  RSI Mean Reversion Selective: BUY 1 RIOT @ $14.72
+Bar 2830 @ 2024-01-05 00:10:00:
+  Smart RSI Confluence: BUY 1 LAC @ $6.13
 
-Bar 2912 @ 2026-01-07 00:32:00:
-  RSI Mean Reversion Selective: BUY 1 BLDP @ $2.77
+Bar 2833 @ 2024-01-05 00:13:00:
+  RSI Mean Reversion Selective: BUY 1 FSLY @ $16.50
 
-Bar 2918 @ 2026-01-07 00:38:00:
-  RSI Mean Reversion Selective: BUY 1 MSTR @ $169.37
+Bar 2855 @ 2024-01-05 00:35:00:
+  RSI Mean Reversion Selective: BUY 1 STZ @ $243.94
 
-Bar 2934 @ 2026-01-07 00:54:00:
-  RSI Mean Reversion Selective: BUY 1 FSLY @ $10.02
+Bar 2871 @ 2024-01-05 00:51:00:
+  RSI Mean Reversion Selective: BUY 1 OPEN @ $4.03
 
-Bar 2940 @ 2026-01-07 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 CRSP @ $57.81
-  RSI Mean Reversion Selective: BUY 1 TSM @ $325.02
-  RSI Mean Reversion Selective: BUY 1 NVO @ $56.48
-  RSI Mean Reversion Selective: BUY 1 BABA @ $149.70
-  RSI Mean Reversion Selective: BUY 1 PDD @ $121.67
+Bar 2876 @ 2024-01-05 00:56:00:
+  RSI Mean Reversion Selective: BUY 1 CF @ $81.16
 
-Bar 3844 @ 2026-01-08 00:04:00:
-  RSI Mean Reversion Selective: BUY 1 ETSY @ $61.51
+Bar 2880 @ 2024-01-05 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 COIN @ $154.07
+  RSI Mean Reversion Selective: BUY 1 XPEV @ $13.62
+  RSI Mean Reversion Selective: BUY 1 LI @ $34.73
 
-Bar 3870 @ 2026-01-08 00:30:00:
-  RSI Mean Reversion Selective: BUY 1 VALE @ $14.18
+Bar 3790 @ 2024-01-06 00:10:00:
+  RSI Mean Reversion Selective: BUY 1 BBAI @ $1.92
 
-Bar 3880 @ 2026-01-08 00:40:00:
-  RSI Mean Reversion Selective: BUY 1 FISV @ $68.91
+Bar 3810 @ 2024-01-06 00:30:00:
+  RSI Mean Reversion Selective: BUY 1 PGR @ $160.03
 
-Bar 3884 @ 2026-01-08 00:44:00:
-  RSI Mean Reversion Selective: BUY 1 SOUN @ $11.00
+Bar 3812 @ 2024-01-06 00:32:00:
+  RSI Mean Reversion Selective: BUY 1 U @ $37.52
 
-Bar 3890 @ 2026-01-08 00:50:00:
-  RSI Mean Reversion Selective: BUY 1 DE @ $473.09
+Bar 3818 @ 2024-01-06 00:38:00:
+  RSI Mean Reversion Selective: BUY 1 CRSP @ $60.76
 
-Bar 3900 @ 2026-01-08 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 COIN @ $243.55
-  RSI Mean Reversion Selective: BUY 1 MRNA @ $35.46
-  RSI Mean Reversion Selective: BUY 1 BALL @ $52.87
+Bar 3840 @ 2024-01-08 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 ON @ $74.52
+  RSI Mean Reversion Selective: BUY 1 C @ $52.94
+  RSI Mean Reversion Selective: BUY 1 UAL @ $40.72
+  RSI Mean Reversion Selective: BUY 1 DAL @ $40.16
+  RSI Mean Reversion Selective: BUY 1 DVN @ $45.01
+  RSI Mean Reversion Selective: BUY 1 NIO @ $8.00
+  RSI Mean Reversion Selective: BUY 1 BABA @ $72.21
+  RSI Mean Reversion Selective: BUY 1 JD @ $25.96
 
-Bar 4801 @ 2026-01-09 00:01:00:
-  RSI Mean Reversion Selective: BUY 1 BEAM @ $27.93
+Bar 4201 @ 2024-01-08 15:01:00:
+  Smart RSI Confluence: BUY 1 VERI @ $1.61
 
-Bar 4812 @ 2026-01-09 00:12:00:
-  RSI Mean Reversion Selective: BUY 1 RUN @ $18.28
+Bar 4744 @ 2024-01-09 00:04:00:
+  RSI Mean Reversion Selective: BUY 1 RBLX @ $42.11
 
-Bar 4813 @ 2026-01-09 00:13:00:
-  RSI Mean Reversion Selective: BUY 1 RIO @ $83.02
+Bar 4784 @ 2024-01-09 00:44:00:
+  RSI Mean Reversion Selective: BUY 1 EDIT @ $9.41
 
-Bar 4814 @ 2026-01-09 00:14:00:
-  RSI Mean Reversion Selective: BUY 1 LYB @ $47.18
+Bar 4800 @ 2024-01-09 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 NFLX @ $476.98
+  RSI Mean Reversion Selective: BUY 1 PYPL @ $60.55
+  RSI Mean Reversion Selective: BUY 1 ENPH @ $115.03
+  RSI Mean Reversion Selective: BUY 1 BHP @ $65.13
 
-Bar 4820 @ 2026-01-09 00:20:00:
-  RSI Mean Reversion Selective: BUY 1 CL @ $80.37
+Bar 4801 @ 2024-01-09 09:01:00:
+  RSI Mean Reversion Selective: BUY 1 SQ @ $69.01
+  RSI Mean Reversion Selective: BUY 1 NU @ $8.87
 
-Bar 4838 @ 2026-01-09 00:38:00:
-  RSI Mean Reversion Selective: BUY 1 BNTX @ $97.77
+Bar 5711 @ 2024-01-10 00:11:00:
+  RSI Mean Reversion Selective: BUY 1 MP @ $18.01
 
-Bar 4839 @ 2026-01-09 00:39:00:
-  RSI Mean Reversion Selective: BUY 1 WELL @ $184.40
+Bar 5760 @ 2024-01-10 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 ETSY @ $74.97
 
-Bar 4843 @ 2026-01-09 00:43:00:
-  RSI Mean Reversion Selective: BUY 1 VERI @ $4.82
+Bar 5761 @ 2024-01-10 09:01:00:
+  RSI Mean Reversion Selective: BUY 1 SOFI @ $8.27
 
-Bar 5779 @ 2026-01-10 00:19:00:
-  RSI Mean Reversion Selective: BUY 1 PLUG @ $2.19
+Bar 5763 @ 2024-01-10 09:03:00:
+  RSI Mean Reversion Selective: BUY 1 AFRM @ $43.58
 
-Bar 5820 @ 2026-01-12 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 SSO @ $118.10
-  RSI Mean Reversion Selective: BUY 1 QQQ @ $620.42
-  RSI Mean Reversion Selective: BUY 1 NVDA @ $1827.10
-  RSI Mean Reversion Selective: BUY 1 META @ $646.03
-  RSI Mean Reversion Selective: BUY 1 AVGO @ $339.00
-  RSI Mean Reversion Selective: BUY 1 ORCL @ $195.03
-  RSI Mean Reversion Selective: BUY 1 CSCO @ $73.27
-  RSI Mean Reversion Selective: BUY 1 AMD @ $200.63
+Bar 5818 @ 2024-01-10 09:58:00:
+  RSI Mean Reversion Selective: BUY 1 CRWD @ $277.06
 
-Bar 6726 @ 2026-01-13 00:06:00:
-  RSI Mean Reversion Selective: BUY 1 W @ $116.02
+Bar 5821 @ 2024-01-10 10:01:00:
+  RSI Mean Reversion Selective: BUY 1 SCHW @ $66.46
 
-Bar 6748 @ 2026-01-13 00:28:00:
-  RSI Mean Reversion Selective: BUY 1 ORA @ $121.02
+Bar 5832 @ 2024-01-10 10:12:00:
+  RSI Mean Reversion Selective: BUY 1 LYB @ $94.13
 
-Bar 6761 @ 2026-01-13 00:41:00:
-  RSI Mean Reversion Selective: BUY 1 PYPL @ $56.91
+Bar 5835 @ 2024-01-10 10:15:00:
+  RSI Mean Reversion Selective: BUY 1 RIO @ $70.43
 
-Bar 6763 @ 2026-01-13 00:43:00:
-  RSI Mean Reversion Selective: BUY 1 HII @ $405.08
+Bar 6667 @ 2024-01-11 00:07:00:
+  RSI Mean Reversion Selective: BUY 1 MDT @ $87.12
 
-Bar 6781 @ 2026-01-13 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 KSS @ $19.76
+Bar 6678 @ 2024-01-11 00:18:00:
+  RSI Mean Reversion Selective: BUY 1 UPST @ $35.01
 
-Bar 6811 @ 2026-01-13 09:31:00:
-  RSI Mean Reversion Selective: BUY 1 QCOM @ $168.57
+Bar 6683 @ 2024-01-11 00:23:00:
+  RSI Mean Reversion Selective: BUY 1 RUN @ $16.14
 
-Bar 6856 @ 2026-01-13 10:16:00:
-  RSI Mean Reversion Selective: BUY 1 MP @ $67.50
+Bar 6735 @ 2024-01-11 09:15:00:
+  RSI Mean Reversion Selective: BUY 1 AI @ $28.82
 
-Bar 6903 @ 2026-01-13 11:03:00:
-  RSI Mean Reversion Selective: BUY 1 NFLX @ $89.15
+Bar 6738 @ 2024-01-11 09:18:00:
+  RSI Mean Reversion Selective: BUY 1 LCID @ $3.45
 
-Bar 7687 @ 2026-01-14 00:07:00:
-  RSI Mean Reversion Selective: BUY 1 PINS @ $27.47
+Bar 6739 @ 2024-01-11 09:19:00:
+  RSI Mean Reversion Selective: BUY 1 CHWY @ $20.65
 
-Bar 7695 @ 2026-01-14 00:15:00:
-  RSI Mean Reversion Selective: BUY 1 D @ $58.29
+Bar 6740 @ 2024-01-11 09:20:00:
+  RSI Mean Reversion Selective: BUY 1 OXY @ $57.60
 
-Bar 7713 @ 2026-01-14 00:33:00:
-  RSI Mean Reversion Selective: BUY 1 DNA @ $9.57
+Bar 6757 @ 2024-01-11 09:37:00:
+  RSI Mean Reversion Selective: BUY 1 PLUG @ $4.06
 
-Bar 7740 @ 2026-01-14 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 RIVN @ $18.34
+Bar 7625 @ 2024-01-12 00:05:00:
+  RSI Mean Reversion Selective: BUY 1 WFC @ $49.00
 
-Bar 7980 @ 2026-01-14 13:00:00:
-  RSI Mean Reversion Selective: BUY 1 GREE @ $1.62
+Bar 7649 @ 2024-01-12 00:29:00:
+  RSI Mean Reversion Selective: BUY 1 APA @ $32.61
 
-Bar 57346 @ 2026-03-30 18:52:00:
-  RSI Mean Reversion Selective: BUY 1 BBAI @ $3.05
+Bar 7650 @ 2024-01-12 00:30:00:
+  RSI Mean Reversion Selective: BUY 1 GPS @ $20.76
+
+Bar 7658 @ 2024-01-12 00:38:00:
+  RSI Mean Reversion Selective: BUY 1 ZM @ $67.61
+
+Bar 7665 @ 2024-01-12 00:45:00:
+  RSI Mean Reversion Selective: BUY 1 RIVN @ $18.64
+
+Bar 7678 @ 2024-01-12 00:58:00:
+  RSI Mean Reversion Selective: BUY 1 SEDG @ $77.41
+
+Bar 7679 @ 2024-01-12 00:59:00:
+  RSI Mean Reversion Selective: BUY 1 ROKU @ $86.02
+
+Bar 7680 @ 2024-01-12 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 TSLA @ $3337.83
+
+Bar 8616 @ 2024-01-13 00:36:00:
+  RSI Mean Reversion Selective: BUY 1 SHOP @ $80.26
+
+Bar 8640 @ 2024-01-16 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 XLK @ $190.92
+  RSI Mean Reversion Selective: BUY 1 AAPL @ $734.84
+  RSI Mean Reversion Selective: BUY 1 MCHP @ $84.16
+  RSI Mean Reversion Selective: BUY 1 PLTR @ $16.59
+  RSI Mean Reversion Selective: BUY 1 ABNB @ $135.54
+  RSI Mean Reversion Selective: BUY 1 CVNA @ $41.67
+  RSI Mean Reversion Selective: BUY 1 SLB @ $49.52
+  RSI Mean Reversion Selective: BUY 1 KTOS @ $18.98
+
+Bar 9575 @ 2024-01-17 00:35:00:
+  RSI Mean Reversion Selective: BUY 1 NEM @ $35.82
+
+Bar 9600 @ 2024-01-17 09:00:00:
+  RSI Mean Reversion Selective: BUY 1 IWM @ $188.80
+  RSI Mean Reversion Selective: BUY 1 F @ $11.25
+  RSI Mean Reversion Selective: BUY 1 FCX @ $38.40
+  RSI Mean Reversion Selective: BUY 1 DKNG @ $33.50
+
+Bar 9601 @ 2024-01-17 09:01:00:
+  RSI Mean Reversion Selective: BUY 1 SSO @ $64.07
+
+Bar 9602 @ 2024-01-17 09:02:00:
+  RSI Mean Reversion Selective: BUY 1 ZS @ $229.68
+  RSI Mean Reversion Selective: BUY 1 VALE @ $14.20
+
+Bar 10558 @ 2024-01-18 00:58:00:
+  RSI Mean Reversion Selective: BUY 1 MTCH @ $35.51
+
+Bar 10727 @ 2024-01-18 11:47:00:
+  RSI Mean Reversion Selective: BUY 1 CSX @ $34.17
+
+Bar 10889 @ 2024-01-18 14:29:00:
+  RSI Mean Reversion Selective: BUY 1 AES @ $17.26
+
+Bar 10908 @ 2024-01-18 14:48:00:
+  RSI Mean Reversion Selective: BUY 1 VERI @ $1.67
 
 
 ================================================================================
@@ -279,97 +334,97 @@ STRATEGY SUMMARY
 
 
 SP500Penguin
-  Final Value:    $10,522.41
-  Total Return:   $522.41  (5.22%)
-  Max Drawdown:   -9.44%
-  Sharpe Ratio:   0.03
+  Final Value:    $14,874.11
+  Total Return:   $4,874.11  (48.74%)
+  Max Drawdown:   -20.50%
+  Sharpe Ratio:   0.04
   Total Trades:   2
   Buy Trades:     1
   Sell Trades:    1
 
   Recent Trades:
-    BUY 14 SPY @ $682.75 at 2026-01-01 00:00:00+00:00
-    SELL 14 SPY @ $720.06 at 2026-05-01 23:59:00+00:00
+    BUY 20 SPY @ $476.36 at 2024-01-02 09:00:00+00:00
+    SELL 20 SPY @ $720.06 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
 
 SP500x2Penguin
-  Final Value:    $11,082.13
-  Total Return:   $1,082.13  (10.82%)
-  Max Drawdown:   -19.12%
-  Sharpe Ratio:   0.03
+  Final Value:    $19,991.92
+  Total Return:   $9,991.92  (99.92%)
+  Max Drawdown:   -34.29%
+  Sharpe Ratio:   0.04
   Total Trades:   2
   Buy Trades:     1
   Sell Trades:    1
 
   Recent Trades:
-    BUY 29 SPY @ $682.75 at 2026-01-01 00:00:00+00:00
-    SELL 29 SPY @ $720.06 at 2026-05-01 23:59:00+00:00
+    BUY 41 SPY @ $476.36 at 2024-01-02 09:00:00+00:00
+    SELL 41 SPY @ $720.06 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
 
 RSI Mean Reversion Selective
-  Final Value:    $11,199.64
-  Total Return:   $1,199.64  (12.00%)
-  Max Drawdown:   -13.50%
-  Sharpe Ratio:   0.05
-  Total Trades:   150
-  Buy Trades:     75
-  Sell Trades:    75
+  Final Value:    $13,692.74
+  Total Return:   $3,692.74  (36.93%)
+  Max Drawdown:   -39.85%
+  Sharpe Ratio:   0.02
+  Total Trades:   194
+  Buy Trades:     97
+  Sell Trades:    97
 
   Recent Trades:
-    SELL 1 NVDA @ $1981.72 at 2026-05-01 23:59:00+00:00
-    SELL 1 META @ $608.80 at 2026-05-01 23:59:00+00:00
-    SELL 1 AVGO @ $420.41 at 2026-05-01 23:59:00+00:00
-    SELL 1 ORCL @ $171.64 at 2026-05-01 23:59:00+00:00
-    SELL 1 CSCO @ $91.86 at 2026-05-01 23:59:00+00:00
-    SELL 1 AMD @ $361.62 at 2026-05-01 23:59:00+00:00
-    SELL 1 W @ $65.35 at 2026-05-01 23:59:00+00:00
-    SELL 1 ORA @ $113.50 at 2026-05-01 23:59:00+00:00
-    SELL 1 PYPL @ $50.55 at 2026-05-01 23:59:00+00:00
-    SELL 1 HII @ $360.00 at 2026-05-01 23:59:00+00:00
-    SELL 1 KSS @ $14.72 at 2026-05-01 23:59:00+00:00
-    SELL 1 QCOM @ $176.63 at 2026-05-01 23:59:00+00:00
-    SELL 1 MP @ $66.60 at 2026-05-01 23:59:00+00:00
-    SELL 1 NFLX @ $91.96 at 2026-05-01 23:59:00+00:00
-    SELL 1 PINS @ $20.33 at 2026-05-01 23:59:00+00:00
-    SELL 1 D @ $63.94 at 2026-05-01 23:59:00+00:00
-    SELL 1 DNA @ $9.62 at 2026-05-01 23:59:00+00:00
-    SELL 1 RIVN @ $15.11 at 2026-05-01 23:59:00+00:00
-    SELL 1 GREE @ $1.21 at 2026-05-01 23:59:00+00:00
-    SELL 1 BBAI @ $4.13 at 2026-05-01 23:59:00+00:00
+    SELL 1 XLK @ $161.49 at 2026-05-01 23:59:00+00:00
+    SELL 1 AAPL @ $1119.77 at 2026-05-01 23:59:00+00:00
+    SELL 1 MCHP @ $93.64 at 2026-05-01 23:59:00+00:00
+    SELL 1 PLTR @ $144.44 at 2026-05-01 23:59:00+00:00
+    SELL 1 ABNB @ $140.54 at 2026-05-01 23:59:00+00:00
+    SELL 1 CVNA @ $381.70 at 2026-05-01 23:59:00+00:00
+    SELL 1 SLB @ $56.90 at 2026-05-01 23:59:00+00:00
+    SELL 1 KTOS @ $62.14 at 2026-05-01 23:59:00+00:00
+    SELL 1 NEM @ $108.82 at 2026-05-01 23:59:00+00:00
+    SELL 1 IWM @ $279.10 at 2026-05-01 23:59:00+00:00
+    SELL 1 F @ $11.88 at 2026-05-01 23:59:00+00:00
+    SELL 1 FCX @ $56.68 at 2026-05-01 23:59:00+00:00
+    SELL 1 DKNG @ $22.95 at 2026-05-01 23:59:00+00:00
+    SELL 1 SSO @ $126.56 at 2026-05-01 23:59:00+00:00
+    SELL 1 ZS @ $139.92 at 2026-05-01 23:59:00+00:00
+    SELL 1 VALE @ $16.20 at 2026-05-01 23:59:00+00:00
+    SELL 1 MTCH @ $38.70 at 2026-05-01 23:59:00+00:00
+    SELL 1 CSX @ $44.86 at 2026-05-01 23:59:00+00:00
+    SELL 1 AES @ $14.28 at 2026-05-01 23:59:00+00:00
+    SELL 1 VERI @ $2.17 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
 
 Smart RSI Confluence
-  Final Value:    $11,667.06
-  Total Return:   $1,667.06  (16.67%)
-  Max Drawdown:   -16.39%
-  Sharpe Ratio:   0.05
-  Total Trades:   58
-  Buy Trades:     29
-  Sell Trades:    29
+  Final Value:    $15,807.57
+  Total Return:   $5,807.57  (58.08%)
+  Max Drawdown:   -51.65%
+  Sharpe Ratio:   0.02
+  Total Trades:   64
+  Buy Trades:     32
+  Sell Trades:    32
 
   Recent Trades:
-    SELL 2 JD @ $29.95 at 2026-05-01 23:59:00+00:00
-    SELL 2 RBLX @ $45.22 at 2026-05-01 23:59:00+00:00
-    SELL 2 SOFI @ $16.47 at 2026-05-01 23:59:00+00:00
+    SELL 2 SQ @ $87.17 at 2026-05-01 23:59:00+00:00
+    SELL 2 BBAI @ $4.13 at 2026-05-01 23:59:00+00:00
+    SELL 2 BABA @ $131.40 at 2026-05-01 23:59:00+00:00
+    SELL 2 FCEL @ $13.16 at 2026-05-01 23:59:00+00:00
+    SELL 2 PYPL @ $50.55 at 2026-05-01 23:59:00+00:00
+    SELL 2 RDFN @ $11.30 at 2026-05-01 23:59:00+00:00
+    SELL 2 BLUE @ $4.99 at 2026-05-01 23:59:00+00:00
     SELL 2 SPCE @ $2.62 at 2026-05-01 23:59:00+00:00
-    SELL 2 NVDA @ $1981.72 at 2026-05-01 23:59:00+00:00
-    SELL 2 DKNG @ $22.95 at 2026-05-01 23:59:00+00:00
-    SELL 2 QQQ @ $673.69 at 2026-05-01 23:59:00+00:00
-    SELL 2 RIOT @ $18.42 at 2026-05-01 23:59:00+00:00
-    SELL 2 PLTR @ $144.44 at 2026-05-01 23:59:00+00:00
-    SELL 2 MARA @ $11.47 at 2026-05-01 23:59:00+00:00
-    SELL 2 NTLA @ $13.19 at 2026-05-01 23:59:00+00:00
-    SELL 2 XLE @ $58.87 at 2026-05-01 23:59:00+00:00
-    SELL 2 AMAT @ $389.13 at 2026-05-01 23:59:00+00:00
+    SELL 2 DNA @ $9.62 at 2026-05-01 23:59:00+00:00
+    SELL 2 GREE @ $1.21 at 2026-05-01 23:59:00+00:00
+    SELL 2 RSI @ $28.33 at 2026-05-01 23:59:00+00:00
+    SELL 2 SOUN @ $9.49 at 2026-05-01 23:59:00+00:00
+    SELL 2 ORCL @ $171.64 at 2026-05-01 23:59:00+00:00
     SELL 2 MU @ $539.89 at 2026-05-01 23:59:00+00:00
-    SELL 1 GD @ $345.84 at 2026-05-01 23:59:00+00:00
-    SELL 2 XOM @ $152.61 at 2026-05-01 23:59:00+00:00
-    SELL 2 CAN @ $0.52 at 2026-05-01 23:59:00+00:00
-    SELL 2 PLUG @ $3.11 at 2026-05-01 23:59:00+00:00
-    SELL 1 SOUN @ $9.49 at 2026-05-01 23:59:00+00:00
-    SELL 1 GREE @ $1.21 at 2026-05-01 23:59:00+00:00
+    SELL 2 DOCU @ $47.60 at 2026-05-01 23:59:00+00:00
+    SELL 2 NVO @ $43.92 at 2026-05-01 23:59:00+00:00
+    SELL 2 OPEN @ $5.43 at 2026-05-01 23:59:00+00:00
+    SELL 1 PLTR @ $144.44 at 2026-05-01 23:59:00+00:00
+    SELL 1 LAC @ $5.68 at 2026-05-01 23:59:00+00:00
+    SELL 1 VERI @ $2.17 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
