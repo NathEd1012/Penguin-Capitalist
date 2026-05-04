@@ -481,14 +481,14 @@ def main():
             curve_values[penguin_name] = portfolio.value_history
         
         # Run consistency checks
-        warnings = check_consistency(
+        warnings, bad_bar_indices = check_consistency(
             results=results,
             max_jump_pct=0.15,
             bar_timestamps=bar_timestamps
         )
         
         if warnings:
-            print(f"\n⚠️  Consistency warnings detected ({len(warnings)}):")
+            print(f"\n⚠️  Consistency warnings detected ({len(warnings)})")
             for warning in warnings[:5]:  # Show first 5 warnings
                 print(f"  - {warning}")
             if len(warnings) > 5:
@@ -497,10 +497,18 @@ def main():
             # Save warnings to file
             current_warnings = current_artifacts_dir / "consistency_warnings.txt"
             with open(current_warnings, 'w') as f:
-                f.write("Consistency Check Warnings\n")
+                f.write("Consistency Check Warnings (Real Issues + Faulty Data)\n")
                 f.write("="*60 + "\n\n")
                 for warning in warnings:
                     f.write(f"• {warning}\n")
+                
+                if bad_bar_indices:
+                    f.write("\n" + "="*60 + "\n")
+                    f.write("Bars with faulty data (trades should be reverted):\n")
+                    f.write("="*60 + "\n\n")
+                    for penguin_name, bar_indices in sorted(bad_bar_indices.items()):
+                        if bar_indices:
+                            f.write(f"  {penguin_name}: bars {sorted(bar_indices)}\n")
         else:
             print("✅ All consistency checks passed")
     except Exception as e:

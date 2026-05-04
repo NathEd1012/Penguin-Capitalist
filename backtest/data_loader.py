@@ -11,7 +11,19 @@ import pytz
 from dotenv import load_dotenv
 from tqdm import tqdm
 from market_data.cache import DataCache
-from corporate_actions import get_price_adjustment_events
+import os
+
+# Conditionally import corporate-action helper. If IGNORE_CORPORATE_ACTIONS is set,
+# provide a no-op fallback to avoid import-time errors or unnecessary processing.
+if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
+    def get_price_adjustment_events(symbol: str):
+        return []
+else:
+    # Try the project's other_corporate_actions first, then fallback to corporate_actions.
+    try:
+        from other_corporate_actions import get_price_adjustment_events  # type: ignore
+    except Exception:
+        from corporate_actions import get_price_adjustment_events  # type: ignore
 
 # Load environment variables from .env file
 load_dotenv()
@@ -69,6 +81,10 @@ class DataLoader:
 
     def _apply_price_adjustments(self, symbol: str, rows: Dict) -> Dict:
         """Apply known split adjustments so the historical series stays on one scale."""
+        # Allow disabling corporate-action adjustments for quick experiments
+        if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
+            return rows
+
         adjustments = get_price_adjustment_events(symbol)
         if not adjustments or not rows:
             return rows

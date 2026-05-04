@@ -8,7 +8,6 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Set, Tuple
 
-
 # Forward splits (price scales down after event date)
 SPLITS: Dict[str, List[Dict[str, str]]] = {
     "AAPL": [
@@ -93,6 +92,7 @@ TICKER_CHANGES: Dict[str, List[Dict[str, str]]] = {
 
 # Mergers / reorganizations (no direct price scaling by default)
 MERGERS: Dict[str, List[Dict[str, str]]] = {}
+
 
 
 def _ratio_to_factor(ratio: str) -> float:

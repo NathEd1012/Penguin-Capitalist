@@ -162,6 +162,9 @@ def run_backtest(
     print(f"{'='*80}\n")
     
     # Load data
+
+    ################################ STEP 1 ################################
+
     print("Step 1: Loading historical data from Alpaca...")
     loader = DataLoader()
     try:
@@ -178,6 +181,8 @@ def run_backtest(
         print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
         sys.exit(1)
     
+    ################################ STEP 2 ################################
+
     # Detect stale data
     print("\nStep 2: Detecting stale data...")
     valid_symbols, stale_symbols = loader.detect_stale_data(data)
@@ -204,14 +209,17 @@ def run_backtest(
     for symbol in symbols:
         ts_sorted = sorted(data[symbol].keys())
         symbol_close_series[symbol] = [(ts, float(data[symbol][ts]["close"])) for ts in ts_sorted]
-
+    print("or here?")
     # Initialize portfolios and penguins
     portfolios = {}
     penguins = {}
     
     # Initialize synthetic spread model for realistic bid/ask
     spread_model = SyntheticSpreadModel()
-    
+
+    ################################ STEP 3 ################################
+
+
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
     for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
@@ -237,6 +245,10 @@ def run_backtest(
         
         print(f"  ✓ Precomputed S/R levels for {len(precomputed_sr_data)} symbols\n")
     
+
+    ################################ STEP 4 ################################
+
+
     # Run simulation
     print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
     
@@ -407,7 +419,7 @@ def main():
     print("PENGUIN CAPITALIST - HISTORICAL BACKTEST")
     print("="*80)
     
-    # Run backtest
+    ################ Run backtest ################
     results, trades_by_bar, bar_timestamps, sr_histories, _symbol_close_series = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
@@ -503,14 +515,14 @@ def main():
             curve_values[penguin_name] = portfolio.value_history
         
         # Run consistency checks
-        warnings = check_consistency(
+        warnings, bad_bar_indices = check_consistency(
             results=results,
             max_jump_pct=0.15,
             bar_timestamps=bar_timestamps
         )
         
         if warnings:
-            print(f"\n⚠️  Consistency warnings detected ({len(warnings)}):")
+            print(f"\n⚠️  Consistency warnings detected ({len(warnings)})")
             for warning in warnings[:5]:  # Show first 5 warnings
                 print(f"  - {warning}")
             if len(warnings) > 5:
@@ -519,10 +531,18 @@ def main():
             # Save warnings to file
             current_warnings = current_artifacts_dir / "consistency_warnings.txt"
             with open(current_warnings, 'w') as f:
-                f.write("Consistency Check Warnings\n")
+                f.write("Consistency Check Warnings (Real Issues + Faulty Data)\n")
                 f.write("="*60 + "\n\n")
                 for warning in warnings:
                     f.write(f"• {warning}\n")
+                
+                if bad_bar_indices:
+                    f.write("\n" + "="*60 + "\n")
+                    f.write("Bars with faulty data (trades should be reverted):\n")
+                    f.write("="*60 + "\n\n")
+                    for penguin_name, bar_indices in sorted(bad_bar_indices.items()):
+                        if bar_indices:
+                            f.write(f"  {penguin_name}: bars {sorted(bar_indices)}\n")
         else:
             print("✅ All consistency checks passed")
     except Exception as e:
