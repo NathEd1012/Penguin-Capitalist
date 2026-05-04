@@ -20,23 +20,23 @@
     "final_value": 19991.92
   },
   "RSI Mean Reversion Selective": {
-    "total_return": 3692.74,
-    "return_pct": 36.93,
-    "max_drawdown": -39.85,
+    "total_return": 3761.52,
+    "return_pct": 37.62,
+    "max_drawdown": -39.7,
     "sharpe_ratio": 0.02,
     "total_trades": 194,
     "buy_trades": 97,
     "sell_trades": 97,
-    "final_value": 13692.74
+    "final_value": 13761.52
   },
   "Smart RSI Confluence": {
-    "total_return": 5807.57,
-    "return_pct": 58.08,
-    "max_drawdown": -51.65,
+    "total_return": 5803.2,
+    "return_pct": 58.03,
+    "max_drawdown": -51.64,
     "sharpe_ratio": 0.02,
-    "total_trades": 64,
-    "buy_trades": 32,
-    "sell_trades": 32,
-    "final_value": 15807.57
+    "total_trades": 60,
+    "buy_trades": 30,
+    "sell_trades": 30,
+    "final_value": 15803.2
   }
 }

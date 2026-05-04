@@ -1,5 +1,5 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-05-04 12:29:53
+Generated: 2026-05-04 15:14:23
 ================================================================================
 
 EXECUTION DETAILS
@@ -24,14 +24,8 @@ Bar 108 @ 2024-01-02 10:48:00:
 Bar 109 @ 2024-01-02 10:49:00:
   RSI Mean Reversion Selective: BUY 1 GREE @ $7.65
 
-Bar 111 @ 2024-01-02 10:51:00:
-  RSI Mean Reversion Selective: BUY 1 MARA @ $26.60
-
 Bar 112 @ 2024-01-02 10:52:00:
   RSI Mean Reversion Selective: BUY 1 NTLA @ $31.00
-
-Bar 117 @ 2024-01-02 10:57:00:
-  Smart RSI Confluence: BUY 2 MARA @ $26.65
 
 Bar 118 @ 2024-01-02 10:58:00:
   Smart RSI Confluence: BUY 2 RIOT @ $17.12
@@ -39,6 +33,9 @@ Bar 118 @ 2024-01-02 10:58:00:
 Bar 119 @ 2024-01-02 10:59:00:
   RSI Mean Reversion Selective: BUY 1 KHC @ $37.01
   Smart RSI Confluence: BUY 2 CAN @ $2.55
+
+Bar 127 @ 2024-01-02 11:07:00:
+  RSI Mean Reversion Selective: BUY 1 SOFI @ $9.93
 
 Bar 132 @ 2024-01-02 11:12:00:
   Smart RSI Confluence: BUY 2 BLDP @ $3.76
@@ -54,6 +51,9 @@ Bar 144 @ 2024-01-02 11:24:00:
 
 Bar 147 @ 2024-01-02 11:27:00:
   Smart RSI Confluence: BUY 2 COIN @ $183.20
+
+Bar 152 @ 2024-01-02 11:32:00:
+  Smart RSI Confluence: BUY 2 NTLA @ $30.50
 
 Bar 900 @ 2024-01-03 00:00:00:
   RSI Mean Reversion Selective: BUY 1 SNAP @ $16.06
@@ -152,9 +152,6 @@ Bar 1923 @ 2024-01-04 09:03:00:
 Bar 2821 @ 2024-01-05 00:01:00:
   RSI Mean Reversion Selective: BUY 1 LAC @ $6.12
 
-Bar 2830 @ 2024-01-05 00:10:00:
-  Smart RSI Confluence: BUY 1 LAC @ $6.13
-
 Bar 2833 @ 2024-01-05 00:13:00:
   RSI Mean Reversion Selective: BUY 1 FSLY @ $16.50
 
@@ -194,9 +191,6 @@ Bar 3840 @ 2024-01-08 09:00:00:
   RSI Mean Reversion Selective: BUY 1 BABA @ $72.21
   RSI Mean Reversion Selective: BUY 1 JD @ $25.96
 
-Bar 4201 @ 2024-01-08 15:01:00:
-  Smart RSI Confluence: BUY 1 VERI @ $1.61
-
 Bar 4744 @ 2024-01-09 00:04:00:
   RSI Mean Reversion Selective: BUY 1 RBLX @ $42.11
 
@@ -219,9 +213,6 @@ Bar 5711 @ 2024-01-10 00:11:00:
 Bar 5760 @ 2024-01-10 09:00:00:
   RSI Mean Reversion Selective: BUY 1 ETSY @ $74.97
 
-Bar 5761 @ 2024-01-10 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 SOFI @ $8.27
-
 Bar 5763 @ 2024-01-10 09:03:00:
   RSI Mean Reversion Selective: BUY 1 AFRM @ $43.58
 
@@ -236,6 +227,9 @@ Bar 5832 @ 2024-01-10 10:12:00:
 
 Bar 5835 @ 2024-01-10 10:15:00:
   RSI Mean Reversion Selective: BUY 1 RIO @ $70.43
+
+Bar 5843 @ 2024-01-10 10:23:00:
+  RSI Mean Reversion Selective: BUY 1 NEE @ $62.29
 
 Bar 6667 @ 2024-01-11 00:07:00:
   RSI Mean Reversion Selective: BUY 1 MDT @ $87.12
@@ -317,14 +311,14 @@ Bar 9602 @ 2024-01-17 09:02:00:
 Bar 10558 @ 2024-01-18 00:58:00:
   RSI Mean Reversion Selective: BUY 1 MTCH @ $35.51
 
-Bar 10727 @ 2024-01-18 11:47:00:
-  RSI Mean Reversion Selective: BUY 1 CSX @ $34.17
-
-Bar 10889 @ 2024-01-18 14:29:00:
-  RSI Mean Reversion Selective: BUY 1 AES @ $17.26
+Bar 10890 @ 2024-01-18 14:30:00:
+  RSI Mean Reversion Selective: BUY 1 RSI @ $4.56
 
 Bar 10908 @ 2024-01-18 14:48:00:
   RSI Mean Reversion Selective: BUY 1 VERI @ $1.67
+
+Bar 268589 @ 2025-02-13 16:12:00:
+  RSI Mean Reversion Selective: BUY 1 AES @ $9.99
 
 
 ================================================================================
@@ -364,9 +358,9 @@ SP500x2Penguin
 --------------------------------------------------------------------------------
 
 RSI Mean Reversion Selective
-  Final Value:    $13,692.74
-  Total Return:   $3,692.74  (36.93%)
-  Max Drawdown:   -39.85%
+  Final Value:    $13,761.52
+  Total Return:   $3,761.52  (37.62%)
+  Max Drawdown:   -39.70%
   Sharpe Ratio:   0.02
   Total Trades:   194
   Buy Trades:     97
@@ -390,22 +384,24 @@ RSI Mean Reversion Selective
     SELL 1 ZS @ $139.92 at 2026-05-01 23:59:00+00:00
     SELL 1 VALE @ $16.20 at 2026-05-01 23:59:00+00:00
     SELL 1 MTCH @ $38.70 at 2026-05-01 23:59:00+00:00
-    SELL 1 CSX @ $44.86 at 2026-05-01 23:59:00+00:00
-    SELL 1 AES @ $14.28 at 2026-05-01 23:59:00+00:00
+    SELL 1 RSI @ $28.33 at 2026-05-01 23:59:00+00:00
     SELL 1 VERI @ $2.17 at 2026-05-01 23:59:00+00:00
+    SELL 1 AES @ $14.28 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
 
 Smart RSI Confluence
-  Final Value:    $15,807.57
-  Total Return:   $5,807.57  (58.08%)
-  Max Drawdown:   -51.65%
+  Final Value:    $15,803.20
+  Total Return:   $5,803.20  (58.03%)
+  Max Drawdown:   -51.64%
   Sharpe Ratio:   0.02
-  Total Trades:   64
-  Buy Trades:     32
-  Sell Trades:    32
+  Total Trades:   60
+  Buy Trades:     30
+  Sell Trades:    30
 
   Recent Trades:
+    SELL 2 XOM @ $152.61 at 2026-05-01 23:59:00+00:00
+    SELL 2 MRNA @ $45.16 at 2026-05-01 23:59:00+00:00
     SELL 2 SQ @ $87.17 at 2026-05-01 23:59:00+00:00
     SELL 2 BBAI @ $4.13 at 2026-05-01 23:59:00+00:00
     SELL 2 BABA @ $131.40 at 2026-05-01 23:59:00+00:00
@@ -424,7 +420,5 @@ Smart RSI Confluence
     SELL 2 NVO @ $43.92 at 2026-05-01 23:59:00+00:00
     SELL 2 OPEN @ $5.43 at 2026-05-01 23:59:00+00:00
     SELL 1 PLTR @ $144.44 at 2026-05-01 23:59:00+00:00
-    SELL 1 LAC @ $5.68 at 2026-05-01 23:59:00+00:00
-    SELL 1 VERI @ $2.17 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
