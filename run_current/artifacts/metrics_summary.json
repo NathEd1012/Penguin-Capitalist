@@ -20,14 +20,14 @@
     "final_value": 19991.92
   },
   "RSI Mean Reversion Selective": {
-    "total_return": 3692.74,
-    "return_pct": 36.93,
-    "max_drawdown": -39.85,
+    "total_return": 3743.61,
+    "return_pct": 37.44,
+    "max_drawdown": -39.79,
     "sharpe_ratio": 0.02,
-    "total_trades": 194,
-    "buy_trades": 97,
-    "sell_trades": 97,
-    "final_value": 13692.74
+    "total_trades": 196,
+    "buy_trades": 98,
+    "sell_trades": 98,
+    "final_value": 13743.61
   },
   "Smart RSI Confluence": {
     "total_return": 5807.57,

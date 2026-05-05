@@ -204,11 +204,13 @@ def run_backtest(
     sorted_timestamps = sorted(all_timestamps)
     print(f"\n  Total bars across all symbols: {len(sorted_timestamps)}")
     
-    # Build close-price series for post-run analytics (e.g., SMA exports).
     symbol_close_series: Dict[str, List[Tuple[datetime, float]]] = {}
     for symbol in symbols:
-        ts_sorted = sorted(data[symbol].keys())
-        symbol_close_series[symbol] = [(ts, float(data[symbol][ts]["close"])) for ts in ts_sorted]
+        # `load_bars()` inserts bars in timestamp order, so we can reuse that order here.
+        symbol_close_series[symbol] = [
+            (ts, float(bar["close"])) for ts, bar in data[symbol].items()
+        ]
+        
     print("or here?")
     # Initialize portfolios and penguins
     portfolios = {}
@@ -232,7 +234,7 @@ def run_backtest(
             penguins[pen_name] = penguin
         except Exception as e:
             print(f"  ✗ {penguin_class.__name__}: {e}")
-
+    """
     sr_penguin_names, precompute_sr_penguin_names = build_sr_strategy_sets(penguins)
     
     # Precompute multiframe S/R levels only for strategies that explicitly require it.
@@ -244,7 +246,7 @@ def run_backtest(
         set_precomputed_levels_on_penguins(penguins, precompute_sr_penguin_names, precomputed_sr_data)
         
         print(f"  ✓ Precomputed S/R levels for {len(precomputed_sr_data)} symbols\n")
-    
+    """
 
     ################################ STEP 4 ################################
 
@@ -355,10 +357,10 @@ def run_backtest(
             portfolio.add_value_snapshot(value)
         
         # Advance bar index for S/R penguins using precomputed levels
-        for penguin_name in sr_penguin_names:
+        """for penguin_name in sr_penguin_names:
             penguin = penguins[penguin_name]
             if hasattr(penguin, "_advance_bar"):
-                penguin._advance_bar()
+                penguin._advance_bar()"""
     
     # Sell all positions at end - use average price from last 10 bars to avoid unrealistic jumps
     print("\nClosing all positions...")
@@ -396,10 +398,10 @@ def run_backtest(
         results[penguin_name] = (portfolio, metrics)
     
     sr_histories = {}
-    for penguin_name, penguin in penguins.items():
+    """for penguin_name, penguin in penguins.items():
         if hasattr(penguin, "export_sr_history"):
             sr_histories[penguin_name] = penguin.export_sr_history()
-
+    """
     return results, trades_by_bar, sorted_timestamps, sr_histories, symbol_close_series
 
 
@@ -431,8 +433,8 @@ def main():
     )
     
     # Identify S/R penguins from results
-    sr_penguin_names = {name for name in sr_histories.keys()}
-    
+    """    sr_penguin_names = {name for name in sr_histories.keys()}
+    """    
     # Generate report
     print("\n" + "="*80)
     print("RESULTS")
@@ -549,14 +551,14 @@ def main():
         print(f"⚠️  Consistency validation error: {e}")
     
     # Generate Support & Resistance analysis reports
-    generate_sr_analysis(
+    """generate_sr_analysis(
         results=results,
         sr_histories=sr_histories,
         sr_penguin_names=sr_penguin_names,
         bar_timestamps=bar_timestamps,
         artifacts_dir=current_artifacts_dir,
         enable_additional_plots=ENABLE_ADDITIONAL_PLOTS,
-    )
+    )"""
     
     # Mirror run_current into run_old only after current run is fully written.
     if archive_dir:

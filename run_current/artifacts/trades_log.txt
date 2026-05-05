@@ -1,5 +1,5 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-05-04 17:24:35
+Generated: 2026-05-05 00:29:03
 ================================================================================
 
 EXECUTION DETAILS
@@ -164,13 +164,11 @@ Bar 2855 @ 2024-01-05 00:35:00:
 Bar 2871 @ 2024-01-05 00:51:00:
   RSI Mean Reversion Selective: BUY 1 OPEN @ $4.03
 
-Bar 2876 @ 2024-01-05 00:56:00:
-  RSI Mean Reversion Selective: BUY 1 CF @ $81.16
-
 Bar 2880 @ 2024-01-05 09:00:00:
   RSI Mean Reversion Selective: BUY 1 COIN @ $154.07
   RSI Mean Reversion Selective: BUY 1 XPEV @ $13.62
   RSI Mean Reversion Selective: BUY 1 LI @ $34.73
+  RSI Mean Reversion Selective: BUY 1 RIO @ $72.28
 
 Bar 3790 @ 2024-01-06 00:10:00:
   RSI Mean Reversion Selective: BUY 1 BBAI @ $1.92
@@ -234,8 +232,8 @@ Bar 5821 @ 2024-01-10 10:01:00:
 Bar 5832 @ 2024-01-10 10:12:00:
   RSI Mean Reversion Selective: BUY 1 LYB @ $94.13
 
-Bar 5835 @ 2024-01-10 10:15:00:
-  RSI Mean Reversion Selective: BUY 1 RIO @ $70.43
+Bar 5843 @ 2024-01-10 10:23:00:
+  RSI Mean Reversion Selective: BUY 1 NEE @ $62.29
 
 Bar 6667 @ 2024-01-11 00:07:00:
   RSI Mean Reversion Selective: BUY 1 MDT @ $87.12
@@ -304,7 +302,6 @@ Bar 9575 @ 2024-01-17 00:35:00:
 Bar 9600 @ 2024-01-17 09:00:00:
   RSI Mean Reversion Selective: BUY 1 IWM @ $188.80
   RSI Mean Reversion Selective: BUY 1 F @ $11.25
-  RSI Mean Reversion Selective: BUY 1 FCX @ $38.40
   RSI Mean Reversion Selective: BUY 1 DKNG @ $33.50
 
 Bar 9601 @ 2024-01-17 09:01:00:
@@ -314,6 +311,9 @@ Bar 9602 @ 2024-01-17 09:02:00:
   RSI Mean Reversion Selective: BUY 1 ZS @ $229.68
   RSI Mean Reversion Selective: BUY 1 VALE @ $14.20
 
+Bar 9604 @ 2024-01-17 09:04:00:
+  RSI Mean Reversion Selective: BUY 1 INTC @ $46.65
+
 Bar 10558 @ 2024-01-18 00:58:00:
   RSI Mean Reversion Selective: BUY 1 MTCH @ $35.51
 
@@ -322,6 +322,9 @@ Bar 10727 @ 2024-01-18 11:47:00:
 
 Bar 10889 @ 2024-01-18 14:29:00:
   RSI Mean Reversion Selective: BUY 1 AES @ $17.26
+
+Bar 10890 @ 2024-01-18 14:30:00:
+  RSI Mean Reversion Selective: BUY 1 RSI @ $4.56
 
 Bar 10908 @ 2024-01-18 14:48:00:
   RSI Mean Reversion Selective: BUY 1 VERI @ $1.67
@@ -364,16 +367,15 @@ SP500x2Penguin
 --------------------------------------------------------------------------------
 
 RSI Mean Reversion Selective
-  Final Value:    $13,692.74
-  Total Return:   $3,692.74  (36.93%)
-  Max Drawdown:   -39.85%
+  Final Value:    $13,743.61
+  Total Return:   $3,743.61  (37.44%)
+  Max Drawdown:   -39.79%
   Sharpe Ratio:   0.02
-  Total Trades:   194
-  Buy Trades:     97
-  Sell Trades:    97
+  Total Trades:   196
+  Buy Trades:     98
+  Sell Trades:    98
 
   Recent Trades:
-    SELL 1 XLK @ $161.49 at 2026-05-01 23:59:00+00:00
     SELL 1 AAPL @ $1119.77 at 2026-05-01 23:59:00+00:00
     SELL 1 MCHP @ $93.64 at 2026-05-01 23:59:00+00:00
     SELL 1 PLTR @ $144.44 at 2026-05-01 23:59:00+00:00
@@ -384,14 +386,15 @@ RSI Mean Reversion Selective
     SELL 1 NEM @ $108.82 at 2026-05-01 23:59:00+00:00
     SELL 1 IWM @ $279.10 at 2026-05-01 23:59:00+00:00
     SELL 1 F @ $11.88 at 2026-05-01 23:59:00+00:00
-    SELL 1 FCX @ $56.68 at 2026-05-01 23:59:00+00:00
     SELL 1 DKNG @ $22.95 at 2026-05-01 23:59:00+00:00
     SELL 1 SSO @ $126.56 at 2026-05-01 23:59:00+00:00
     SELL 1 ZS @ $139.92 at 2026-05-01 23:59:00+00:00
     SELL 1 VALE @ $16.20 at 2026-05-01 23:59:00+00:00
+    SELL 1 INTC @ $100.72 at 2026-05-01 23:59:00+00:00
     SELL 1 MTCH @ $38.70 at 2026-05-01 23:59:00+00:00
     SELL 1 CSX @ $44.86 at 2026-05-01 23:59:00+00:00
     SELL 1 AES @ $14.28 at 2026-05-01 23:59:00+00:00
+    SELL 1 RSI @ $28.33 at 2026-05-01 23:59:00+00:00
     SELL 1 VERI @ $2.17 at 2026-05-01 23:59:00+00:00
 
 --------------------------------------------------------------------------------
