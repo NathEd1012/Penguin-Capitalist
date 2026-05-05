@@ -204,14 +204,17 @@ def run_backtest(
     sorted_timestamps = sorted(all_timestamps)
     print(f"\n  Total bars across all symbols: {len(sorted_timestamps)}")
     
+    # Build close-price series only if S/R analysis or additional plots are enabled.
+    # This step is expensive with large datasets and is currently unused (commented out).
     symbol_close_series: Dict[str, List[Tuple[datetime, float]]] = {}
-    for symbol in symbols:
-        # `load_bars()` inserts bars in timestamp order, so we can reuse that order here.
-        symbol_close_series[symbol] = [
-            (ts, float(bar["close"])) for ts, bar in data[symbol].items()
-        ]
-        
-    print("or here?")
+    if ENABLE_ADDITIONAL_PLOTS:
+        print("\n  Building close-price series for analytics...")
+        for symbol in symbols:
+            # `load_bars()` inserts bars in timestamp order, so we can reuse that order here.
+            symbol_close_series[symbol] = [
+                (ts, float(bar["close"])) for ts, bar in data[symbol].items()
+            ]
+        print(f"  ✓ Close-price series built for {len(symbol_close_series)} symbols")
     # Initialize portfolios and penguins
     portfolios = {}
     penguins = {}
@@ -489,19 +492,32 @@ def main():
     # Generate PDF reports
     print("\nGenerating PDF report...")
     current_pdf = current_dir / "report.pdf"
-    
-    Evaluator.generate_pdf_report(
-        results,
-        current_pdf,
-        current_plot,
-        num_bars,
-        BINNING,
-        START_DATE,
-        STOP_DATE,
-        bar_timestamps,
-        current_artifacts_dir,
-        ACTIVE_SYMBOL_LIST,
-    )
+    # Ensure matplotlib has sensible fallback fonts on systems missing DejaVu.
+    try:
+        import matplotlib
+        matplotlib.rcParams.setdefault("font.family", "sans-serif")
+        matplotlib.rcParams.setdefault("font.sans-serif", ["Helvetica", "Arial", "DejaVu Sans", "Liberation Sans"])
+        matplotlib.rcParams.setdefault("mathtext.fontset", "stix")
+    except Exception:
+        # If matplotlib isn't available here, PDF generation will fail later and be handled below.
+        pass
+
+    try:
+        Evaluator.generate_pdf_report(
+            results,
+            current_pdf,
+            current_plot,
+            num_bars,
+            BINNING,
+            START_DATE,
+            STOP_DATE,
+            bar_timestamps,
+            current_artifacts_dir,
+            ACTIVE_SYMBOL_LIST,
+        )
+    except Exception as e:
+        print(f"\n⚠️  PDF generation failed: {e}")
+        print("Skipping PDF report (fonts or rendering issue).")
     
     # Validate consistency (check for price jumps)
     print("\nValidating consistency...")
