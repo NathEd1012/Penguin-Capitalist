@@ -165,14 +165,42 @@ def run_backtest(
 
     ################################ STEP 1 ################################
 
+    # Before requesting data, inspect active penguin classes for their
+    # lookback / minimum-history requirements and request slightly more
+    # historical data than the largest requirement to avoid inconsistencies
+    # caused by insufficient prior bars.
+    max_lookback_bars = 0
+    max_min_history_required = 0
+    for penguin_class in penguin_classes:
+        max_lookback_bars = max(max_lookback_bars, getattr(penguin_class, "LOOKBACK_BARS", 0))
+        max_min_history_required = max(max_min_history_required, getattr(penguin_class, "MIN_HISTORY_REQUIRED", 0))
+
+    required_bars = max(max_lookback_bars, max_min_history_required)
+
     print("Step 1: Loading historical data from Alpaca...")
     loader = DataLoader()
     try:
+        # Determine minutes per bar for the chosen binning so we can compute
+        # a safe earlier start datetime. We add a small buffer (10 bars or
+        # 10% of the required bars) to be conservative.
+        try:
+            _, minutes_per_bar = loader._binning_to_timeframe(binning)
+        except Exception:
+            minutes_per_bar = 1
+
+        if required_bars and minutes_per_bar:
+            buffer_bars = max(10, int(required_bars * 0.1))
+            total_bars = required_bars + buffer_bars
+            adjusted_start = start_datetime_utc - timedelta(minutes=total_bars * minutes_per_bar)
+            print(f"  • Detected penguin lookback requirement: {required_bars} bars; requesting an extra {buffer_bars} bars ({total_bars} bars total) -> adjusted start: {adjusted_start}")
+        else:
+            adjusted_start = start_datetime_utc
+
         data, sparse_warning = loader.load_bars(
             symbols,
-            start_datetime_utc,
+            adjusted_start,
             end_datetime_utc,
-            binning
+            binning,
         )
         if sparse_warning:
             print(sparse_warning)

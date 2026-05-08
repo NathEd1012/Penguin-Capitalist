@@ -1,0 +1,42 @@
+{
+  "SP500Penguin": {
+    "total_return": 613.59,
+    "return_pct": 6.14,
+    "max_drawdown": -9.41,
+    "sharpe_ratio": 0.04,
+    "total_trades": 2,
+    "buy_trades": 1,
+    "sell_trades": 1,
+    "final_value": 10613.59
+  },
+  "SP500x2Penguin": {
+    "total_return": 1271.01,
+    "return_pct": 12.71,
+    "max_drawdown": -19.18,
+    "sharpe_ratio": 0.04,
+    "total_trades": 2,
+    "buy_trades": 1,
+    "sell_trades": 1,
+    "final_value": 11271.01
+  },
+  "RSI Mean Reversion Selective": {
+    "total_return": 1260.06,
+    "return_pct": 12.6,
+    "max_drawdown": -12.48,
+    "sharpe_ratio": 0.06,
+    "total_trades": 148,
+    "buy_trades": 74,
+    "sell_trades": 74,
+    "final_value": 11260.06
+  },
+  "Smart RSI Confluence": {
+    "total_return": 775.49,
+    "return_pct": 7.75,
+    "max_drawdown": -18.12,
+    "sharpe_ratio": 0.03,
+    "total_trades": 104,
+    "buy_trades": 52,
+    "sell_trades": 52,
+    "final_value": 10775.49
+  }
+}
