@@ -37,6 +37,10 @@ class Portfolio:
         
         # Trade history
         self.trades: List[Trade] = []
+
+        # Cached trade counts for fast reporting
+        self.buy_trade_count = 0
+        self.sell_trade_count = 0
         
         # Value snapshots for curve tracking
         self.value_history: List[float] = []
@@ -136,6 +140,7 @@ class Portfolio:
             timestamp=timestamp
         )
         self.trades.append(trade)
+        self.buy_trade_count += 1
         
         return True
     
@@ -168,6 +173,7 @@ class Portfolio:
             timestamp=timestamp
         )
         self.trades.append(trade)
+        self.sell_trade_count += 1
         
         return True
     

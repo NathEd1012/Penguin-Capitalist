@@ -139,6 +139,15 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                             is_first_trade=(i == 1),
                         )
                         
+                        # Detect synthetic/stubbed bars at dataset boundaries
+                        synthetic_flag = False
+                        try:
+                            if bar_timestamps and trade.timestamp is not None:
+                                if trade.timestamp == bar_timestamps[0] or trade.timestamp == bar_timestamps[-1]:
+                                    synthetic_flag = True
+                        except Exception:
+                            synthetic_flag = False
+
                         jump_data = {
                             'trade_idx': i,
                             'symbol': trade.symbol,
@@ -146,6 +155,7 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                             'prev': prev_price,
                             'curr': curr_price,
                             'type': jump_type,
+                            'synthetic': synthetic_flag,
                         }
                         
                         if jump_type in ("first_trade_artifact", "data_tick_anomaly"):
@@ -168,9 +178,10 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                 for jump in real_jumps:
                     trade = portfolio.trades[jump['trade_idx']]
                     date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
+                    synth_tag = ' [synthetic_jump]' if jump.get('synthetic') else ''
                     warnings.append(
                         f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
-                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f})"
+                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}){synth_tag}"
                     )
                     # Mark bad bars for trading restrictions
                     if penguin_name not in bad_bar_indices_by_penguin:
@@ -187,9 +198,10 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                 for jump in faulty_data_jumps:
                     trade = portfolio.trades[jump['trade_idx']]
                     date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
+                    synth_tag = ' | synthetic_jump' if jump.get('synthetic') else ''
                     warnings.append(
                         f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
-                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}) [{jump['type']}]"
+                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}) [{jump['type']}{synth_tag}]"
                     )
                     # Mark bad bars so trades are reverted
                     if penguin_name not in bad_bar_indices_by_penguin:

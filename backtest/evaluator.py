@@ -1,6 +1,6 @@
 """Performance evaluation and reporting for backtests."""
 import json
-import numpy as np
+from math import sqrt
 from datetime import datetime
 from typing import Dict, List, Tuple
 from pathlib import Path
@@ -33,41 +33,58 @@ class Evaluator:
                 'buy_trades': 0,
                 'sell_trades': 0,
             }
-        
-        values = np.array(portfolio.value_history, dtype=float)
-        
-        # Total return
-        final_value = values[-1]
+
+        # Use a single streaming pass to avoid materializing a second full array.
+        final_value = float(portfolio.value_history[-1])
         total_return = final_value - initial_capital
-        return_pct = (total_return / initial_capital) * 100
-        
-        # Maximum drawdown
-        running_max = np.maximum.accumulate(values)
-        drawdown = (values - running_max) / running_max
-        max_drawdown = np.min(drawdown) * 100
-        
-        # Daily returns (simplified using value snapshots)
-        if len(values) > 1:
-            returns = np.diff(values) / values[:-1]
-            returns = returns[~np.isnan(returns)]
-            returns = returns[~np.isinf(returns)]
-            
-            if len(returns) > 0:
-                sharpe_ratio = np.mean(returns) / (np.std(returns) + 1e-10) * np.sqrt(252)
-            else:
-                sharpe_ratio = 0
+        return_pct = (total_return / initial_capital) * 100 if initial_capital else 0
+
+        running_max = float("-inf")
+        worst_drawdown = 0.0
+        previous_value = None
+        returns_count = 0
+        returns_sum = 0.0
+        returns_sq_sum = 0.0
+
+        for raw_value in portfolio.value_history:
+            value = float(raw_value)
+
+            if value > running_max:
+                running_max = value
+
+            if running_max > 0:
+                drawdown = (value - running_max) / running_max
+                if drawdown < worst_drawdown:
+                    worst_drawdown = drawdown
+
+            if previous_value is not None and previous_value > 0:
+                period_return = (value - previous_value) / previous_value
+                if period_return == period_return and period_return not in (float("inf"), float("-inf")):
+                    returns_count += 1
+                    returns_sum += period_return
+                    returns_sq_sum += period_return * period_return
+
+            previous_value = value
+
+        if returns_count > 0:
+            mean_return = returns_sum / returns_count
+            variance = max(0.0, (returns_sq_sum / returns_count) - (mean_return * mean_return))
+            sharpe_ratio = mean_return / (sqrt(variance) + 1e-10) * sqrt(252)
         else:
-            sharpe_ratio = 0
-        
-        # Trade counts
-        buy_trades = sum(1 for trade in portfolio.trades if trade.action == "BUY")
-        sell_trades = sum(1 for trade in portfolio.trades if trade.action == "SELL")
+            sharpe_ratio = 0.0
+
+        # Trade counts are cached on the portfolio and fall back to a scan if needed.
+        buy_trades = getattr(portfolio, "buy_trade_count", None)
+        sell_trades = getattr(portfolio, "sell_trade_count", None)
+        if buy_trades is None or sell_trades is None:
+            buy_trades = sum(1 for trade in portfolio.trades if trade.action == "BUY")
+            sell_trades = sum(1 for trade in portfolio.trades if trade.action == "SELL")
         total_trades = len(portfolio.trades)
         
         return {
             'total_return': round(total_return, 2),
             'return_pct': round(return_pct, 2),
-            'max_drawdown': round(max_drawdown, 2),
+            'max_drawdown': round(worst_drawdown * 100, 2),
             'sharpe_ratio': round(sharpe_ratio, 2),
             'total_trades': total_trades,
             'buy_trades': buy_trades,
