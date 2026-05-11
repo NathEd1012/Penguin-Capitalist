@@ -202,6 +202,27 @@ class Evaluator:
             
             trades_content += "\n" + "=" * 80 + "\n\n"
         
+        # Identify final liquidation timestamp (last bar)
+        final_liquidation_timestamp = None
+        if bar_timestamps and len(bar_timestamps) > 0:
+            final_liquidation_timestamp = bar_timestamps[-1]
+        
+        trades_content += "LIQUIDATION TRADES (End of Backtest Forced Closes)\n"
+        trades_content += "-" * 80 + "\n\n"
+        
+        liquidation_found = False
+        for penguin_name, (portfolio, _) in results.items():
+            liquidation_trades = [t for t in portfolio.trades if final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp]
+            if liquidation_trades:
+                liquidation_found = True
+                trades_content += f"\n{penguin_name}:\n"
+                for trade in liquidation_trades:
+                    trades_content += f"  {trade}\n"
+        
+        if not liquidation_found:
+            trades_content += "(No liquidation trades recorded)\n"
+        
+        trades_content += "\n" + "=" * 80 + "\n\n"
         trades_content += "STRATEGY SUMMARY\n"
         trades_content += "-" * 80 + "\n\n"
         
@@ -217,9 +238,11 @@ class Evaluator:
             trades_content += f"  Total Trades:   {metrics['total_trades']}\n"
             trades_content += f"  Buy Trades:     {metrics['buy_trades']}\n"
             trades_content += f"  Sell Trades:    {metrics['sell_trades']}\n"
-            trades_content += "\n  Recent Trades:\n"
+            trades_content += "\n  Recent Trades (excluding liquidation):\n"
             
-            for trade in portfolio.trades[-20:]:
+            # Exclude liquidation trades from recent trades display
+            non_liquidation_trades = [t for t in portfolio.trades if not (final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp)]
+            for trade in non_liquidation_trades[-20:]:
                 trades_content += f"    {trade}\n"
             
             trades_content += "\n" + "-" * 80 + "\n"

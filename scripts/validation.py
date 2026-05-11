@@ -103,65 +103,92 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                     )
         
         # 3) Suspicious price jumps detection in trade history
+        # GROUP TRADES BY SYMBOL FIRST - only compare within the same ticker
         if len(portfolio.trades) > 1:
-            trade_prices = [trade.price for trade in portfolio.trades]
+            trades_by_symbol: Dict[str, List] = {}
+            for trade in portfolio.trades:
+                if trade.symbol not in trades_by_symbol:
+                    trades_by_symbol[trade.symbol] = []
+                trades_by_symbol[trade.symbol].append(trade)
+            
             real_jumps = []           # Missing corporate actions, sustained anomalies
             faulty_data_jumps = []    # Single-tick anomalies, first-trade artifacts
             skipped_corporate_action_jumps = 0
+            largest_trade_jump = None
             
-            for i in range(1, len(trade_prices)):
-                prev_price = trade_prices[i-1]
-                curr_price = trade_prices[i]
+            # Check price jumps WITHIN each symbol's trade history only
+            for symbol, symbol_trades in trades_by_symbol.items():
+                if len(symbol_trades) < 2:
+                    continue
                 
-                if prev_price > 0:
-                    price_pct = (curr_price - prev_price) / prev_price
+                trade_prices = [t.price for t in symbol_trades]
+                
+                for i in range(1, len(trade_prices)):
+                    prev_price = trade_prices[i-1]
+                    curr_price = trade_prices[i]
                     
-                    if abs(price_pct) > max_jump_pct:
-                        trade = portfolio.trades[i]
-                        
-                        # Check for known corporate actions
-                        if has_corporate_action_near(
-                            symbol=trade.symbol,
-                            timestamp=trade.timestamp,
-                            window_days=2,
-                            action_types={"split", "reverse_split"},
-                        ):
-                            skipped_corporate_action_jumps += 1
-                            continue
+                    if prev_price > 0:
+                        price_pct = (curr_price - prev_price) / prev_price
 
-                        # Classify the jump
-                        jump_type = classify_price_jump(
-                            trade_idx=i,
-                            price_pct=price_pct,
-                            prev_price=prev_price,
-                            curr_price=curr_price,
-                            trade_prices=trade_prices,
-                            is_first_trade=(i == 1),
-                        )
+                        if largest_trade_jump is None or abs(price_pct) > abs(largest_trade_jump['pct']):
+                            largest_trade_jump = {
+                                'trade_idx': i,
+                                'symbol': symbol,
+                                'pct': price_pct,
+                                'prev': prev_price,
+                                'curr': curr_price,
+                                'timestamp': symbol_trades[i].timestamp,
+                            }
                         
-                        # Detect synthetic/stubbed bars at dataset boundaries
-                        synthetic_flag = False
-                        try:
-                            if bar_timestamps and trade.timestamp is not None:
-                                if trade.timestamp == bar_timestamps[0] or trade.timestamp == bar_timestamps[-1]:
-                                    synthetic_flag = True
-                        except Exception:
+                        if abs(price_pct) > max_jump_pct:
+                            trade = symbol_trades[i]
+                            
+                            # Check for known corporate actions
+                            if has_corporate_action_near(
+                                symbol=trade.symbol,
+                                timestamp=trade.timestamp,
+                                window_days=2,
+                                action_types={"split", "reverse_split"},
+                            ):
+                                skipped_corporate_action_jumps += 1
+                                continue
+
+                            # Classify the jump
+                            jump_type = classify_price_jump(
+                                trade_idx=i,
+                                price_pct=price_pct,
+                                prev_price=prev_price,
+                                curr_price=curr_price,
+                                trade_prices=trade_prices,
+                                is_first_trade=(i == 1),  # First trade per SYMBOL, not globally
+                            )
+                            
+                            # Detect synthetic/stubbed bars at dataset boundaries
                             synthetic_flag = False
+                            try:
+                                if bar_timestamps and trade.timestamp is not None:
+                                    if trade.timestamp == bar_timestamps[0] or trade.timestamp == bar_timestamps[-1]:
+                                        synthetic_flag = True
+                            except Exception:
+                                synthetic_flag = False
 
-                        jump_data = {
-                            'trade_idx': i,
-                            'symbol': trade.symbol,
-                            'pct': price_pct,
-                            'prev': prev_price,
-                            'curr': curr_price,
-                            'type': jump_type,
-                            'synthetic': synthetic_flag,
-                        }
-                        
-                        if jump_type in ("first_trade_artifact", "data_tick_anomaly"):
-                            faulty_data_jumps.append(jump_data)
-                        else:
-                            real_jumps.append(jump_data)
+                            jump_data = {
+                                'trade_idx': i,
+                                'symbol': trade.symbol,
+                                'pct': price_pct,
+                                'prev': prev_price,
+                                'curr': curr_price,
+                                'type': jump_type,
+                                'synthetic': synthetic_flag,
+                            }
+                            
+                            # Completely skip synthetic jumps (final liquidation) - they're algorithmic artifacts, not data issues
+                            if synthetic_flag:
+                                continue
+                            elif jump_type in ("first_trade_artifact", "data_tick_anomaly"):
+                                faulty_data_jumps.append(jump_data)
+                            else:
+                                real_jumps.append(jump_data)
 
             if skipped_corporate_action_jumps:
                 warnings.append(
@@ -176,18 +203,29 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                     f"suspicious price jumps > {max_jump_pct*100:.0f}% (possible missing corporate actions)"
                 )
                 for jump in real_jumps:
-                    trade = portfolio.trades[jump['trade_idx']]
-                    date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
+                    # Find the trade from portfolio by matching symbol and price
+                    matching_trade = None
+                    for t in portfolio.trades:
+                        if t.symbol == jump['symbol'] and abs(t.price - jump['curr']) < 0.01:
+                            matching_trade = t
+                            break
+                    
+                    if matching_trade:
+                        date_str = matching_trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if matching_trade.timestamp else 'N/A'
+                    else:
+                        date_str = 'N/A'
+                    
                     synth_tag = ' [synthetic_jump]' if jump.get('synthetic') else ''
                     warnings.append(
-                        f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
-                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}){synth_tag}"
+                        f"  {jump['symbol']} trade #{jump['trade_idx']}: "
+                        f"{jump['pct']:+.2%} @ {date_str} "
+                        f"(${jump['prev']:.2f} → ${jump['curr']:.2f}){synth_tag}"
                     )
                     # Mark bad bars for trading restrictions
                     if penguin_name not in bad_bar_indices_by_penguin:
                         bad_bar_indices_by_penguin[penguin_name] = set()
-                    if hasattr(trade, 'bar_index'):
-                        bad_bar_indices_by_penguin[penguin_name].add(trade.bar_index)
+                    if hasattr(matching_trade, 'bar_index') if matching_trade else False:
+                        bad_bar_indices_by_penguin[penguin_name].add(matching_trade.bar_index)
             
             # Faulty data section (separate table)
             if faulty_data_jumps:
@@ -196,22 +234,45 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                     f"(no trading should occur on these bars)"
                 )
                 for jump in faulty_data_jumps:
-                    trade = portfolio.trades[jump['trade_idx']]
-                    date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
+                    # Find the trade from portfolio by matching symbol and price
+                    matching_trade = None
+                    for t in portfolio.trades:
+                        if t.symbol == jump['symbol'] and abs(t.price - jump['curr']) < 0.01:
+                            matching_trade = t
+                            break
+                    
+                    if matching_trade:
+                        date_str = matching_trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if matching_trade.timestamp else 'N/A'
+                    else:
+                        date_str = 'N/A'
+                    
                     synth_tag = ' | synthetic_jump' if jump.get('synthetic') else ''
                     warnings.append(
-                        f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
-                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}) [{jump['type']}{synth_tag}]"
+                        f"  {jump['symbol']} trade #{jump['trade_idx']}: "
+                        f"{jump['pct']:+.2%} @ {date_str} "
+                        f"(${jump['prev']:.2f} → ${jump['curr']:.2f}) [{jump['type']}{synth_tag}]"
                     )
                     # Mark bad bars so trades are reverted
                     if penguin_name not in bad_bar_indices_by_penguin:
                         bad_bar_indices_by_penguin[penguin_name] = set()
-                    if hasattr(trade, 'bar_index'):
-                        bad_bar_indices_by_penguin[penguin_name].add(trade.bar_index)
+                    if hasattr(matching_trade, 'bar_index') if matching_trade else False:
+                        bad_bar_indices_by_penguin[penguin_name].add(matching_trade.bar_index)
+
+            # Always surface the largest trade-to-trade jump so notable moves
+            # are visible even when they fall below the strict alert threshold.
+            if largest_trade_jump is not None:
+                ts = largest_trade_jump['timestamp']
+                date_str = ts.strftime('%Y-%m-%d %H:%M:%S') if ts else 'N/A'
+                warnings.append(
+                    f"[{penguin_name}] Largest {largest_trade_jump['symbol']} jump: "
+                    f"{largest_trade_jump['pct']:+.2%} @ {date_str} "
+                    f"(${largest_trade_jump['prev']:.2f} → ${largest_trade_jump['curr']:.2f})"
+                )
         
         # 4) Curve value jumps detection
         if len(portfolio.value_history) > 1:
             value_jumps = []
+            largest_value_jump = None
             
             for i in range(1, len(portfolio.value_history)):
                 prev_val = portfolio.value_history[i-1]
@@ -219,6 +280,14 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                 
                 if prev_val > 0:
                     val_pct = (curr_val - prev_val) / prev_val
+
+                    if largest_value_jump is None or abs(val_pct) > abs(largest_value_jump['pct']):
+                        largest_value_jump = {
+                            'bar': i,
+                            'pct': val_pct,
+                            'prev': prev_val,
+                            'curr': curr_val,
+                        }
                     
                     if abs(val_pct) > max_jump_pct:
                         value_jumps.append({
@@ -240,5 +309,16 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                         f"  Bar {bar_idx} @ {date_str}: "
                         f"{jump['pct']:+.2%} (${jump['prev']:,.2f} → ${jump['curr']:,.2f})"
                     )
+
+            # Always surface the largest single-bar portfolio move so users can
+            # inspect material jumps even if they are below max_jump_pct.
+            if largest_value_jump is not None:
+                bar_idx = largest_value_jump['bar']
+                date_str = bar_timestamps[bar_idx].strftime('%Y-%m-%d %H:%M:%S') if bar_timestamps and bar_idx < len(bar_timestamps) else 'N/A'
+                warnings.append(
+                    f"[{penguin_name}] Largest single-bar portfolio move: "
+                    f"{largest_value_jump['pct']:+.2%} @ {date_str} "
+                    f"(${largest_value_jump['prev']:,.2f} → ${largest_value_jump['curr']:,.2f})"
+                )
     
     return warnings, bad_bar_indices_by_penguin

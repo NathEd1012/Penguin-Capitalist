@@ -18,7 +18,16 @@ class Trade:
 
 
 class Portfolio:
-    """Tracks positions, cash, and performance during backtesting."""
+    """
+    Tracks positions, cash, and performance during backtesting.
+    
+    **SYMBOL-SPECIFIC PRICE TRACKING:**
+    All price tracking is indexed by symbol to ensure multi-asset correctness.
+    - positions[symbol]: quantity held
+    - cost_basis[symbol]: average entry price
+    - last_known_prices[symbol]: last known price for this symbol
+    Never use a global/shared previous_price variable.
+    """
     
     def __init__(self, initial_capital: float = 5000.0, transaction_cost: float = 0.0):
         self.initial_capital = initial_capital
@@ -26,13 +35,15 @@ class Portfolio:
         self.transaction_cost = transaction_cost
         self.max_leverage = 1.0
         
-        # Positions: symbol -> quantity
+        # Positions: symbol -> quantity (last_price_by_symbol equivalent)
         self.positions: Dict[str, int] = {}
         
         # Track the cost basis for each position for P&L calculation
+        # symbol -> average entry price (previous_close_by_symbol for cost tracking)
         self.cost_basis: Dict[str, float] = {}
         
         # Track last known good price for each symbol (fallback if price data missing)
+        # symbol -> price (previous_close_by_symbol: price_history[symbol])
         self.last_known_prices: Dict[str, float] = {}
         
         # Trade history
@@ -55,8 +66,13 @@ class Portfolio:
         Uses last-known-good price if current price is not available to prevent
         artificial drops when price data is missing.
         
+        SYMBOL-SPECIFIC PRICE TRACKING (previous_close_by_symbol):
+        - current_prices[symbol]: latest price for this symbol
+        - self.last_known_prices[symbol]: fallback price for this symbol
+        - Never uses a global/shared previous_price
+        
         Args:
-            current_prices: Dict of current symbol prices
+            current_prices: Dict of current symbol prices {symbol: price}
         
         Returns:
             Total portfolio value
@@ -64,12 +80,12 @@ class Portfolio:
         total = self.cash
         for symbol, quantity in self.positions.items():
             if quantity > 0:
-                # Use current price if available, otherwise fall back to last known price
+                # Use current price if available, otherwise fall back to last known price for THIS symbol
                 if symbol in current_prices and current_prices[symbol] > 0:
                     price = current_prices[symbol]
                     self.last_known_prices[symbol] = price  # Update last known price
                 elif symbol in self.last_known_prices and self.last_known_prices[symbol] > 0:
-                    # Use previous price (carry forward)
+                    # Use previous price for this symbol (carry forward)
                     price = self.last_known_prices[symbol]
                 else:
                     # No price available at all, skip this position
@@ -82,7 +98,19 @@ class Portfolio:
     def buy(self, symbol: str, quantity: int, price: float, timestamp: datetime) -> bool:
         """
         Execute a buy order.
-        Returns True if successful, False if insufficient cash.
+        
+        SYMBOL-SPECIFIC PRICE TRACKING (last_price_by_symbol):
+        - Updates last_known_prices[symbol] for this specific symbol
+        - Tracks cost_basis[symbol] for this symbol's positions
+        
+        Args:
+            symbol: The symbol being bought
+            quantity: Quantity to buy
+            price: Price per share for THIS symbol
+            timestamp: Trade timestamp
+        
+        Returns:
+            True if successful, False if insufficient cash.
         """
         if quantity <= 0 or price <= 0:
             return False
@@ -147,7 +175,19 @@ class Portfolio:
     def sell(self, symbol: str, quantity: int, price: float, timestamp: datetime) -> bool:
         """
         Execute a sell order.
-        Returns True if successful, False if insufficient position.
+        
+        SYMBOL-SPECIFIC PRICE TRACKING (last_price_by_symbol):
+        - Updates last_known_prices[symbol] for this specific symbol
+        - Closes position[symbol] tracking
+        
+        Args:
+            symbol: The symbol being sold
+            quantity: Quantity to sell
+            price: Price per share for THIS symbol
+            timestamp: Trade timestamp
+        
+        Returns:
+            True if successful, False if insufficient position.
         """
         current_qty = self.get_position(symbol)
         

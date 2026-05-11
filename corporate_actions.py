@@ -18,6 +18,14 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "comment": "4-for-1 stock split",
         }
     ],
+    "BKNG": [
+    {
+        "date": "2026-04-06",
+        "type": "split",
+        "ratio": "25:1",
+        "comment": "25-for-1 stock split",
+    }
+    ],
     "AMZN": [
         {
             "date": "2022-06-06",

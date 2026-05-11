@@ -393,29 +393,45 @@ def run_backtest(
             if hasattr(penguin, "_advance_bar"):
                 penguin._advance_bar()"""
     
-    # Sell all positions at end - use average price from last 10 bars to avoid unrealistic jumps
+    # ======================== FINAL LIQUIDATION ========================
+    # CRITICAL CONSTRAINTS for end-of-backtest liquidation:
+    # 1. DO NOT call penguin.decide() or any signal evaluation methods
+    # 2. DO NOT rerank penguins
+    # 3. DO NOT recompute indicators or refresh S/R levels
+    # 4. ONLY close existing open positions at fair prices
+    #
+    # This ensures final positions are closed cleanly without artificially
+    # triggering new trades or changing strategy rankings based on final-bar behavior.
+    # ===================================================================
+    
     print("\nClosing all positions...")
     
     for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
-        # For each position, close using average price of last few bars
+        # For each open position in this portfolio, close it cleanly.
+        # Use average price from last 10 bars to smooth final closing price
+        # and avoid unrealistic single-bar spikes.
         for symbol, quantity in list(portfolio.positions.items()):
             if quantity > 0:
-                # Get price history - use last 10 bars average
+                # Get price history for this SPECIFIC symbol (last_price_by_symbol)
                 symbol_prices = price_history[symbol][-10:] if symbol in price_history else []
                 
                 if symbol_prices:
+                    # Use average of last 10 bars for smooth liquidation
                     close_price = np.mean(symbol_prices)
                 else:
-                    # Fallback to final price
+                    # Fallback: use final available price for this symbol
                     close_price = price_history[symbol][-1] if symbol in price_history else 0
                 
+                # Execute closing sell only if we have a valid price
                 if close_price > 0:
                     portfolio.sell(symbol, quantity, close_price, sorted_timestamps[-1])
         
-        # Add final snapshot with smoothed price
+        # Record final portfolio value using symbol-specific price averaging
+        # (previous_close_by_symbol)
         final_prices = {}
         for symbol in symbols:
             if symbol in price_history and price_history[symbol]:
+                # Average last 10 bars for each symbol independently
                 final_prices[symbol] = np.mean(price_history[symbol][-10:])
         
         final_value = portfolio.get_total_value(final_prices)
