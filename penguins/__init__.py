@@ -15,6 +15,8 @@ from .sr_multiframe_penguin import SRMultiframePenguin
 from .sma20_penguin import SMA20AdvancedPenguin, SMA20Penguin
 from .SP500 import SP500
 from .SP500x2 import SP500x2
+from .buy_one_each_penguin import BuyOneEachPenguin
+from .buy_max_each_penguin import BuyMaxEachPenguin
 
 __all__ = [
     "BasePenguin",
@@ -33,4 +35,6 @@ __all__ = [
     "SMA20Penguin",
     "SP500",
     "SP500x2",
+    "BuyOneEachPenguin",
+    "BuyMaxEachPenguin",
 ]

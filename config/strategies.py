@@ -17,6 +17,8 @@ from penguins import (
     RSIMeanReversionMomentumPenguin,
     RSIMeanReversionSelectivePenguin,
     SmartRSIConfluencePenguin,
+    BuyOneEachPenguin,
+    BuyMaxEachPenguin,
 )
 from penguins.multitimeframe_reaction_sr_penguin import MultitimeframeReactionSRPenguin
 
@@ -35,6 +37,8 @@ ACTIVE_PENGUINS = [
     #RSIMeanReversionMomentumPenguin,    # 3-stage momentum RSI - RISING/FALLING/HOLDING
     RSIMeanReversionSelectivePenguin,   # Low-frequency high-quality RSI mean reversion
     SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
+    BuyOneEachPenguin,                  # Buy exactly 1 share for each symbol once
+    BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
 
     # CopilotPenguin,                    # AI-assisted strategy
     #MomentumPenguin,                  # Pure momentum following
