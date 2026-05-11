@@ -636,6 +636,26 @@ def main():
     else:
         print("Run updated (not archived - SAVE_TO_RUN_OLD is False)")
 
+    # Attempt a clean shutdown: close plotting resources and detect background threads.
+    try:
+        import threading
+        try:
+            import matplotlib.pyplot as plt
+            plt.close('all')
+        except Exception:
+            pass
+
+        non_main = [t for t in threading.enumerate() if t is not threading.main_thread()]
+        non_daemon = [t.name for t in non_main if not t.daemon and t.is_alive()]
+        if non_daemon:
+            print(f"\nNote: {len(non_daemon)} non-daemon background thread(s) still running: {non_daemon}")
+            print("If you want the process to exit immediately, run with CTRL+C or enable forced exit in the runner.")
+    except Exception:
+        # Defensive: don't raise from shutdown diagnostics
+        pass
+
+    # Exit explicitly to avoid waiting for non-daemon threads in some environments.
+    sys.exit(0)
 
 if __name__ == "__main__":
     try:

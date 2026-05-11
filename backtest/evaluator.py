@@ -5,6 +5,13 @@ from datetime import datetime
 from typing import Dict, List, Tuple
 from pathlib import Path
 from backtest.portfolio import Portfolio
+try:
+    from tqdm import tqdm
+except Exception:
+    # Fallback: identity function if tqdm not available
+    def tqdm(x, **kwargs):
+        return x
+
 from scripts.plotting import plot_capital_curves, create_final_report_pdf, _strategy_parameter_text
 
 
@@ -46,7 +53,8 @@ class Evaluator:
         returns_sum = 0.0
         returns_sq_sum = 0.0
 
-        for raw_value in portfolio.value_history:
+        # Wrap the iteration in tqdm to show progress for long histories.
+        for raw_value in tqdm(portfolio.value_history, desc="Calc metrics", leave=False):
             value = float(raw_value)
 
             if value > running_max:
