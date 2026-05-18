@@ -35,6 +35,28 @@ from config import (
 )
 
 
+def percent_progress(iterable, desc: str):
+    total = len(iterable)
+    if total == 0:
+        return
+
+    progress = tqdm(total=total, desc=desc)
+    last_percent = -1
+
+    try:
+        for index, item in enumerate(iterable, start=1):
+            percent = (index * 100) // total
+            if percent != last_percent:
+                progress.update(index - progress.n)
+                last_percent = percent
+            yield index - 1, item
+
+        if progress.n < total:
+            progress.update(total - progress.n)
+    finally:
+        progress.close()
+
+
 def parse_datetime_string(dt_str: str) -> datetime:
     """
     Parse datetime from config format string.
@@ -224,7 +246,7 @@ def run_backtest(
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
     
-    for bar_idx, timestamp in enumerate(tqdm(sorted_timestamps, desc="Executing bars")):
+    for bar_idx, timestamp in percent_progress(sorted_timestamps, desc="Executing bars"):
         # Get current prices
         current_prices = {}
         for symbol in symbols:

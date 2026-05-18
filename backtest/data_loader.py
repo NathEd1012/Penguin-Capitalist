@@ -3,6 +3,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Tuple, Optional
+from pathlib import Path
 import pandas as pd
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
@@ -11,7 +12,6 @@ import pytz
 from dotenv import load_dotenv
 from tqdm import tqdm
 from market_data.cache import DataCache
-import os
 
 # Conditionally import corporate-action helper. If IGNORE_CORPORATE_ACTIONS is set,
 # provide a no-op fallback to avoid import-time errors or unnecessary processing.
@@ -52,7 +52,10 @@ class DataLoader:
         
         self.client = StockHistoricalDataClient(api_key, secret_key)
         # Repeated runs with identical ranges should be served from disk cache.
-        self.cache = DataCache("data_cache")
+        # Resolve cache path relative to project root (Penguin-Capitalist folder)
+        project_root = Path(__file__).parent.parent
+        cache_dir = project_root / "data_cache"
+        self.cache = DataCache(str(cache_dir))
     
     def _binning_to_timeframe(self, binning: str) -> Tuple[TimeFrame, int]:
         """

@@ -1,5 +1,7 @@
 """Backtest timing and execution configuration."""
 
+import os
+
 # ========== BACKTEST TIMING SETTINGS ==========
 
 # Start date for backtest (ISO format: YYYY-MM-DD HH:MM:SS in UTC)
@@ -30,7 +32,7 @@ BINNING = "1m"
 # Whether to save completed runs to run_old/ directory
 # True  - Archive each run with timestamp (for historical comparison)
 # False - Only update run_current/ (saves disk space)
-SAVE_TO_RUN_OLD = 0 #False
+SAVE_TO_RUN_OLD = int(os.getenv("SAVE_TO_RUN_OLD", "0"))
 
 # ========== OPTIONAL ADDITIONAL PLOTS ==========
 # Controls extra visualization outputs like multitimeframe S/R line PNGs + combined PDF.
