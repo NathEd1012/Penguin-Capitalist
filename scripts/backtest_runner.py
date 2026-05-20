@@ -2,6 +2,7 @@
 import os
 import shutil
 import sys
+import logging
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -13,6 +14,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from tqdm import tqdm
+logger = logging.getLogger(__name__)
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
@@ -35,26 +37,28 @@ from config import (
 )
 
 
+
 def percent_progress(iterable, desc: str):
+    """Iterate with progress logging only every 5% for reduced server log spam."""
     total = len(iterable)
     if total == 0:
         return
 
-    progress = tqdm(total=total, desc=desc)
-    last_percent = -1
+    last_logged_percent = -5
 
-    try:
-        for index, item in enumerate(iterable, start=1):
-            percent = (index * 100) // total
-            if percent != last_percent:
-                progress.update(index - progress.n)
-                last_percent = percent
-            yield index - 1, item
+    for index, item in enumerate(iterable, start=1):
+        percent = int((index / total) * 100)
 
-        if progress.n < total:
-            progress.update(total - progress.n)
-    finally:
-        progress.close()
+        if percent >= last_logged_percent + 5:
+            logger.info(
+                "%s: %d%% (%d/%d)",
+                desc,
+                percent,
+                index,
+                total
+            )
+            last_logged_percent = percent
+        yield index - 1, item
 
 
 def parse_datetime_string(dt_str: str) -> datetime:
@@ -221,7 +225,7 @@ def run_backtest(
     spread_model = SyntheticSpreadModel()
     
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
-    for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
+    for penguin_class in tqdm(penguin_classes, desc="Initializing strategies", mininterval=60, miniters=5000):
         try:
             penguin = penguin_class()
             if hasattr(penguin, "record_history"):
@@ -354,7 +358,7 @@ def run_backtest(
     # Sell all positions at end - use average price from last 10 bars to avoid unrealistic jumps
     print("\nClosing all positions...")
     
-    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
+    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions", mininterval=60, miniters=5000):
         # For each position, close using average price of last few bars
         for symbol, quantity in list(portfolio.positions.items()):
             if quantity > 0:
@@ -382,7 +386,7 @@ def run_backtest(
     # Calculate metrics
     print("\nCalculating performance metrics...")
     results = {}
-    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Computing metrics"):
+    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Computing metrics", mininterval=60, miniters=5000):
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     

@@ -1,62 +1,62 @@
 {
   "SP500Penguin": {
-    "total_return": 5260.47,
-    "return_pct": 52.6,
-    "max_drawdown": -20.5,
+    "total_return": 54544.23,
+    "return_pct": 54.54,
+    "max_drawdown": -21.22,
     "sharpe_ratio": 0.04,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 15260.47
+    "final_value": 154544.23
   },
   "SP500x2Penguin": {
-    "total_return": 10783.96,
-    "return_pct": 107.84,
-    "max_drawdown": -34.29,
+    "total_return": 109349.43,
+    "return_pct": 109.35,
+    "max_drawdown": -34.76,
     "sharpe_ratio": 0.04,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 20783.96
+    "final_value": 209349.43
   },
   "RSI Mean Reversion Selective": {
-    "total_return": 4396.08,
-    "return_pct": 43.96,
-    "max_drawdown": -39.85,
+    "total_return": 15594.24,
+    "return_pct": 15.59,
+    "max_drawdown": -15.16,
     "sharpe_ratio": 0.02,
-    "total_trades": 194,
-    "buy_trades": 97,
-    "sell_trades": 97,
-    "final_value": 14396.08
+    "total_trades": 598,
+    "buy_trades": 299,
+    "sell_trades": 299,
+    "final_value": 115594.24
   },
   "Smart RSI Confluence": {
-    "total_return": 8068.86,
-    "return_pct": 80.69,
-    "max_drawdown": -51.65,
-    "sharpe_ratio": 0.02,
-    "total_trades": 64,
-    "buy_trades": 32,
-    "sell_trades": 32,
-    "final_value": 18068.86
+    "total_return": 31932.69,
+    "return_pct": 31.93,
+    "max_drawdown": -26.49,
+    "sharpe_ratio": 0.03,
+    "total_trades": 520,
+    "buy_trades": 260,
+    "sell_trades": 260,
+    "final_value": 131932.69
   },
   "Buy One Each Penguin": {
-    "total_return": 10885.85,
-    "return_pct": 108.86,
-    "max_drawdown": -30.5,
-    "sharpe_ratio": 0.04,
-    "total_trades": 78,
-    "buy_trades": 39,
-    "sell_trades": 39,
-    "final_value": 20885.85
+    "total_return": 16312.38,
+    "return_pct": 16.31,
+    "max_drawdown": -15.06,
+    "sharpe_ratio": 0.02,
+    "total_trades": 600,
+    "buy_trades": 300,
+    "sell_trades": 300,
+    "final_value": 116312.38
   },
   "Buy Max Each Penguin": {
-    "total_return": 5779.06,
-    "return_pct": 57.79,
-    "max_drawdown": -22.42,
+    "total_return": 54971.52,
+    "return_pct": 54.97,
+    "max_drawdown": -21.38,
     "sharpe_ratio": 0.04,
     "total_trades": 10,
     "buy_trades": 5,
     "sell_trades": 5,
-    "final_value": 15779.06
+    "final_value": 154971.52
   }
 }

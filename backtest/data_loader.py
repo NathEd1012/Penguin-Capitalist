@@ -262,7 +262,7 @@ class DataLoader:
         max_workers = min(4, max(1, len(symbols)))
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {executor.submit(_fetch_symbol, symbol): symbol for symbol in symbols}
-            for future in tqdm(as_completed(futures), total=len(futures), desc="Fetching/organizing data"):
+            for future in tqdm(as_completed(futures), total=len(futures), desc="Fetching/organizing data", mininterval=60, miniters=5000):
                 symbol = futures[future]
                 try:
                     symbol_rows = future.result()

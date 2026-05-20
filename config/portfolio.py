@@ -2,7 +2,7 @@
 
 # ========== PORTFOLIO CAPITAL ==========
 # Initial capital to start backtesting with (USD)
-INITIAL_CAPITAL = 10000.0
+INITIAL_CAPITAL = 100000.0
 
 # ========== TRANSACTION COSTS ==========
 # Fixed transaction cost per trade (USD)
