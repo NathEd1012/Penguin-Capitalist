@@ -2,7 +2,6 @@
 import os
 import shutil
 import sys
-import logging
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -13,7 +12,6 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent))
 
 from tqdm import tqdm
-logger = logging.getLogger(__name__)
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
@@ -40,26 +38,25 @@ from config import (
 
 
 def percent_progress(iterable, desc: str):
-    """Iterate with progress logging only every 5% for reduced server log spam."""
     total = len(iterable)
     if total == 0:
         return
 
-    last_logged_percent = -5
+    progress = tqdm(total=total, desc=desc)
+    last_percent = -1
 
-    for index, item in enumerate(iterable, start=1):
-        percent = int((index / total) * 100)
+    try:
+        for index, item in enumerate(iterable, start=1):
+            percent = (index * 100) // total
+            if percent != last_percent:
+                progress.update(index - progress.n)
+                last_percent = percent
+            yield index - 1, item
 
-        if percent >= last_logged_percent + 5:
-            logger.info(
-                "%s: %d%% (%d/%d)",
-                desc,
-                percent,
-                index,
-                total
-            )
-            last_logged_percent = percent
-        yield index - 1, item
+        if progress.n < total:
+            progress.update(total - progress.n)
+    finally:
+        progress.close()
 
 
 def parse_datetime_string(dt_str: str) -> datetime:
@@ -187,45 +184,14 @@ def run_backtest(
     print(f"{'='*80}\n")
     
     # Load data
-
-    ################################ STEP 1 ################################
-
-    # Before requesting data, inspect active penguin classes for their
-    # lookback / minimum-history requirements and request slightly more
-    # historical data than the largest requirement to avoid inconsistencies
-    # caused by insufficient prior bars.
-    max_lookback_bars = 0
-    max_min_history_required = 0
-    for penguin_class in penguin_classes:
-        max_lookback_bars = max(max_lookback_bars, getattr(penguin_class, "LOOKBACK_BARS", 0))
-        max_min_history_required = max(max_min_history_required, getattr(penguin_class, "MIN_HISTORY_REQUIRED", 0))
-
-    required_bars = max(max_lookback_bars, max_min_history_required)
-
     print("Step 1: Loading historical data from Alpaca...")
     loader = DataLoader()
     try:
-        # Determine minutes per bar for the chosen binning so we can compute
-        # a safe earlier start datetime. We add a small buffer (10 bars or
-        # 10% of the required bars) to be conservative.
-        try:
-            _, minutes_per_bar = loader._binning_to_timeframe(binning)
-        except Exception:
-            minutes_per_bar = 1
-
-        if required_bars and minutes_per_bar:
-            buffer_bars = max(10, int(required_bars * 0.1))
-            total_bars = required_bars + buffer_bars
-            adjusted_start = start_datetime_utc - timedelta(minutes=total_bars * minutes_per_bar)
-            print(f"  • Detected penguin lookback requirement: {required_bars} bars; requesting an extra {buffer_bars} bars ({total_bars} bars total) -> adjusted start: {adjusted_start}")
-        else:
-            adjusted_start = start_datetime_utc
-
         data, sparse_warning = loader.load_bars(
             symbols,
-            adjusted_start,
+            start_datetime_utc,
             end_datetime_utc,
-            binning,
+            binning
         )
         if sparse_warning:
             print(sparse_warning)
@@ -279,7 +245,7 @@ def run_backtest(
 
 
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
-    for penguin_class in tqdm(penguin_classes, desc="Initializing strategies", mininterval=60, miniters=5000):
+    for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
             penguin = penguin_class()
             if hasattr(penguin, "record_history"):
@@ -357,6 +323,28 @@ def run_backtest(
             
             if hasattr(penguin, "set_current_timestamp"):
                 penguin.set_current_timestamp(timestamp)
+
+            if hasattr(penguin, "decide_batch"):
+                batch_orders = penguin.decide_batch(symbols, quotes, portfolio)
+                for order_symbol, action, quantity in batch_orders:
+                    if order_symbol not in quotes or quantity <= 0:
+                        continue
+
+                    bid, ask = quotes[order_symbol]
+                    if action == "BUY":
+                        if portfolio.buy(order_symbol, quantity, ask, timestamp):
+                            trades_by_bar[bar_idx].append(
+                                f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
+                            )
+                    elif action == "SELL":
+                        if portfolio.sell(order_symbol, quantity, bid, timestamp):
+                            trades_by_bar[bar_idx].append(
+                                f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
+                            )
+
+                value = portfolio.get_total_value(current_prices)
+                portfolio.add_value_snapshot(value)
+                continue
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
@@ -431,7 +419,7 @@ def run_backtest(
     
     print("\nClosing all positions...")
     
-    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions", mininterval=60, miniters=5000):
+    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
         # For each open position in this portfolio, close it cleanly.
         # Use average price from last 10 bars to smooth final closing price
         # and avoid unrealistic single-bar spikes.
@@ -465,7 +453,7 @@ def run_backtest(
     # Calculate metrics
     print("\nCalculating performance metrics...")
     results = {}
-    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Computing metrics", mininterval=60, miniters=5000):
+    for penguin_name, portfolio in tqdm(portfolios.items(), desc="Computing metrics"):
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     

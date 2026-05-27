@@ -1,5 +1,5 @@
 Penguin Capitalist - Historical Backtest Log
-Generated: 2026-05-18 14:45:21
+Generated: 2026-05-21 18:05:17
 ================================================================================
 
 EXECUTION DETAILS
@@ -10,6 +10,8 @@ Bar 0 @ 2024-01-02 09:00:00:
   SP500x2Penguin: BUY 419 SPY @ $476.36
   Buy One Each Penguin: BUY 1 SPY @ $476.36
   Buy One Each Penguin: BUY 1 SSO @ $65.32
+  Buy One Each Penguin: BUY 1 QQQ @ $409.83
+  Buy One Each Penguin: BUY 1 IWM @ $202.20
   Buy One Each Penguin: BUY 1 XLK @ $193.03
   Buy One Each Penguin: BUY 1 XLF @ $37.76
   Buy One Each Penguin: BUY 1 XLE @ $84.58
@@ -21,7 +23,6 @@ Bar 0 @ 2024-01-02 09:00:00:
   Buy One Each Penguin: BUY 1 TSLA @ $3764.26
   Buy One Each Penguin: BUY 1 AMD @ $147.65
   Buy One Each Penguin: BUY 1 INTC @ $50.26
-  Buy One Each Penguin: BUY 1 ASML @ $752.08
   Buy One Each Penguin: BUY 1 PLTR @ $17.29
   Buy One Each Penguin: BUY 1 U @ $39.99
   Buy One Each Penguin: BUY 1 UBER @ $61.51
@@ -34,6 +35,7 @@ Bar 0 @ 2024-01-02 09:00:00:
   Buy One Each Penguin: BUY 1 HOOD @ $13.00
   Buy One Each Penguin: BUY 1 UPST @ $41.09
   Buy One Each Penguin: BUY 1 NU @ $8.32
+  Buy One Each Penguin: BUY 1 BAC @ $33.64
   Buy One Each Penguin: BUY 1 C @ $51.42
   Buy One Each Penguin: BUY 1 PFE @ $28.96
   Buy One Each Penguin: BUY 1 GILD @ $80.92
@@ -69,11 +71,129 @@ Bar 0 @ 2024-01-02 09:00:00:
   Buy One Each Penguin: BUY 1 DKNG @ $35.26
   Buy One Each Penguin: BUY 1 BABA @ $76.85
   Buy One Each Penguin: BUY 1 JD @ $28.27
-  Buy Max Each Penguin: BUY 209 SPY @ $476.36
+  Buy Max Each Penguin: BUY 6 SPY @ $476.36
   Buy Max Each Penguin: BUY 6 SSO @ $65.32
-  Buy Max Each Penguin: BUY 1 XLF @ $37.76
-  Buy Max Each Penguin: BUY 1 SOFI @ $9.90
-  Buy Max Each Penguin: BUY 1 DNA @ $1.68
+  Buy Max Each Penguin: BUY 6 QQQ @ $409.83
+  Buy Max Each Penguin: BUY 6 IWM @ $202.20
+  Buy Max Each Penguin: BUY 6 XLK @ $193.03
+  Buy Max Each Penguin: BUY 6 XLF @ $37.76
+  Buy Max Each Penguin: BUY 6 XLE @ $84.58
+  Buy Max Each Penguin: BUY 6 XLP @ $72.10
+  Buy Max Each Penguin: BUY 6 AAPL @ $760.95
+  Buy Max Each Penguin: BUY 6 NVDA @ $494.77
+  Buy Max Each Penguin: BUY 6 AMZN @ $3053.31
+  Buy Max Each Penguin: BUY 6 GOOGL @ $2800.08
+  Buy Max Each Penguin: BUY 6 TSLA @ $3764.26
+  Buy Max Each Penguin: BUY 6 AMD @ $147.65
+  Buy Max Each Penguin: BUY 6 INTC @ $50.26
+  Buy Max Each Penguin: BUY 6 PLTR @ $17.29
+  Buy Max Each Penguin: BUY 6 U @ $39.99
+  Buy Max Each Penguin: BUY 6 UBER @ $61.51
+  Buy Max Each Penguin: BUY 6 DIS @ $90.46
+  Buy Max Each Penguin: BUY 6 SQ @ $78.02
+  Buy Max Each Penguin: BUY 6 PYPL @ $61.91
+  Buy Max Each Penguin: BUY 6 COIN @ $187.07
+  Buy Max Each Penguin: BUY 6 SOFI @ $9.90
+  Buy Max Each Penguin: BUY 6 AFRM @ $49.80
+  Buy Max Each Penguin: BUY 6 HOOD @ $13.00
+  Buy Max Each Penguin: BUY 6 UPST @ $41.09
+  Buy Max Each Penguin: BUY 6 NU @ $8.32
+  Buy Max Each Penguin: BUY 6 BAC @ $33.64
+  Buy Max Each Penguin: BUY 6 C @ $51.42
+  Buy Max Each Penguin: BUY 6 PFE @ $28.96
+  Buy Max Each Penguin: BUY 6 GILD @ $80.92
+  Buy Max Each Penguin: BUY 6 DNA @ $1.68
+  Buy Max Each Penguin: BUY 6 BLUE @ $1.40
+  Buy Max Each Penguin: BUY 6 NKE @ $108.61
+  Buy Max Each Penguin: BUY 6 CHWY @ $23.58
+  Buy Max Each Penguin: BUY 6 KHC @ $37.49
+  Buy Max Each Penguin: BUY 6 EL @ $146.50
+  Buy Max Each Penguin: BUY 6 XOM @ $100.30
+  Buy Max Each Penguin: BUY 6 CVX @ $149.71
+  Buy Max Each Penguin: BUY 6 ENPH @ $133.16
+  Buy Max Each Penguin: BUY 6 RUN @ $19.50
+  Buy Max Each Penguin: BUY 6 PLUG @ $4.59
+  Buy Max Each Penguin: BUY 6 FCEL @ $1.60
+  Buy Max Each Penguin: BUY 6 RIVN @ $23.61
+  Buy Max Each Penguin: BUY 6 LCID @ $4.25
+  Buy Max Each Penguin: BUY 6 NIO @ $8.94
+  Buy Max Each Penguin: BUY 6 XPEV @ $14.72
+  Buy Max Each Penguin: BUY 6 LI @ $35.83
+  Buy Max Each Penguin: BUY 6 MP @ $19.88
+  Buy Max Each Penguin: BUY 6 O @ $57.58
+  Buy Max Each Penguin: BUY 6 RKLB @ $5.54
+  Buy Max Each Penguin: BUY 6 SPCE @ $2.45
+  Buy Max Each Penguin: BUY 6 AI @ $28.90
+  Buy Max Each Penguin: BUY 6 PATH @ $25.05
+  Buy Max Each Penguin: BUY 6 RIOT @ $17.31
+  Buy Max Each Penguin: BUY 6 MARA @ $27.20
+  Buy Max Each Penguin: BUY 6 CAN @ $2.76
+  Buy Max Each Penguin: BUY 6 GREE @ $8.03
+  Buy Max Each Penguin: BUY 6 OPEN @ $4.40
+  Buy Max Each Penguin: BUY 6 RDFN @ $10.39
+  Buy Max Each Penguin: BUY 6 DKNG @ $35.26
+  Buy Max Each Penguin: BUY 6 BABA @ $76.85
+  Buy Max Each Penguin: BUY 6 JD @ $28.27
+  Buy Equal Price Each Penguin: BUY 3 SPY @ $476.36
+  Buy Equal Price Each Penguin: BUY 24 SSO @ $65.32
+  Buy Equal Price Each Penguin: BUY 3 QQQ @ $409.83
+  Buy Equal Price Each Penguin: BUY 7 IWM @ $202.20
+  Buy Equal Price Each Penguin: BUY 8 XLK @ $193.03
+  Buy Equal Price Each Penguin: BUY 42 XLF @ $37.76
+  Buy Equal Price Each Penguin: BUY 18 XLE @ $84.58
+  Buy Equal Price Each Penguin: BUY 22 XLP @ $72.10
+  Buy Equal Price Each Penguin: BUY 2 AAPL @ $760.95
+  Buy Equal Price Each Penguin: BUY 3 NVDA @ $494.77
+  Buy Equal Price Each Penguin: BUY 10 AMD @ $147.65
+  Buy Equal Price Each Penguin: BUY 31 INTC @ $50.26
+  Buy Equal Price Each Penguin: BUY 91 PLTR @ $17.29
+  Buy Equal Price Each Penguin: BUY 39 U @ $39.99
+  Buy Equal Price Each Penguin: BUY 25 UBER @ $61.51
+  Buy Equal Price Each Penguin: BUY 17 DIS @ $90.46
+  Buy Equal Price Each Penguin: BUY 20 SQ @ $78.02
+  Buy Equal Price Each Penguin: BUY 25 PYPL @ $61.91
+  Buy Equal Price Each Penguin: BUY 8 COIN @ $187.07
+  Buy Equal Price Each Penguin: BUY 160 SOFI @ $9.90
+  Buy Equal Price Each Penguin: BUY 31 AFRM @ $49.80
+  Buy Equal Price Each Penguin: BUY 122 HOOD @ $13.00
+  Buy Equal Price Each Penguin: BUY 38 UPST @ $41.09
+  Buy Equal Price Each Penguin: BUY 190 NU @ $8.32
+  Buy Equal Price Each Penguin: BUY 47 BAC @ $33.64
+  Buy Equal Price Each Penguin: BUY 30 C @ $51.42
+  Buy Equal Price Each Penguin: BUY 54 PFE @ $28.96
+  Buy Equal Price Each Penguin: BUY 19 GILD @ $80.92
+  Buy Equal Price Each Penguin: BUY 944 DNA @ $1.68
+  Buy Equal Price Each Penguin: BUY 1133 BLUE @ $1.40
+  Buy Equal Price Each Penguin: BUY 14 NKE @ $108.61
+  Buy Equal Price Each Penguin: BUY 67 CHWY @ $23.58
+  Buy Equal Price Each Penguin: BUY 42 KHC @ $37.49
+  Buy Equal Price Each Penguin: BUY 10 EL @ $146.50
+  Buy Equal Price Each Penguin: BUY 15 XOM @ $100.30
+  Buy Equal Price Each Penguin: BUY 10 CVX @ $149.71
+  Buy Equal Price Each Penguin: BUY 11 ENPH @ $133.16
+  Buy Equal Price Each Penguin: BUY 81 RUN @ $19.50
+  Buy Equal Price Each Penguin: BUY 345 PLUG @ $4.59
+  Buy Equal Price Each Penguin: BUY 991 FCEL @ $1.60
+  Buy Equal Price Each Penguin: BUY 67 RIVN @ $23.61
+  Buy Equal Price Each Penguin: BUY 373 LCID @ $4.25
+  Buy Equal Price Each Penguin: BUY 177 NIO @ $8.94
+  Buy Equal Price Each Penguin: BUY 107 XPEV @ $14.72
+  Buy Equal Price Each Penguin: BUY 44 LI @ $35.83
+  Buy Equal Price Each Penguin: BUY 79 MP @ $19.88
+  Buy Equal Price Each Penguin: BUY 27 O @ $57.58
+  Buy Equal Price Each Penguin: BUY 286 RKLB @ $5.54
+  Buy Equal Price Each Penguin: BUY 647 SPCE @ $2.45
+  Buy Equal Price Each Penguin: BUY 54 AI @ $28.90
+  Buy Equal Price Each Penguin: BUY 63 PATH @ $25.05
+  Buy Equal Price Each Penguin: BUY 91 RIOT @ $17.31
+  Buy Equal Price Each Penguin: BUY 58 MARA @ $27.20
+  Buy Equal Price Each Penguin: BUY 574 CAN @ $2.76
+  Buy Equal Price Each Penguin: BUY 197 GREE @ $8.03
+  Buy Equal Price Each Penguin: BUY 360 OPEN @ $4.40
+  Buy Equal Price Each Penguin: BUY 152 RDFN @ $10.39
+  Buy Equal Price Each Penguin: BUY 45 DKNG @ $35.26
+  Buy Equal Price Each Penguin: BUY 20 BABA @ $76.85
+  Buy Equal Price Each Penguin: BUY 56 JD @ $28.27
 
 Bar 1 @ 2024-01-02 09:01:00:
   Buy One Each Penguin: BUY 1 DIA @ $378.02
@@ -91,14 +211,47 @@ Bar 1 @ 2024-01-02 09:01:00:
   Buy One Each Penguin: BUY 1 BBAI @ $2.16
   Buy One Each Penguin: BUY 1 TSM @ $103.51
   Buy One Each Penguin: BUY 1 PDD @ $145.63
+  Buy Max Each Penguin: BUY 9 DIA @ $378.02
+  Buy Max Each Penguin: BUY 9 ORCL @ $105.36
+  Buy Max Each Penguin: BUY 9 QCOM @ $145.05
+  Buy Max Each Penguin: BUY 9 SHOP @ $78.13
+  Buy Max Each Penguin: BUY 9 RBLX @ $45.50
+  Buy Max Each Penguin: BUY 9 MRNA @ $99.91
+  Buy Max Each Penguin: BUY 9 M @ $20.15
+  Buy Max Each Penguin: BUY 9 W @ $61.65
+  Buy Max Each Penguin: BUY 9 CVNA @ $53.76
+  Buy Max Each Penguin: BUY 9 MO @ $40.35
+  Buy Max Each Penguin: BUY 9 OXY @ $60.10
+  Buy Max Each Penguin: BUY 9 LAC @ $6.50
+  Buy Max Each Penguin: BUY 9 BBAI @ $2.16
+  Buy Max Each Penguin: BUY 9 TSM @ $103.51
+  Buy Max Each Penguin: BUY 9 PDD @ $145.63
+  Buy Equal Price Each Penguin: BUY 1 DIA @ $378.02
+  Buy Equal Price Each Penguin: BUY 4 ORCL @ $105.36
+  Buy Equal Price Each Penguin: BUY 3 QCOM @ $145.05
+  Buy Equal Price Each Penguin: BUY 5 SHOP @ $78.13
+  Buy Equal Price Each Penguin: BUY 9 RBLX @ $45.50
+  Buy Equal Price Each Penguin: BUY 4 MRNA @ $99.91
+  Buy Equal Price Each Penguin: BUY 22 M @ $20.15
+  Buy Equal Price Each Penguin: BUY 7 W @ $61.65
+  Buy Equal Price Each Penguin: BUY 8 CVNA @ $53.76
+  Buy Equal Price Each Penguin: BUY 11 MO @ $40.35
+  Buy Equal Price Each Penguin: BUY 7 OXY @ $60.10
+  Buy Equal Price Each Penguin: BUY 68 LAC @ $6.50
+  Buy Equal Price Each Penguin: BUY 206 BBAI @ $2.16
+  Buy Equal Price Each Penguin: BUY 4 TSM @ $103.51
+  Buy Equal Price Each Penguin: BUY 3 PDD @ $145.63
 
 Bar 2 @ 2024-01-02 09:02:00:
   Buy One Each Penguin: BUY 1 MSFT @ $376.77
   Buy One Each Penguin: BUY 1 NET @ $83.01
+  Buy Equal Price Each Penguin: BUY 2 NET @ $83.01
 
 Bar 3 @ 2024-01-02 09:03:00:
+  Buy One Each Penguin: BUY 1 ADBE @ $596.70
   Buy One Each Penguin: BUY 1 JPM @ $170.12
   Buy One Each Penguin: BUY 1 ALB @ $145.65
+  Buy Equal Price Each Penguin: BUY 1 ALB @ $145.65
 
 Bar 4 @ 2024-01-02 09:04:00:
   Buy One Each Penguin: BUY 1 DAL @ $40.29
@@ -106,15 +259,23 @@ Bar 4 @ 2024-01-02 09:04:00:
   Buy One Each Penguin: BUY 1 SOUN @ $2.13
   Buy One Each Penguin: BUY 1 MSTR @ $693.18
   Buy One Each Penguin: BUY 1 NVO @ $103.23
+  Buy Equal Price Each Penguin: BUY 1 DAL @ $40.29
+  Buy Equal Price Each Penguin: BUY 27 SOUN @ $2.13
 
 Bar 5 @ 2024-01-02 09:05:00:
   Buy One Each Penguin: BUY 1 CRSP @ $63.56
   Buy One Each Penguin: BUY 1 GM @ $36.05
   Buy One Each Penguin: BUY 1 F @ $12.22
   Buy One Each Penguin: BUY 1 HAL @ $36.74
+  Buy Equal Price Each Penguin: BUY 1 GM @ $36.05
+  Buy Equal Price Each Penguin: BUY 5 F @ $12.22
+  Buy Equal Price Each Penguin: BUY 1 HAL @ $36.74
 
 Bar 6 @ 2024-01-02 09:06:00:
   Buy One Each Penguin: BUY 1 BHP @ $68.80
+  Buy Max Each Penguin: BUY 1 BHP @ $68.80
+  Buy Max Each Penguin: BUY 1 SOUN @ $2.13
+  Buy Equal Price Each Penguin: BUY 1 BHP @ $68.80
 
 Bar 7 @ 2024-01-02 09:07:00:
   Buy One Each Penguin: BUY 1 META @ $354.25
@@ -140,9 +301,18 @@ Bar 15 @ 2024-01-02 09:15:00:
 
 Bar 16 @ 2024-01-02 09:16:00:
   Buy One Each Penguin: BUY 1 TWLO @ $76.01
+  Buy Equal Price Each Penguin: BUY 1 TWLO @ $76.01
+
+Bar 17 @ 2024-01-02 09:17:00:
+  Buy One Each Penguin: BUY 1 APP @ $39.75
+
+Bar 18 @ 2024-01-02 09:18:00:
+  Buy Equal Price Each Penguin: BUY 1 APP @ $39.75
 
 Bar 22 @ 2024-01-02 09:22:00:
   Buy One Each Penguin: BUY 1 VALE @ $15.95
+  Buy Max Each Penguin: BUY 1 VALE @ $15.95
+  Buy Equal Price Each Penguin: BUY 1 VALE @ $15.95
 
 Bar 24 @ 2024-01-02 09:24:00:
   Buy One Each Penguin: BUY 1 BNTX @ $105.55
@@ -153,9 +323,13 @@ Bar 25 @ 2024-01-02 09:25:00:
 
 Bar 28 @ 2024-01-02 09:28:00:
   Buy One Each Penguin: BUY 1 SNAP @ $16.93
+  Buy Equal Price Each Penguin: BUY 1 SNAP @ $16.93
 
 Bar 29 @ 2024-01-02 09:29:00:
   Buy One Each Penguin: BUY 1 ORA @ $76.58
+
+Bar 30 @ 2024-01-02 09:30:00:
+  Buy One Each Penguin: BUY 1 NFLX @ $486.35
 
 Bar 34 @ 2024-01-02 09:34:00:
   Buy One Each Penguin: BUY 1 BMY @ $51.50
@@ -169,6 +343,7 @@ Bar 38 @ 2024-01-02 09:38:00:
 
 Bar 39 @ 2024-01-02 09:39:00:
   Buy One Each Penguin: BUY 1 VERI @ $1.82
+  Buy Equal Price Each Penguin: BUY 3 VERI @ $1.82
 
 Bar 41 @ 2024-01-02 09:41:00:
   Buy One Each Penguin: BUY 1 ZM @ $72.13
@@ -190,6 +365,10 @@ Bar 49 @ 2024-01-02 09:49:00:
 
 Bar 50 @ 2024-01-02 09:50:00:
   Buy One Each Penguin: BUY 1 BLDP @ $3.70
+  Buy Equal Price Each Penguin: BUY 2 BLDP @ $3.70
+
+Bar 51 @ 2024-01-02 09:51:00:
+  Buy One Each Penguin: BUY 1 LLY @ $583.86
 
 Bar 55 @ 2024-01-02 09:55:00:
   Buy One Each Penguin: BUY 1 APA @ $36.56
@@ -211,96 +390,283 @@ Bar 73 @ 2024-01-02 10:13:00:
 Bar 76 @ 2024-01-02 10:16:00:
   Buy One Each Penguin: BUY 1 MCD @ $296.23
 
+Bar 77 @ 2024-01-02 10:17:00:
+  Buy Max Each Penguin: BUY 1 F @ $12.23
+
 Bar 78 @ 2024-01-02 10:18:00:
   Buy One Each Penguin: BUY 1 PH @ $464.95
 
 Bar 79 @ 2024-01-02 10:19:00:
   Buy One Each Penguin: BUY 1 NEM @ $41.73
+  CopilotPenguin: BUY 1 APP @ $39.51
+  CopilotPenguin: BUY 1 XPEV @ $14.42
+  CopilotPenguin: BUY 1 BHP @ $68.42
+  CopilotPenguin: BUY 1 BABA @ $76.57
+
+Bar 80 @ 2024-01-02 10:20:00:
+  CopilotPenguin: BUY 1 BA @ $259.11
+
+Bar 81 @ 2024-01-02 10:21:00:
+  CopilotPenguin: BUY 1 NVDA @ $494.61
 
 Bar 82 @ 2024-01-02 10:22:00:
   Buy One Each Penguin: BUY 1 ROKU @ $92.01
+  CopilotPenguin: BUY 1 HOOD @ $13.02
+
+Bar 83 @ 2024-01-02 10:23:00:
+  CopilotPenguin: BUY 1 SSO @ $65.05
+
+Bar 84 @ 2024-01-02 10:24:00:
+  CopilotPenguin: BUY 1 MSFT @ $375.78
+  CopilotPenguin: BUY 1 META @ $354.43
+  CopilotPenguin: BUY 1 CAN @ $2.63
+
+Bar 85 @ 2024-01-02 10:25:00:
+  CopilotPenguin: BUY 1 TSLA @ $3748.69
+  CopilotPenguin: BUY 1 PFE @ $28.94
+  CopilotPenguin: BUY 1 ORA @ $76.33
+
+Bar 86 @ 2024-01-02 10:26:00:
+  CopilotPenguin: BUY 1 COIN @ $184.46
+  CopilotPenguin: BUY 1 SOFI @ $10.00
+  CopilotPenguin: BUY 1 FCEL @ $1.63
+  CopilotPenguin: BUY 1 AI @ $29.00
+
+Bar 87 @ 2024-01-02 10:27:00:
+  CopilotPenguin: BUY 1 SPCE @ $2.45
+  CopilotPenguin: BUY 1 OPEN @ $4.55
+
+Bar 88 @ 2024-01-02 10:28:00:
+  CopilotPenguin: BUY 1 AMZN @ $3039.59
+  CopilotPenguin: BUY 1 NEE @ $61.12
+
+Bar 89 @ 2024-01-02 10:29:00:
+  CopilotPenguin: BUY 1 QQQ @ $408.86
+  CopilotPenguin: BUY 1 GOOGL @ $2793.94
+  CopilotPenguin: BUY 1 ENPH @ $133.02
+
+Bar 90 @ 2024-01-02 10:30:00:
+  CopilotPenguin: BUY 1 AFRM @ $49.22
+
+Bar 91 @ 2024-01-02 10:31:00:
+  CopilotPenguin: BUY 1 U @ $39.76
+
+Bar 92 @ 2024-01-02 10:32:00:
+  CopilotPenguin: SELL 1 XPEV @ $14.46
+
+Bar 93 @ 2024-01-02 10:33:00:
+  CopilotPenguin: BUY 1 BAC @ $33.73
+  CopilotPenguin: SELL 1 CAN @ $2.57
+  CopilotPenguin: BUY 1 GREE @ $7.71
+
+Bar 95 @ 2024-01-02 10:35:00:
+  CopilotPenguin: BUY 1 PLTR @ $17.29
+
+Bar 96 @ 2024-01-02 10:36:00:
+  CopilotPenguin: BUY 1 RBLX @ $45.25
+  CopilotPenguin: BUY 1 RKLB @ $5.55
+
+Bar 97 @ 2024-01-02 10:37:00:
+  CopilotPenguin: BUY 1 UPST @ $40.66
+  CopilotPenguin: BUY 1 NKE @ $108.80
 
 Bar 99 @ 2024-01-02 10:39:00:
-  RSI Mean Reversion Selective: BUY 1 CVX @ $150.51
-  RSI Mean Reversion Selective: BUY 1 CAN @ $2.55
   Smart RSI Confluence: BUY 2 CVX @ $150.51
+  CopilotPenguin: SELL 1 GOOGL @ $2794.56
+  CopilotPenguin: BUY 1 CVX @ $150.51
+
+Bar 100 @ 2024-01-02 10:40:00:
+  CopilotPenguin: SELL 1 ENPH @ $133.40
+
+Bar 101 @ 2024-01-02 10:41:00:
+  CopilotPenguin: SELL 1 UPST @ $40.74
+  CopilotPenguin: BUY 1 NU @ $8.35
+  CopilotPenguin: SELL 1 SPCE @ $2.46
+  CopilotPenguin: BUY 1 MSTR @ $690.14
 
 Bar 102 @ 2024-01-02 10:42:00:
   Buy One Each Penguin: BUY 1 LIN @ $410.22
   Buy One Each Penguin: BUY 1 CF @ $79.88
+  CopilotPenguin: SELL 1 QQQ @ $409.00
+  CopilotPenguin: SELL 1 BABA @ $76.64
 
 Bar 103 @ 2024-01-02 10:43:00:
-  RSI Mean Reversion Selective: BUY 1 RKLB @ $5.56
   Smart RSI Confluence: BUY 2 RKLB @ $5.56
 
+Bar 104 @ 2024-01-02 10:44:00:
+  CopilotPenguin: SELL 1 NVDA @ $494.47
+  CopilotPenguin: BUY 1 RIOT @ $17.23
+
+Bar 105 @ 2024-01-02 10:45:00:
+  CopilotPenguin: SELL 1 AFRM @ $49.29
+
+Bar 106 @ 2024-01-02 10:46:00:
+  CopilotPenguin: SELL 1 AMZN @ $3040.59
+
 Bar 108 @ 2024-01-02 10:48:00:
-  RSI Mean Reversion Selective: BUY 1 RIOT @ $17.21
+  CopilotPenguin: SELL 1 U @ $39.80
+  CopilotPenguin: SELL 1 SOFI @ $10.01
 
 Bar 109 @ 2024-01-02 10:49:00:
-  RSI Mean Reversion Selective: BUY 1 GREE @ $7.65
+  CopilotPenguin: BUY 1 NFLX @ $486.22
+  CopilotPenguin: SELL 1 HOOD @ $13.10
 
 Bar 111 @ 2024-01-02 10:51:00:
-  RSI Mean Reversion Selective: BUY 1 MARA @ $26.60
+  CopilotPenguin: SELL 1 SSO @ $65.03
+  CopilotPenguin: BUY 1 XLK @ $191.83
+  CopilotPenguin: SELL 1 PLTR @ $17.31
+  CopilotPenguin: BUY 1 MARA @ $26.60
 
 Bar 112 @ 2024-01-02 10:52:00:
-  RSI Mean Reversion Selective: BUY 1 NTLA @ $31.00
+  CopilotPenguin: BUY 1 QCOM @ $144.43
+  CopilotPenguin: BUY 1 SHOP @ $78.09
+  CopilotPenguin: SELL 1 PFE @ $28.95
+  CopilotPenguin: BUY 1 NTLA @ $31.00
+  CopilotPenguin: BUY 1 PATH @ $24.94
+
+Bar 113 @ 2024-01-02 10:53:00:
+  CopilotPenguin: BUY 1 QQQ @ $408.77
+  CopilotPenguin: SELL 1 CVX @ $150.75
+  CopilotPenguin: BUY 1 CAN @ $2.56
+  CopilotPenguin: BUY 1 TSM @ $103.59
+
+Bar 114 @ 2024-01-02 10:54:00:
+  CopilotPenguin: SELL 1 BAC @ $33.65
+
+Bar 116 @ 2024-01-02 10:56:00:
+  CopilotPenguin: SELL 1 COIN @ $184.95
 
 Bar 117 @ 2024-01-02 10:57:00:
   Smart RSI Confluence: BUY 2 MARA @ $26.65
+  CopilotPenguin: BUY 1 AAPL @ $760.19
+  CopilotPenguin: BUY 1 LCID @ $4.26
 
 Bar 118 @ 2024-01-02 10:58:00:
   Smart RSI Confluence: BUY 2 RIOT @ $17.12
   Buy One Each Penguin: BUY 1 PINS @ $37.05
+  CopilotPenguin: BUY 1 AMZN @ $3037.79
+  CopilotPenguin: BUY 1 ZM @ $72.02
+  CopilotPenguin: BUY 1 SOFI @ $9.99
+  CopilotPenguin: BUY 1 GM @ $35.95
 
 Bar 119 @ 2024-01-02 10:59:00:
-  RSI Mean Reversion Selective: BUY 1 KHC @ $37.01
   Smart RSI Confluence: BUY 2 CAN @ $2.55
+  CopilotPenguin: BUY 1 MU @ $85.20
+  CopilotPenguin: BUY 1 U @ $39.66
+  CopilotPenguin: BUY 1 KHC @ $37.01
+  CopilotPenguin: SELL 1 FCEL @ $1.64
+  CopilotPenguin: SELL 1 OPEN @ $4.56
 
 Bar 120 @ 2024-01-02 11:00:00:
   Buy One Each Penguin: BUY 1 BILL @ $81.51
+  CopilotPenguin: BUY 1 EL @ $144.81
+
+Bar 121 @ 2024-01-02 11:01:00:
+  CopilotPenguin: BUY 1 SSO @ $64.96
+  CopilotPenguin: BUY 1 NVO @ $102.67
+
+Bar 122 @ 2024-01-02 11:02:00:
+  CopilotPenguin: BUY 1 NVDA @ $493.86
+  CopilotPenguin: BUY 1 RIVN @ $23.53
 
 Bar 123 @ 2024-01-02 11:03:00:
   Buy One Each Penguin: BUY 1 CSCO @ $50.54
 
 Bar 124 @ 2024-01-02 11:04:00:
   Buy One Each Penguin: BUY 1 SHW @ $308.53
+  CopilotPenguin: BUY 1 SPY @ $475.05
+  CopilotPenguin: BUY 1 DKNG @ $35.25
 
 Bar 125 @ 2024-01-02 11:05:00:
   Buy One Each Penguin: BUY 1 TFC @ $36.99
   Buy One Each Penguin: BUY 1 EXC @ $35.83
+  CopilotPenguin: BUY 1 PLTR @ $17.26
 
 Bar 126 @ 2024-01-02 11:06:00:
   Buy One Each Penguin: BUY 1 MDB @ $405.05
+  CopilotPenguin: BUY 1 IWM @ $201.09
+  CopilotPenguin: BUY 1 DIA @ $376.68
+  CopilotPenguin: BUY 1 PYPL @ $61.80
+  CopilotPenguin: BUY 1 UPST @ $40.50
+  CopilotPenguin: BUY 1 CHWY @ $23.70
+  CopilotPenguin: BUY 1 PLUG @ $4.54
+  CopilotPenguin: SELL 1 RIOT @ $17.23
+  CopilotPenguin: SELL 1 MARA @ $26.66
 
 Bar 127 @ 2024-01-02 11:07:00:
   Buy One Each Penguin: BUY 1 BALL @ $56.32
+  CopilotPenguin: SELL 1 RBLX @ $45.29
+  CopilotPenguin: BUY 1 BMY @ $51.41
+  CopilotPenguin: BUY 1 LI @ $35.83
 
 Bar 128 @ 2024-01-02 11:08:00:
   Buy One Each Penguin: BUY 1 ETSY @ $81.01
   Buy One Each Penguin: BUY 1 D @ $47.50
+  CopilotPenguin: BUY 1 GOOGL @ $2790.96
+  CopilotPenguin: BUY 1 AMD @ $146.51
+  CopilotPenguin: BUY 1 HOOD @ $13.03
+  CopilotPenguin: BUY 1 C @ $51.50
+  CopilotPenguin: BUY 1 W @ $61.61
+
+Bar 129 @ 2024-01-02 11:09:00:
+  CopilotPenguin: BUY 1 AFRM @ $49.11
+  CopilotPenguin: BUY 1 F @ $12.22
+  CopilotPenguin: SELL 1 AI @ $29.05
 
 Bar 130 @ 2024-01-02 11:10:00:
   Buy One Each Penguin: BUY 1 HES @ $145.32
+  CopilotPenguin: BUY 1 XPEV @ $14.42
+  CopilotPenguin: SELL 1 RKLB @ $5.63
 
 Bar 132 @ 2024-01-02 11:12:00:
   Smart RSI Confluence: BUY 2 BLDP @ $3.76
+  CopilotPenguin: BUY 1 KO @ $58.95
+  CopilotPenguin: BUY 1 BLDP @ $3.76
+
+Bar 133 @ 2024-01-02 11:13:00:
+  CopilotPenguin: BUY 1 INTC @ $49.86
+  CopilotPenguin: SELL 1 UPST @ $39.76
+  CopilotPenguin: BUY 1 CVNA @ $52.96
+  CopilotPenguin: SELL 1 MSTR @ $688.97
+  CopilotPenguin: BUY 1 RDFN @ $10.32
 
 Bar 134 @ 2024-01-02 11:14:00:
   Buy One Each Penguin: BUY 1 XLV @ $136.47
+  CopilotPenguin: BUY 1 SQ @ $77.82
+  CopilotPenguin: BUY 1 BLUE @ $1.40
+  CopilotPenguin: BUY 1 SEDG @ $93.75
 
 Bar 135 @ 2024-01-02 11:15:00:
   Buy One Each Penguin: BUY 1 ABNB @ $135.71
+  CopilotPenguin: BUY 1 CRSP @ $63.00
+  CopilotPenguin: BUY 1 ENPH @ $132.48
+  CopilotPenguin: BUY 1 SPCE @ $2.45
 
 Bar 136 @ 2024-01-02 11:16:00:
   Buy One Each Penguin: BUY 1 KTOS @ $20.35
+  CopilotPenguin: BUY 1 NET @ $82.63
+  CopilotPenguin: BUY 1 RUN @ $19.60
+  CopilotPenguin: BUY 1 VALE @ $15.90
+  CopilotPenguin: BUY 1 PDD @ $144.62
 
 Bar 137 @ 2024-01-02 11:17:00:
   Buy One Each Penguin: BUY 1 WFC @ $49.24
   Buy One Each Penguin: BUY 1 BKR @ $34.59
   Buy One Each Penguin: BUY 1 DD @ $76.93
+  CopilotPenguin: BUY 1 OXY @ $60.41
+  CopilotPenguin: BUY 1 BABA @ $76.44
 
 Bar 138 @ 2024-01-02 11:18:00:
   Buy One Each Penguin: BUY 1 ISRG @ $336.03
+  CopilotPenguin: BUY 1 DIS @ $90.30
+  CopilotPenguin: BUY 1 MO @ $40.36
+  CopilotPenguin: BUY 1 SOUN @ $2.12
+
+Bar 139 @ 2024-01-02 11:19:00:
+  CopilotPenguin: BUY 1 O @ $57.43
+
+Bar 141 @ 2024-01-02 11:21:00:
+  CopilotPenguin: BUY 1 SNAP @ $16.78
 
 Bar 142 @ 2024-01-02 11:22:00:
   Smart RSI Confluence: BUY 2 AFRM @ $48.95
@@ -314,18 +680,42 @@ Bar 143 @ 2024-01-02 11:23:00:
 Bar 144 @ 2024-01-02 11:24:00:
   Smart RSI Confluence: BUY 2 UPST @ $39.66
 
+Bar 145 @ 2024-01-02 11:25:00:
+  CopilotPenguin: SELL 1 GREE @ $7.52
+
 Bar 146 @ 2024-01-02 11:26:00:
   Buy One Each Penguin: BUY 1 CRM @ $262.36
+  CopilotPenguin: BUY 1 ROKU @ $91.07
+  CopilotPenguin: BUY 1 DAL @ $39.99
+  CopilotPenguin: BUY 1 NIO @ $8.92
+  CopilotPenguin: BUY 1 BBAI @ $2.14
 
 Bar 147 @ 2024-01-02 11:27:00:
   Smart RSI Confluence: BUY 2 COIN @ $183.20
   Buy One Each Penguin: BUY 1 TJX @ $94.53
+  CopilotPenguin: BUY 1 ORCL @ $105.03
 
 Bar 148 @ 2024-01-02 11:28:00:
   Buy One Each Penguin: BUY 1 PLD @ $133.01
+  CopilotPenguin: BUY 1 XLF @ $37.59
+  CopilotPenguin: BUY 1 FSLY @ $17.79
+  CopilotPenguin: BUY 1 UBER @ $61.31
+  CopilotPenguin: BUY 1 MRNA @ $99.57
+  CopilotPenguin: SELL 1 SPCE @ $2.40
 
 Bar 149 @ 2024-01-02 11:29:00:
   Buy One Each Penguin: BUY 1 AMGN @ $288.24
+  CopilotPenguin: SELL 1 TSLA @ $3676.24
+  CopilotPenguin: BUY 1 MRK @ $108.81
+  CopilotPenguin: BUY 1 UAL @ $41.00
+  CopilotPenguin: BUY 1 PM @ $93.79
+  CopilotPenguin: SELL 1 CAN @ $2.49
+
+Bar 150 @ 2024-01-02 11:30:00:
+  CopilotPenguin: BUY 1 MDB @ $402.82
+
+Bar 151 @ 2024-01-02 11:31:00:
+  CopilotPenguin: BUY 1 JD @ $28.07
 
 Bar 152 @ 2024-01-02 11:32:00:
   Buy One Each Penguin: BUY 1 BEAM @ $27.13
@@ -333,52 +723,92 @@ Bar 152 @ 2024-01-02 11:32:00:
 
 Bar 153 @ 2024-01-02 11:33:00:
   Buy One Each Penguin: BUY 1 WMT @ $157.33
+  CopilotPenguin: BUY 1 XLP @ $71.89
+
+Bar 154 @ 2024-01-02 11:34:00:
+  CopilotPenguin: BUY 1 HAL @ $36.57
+  CopilotPenguin: BUY 1 LAC @ $6.40
 
 Bar 155 @ 2024-01-02 11:35:00:
   Buy One Each Penguin: BUY 1 SCHW @ $68.81
   Buy One Each Penguin: BUY 1 PG @ $146.19
   Buy One Each Penguin: BUY 1 RIO @ $73.85
+  CopilotPenguin: BUY 1 SQM @ $60.21
 
 Bar 156 @ 2024-01-02 11:36:00:
   Buy One Each Penguin: BUY 1 TEAM @ $236.08
   Buy One Each Penguin: BUY 1 DOCU @ $58.86
   Buy One Each Penguin: BUY 1 GS @ $384.86
+  CopilotPenguin: BUY 1 SNOW @ $197.24
+  CopilotPenguin: SELL 1 HOOD @ $12.75
+  CopilotPenguin: BUY 1 JPM @ $169.88
 
 Bar 157 @ 2024-01-02 11:37:00:
   Buy One Each Penguin: BUY 1 BE @ $14.68
 
 Bar 158 @ 2024-01-02 11:38:00:
-  Buy One Each Penguin: BUY 1 CAT @ $294.03
+  CopilotPenguin: BUY 1 GPS @ $20.69
+
+Bar 159 @ 2024-01-02 11:39:00:
+  CopilotPenguin: BUY 1 ALB @ $144.08
 
 Bar 160 @ 2024-01-02 11:40:00:
   Buy One Each Penguin: BUY 1 OKE @ $70.61
+  CopilotPenguin: SELL 1 PATH @ $24.45
 
 Bar 161 @ 2024-01-02 11:41:00:
   Buy One Each Penguin: BUY 1 ZG @ $56.34
+
+Bar 162 @ 2024-01-02 11:42:00:
+  CopilotPenguin: SELL 1 NTLA @ $30.50
 
 Bar 163 @ 2024-01-02 11:43:00:
   Buy One Each Penguin: BUY 1 GIS @ $65.16
 
 Bar 164 @ 2024-01-02 11:44:00:
   Buy One Each Penguin: BUY 1 TGT @ $142.81
+  CopilotPenguin: BUY 1 ADM @ $72.03
+  CopilotPenguin: BUY 1 NEM @ $41.53
+
+Bar 166 @ 2024-01-02 11:46:00:
+  Buy One Each Penguin: BUY 1 KLAC @ $572.36
+  CopilotPenguin: BUY 1 XLE @ $84.67
 
 Bar 168 @ 2024-01-02 11:48:00:
   Buy One Each Penguin: BUY 1 GE @ $15.88
+  CopilotPenguin: SELL 1 AMD @ $144.93
+  CopilotPenguin: BUY 1 PINS @ $36.81
+  CopilotPenguin: SELL 1 BA @ $256.47
+  CopilotPenguin: SELL 1 LCID @ $4.21
+  CopilotPenguin: BUY 1 LIN @ $407.83
 
 Bar 169 @ 2024-01-02 11:49:00:
   Buy One Each Penguin: BUY 1 MDLZ @ $72.09
 
 Bar 170 @ 2024-01-02 11:50:00:
   Buy One Each Penguin: BUY 1 EOG @ $122.06
+  CopilotPenguin: SELL 1 QQQ @ $405.87
 
 Bar 172 @ 2024-01-02 11:52:00:
   Buy One Each Penguin: BUY 1 RTX @ $84.15
 
+Bar 175 @ 2024-01-02 11:55:00:
+  CopilotPenguin: SELL 1 SOFI @ $9.85
+
 Bar 176 @ 2024-01-02 11:56:00:
   Buy One Each Penguin: BUY 1 SBUX @ $95.73
+  CopilotPenguin: SELL 1 PLUG @ $4.49
 
 Bar 177 @ 2024-01-02 11:57:00:
   Buy One Each Penguin: BUY 1 PEP @ $169.24
+  CopilotPenguin: SELL 1 META @ $350.76
+  CopilotPenguin: SELL 1 RIVN @ $23.27
+
+Bar 178 @ 2024-01-02 11:58:00:
+  CopilotPenguin: SELL 1 QCOM @ $142.81
+
+Bar 179 @ 2024-01-02 11:59:00:
+  CopilotPenguin: SELL 1 TSM @ $102.94
 
 Bar 180 @ 2024-01-02 12:00:00:
   Buy One Each Penguin: BUY 1 QRVO @ $111.01
@@ -397,26 +827,64 @@ Bar 180 @ 2024-01-02 12:00:00:
   Buy One Each Penguin: BUY 1 MOS @ $35.75
   Buy One Each Penguin: BUY 1 CCI @ $115.22
   Buy One Each Penguin: BUY 1 PENN @ $25.91
+  CopilotPenguin: SELL 1 XLK @ $190.54
+  CopilotPenguin: SELL 1 NU @ $8.34
+  CopilotPenguin: BUY 1 TFC @ $36.91
+  CopilotPenguin: BUY 1 LLY @ $581.30
+  CopilotPenguin: BUY 1 XOM @ $101.00
+  CopilotPenguin: BUY 1 SLB @ $52.70
+  CopilotPenguin: BUY 1 DVN @ $45.89
+  CopilotPenguin: BUY 1 D @ $47.01
 
 Bar 181 @ 2024-01-02 12:01:00:
   Buy One Each Penguin: BUY 1 AEP @ $81.01
 
+Bar 182 @ 2024-01-02 12:02:00:
+  CopilotPenguin: SELL 1 MU @ $84.16
+
 Bar 183 @ 2024-01-02 12:03:00:
   Buy One Each Penguin: BUY 1 COST @ $659.07
+  CopilotPenguin: BUY 1 TWLO @ $75.01
+
+Bar 184 @ 2024-01-02 12:04:00:
+  CopilotPenguin: SELL 1 MSFT @ $373.45
+  CopilotPenguin: SELL 1 BLUE @ $1.37
+  CopilotPenguin: SELL 1 XPEV @ $14.27
+
+Bar 185 @ 2024-01-02 12:05:00:
+  CopilotPenguin: SELL 1 NKE @ $108.09
+  CopilotPenguin: SELL 1 RDFN @ $10.12
 
 Bar 186 @ 2024-01-02 12:06:00:
   Buy One Each Penguin: BUY 1 DDOG @ $120.01
   Buy One Each Penguin: BUY 1 WDAY @ $274.03
+  CopilotPenguin: BUY 1 ABNB @ $135.20
 
 Bar 187 @ 2024-01-02 12:07:00:
   Buy One Each Penguin: BUY 1 TXN @ $168.79
   Buy One Each Penguin: BUY 1 USB @ $42.90
+  CopilotPenguin: BUY 1 BKR @ $34.41
+
+Bar 188 @ 2024-01-02 12:08:00:
+  CopilotPenguin: BUY 1 ADBE @ $591.37
 
 Bar 189 @ 2024-01-02 12:09:00:
   Buy One Each Penguin: BUY 1 CTRA @ $25.91
+  CopilotPenguin: BUY 1 SHW @ $306.69
+
+Bar 192 @ 2024-01-02 12:12:00:
+  CopilotPenguin: BUY 1 BE @ $14.62
+
+Bar 193 @ 2024-01-02 12:13:00:
+  CopilotPenguin: BUY 1 COP @ $117.14
 
 Bar 194 @ 2024-01-02 12:14:00:
   Buy One Each Penguin: BUY 1 KSS @ $28.55
+  CopilotPenguin: BUY 1 CMCSA @ $43.40
+  CopilotPenguin: BUY 1 FCX @ $42.27
+
+Bar 195 @ 2024-01-02 12:15:00:
+  CopilotPenguin: SELL 1 BHP @ $68.14
 
 Bar 197 @ 2024-01-02 12:17:00:
   Buy One Each Penguin: BUY 1 UPS @ $156.54
@@ -424,40 +892,115 @@ Bar 197 @ 2024-01-02 12:17:00:
 Bar 198 @ 2024-01-02 12:18:00:
   Buy One Each Penguin: BUY 1 OTIS @ $88.65
 
+Bar 200 @ 2024-01-02 12:20:00:
+  CopilotPenguin: BUY 1 XLI @ $113.46
+  CopilotPenguin: BUY 1 APA @ $36.25
+  CopilotPenguin: SELL 1 BBAI @ $2.08
+
 Bar 203 @ 2024-01-02 12:23:00:
   Buy One Each Penguin: BUY 1 SPG @ $142.01
+
+Bar 204 @ 2024-01-02 12:24:00:
+  CopilotPenguin: BUY 1 MP @ $19.65
+  CopilotPenguin: BUY 1 VERI @ $1.84
+
+Bar 205 @ 2024-01-02 12:25:00:
+  CopilotPenguin: BUY 1 SCHW @ $68.50
+
+Bar 206 @ 2024-01-02 12:26:00:
+  CopilotPenguin: BUY 1 WMT @ $157.20
+  CopilotPenguin: SELL 1 DKNG @ $34.89
+
+Bar 207 @ 2024-01-02 12:27:00:
+  CopilotPenguin: BUY 1 EDIT @ $10.06
+  CopilotPenguin: SELL 1 RUN @ $19.40
+
+Bar 208 @ 2024-01-02 12:28:00:
+  CopilotPenguin: BUY 1 USB @ $42.73
 
 Bar 210 @ 2024-01-02 12:30:00:
   Buy One Each Penguin: BUY 1 Z @ $57.21
 
+Bar 211 @ 2024-01-02 12:31:00:
+  CopilotPenguin: SELL 1 AFRM @ $48.25
+  CopilotPenguin: BUY 1 GILD @ $80.65
+
+Bar 212 @ 2024-01-02 12:32:00:
+  CopilotPenguin: BUY 1 BNTX @ $104.55
+
+Bar 214 @ 2024-01-02 12:34:00:
+  CopilotPenguin: SELL 1 SHOP @ $77.13
+
+Bar 217 @ 2024-01-02 12:37:00:
+  CopilotPenguin: BUY 1 M @ $20.03
+  CopilotPenguin: BUY 1 GIS @ $65.14
+
 Bar 219 @ 2024-01-02 12:39:00:
   Buy One Each Penguin: BUY 1 VLO @ $131.32
 
+Bar 221 @ 2024-01-02 12:41:00:
+  CopilotPenguin: BUY 1 GE @ $15.85
+
+Bar 222 @ 2024-01-02 12:42:00:
+  CopilotPenguin: BUY 1 XLV @ $135.97
+  CopilotPenguin: BUY 1 DNA @ $1.68
+  CopilotPenguin: BUY 1 TGT @ $142.01
+
+Bar 223 @ 2024-01-02 12:43:00:
+  CopilotPenguin: BUY 1 CSCO @ $50.27
+
+Bar 225 @ 2024-01-02 12:45:00:
+  CopilotPenguin: BUY 1 HD @ $345.03
+
 Bar 226 @ 2024-01-02 12:46:00:
   Buy One Each Penguin: BUY 1 ICE @ $128.01
+  CopilotPenguin: SELL 1 CRSP @ $61.84
 
 Bar 230 @ 2024-01-02 12:50:00:
   Buy One Each Penguin: BUY 1 DE @ $398.29
+  CopilotPenguin: BUY 1 ON @ $82.11
+  CopilotPenguin: BUY 1 WFC @ $48.91
 
 Bar 231 @ 2024-01-02 12:51:00:
   Buy One Each Penguin: BUY 1 NOW @ $699.07
+  Buy One Each Penguin: BUY 1 ESTC @ $111.52
 
 Bar 234 @ 2024-01-02 12:54:00:
   Buy One Each Penguin: BUY 1 FDX @ $251.84
+  CopilotPenguin: BUY 1 OKTA @ $89.51
+
+Bar 235 @ 2024-01-02 12:55:00:
+  CopilotPenguin: BUY 1 ETSY @ $80.35
+  CopilotPenguin: BUY 1 MTCH @ $36.05
+  CopilotPenguin: SELL 1 SQ @ $76.15
+  CopilotPenguin: SELL 1 CVNA @ $51.99
+
+Bar 236 @ 2024-01-02 12:56:00:
+  CopilotPenguin: BUY 1 DDOG @ $119.34
+  CopilotPenguin: SELL 1 PLTR @ $16.93
+  CopilotPenguin: BUY 1 BILL @ $80.51
 
 Bar 237 @ 2024-01-02 12:57:00:
   Buy One Each Penguin: BUY 1 BBY @ $77.81
+  CopilotPenguin: BUY 1 AVGO @ $1099.11
 
 Bar 238 @ 2024-01-02 12:58:00:
   Buy One Each Penguin: BUY 1 SPGI @ $438.04
   Buy One Each Penguin: BUY 1 UNP @ $244.22
+  CopilotPenguin: BUY 1 ZS @ $218.59
+  CopilotPenguin: BUY 1 RTX @ $83.93
+
+Bar 239 @ 2024-01-02 12:59:00:
+  CopilotPenguin: BUY 1 ISRG @ $334.03
+  CopilotPenguin: BUY 1 KMI @ $17.72
 
 Bar 240 @ 2024-01-02 13:00:00:
+  Buy One Each Penguin: BUY 1 SWKS @ $111.01
   Buy One Each Penguin: BUY 1 MS @ $92.57
   Buy One Each Penguin: BUY 1 AXP @ $186.47
   Buy One Each Penguin: BUY 1 JNJ @ $156.76
-  Buy One Each Penguin: BUY 1 UNH @ $526.52
   Buy One Each Penguin: BUY 1 DHR @ $231.36
+  Buy One Each Penguin: BUY 1 ABT @ $110.08
   Buy One Each Penguin: BUY 1 REGN @ $878.38
   Buy One Each Penguin: BUY 1 MDT @ $82.39
   Buy One Each Penguin: BUY 1 SYK @ $299.49
@@ -474,6 +1017,31 @@ Bar 240 @ 2024-01-02 13:00:00:
   Buy One Each Penguin: BUY 1 DG @ $135.01
   Buy One Each Penguin: BUY 1 SRE @ $74.59
   Buy One Each Penguin: BUY 1 RSI @ $4.50
+  CopilotPenguin: BUY 1 CRM @ $260.02
+  CopilotPenguin: BUY 1 AMAT @ $158.65
+  CopilotPenguin: BUY 1 DOCU @ $58.56
+  CopilotPenguin: SELL 1 NFLX @ $483.86
+  CopilotPenguin: BUY 1 TMO @ $530.83
+  CopilotPenguin: BUY 1 AMGN @ $288.04
+  CopilotPenguin: BUY 1 VRTX @ $406.93
+  CopilotPenguin: BUY 1 SBUX @ $95.47
+  CopilotPenguin: BUY 1 COST @ $658.25
+  CopilotPenguin: SELL 1 W @ $60.39
+  CopilotPenguin: BUY 1 PEP @ $169.11
+  CopilotPenguin: BUY 1 PSX @ $134.02
+  CopilotPenguin: BUY 1 OKE @ $70.51
+  CopilotPenguin: BUY 1 DD @ $76.98
+
+Bar 241 @ 2024-01-02 13:01:00:
+  CopilotPenguin: SELL 1 APP @ $40.39
+  CopilotPenguin: BUY 1 PENN @ $25.71
+
+Bar 242 @ 2024-01-02 13:02:00:
+  CopilotPenguin: SELL 1 CHWY @ $23.33
+  CopilotPenguin: SELL 1 LAC @ $6.33
+
+Bar 243 @ 2024-01-02 13:03:00:
+  CopilotPenguin: BUY 1 KTOS @ $20.40
 
 Bar 244 @ 2024-01-02 13:04:00:
   Buy One Each Penguin: BUY 1 TER @ $109.01
@@ -482,21 +1050,42 @@ Bar 245 @ 2024-01-02 13:05:00:
   Buy One Each Penguin: BUY 1 HLT @ $182.11
   Buy One Each Penguin: BUY 1 WELL @ $90.21
   Buy One Each Penguin: BUY 1 VTR @ $49.84
+  CopilotPenguin: SELL 1 ENPH @ $129.79
+  CopilotPenguin: BUY 1 BALL @ $56.30
 
 Bar 246 @ 2024-01-02 13:06:00:
   Buy One Each Penguin: BUY 1 LOW @ $221.12
+  CopilotPenguin: BUY 1 GS @ $383.05
 
 Bar 247 @ 2024-01-02 13:07:00:
   Buy One Each Penguin: BUY 1 ROK @ $310.49
 
+Bar 248 @ 2024-01-02 13:08:00:
+  CopilotPenguin: BUY 1 SPG @ $141.41
+
 Bar 250 @ 2024-01-02 13:10:00:
   Buy One Each Penguin: BUY 1 DUK @ $96.19
+  CopilotPenguin: BUY 1 LRCX @ $768.36
+
+Bar 251 @ 2024-01-02 13:11:00:
+  CopilotPenguin: BUY 1 KSS @ $28.38
 
 Bar 252 @ 2024-01-02 13:12:00:
   Buy One Each Penguin: BUY 1 HSY @ $186.13
 
+Bar 253 @ 2024-01-02 13:13:00:
+  CopilotPenguin: BUY 1 RIO @ $73.80
+
+Bar 254 @ 2024-01-02 13:14:00:
+  CopilotPenguin: BUY 1 ESTC @ $112.71
+
 Bar 255 @ 2024-01-02 13:15:00:
   Buy One Each Penguin: BUY 1 FANG @ $156.27
+  CopilotPenguin: BUY 1 KLAC @ $567.85
+  CopilotPenguin: BUY 1 VLO @ $131.03
+  CopilotPenguin: BUY 1 HES @ $145.05
+  CopilotPenguin: BUY 1 MOS @ $35.52
+  CopilotPenguin: BUY 1 EXC @ $35.50
 
 Bar 256 @ 2024-01-02 13:16:00:
   Buy One Each Penguin: BUY 1 PGR @ $156.02
@@ -504,41 +1093,137 @@ Bar 256 @ 2024-01-02 13:16:00:
 Bar 257 @ 2024-01-02 13:17:00:
   Buy One Each Penguin: BUY 1 INTU @ $615.99
 
+Bar 260 @ 2024-01-02 13:20:00:
+  CopilotPenguin: SELL 1 INTC @ $48.91
+
 Bar 262 @ 2024-01-02 13:22:00:
   Buy One Each Penguin: BUY 1 AES @ $19.10
+  CopilotPenguin: SELL 1 U @ $38.90
+  CopilotPenguin: SELL 1 NVO @ $101.56
+
+Bar 263 @ 2024-01-02 13:23:00:
+  CopilotPenguin: SELL 1 FSLY @ $17.59
+
+Bar 264 @ 2024-01-02 13:24:00:
+  CopilotPenguin: BUY 1 TXN @ $168.27
 
 Bar 265 @ 2024-01-02 13:25:00:
   Buy One Each Penguin: BUY 1 DLR @ $133.51
 
+Bar 266 @ 2024-01-02 13:26:00:
+  CopilotPenguin: BUY 1 BEAM @ $26.81
+
+Bar 267 @ 2024-01-02 13:27:00:
+  CopilotPenguin: BUY 1 CRWD @ $252.04
+  CopilotPenguin: BUY 1 CCI @ $114.52
+
+Bar 268 @ 2024-01-02 13:28:00:
+  CopilotPenguin: SELL 1 AAPL @ $751.91
+  CopilotPenguin: SELL 1 PYPL @ $60.84
+
+Bar 270 @ 2024-01-02 13:30:00:
+  CopilotPenguin: SELL 1 F @ $12.07
+  CopilotPenguin: SELL 1 SQM @ $59.00
+
 Bar 272 @ 2024-01-02 13:32:00:
   Buy One Each Penguin: BUY 1 CL @ $79.26
+  CopilotPenguin: BUY 1 JNJ @ $156.87
+  CopilotPenguin: SELL 1 SEDG @ $92.70
 
 Bar 273 @ 2024-01-02 13:33:00:
   Buy One Each Penguin: BUY 1 MPC @ $149.40
+  CopilotPenguin: BUY 1 CTRA @ $25.84
 
 Bar 276 @ 2024-01-02 13:36:00:
   Buy One Each Penguin: BUY 1 FAST @ $64.27
 
 Bar 277 @ 2024-01-02 13:37:00:
   Buy One Each Penguin: BUY 1 CSX @ $34.54
+  CopilotPenguin: SELL 1 GM @ $35.55
+
+Bar 278 @ 2024-01-02 13:38:00:
+  CopilotPenguin: SELL 1 AMZN @ $3007.40
+
+Bar 279 @ 2024-01-02 13:39:00:
+  CopilotPenguin: SELL 1 SSO @ $64.11
+  CopilotPenguin: BUY 1 MNST @ $57.51
+
+Bar 282 @ 2024-01-02 13:42:00:
+  CopilotPenguin: BUY 1 PGR @ $159.31
+  CopilotPenguin: BUY 1 CF @ $79.50
+  CopilotPenguin: BUY 1 Z @ $57.91
+
+Bar 283 @ 2024-01-02 13:43:00:
+  CopilotPenguin: BUY 1 AXP @ $185.12
+  CopilotPenguin: BUY 1 KR @ $45.61
+
+Bar 284 @ 2024-01-02 13:44:00:
+  CopilotPenguin: SELL 1 PDD @ $142.99
 
 Bar 287 @ 2024-01-02 13:47:00:
   Buy One Each Penguin: BUY 1 MCHP @ $88.72
 
+Bar 290 @ 2024-01-02 13:50:00:
+  CopilotPenguin: SELL 1 NET @ $81.48
+
 Bar 291 @ 2024-01-02 13:51:00:
   Buy One Each Penguin: BUY 1 LYB @ $95.08
+  CopilotPenguin: BUY 1 DE @ $395.58
+  CopilotPenguin: BUY 1 WMB @ $34.90
+
+Bar 297 @ 2024-01-02 13:57:00:
+  CopilotPenguin: SELL 1 ZM @ $70.99
+
+Bar 298 @ 2024-01-02 13:58:00:
+  CopilotPenguin: BUY 1 MCD @ $295.03
+
+Bar 301 @ 2024-01-02 14:01:00:
+  CopilotPenguin: BUY 1 RSI @ $4.40
+
+Bar 302 @ 2024-01-02 14:02:00:
+  CopilotPenguin: SELL 1 TFC @ $36.48
+
+Bar 303 @ 2024-01-02 14:03:00:
+  CopilotPenguin: BUY 1 MS @ $92.33
+
+Bar 304 @ 2024-01-02 14:04:00:
+  CopilotPenguin: SELL 1 SNAP @ $16.60
+  CopilotPenguin: BUY 1 LULU @ $507.61
 
 Bar 305 @ 2024-01-02 14:05:00:
   Buy One Each Penguin: BUY 1 SPLK @ $152.02
+  CopilotPenguin: BUY 1 LOW @ $220.02
 
 Bar 306 @ 2024-01-02 14:06:00:
   Buy One Each Penguin: BUY 1 ITW @ $261.97
+  CopilotPenguin: BUY 1 PG @ $146.03
+
+Bar 309 @ 2024-01-02 14:09:00:
+  CopilotPenguin: BUY 1 FANG @ $156.23
+  CopilotPenguin: SELL 1 ALB @ $142.41
+
+Bar 310 @ 2024-01-02 14:10:00:
+  CopilotPenguin: BUY 1 ZG @ $55.60
+
+Bar 312 @ 2024-01-02 14:12:00:
+  CopilotPenguin: BUY 1 AEP @ $80.21
+
+Bar 314 @ 2024-01-02 14:14:00:
+  CopilotPenguin: BUY 1 EMR @ $95.76
+
+Bar 318 @ 2024-01-02 14:18:00:
+  CopilotPenguin: SELL 1 DNA @ $1.66
+
+Bar 322 @ 2024-01-02 14:22:00:
+  CopilotPenguin: BUY 1 ZTS @ $195.78
 
 Bar 323 @ 2024-01-02 14:23:00:
   Buy One Each Penguin: BUY 1 ULTA @ $487.05
 
 Bar 325 @ 2024-01-02 14:25:00:
   Buy One Each Penguin: BUY 1 EA @ $135.98
+  CopilotPenguin: BUY 1 REGN @ $871.03
+  CopilotPenguin: BUY 1 LYB @ $94.74
 
 Bar 327 @ 2024-01-02 14:27:00:
   Buy One Each Penguin: BUY 1 CME @ $210.95
@@ -546,14 +1231,22 @@ Bar 327 @ 2024-01-02 14:27:00:
 
 Bar 328 @ 2024-01-02 14:28:00:
   Buy One Each Penguin: BUY 1 NXPI @ $226.79
+  CopilotPenguin: BUY 1 MDT @ $82.30
+  CopilotPenguin: BUY 1 HON @ $209.10
+  CopilotPenguin: BUY 1 ROST @ $137.80
+  CopilotPenguin: BUY 1 HSY @ $186.01
 
 Bar 329 @ 2024-01-02 14:29:00:
+  Buy One Each Penguin: BUY 1 LMT @ $454.05
   Buy One Each Penguin: BUY 1 JBHT @ $199.64
   Buy One Each Penguin: BUY 1 CHRW @ $86.44
   Buy One Each Penguin: BUY 1 ODFL @ $403.59
   Buy One Each Penguin: BUY 1 KMB @ $121.02
   Buy One Each Penguin: BUY 1 EQIX @ $802.13
   Buy One Each Penguin: BUY 1 PSA @ $304.92
+  CopilotPenguin: BUY 1 ITW @ $259.41
+  CopilotPenguin: BUY 1 WM @ $177.77
+  CopilotPenguin: BUY 1 OTIS @ $88.37
 
 Bar 330 @ 2024-01-02 14:30:00:
   Buy One Each Penguin: BUY 1 HUBS @ $568.18
@@ -562,6 +1255,7 @@ Bar 330 @ 2024-01-02 14:30:00:
   Buy One Each Penguin: BUY 1 GPN @ $126.40
   Buy One Each Penguin: BUY 1 BLK @ $806.41
   Buy One Each Penguin: BUY 1 CB @ $226.72
+  Buy One Each Penguin: BUY 1 AON @ $292.69
   Buy One Each Penguin: BUY 1 MMC @ $190.49
   Buy One Each Penguin: BUY 1 BK @ $52.07
   Buy One Each Penguin: BUY 1 ARCT @ $31.35
@@ -588,28 +1282,354 @@ Bar 330 @ 2024-01-02 14:30:00:
   Buy One Each Penguin: BUY 1 AMT @ $215.05
   Buy One Each Penguin: BUY 1 AVAV @ $125.98
   Buy One Each Penguin: BUY 1 HII @ $259.54
+  CopilotPenguin: BUY 1 NOW @ $694.78
+  CopilotPenguin: BUY 1 TER @ $106.26
+  CopilotPenguin: BUY 1 SWKS @ $110.22
+  CopilotPenguin: BUY 1 QRVO @ $110.61
+  CopilotPenguin: BUY 1 TEAM @ $233.33
+  CopilotPenguin: BUY 1 PNC @ $153.87
+  CopilotPenguin: BUY 1 ABT @ $109.59
+  CopilotPenguin: BUY 1 SYK @ $297.01
+  CopilotPenguin: BUY 1 HCA @ $268.82
+  CopilotPenguin: SELL 1 EDIT @ $9.84
+  CopilotPenguin: SELL 1 BEAM @ $26.19
+  CopilotPenguin: BUY 1 UPS @ $156.31
+  CopilotPenguin: BUY 1 PH @ $458.83
+  CopilotPenguin: BUY 1 ROK @ $308.03
+  CopilotPenguin: BUY 1 TJX @ $93.28
+  CopilotPenguin: BUY 1 HLT @ $181.45
+  CopilotPenguin: SELL 1 GPS @ $20.09
+  CopilotPenguin: BUY 1 SYY @ $72.91
+  CopilotPenguin: BUY 1 STZ @ $240.66
+  CopilotPenguin: BUY 1 EOG @ $121.51
+  CopilotPenguin: BUY 1 MPC @ $149.22
+  CopilotPenguin: SELL 1 BLDP @ $3.62
+  CopilotPenguin: BUY 1 DOW @ $54.66
+  CopilotPenguin: BUY 1 PLD @ $132.12
+  CopilotPenguin: BUY 1 WELL @ $90.07
+  CopilotPenguin: SELL 1 RSI @ $4.27
+
+Bar 331 @ 2024-01-02 14:31:00:
+  CopilotPenguin: BUY 1 SPGI @ $438.73
+  CopilotPenguin: BUY 1 ICE @ $127.85
+  CopilotPenguin: BUY 1 ABBV @ $154.90
+  CopilotPenguin: BUY 1 SRE @ $74.26
 
 Bar 332 @ 2024-01-02 14:32:00:
   Buy One Each Penguin: BUY 1 ECL @ $196.56
+  CopilotPenguin: BUY 1 DHR @ $230.44
+  CopilotPenguin: BUY 1 BBY @ $78.68
 
-Bar 900 @ 2024-01-03 00:00:00:
-  RSI Mean Reversion Selective: BUY 1 SNAP @ $16.06
-  RSI Mean Reversion Selective: BUY 1 RDFN @ $9.88
+Bar 333 @ 2024-01-02 14:33:00:
+  CopilotPenguin: BUY 1 FAST @ $64.61
+  CopilotPenguin: SELL 1 NIO @ $8.64
+  CopilotPenguin: SELL 1 LI @ $34.82
 
-Bar 906 @ 2024-01-03 00:06:00:
-  RSI Mean Reversion Selective: BUY 1 SPCE @ $2.38
+Bar 334 @ 2024-01-02 14:34:00:
+  CopilotPenguin: SELL 1 NVDA @ $483.28
+  CopilotPenguin: SELL 1 MDB @ $395.73
+  CopilotPenguin: SELL 1 NEE @ $60.43
+  CopilotPenguin: BUY 1 DUK @ $97.17
+  CopilotPenguin: SELL 1 SOUN @ $2.08
+
+Bar 335 @ 2024-01-02 14:35:00:
+  CopilotPenguin: SELL 1 BILL @ $78.94
+  CopilotPenguin: BUY 1 CI @ $303.40
+
+Bar 336 @ 2024-01-02 14:36:00:
+  CopilotPenguin: BUY 1 AES @ $19.22
+  CopilotPenguin: SELL 1 ORA @ $75.77
+
+Bar 337 @ 2024-01-02 14:37:00:
+  CopilotPenguin: SELL 1 TWLO @ $73.55
+  CopilotPenguin: BUY 1 WDAY @ $273.17
+  CopilotPenguin: BUY 1 DG @ $137.19
+
+Bar 338 @ 2024-01-02 14:38:00:
+  CopilotPenguin: SELL 1 SNOW @ $193.34
+
+Bar 340 @ 2024-01-02 14:40:00:
+  CopilotPenguin: BUY 1 INTU @ $613.01
+
+Bar 342 @ 2024-01-02 14:42:00:
+  CopilotPenguin: SELL 1 DDOG @ $116.88
+  CopilotPenguin: SELL 1 PINS @ $36.04
+
+Bar 343 @ 2024-01-02 14:43:00:
+  CopilotPenguin: SELL 1 OKTA @ $87.73
+  CopilotPenguin: SELL 1 ESTC @ $109.55
+  CopilotPenguin: BUY 1 DLR @ $135.03
+
+Bar 346 @ 2024-01-02 14:46:00:
+  CopilotPenguin: BUY 1 FDX @ $250.88
+
+Bar 347 @ 2024-01-02 14:47:00:
+  CopilotPenguin: SELL 1 BABA @ $75.42
+
+Bar 348 @ 2024-01-02 14:48:00:
+  CopilotPenguin: BUY 1 MCHP @ $88.46
+  CopilotPenguin: BUY 1 MDLZ @ $73.10
+
+Bar 349 @ 2024-01-02 14:49:00:
+  CopilotPenguin: SELL 1 CRWD @ $247.64
+  CopilotPenguin: BUY 1 HUBS @ $560.07
+  CopilotPenguin: SELL 1 ROKU @ $89.24
+  CopilotPenguin: BUY 1 LMT @ $459.43
+  CopilotPenguin: BUY 1 KMB @ $122.35
+  CopilotPenguin: BUY 1 XEL @ $62.56
+
+Bar 350 @ 2024-01-02 14:50:00:
+  CopilotPenguin: BUY 1 ARCT @ $32.50
+  CopilotPenguin: BUY 1 ULTA @ $489.51
+
+Bar 351 @ 2024-01-02 14:51:00:
+  CopilotPenguin: BUY 1 GPN @ $127.16
+  CopilotPenguin: BUY 1 ED @ $91.52
+  CopilotPenguin: BUY 1 VTR @ $50.09
+
+Bar 352 @ 2024-01-02 14:52:00:
+  CopilotPenguin: BUY 1 CME @ $210.19
+  CopilotPenguin: BUY 1 NSC @ $236.97
+
+Bar 353 @ 2024-01-02 14:53:00:
+  CopilotPenguin: SELL 1 JD @ $27.74
+
+Bar 354 @ 2024-01-02 14:54:00:
+  CopilotPenguin: SELL 1 GOOGL @ $2736.66
+  CopilotPenguin: SELL 1 ZS @ $214.26
+  CopilotPenguin: SELL 1 UBER @ $60.07
+  CopilotPenguin: BUY 1 STLD @ $118.94
+
+Bar 356 @ 2024-01-02 14:56:00:
+  CopilotPenguin: BUY 1 PSA @ $309.32
+
+Bar 357 @ 2024-01-02 14:57:00:
+  CopilotPenguin: BUY 1 MAR @ $224.93
+  CopilotPenguin: BUY 1 AMT @ $217.11
+
+Bar 358 @ 2024-01-02 14:58:00:
+  CopilotPenguin: BUY 1 NUE @ $175.56
+  CopilotPenguin: BUY 1 EQIX @ $809.35
+
+Bar 359 @ 2024-01-02 14:59:00:
+  CopilotPenguin: SELL 1 LRCX @ $760.08
+
+Bar 360 @ 2024-01-02 15:00:00:
+  CopilotPenguin: BUY 1 AVAV @ $126.07
+
+Bar 362 @ 2024-01-02 15:02:00:
+  CopilotPenguin: SELL 1 ADBE @ $582.78
+
+Bar 363 @ 2024-01-02 15:03:00:
+  CopilotPenguin: BUY 1 SPLK @ $152.02
+
+Bar 367 @ 2024-01-02 15:07:00:
+  CopilotPenguin: BUY 1 JBHT @ $199.02
+  CopilotPenguin: BUY 1 LSTR @ $190.99
+
+Bar 368 @ 2024-01-02 15:08:00:
+  CopilotPenguin: SELL 1 TEAM @ $228.56
+
+Bar 370 @ 2024-01-02 15:10:00:
+  CopilotPenguin: BUY 1 CSX @ $34.79
+  CopilotPenguin: BUY 1 UNP @ $244.82
+  CopilotPenguin: BUY 1 PPG @ $147.83
+
+Bar 377 @ 2024-01-02 15:17:00:
+  CopilotPenguin: BUY 1 EA @ $135.41
+
+Bar 379 @ 2024-01-02 15:19:00:
+  CopilotPenguin: SELL 1 NOW @ $681.33
+  CopilotPenguin: SELL 1 WDAY @ $267.92
+
+Bar 380 @ 2024-01-02 15:20:00:
+  CopilotPenguin: BUY 1 ODFL @ $402.39
+  CopilotPenguin: BUY 1 CMG @ $2271.88
+
+Bar 381 @ 2024-01-02 15:21:00:
+  CopilotPenguin: SELL 1 AMAT @ $156.53
+
+Bar 382 @ 2024-01-02 15:22:00:
+  CopilotPenguin: BUY 1 DPZ @ $411.24
+
+Bar 383 @ 2024-01-02 15:23:00:
+  CopilotPenguin: BUY 1 VMC @ $224.70
+
+Bar 384 @ 2024-01-02 15:24:00:
+  CopilotPenguin: BUY 1 MMC @ $189.04
+
+Bar 385 @ 2024-01-02 15:25:00:
+  CopilotPenguin: BUY 1 ETN @ $238.49
+
+Bar 386 @ 2024-01-02 15:26:00:
+  CopilotPenguin: SELL 1 CRM @ $254.98
+  CopilotPenguin: BUY 1 BLK @ $798.77
+
+Bar 387 @ 2024-01-02 15:27:00:
+  CopilotPenguin: BUY 1 NXPI @ $223.80
+  CopilotPenguin: SELL 1 HUBS @ $549.21
+  CopilotPenguin: BUY 1 BK @ $52.06
+
+Bar 388 @ 2024-01-02 15:28:00:
+  CopilotPenguin: BUY 1 EXPD @ $126.77
+
+Bar 389 @ 2024-01-02 15:29:00:
+  CopilotPenguin: BUY 1 MLM @ $492.43
+
+Bar 394 @ 2024-01-02 15:34:00:
+  CopilotPenguin: BUY 1 IFF @ $80.57
+
+Bar 396 @ 2024-01-02 15:36:00:
+  CopilotPenguin: SELL 1 DOCU @ $57.42
+  CopilotPenguin: BUY 1 GD @ $260.03
+
+Bar 398 @ 2024-01-02 15:38:00:
+  CopilotPenguin: BUY 1 RSG @ $165.01
+
+Bar 401 @ 2024-01-02 15:41:00:
+  CopilotPenguin: SELL 1 ORCL @ $103.03
+  CopilotPenguin: SELL 1 INTU @ $601.10
+
+Bar 404 @ 2024-01-02 15:44:00:
+  CopilotPenguin: SELL 1 SHW @ $302.11
+
+Bar 412 @ 2024-01-02 15:52:00:
+  CopilotPenguin: SELL 1 KTOS @ $20.15
+
+Bar 417 @ 2024-01-02 15:57:00:
+  CopilotPenguin: BUY 1 CHRW @ $87.02
+
+Bar 423 @ 2024-01-02 16:03:00:
+  CopilotPenguin: SELL 1 ODFL @ $397.79
+
+Bar 425 @ 2024-01-02 16:05:00:
+  CopilotPenguin: SELL 1 JBHT @ $196.46
+
+Bar 428 @ 2024-01-02 16:08:00:
+  CopilotPenguin: SELL 1 NEM @ $41.07
+
+Bar 432 @ 2024-01-02 16:12:00:
+  CopilotPenguin: BUY 1 YUM @ $129.35
+
+Bar 433 @ 2024-01-02 16:13:00:
+  CopilotPenguin: BUY 1 SO @ $70.45
+
+Bar 434 @ 2024-01-02 16:14:00:
+  CopilotPenguin: BUY 1 CL @ $80.25
+
+Bar 436 @ 2024-01-02 16:16:00:
+  CopilotPenguin: BUY 1 AON @ $290.12
+
+Bar 442 @ 2024-01-02 16:22:00:
+  CopilotPenguin: BUY 1 APD @ $273.62
+
+Bar 443 @ 2024-01-02 16:23:00:
+  CopilotPenguin: BUY 1 CB @ $227.33
+  CopilotPenguin: BUY 1 NOC @ $475.07
+
+Bar 450 @ 2024-01-02 16:30:00:
+  CopilotPenguin: BUY 1 PKG @ $163.42
+
+Bar 451 @ 2024-01-02 16:31:00:
+  CopilotPenguin: BUY 1 PEG @ $61.49
+
+Bar 452 @ 2024-01-02 16:32:00:
+  CopilotPenguin: SELL 1 EL @ $143.20
+  CopilotPenguin: BUY 1 ECL @ $197.11
+
+Bar 453 @ 2024-01-02 16:33:00:
+  CopilotPenguin: BUY 1 HII @ $260.52
+
+Bar 470 @ 2024-01-02 16:50:00:
+  CopilotPenguin: SELL 1 SBUX @ $94.29
+
+Bar 486 @ 2024-01-02 17:06:00:
+  CopilotPenguin: BUY 1 FIS @ $60.91
+
+Bar 529 @ 2024-01-02 17:49:00:
+  CopilotPenguin: SELL 1 LSTR @ $188.92
+
+Bar 557 @ 2024-01-02 18:17:00:
+  CopilotPenguin: SELL 1 KLAC @ $562.06
+  CopilotPenguin: SELL 1 ICE @ $126.12
+
+Bar 561 @ 2024-01-02 18:21:00:
+  CopilotPenguin: SELL 1 VALE @ $15.74
+
+Bar 610 @ 2024-01-02 19:10:00:
+  CopilotPenguin: SELL 1 MAR @ $222.22
+
+Bar 613 @ 2024-01-02 19:13:00:
+  CopilotPenguin: SELL 1 HLT @ $179.58
+
+Bar 615 @ 2024-01-02 19:15:00:
+  CopilotPenguin: BUY 1 FISV @ $133.24
+
+Bar 619 @ 2024-01-02 19:19:00:
+  CopilotPenguin: SELL 1 AVGO @ $1086.04
+
+Bar 620 @ 2024-01-02 19:20:00:
+  CopilotPenguin: SELL 1 MCHP @ $87.24
+  CopilotPenguin: SELL 1 CMG @ $2239.99
+
+Bar 627 @ 2024-01-02 19:27:00:
+  CopilotPenguin: SELL 1 QRVO @ $109.29
+
+Bar 632 @ 2024-01-02 19:32:00:
+  CopilotPenguin: SELL 1 ISRG @ $330.61
+
+Bar 641 @ 2024-01-02 19:41:00:
+  CopilotPenguin: SELL 1 BKR @ $33.92
+
+Bar 651 @ 2024-01-02 19:51:00:
+  CopilotPenguin: SELL 1 SLB @ $52.14
+
+Bar 653 @ 2024-01-02 19:53:00:
+  CopilotPenguin: SELL 1 AVAV @ $122.39
+
+Bar 660 @ 2024-01-02 20:00:00:
+  CopilotPenguin: SELL 1 M @ $19.65
+
+Bar 664 @ 2024-01-02 20:04:00:
+  CopilotPenguin: SELL 1 TER @ $104.16
+
+Bar 667 @ 2024-01-02 20:07:00:
+  CopilotPenguin: SELL 1 GE @ $15.68
+
+Bar 669 @ 2024-01-02 20:09:00:
+  CopilotPenguin: SELL 1 SWKS @ $108.28
+
+Bar 671 @ 2024-01-02 20:11:00:
+  CopilotPenguin: SELL 1 NXPI @ $219.48
+
+Bar 679 @ 2024-01-02 20:19:00:
+  CopilotPenguin: SELL 1 IWM @ $198.96
+  CopilotPenguin: SELL 1 ABNB @ $133.83
+  CopilotPenguin: SELL 1 COST @ $649.97
+
+Bar 685 @ 2024-01-02 20:25:00:
+  CopilotPenguin: SELL 1 ON @ $80.49
+
+Bar 688 @ 2024-01-02 20:28:00:
+  CopilotPenguin: SELL 1 NOC @ $470.29
+
+Bar 695 @ 2024-01-02 20:35:00:
+  CopilotPenguin: SELL 1 KSS @ $27.82
+
+Bar 696 @ 2024-01-02 20:36:00:
+  CopilotPenguin: SELL 1 FCX @ $41.84
+
+Bar 710 @ 2024-01-02 20:50:00:
+  CopilotPenguin: SELL 1 HAL @ $36.12
+
+Bar 839 @ 2024-01-02 22:59:00:
+  CopilotPenguin: SELL 1 CME @ $207.21
 
 Bar 908 @ 2024-01-03 00:08:00:
   Smart RSI Confluence: BUY 2 XOM @ $102.38
 
-Bar 910 @ 2024-01-03 00:10:00:
-  RSI Mean Reversion Selective: BUY 1 W @ $58.27
-
 Bar 912 @ 2024-01-03 00:12:00:
   Smart RSI Confluence: BUY 2 MRNA @ $115.01
-
-Bar 913 @ 2024-01-03 00:13:00:
-  RSI Mean Reversion Selective: BUY 1 FCEL @ $1.54
 
 Bar 915 @ 2024-01-03 00:15:00:
   Smart RSI Confluence: BUY 2 SQ @ $72.10
@@ -624,23 +1644,162 @@ Bar 921 @ 2024-01-03 00:21:00:
 Bar 922 @ 2024-01-03 00:22:00:
   Smart RSI Confluence: BUY 2 GOOGL @ $2762.52
 
-Bar 943 @ 2024-01-03 00:43:00:
-  RSI Mean Reversion Selective: BUY 1 BILL @ $77.36
-
 Bar 946 @ 2024-01-03 00:46:00:
   Smart RSI Confluence: BUY 2 PYPL @ $61.58
-
-Bar 950 @ 2024-01-03 00:50:00:
-  RSI Mean Reversion Selective: BUY 1 OKTA @ $86.02
 
 Bar 951 @ 2024-01-03 00:51:00:
   Smart RSI Confluence: BUY 2 RDFN @ $9.87
 
-Bar 957 @ 2024-01-03 00:57:00:
-  RSI Mean Reversion Selective: BUY 1 BLUE @ $1.45
-
 Bar 963 @ 2024-01-03 09:03:00:
   Smart RSI Confluence: BUY 2 BLUE @ $1.48
+
+Bar 1126 @ 2024-01-03 11:46:00:
+  CopilotPenguin: SELL 1 OXY @ $59.49
+
+Bar 1156 @ 2024-01-03 12:16:00:
+  CopilotPenguin: SELL 1 UAL @ $40.34
+
+Bar 1239 @ 2024-01-03 13:39:00:
+  CopilotPenguin: SELL 1 ETSY @ $79.49
+
+Bar 1262 @ 2024-01-03 14:02:00:
+  CopilotPenguin: SELL 1 MP @ $19.38
+
+Bar 1276 @ 2024-01-03 14:16:00:
+  CopilotPenguin: SELL 1 Z @ $55.99
+
+Bar 1284 @ 2024-01-03 14:24:00:
+  CopilotPenguin: SELL 1 BE @ $14.36
+
+Bar 1288 @ 2024-01-03 14:28:00:
+  CopilotPenguin: SELL 1 SCHW @ $67.21
+
+Bar 1290 @ 2024-01-03 14:30:00:
+  CopilotPenguin: SELL 1 VERI @ $1.75
+
+Bar 1291 @ 2024-01-03 14:31:00:
+  CopilotPenguin: SELL 1 PENN @ $25.16
+
+Bar 1293 @ 2024-01-03 14:33:00:
+  CopilotPenguin: SELL 1 MTCH @ $35.24
+  CopilotPenguin: SELL 1 LOW @ $215.19
+  CopilotPenguin: SELL 1 BBY @ $76.41
+  CopilotPenguin: SELL 1 BALL @ $55.31
+
+Bar 1294 @ 2024-01-03 14:34:00:
+  CopilotPenguin: SELL 1 VMC @ $220.41
+
+Bar 1308 @ 2024-01-03 14:48:00:
+  CopilotPenguin: SELL 1 SPGI @ $433.24
+
+Bar 1309 @ 2024-01-03 14:49:00:
+  CopilotPenguin: SELL 1 APA @ $35.84
+
+Bar 1311 @ 2024-01-03 14:51:00:
+  CopilotPenguin: SELL 1 PPG @ $146.18
+
+Bar 1316 @ 2024-01-03 14:56:00:
+  CopilotPenguin: SELL 1 ZG @ $54.32
+
+Bar 1318 @ 2024-01-03 14:58:00:
+  CopilotPenguin: SELL 1 UNP @ $242.28
+
+Bar 1320 @ 2024-01-03 15:00:00:
+  CopilotPenguin: SELL 1 HD @ $341.46
+  CopilotPenguin: SELL 1 MLM @ $482.75
+
+Bar 1321 @ 2024-01-03 15:01:00:
+  CopilotPenguin: SELL 1 ETN @ $233.60
+
+Bar 1322 @ 2024-01-03 15:02:00:
+  CopilotPenguin: SELL 1 TGT @ $140.43
+
+Bar 1328 @ 2024-01-03 15:08:00:
+  CopilotPenguin: SELL 1 HON @ $206.68
+
+Bar 1334 @ 2024-01-03 15:14:00:
+  CopilotPenguin: SELL 1 FAST @ $62.80
+
+Bar 1339 @ 2024-01-03 15:19:00:
+  CopilotPenguin: SELL 1 DAL @ $39.22
+
+Bar 1347 @ 2024-01-03 15:27:00:
+  CopilotPenguin: SELL 1 PH @ $452.27
+
+Bar 1348 @ 2024-01-03 15:28:00:
+  CopilotPenguin: SELL 1 SPY @ $469.62
+  CopilotPenguin: SELL 1 XLI @ $111.84
+
+Bar 1355 @ 2024-01-03 15:35:00:
+  CopilotPenguin: SELL 1 LULU @ $497.72
+
+Bar 1359 @ 2024-01-03 15:39:00:
+  CopilotPenguin: SELL 1 FDX @ $246.49
+  CopilotPenguin: SELL 1 DPZ @ $403.65
+
+Bar 1361 @ 2024-01-03 15:41:00:
+  CopilotPenguin: SELL 1 BLK @ $783.38
+
+Bar 1363 @ 2024-01-03 15:43:00:
+  CopilotPenguin: SELL 1 AES @ $18.68
+
+Bar 1368 @ 2024-01-03 15:48:00:
+  CopilotPenguin: SELL 1 ZTS @ $193.52
+
+Bar 1371 @ 2024-01-03 15:51:00:
+  CopilotPenguin: SELL 1 GS @ $378.11
+  CopilotPenguin: SELL 1 EMR @ $94.41
+
+Bar 1374 @ 2024-01-03 15:54:00:
+  CopilotPenguin: SELL 1 ROST @ $135.58
+
+Bar 1376 @ 2024-01-03 15:56:00:
+  CopilotPenguin: SELL 1 FIS @ $60.08
+
+Bar 1377 @ 2024-01-03 15:57:00:
+  CopilotPenguin: SELL 1 IFF @ $79.61
+
+Bar 1384 @ 2024-01-03 16:04:00:
+  CopilotPenguin: SELL 1 DOW @ $54.10
+
+Bar 1385 @ 2024-01-03 16:05:00:
+  CopilotPenguin: SELL 1 FISV @ $131.78
+
+Bar 1388 @ 2024-01-03 16:08:00:
+  CopilotPenguin: SELL 1 SYK @ $293.07
+
+Bar 1389 @ 2024-01-03 16:09:00:
+  CopilotPenguin: SELL 1 TJX @ $92.29
+
+Bar 1393 @ 2024-01-03 16:13:00:
+  CopilotPenguin: SELL 1 APD @ $270.57
+
+Bar 1403 @ 2024-01-03 16:23:00:
+  CopilotPenguin: SELL 1 ULTA @ $475.55
+
+Bar 1465 @ 2024-01-03 17:25:00:
+  CopilotPenguin: SELL 1 TXN @ $166.57
+
+Bar 1535 @ 2024-01-03 18:35:00:
+  CopilotPenguin: SELL 1 DG @ $133.29
+
+Bar 1561 @ 2024-01-03 19:01:00:
+  CopilotPenguin: SELL 1 ARCT @ $31.49
+
+Bar 1629 @ 2024-01-03 20:09:00:
+  CopilotPenguin: SELL 1 HII @ $257.91
+
+Bar 1641 @ 2024-01-03 20:21:00:
+  CopilotPenguin: SELL 1 ROK @ $304.15
+
+Bar 1649 @ 2024-01-03 20:29:00:
+  CopilotPenguin: SELL 1 WELL @ $89.12
+
+Bar 1653 @ 2024-01-03 20:33:00:
+  CopilotPenguin: SELL 1 PNC @ $152.06
+
+Bar 1661 @ 2024-01-03 20:41:00:
+  CopilotPenguin: SELL 1 GD @ $257.36
 
 Bar 1861 @ 2024-01-04 00:01:00:
   Smart RSI Confluence: BUY 2 DNA @ $1.56
@@ -648,35 +1807,13 @@ Bar 1861 @ 2024-01-04 00:01:00:
 Bar 1874 @ 2024-01-04 00:14:00:
   Smart RSI Confluence: BUY 2 GREE @ $6.10
 
-Bar 1878 @ 2024-01-04 00:18:00:
-  RSI Mean Reversion Selective: BUY 1 HOOD @ $11.73
-
-Bar 1879 @ 2024-01-04 00:19:00:
-  RSI Mean Reversion Selective: BUY 1 DNA @ $1.55
-
-Bar 1880 @ 2024-01-04 00:20:00:
-  RSI Mean Reversion Selective: BUY 1 MSTR @ $634.18
-
 Bar 1881 @ 2024-01-04 00:21:00:
   Smart RSI Confluence: BUY 2 SPCE @ $2.31
-
-Bar 1884 @ 2024-01-04 00:24:00:
-  RSI Mean Reversion Selective: BUY 1 BE @ $13.87
-
-Bar 1890 @ 2024-01-04 00:30:00:
-  RSI Mean Reversion Selective: BUY 1 DOW @ $55.06
 
 Bar 1901 @ 2024-01-04 00:41:00:
   Smart RSI Confluence: BUY 2 RSI @ $3.99
 
-Bar 1910 @ 2024-01-04 00:50:00:
-  RSI Mean Reversion Selective: BUY 1 SOUN @ $1.98
-
-Bar 1915 @ 2024-01-04 00:55:00:
-  RSI Mean Reversion Selective: BUY 1 ADM @ $73.01
-
 Bar 1919 @ 2024-01-04 00:59:00:
-  RSI Mean Reversion Selective: BUY 1 BLDP @ $3.59
   Smart RSI Confluence: BUY 2 SOUN @ $2.00
 
 Bar 1920 @ 2024-01-04 09:00:00:
@@ -688,21 +1825,29 @@ Bar 1920 @ 2024-01-04 09:00:00:
 Bar 1922 @ 2024-01-04 09:02:00:
   Smart RSI Confluence: BUY 2 OPEN @ $4.06
 
-Bar 2821 @ 2024-01-05 00:01:00:
-  RSI Mean Reversion Selective: BUY 1 LAC @ $6.12
+Bar 2250 @ 2024-01-04 14:30:00:
+  CopilotPenguin: SELL 1 PLD @ $129.55
+
+Bar 2320 @ 2024-01-04 15:40:00:
+  CopilotPenguin: SELL 1 CMCSA @ $42.57
+
+Bar 2425 @ 2024-01-04 17:25:00:
+  CopilotPenguin: SELL 1 CTRA @ $25.57
+
+Bar 2430 @ 2024-01-04 17:30:00:
+  CopilotPenguin: SELL 1 PSA @ $300.64
+
+Bar 2617 @ 2024-01-04 20:37:00:
+  CopilotPenguin: SELL 1 MCD @ $291.92
 
 Bar 2830 @ 2024-01-05 00:10:00:
   Smart RSI Confluence: BUY 2 LAC @ $6.13
 
 Bar 2833 @ 2024-01-05 00:13:00:
-  RSI Mean Reversion Selective: BUY 1 FSLY @ $16.50
   Smart RSI Confluence: BUY 2 FSLY @ $16.50
 
 Bar 2841 @ 2024-01-05 00:21:00:
   Smart RSI Confluence: BUY 2 XPEV @ $13.91
-
-Bar 2855 @ 2024-01-05 00:35:00:
-  RSI Mean Reversion Selective: BUY 1 STZ @ $243.94
 
 Bar 2869 @ 2024-01-05 00:49:00:
   Smart RSI Confluence: BUY 2 RUN @ $17.23
@@ -710,19 +1855,11 @@ Bar 2869 @ 2024-01-05 00:49:00:
 Bar 2870 @ 2024-01-05 00:50:00:
   Smart RSI Confluence: BUY 2 PLUG @ $4.34
 
-Bar 2871 @ 2024-01-05 00:51:00:
-  RSI Mean Reversion Selective: BUY 1 OPEN @ $4.03
-
-Bar 2876 @ 2024-01-05 00:56:00:
-  RSI Mean Reversion Selective: BUY 1 CF @ $81.16
-
 Bar 2878 @ 2024-01-05 00:58:00:
   Smart RSI Confluence: BUY 2 BA @ $245.29
 
 Bar 2880 @ 2024-01-05 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 COIN @ $154.07
-  RSI Mean Reversion Selective: BUY 1 XPEV @ $13.62
-  RSI Mean Reversion Selective: BUY 1 LI @ $34.73
+  CopilotPenguin: SELL 1 RIO @ $72.26
 
 Bar 2883 @ 2024-01-05 09:03:00:
   Smart RSI Confluence: BUY 2 CTRA @ $26.01
@@ -736,17 +1873,63 @@ Bar 2890 @ 2024-01-05 09:10:00:
 Bar 2892 @ 2024-01-05 09:12:00:
   Smart RSI Confluence: BUY 2 SOFI @ $8.39
 
+Bar 3037 @ 2024-01-05 11:37:00:
+  CopilotPenguin: SELL 1 DLR @ $130.98
+
+Bar 3060 @ 2024-01-05 12:00:00:
+  CopilotPenguin: SELL 1 VTR @ $48.54
+
+Bar 3132 @ 2024-01-05 13:12:00:
+  CopilotPenguin: SELL 1 EOG @ $120.28
+
+Bar 3180 @ 2024-01-05 14:00:00:
+  CopilotPenguin: SELL 1 DD @ $76.12
+
+Bar 3190 @ 2024-01-05 14:10:00:
+  CopilotPenguin: SELL 1 SPG @ $139.26
+
+Bar 3210 @ 2024-01-05 14:30:00:
+  CopilotPenguin: SELL 1 CCI @ $113.10
+
+Bar 3218 @ 2024-01-05 14:38:00:
+  CopilotPenguin: SELL 1 NSC @ $230.48
+
+Bar 3224 @ 2024-01-05 14:44:00:
+  CopilotPenguin: SELL 1 DE @ $390.70
+  CopilotPenguin: SELL 1 NUE @ $170.55
+
+Bar 3232 @ 2024-01-05 14:52:00:
+  CopilotPenguin: SELL 1 ADM @ $71.30
+
+Bar 3235 @ 2024-01-05 14:55:00:
+  CopilotPenguin: SELL 1 OTIS @ $87.48
+
+Bar 3274 @ 2024-01-05 15:34:00:
+  CopilotPenguin: SELL 1 VLO @ $129.68
+
+Bar 3334 @ 2024-01-05 16:34:00:
+  CopilotPenguin: SELL 1 RSG @ $163.07
+
+Bar 3382 @ 2024-01-05 17:22:00:
+  CopilotPenguin: SELL 1 YUM @ $127.79
+
+Bar 3383 @ 2024-01-05 17:23:00:
+  CopilotPenguin: SELL 1 AON @ $286.76
+
+Bar 3398 @ 2024-01-05 17:38:00:
+  CopilotPenguin: SELL 1 ECL @ $195.09
+
+Bar 3420 @ 2024-01-05 18:00:00:
+  CopilotPenguin: SELL 1 STLD @ $115.67
+
+Bar 3433 @ 2024-01-05 18:13:00:
+  CopilotPenguin: SELL 1 EQIX @ $786.48
+
+Bar 3718 @ 2024-01-05 22:58:00:
+  Buy Max Each Penguin: BUY 1 VERI @ $1.68
+
 Bar 3784 @ 2024-01-06 00:04:00:
   Smart RSI Confluence: BUY 2 F @ $11.86
-
-Bar 3790 @ 2024-01-06 00:10:00:
-  RSI Mean Reversion Selective: BUY 1 BBAI @ $1.92
-
-Bar 3810 @ 2024-01-06 00:30:00:
-  RSI Mean Reversion Selective: BUY 1 PGR @ $160.03
-
-Bar 3812 @ 2024-01-06 00:32:00:
-  RSI Mean Reversion Selective: BUY 1 U @ $37.52
 
 Bar 3813 @ 2024-01-06 00:33:00:
   Smart RSI Confluence: BUY 2 RIVN @ $19.09
@@ -754,21 +1937,11 @@ Bar 3813 @ 2024-01-06 00:33:00:
 Bar 3817 @ 2024-01-06 00:37:00:
   Smart RSI Confluence: BUY 2 AAPL @ $723.54
 
-Bar 3818 @ 2024-01-06 00:38:00:
-  RSI Mean Reversion Selective: BUY 1 CRSP @ $60.76
-
 Bar 3819 @ 2024-01-06 00:39:00:
   Smart RSI Confluence: BUY 2 U @ $37.53
 
 Bar 3840 @ 2024-01-08 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 ON @ $74.52
-  RSI Mean Reversion Selective: BUY 1 C @ $52.94
-  RSI Mean Reversion Selective: BUY 1 UAL @ $40.72
-  RSI Mean Reversion Selective: BUY 1 DAL @ $40.16
-  RSI Mean Reversion Selective: BUY 1 DVN @ $45.01
-  RSI Mean Reversion Selective: BUY 1 NIO @ $8.00
-  RSI Mean Reversion Selective: BUY 1 BABA @ $72.21
-  RSI Mean Reversion Selective: BUY 1 JD @ $25.96
+  CopilotPenguin: SELL 1 DVN @ $44.99
 
 Bar 3843 @ 2024-01-08 09:03:00:
   Smart RSI Confluence: BUY 2 FCX @ $41.72
@@ -794,58 +1967,90 @@ Bar 3857 @ 2024-01-08 09:17:00:
 Bar 3886 @ 2024-01-08 09:46:00:
   Smart RSI Confluence: BUY 2 DAL @ $40.19
 
+Bar 3900 @ 2024-01-08 10:00:00:
+  Smart RSI Confluence: BUY 2 NFLX @ $471.09
+
 Bar 3902 @ 2024-01-08 10:02:00:
   Smart RSI Confluence: BUY 2 ENPH @ $116.46
 
-Bar 3915 @ 2024-01-08 10:15:00:
-  Smart RSI Confluence: BUY 2 SSO @ $62.71
+Bar 3945 @ 2024-01-08 10:45:00:
+  CopilotPenguin: SELL 1 DIA @ $372.91
 
-Bar 4744 @ 2024-01-09 00:04:00:
-  RSI Mean Reversion Selective: BUY 1 RBLX @ $42.11
+Bar 3960 @ 2024-01-08 11:00:00:
+  CopilotPenguin: SELL 1 COP @ $114.99
+
+Bar 4144 @ 2024-01-08 14:04:00:
+  CopilotPenguin: SELL 1 FANG @ $153.07
+
+Bar 4171 @ 2024-01-08 14:31:00:
+  CopilotPenguin: SELL 1 XLE @ $83.05
+  CopilotPenguin: SELL 1 HES @ $142.29
+
+Bar 4182 @ 2024-01-08 14:42:00:
+  CopilotPenguin: SELL 1 MOS @ $34.80
+
+Bar 4202 @ 2024-01-08 15:02:00:
+  CopilotPenguin: SELL 1 XOM @ $99.07
+
+Bar 4206 @ 2024-01-08 15:06:00:
+  CopilotPenguin: SELL 1 PSX @ $132.22
+
+Bar 4207 @ 2024-01-08 15:07:00:
+  CopilotPenguin: SELL 1 ITW @ $256.67
+
+Bar 4208 @ 2024-01-08 15:08:00:
+  CopilotPenguin: SELL 1 CB @ $224.46
+
+Bar 4222 @ 2024-01-08 15:22:00:
+  CopilotPenguin: SELL 1 CF @ $78.69
 
 Bar 4754 @ 2024-01-09 00:14:00:
   Smart RSI Confluence: BUY 2 DIS @ $91.57
 
+Bar 4762 @ 2024-01-09 00:22:00:
+  Smart RSI Confluence: BUY 2 QQQ @ $404.76
+
 Bar 4766 @ 2024-01-09 00:26:00:
   Smart RSI Confluence: BUY 2 BMY @ $52.31
 
+Bar 4767 @ 2024-01-09 00:27:00:
+  Smart RSI Confluence: BUY 2 IWM @ $196.74
+
+Bar 4768 @ 2024-01-09 00:28:00:
+  Smart RSI Confluence: BUY 2 ESTC @ $110.02
+
 Bar 4780 @ 2024-01-09 00:40:00:
   Smart RSI Confluence: BUY 2 PINS @ $37.57
-
-Bar 4784 @ 2024-01-09 00:44:00:
-  RSI Mean Reversion Selective: BUY 1 EDIT @ $9.41
 
 Bar 4793 @ 2024-01-09 00:53:00:
   Smart RSI Confluence: BUY 2 NXPI @ $211.04
 
 Bar 4800 @ 2024-01-09 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 PYPL @ $60.55
-  RSI Mean Reversion Selective: BUY 1 ENPH @ $115.03
-  RSI Mean Reversion Selective: BUY 1 BHP @ $65.13
   Smart RSI Confluence: BUY 2 MTCH @ $40.95
 
-Bar 4801 @ 2024-01-09 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 SQ @ $69.01
-  RSI Mean Reversion Selective: BUY 1 NU @ $8.87
-
 Bar 4802 @ 2024-01-09 09:02:00:
-  RSI Mean Reversion Selective: BUY 1 ASML @ $712.63
   Smart RSI Confluence: BUY 2 CRWD @ $266.99
 
 Bar 4805 @ 2024-01-09 09:05:00:
   Smart RSI Confluence: BUY 2 BHP @ $65.12
 
-Bar 4806 @ 2024-01-09 09:06:00:
-  Smart RSI Confluence: BUY 2 JD @ $25.25
+Bar 5040 @ 2024-01-09 13:00:00:
+  CopilotPenguin: SELL 1 GIS @ $64.29
 
-Bar 4810 @ 2024-01-09 09:10:00:
-  Smart RSI Confluence: BUY 2 LI @ $33.62
+Bar 5144 @ 2024-01-09 14:44:00:
+  CopilotPenguin: SELL 1 CSX @ $34.41
 
-Bar 4814 @ 2024-01-09 09:14:00:
-  Smart RSI Confluence: BUY 2 MCHP @ $82.06
+Bar 5179 @ 2024-01-09 15:19:00:
+  CopilotPenguin: SELL 1 CSCO @ $49.68
 
-Bar 5711 @ 2024-01-10 00:11:00:
-  RSI Mean Reversion Selective: BUY 1 MP @ $18.01
+Bar 5188 @ 2024-01-09 15:28:00:
+  CopilotPenguin: SELL 1 EXPD @ $124.37
+
+Bar 5213 @ 2024-01-09 15:53:00:
+  CopilotPenguin: SELL 1 PEP @ $166.88
+
+Bar 5420 @ 2024-01-09 19:20:00:
+  CopilotPenguin: SELL 1 AMT @ $211.09
 
 Bar 5719 @ 2024-01-10 00:19:00:
   Smart RSI Confluence: BUY 2 ALB @ $133.08
@@ -859,15 +2064,8 @@ Bar 5753 @ 2024-01-10 00:53:00:
 Bar 5757 @ 2024-01-10 00:57:00:
   Smart RSI Confluence: BUY 2 ON @ $76.38
 
-Bar 5760 @ 2024-01-10 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 ETSY @ $74.97
-
 Bar 5761 @ 2024-01-10 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 SOFI @ $8.27
   Smart RSI Confluence: BUY 2 BE @ $13.72
-
-Bar 5763 @ 2024-01-10 09:03:00:
-  RSI Mean Reversion Selective: BUY 1 AFRM @ $43.58
 
 Bar 5767 @ 2024-01-10 09:07:00:
   Smart RSI Confluence: BUY 2 ETSY @ $75.42
@@ -875,33 +2073,22 @@ Bar 5767 @ 2024-01-10 09:07:00:
 Bar 5768 @ 2024-01-10 09:08:00:
   Smart RSI Confluence: BUY 2 CVNA @ $47.81
   Smart RSI Confluence: BUY 2 LCID @ $3.67
+  Smart RSI Confluence: BUY 2 LI @ $32.16
 
 Bar 5769 @ 2024-01-10 09:09:00:
   Smart RSI Confluence: BUY 2 META @ $360.77
 
-Bar 5778 @ 2024-01-10 09:18:00:
-  Smart RSI Confluence: BUY 2 NU @ $9.03
+Bar 6156 @ 2024-01-10 15:36:00:
+  CopilotPenguin: SELL 1 DIS @ $89.12
 
-Bar 5818 @ 2024-01-10 09:58:00:
-  RSI Mean Reversion Selective: BUY 1 CRWD @ $277.06
+Bar 6276 @ 2024-01-10 17:36:00:
+  CopilotPenguin: SELL 1 BMY @ $50.54
 
-Bar 5821 @ 2024-01-10 10:01:00:
-  RSI Mean Reversion Selective: BUY 1 SCHW @ $66.46
+Bar 6342 @ 2024-01-10 18:42:00:
+  CopilotPenguin: SELL 1 LYB @ $93.74
 
-Bar 5832 @ 2024-01-10 10:12:00:
-  RSI Mean Reversion Selective: BUY 1 LYB @ $94.13
-
-Bar 5835 @ 2024-01-10 10:15:00:
-  RSI Mean Reversion Selective: BUY 1 RIO @ $70.43
-
-Bar 6667 @ 2024-01-11 00:07:00:
-  RSI Mean Reversion Selective: BUY 1 MDT @ $87.12
-
-Bar 6678 @ 2024-01-11 00:18:00:
-  RSI Mean Reversion Selective: BUY 1 UPST @ $35.01
-
-Bar 6683 @ 2024-01-11 00:23:00:
-  RSI Mean Reversion Selective: BUY 1 RUN @ $16.14
+Bar 6693 @ 2024-01-11 00:33:00:
+  Smart RSI Confluence: BUY 2 JD @ $25.31
 
 Bar 6700 @ 2024-01-11 00:40:00:
   Smart RSI Confluence: BUY 2 HOOD @ $12.68
@@ -928,29 +2115,30 @@ Bar 6728 @ 2024-01-11 09:08:00:
 Bar 6731 @ 2024-01-11 09:11:00:
   Smart RSI Confluence: BUY 2 SNOW @ $198.27
 
-Bar 6733 @ 2024-01-11 09:13:00:
-  Smart RSI Confluence: BUY 2 AMAT @ $151.73
+Bar 7007 @ 2024-01-11 13:47:00:
+  CopilotPenguin: SELL 1 MS @ $91.17
 
-Bar 6735 @ 2024-01-11 09:15:00:
-  RSI Mean Reversion Selective: BUY 1 AI @ $28.82
+Bar 7104 @ 2024-01-11 15:24:00:
+  CopilotPenguin: SELL 1 AXP @ $182.67
+  CopilotPenguin: SELL 1 USB @ $42.29
 
-Bar 6738 @ 2024-01-11 09:18:00:
-  RSI Mean Reversion Selective: BUY 1 LCID @ $3.45
+Bar 7121 @ 2024-01-11 15:41:00:
+  CopilotPenguin: SELL 1 PEG @ $60.58
 
-Bar 6739 @ 2024-01-11 09:19:00:
-  RSI Mean Reversion Selective: BUY 1 CHWY @ $20.65
+Bar 7149 @ 2024-01-11 16:09:00:
+  CopilotPenguin: SELL 1 LIN @ $403.08
 
-Bar 6740 @ 2024-01-11 09:20:00:
-  RSI Mean Reversion Selective: BUY 1 OXY @ $57.60
+Bar 7244 @ 2024-01-11 17:44:00:
+  CopilotPenguin: SELL 1 WMB @ $34.55
 
-Bar 6757 @ 2024-01-11 09:37:00:
-  RSI Mean Reversion Selective: BUY 1 PLUG @ $4.06
+Bar 7291 @ 2024-01-11 18:31:00:
+  CopilotPenguin: SELL 1 BNTX @ $101.73
+
+Bar 7301 @ 2024-01-11 18:41:00:
+  CopilotPenguin: SELL 1 OKE @ $69.54
 
 Bar 7624 @ 2024-01-12 00:04:00:
   Smart RSI Confluence: BUY 2 HAL @ $34.27
-
-Bar 7625 @ 2024-01-12 00:05:00:
-  RSI Mean Reversion Selective: BUY 1 WFC @ $49.00
 
 Bar 7630 @ 2024-01-12 00:10:00:
   Smart RSI Confluence: BUY 2 APA @ $32.99
@@ -958,33 +2146,16 @@ Bar 7630 @ 2024-01-12 00:10:00:
 Bar 7640 @ 2024-01-12 00:20:00:
   Smart RSI Confluence: BUY 2 WFC @ $48.73
 
-Bar 7649 @ 2024-01-12 00:29:00:
-  RSI Mean Reversion Selective: BUY 1 APA @ $32.61
-
 Bar 7650 @ 2024-01-12 00:30:00:
-  RSI Mean Reversion Selective: BUY 1 GPS @ $20.76
   Smart RSI Confluence: BUY 2 CCI @ $112.77
 
 Bar 7657 @ 2024-01-12 00:37:00:
   Smart RSI Confluence: BUY 2 MSFT @ $383.06
 
-Bar 7658 @ 2024-01-12 00:38:00:
-  RSI Mean Reversion Selective: BUY 1 ZM @ $67.61
-
-Bar 7665 @ 2024-01-12 00:45:00:
-  RSI Mean Reversion Selective: BUY 1 RIVN @ $18.64
-
 Bar 7673 @ 2024-01-12 00:53:00:
   Smart RSI Confluence: BUY 2 RTX @ $86.18
 
-Bar 7678 @ 2024-01-12 00:58:00:
-  RSI Mean Reversion Selective: BUY 1 SEDG @ $77.41
-
-Bar 7679 @ 2024-01-12 00:59:00:
-  RSI Mean Reversion Selective: BUY 1 ROKU @ $86.02
-
 Bar 7680 @ 2024-01-12 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 TSLA @ $3337.83
   Smart RSI Confluence: BUY 2 CF @ $79.76
 
 Bar 7685 @ 2024-01-12 09:05:00:
@@ -996,14 +2167,23 @@ Bar 7689 @ 2024-01-12 09:09:00:
 Bar 7691 @ 2024-01-12 09:11:00:
   Smart RSI Confluence: BUY 2 TWLO @ $73.05
 
+Bar 7795 @ 2024-01-12 10:55:00:
+  CopilotPenguin: SELL 1 WFC @ $47.67
+
+Bar 7848 @ 2024-01-12 11:48:00:
+  CopilotPenguin: SELL 1 JPM @ $166.22
+
+Bar 7905 @ 2024-01-12 12:45:00:
+  CopilotPenguin: SELL 1 CI @ $292.90
+
 Bar 8587 @ 2024-01-13 00:07:00:
   Smart RSI Confluence: BUY 2 SPY @ $475.90
 
 Bar 8611 @ 2024-01-13 00:31:00:
   Smart RSI Confluence: BUY 2 KTOS @ $19.10
 
-Bar 8616 @ 2024-01-13 00:36:00:
-  RSI Mean Reversion Selective: BUY 1 SHOP @ $80.26
+Bar 8621 @ 2024-01-13 00:41:00:
+  Smart RSI Confluence: BUY 2 BAC @ $32.79
 
 Bar 8622 @ 2024-01-13 00:42:00:
   Smart RSI Confluence: BUY 2 SHOP @ $80.42
@@ -1012,14 +2192,6 @@ Bar 8632 @ 2024-01-13 00:52:00:
   Smart RSI Confluence: BUY 2 EDIT @ $9.20
 
 Bar 8640 @ 2024-01-16 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 XLK @ $190.92
-  RSI Mean Reversion Selective: BUY 1 AAPL @ $734.84
-  RSI Mean Reversion Selective: BUY 1 MCHP @ $84.16
-  RSI Mean Reversion Selective: BUY 1 PLTR @ $16.59
-  RSI Mean Reversion Selective: BUY 1 ABNB @ $135.54
-  RSI Mean Reversion Selective: BUY 1 CVNA @ $41.67
-  RSI Mean Reversion Selective: BUY 1 SLB @ $49.52
-  RSI Mean Reversion Selective: BUY 1 KTOS @ $18.98
   Smart RSI Confluence: BUY 2 W @ $52.51
 
 Bar 8645 @ 2024-01-16 09:05:00:
@@ -1049,24 +2221,17 @@ Bar 8686 @ 2024-01-16 09:46:00:
 Bar 8764 @ 2024-01-16 11:04:00:
   Smart RSI Confluence: BUY 2 DOW @ $54.32
 
+Bar 8880 @ 2024-01-16 13:00:00:
+  CopilotPenguin: SELL 1 DHR @ $222.96
+
+Bar 8967 @ 2024-01-16 14:27:00:
+  CopilotPenguin: SELL 1 XEL @ $60.69
+
+Bar 8990 @ 2024-01-16 14:50:00:
+  CopilotPenguin: SELL 1 CHRW @ $85.79
+
 Bar 9570 @ 2024-01-17 00:30:00:
   Smart RSI Confluence: BUY 2 CRSP @ $63.61
-
-Bar 9575 @ 2024-01-17 00:35:00:
-  RSI Mean Reversion Selective: BUY 1 NEM @ $35.82
-
-Bar 9600 @ 2024-01-17 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 F @ $11.25
-  RSI Mean Reversion Selective: BUY 1 FCX @ $38.40
-  RSI Mean Reversion Selective: BUY 1 DKNG @ $33.50
-
-Bar 9601 @ 2024-01-17 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 SSO @ $64.07
-
-Bar 9602 @ 2024-01-17 09:02:00:
-  RSI Mean Reversion Selective: BUY 1 AMZN @ $3038.53
-  RSI Mean Reversion Selective: BUY 1 GOOGL @ $2824.14
-  RSI Mean Reversion Selective: BUY 1 ZS @ $229.68
 
 Bar 9610 @ 2024-01-17 09:10:00:
   Smart RSI Confluence: BUY 2 INTC @ $46.67
@@ -1080,6 +2245,12 @@ Bar 9642 @ 2024-01-17 09:42:00:
 Bar 9657 @ 2024-01-17 09:57:00:
   Smart RSI Confluence: BUY 2 DKNG @ $33.88
 
+Bar 9668 @ 2024-01-17 10:08:00:
+  CopilotPenguin: SELL 1 XLF @ $37.17
+
+Bar 9759 @ 2024-01-17 11:39:00:
+  CopilotPenguin: SELL 1 UPS @ $154.37
+
 Bar 9779 @ 2024-01-17 11:59:00:
   Smart RSI Confluence: BUY 2 SQM @ $49.07
 
@@ -1089,26 +2260,36 @@ Bar 9780 @ 2024-01-17 12:00:00:
 Bar 9799 @ 2024-01-17 12:19:00:
   Smart RSI Confluence: BUY 2 XLE @ $80.24
 
-Bar 9840 @ 2024-01-17 13:00:00:
-  Smart RSI Confluence: BUY 2 MP @ $16.87
+Bar 9811 @ 2024-01-17 12:31:00:
+  Smart RSI Confluence: BUY 2 APP @ $40.61
 
-Bar 9841 @ 2024-01-17 13:01:00:
-  Smart RSI Confluence: BUY 2 PLD @ $130.03
+Bar 9830 @ 2024-01-17 12:50:00:
+  Smart RSI Confluence: BUY 2 SSO @ $64.29
 
-Bar 10539 @ 2024-01-18 00:39:00:
-  RSI Mean Reversion Selective: BUY 1 NXPI @ $206.19
+Bar 9927 @ 2024-01-17 14:27:00:
+  CopilotPenguin: SELL 1 MRNA @ $97.64
 
-Bar 10550 @ 2024-01-18 00:50:00:
-  RSI Mean Reversion Selective: BUY 1 TSM @ $103.65
+Bar 9976 @ 2024-01-17 15:16:00:
+  CopilotPenguin: SELL 1 MNST @ $56.41
 
-Bar 10558 @ 2024-01-18 00:58:00:
-  RSI Mean Reversion Selective: BUY 1 MTCH @ $35.51
+Bar 10050 @ 2024-01-17 16:30:00:
+  CopilotPenguin: SELL 1 D @ $46.03
 
-Bar 10573 @ 2024-01-18 09:13:00:
-  Smart RSI Confluence: BUY 2 ASML @ $718.37
+Bar 10137 @ 2024-01-17 17:57:00:
+  CopilotPenguin: SELL 1 SO @ $69.47
 
-Bar 10576 @ 2024-01-18 09:16:00:
-  RSI Mean Reversion Selective: BUY 1 MSFT @ $392.69
+Bar 10181 @ 2024-01-17 18:41:00:
+  CopilotPenguin: SELL 1 AEP @ $79.30
+  CopilotPenguin: SELL 1 SRE @ $73.38
+
+Bar 10194 @ 2024-01-17 18:54:00:
+  CopilotPenguin: SELL 1 O @ $56.78
+
+Bar 10199 @ 2024-01-17 18:59:00:
+  CopilotPenguin: SELL 1 KMI @ $17.52
+
+Bar 10577 @ 2024-01-18 09:17:00:
+  Smart RSI Confluence: BUY 2 AMAT @ $155.33
 
 Bar 10583 @ 2024-01-18 09:23:00:
   Smart RSI Confluence: BUY 2 QCOM @ $141.03
@@ -1116,16 +2297,13 @@ Bar 10583 @ 2024-01-18 09:23:00:
 Bar 10593 @ 2024-01-18 09:33:00:
   Smart RSI Confluence: BUY 2 ZM @ $67.01
 
-Bar 10667 @ 2024-01-18 10:47:00:
-  RSI Mean Reversion Selective: BUY 1 FAST @ $62.81
-
 Bar 10674 @ 2024-01-18 10:54:00:
   Smart RSI Confluence: BUY 2 SPG @ $144.26
 
+Bar 10686 @ 2024-01-18 11:06:00:
+  Smart RSI Confluence: BUY 2 SWKS @ $101.52
+
 Bar 10721 @ 2024-01-18 11:41:00:
-  RSI Mean Reversion Selective: BUY 1 UNH @ $518.61
-  RSI Mean Reversion Selective: BUY 1 MRK @ $118.65
-  RSI Mean Reversion Selective: BUY 1 CI @ $304.58
   Smart RSI Confluence: BUY 2 MRK @ $118.65
 
 Bar 10727 @ 2024-01-18 11:47:00:
@@ -1135,11 +2313,17 @@ Bar 10735 @ 2024-01-18 11:55:00:
   Smart RSI Confluence: BUY 2 FAST @ $63.61
 
 Bar 10740 @ 2024-01-18 12:00:00:
+  Smart RSI Confluence: BUY 2 KLAC @ $573.46
   Smart RSI Confluence: BUY 2 TFC @ $37.45
-  Smart RSI Confluence: BUY 2 UNH @ $509.89
 
-Bar 10741 @ 2024-01-18 12:01:00:
-  Smart RSI Confluence: BUY 2 QRVO @ $101.52
+Bar 10953 @ 2024-01-18 15:33:00:
+  CopilotPenguin: SELL 1 PM @ $92.77
+
+Bar 10954 @ 2024-01-18 15:34:00:
+  CopilotPenguin: SELL 1 EXC @ $35.12
+
+Bar 10986 @ 2024-01-18 16:06:00:
+  CopilotPenguin: SELL 1 C @ $50.53
 
 Bar 11460 @ 2024-01-19 00:00:00:
   Smart RSI Confluence: BUY 2 TER @ $107.71
@@ -1150,17 +2334,11 @@ Bar 11481 @ 2024-01-19 00:21:00:
 Bar 11520 @ 2024-01-19 09:00:00:
   Smart RSI Confluence: BUY 2 TXN @ $169.86
 
-Bar 11526 @ 2024-01-19 09:06:00:
-  RSI Mean Reversion Selective: BUY 1 PDD @ $141.27
-
 Bar 11527 @ 2024-01-19 09:07:00:
   Smart RSI Confluence: BUY 2 ROKU @ $85.44
 
-Bar 11528 @ 2024-01-19 09:08:00:
-  RSI Mean Reversion Selective: BUY 1 BNTX @ $96.52
-
-Bar 11563 @ 2024-01-19 09:43:00:
-  RSI Mean Reversion Selective: BUY 1 BA @ $213.55
+Bar 11635 @ 2024-01-19 10:55:00:
+  Smart RSI Confluence: BUY 2 MP @ $16.37
 
 Bar 11685 @ 2024-01-19 11:45:00:
   Smart RSI Confluence: BUY 2 MCD @ $297.06
@@ -1168,20 +2346,7 @@ Bar 11685 @ 2024-01-19 11:45:00:
 Bar 11690 @ 2024-01-19 11:50:00:
   Smart RSI Confluence: BUY 2 SLB @ $49.86
 
-Bar 11705 @ 2024-01-19 12:05:00:
-  RSI Mean Reversion Selective: BUY 1 HAL @ $33.35
-
-Bar 11706 @ 2024-01-19 12:06:00:
-  RSI Mean Reversion Selective: BUY 1 SPG @ $142.74
-
-Bar 11708 @ 2024-01-19 12:08:00:
-  RSI Mean Reversion Selective: BUY 1 QCOM @ $147.82
-
-Bar 11714 @ 2024-01-19 12:14:00:
-  RSI Mean Reversion Selective: BUY 1 PATH @ $21.90
-
 Bar 11720 @ 2024-01-19 12:20:00:
-  RSI Mean Reversion Selective: BUY 1 NET @ $78.72
   Smart RSI Confluence: BUY 2 NET @ $78.72
 
 Bar 11743 @ 2024-01-19 12:43:00:
@@ -1190,40 +2355,18 @@ Bar 11743 @ 2024-01-19 12:43:00:
 Bar 11779 @ 2024-01-19 13:19:00:
   Smart RSI Confluence: BUY 2 EL @ $129.63
 
-Bar 11783 @ 2024-01-19 13:23:00:
-  Smart RSI Confluence: BUY 2 GPS @ $18.70
+Bar 11858 @ 2024-01-19 14:38:00:
+  CopilotPenguin: SELL 1 ED @ $88.86
 
 Bar 12433 @ 2024-01-20 00:13:00:
   Smart RSI Confluence: BUY 2 NTLA @ $25.56
 
-Bar 12444 @ 2024-01-20 00:24:00:
-  RSI Mean Reversion Selective: BUY 1 HES @ $135.03
-
 Bar 12480 @ 2024-01-22 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 VALE @ $13.67
   Smart RSI Confluence: BUY 2 NOW @ $762.65
   Smart RSI Confluence: BUY 2 M @ $17.85
 
-Bar 12481 @ 2024-01-22 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 ALB @ $114.32
-
-Bar 12485 @ 2024-01-22 09:05:00:
-  RSI Mean Reversion Selective: BUY 1 NVO @ $106.10
-
 Bar 12499 @ 2024-01-22 09:19:00:
   Smart RSI Confluence: BUY 2 ZS @ $236.05
-
-Bar 12512 @ 2024-01-22 09:32:00:
-  RSI Mean Reversion Selective: BUY 1 TXN @ $172.18
-
-Bar 12529 @ 2024-01-22 09:49:00:
-  RSI Mean Reversion Selective: BUY 1 M @ $17.81
-
-Bar 12550 @ 2024-01-22 10:10:00:
-  RSI Mean Reversion Selective: BUY 1 AMD @ $175.17
-
-Bar 12552 @ 2024-01-22 10:12:00:
-  RSI Mean Reversion Selective: BUY 1 CTRA @ $24.01
 
 Bar 12561 @ 2024-01-22 10:21:00:
   Smart RSI Confluence: BUY 2 ADM @ $60.21
@@ -1246,21 +2389,17 @@ Bar 12708 @ 2024-01-22 12:48:00:
 Bar 12720 @ 2024-01-22 13:00:00:
   Smart RSI Confluence: BUY 2 VRTX @ $442.95
 
-Bar 12721 @ 2024-01-22 13:01:00:
-  RSI Mean Reversion Selective: BUY 1 INTC @ $48.56
+Bar 12757 @ 2024-01-22 13:37:00:
+  CopilotPenguin: SELL 1 GILD @ $78.25
+
+Bar 13038 @ 2024-01-22 18:18:00:
+  CopilotPenguin: SELL 1 KHC @ $36.63
 
 Bar 13440 @ 2024-01-23 09:00:00:
   Smart RSI Confluence: BUY 2 ARCT @ $32.45
 
-Bar 13449 @ 2024-01-23 09:09:00:
-  RSI Mean Reversion Selective: BUY 1 PM @ $91.55
-
 Bar 13504 @ 2024-01-23 10:04:00:
   Smart RSI Confluence: BUY 2 O @ $55.82
-
-Bar 13580 @ 2024-01-23 11:20:00:
-  RSI Mean Reversion Selective: BUY 1 JNJ @ $161.21
-  RSI Mean Reversion Selective: BUY 1 GE @ $16.12
 
 Bar 13586 @ 2024-01-23 11:26:00:
   Smart RSI Confluence: BUY 2 JNJ @ $161.66
@@ -1268,21 +2407,11 @@ Bar 13586 @ 2024-01-23 11:26:00:
 Bar 13587 @ 2024-01-23 11:27:00:
   Smart RSI Confluence: BUY 2 GE @ $15.97
 
-Bar 13597 @ 2024-01-23 11:37:00:
-  RSI Mean Reversion Selective: BUY 1 XLI @ $112.75
-
-Bar 13599 @ 2024-01-23 11:39:00:
-  RSI Mean Reversion Selective: BUY 1 HON @ $198.33
-
 Bar 13621 @ 2024-01-23 12:01:00:
-  RSI Mean Reversion Selective: BUY 1 SQM @ $48.20
   Smart RSI Confluence: BUY 2 PG @ $149.44
 
-Bar 13641 @ 2024-01-23 12:21:00:
-  RSI Mean Reversion Selective: BUY 1 CSCO @ $51.44
-
-Bar 13650 @ 2024-01-23 12:30:00:
-  RSI Mean Reversion Selective: BUY 1 LOW @ $218.03
+Bar 13649 @ 2024-01-23 12:29:00:
+  Smart RSI Confluence: BUY 2 LMT @ $469.30
 
 Bar 13682 @ 2024-01-23 13:02:00:
   Smart RSI Confluence: BUY 2 UPS @ $159.03
@@ -1292,24 +2421,13 @@ Bar 13685 @ 2024-01-23 13:05:00:
 
 Bar 13687 @ 2024-01-23 13:07:00:
   Smart RSI Confluence: BUY 2 BILL @ $73.92
+  Smart RSI Confluence: BUY 2 NU @ $9.02
 
-Bar 13690 @ 2024-01-23 13:10:00:
-  Smart RSI Confluence: BUY 2 C @ $53.01
-
-Bar 13696 @ 2024-01-23 13:16:00:
-  Smart RSI Confluence: BUY 2 PM @ $91.22
-
-Bar 14400 @ 2024-01-24 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 DPZ @ $420.09
+Bar 13871 @ 2024-01-23 16:11:00:
+  CopilotPenguin: SELL 1 LMT @ $443.72
 
 Bar 14408 @ 2024-01-24 09:08:00:
   Smart RSI Confluence: BUY 2 VALE @ $14.20
-
-Bar 14414 @ 2024-01-24 09:14:00:
-  RSI Mean Reversion Selective: BUY 1 NVDA @ $603.74
-
-Bar 14416 @ 2024-01-24 09:16:00:
-  RSI Mean Reversion Selective: BUY 1 AMAT @ $170.13
 
 Bar 14424 @ 2024-01-24 09:24:00:
   Smart RSI Confluence: BUY 2 DPZ @ $426.59
@@ -1317,26 +2435,11 @@ Bar 14424 @ 2024-01-24 09:24:00:
 Bar 14460 @ 2024-01-24 10:00:00:
   Smart RSI Confluence: BUY 2 BKR @ $32.21
 
-Bar 14493 @ 2024-01-24 10:33:00:
-  RSI Mean Reversion Selective: BUY 1 UBER @ $63.91
-
-Bar 14528 @ 2024-01-24 11:08:00:
-  RSI Mean Reversion Selective: BUY 1 DHR @ $230.07
-
 Bar 14543 @ 2024-01-24 11:23:00:
   Smart RSI Confluence: BUY 2 DHR @ $227.05
 
-Bar 14567 @ 2024-01-24 11:47:00:
-  RSI Mean Reversion Selective: BUY 1 SNOW @ $211.49
-
 Bar 14569 @ 2024-01-24 11:49:00:
   Smart RSI Confluence: BUY 2 PENN @ $24.30
-
-Bar 14571 @ 2024-01-24 11:51:00:
-  RSI Mean Reversion Selective: BUY 1 MOS @ $31.97
-
-Bar 14580 @ 2024-01-24 12:00:00:
-  RSI Mean Reversion Selective: BUY 1 KMB @ $123.34
 
 Bar 14586 @ 2024-01-24 12:06:00:
   Smart RSI Confluence: BUY 2 MDB @ $418.38
@@ -1347,45 +2450,35 @@ Bar 14640 @ 2024-01-24 13:00:00:
 Bar 14642 @ 2024-01-24 13:02:00:
   Smart RSI Confluence: BUY 2 PGR @ $176.73
 
+Bar 14646 @ 2024-01-24 13:06:00:
+  Smart RSI Confluence: BUY 2 MCHP @ $90.99
+
 Bar 14653 @ 2024-01-24 13:13:00:
   Smart RSI Confluence: BUY 2 CRM @ $280.06
-  Smart RSI Confluence: BUY 2 DD @ $66.97
+
+Bar 14668 @ 2024-01-24 13:28:00:
+  CopilotPenguin: SELL 1 KMB @ $118.83
+
+Bar 14795 @ 2024-01-24 15:35:00:
+  CopilotPenguin: SELL 1 DUK @ $94.42
+
+Bar 15156 @ 2024-01-24 21:36:00:
+  CopilotPenguin: SELL 1 MO @ $39.95
+
+Bar 15342 @ 2024-01-25 00:42:00:
+  Smart RSI Confluence: BUY 2 DD @ $64.30
 
 Bar 15352 @ 2024-01-25 00:52:00:
   Smart RSI Confluence: BUY 2 CMCSA @ $44.51
 
-Bar 15361 @ 2024-01-25 09:01:00:
-  RSI Mean Reversion Selective: BUY 1 PFE @ $28.04
-
-Bar 15375 @ 2024-01-25 09:15:00:
-  RSI Mean Reversion Selective: BUY 1 NEE @ $57.03
-
 Bar 15416 @ 2024-01-25 09:56:00:
   Smart RSI Confluence: BUY 2 XLF @ $38.40
-
-Bar 15514 @ 2024-01-25 11:34:00:
-  RSI Mean Reversion Selective: BUY 1 META @ $389.68
-
-Bar 15517 @ 2024-01-25 11:37:00:
-  RSI Mean Reversion Selective: BUY 1 XLV @ $137.90
-
-Bar 15528 @ 2024-01-25 11:48:00:
-  RSI Mean Reversion Selective: BUY 1 DIS @ $92.80
 
 Bar 15530 @ 2024-01-25 11:50:00:
   Smart RSI Confluence: BUY 2 VLO @ $132.02
 
-Bar 15545 @ 2024-01-25 12:05:00:
-  RSI Mean Reversion Selective: BUY 1 SHW @ $295.06
-
-Bar 15547 @ 2024-01-25 12:07:00:
-  RSI Mean Reversion Selective: BUY 1 NOC @ $460.09
-
 Bar 15551 @ 2024-01-25 12:11:00:
   Smart RSI Confluence: BUY 2 CSX @ $34.49
-
-Bar 15552 @ 2024-01-25 12:12:00:
-  RSI Mean Reversion Selective: BUY 1 PENN @ $23.67
 
 Bar 15567 @ 2024-01-25 12:27:00:
   Smart RSI Confluence: BUY 2 DIA @ $378.24
@@ -1402,41 +2495,14 @@ Bar 15599 @ 2024-01-25 12:59:00:
 Bar 15600 @ 2024-01-25 13:00:00:
   Smart RSI Confluence: BUY 2 UNP @ $245.96
 
-Bar 15618 @ 2024-01-25 13:18:00:
-  Smart RSI Confluence: BUY 2 COST @ $687.15
-
-Bar 16273 @ 2024-01-26 00:13:00:
-  RSI Mean Reversion Selective: BUY 1 KSS @ $27.21
-
 Bar 16280 @ 2024-01-26 00:20:00:
   Smart RSI Confluence: BUY 2 KSS @ $27.21
-
-Bar 16282 @ 2024-01-26 00:22:00:
-  RSI Mean Reversion Selective: BUY 1 CRM @ $276.95
-
-Bar 16294 @ 2024-01-26 00:34:00:
-  RSI Mean Reversion Selective: BUY 1 XEL @ $59.07
-
-Bar 16307 @ 2024-01-26 00:47:00:
-  RSI Mean Reversion Selective: BUY 1 NUE @ $173.03
-
-Bar 16315 @ 2024-01-26 00:55:00:
-  RSI Mean Reversion Selective: BUY 1 BEAM @ $24.50
-
-Bar 16320 @ 2024-01-26 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 PINS @ $37.02
 
 Bar 16376 @ 2024-01-26 09:56:00:
   Smart RSI Confluence: BUY 2 AVGO @ $1215.65
 
-Bar 16405 @ 2024-01-26 10:25:00:
-  RSI Mean Reversion Selective: BUY 1 GILD @ $80.56
-
 Bar 16500 @ 2024-01-26 12:00:00:
   Smart RSI Confluence: BUY 2 AXP @ $192.14
-
-Bar 16509 @ 2024-01-26 12:09:00:
-  RSI Mean Reversion Selective: BUY 1 CL @ $81.17
 
 Bar 16541 @ 2024-01-26 12:41:00:
   Smart RSI Confluence: BUY 2 CL @ $81.69
@@ -1447,26 +2513,23 @@ Bar 16569 @ 2024-01-26 13:09:00:
 Bar 16584 @ 2024-01-26 13:24:00:
   Smart RSI Confluence: BUY 2 COP @ $111.93
 
+Bar 16591 @ 2024-01-26 13:31:00:
+  Smart RSI Confluence: BUY 2 QRVO @ $105.46
+
 Bar 16618 @ 2024-01-26 13:58:00:
   Smart RSI Confluence: BUY 2 ZG @ $54.23
 
 Bar 16620 @ 2024-01-26 14:00:00:
   Smart RSI Confluence: BUY 2 ROK @ $305.45
 
-Bar 16631 @ 2024-01-26 14:11:00:
-  Smart RSI Confluence: BUY 2 GS @ $379.58
+Bar 16623 @ 2024-01-26 14:03:00:
+  Smart RSI Confluence: BUY 2 C @ $53.83
 
-Bar 16649 @ 2024-01-26 14:29:00:
-  Smart RSI Confluence: BUY 2 AMT @ $200.04
-
-Bar 17263 @ 2024-01-27 00:43:00:
-  RSI Mean Reversion Selective: BUY 1 COP @ $112.17
+Bar 16638 @ 2024-01-26 14:18:00:
+  CopilotPenguin: SELL 1 CL @ $78.65
 
 Bar 17294 @ 2024-01-29 09:13:00:
   Smart RSI Confluence: BUY 2 OKTA @ $86.95
-
-Bar 17311 @ 2024-01-29 09:30:00:
-  RSI Mean Reversion Selective: BUY 1 PSX @ $138.59
 
 Bar 17384 @ 2024-01-29 10:43:00:
   Smart RSI Confluence: BUY 2 HSY @ $191.99
@@ -1477,29 +2540,11 @@ Bar 17425 @ 2024-01-29 11:24:00:
 Bar 17465 @ 2024-01-29 12:04:00:
   Smart RSI Confluence: BUY 2 ABBV @ $165.71
 
-Bar 17468 @ 2024-01-29 12:07:00:
-  RSI Mean Reversion Selective: BUY 1 OKE @ $69.66
-
-Bar 17476 @ 2024-01-29 12:15:00:
-  RSI Mean Reversion Selective: BUY 1 BKR @ $30.24
-
-Bar 17498 @ 2024-01-29 12:37:00:
-  RSI Mean Reversion Selective: BUY 1 MDB @ $396.37
-
 Bar 17533 @ 2024-01-29 13:12:00:
   Smart RSI Confluence: BUY 2 CI @ $302.02
 
-Bar 17534 @ 2024-01-29 13:13:00:
-  RSI Mean Reversion Selective: BUY 1 AES @ $17.22
-
-Bar 17546 @ 2024-01-29 13:25:00:
-  RSI Mean Reversion Selective: BUY 1 TER @ $105.88
-
-Bar 17563 @ 2024-01-29 13:42:00:
-  RSI Mean Reversion Selective: BUY 1 D @ $45.27
-
-Bar 17565 @ 2024-01-29 13:44:00:
-  RSI Mean Reversion Selective: BUY 1 VERI @ $1.72
+Bar 17590 @ 2024-01-29 14:09:00:
+  Smart RSI Confluence: BUY 2 ABT @ $113.23
 
 Bar 17607 @ 2024-01-29 14:26:00:
   Smart RSI Confluence: BUY 2 NSC @ $229.00
@@ -1507,45 +2552,20 @@ Bar 17607 @ 2024-01-29 14:26:00:
 Bar 17611 @ 2024-01-29 14:30:00:
   Smart RSI Confluence: BUY 2 AVAV @ $122.51
 
+Bar 17612 @ 2024-01-29 14:31:00:
+  Smart RSI Confluence: BUY 2 ADBE @ $623.86
+
 Bar 17613 @ 2024-01-29 14:32:00:
   Smart RSI Confluence: BUY 2 ABNB @ $152.67
 
-Bar 17614 @ 2024-01-29 14:33:00:
-  Smart RSI Confluence: BUY 2 REGN @ $953.28
-
-Bar 17615 @ 2024-01-29 14:34:00:
-  Smart RSI Confluence: BUY 2 SPGI @ $450.58
-
-Bar 18186 @ 2024-01-30 00:05:00:
-  RSI Mean Reversion Selective: BUY 1 STLD @ $115.78
-
 Bar 18218 @ 2024-01-30 00:37:00:
-  RSI Mean Reversion Selective: BUY 1 KMI @ $17.35
   Smart RSI Confluence: BUY 2 KMI @ $17.35
-
-Bar 18257 @ 2024-01-30 09:16:00:
-  RSI Mean Reversion Selective: BUY 1 MS @ $86.78
 
 Bar 18266 @ 2024-01-30 09:25:00:
   Smart RSI Confluence: BUY 2 MPC @ $162.04
 
-Bar 18275 @ 2024-01-30 09:34:00:
-  RSI Mean Reversion Selective: BUY 1 UPS @ $158.03
-
-Bar 18300 @ 2024-01-30 09:59:00:
-  RSI Mean Reversion Selective: BUY 1 GM @ $35.20
-
-Bar 18374 @ 2024-01-30 11:13:00:
-  RSI Mean Reversion Selective: BUY 1 DOCU @ $63.41
-
-Bar 18383 @ 2024-01-30 11:22:00:
-  RSI Mean Reversion Selective: BUY 1 FDX @ $245.04
-
 Bar 18421 @ 2024-01-30 12:00:00:
   Smart RSI Confluence: BUY 2 FDX @ $242.58
-
-Bar 18424 @ 2024-01-30 12:03:00:
-  RSI Mean Reversion Selective: BUY 1 VRTX @ $445.09
 
 Bar 18451 @ 2024-01-30 12:30:00:
   Smart RSI Confluence: BUY 2 HCA @ $295.05
@@ -1564,33 +2584,14 @@ Bar 18571 @ 2024-01-30 14:30:00:
   Smart RSI Confluence: BUY 2 HD @ $355.04
   Smart RSI Confluence: BUY 2 LULU @ $486.53
 
-Bar 19145 @ 2024-01-31 00:04:00:
-  RSI Mean Reversion Selective: BUY 1 SBUX @ $97.42
-
-Bar 19146 @ 2024-01-31 00:05:00:
-  RSI Mean Reversion Selective: BUY 1 TFC @ $38.01
-
-Bar 19192 @ 2024-01-31 00:51:00:
-  RSI Mean Reversion Selective: BUY 1 BBY @ $72.55
-
-Bar 19201 @ 2024-01-31 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 SYK @ $325.78
+Bar 18968 @ 2024-01-30 21:07:00:
+  CopilotPenguin: SELL 1 EA @ $128.44
 
 Bar 19214 @ 2024-01-31 09:13:00:
   Smart RSI Confluence: BUY 2 BNTX @ $93.73
 
-Bar 19252 @ 2024-01-31 09:51:00:
-  RSI Mean Reversion Selective: BUY 1 XOM @ $104.32
-
 Bar 19256 @ 2024-01-31 09:55:00:
-  RSI Mean Reversion Selective: BUY 1 MDLZ @ $74.41
   Smart RSI Confluence: BUY 2 MDLZ @ $74.41
-
-Bar 19269 @ 2024-01-31 10:08:00:
-  RSI Mean Reversion Selective: BUY 1 MRNA @ $102.10
-
-Bar 19322 @ 2024-01-31 11:01:00:
-  RSI Mean Reversion Selective: BUY 1 TMO @ $567.11
 
 Bar 19389 @ 2024-01-31 12:08:00:
   Smart RSI Confluence: BUY 2 PSX @ $144.51
@@ -1614,14 +2615,11 @@ Bar 19521 @ 2024-01-31 14:20:00:
 Bar 19528 @ 2024-01-31 14:27:00:
   Smart RSI Confluence: BUY 2 PNC @ $154.28
 
+Bar 20029 @ 2024-01-31 22:48:00:
+  CopilotPenguin: SELL 1 KO @ $55.47
+
 Bar 20106 @ 2024-02-01 00:05:00:
   Smart RSI Confluence: BUY 2 DVN @ $42.16
-
-Bar 20156 @ 2024-02-01 00:55:00:
-  RSI Mean Reversion Selective: BUY 1 QRVO @ $105.02
-
-Bar 20158 @ 2024-02-01 00:57:00:
-  RSI Mean Reversion Selective: BUY 1 CSX @ $36.01
 
 Bar 20347 @ 2024-02-01 12:06:00:
   Smart RSI Confluence: BUY 2 ETN @ $250.55
@@ -1634,22 +2632,6 @@ Bar 20376 @ 2024-02-01 12:35:00:
 
 Bar 20384 @ 2024-02-01 12:43:00:
   Smart RSI Confluence: BUY 2 PH @ $485.22
-
-Bar 20401 @ 2024-02-01 13:00:00:
-  RSI Mean Reversion Selective: BUY 1 PH @ $474.29
-  RSI Mean Reversion Selective: BUY 1 HII @ $262.87
-
-Bar 20402 @ 2024-02-01 13:01:00:
-  RSI Mean Reversion Selective: BUY 1 ORCL @ $111.75
-
-Bar 20406 @ 2024-02-01 13:05:00:
-  RSI Mean Reversion Selective: BUY 1 PLD @ $126.72
-
-Bar 20411 @ 2024-02-01 13:10:00:
-  RSI Mean Reversion Selective: BUY 1 ITW @ $255.45
-
-Bar 20414 @ 2024-02-01 13:13:00:
-  RSI Mean Reversion Selective: BUY 1 TWLO @ $72.68
 
 Bar 20417 @ 2024-02-01 13:16:00:
   Smart RSI Confluence: BUY 2 LSTR @ $188.04
@@ -1666,41 +2648,17 @@ Bar 20478 @ 2024-02-01 14:17:00:
 Bar 20490 @ 2024-02-01 14:29:00:
   Smart RSI Confluence: BUY 2 EMR @ $92.77
 
-Bar 21062 @ 2024-02-02 00:01:00:
-  RSI Mean Reversion Selective: BUY 1 NOW @ $773.15
-
-Bar 21089 @ 2024-02-02 00:28:00:
-  RSI Mean Reversion Selective: BUY 1 AVAV @ $120.12
-
 Bar 21121 @ 2024-02-02 09:00:00:
   Smart RSI Confluence: BUY 2 DLR @ $146.75
 
-Bar 21127 @ 2024-02-02 09:06:00:
-  RSI Mean Reversion Selective: BUY 1 BALL @ $58.01
-
-Bar 21154 @ 2024-02-02 09:33:00:
-  RSI Mean Reversion Selective: BUY 1 XLF @ $38.85
-
-Bar 21238 @ 2024-02-02 10:57:00:
-  RSI Mean Reversion Selective: BUY 1 TEAM @ $234.97
-
-Bar 21337 @ 2024-02-02 12:36:00:
-  RSI Mean Reversion Selective: BUY 1 BMY @ $49.99
-
-Bar 21338 @ 2024-02-02 12:37:00:
-  RSI Mean Reversion Selective: BUY 1 ABBV @ $165.18
-
-Bar 21347 @ 2024-02-02 12:46:00:
-  RSI Mean Reversion Selective: BUY 1 CMCSA @ $46.01
+Bar 21361 @ 2024-02-02 13:00:00:
+  Smart RSI Confluence: BUY 2 REGN @ $990.20
 
 Bar 21364 @ 2024-02-02 13:03:00:
   Smart RSI Confluence: BUY 2 GPN @ $137.73
 
 Bar 21403 @ 2024-02-02 13:42:00:
   Smart RSI Confluence: BUY 2 XLI @ $114.57
-
-Bar 21407 @ 2024-02-02 13:46:00:
-  Smart RSI Confluence: BUY 2 CAT @ $306.66
 
 Bar 21412 @ 2024-02-02 13:51:00:
   Smart RSI Confluence: BUY 2 BK @ $55.24
@@ -1718,39 +2676,20 @@ Bar 21451 @ 2024-02-02 14:30:00:
   Smart RSI Confluence: BUY 2 EA @ $138.38
   Smart RSI Confluence: BUY 2 CME @ $208.37
 
-Bar 22050 @ 2024-02-03 00:29:00:
-  RSI Mean Reversion Selective: BUY 1 Z @ $57.08
+Bar 21463 @ 2024-02-02 14:42:00:
+  CopilotPenguin: SELL 1 PKG @ $160.20
 
-Bar 22073 @ 2024-02-03 00:52:00:
-  RSI Mean Reversion Selective: BUY 1 EL @ $134.19
-
-Bar 22081 @ 2024-02-05 09:00:00:
-  RSI Mean Reversion Selective: BUY 1 COST @ $695.14
-  RSI Mean Reversion Selective: BUY 1 RSI @ $5.35
-
-Bar 22196 @ 2024-02-05 10:55:00:
-  RSI Mean Reversion Selective: BUY 1 APD @ $255.05
-
-Bar 22211 @ 2024-02-05 11:10:00:
-  RSI Mean Reversion Selective: BUY 1 LIN @ $400.00
-
-Bar 22216 @ 2024-02-05 11:15:00:
-  RSI Mean Reversion Selective: BUY 1 CAT @ $314.56
+Bar 22156 @ 2024-02-05 10:15:00:
+  Smart RSI Confluence: BUY 2 LLY @ $674.97
 
 Bar 22247 @ 2024-02-05 11:46:00:
   Smart RSI Confluence: BUY 2 DE @ $396.58
 
 Bar 22261 @ 2024-02-05 12:00:00:
-  RSI Mean Reversion Selective: BUY 1 MCD @ $296.22
-
-Bar 22267 @ 2024-02-05 12:06:00:
-  RSI Mean Reversion Selective: BUY 1 DE @ $396.38
+  Smart RSI Confluence: BUY 2 COST @ $711.24
 
 Bar 22268 @ 2024-02-05 12:07:00:
   Smart RSI Confluence: BUY 2 APD @ $238.05
-
-Bar 22275 @ 2024-02-05 12:14:00:
-  RSI Mean Reversion Selective: BUY 1 AMGN @ $326.07
 
 Bar 22339 @ 2024-02-05 13:18:00:
   Smart RSI Confluence: BUY 2 KO @ $60.49
@@ -1761,49 +2700,25 @@ Bar 22406 @ 2024-02-05 14:25:00:
 Bar 22414 @ 2024-02-05 14:33:00:
   Smart RSI Confluence: BUY 2 ECL @ $197.18
 
+Bar 22415 @ 2024-02-05 14:34:00:
+  Smart RSI Confluence: BUY 2 GPS @ $19.65
+
 Bar 22416 @ 2024-02-05 14:35:00:
   Smart RSI Confluence: BUY 2 EQIX @ $838.76
 
 Bar 22417 @ 2024-02-05 14:36:00:
   Smart RSI Confluence: BUY 2 BLK @ $783.41
-  Smart RSI Confluence: BUY 2 PEP @ $169.74
-
-Bar 22418 @ 2024-02-05 14:37:00:
-  Smart RSI Confluence: BUY 2 ROST @ $142.35
-  Smart RSI Confluence: BUY 2 OKE @ $67.25
 
 Bar 23018 @ 2024-02-06 00:37:00:
   Smart RSI Confluence: BUY 2 EOG @ $109.52
-
-Bar 23103 @ 2024-02-06 10:02:00:
-  RSI Mean Reversion Selective: BUY 1 ORA @ $63.70
-
-Bar 23115 @ 2024-02-06 10:14:00:
-  RSI Mean Reversion Selective: BUY 1 FISV @ $145.01
-
-Bar 23219 @ 2024-02-06 11:58:00:
-  RSI Mean Reversion Selective: BUY 1 AVGO @ $1250.05
 
 Bar 23222 @ 2024-02-06 12:01:00:
   Smart RSI Confluence: BUY 2 FISV @ $148.92
 
 Bar 23285 @ 2024-02-06 13:04:00:
-  Smart RSI Confluence: BUY 2 CMG @ $2499.32
-
-Bar 23320 @ 2024-02-06 13:39:00:
-  RSI Mean Reversion Selective: BUY 1 DDOG @ $131.53
-
-Bar 23337 @ 2024-02-06 13:56:00:
-  RSI Mean Reversion Selective: BUY 1 CMG @ $2489.35
-
-Bar 23353 @ 2024-02-06 14:12:00:
-  RSI Mean Reversion Selective: BUY 1 MNST @ $54.51
-
-Bar 23370 @ 2024-02-06 14:29:00:
-  RSI Mean Reversion Selective: BUY 1 MU @ $86.94
+  Smart RSI Confluence: BUY 1 CMG @ $2499.32
 
 Bar 23371 @ 2024-02-06 14:30:00:
-  RSI Mean Reversion Selective: BUY 1 BK @ $55.07
   Smart RSI Confluence: BUY 2 MNST @ $55.18
 
 Bar 23372 @ 2024-02-06 14:31:00:
@@ -1812,238 +2727,80 @@ Bar 23372 @ 2024-02-06 14:31:00:
 Bar 23375 @ 2024-02-06 14:34:00:
   Smart RSI Confluence: BUY 2 MS @ $86.10
   Smart RSI Confluence: BUY 2 PPG @ $139.00
-  Smart RSI Confluence: BUY 1 VMC @ $229.96
+  Smart RSI Confluence: BUY 2 VMC @ $229.96
   Smart RSI Confluence: BUY 2 VTR @ $45.03
 
-Bar 23378 @ 2024-02-06 14:37:00:
-  Smart RSI Confluence: BUY 2 KHC @ $37.23
+Bar 23376 @ 2024-02-06 14:35:00:
+  Smart RSI Confluence: BUY 2 EXPD @ $125.67
 
-Bar 23947 @ 2024-02-07 00:06:00:
-  RSI Mean Reversion Selective: BUY 1 HLT @ $195.69
+Bar 23706 @ 2024-02-06 20:05:00:
+  CopilotPenguin: SELL 1 KR @ $45.12
 
-Bar 23988 @ 2024-02-07 00:47:00:
-  RSI Mean Reversion Selective: BUY 1 YUM @ $131.53
+Bar 23957 @ 2024-02-07 00:16:00:
+  Smart RSI Confluence: BUY 2 YUM @ $133.03
 
-Bar 23990 @ 2024-02-07 00:49:00:
-  RSI Mean Reversion Selective: BUY 1 ETN @ $271.90
+Bar 24079 @ 2024-02-07 10:18:00:
+  Buy Equal Price Each Penguin: BUY 1 BE @ $11.30
 
-Bar 24189 @ 2024-02-07 12:08:00:
-  RSI Mean Reversion Selective: BUY 1 USB @ $39.77
+Bar 24121 @ 2024-02-07 11:00:00:
+  Smart RSI Confluence: BUY 2 TGT @ $147.20
 
-Bar 24191 @ 2024-02-07 12:10:00:
-  RSI Mean Reversion Selective: BUY 1 NKE @ $101.72
+Bar 24332 @ 2024-02-07 14:31:00:
+  Smart RSI Confluence: BUY 1 ICE @ $127.34
 
-Bar 24330 @ 2024-02-07 14:29:00:
-  RSI Mean Reversion Selective: BUY 1 FANG @ $152.05
+Bar 29317 @ 2024-02-14 17:36:00:
+  CopilotPenguin: SELL 1 MDLZ @ $71.04
 
-Bar 24333 @ 2024-02-07 14:32:00:
-  RSI Mean Reversion Selective: BUY 1 ED @ $89.76
+Bar 29320 @ 2024-02-14 17:39:00:
+  CopilotPenguin: SELL 1 JNJ @ $155.06
 
-Bar 24334 @ 2024-02-07 14:33:00:
-  RSI Mean Reversion Selective: BUY 1 ARCT @ $37.42
+Bar 31109 @ 2024-02-16 15:28:00:
+  CopilotPenguin: SELL 1 AMGN @ $284.84
 
-Bar 24349 @ 2024-02-07 14:48:00:
-  Smart RSI Confluence: BUY 1 D @ $44.72
+Bar 35521 @ 2024-02-26 09:00:00:
+  CopilotPenguin: SELL 1 WMT @ $58.81
 
-Bar 25014 @ 2024-02-08 09:53:00:
-  RSI Mean Reversion Selective: BUY 1 AXP @ $205.96
+Bar 40675 @ 2024-03-04 14:54:00:
+  CopilotPenguin: SELL 1 HSY @ $182.36
 
-Bar 25152 @ 2024-02-08 12:11:00:
-  RSI Mean Reversion Selective: BUY 1 SPGI @ $459.09
+Bar 63712 @ 2024-04-08 13:50:00:
+  CopilotPenguin: SELL 1 VRTX @ $402.71
 
-Bar 25164 @ 2024-02-08 12:23:00:
-  RSI Mean Reversion Selective: BUY 1 HSY @ $190.54
+Bar 66617 @ 2024-04-11 14:15:00:
+  CopilotPenguin: SELL 1 GPN @ $123.53
 
-Bar 25247 @ 2024-02-08 13:46:00:
-  RSI Mean Reversion Selective: BUY 1 DUK @ $94.78
+Bar 67593 @ 2024-04-12 14:31:00:
+  CopilotPenguin: SELL 1 MDT @ $81.00
 
-Bar 25289 @ 2024-02-08 14:28:00:
-  RSI Mean Reversion Selective: BUY 1 AEP @ $76.23
+Bar 70253 @ 2024-04-17 11:41:00:
+  CopilotPenguin: SELL 1 ABT @ $106.64
 
-Bar 25291 @ 2024-02-08 14:30:00:
-  RSI Mean Reversion Selective: BUY 1 GIS @ $63.24
-  RSI Mean Reversion Selective: BUY 1 IFF @ $82.36
-  RSI Mean Reversion Selective: BUY 1 VTR @ $45.09
+Bar 98349 @ 2024-05-29 15:56:00:
+  CopilotPenguin: SELL 1 SYY @ $71.87
 
-Bar 26041 @ 2024-02-09 11:00:00:
-  RSI Mean Reversion Selective: BUY 1 PEP @ $171.06
+Bar 142291 @ 2024-08-05 15:16:00:
+  CopilotPenguin: SELL 1 STZ @ $238.24
 
-Bar 26101 @ 2024-02-09 12:00:00:
-  RSI Mean Reversion Selective: BUY 1 SO @ $66.89
+Bar 194160 @ 2024-10-21 15:44:00:
+  CopilotPenguin: SELL 1 MRK @ $107.34
 
-Bar 26184 @ 2024-02-09 13:23:00:
-  RSI Mean Reversion Selective: BUY 1 LRCX @ $870.18
+Bar 199966 @ 2024-10-29 16:30:00:
+  CopilotPenguin: SELL 1 MPC @ $146.31
 
-Bar 26251 @ 2024-02-09 14:30:00:
-  RSI Mean Reversion Selective: BUY 1 EA @ $137.08
-  RSI Mean Reversion Selective: BUY 1 LULU @ $467.43
-  RSI Mean Reversion Selective: BUY 1 SYY @ $79.23
-  RSI Mean Reversion Selective: BUY 1 WELL @ $86.44
-  RSI Mean Reversion Selective: BUY 1 ZG @ $53.70
+Bar 201712 @ 2024-10-31 13:36:00:
+  CopilotPenguin: SELL 1 REGN @ $844.06
 
-Bar 27139 @ 2024-02-12 13:18:00:
-  RSI Mean Reversion Selective: BUY 1 VLO @ $140.53
+Bar 212291 @ 2024-11-15 14:55:00:
+  CopilotPenguin: SELL 1 TMO @ $520.39
 
-Bar 27191 @ 2024-02-12 14:10:00:
-  RSI Mean Reversion Selective: BUY 1 EOG @ $110.85
+Bar 302636 @ 2025-04-04 22:36:00:
+  CopilotPenguin: SELL 1 XLV @ $133.16
 
-Bar 27206 @ 2024-02-12 14:25:00:
-  RSI Mean Reversion Selective: BUY 1 OTIS @ $90.19
+Bar 430583 @ 2025-10-16 13:56:00:
+  CopilotPenguin: SELL 1 MMC @ $185.31
 
-Bar 27208 @ 2024-02-12 14:27:00:
-  RSI Mean Reversion Selective: BUY 1 WDAY @ $302.07
-
-Bar 27210 @ 2024-02-12 14:29:00:
-  RSI Mean Reversion Selective: BUY 1 MAR @ $246.50
-
-Bar 27211 @ 2024-02-12 14:30:00:
-  RSI Mean Reversion Selective: BUY 1 HUBS @ $638.30
-  RSI Mean Reversion Selective: BUY 1 ISRG @ $386.08
-  RSI Mean Reversion Selective: BUY 1 TJX @ $98.59
-
-Bar 28045 @ 2024-02-13 12:24:00:
-  RSI Mean Reversion Selective: BUY 1 GPN @ $137.79
-
-Bar 28081 @ 2024-02-13 13:00:00:
-  RSI Mean Reversion Selective: BUY 1 ZTS @ $188.14
-  RSI Mean Reversion Selective: BUY 1 EXC @ $34.06
-
-Bar 28103 @ 2024-02-13 13:22:00:
-  RSI Mean Reversion Selective: BUY 1 XLE @ $84.61
-
-Bar 28111 @ 2024-02-13 13:30:00:
-  RSI Mean Reversion Selective: BUY 1 HD @ $361.20
-  RSI Mean Reversion Selective: BUY 1 AMT @ $190.04
-  RSI Mean Reversion Selective: BUY 1 O @ $52.29
-
-Bar 28112 @ 2024-02-13 13:31:00:
-  RSI Mean Reversion Selective: BUY 1 CCI @ $107.15
-
-Bar 28756 @ 2024-02-14 00:15:00:
-  RSI Mean Reversion Selective: BUY 1 CME @ $209.17
-
-Bar 28761 @ 2024-02-14 00:20:00:
-  RSI Mean Reversion Selective: BUY 1 WMB @ $34.05
-
-Bar 28935 @ 2024-02-14 11:14:00:
-  RSI Mean Reversion Selective: BUY 1 WMT @ $168.03
-
-Bar 29130 @ 2024-02-14 14:29:00:
-  RSI Mean Reversion Selective: BUY 1 DLR @ $141.71
-
-Bar 29133 @ 2024-02-14 14:32:00:
-  RSI Mean Reversion Selective: BUY 1 GS @ $376.72
-  RSI Mean Reversion Selective: BUY 1 KR @ $45.25
-  RSI Mean Reversion Selective: BUY 1 DG @ $131.28
-  RSI Mean Reversion Selective: BUY 1 SRE @ $69.65
-
-Bar 29753 @ 2024-02-15 00:52:00:
-  RSI Mean Reversion Selective: BUY 1 RTX @ $90.29
-
-Bar 30043 @ 2024-02-15 13:42:00:
-  RSI Mean Reversion Selective: BUY 1 EMR @ $104.99
-
-Bar 30091 @ 2024-02-15 14:30:00:
-  RSI Mean Reversion Selective: BUY 1 MLM @ $541.44
-  RSI Mean Reversion Selective: BUY 1 EQIX @ $839.04
-
-Bar 30104 @ 2024-02-15 14:43:00:
-  RSI Mean Reversion Selective: BUY 1 INTU @ $659.22
-
-Bar 30106 @ 2024-02-15 14:45:00:
-  RSI Mean Reversion Selective: BUY 1 LSTR @ $195.79
-  RSI Mean Reversion Selective: BUY 1 VMC @ $240.63
-
-Bar 30108 @ 2024-02-15 14:47:00:
-  RSI Mean Reversion Selective: BUY 1 ODFL @ $431.45
-
-Bar 31008 @ 2024-02-16 13:47:00:
-  RSI Mean Reversion Selective: BUY 1 JPM @ $179.14
-
-Bar 31009 @ 2024-02-16 13:48:00:
-  RSI Mean Reversion Selective: BUY 1 PPG @ $141.65
-
-Bar 31052 @ 2024-02-16 14:31:00:
-  RSI Mean Reversion Selective: BUY 1 UNP @ $248.85
-  RSI Mean Reversion Selective: BUY 1 EXPD @ $125.01
-  RSI Mean Reversion Selective: BUY 1 PSA @ $283.62
-
-Bar 31054 @ 2024-02-16 14:33:00:
-  RSI Mean Reversion Selective: BUY 1 REGN @ $950.28
-  RSI Mean Reversion Selective: BUY 1 KO @ $59.02
-
-Bar 31055 @ 2024-02-16 14:34:00:
-  RSI Mean Reversion Selective: BUY 1 NSC @ $252.31
-
-Bar 31665 @ 2024-02-17 00:44:00:
-  RSI Mean Reversion Selective: BUY 1 WM @ $202.07
-
-Bar 31718 @ 2024-02-20 09:37:00:
-  RSI Mean Reversion Selective: BUY 1 TGT @ $148.54
-
-Bar 32010 @ 2024-02-20 14:29:00:
-  RSI Mean Reversion Selective: BUY 1 FIS @ $63.06
-  RSI Mean Reversion Selective: BUY 1 JBHT @ $206.39
-
-Bar 32011 @ 2024-02-20 14:30:00:
-  RSI Mean Reversion Selective: BUY 1 ROK @ $277.32
-  RSI Mean Reversion Selective: BUY 1 CHRW @ $71.59
-  RSI Mean Reversion Selective: BUY 1 MPC @ $167.59
-  RSI Mean Reversion Selective: BUY 1 PEG @ $59.79
-
-Bar 32012 @ 2024-02-20 14:31:00:
-  RSI Mean Reversion Selective: BUY 1 PNC @ $147.25
-
-Bar 32973 @ 2024-02-21 14:32:00:
-  RSI Mean Reversion Selective: BUY 1 ICE @ $135.82
-
-Bar 33004 @ 2024-02-21 15:03:00:
-  RSI Mean Reversion Selective: BUY 1 PKG @ $170.05
-
-Bar 33040 @ 2024-02-21 15:39:00:
-  RSI Mean Reversion Selective: BUY 1 ULTA @ $545.39
-
-Bar 33089 @ 2024-02-21 16:28:00:
-  RSI Mean Reversion Selective: BUY 1 DD @ $68.30
-
-Bar 33848 @ 2024-02-22 13:07:00:
-  RSI Mean Reversion Selective: BUY 1 CB @ $249.98
-
-Bar 33884 @ 2024-02-22 13:43:00:
-  RSI Mean Reversion Selective: BUY 1 PG @ $159.89
-
-Bar 33934 @ 2024-02-22 14:33:00:
-  RSI Mean Reversion Selective: BUY 1 GD @ $270.80
-
-Bar 34887 @ 2024-02-23 14:26:00:
-  RSI Mean Reversion Selective: BUY 1 RSG @ $181.95
-
-Bar 35855 @ 2024-02-26 14:34:00:
-  RSI Mean Reversion Selective: BUY 1 BLK @ $812.50
-
-Bar 35903 @ 2024-02-26 15:22:00:
-  RSI Mean Reversion Selective: BUY 1 HCA @ $314.12
-
-Bar 36238 @ 2024-02-26 20:57:00:
-  RSI Mean Reversion Selective: BUY 1 ECL @ $220.43
-
-Bar 36814 @ 2024-02-27 14:33:00:
-  RSI Mean Reversion Selective: BUY 1 MMC @ $202.37
-
-Bar 38740 @ 2024-02-29 14:39:00:
-  RSI Mean Reversion Selective: BUY 1 ROST @ $149.42
-
-Bar 39697 @ 2024-03-01 14:36:00:
-  RSI Mean Reversion Selective: BUY 1 MO @ $40.70
-
-Bar 44496 @ 2024-03-08 14:35:00:
-  RSI Mean Reversion Selective: BUY 1 XLP @ $74.92
-
-Bar 48354 @ 2024-03-14 13:53:00:
-  RSI Mean Reversion Selective: BUY 1 SPY @ $514.24
-
-Bar 64721 @ 2024-04-09 14:39:00:
-  RSI Mean Reversion Selective: BUY 1 DIA @ $386.67
+Bar 447125 @ 2025-11-10 18:36:00:
+  CopilotPenguin: SELL 1 PG @ $144.27
 
 
 ================================================================================
@@ -2053,882 +2810,775 @@ LIQUIDATION TRADES (End of Backtest Forced Closes)
 
 
 SP500Penguin:
-  SELL 209 SPY @ $737.33 at 2026-05-15 23:59:00+00:00
+  SELL 209 SPY @ $738.25 at 2026-05-20 23:50:00+00:00
 
 SP500x2Penguin:
-  SELL 419 SPY @ $737.33 at 2026-05-15 23:59:00+00:00
-
-RSI Mean Reversion Selective:
-  SELL 1 CVX @ $190.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 CAN @ $0.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 RKLB @ $122.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 RIOT @ $23.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 GREE @ $1.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 MARA @ $12.34 at 2026-05-15 23:59:00+00:00
-  SELL 1 NTLA @ $13.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 KHC @ $23.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 SNAP @ $5.49 at 2026-05-15 23:59:00+00:00
-  SELL 1 RDFN @ $11.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPCE @ $2.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 W @ $58.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 FCEL @ $21.58 at 2026-05-15 23:59:00+00:00
-  SELL 1 BILL @ $40.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 OKTA @ $82.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 BLUE @ $4.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 HOOD @ $76.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 DNA @ $7.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 MSTR @ $176.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 BE @ $274.86 at 2026-05-15 23:59:00+00:00
-  SELL 1 DOW @ $38.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 SOUN @ $8.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 ADM @ $80.29 at 2026-05-15 23:59:00+00:00
-  SELL 1 BLDP @ $4.53 at 2026-05-15 23:59:00+00:00
-  SELL 1 LAC @ $5.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 FSLY @ $16.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 STZ @ $140.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 OPEN @ $4.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 CF @ $125.72 at 2026-05-15 23:59:00+00:00
-  SELL 1 COIN @ $194.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 XPEV @ $15.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 LI @ $18.58 at 2026-05-15 23:59:00+00:00
-  SELL 1 BBAI @ $4.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 PGR @ $199.73 at 2026-05-15 23:59:00+00:00
-  SELL 1 U @ $27.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 CRSP @ $48.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 ON @ $112.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 C @ $123.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 UAL @ $93.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 DAL @ $72.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 DVN @ $49.51 at 2026-05-15 23:59:00+00:00
-  SELL 1 NIO @ $6.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 BABA @ $132.28 at 2026-05-15 23:59:00+00:00
-  SELL 1 JD @ $31.95 at 2026-05-15 23:59:00+00:00
-  SELL 1 RBLX @ $42.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 EDIT @ $2.61 at 2026-05-15 23:59:00+00:00
-  SELL 1 PYPL @ $44.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 ENPH @ $52.55 at 2026-05-15 23:59:00+00:00
-  SELL 1 BHP @ $84.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 SQ @ $87.17 at 2026-05-15 23:59:00+00:00
-  SELL 1 NU @ $12.22 at 2026-05-15 23:59:00+00:00
-  SELL 1 ASML @ $1499.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 MP @ $61.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 ETSY @ $58.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 SOFI @ $15.52 at 2026-05-15 23:59:00+00:00
-  SELL 1 AFRM @ $65.67 at 2026-05-15 23:59:00+00:00
-  SELL 1 CRWD @ $591.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 SCHW @ $90.87 at 2026-05-15 23:59:00+00:00
-  SELL 1 LYB @ $76.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 RIO @ $103.61 at 2026-05-15 23:59:00+00:00
-  SELL 1 MDT @ $76.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 UPST @ $29.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 RUN @ $13.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 AI @ $8.65 at 2026-05-15 23:59:00+00:00
-  SELL 1 LCID @ $6.04 at 2026-05-15 23:59:00+00:00
-  SELL 1 CHWY @ $21.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 OXY @ $59.45 at 2026-05-15 23:59:00+00:00
-  SELL 1 PLUG @ $3.75 at 2026-05-15 23:59:00+00:00
-  SELL 1 WFC @ $73.11 at 2026-05-15 23:59:00+00:00
-  SELL 1 APA @ $38.94 at 2026-05-15 23:59:00+00:00
-  SELL 1 GPS @ $24.56 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZM @ $99.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 RIVN @ $13.79 at 2026-05-15 23:59:00+00:00
-  SELL 1 SEDG @ $61.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 ROKU @ $123.58 at 2026-05-15 23:59:00+00:00
-  SELL 1 TSLA @ $6275.21 at 2026-05-15 23:59:00+00:00
-  SELL 1 SHOP @ $99.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLK @ $175.75 at 2026-05-15 23:59:00+00:00
-  SELL 1 AAPL @ $1199.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 MCHP @ $93.54 at 2026-05-15 23:59:00+00:00
-  SELL 1 PLTR @ $133.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 ABNB @ $132.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 CVNA @ $67.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 SLB @ $55.29 at 2026-05-15 23:59:00+00:00
-  SELL 1 KTOS @ $51.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 NEM @ $109.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 F @ $13.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 FCX @ $63.13 at 2026-05-15 23:59:00+00:00
-  SELL 1 DKNG @ $24.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 SSO @ $132.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMZN @ $5252.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 GOOGL @ $7907.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZS @ $160.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 NXPI @ $291.26 at 2026-05-15 23:59:00+00:00
-  SELL 1 TSM @ $402.65 at 2026-05-15 23:59:00+00:00
-  SELL 1 MTCH @ $35.41 at 2026-05-15 23:59:00+00:00
-  SELL 1 MSFT @ $419.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 FAST @ $43.29 at 2026-05-15 23:59:00+00:00
-  SELL 1 UNH @ $375.17 at 2026-05-15 23:59:00+00:00
-  SELL 1 MRK @ $111.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 CI @ $285.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 PDD @ $96.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 BNTX @ $89.16 at 2026-05-15 23:59:00+00:00
-  SELL 1 BA @ $220.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 HAL @ $41.73 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPG @ $200.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 QCOM @ $199.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 PATH @ $10.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 NET @ $196.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 HES @ $160.31 at 2026-05-15 23:59:00+00:00
-  SELL 1 VALE @ $16.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 ALB @ $179.96 at 2026-05-15 23:59:00+00:00
-  SELL 1 NVO @ $44.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 TXN @ $302.11 at 2026-05-15 23:59:00+00:00
-  SELL 1 M @ $19.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMD @ $420.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 CTRA @ $32.49 at 2026-05-15 23:59:00+00:00
-  SELL 1 INTC @ $106.91 at 2026-05-15 23:59:00+00:00
-  SELL 1 PM @ $190.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 JNJ @ $226.79 at 2026-05-15 23:59:00+00:00
-  SELL 1 GE @ $35.17 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLI @ $171.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 HON @ $213.22 at 2026-05-15 23:59:00+00:00
-  SELL 1 SQM @ $84.26 at 2026-05-15 23:59:00+00:00
-  SELL 1 CSCO @ $117.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 LOW @ $218.14 at 2026-05-15 23:59:00+00:00
-  SELL 1 DPZ @ $301.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 NVDA @ $2243.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMAT @ $432.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 UBER @ $75.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 DHR @ $161.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 SNOW @ $157.64 at 2026-05-15 23:59:00+00:00
-  SELL 1 MOS @ $21.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 KMB @ $96.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 PFE @ $25.32 at 2026-05-15 23:59:00+00:00
-  SELL 1 NEE @ $93.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 META @ $610.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLV @ $144.81 at 2026-05-15 23:59:00+00:00
-  SELL 1 DIS @ $102.55 at 2026-05-15 23:59:00+00:00
-  SELL 1 SHW @ $300.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 NOC @ $540.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 PENN @ $16.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 KSS @ $11.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 CRM @ $173.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 XEL @ $78.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 NUE @ $225.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 BEAM @ $27.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 PINS @ $19.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 GILD @ $129.06 at 2026-05-15 23:59:00+00:00
-  SELL 1 CL @ $88.13 at 2026-05-15 23:59:00+00:00
-  SELL 1 COP @ $122.43 at 2026-05-15 23:59:00+00:00
-  SELL 1 PSX @ $176.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 OKE @ $92.41 at 2026-05-15 23:59:00+00:00
-  SELL 1 BKR @ $64.23 at 2026-05-15 23:59:00+00:00
-  SELL 1 MDB @ $311.41 at 2026-05-15 23:59:00+00:00
-  SELL 1 AES @ $14.49 at 2026-05-15 23:59:00+00:00
-  SELL 1 TER @ $335.56 at 2026-05-15 23:59:00+00:00
-  SELL 1 D @ $61.70 at 2026-05-15 23:59:00+00:00
-  SELL 1 VERI @ $2.08 at 2026-05-15 23:59:00+00:00
-  SELL 1 STLD @ $229.39 at 2026-05-15 23:59:00+00:00
-  SELL 1 KMI @ $33.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 MS @ $192.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 UPS @ $98.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 GM @ $74.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 DOCU @ $47.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 FDX @ $374.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 VRTX @ $438.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 SBUX @ $106.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 TFC @ $47.08 at 2026-05-15 23:59:00+00:00
-  SELL 1 BBY @ $56.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 SYK @ $305.90 at 2026-05-15 23:59:00+00:00
-  SELL 1 XOM @ $157.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 MDLZ @ $60.51 at 2026-05-15 23:59:00+00:00
-  SELL 1 MRNA @ $48.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 TMO @ $436.56 at 2026-05-15 23:59:00+00:00
-  SELL 1 QRVO @ $92.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 CSX @ $45.72 at 2026-05-15 23:59:00+00:00
-  SELL 1 PH @ $862.72 at 2026-05-15 23:59:00+00:00
-  SELL 1 HII @ $326.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 ORCL @ $191.42 at 2026-05-15 23:59:00+00:00
-  SELL 1 PLD @ $140.53 at 2026-05-15 23:59:00+00:00
-  SELL 1 ITW @ $247.68 at 2026-05-15 23:59:00+00:00
-  SELL 1 TWLO @ $197.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 NOW @ $94.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 AVAV @ $157.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 BALL @ $55.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLF @ $51.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 TEAM @ $87.43 at 2026-05-15 23:59:00+00:00
-  SELL 1 BMY @ $57.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 ABBV @ $209.61 at 2026-05-15 23:59:00+00:00
-  SELL 1 CMCSA @ $24.77 at 2026-05-15 23:59:00+00:00
-  SELL 1 Z @ $37.73 at 2026-05-15 23:59:00+00:00
-  SELL 1 EL @ $80.28 at 2026-05-15 23:59:00+00:00
-  SELL 1 COST @ $1047.28 at 2026-05-15 23:59:00+00:00
-  SELL 1 RSI @ $26.77 at 2026-05-15 23:59:00+00:00
-  SELL 1 APD @ $295.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 LIN @ $505.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 CAT @ $887.32 at 2026-05-15 23:59:00+00:00
-  SELL 1 MCD @ $276.68 at 2026-05-15 23:59:00+00:00
-  SELL 1 DE @ $561.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMGN @ $326.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 ORA @ $133.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 FISV @ $55.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 AVGO @ $423.39 at 2026-05-15 23:59:00+00:00
-  SELL 1 DDOG @ $207.21 at 2026-05-15 23:59:00+00:00
-  SELL 1 CMG @ $32.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 MNST @ $87.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 MU @ $716.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 BK @ $135.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 HLT @ $315.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 YUM @ $149.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 ETN @ $398.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 USB @ $53.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 NKE @ $41.92 at 2026-05-15 23:59:00+00:00
-  SELL 1 FANG @ $204.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 ED @ $105.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 ARCT @ $7.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 AXP @ $312.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPGI @ $403.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 HSY @ $186.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 DUK @ $121.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 AEP @ $125.13 at 2026-05-15 23:59:00+00:00
-  SELL 1 GIS @ $33.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 IFF @ $73.10 at 2026-05-15 23:59:00+00:00
-  SELL 1 VTR @ $87.45 at 2026-05-15 23:59:00+00:00
-  SELL 1 PEP @ $149.24 at 2026-05-15 23:59:00+00:00
-  SELL 1 SO @ $92.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 LRCX @ $282.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 EA @ $200.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 LULU @ $119.11 at 2026-05-15 23:59:00+00:00
-  SELL 1 SYY @ $72.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 WELL @ $213.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZG @ $38.06 at 2026-05-15 23:59:00+00:00
-  SELL 1 VLO @ $250.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 EOG @ $140.26 at 2026-05-15 23:59:00+00:00
-  SELL 1 OTIS @ $71.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 WDAY @ $124.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 MAR @ $350.95 at 2026-05-15 23:59:00+00:00
-  SELL 1 HUBS @ $198.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 ISRG @ $421.54 at 2026-05-15 23:59:00+00:00
-  SELL 1 TJX @ $147.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 GPN @ $67.69 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZTS @ $74.14 at 2026-05-15 23:59:00+00:00
-  SELL 1 EXC @ $43.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLE @ $59.48 at 2026-05-15 23:59:00+00:00
-  SELL 1 HD @ $297.66 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMT @ $170.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 O @ $61.22 at 2026-05-15 23:59:00+00:00
-  SELL 1 CCI @ $86.66 at 2026-05-15 23:59:00+00:00
-  SELL 1 CME @ $299.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 WMB @ $78.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 WMT @ $132.06 at 2026-05-15 23:59:00+00:00
-  SELL 1 DLR @ $188.51 at 2026-05-15 23:59:00+00:00
-  SELL 1 GS @ $946.88 at 2026-05-15 23:59:00+00:00
-  SELL 1 KR @ $65.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 DG @ $102.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 SRE @ $90.43 at 2026-05-15 23:59:00+00:00
-  SELL 1 RTX @ $171.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 EMR @ $133.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 MLM @ $558.66 at 2026-05-15 23:59:00+00:00
-  SELL 1 EQIX @ $1060.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 INTU @ $393.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 LSTR @ $176.04 at 2026-05-15 23:59:00+00:00
-  SELL 1 VMC @ $267.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 ODFL @ $203.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 JPM @ $297.53 at 2026-05-15 23:59:00+00:00
-  SELL 1 PPG @ $102.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 UNP @ $270.16 at 2026-05-15 23:59:00+00:00
-  SELL 1 EXPD @ $155.45 at 2026-05-15 23:59:00+00:00
-  SELL 1 PSA @ $292.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 REGN @ $697.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 KO @ $80.88 at 2026-05-15 23:59:00+00:00
-  SELL 1 NSC @ $315.95 at 2026-05-15 23:59:00+00:00
-  SELL 1 WM @ $219.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 TGT @ $121.48 at 2026-05-15 23:59:00+00:00
-  SELL 1 FIS @ $41.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 JBHT @ $262.21 at 2026-05-15 23:59:00+00:00
-  SELL 1 ROK @ $442.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 CHRW @ $163.59 at 2026-05-15 23:59:00+00:00
-  SELL 1 MPC @ $255.68 at 2026-05-15 23:59:00+00:00
-  SELL 1 PEG @ $76.44 at 2026-05-15 23:59:00+00:00
-  SELL 1 PNC @ $212.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 ICE @ $154.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 PKG @ $212.08 at 2026-05-15 23:59:00+00:00
-  SELL 1 ULTA @ $493.79 at 2026-05-15 23:59:00+00:00
-  SELL 1 DD @ $49.31 at 2026-05-15 23:59:00+00:00
-  SELL 1 CB @ $323.94 at 2026-05-15 23:59:00+00:00
-  SELL 1 PG @ $141.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 GD @ $335.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 RSG @ $208.32 at 2026-05-15 23:59:00+00:00
-  SELL 1 BLK @ $1079.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 HCA @ $423.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 ECL @ $247.62 at 2026-05-15 23:59:00+00:00
-  SELL 1 MMC @ $182.70 at 2026-05-15 23:59:00+00:00
-  SELL 1 ROST @ $213.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 MO @ $73.04 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLP @ $84.52 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPY @ $737.33 at 2026-05-15 23:59:00+00:00
-  SELL 1 DIA @ $493.69 at 2026-05-15 23:59:00+00:00
+  SELL 419 SPY @ $738.25 at 2026-05-20 23:50:00+00:00
 
 Smart RSI Confluence:
-  SELL 2 CVX @ $190.83 at 2026-05-15 23:59:00+00:00
-  SELL 2 RKLB @ $122.80 at 2026-05-15 23:59:00+00:00
-  SELL 2 MARA @ $12.34 at 2026-05-15 23:59:00+00:00
-  SELL 2 RIOT @ $23.30 at 2026-05-15 23:59:00+00:00
-  SELL 2 CAN @ $0.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 BLDP @ $4.53 at 2026-05-15 23:59:00+00:00
-  SELL 2 AFRM @ $65.67 at 2026-05-15 23:59:00+00:00
-  SELL 2 TSLA @ $6275.21 at 2026-05-15 23:59:00+00:00
-  SELL 2 UPST @ $29.35 at 2026-05-15 23:59:00+00:00
-  SELL 2 COIN @ $194.40 at 2026-05-15 23:59:00+00:00
-  SELL 2 XOM @ $157.74 at 2026-05-15 23:59:00+00:00
-  SELL 2 MRNA @ $48.57 at 2026-05-15 23:59:00+00:00
-  SELL 2 SQ @ $87.17 at 2026-05-15 23:59:00+00:00
-  SELL 2 BBAI @ $4.09 at 2026-05-15 23:59:00+00:00
-  SELL 2 BABA @ $132.28 at 2026-05-15 23:59:00+00:00
-  SELL 2 FCEL @ $21.58 at 2026-05-15 23:59:00+00:00
-  SELL 2 GOOGL @ $7907.15 at 2026-05-15 23:59:00+00:00
-  SELL 2 PYPL @ $44.35 at 2026-05-15 23:59:00+00:00
-  SELL 2 RDFN @ $11.30 at 2026-05-15 23:59:00+00:00
-  SELL 2 BLUE @ $4.99 at 2026-05-15 23:59:00+00:00
-  SELL 2 DNA @ $7.78 at 2026-05-15 23:59:00+00:00
-  SELL 2 GREE @ $1.40 at 2026-05-15 23:59:00+00:00
-  SELL 2 SPCE @ $2.80 at 2026-05-15 23:59:00+00:00
-  SELL 2 RSI @ $26.77 at 2026-05-15 23:59:00+00:00
-  SELL 2 SOUN @ $8.36 at 2026-05-15 23:59:00+00:00
-  SELL 2 ORCL @ $191.42 at 2026-05-15 23:59:00+00:00
-  SELL 2 MU @ $716.01 at 2026-05-15 23:59:00+00:00
-  SELL 2 DOCU @ $47.63 at 2026-05-15 23:59:00+00:00
-  SELL 2 NVO @ $44.47 at 2026-05-15 23:59:00+00:00
-  SELL 2 OPEN @ $4.35 at 2026-05-15 23:59:00+00:00
-  SELL 2 LAC @ $5.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 FSLY @ $16.98 at 2026-05-15 23:59:00+00:00
-  SELL 2 XPEV @ $15.63 at 2026-05-15 23:59:00+00:00
-  SELL 2 RUN @ $13.98 at 2026-05-15 23:59:00+00:00
-  SELL 2 PLUG @ $3.75 at 2026-05-15 23:59:00+00:00
-  SELL 2 BA @ $220.01 at 2026-05-15 23:59:00+00:00
-  SELL 2 CTRA @ $32.49 at 2026-05-15 23:59:00+00:00
-  SELL 2 PLTR @ $133.09 at 2026-05-15 23:59:00+00:00
-  SELL 2 MSTR @ $176.05 at 2026-05-15 23:59:00+00:00
-  SELL 2 SOFI @ $15.52 at 2026-05-15 23:59:00+00:00
-  SELL 2 F @ $13.40 at 2026-05-15 23:59:00+00:00
-  SELL 2 RIVN @ $13.79 at 2026-05-15 23:59:00+00:00
-  SELL 2 AAPL @ $1199.03 at 2026-05-15 23:59:00+00:00
-  SELL 2 U @ $27.15 at 2026-05-15 23:59:00+00:00
-  SELL 2 FCX @ $63.13 at 2026-05-15 23:59:00+00:00
-  SELL 2 UAL @ $93.12 at 2026-05-15 23:59:00+00:00
-  SELL 2 NVDA @ $2243.93 at 2026-05-15 23:59:00+00:00
-  SELL 2 NIO @ $6.12 at 2026-05-15 23:59:00+00:00
-  SELL 2 RIO @ $103.61 at 2026-05-15 23:59:00+00:00
-  SELL 2 PDD @ $96.09 at 2026-05-15 23:59:00+00:00
-  SELL 2 TSM @ $402.65 at 2026-05-15 23:59:00+00:00
-  SELL 2 DAL @ $72.15 at 2026-05-15 23:59:00+00:00
-  SELL 2 ENPH @ $52.55 at 2026-05-15 23:59:00+00:00
-  SELL 2 SSO @ $132.37 at 2026-05-15 23:59:00+00:00
-  SELL 2 DIS @ $102.55 at 2026-05-15 23:59:00+00:00
-  SELL 2 BMY @ $57.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 PINS @ $19.35 at 2026-05-15 23:59:00+00:00
-  SELL 2 NXPI @ $291.26 at 2026-05-15 23:59:00+00:00
-  SELL 2 MTCH @ $35.41 at 2026-05-15 23:59:00+00:00
-  SELL 2 CRWD @ $591.93 at 2026-05-15 23:59:00+00:00
-  SELL 2 BHP @ $84.40 at 2026-05-15 23:59:00+00:00
-  SELL 2 JD @ $31.95 at 2026-05-15 23:59:00+00:00
-  SELL 2 LI @ $18.58 at 2026-05-15 23:59:00+00:00
-  SELL 2 MCHP @ $93.54 at 2026-05-15 23:59:00+00:00
-  SELL 2 ALB @ $179.96 at 2026-05-15 23:59:00+00:00
-  SELL 2 AMD @ $420.09 at 2026-05-15 23:59:00+00:00
-  SELL 2 NKE @ $41.92 at 2026-05-15 23:59:00+00:00
-  SELL 2 ON @ $112.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 BE @ $274.86 at 2026-05-15 23:59:00+00:00
-  SELL 2 ETSY @ $58.07 at 2026-05-15 23:59:00+00:00
-  SELL 2 CVNA @ $67.03 at 2026-05-15 23:59:00+00:00
-  SELL 2 LCID @ $6.04 at 2026-05-15 23:59:00+00:00
-  SELL 2 META @ $610.38 at 2026-05-15 23:59:00+00:00
-  SELL 2 NU @ $12.22 at 2026-05-15 23:59:00+00:00
-  SELL 2 HOOD @ $76.83 at 2026-05-15 23:59:00+00:00
-  SELL 2 VERI @ $2.08 at 2026-05-15 23:59:00+00:00
-  SELL 2 CHWY @ $21.35 at 2026-05-15 23:59:00+00:00
-  SELL 2 SCHW @ $90.87 at 2026-05-15 23:59:00+00:00
-  SELL 2 AI @ $8.65 at 2026-05-15 23:59:00+00:00
-  SELL 2 UBER @ $75.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 OXY @ $59.45 at 2026-05-15 23:59:00+00:00
-  SELL 2 SEDG @ $61.02 at 2026-05-15 23:59:00+00:00
-  SELL 2 SNOW @ $157.64 at 2026-05-15 23:59:00+00:00
-  SELL 2 AMAT @ $432.74 at 2026-05-15 23:59:00+00:00
-  SELL 2 HAL @ $41.73 at 2026-05-15 23:59:00+00:00
-  SELL 2 APA @ $38.94 at 2026-05-15 23:59:00+00:00
-  SELL 2 WFC @ $73.11 at 2026-05-15 23:59:00+00:00
-  SELL 2 CCI @ $86.66 at 2026-05-15 23:59:00+00:00
-  SELL 2 MSFT @ $419.76 at 2026-05-15 23:59:00+00:00
-  SELL 2 RTX @ $171.25 at 2026-05-15 23:59:00+00:00
-  SELL 2 CF @ $125.72 at 2026-05-15 23:59:00+00:00
-  SELL 2 IFF @ $73.10 at 2026-05-15 23:59:00+00:00
-  SELL 2 RBLX @ $42.76 at 2026-05-15 23:59:00+00:00
-  SELL 2 TWLO @ $197.99 at 2026-05-15 23:59:00+00:00
-  SELL 2 SPY @ $737.33 at 2026-05-15 23:59:00+00:00
-  SELL 2 KTOS @ $51.99 at 2026-05-15 23:59:00+00:00
-  SELL 2 SHOP @ $99.78 at 2026-05-15 23:59:00+00:00
-  SELL 2 EDIT @ $2.61 at 2026-05-15 23:59:00+00:00
-  SELL 2 W @ $58.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 AMZN @ $5252.02 at 2026-05-15 23:59:00+00:00
-  SELL 2 PATH @ $10.38 at 2026-05-15 23:59:00+00:00
-  SELL 2 TEAM @ $87.43 at 2026-05-15 23:59:00+00:00
-  SELL 2 XLV @ $144.81 at 2026-05-15 23:59:00+00:00
-  SELL 2 ISRG @ $421.54 at 2026-05-15 23:59:00+00:00
-  SELL 2 SBUX @ $106.78 at 2026-05-15 23:59:00+00:00
-  SELL 2 NEM @ $109.20 at 2026-05-15 23:59:00+00:00
-  SELL 2 PFE @ $25.32 at 2026-05-15 23:59:00+00:00
-  SELL 2 DOW @ $38.76 at 2026-05-15 23:59:00+00:00
-  SELL 2 CRSP @ $48.63 at 2026-05-15 23:59:00+00:00
-  SELL 2 INTC @ $106.91 at 2026-05-15 23:59:00+00:00
-  SELL 2 SNAP @ $5.49 at 2026-05-15 23:59:00+00:00
-  SELL 2 ORA @ $133.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 DKNG @ $24.98 at 2026-05-15 23:59:00+00:00
-  SELL 2 SQM @ $84.26 at 2026-05-15 23:59:00+00:00
-  SELL 2 WMB @ $78.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 XLE @ $59.48 at 2026-05-15 23:59:00+00:00
-  SELL 2 MP @ $61.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 PLD @ $140.53 at 2026-05-15 23:59:00+00:00
-  SELL 2 ASML @ $1499.38 at 2026-05-15 23:59:00+00:00
-  SELL 2 QCOM @ $199.78 at 2026-05-15 23:59:00+00:00
-  SELL 2 ZM @ $99.74 at 2026-05-15 23:59:00+00:00
-  SELL 2 SPG @ $200.02 at 2026-05-15 23:59:00+00:00
-  SELL 2 MRK @ $111.37 at 2026-05-15 23:59:00+00:00
-  SELL 2 LRCX @ $282.60 at 2026-05-15 23:59:00+00:00
-  SELL 2 FAST @ $43.29 at 2026-05-15 23:59:00+00:00
-  SELL 2 TFC @ $47.08 at 2026-05-15 23:59:00+00:00
-  SELL 2 UNH @ $375.17 at 2026-05-15 23:59:00+00:00
-  SELL 2 QRVO @ $92.30 at 2026-05-15 23:59:00+00:00
-  SELL 2 TER @ $335.56 at 2026-05-15 23:59:00+00:00
-  SELL 2 JBHT @ $262.21 at 2026-05-15 23:59:00+00:00
-  SELL 2 TXN @ $302.11 at 2026-05-15 23:59:00+00:00
-  SELL 2 ROKU @ $123.58 at 2026-05-15 23:59:00+00:00
-  SELL 2 MCD @ $276.68 at 2026-05-15 23:59:00+00:00
-  SELL 2 SLB @ $55.29 at 2026-05-15 23:59:00+00:00
-  SELL 2 NET @ $196.83 at 2026-05-15 23:59:00+00:00
-  SELL 2 GM @ $74.76 at 2026-05-15 23:59:00+00:00
-  SELL 2 EL @ $80.28 at 2026-05-15 23:59:00+00:00
-  SELL 2 GPS @ $24.56 at 2026-05-15 23:59:00+00:00
-  SELL 2 NTLA @ $13.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 NOW @ $94.97 at 2026-05-15 23:59:00+00:00
-  SELL 2 M @ $19.35 at 2026-05-15 23:59:00+00:00
-  SELL 2 ZS @ $160.84 at 2026-05-15 23:59:00+00:00
-  SELL 2 ADM @ $80.29 at 2026-05-15 23:59:00+00:00
-  SELL 2 DDOG @ $207.21 at 2026-05-15 23:59:00+00:00
-  SELL 2 FIS @ $41.60 at 2026-05-15 23:59:00+00:00
-  SELL 2 CSCO @ $117.97 at 2026-05-15 23:59:00+00:00
-  SELL 2 Z @ $37.73 at 2026-05-15 23:59:00+00:00
-  SELL 2 MO @ $73.04 at 2026-05-15 23:59:00+00:00
-  SELL 2 VRTX @ $438.07 at 2026-05-15 23:59:00+00:00
-  SELL 2 ARCT @ $7.47 at 2026-05-15 23:59:00+00:00
-  SELL 2 O @ $61.22 at 2026-05-15 23:59:00+00:00
-  SELL 2 JNJ @ $226.79 at 2026-05-15 23:59:00+00:00
-  SELL 2 GE @ $35.17 at 2026-05-15 23:59:00+00:00
-  SELL 2 PG @ $141.74 at 2026-05-15 23:59:00+00:00
-  SELL 2 UPS @ $98.93 at 2026-05-15 23:59:00+00:00
-  SELL 2 BEAM @ $27.99 at 2026-05-15 23:59:00+00:00
-  SELL 2 BILL @ $40.05 at 2026-05-15 23:59:00+00:00
-  SELL 2 C @ $123.09 at 2026-05-15 23:59:00+00:00
-  SELL 2 PM @ $190.02 at 2026-05-15 23:59:00+00:00
-  SELL 2 VALE @ $16.47 at 2026-05-15 23:59:00+00:00
-  SELL 2 DPZ @ $301.57 at 2026-05-15 23:59:00+00:00
-  SELL 2 BKR @ $64.23 at 2026-05-15 23:59:00+00:00
-  SELL 2 DHR @ $161.84 at 2026-05-15 23:59:00+00:00
-  SELL 2 PENN @ $16.20 at 2026-05-15 23:59:00+00:00
-  SELL 2 MDB @ $311.41 at 2026-05-15 23:59:00+00:00
-  SELL 2 GD @ $335.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 PGR @ $199.73 at 2026-05-15 23:59:00+00:00
-  SELL 2 CRM @ $173.47 at 2026-05-15 23:59:00+00:00
-  SELL 2 DD @ $49.31 at 2026-05-15 23:59:00+00:00
-  SELL 2 CMCSA @ $24.77 at 2026-05-15 23:59:00+00:00
-  SELL 2 XLF @ $51.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 VLO @ $250.80 at 2026-05-15 23:59:00+00:00
-  SELL 2 CSX @ $45.72 at 2026-05-15 23:59:00+00:00
-  SELL 2 DIA @ $493.69 at 2026-05-15 23:59:00+00:00
-  SELL 2 NOC @ $540.78 at 2026-05-15 23:59:00+00:00
-  SELL 2 NEE @ $93.12 at 2026-05-15 23:59:00+00:00
-  SELL 2 SHW @ $300.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 UNP @ $270.16 at 2026-05-15 23:59:00+00:00
-  SELL 2 COST @ $1047.28 at 2026-05-15 23:59:00+00:00
-  SELL 2 KSS @ $11.80 at 2026-05-15 23:59:00+00:00
-  SELL 2 AVGO @ $423.39 at 2026-05-15 23:59:00+00:00
-  SELL 2 AXP @ $312.97 at 2026-05-15 23:59:00+00:00
-  SELL 2 CL @ $88.13 at 2026-05-15 23:59:00+00:00
-  SELL 2 TMO @ $436.56 at 2026-05-15 23:59:00+00:00
-  SELL 2 COP @ $122.43 at 2026-05-15 23:59:00+00:00
-  SELL 2 ZG @ $38.06 at 2026-05-15 23:59:00+00:00
-  SELL 2 ROK @ $442.93 at 2026-05-15 23:59:00+00:00
-  SELL 2 GS @ $946.88 at 2026-05-15 23:59:00+00:00
-  SELL 2 AMT @ $170.63 at 2026-05-15 23:59:00+00:00
-  SELL 2 OKTA @ $82.09 at 2026-05-15 23:59:00+00:00
-  SELL 2 HSY @ $186.98 at 2026-05-15 23:59:00+00:00
-  SELL 2 AES @ $14.49 at 2026-05-15 23:59:00+00:00
-  SELL 2 ABBV @ $209.61 at 2026-05-15 23:59:00+00:00
-  SELL 2 CI @ $285.05 at 2026-05-15 23:59:00+00:00
-  SELL 2 NSC @ $315.95 at 2026-05-15 23:59:00+00:00
-  SELL 2 AVAV @ $157.20 at 2026-05-15 23:59:00+00:00
-  SELL 2 ABNB @ $132.25 at 2026-05-15 23:59:00+00:00
-  SELL 2 REGN @ $697.15 at 2026-05-15 23:59:00+00:00
-  SELL 2 SPGI @ $403.01 at 2026-05-15 23:59:00+00:00
-  SELL 2 KMI @ $33.36 at 2026-05-15 23:59:00+00:00
-  SELL 2 MPC @ $255.68 at 2026-05-15 23:59:00+00:00
-  SELL 2 FDX @ $374.60 at 2026-05-15 23:59:00+00:00
-  SELL 2 HCA @ $423.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 HLT @ $315.80 at 2026-05-15 23:59:00+00:00
-  SELL 2 MOS @ $21.76 at 2026-05-15 23:59:00+00:00
-  SELL 2 SYY @ $72.57 at 2026-05-15 23:59:00+00:00
-  SELL 2 MDT @ $76.37 at 2026-05-15 23:59:00+00:00
-  SELL 2 HD @ $297.66 at 2026-05-15 23:59:00+00:00
-  SELL 2 LULU @ $119.11 at 2026-05-15 23:59:00+00:00
-  SELL 2 BNTX @ $89.16 at 2026-05-15 23:59:00+00:00
-  SELL 2 MDLZ @ $60.51 at 2026-05-15 23:59:00+00:00
-  SELL 2 PSX @ $176.40 at 2026-05-15 23:59:00+00:00
-  SELL 2 SYK @ $305.90 at 2026-05-15 23:59:00+00:00
-  SELL 2 USB @ $53.02 at 2026-05-15 23:59:00+00:00
-  SELL 2 CB @ $323.94 at 2026-05-15 23:59:00+00:00
-  SELL 2 ODFL @ $203.12 at 2026-05-15 23:59:00+00:00
-  SELL 2 AMGN @ $326.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 FANG @ $204.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 PNC @ $212.84 at 2026-05-15 23:59:00+00:00
-  SELL 2 DVN @ $49.51 at 2026-05-15 23:59:00+00:00
-  SELL 2 ETN @ $398.80 at 2026-05-15 23:59:00+00:00
-  SELL 2 BALL @ $55.20 at 2026-05-15 23:59:00+00:00
-  SELL 2 HII @ $326.07 at 2026-05-15 23:59:00+00:00
-  SELL 2 PH @ $862.72 at 2026-05-15 23:59:00+00:00
-  SELL 2 LSTR @ $176.04 at 2026-05-15 23:59:00+00:00
-  SELL 2 ITW @ $247.68 at 2026-05-15 23:59:00+00:00
-  SELL 2 XLK @ $175.75 at 2026-05-15 23:59:00+00:00
-  SELL 2 CHRW @ $163.59 at 2026-05-15 23:59:00+00:00
-  SELL 2 EMR @ $133.05 at 2026-05-15 23:59:00+00:00
-  SELL 2 DLR @ $188.51 at 2026-05-15 23:59:00+00:00
-  SELL 2 GPN @ $67.69 at 2026-05-15 23:59:00+00:00
-  SELL 2 XLI @ $171.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 CAT @ $887.32 at 2026-05-15 23:59:00+00:00
-  SELL 2 BK @ $135.02 at 2026-05-15 23:59:00+00:00
-  SELL 2 KR @ $65.99 at 2026-05-15 23:59:00+00:00
-  SELL 2 OTIS @ $71.01 at 2026-05-15 23:59:00+00:00
-  SELL 2 HES @ $160.31 at 2026-05-15 23:59:00+00:00
-  SELL 2 EA @ $200.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 CME @ $299.36 at 2026-05-15 23:59:00+00:00
-  SELL 2 DE @ $561.83 at 2026-05-15 23:59:00+00:00
-  SELL 2 APD @ $295.38 at 2026-05-15 23:59:00+00:00
-  SELL 2 KO @ $80.88 at 2026-05-15 23:59:00+00:00
-  SELL 2 LIN @ $505.50 at 2026-05-15 23:59:00+00:00
-  SELL 2 ECL @ $247.62 at 2026-05-15 23:59:00+00:00
-  SELL 2 EQIX @ $1060.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 BLK @ $1079.98 at 2026-05-15 23:59:00+00:00
-  SELL 2 PEP @ $149.24 at 2026-05-15 23:59:00+00:00
-  SELL 2 ROST @ $213.00 at 2026-05-15 23:59:00+00:00
-  SELL 2 OKE @ $92.41 at 2026-05-15 23:59:00+00:00
-  SELL 2 EOG @ $140.26 at 2026-05-15 23:59:00+00:00
-  SELL 2 FISV @ $55.20 at 2026-05-15 23:59:00+00:00
-  SELL 2 CMG @ $32.25 at 2026-05-15 23:59:00+00:00
-  SELL 2 MNST @ $87.37 at 2026-05-15 23:59:00+00:00
-  SELL 2 ZTS @ $74.14 at 2026-05-15 23:59:00+00:00
-  SELL 2 MS @ $192.36 at 2026-05-15 23:59:00+00:00
-  SELL 2 PPG @ $102.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 VMC @ $267.83 at 2026-05-15 23:59:00+00:00
-  SELL 2 VTR @ $87.45 at 2026-05-15 23:59:00+00:00
-  SELL 2 KHC @ $23.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 D @ $61.70 at 2026-05-15 23:59:00+00:00
+  SELL 2 CVX @ $191.28 at 2026-05-20 23:50:00+00:00
+  SELL 2 RKLB @ $123.28 at 2026-05-20 23:50:00+00:00
+  SELL 2 MARA @ $13.13 at 2026-05-20 23:50:00+00:00
+  SELL 2 RIOT @ $23.67 at 2026-05-20 23:50:00+00:00
+  SELL 2 CAN @ $0.45 at 2026-05-20 23:50:00+00:00
+  SELL 2 BLDP @ $4.74 at 2026-05-20 23:50:00+00:00
+  SELL 2 AFRM @ $66.60 at 2026-05-20 23:50:00+00:00
+  SELL 2 TSLA @ $6225.16 at 2026-05-20 23:50:00+00:00
+  SELL 2 UPST @ $28.76 at 2026-05-20 23:50:00+00:00
+  SELL 2 COIN @ $191.48 at 2026-05-20 23:50:00+00:00
+  SELL 2 XOM @ $156.21 at 2026-05-20 23:50:00+00:00
+  SELL 2 MRNA @ $48.18 at 2026-05-20 23:50:00+00:00
+  SELL 2 SQ @ $87.17 at 2026-05-20 23:50:00+00:00
+  SELL 2 BBAI @ $4.07 at 2026-05-20 23:50:00+00:00
+  SELL 2 BABA @ $134.27 at 2026-05-20 23:50:00+00:00
+  SELL 2 FCEL @ $20.52 at 2026-05-20 23:50:00+00:00
+  SELL 2 GOOGL @ $7749.84 at 2026-05-20 23:50:00+00:00
+  SELL 2 PYPL @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 2 RDFN @ $11.30 at 2026-05-20 23:50:00+00:00
+  SELL 2 BLUE @ $4.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 DNA @ $7.78 at 2026-05-20 23:50:00+00:00
+  SELL 2 GREE @ $1.25 at 2026-05-20 23:50:00+00:00
+  SELL 2 SPCE @ $2.50 at 2026-05-20 23:50:00+00:00
+  SELL 2 RSI @ $28.38 at 2026-05-20 23:50:00+00:00
+  SELL 2 SOUN @ $8.39 at 2026-05-20 23:50:00+00:00
+  SELL 2 ORCL @ $186.29 at 2026-05-20 23:50:00+00:00
+  SELL 2 MU @ $725.53 at 2026-05-20 23:50:00+00:00
+  SELL 2 DOCU @ $48.75 at 2026-05-20 23:50:00+00:00
+  SELL 2 NVO @ $45.03 at 2026-05-20 23:50:00+00:00
+  SELL 2 OPEN @ $4.39 at 2026-05-20 23:50:00+00:00
+  SELL 2 LAC @ $4.75 at 2026-05-20 23:50:00+00:00
+  SELL 2 FSLY @ $17.05 at 2026-05-20 23:50:00+00:00
+  SELL 2 XPEV @ $15.16 at 2026-05-20 23:50:00+00:00
+  SELL 2 RUN @ $13.61 at 2026-05-20 23:50:00+00:00
+  SELL 2 PLUG @ $3.28 at 2026-05-20 23:50:00+00:00
+  SELL 2 BA @ $221.15 at 2026-05-20 23:50:00+00:00
+  SELL 2 CTRA @ $32.49 at 2026-05-20 23:50:00+00:00
+  SELL 2 PLTR @ $135.85 at 2026-05-20 23:50:00+00:00
+  SELL 2 MSTR @ $165.14 at 2026-05-20 23:50:00+00:00
+  SELL 2 SOFI @ $15.60 at 2026-05-20 23:50:00+00:00
+  SELL 2 F @ $13.20 at 2026-05-20 23:50:00+00:00
+  SELL 2 RIVN @ $13.68 at 2026-05-20 23:50:00+00:00
+  SELL 2 AAPL @ $1203.92 at 2026-05-20 23:50:00+00:00
+  SELL 2 U @ $26.15 at 2026-05-20 23:50:00+00:00
+  SELL 2 FCX @ $60.63 at 2026-05-20 23:50:00+00:00
+  SELL 2 UAL @ $97.50 at 2026-05-20 23:50:00+00:00
+  SELL 2 NVDA @ $2207.03 at 2026-05-20 23:50:00+00:00
+  SELL 2 NIO @ $5.65 at 2026-05-20 23:50:00+00:00
+  SELL 2 RIO @ $101.53 at 2026-05-20 23:50:00+00:00
+  SELL 2 PDD @ $97.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 TSM @ $400.11 at 2026-05-20 23:50:00+00:00
+  SELL 2 DAL @ $73.70 at 2026-05-20 23:50:00+00:00
+  SELL 2 NFLX @ $87.85 at 2026-05-20 23:50:00+00:00
+  SELL 2 ENPH @ $52.97 at 2026-05-20 23:50:00+00:00
+  SELL 2 DIS @ $103.95 at 2026-05-20 23:50:00+00:00
+  SELL 2 QQQ @ $708.43 at 2026-05-20 23:50:00+00:00
+  SELL 2 BMY @ $58.48 at 2026-05-20 23:50:00+00:00
+  SELL 2 IWM @ $278.70 at 2026-05-20 23:50:00+00:00
+  SELL 2 ESTC @ $54.68 at 2026-05-20 23:50:00+00:00
+  SELL 2 PINS @ $18.80 at 2026-05-20 23:50:00+00:00
+  SELL 2 NXPI @ $308.57 at 2026-05-20 23:50:00+00:00
+  SELL 2 MTCH @ $35.72 at 2026-05-20 23:50:00+00:00
+  SELL 2 CRWD @ $647.27 at 2026-05-20 23:50:00+00:00
+  SELL 2 BHP @ $84.17 at 2026-05-20 23:50:00+00:00
+  SELL 2 ALB @ $169.63 at 2026-05-20 23:50:00+00:00
+  SELL 2 AMD @ $439.03 at 2026-05-20 23:50:00+00:00
+  SELL 2 NKE @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 2 ON @ $109.39 at 2026-05-20 23:50:00+00:00
+  SELL 2 BE @ $280.83 at 2026-05-20 23:50:00+00:00
+  SELL 2 ETSY @ $60.80 at 2026-05-20 23:50:00+00:00
+  SELL 2 CVNA @ $64.96 at 2026-05-20 23:50:00+00:00
+  SELL 2 LCID @ $5.68 at 2026-05-20 23:50:00+00:00
+  SELL 2 LI @ $16.20 at 2026-05-20 23:50:00+00:00
+  SELL 2 META @ $603.23 at 2026-05-20 23:50:00+00:00
+  SELL 2 JD @ $32.49 at 2026-05-20 23:50:00+00:00
+  SELL 2 HOOD @ $75.38 at 2026-05-20 23:50:00+00:00
+  SELL 2 VERI @ $1.96 at 2026-05-20 23:50:00+00:00
+  SELL 2 CHWY @ $20.12 at 2026-05-20 23:50:00+00:00
+  SELL 2 SCHW @ $90.02 at 2026-05-20 23:50:00+00:00
+  SELL 2 AI @ $9.20 at 2026-05-20 23:50:00+00:00
+  SELL 2 UBER @ $74.47 at 2026-05-20 23:50:00+00:00
+  SELL 2 OXY @ $59.03 at 2026-05-20 23:50:00+00:00
+  SELL 2 SEDG @ $55.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 SNOW @ $165.35 at 2026-05-20 23:50:00+00:00
+  SELL 2 HAL @ $42.20 at 2026-05-20 23:50:00+00:00
+  SELL 2 APA @ $39.48 at 2026-05-20 23:50:00+00:00
+  SELL 2 WFC @ $75.77 at 2026-05-20 23:50:00+00:00
+  SELL 2 CCI @ $92.64 at 2026-05-20 23:50:00+00:00
+  SELL 2 MSFT @ $418.38 at 2026-05-20 23:50:00+00:00
+  SELL 2 RTX @ $174.76 at 2026-05-20 23:50:00+00:00
+  SELL 2 CF @ $123.17 at 2026-05-20 23:50:00+00:00
+  SELL 2 IFF @ $74.43 at 2026-05-20 23:50:00+00:00
+  SELL 2 RBLX @ $45.49 at 2026-05-20 23:50:00+00:00
+  SELL 2 TWLO @ $187.83 at 2026-05-20 23:50:00+00:00
+  SELL 2 SPY @ $738.25 at 2026-05-20 23:50:00+00:00
+  SELL 2 KTOS @ $55.75 at 2026-05-20 23:50:00+00:00
+  SELL 2 BAC @ $51.18 at 2026-05-20 23:50:00+00:00
+  SELL 2 SHOP @ $104.19 at 2026-05-20 23:50:00+00:00
+  SELL 2 EDIT @ $2.62 at 2026-05-20 23:50:00+00:00
+  SELL 2 W @ $63.83 at 2026-05-20 23:50:00+00:00
+  SELL 2 AMZN @ $5278.55 at 2026-05-20 23:50:00+00:00
+  SELL 2 PATH @ $10.68 at 2026-05-20 23:50:00+00:00
+  SELL 2 TEAM @ $85.40 at 2026-05-20 23:50:00+00:00
+  SELL 2 XLV @ $147.13 at 2026-05-20 23:50:00+00:00
+  SELL 2 ISRG @ $447.70 at 2026-05-20 23:50:00+00:00
+  SELL 2 SBUX @ $106.02 at 2026-05-20 23:50:00+00:00
+  SELL 2 NEM @ $107.16 at 2026-05-20 23:50:00+00:00
+  SELL 2 PFE @ $25.79 at 2026-05-20 23:50:00+00:00
+  SELL 2 DOW @ $36.28 at 2026-05-20 23:50:00+00:00
+  SELL 2 CRSP @ $48.50 at 2026-05-20 23:50:00+00:00
+  SELL 2 INTC @ $116.92 at 2026-05-20 23:50:00+00:00
+  SELL 2 SNAP @ $5.58 at 2026-05-20 23:50:00+00:00
+  SELL 2 ORA @ $131.78 at 2026-05-20 23:50:00+00:00
+  SELL 2 DKNG @ $25.15 at 2026-05-20 23:50:00+00:00
+  SELL 2 SQM @ $81.32 at 2026-05-20 23:50:00+00:00
+  SELL 2 WMB @ $78.10 at 2026-05-20 23:50:00+00:00
+  SELL 2 XLE @ $59.71 at 2026-05-20 23:50:00+00:00
+  SELL 2 APP @ $477.97 at 2026-05-20 23:50:00+00:00
+  SELL 2 SSO @ $132.47 at 2026-05-20 23:50:00+00:00
+  SELL 2 AMAT @ $423.81 at 2026-05-20 23:50:00+00:00
+  SELL 2 QCOM @ $199.96 at 2026-05-20 23:50:00+00:00
+  SELL 2 ZM @ $99.49 at 2026-05-20 23:50:00+00:00
+  SELL 2 SPG @ $204.10 at 2026-05-20 23:50:00+00:00
+  SELL 2 SWKS @ $74.01 at 2026-05-20 23:50:00+00:00
+  SELL 2 MRK @ $113.29 at 2026-05-20 23:50:00+00:00
+  SELL 2 LRCX @ $290.01 at 2026-05-20 23:50:00+00:00
+  SELL 2 FAST @ $43.47 at 2026-05-20 23:50:00+00:00
+  SELL 2 KLAC @ $1824.72 at 2026-05-20 23:50:00+00:00
+  SELL 2 TFC @ $48.05 at 2026-05-20 23:50:00+00:00
+  SELL 2 TER @ $341.18 at 2026-05-20 23:50:00+00:00
+  SELL 2 JBHT @ $262.88 at 2026-05-20 23:50:00+00:00
+  SELL 2 TXN @ $303.45 at 2026-05-20 23:50:00+00:00
+  SELL 2 ROKU @ $122.96 at 2026-05-20 23:50:00+00:00
+  SELL 2 MP @ $56.25 at 2026-05-20 23:50:00+00:00
+  SELL 2 MCD @ $280.49 at 2026-05-20 23:50:00+00:00
+  SELL 2 SLB @ $57.25 at 2026-05-20 23:50:00+00:00
+  SELL 2 NET @ $208.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 GM @ $75.87 at 2026-05-20 23:50:00+00:00
+  SELL 2 EL @ $78.09 at 2026-05-20 23:50:00+00:00
+  SELL 2 NTLA @ $12.34 at 2026-05-20 23:50:00+00:00
+  SELL 2 NOW @ $102.11 at 2026-05-20 23:50:00+00:00
+  SELL 2 M @ $19.85 at 2026-05-20 23:50:00+00:00
+  SELL 2 ZS @ $172.78 at 2026-05-20 23:50:00+00:00
+  SELL 2 ADM @ $77.57 at 2026-05-20 23:50:00+00:00
+  SELL 2 DDOG @ $211.40 at 2026-05-20 23:50:00+00:00
+  SELL 2 FIS @ $42.70 at 2026-05-20 23:50:00+00:00
+  SELL 2 CSCO @ $113.91 at 2026-05-20 23:50:00+00:00
+  SELL 2 Z @ $36.12 at 2026-05-20 23:50:00+00:00
+  SELL 2 MO @ $73.40 at 2026-05-20 23:50:00+00:00
+  SELL 2 VRTX @ $428.01 at 2026-05-20 23:50:00+00:00
+  SELL 2 ARCT @ $6.84 at 2026-05-20 23:50:00+00:00
+  SELL 2 O @ $62.19 at 2026-05-20 23:50:00+00:00
+  SELL 2 JNJ @ $229.32 at 2026-05-20 23:50:00+00:00
+  SELL 2 GE @ $37.31 at 2026-05-20 23:50:00+00:00
+  SELL 2 PG @ $142.51 at 2026-05-20 23:50:00+00:00
+  SELL 2 LMT @ $520.10 at 2026-05-20 23:50:00+00:00
+  SELL 2 UPS @ $98.24 at 2026-05-20 23:50:00+00:00
+  SELL 2 BEAM @ $27.11 at 2026-05-20 23:50:00+00:00
+  SELL 2 BILL @ $38.10 at 2026-05-20 23:50:00+00:00
+  SELL 2 NU @ $12.76 at 2026-05-20 23:50:00+00:00
+  SELL 2 VALE @ $16.41 at 2026-05-20 23:50:00+00:00
+  SELL 2 DPZ @ $316.50 at 2026-05-20 23:50:00+00:00
+  SELL 2 BKR @ $66.98 at 2026-05-20 23:50:00+00:00
+  SELL 2 DHR @ $170.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 PENN @ $16.17 at 2026-05-20 23:50:00+00:00
+  SELL 2 MDB @ $327.17 at 2026-05-20 23:50:00+00:00
+  SELL 2 GD @ $336.02 at 2026-05-20 23:50:00+00:00
+  SELL 2 PGR @ $203.09 at 2026-05-20 23:50:00+00:00
+  SELL 2 MCHP @ $93.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 CRM @ $176.34 at 2026-05-20 23:50:00+00:00
+  SELL 2 DD @ $46.73 at 2026-05-20 23:50:00+00:00
+  SELL 2 CMCSA @ $24.88 at 2026-05-20 23:50:00+00:00
+  SELL 2 XLF @ $51.60 at 2026-05-20 23:50:00+00:00
+  SELL 2 VLO @ $254.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 CSX @ $45.74 at 2026-05-20 23:50:00+00:00
+  SELL 2 DIA @ $499.02 at 2026-05-20 23:50:00+00:00
+  SELL 2 NOC @ $550.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 NEE @ $88.06 at 2026-05-20 23:50:00+00:00
+  SELL 2 SHW @ $307.39 at 2026-05-20 23:50:00+00:00
+  SELL 2 UNP @ $265.80 at 2026-05-20 23:50:00+00:00
+  SELL 2 KSS @ $12.15 at 2026-05-20 23:50:00+00:00
+  SELL 2 AVGO @ $416.53 at 2026-05-20 23:50:00+00:00
+  SELL 2 AXP @ $309.67 at 2026-05-20 23:50:00+00:00
+  SELL 2 CL @ $90.36 at 2026-05-20 23:50:00+00:00
+  SELL 2 TMO @ $451.77 at 2026-05-20 23:50:00+00:00
+  SELL 2 COP @ $122.46 at 2026-05-20 23:50:00+00:00
+  SELL 2 QRVO @ $97.80 at 2026-05-20 23:50:00+00:00
+  SELL 2 ZG @ $36.77 at 2026-05-20 23:50:00+00:00
+  SELL 2 ROK @ $436.29 at 2026-05-20 23:50:00+00:00
+  SELL 2 C @ $124.52 at 2026-05-20 23:50:00+00:00
+  SELL 2 OKTA @ $88.53 at 2026-05-20 23:50:00+00:00
+  SELL 2 HSY @ $190.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 AES @ $14.64 at 2026-05-20 23:50:00+00:00
+  SELL 2 ABBV @ $212.15 at 2026-05-20 23:50:00+00:00
+  SELL 2 CI @ $283.60 at 2026-05-20 23:50:00+00:00
+  SELL 2 ABT @ $88.21 at 2026-05-20 23:50:00+00:00
+  SELL 2 NSC @ $312.04 at 2026-05-20 23:50:00+00:00
+  SELL 2 AVAV @ $162.90 at 2026-05-20 23:50:00+00:00
+  SELL 2 ADBE @ $250.79 at 2026-05-20 23:50:00+00:00
+  SELL 2 ABNB @ $134.20 at 2026-05-20 23:50:00+00:00
+  SELL 2 KMI @ $33.63 at 2026-05-20 23:50:00+00:00
+  SELL 2 MPC @ $258.37 at 2026-05-20 23:50:00+00:00
+  SELL 2 FDX @ $386.12 at 2026-05-20 23:50:00+00:00
+  SELL 2 HCA @ $396.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 HLT @ $323.87 at 2026-05-20 23:50:00+00:00
+  SELL 2 MOS @ $21.90 at 2026-05-20 23:50:00+00:00
+  SELL 2 SYY @ $75.46 at 2026-05-20 23:50:00+00:00
+  SELL 2 MDT @ $77.63 at 2026-05-20 23:50:00+00:00
+  SELL 2 HD @ $310.20 at 2026-05-20 23:50:00+00:00
+  SELL 2 LULU @ $124.66 at 2026-05-20 23:50:00+00:00
+  SELL 2 BNTX @ $90.36 at 2026-05-20 23:50:00+00:00
+  SELL 2 MDLZ @ $61.83 at 2026-05-20 23:50:00+00:00
+  SELL 2 PSX @ $180.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 SYK @ $321.49 at 2026-05-20 23:50:00+00:00
+  SELL 2 USB @ $54.50 at 2026-05-20 23:50:00+00:00
+  SELL 2 CB @ $328.38 at 2026-05-20 23:50:00+00:00
+  SELL 2 ODFL @ $205.64 at 2026-05-20 23:50:00+00:00
+  SELL 2 AMGN @ $330.90 at 2026-05-20 23:50:00+00:00
+  SELL 2 FANG @ $204.45 at 2026-05-20 23:50:00+00:00
+  SELL 2 PNC @ $216.83 at 2026-05-20 23:50:00+00:00
+  SELL 2 DVN @ $48.36 at 2026-05-20 23:50:00+00:00
+  SELL 2 ETN @ $380.34 at 2026-05-20 23:50:00+00:00
+  SELL 2 BALL @ $56.80 at 2026-05-20 23:50:00+00:00
+  SELL 2 HII @ $322.28 at 2026-05-20 23:50:00+00:00
+  SELL 2 PH @ $859.44 at 2026-05-20 23:50:00+00:00
+  SELL 2 LSTR @ $189.37 at 2026-05-20 23:50:00+00:00
+  SELL 2 ITW @ $250.77 at 2026-05-20 23:50:00+00:00
+  SELL 2 XLK @ $175.43 at 2026-05-20 23:50:00+00:00
+  SELL 2 CHRW @ $180.64 at 2026-05-20 23:50:00+00:00
+  SELL 2 EMR @ $132.86 at 2026-05-20 23:50:00+00:00
+  SELL 2 DLR @ $190.65 at 2026-05-20 23:50:00+00:00
+  SELL 2 REGN @ $646.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 GPN @ $70.65 at 2026-05-20 23:50:00+00:00
+  SELL 2 XLI @ $170.09 at 2026-05-20 23:50:00+00:00
+  SELL 2 BK @ $137.16 at 2026-05-20 23:50:00+00:00
+  SELL 2 KR @ $68.37 at 2026-05-20 23:50:00+00:00
+  SELL 2 OTIS @ $71.27 at 2026-05-20 23:50:00+00:00
+  SELL 2 HES @ $160.31 at 2026-05-20 23:50:00+00:00
+  SELL 2 EA @ $201.59 at 2026-05-20 23:50:00+00:00
+  SELL 2 CME @ $290.06 at 2026-05-20 23:50:00+00:00
+  SELL 2 LLY @ $1015.84 at 2026-05-20 23:50:00+00:00
+  SELL 2 DE @ $558.69 at 2026-05-20 23:50:00+00:00
+  SELL 2 COST @ $1074.94 at 2026-05-20 23:50:00+00:00
+  SELL 2 APD @ $289.19 at 2026-05-20 23:50:00+00:00
+  SELL 2 KO @ $81.56 at 2026-05-20 23:50:00+00:00
+  SELL 2 LIN @ $500.92 at 2026-05-20 23:50:00+00:00
+  SELL 2 ECL @ $248.64 at 2026-05-20 23:50:00+00:00
+  SELL 2 GPS @ $24.56 at 2026-05-20 23:50:00+00:00
+  SELL 2 EQIX @ $1063.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 BLK @ $1051.57 at 2026-05-20 23:50:00+00:00
+  SELL 2 EOG @ $142.00 at 2026-05-20 23:50:00+00:00
+  SELL 2 FISV @ $56.03 at 2026-05-20 23:50:00+00:00
+  SELL 1 CMG @ $32.90 at 2026-05-20 23:50:00+00:00
+  SELL 2 MNST @ $86.44 at 2026-05-20 23:50:00+00:00
+  SELL 2 ZTS @ $79.69 at 2026-05-20 23:50:00+00:00
+  SELL 2 MS @ $197.75 at 2026-05-20 23:50:00+00:00
+  SELL 2 PPG @ $104.39 at 2026-05-20 23:50:00+00:00
+  SELL 2 VMC @ $264.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 VTR @ $88.60 at 2026-05-20 23:50:00+00:00
+  SELL 2 EXPD @ $158.42 at 2026-05-20 23:50:00+00:00
+  SELL 2 YUM @ $152.71 at 2026-05-20 23:50:00+00:00
+  SELL 2 TGT @ $122.38 at 2026-05-20 23:50:00+00:00
+  SELL 1 ICE @ $151.23 at 2026-05-20 23:50:00+00:00
 
 Buy One Each Penguin:
-  SELL 1 SPY @ $737.33 at 2026-05-15 23:59:00+00:00
-  SELL 1 SSO @ $132.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLK @ $175.75 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLF @ $51.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLE @ $59.48 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLP @ $84.52 at 2026-05-15 23:59:00+00:00
-  SELL 1 AAPL @ $1199.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 NVDA @ $2243.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMZN @ $5252.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 GOOGL @ $7907.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 TSLA @ $6275.21 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMD @ $420.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 INTC @ $106.91 at 2026-05-15 23:59:00+00:00
-  SELL 1 ASML @ $1499.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 PLTR @ $133.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 U @ $27.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 UBER @ $75.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 DIS @ $102.55 at 2026-05-15 23:59:00+00:00
-  SELL 1 SQ @ $87.17 at 2026-05-15 23:59:00+00:00
-  SELL 1 PYPL @ $44.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 COIN @ $194.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 SOFI @ $15.52 at 2026-05-15 23:59:00+00:00
-  SELL 1 AFRM @ $65.67 at 2026-05-15 23:59:00+00:00
-  SELL 1 HOOD @ $76.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 UPST @ $29.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 NU @ $12.22 at 2026-05-15 23:59:00+00:00
-  SELL 1 C @ $123.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 PFE @ $25.32 at 2026-05-15 23:59:00+00:00
-  SELL 1 GILD @ $129.06 at 2026-05-15 23:59:00+00:00
-  SELL 1 DNA @ $7.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 BLUE @ $4.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 NKE @ $41.92 at 2026-05-15 23:59:00+00:00
-  SELL 1 CHWY @ $21.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 KHC @ $23.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 EL @ $80.28 at 2026-05-15 23:59:00+00:00
-  SELL 1 XOM @ $157.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 CVX @ $190.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 ENPH @ $52.55 at 2026-05-15 23:59:00+00:00
-  SELL 1 RUN @ $13.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 PLUG @ $3.75 at 2026-05-15 23:59:00+00:00
-  SELL 1 FCEL @ $21.58 at 2026-05-15 23:59:00+00:00
-  SELL 1 RIVN @ $13.79 at 2026-05-15 23:59:00+00:00
-  SELL 1 LCID @ $6.04 at 2026-05-15 23:59:00+00:00
-  SELL 1 NIO @ $6.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 XPEV @ $15.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 LI @ $18.58 at 2026-05-15 23:59:00+00:00
-  SELL 1 MP @ $61.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 O @ $61.22 at 2026-05-15 23:59:00+00:00
-  SELL 1 RKLB @ $122.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPCE @ $2.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 AI @ $8.65 at 2026-05-15 23:59:00+00:00
-  SELL 1 PATH @ $10.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 RIOT @ $23.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 MARA @ $12.34 at 2026-05-15 23:59:00+00:00
-  SELL 1 CAN @ $0.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 GREE @ $1.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 OPEN @ $4.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 RDFN @ $11.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 DKNG @ $24.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 BABA @ $132.28 at 2026-05-15 23:59:00+00:00
-  SELL 1 JD @ $31.95 at 2026-05-15 23:59:00+00:00
-  SELL 1 DIA @ $493.69 at 2026-05-15 23:59:00+00:00
-  SELL 1 ORCL @ $191.42 at 2026-05-15 23:59:00+00:00
-  SELL 1 QCOM @ $199.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 SHOP @ $99.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 RBLX @ $42.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 MRNA @ $48.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 M @ $19.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 W @ $58.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 CVNA @ $67.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 MO @ $73.04 at 2026-05-15 23:59:00+00:00
-  SELL 1 OXY @ $59.45 at 2026-05-15 23:59:00+00:00
-  SELL 1 LAC @ $5.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 BBAI @ $4.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 TSM @ $402.65 at 2026-05-15 23:59:00+00:00
-  SELL 1 PDD @ $96.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 MSFT @ $419.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 NET @ $196.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 JPM @ $297.53 at 2026-05-15 23:59:00+00:00
-  SELL 1 ALB @ $179.96 at 2026-05-15 23:59:00+00:00
-  SELL 1 DAL @ $72.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 PSX @ $176.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 SOUN @ $8.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 MSTR @ $176.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 NVO @ $44.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 CRSP @ $48.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 GM @ $74.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 F @ $13.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 HAL @ $41.73 at 2026-05-15 23:59:00+00:00
-  SELL 1 BHP @ $84.40 at 2026-05-15 23:59:00+00:00
-  SELL 1 META @ $610.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 COP @ $122.43 at 2026-05-15 23:59:00+00:00
-  SELL 1 IFF @ $73.10 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLI @ $171.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 MU @ $716.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 ADM @ $80.29 at 2026-05-15 23:59:00+00:00
-  SELL 1 SLB @ $55.29 at 2026-05-15 23:59:00+00:00
-  SELL 1 KO @ $80.88 at 2026-05-15 23:59:00+00:00
-  SELL 1 TWLO @ $197.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 VALE @ $16.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 BNTX @ $89.16 at 2026-05-15 23:59:00+00:00
-  SELL 1 ON @ $112.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 SEDG @ $61.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 SNAP @ $5.49 at 2026-05-15 23:59:00+00:00
-  SELL 1 ORA @ $133.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 BMY @ $57.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 SNOW @ $157.64 at 2026-05-15 23:59:00+00:00
-  SELL 1 NEE @ $93.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 BA @ $220.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 VERI @ $2.08 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZM @ $99.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 KR @ $65.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 FSLY @ $16.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 DVN @ $49.51 at 2026-05-15 23:59:00+00:00
-  SELL 1 LRCX @ $282.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 NTLA @ $13.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 SQM @ $84.26 at 2026-05-15 23:59:00+00:00
-  SELL 1 UAL @ $93.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 BLDP @ $4.53 at 2026-05-15 23:59:00+00:00
-  SELL 1 APA @ $38.94 at 2026-05-15 23:59:00+00:00
-  SELL 1 PM @ $190.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 MRK @ $111.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 MNST @ $87.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 AVGO @ $423.39 at 2026-05-15 23:59:00+00:00
-  SELL 1 GPS @ $24.56 at 2026-05-15 23:59:00+00:00
-  SELL 1 TMO @ $436.56 at 2026-05-15 23:59:00+00:00
-  SELL 1 MCD @ $276.68 at 2026-05-15 23:59:00+00:00
-  SELL 1 PH @ $862.72 at 2026-05-15 23:59:00+00:00
-  SELL 1 NEM @ $109.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 ROKU @ $123.58 at 2026-05-15 23:59:00+00:00
-  SELL 1 LIN @ $505.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 CF @ $125.72 at 2026-05-15 23:59:00+00:00
-  SELL 1 PINS @ $19.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 BILL @ $40.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 CSCO @ $117.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 SHW @ $300.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 TFC @ $47.08 at 2026-05-15 23:59:00+00:00
-  SELL 1 EXC @ $43.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 MDB @ $311.41 at 2026-05-15 23:59:00+00:00
-  SELL 1 BALL @ $55.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 ETSY @ $58.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 D @ $61.70 at 2026-05-15 23:59:00+00:00
-  SELL 1 HES @ $160.31 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLV @ $144.81 at 2026-05-15 23:59:00+00:00
-  SELL 1 ABNB @ $132.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 KTOS @ $51.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 WFC @ $73.11 at 2026-05-15 23:59:00+00:00
-  SELL 1 BKR @ $64.23 at 2026-05-15 23:59:00+00:00
-  SELL 1 DD @ $49.31 at 2026-05-15 23:59:00+00:00
-  SELL 1 ISRG @ $421.54 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMAT @ $432.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 CMCSA @ $24.77 at 2026-05-15 23:59:00+00:00
-  SELL 1 FCX @ $63.13 at 2026-05-15 23:59:00+00:00
-  SELL 1 CRM @ $173.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 TJX @ $147.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 PLD @ $140.53 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMGN @ $326.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 BEAM @ $27.99 at 2026-05-15 23:59:00+00:00
-  SELL 1 HD @ $297.66 at 2026-05-15 23:59:00+00:00
-  SELL 1 WMT @ $132.06 at 2026-05-15 23:59:00+00:00
-  SELL 1 SCHW @ $90.87 at 2026-05-15 23:59:00+00:00
-  SELL 1 PG @ $141.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 RIO @ $103.61 at 2026-05-15 23:59:00+00:00
-  SELL 1 TEAM @ $87.43 at 2026-05-15 23:59:00+00:00
-  SELL 1 DOCU @ $47.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 GS @ $946.88 at 2026-05-15 23:59:00+00:00
-  SELL 1 BE @ $274.86 at 2026-05-15 23:59:00+00:00
-  SELL 1 CAT @ $887.32 at 2026-05-15 23:59:00+00:00
-  SELL 1 OKE @ $92.41 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZG @ $38.06 at 2026-05-15 23:59:00+00:00
-  SELL 1 GIS @ $33.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 TGT @ $121.48 at 2026-05-15 23:59:00+00:00
-  SELL 1 GE @ $35.17 at 2026-05-15 23:59:00+00:00
-  SELL 1 MDLZ @ $60.51 at 2026-05-15 23:59:00+00:00
-  SELL 1 EOG @ $140.26 at 2026-05-15 23:59:00+00:00
-  SELL 1 RTX @ $171.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 SBUX @ $106.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 PEP @ $149.24 at 2026-05-15 23:59:00+00:00
-  SELL 1 QRVO @ $92.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 CRWD @ $591.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZS @ $160.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 OKTA @ $82.09 at 2026-05-15 23:59:00+00:00
-  SELL 1 MTCH @ $35.41 at 2026-05-15 23:59:00+00:00
-  SELL 1 PNC @ $212.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 ABBV @ $209.61 at 2026-05-15 23:59:00+00:00
-  SELL 1 VRTX @ $438.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 EDIT @ $2.61 at 2026-05-15 23:59:00+00:00
-  SELL 1 MAR @ $350.95 at 2026-05-15 23:59:00+00:00
-  SELL 1 KMI @ $33.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 WMB @ $78.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 DOW @ $38.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 MOS @ $21.76 at 2026-05-15 23:59:00+00:00
-  SELL 1 CCI @ $86.66 at 2026-05-15 23:59:00+00:00
-  SELL 1 PENN @ $16.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 AEP @ $125.13 at 2026-05-15 23:59:00+00:00
-  SELL 1 COST @ $1047.28 at 2026-05-15 23:59:00+00:00
-  SELL 1 DDOG @ $207.21 at 2026-05-15 23:59:00+00:00
-  SELL 1 WDAY @ $124.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 TXN @ $302.11 at 2026-05-15 23:59:00+00:00
-  SELL 1 USB @ $53.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 CTRA @ $32.49 at 2026-05-15 23:59:00+00:00
-  SELL 1 KSS @ $11.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 UPS @ $98.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 OTIS @ $71.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPG @ $200.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 Z @ $37.73 at 2026-05-15 23:59:00+00:00
-  SELL 1 VLO @ $250.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 ICE @ $154.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 DE @ $561.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 NOW @ $94.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 FDX @ $374.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 BBY @ $56.30 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPGI @ $403.01 at 2026-05-15 23:59:00+00:00
-  SELL 1 UNP @ $270.16 at 2026-05-15 23:59:00+00:00
-  SELL 1 MS @ $192.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 AXP @ $312.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 JNJ @ $226.79 at 2026-05-15 23:59:00+00:00
-  SELL 1 UNH @ $375.17 at 2026-05-15 23:59:00+00:00
-  SELL 1 DHR @ $161.84 at 2026-05-15 23:59:00+00:00
-  SELL 1 REGN @ $697.15 at 2026-05-15 23:59:00+00:00
-  SELL 1 MDT @ $76.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 SYK @ $305.90 at 2026-05-15 23:59:00+00:00
-  SELL 1 CI @ $285.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 ZTS @ $74.14 at 2026-05-15 23:59:00+00:00
-  SELL 1 HCA @ $423.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 HON @ $213.22 at 2026-05-15 23:59:00+00:00
-  SELL 1 EMR @ $133.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 WM @ $219.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 ROST @ $213.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 LULU @ $119.11 at 2026-05-15 23:59:00+00:00
-  SELL 1 SYY @ $72.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 STZ @ $140.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 DG @ $102.35 at 2026-05-15 23:59:00+00:00
-  SELL 1 SRE @ $90.43 at 2026-05-15 23:59:00+00:00
-  SELL 1 RSI @ $26.77 at 2026-05-15 23:59:00+00:00
-  SELL 1 TER @ $335.56 at 2026-05-15 23:59:00+00:00
-  SELL 1 HLT @ $315.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 WELL @ $213.74 at 2026-05-15 23:59:00+00:00
-  SELL 1 VTR @ $87.45 at 2026-05-15 23:59:00+00:00
-  SELL 1 LOW @ $218.14 at 2026-05-15 23:59:00+00:00
-  SELL 1 ROK @ $442.93 at 2026-05-15 23:59:00+00:00
-  SELL 1 DUK @ $121.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 HSY @ $186.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 FANG @ $204.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 PGR @ $199.73 at 2026-05-15 23:59:00+00:00
-  SELL 1 INTU @ $393.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 AES @ $14.49 at 2026-05-15 23:59:00+00:00
-  SELL 1 DLR @ $188.51 at 2026-05-15 23:59:00+00:00
-  SELL 1 CL @ $88.13 at 2026-05-15 23:59:00+00:00
-  SELL 1 MPC @ $255.68 at 2026-05-15 23:59:00+00:00
-  SELL 1 FAST @ $43.29 at 2026-05-15 23:59:00+00:00
-  SELL 1 CSX @ $45.72 at 2026-05-15 23:59:00+00:00
-  SELL 1 MCHP @ $93.54 at 2026-05-15 23:59:00+00:00
-  SELL 1 LYB @ $76.05 at 2026-05-15 23:59:00+00:00
-  SELL 1 SPLK @ $156.92 at 2026-05-15 23:59:00+00:00
-  SELL 1 ITW @ $247.68 at 2026-05-15 23:59:00+00:00
-  SELL 1 ULTA @ $493.79 at 2026-05-15 23:59:00+00:00
-  SELL 1 EA @ $200.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 CME @ $299.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 XEL @ $78.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 NXPI @ $291.26 at 2026-05-15 23:59:00+00:00
-  SELL 1 JBHT @ $262.21 at 2026-05-15 23:59:00+00:00
-  SELL 1 CHRW @ $163.59 at 2026-05-15 23:59:00+00:00
-  SELL 1 ODFL @ $203.12 at 2026-05-15 23:59:00+00:00
-  SELL 1 KMB @ $96.03 at 2026-05-15 23:59:00+00:00
-  SELL 1 EQIX @ $1060.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 PSA @ $292.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 HUBS @ $198.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 FIS @ $41.60 at 2026-05-15 23:59:00+00:00
-  SELL 1 FISV @ $55.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 GPN @ $67.69 at 2026-05-15 23:59:00+00:00
-  SELL 1 BLK @ $1079.98 at 2026-05-15 23:59:00+00:00
-  SELL 1 CB @ $323.94 at 2026-05-15 23:59:00+00:00
-  SELL 1 MMC @ $182.70 at 2026-05-15 23:59:00+00:00
-  SELL 1 BK @ $135.02 at 2026-05-15 23:59:00+00:00
-  SELL 1 ARCT @ $7.47 at 2026-05-15 23:59:00+00:00
-  SELL 1 NOC @ $540.78 at 2026-05-15 23:59:00+00:00
-  SELL 1 ETN @ $398.80 at 2026-05-15 23:59:00+00:00
-  SELL 1 GD @ $335.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 RSG @ $208.32 at 2026-05-15 23:59:00+00:00
-  SELL 1 NSC @ $315.95 at 2026-05-15 23:59:00+00:00
-  SELL 1 LSTR @ $176.04 at 2026-05-15 23:59:00+00:00
-  SELL 1 EXPD @ $155.45 at 2026-05-15 23:59:00+00:00
-  SELL 1 DPZ @ $301.57 at 2026-05-15 23:59:00+00:00
-  SELL 1 YUM @ $149.97 at 2026-05-15 23:59:00+00:00
-  SELL 1 CMG @ $32.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 APD @ $295.38 at 2026-05-15 23:59:00+00:00
-  SELL 1 PPG @ $102.25 at 2026-05-15 23:59:00+00:00
-  SELL 1 NUE @ $225.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 STLD @ $229.39 at 2026-05-15 23:59:00+00:00
-  SELL 1 MLM @ $558.66 at 2026-05-15 23:59:00+00:00
-  SELL 1 VMC @ $267.83 at 2026-05-15 23:59:00+00:00
-  SELL 1 PKG @ $212.08 at 2026-05-15 23:59:00+00:00
-  SELL 1 SO @ $92.50 at 2026-05-15 23:59:00+00:00
-  SELL 1 PEG @ $76.44 at 2026-05-15 23:59:00+00:00
-  SELL 1 ED @ $105.36 at 2026-05-15 23:59:00+00:00
-  SELL 1 AMT @ $170.63 at 2026-05-15 23:59:00+00:00
-  SELL 1 AVAV @ $157.20 at 2026-05-15 23:59:00+00:00
-  SELL 1 HII @ $326.07 at 2026-05-15 23:59:00+00:00
-  SELL 1 ECL @ $247.62 at 2026-05-15 23:59:00+00:00
+  SELL 1 SPY @ $738.25 at 2026-05-20 23:50:00+00:00
+  SELL 1 SSO @ $132.47 at 2026-05-20 23:50:00+00:00
+  SELL 1 QQQ @ $708.43 at 2026-05-20 23:50:00+00:00
+  SELL 1 IWM @ $278.70 at 2026-05-20 23:50:00+00:00
+  SELL 1 XLK @ $175.43 at 2026-05-20 23:50:00+00:00
+  SELL 1 XLF @ $51.60 at 2026-05-20 23:50:00+00:00
+  SELL 1 XLE @ $59.71 at 2026-05-20 23:50:00+00:00
+  SELL 1 XLP @ $86.21 at 2026-05-20 23:50:00+00:00
+  SELL 1 AAPL @ $1203.92 at 2026-05-20 23:50:00+00:00
+  SELL 1 NVDA @ $2207.03 at 2026-05-20 23:50:00+00:00
+  SELL 1 AMZN @ $5278.55 at 2026-05-20 23:50:00+00:00
+  SELL 1 GOOGL @ $7749.84 at 2026-05-20 23:50:00+00:00
+  SELL 1 TSLA @ $6225.16 at 2026-05-20 23:50:00+00:00
+  SELL 1 AMD @ $439.03 at 2026-05-20 23:50:00+00:00
+  SELL 1 INTC @ $116.92 at 2026-05-20 23:50:00+00:00
+  SELL 1 PLTR @ $135.85 at 2026-05-20 23:50:00+00:00
+  SELL 1 U @ $26.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 UBER @ $74.47 at 2026-05-20 23:50:00+00:00
+  SELL 1 DIS @ $103.95 at 2026-05-20 23:50:00+00:00
+  SELL 1 SQ @ $87.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 PYPL @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 1 COIN @ $191.48 at 2026-05-20 23:50:00+00:00
+  SELL 1 SOFI @ $15.60 at 2026-05-20 23:50:00+00:00
+  SELL 1 AFRM @ $66.60 at 2026-05-20 23:50:00+00:00
+  SELL 1 HOOD @ $75.38 at 2026-05-20 23:50:00+00:00
+  SELL 1 UPST @ $28.76 at 2026-05-20 23:50:00+00:00
+  SELL 1 NU @ $12.76 at 2026-05-20 23:50:00+00:00
+  SELL 1 BAC @ $51.18 at 2026-05-20 23:50:00+00:00
+  SELL 1 C @ $124.52 at 2026-05-20 23:50:00+00:00
+  SELL 1 PFE @ $25.79 at 2026-05-20 23:50:00+00:00
+  SELL 1 GILD @ $130.09 at 2026-05-20 23:50:00+00:00
+  SELL 1 DNA @ $7.78 at 2026-05-20 23:50:00+00:00
+  SELL 1 BLUE @ $4.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 NKE @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 1 CHWY @ $20.12 at 2026-05-20 23:50:00+00:00
+  SELL 1 KHC @ $23.53 at 2026-05-20 23:50:00+00:00
+  SELL 1 EL @ $78.09 at 2026-05-20 23:50:00+00:00
+  SELL 1 XOM @ $156.21 at 2026-05-20 23:50:00+00:00
+  SELL 1 CVX @ $191.28 at 2026-05-20 23:50:00+00:00
+  SELL 1 ENPH @ $52.97 at 2026-05-20 23:50:00+00:00
+  SELL 1 RUN @ $13.61 at 2026-05-20 23:50:00+00:00
+  SELL 1 PLUG @ $3.28 at 2026-05-20 23:50:00+00:00
+  SELL 1 FCEL @ $20.52 at 2026-05-20 23:50:00+00:00
+  SELL 1 RIVN @ $13.68 at 2026-05-20 23:50:00+00:00
+  SELL 1 LCID @ $5.68 at 2026-05-20 23:50:00+00:00
+  SELL 1 NIO @ $5.65 at 2026-05-20 23:50:00+00:00
+  SELL 1 XPEV @ $15.16 at 2026-05-20 23:50:00+00:00
+  SELL 1 LI @ $16.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 MP @ $56.25 at 2026-05-20 23:50:00+00:00
+  SELL 1 O @ $62.19 at 2026-05-20 23:50:00+00:00
+  SELL 1 RKLB @ $123.28 at 2026-05-20 23:50:00+00:00
+  SELL 1 SPCE @ $2.50 at 2026-05-20 23:50:00+00:00
+  SELL 1 AI @ $9.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 PATH @ $10.68 at 2026-05-20 23:50:00+00:00
+  SELL 1 RIOT @ $23.67 at 2026-05-20 23:50:00+00:00
+  SELL 1 MARA @ $13.13 at 2026-05-20 23:50:00+00:00
+  SELL 1 CAN @ $0.45 at 2026-05-20 23:50:00+00:00
+  SELL 1 GREE @ $1.25 at 2026-05-20 23:50:00+00:00
+  SELL 1 OPEN @ $4.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 RDFN @ $11.30 at 2026-05-20 23:50:00+00:00
+  SELL 1 DKNG @ $25.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 BABA @ $134.27 at 2026-05-20 23:50:00+00:00
+  SELL 1 JD @ $32.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 DIA @ $499.02 at 2026-05-20 23:50:00+00:00
+  SELL 1 ORCL @ $186.29 at 2026-05-20 23:50:00+00:00
+  SELL 1 QCOM @ $199.96 at 2026-05-20 23:50:00+00:00
+  SELL 1 SHOP @ $104.19 at 2026-05-20 23:50:00+00:00
+  SELL 1 RBLX @ $45.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 MRNA @ $48.18 at 2026-05-20 23:50:00+00:00
+  SELL 1 M @ $19.85 at 2026-05-20 23:50:00+00:00
+  SELL 1 W @ $63.83 at 2026-05-20 23:50:00+00:00
+  SELL 1 CVNA @ $64.96 at 2026-05-20 23:50:00+00:00
+  SELL 1 MO @ $73.40 at 2026-05-20 23:50:00+00:00
+  SELL 1 OXY @ $59.03 at 2026-05-20 23:50:00+00:00
+  SELL 1 LAC @ $4.75 at 2026-05-20 23:50:00+00:00
+  SELL 1 BBAI @ $4.07 at 2026-05-20 23:50:00+00:00
+  SELL 1 TSM @ $400.11 at 2026-05-20 23:50:00+00:00
+  SELL 1 PDD @ $97.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 MSFT @ $418.38 at 2026-05-20 23:50:00+00:00
+  SELL 1 NET @ $208.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 ADBE @ $250.79 at 2026-05-20 23:50:00+00:00
+  SELL 1 JPM @ $301.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 ALB @ $169.63 at 2026-05-20 23:50:00+00:00
+  SELL 1 DAL @ $73.70 at 2026-05-20 23:50:00+00:00
+  SELL 1 PSX @ $180.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 SOUN @ $8.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 MSTR @ $165.14 at 2026-05-20 23:50:00+00:00
+  SELL 1 NVO @ $45.03 at 2026-05-20 23:50:00+00:00
+  SELL 1 CRSP @ $48.50 at 2026-05-20 23:50:00+00:00
+  SELL 1 GM @ $75.87 at 2026-05-20 23:50:00+00:00
+  SELL 1 F @ $13.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 HAL @ $42.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 BHP @ $84.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 META @ $603.23 at 2026-05-20 23:50:00+00:00
+  SELL 1 COP @ $122.46 at 2026-05-20 23:50:00+00:00
+  SELL 1 IFF @ $74.43 at 2026-05-20 23:50:00+00:00
+  SELL 1 XLI @ $170.09 at 2026-05-20 23:50:00+00:00
+  SELL 1 MU @ $725.53 at 2026-05-20 23:50:00+00:00
+  SELL 1 ADM @ $77.57 at 2026-05-20 23:50:00+00:00
+  SELL 1 SLB @ $57.25 at 2026-05-20 23:50:00+00:00
+  SELL 1 KO @ $81.56 at 2026-05-20 23:50:00+00:00
+  SELL 1 TWLO @ $187.83 at 2026-05-20 23:50:00+00:00
+  SELL 1 APP @ $477.97 at 2026-05-20 23:50:00+00:00
+  SELL 1 VALE @ $16.41 at 2026-05-20 23:50:00+00:00
+  SELL 1 BNTX @ $90.36 at 2026-05-20 23:50:00+00:00
+  SELL 1 ON @ $109.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 SEDG @ $55.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 SNAP @ $5.58 at 2026-05-20 23:50:00+00:00
+  SELL 1 ORA @ $131.78 at 2026-05-20 23:50:00+00:00
+  SELL 1 NFLX @ $87.85 at 2026-05-20 23:50:00+00:00
+  SELL 1 BMY @ $58.48 at 2026-05-20 23:50:00+00:00
+  SELL 1 SNOW @ $165.35 at 2026-05-20 23:50:00+00:00
+  SELL 1 NEE @ $88.06 at 2026-05-20 23:50:00+00:00
+  SELL 1 BA @ $221.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 VERI @ $1.96 at 2026-05-20 23:50:00+00:00
+  SELL 1 ZM @ $99.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 KR @ $68.37 at 2026-05-20 23:50:00+00:00
+  SELL 1 FSLY @ $17.05 at 2026-05-20 23:50:00+00:00
+  SELL 1 DVN @ $48.36 at 2026-05-20 23:50:00+00:00
+  SELL 1 LRCX @ $290.01 at 2026-05-20 23:50:00+00:00
+  SELL 1 NTLA @ $12.34 at 2026-05-20 23:50:00+00:00
+  SELL 1 SQM @ $81.32 at 2026-05-20 23:50:00+00:00
+  SELL 1 UAL @ $97.50 at 2026-05-20 23:50:00+00:00
+  SELL 1 BLDP @ $4.74 at 2026-05-20 23:50:00+00:00
+  SELL 1 LLY @ $1015.84 at 2026-05-20 23:50:00+00:00
+  SELL 1 APA @ $39.48 at 2026-05-20 23:50:00+00:00
+  SELL 1 PM @ $188.87 at 2026-05-20 23:50:00+00:00
+  SELL 1 MRK @ $113.29 at 2026-05-20 23:50:00+00:00
+  SELL 1 MNST @ $86.44 at 2026-05-20 23:50:00+00:00
+  SELL 1 AVGO @ $416.53 at 2026-05-20 23:50:00+00:00
+  SELL 1 GPS @ $24.56 at 2026-05-20 23:50:00+00:00
+  SELL 1 TMO @ $451.77 at 2026-05-20 23:50:00+00:00
+  SELL 1 MCD @ $280.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 PH @ $859.44 at 2026-05-20 23:50:00+00:00
+  SELL 1 NEM @ $107.16 at 2026-05-20 23:50:00+00:00
+  SELL 1 ROKU @ $122.96 at 2026-05-20 23:50:00+00:00
+  SELL 1 LIN @ $500.92 at 2026-05-20 23:50:00+00:00
+  SELL 1 CF @ $123.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 PINS @ $18.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 BILL @ $38.10 at 2026-05-20 23:50:00+00:00
+  SELL 1 CSCO @ $113.91 at 2026-05-20 23:50:00+00:00
+  SELL 1 SHW @ $307.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 TFC @ $48.05 at 2026-05-20 23:50:00+00:00
+  SELL 1 EXC @ $44.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 MDB @ $327.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 BALL @ $56.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 ETSY @ $60.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 D @ $67.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 HES @ $160.31 at 2026-05-20 23:50:00+00:00
+  SELL 1 XLV @ $147.13 at 2026-05-20 23:50:00+00:00
+  SELL 1 ABNB @ $134.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 KTOS @ $55.75 at 2026-05-20 23:50:00+00:00
+  SELL 1 WFC @ $75.77 at 2026-05-20 23:50:00+00:00
+  SELL 1 BKR @ $66.98 at 2026-05-20 23:50:00+00:00
+  SELL 1 DD @ $46.73 at 2026-05-20 23:50:00+00:00
+  SELL 1 ISRG @ $447.70 at 2026-05-20 23:50:00+00:00
+  SELL 1 AMAT @ $423.81 at 2026-05-20 23:50:00+00:00
+  SELL 1 CMCSA @ $24.88 at 2026-05-20 23:50:00+00:00
+  SELL 1 FCX @ $60.63 at 2026-05-20 23:50:00+00:00
+  SELL 1 CRM @ $176.34 at 2026-05-20 23:50:00+00:00
+  SELL 1 TJX @ $159.18 at 2026-05-20 23:50:00+00:00
+  SELL 1 PLD @ $144.68 at 2026-05-20 23:50:00+00:00
+  SELL 1 AMGN @ $330.90 at 2026-05-20 23:50:00+00:00
+  SELL 1 BEAM @ $27.11 at 2026-05-20 23:50:00+00:00
+  SELL 1 HD @ $310.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 WMT @ $131.32 at 2026-05-20 23:50:00+00:00
+  SELL 1 SCHW @ $90.02 at 2026-05-20 23:50:00+00:00
+  SELL 1 PG @ $142.51 at 2026-05-20 23:50:00+00:00
+  SELL 1 RIO @ $101.53 at 2026-05-20 23:50:00+00:00
+  SELL 1 TEAM @ $85.40 at 2026-05-20 23:50:00+00:00
+  SELL 1 DOCU @ $48.75 at 2026-05-20 23:50:00+00:00
+  SELL 1 GS @ $983.55 at 2026-05-20 23:50:00+00:00
+  SELL 1 BE @ $280.83 at 2026-05-20 23:50:00+00:00
+  SELL 1 OKE @ $92.21 at 2026-05-20 23:50:00+00:00
+  SELL 1 ZG @ $36.77 at 2026-05-20 23:50:00+00:00
+  SELL 1 GIS @ $33.68 at 2026-05-20 23:50:00+00:00
+  SELL 1 TGT @ $122.38 at 2026-05-20 23:50:00+00:00
+  SELL 1 KLAC @ $1824.72 at 2026-05-20 23:50:00+00:00
+  SELL 1 GE @ $37.31 at 2026-05-20 23:50:00+00:00
+  SELL 1 MDLZ @ $61.83 at 2026-05-20 23:50:00+00:00
+  SELL 1 EOG @ $142.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 RTX @ $174.76 at 2026-05-20 23:50:00+00:00
+  SELL 1 SBUX @ $106.02 at 2026-05-20 23:50:00+00:00
+  SELL 1 PEP @ $149.45 at 2026-05-20 23:50:00+00:00
+  SELL 1 QRVO @ $97.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 CRWD @ $647.27 at 2026-05-20 23:50:00+00:00
+  SELL 1 ZS @ $172.78 at 2026-05-20 23:50:00+00:00
+  SELL 1 OKTA @ $88.53 at 2026-05-20 23:50:00+00:00
+  SELL 1 MTCH @ $35.72 at 2026-05-20 23:50:00+00:00
+  SELL 1 PNC @ $216.83 at 2026-05-20 23:50:00+00:00
+  SELL 1 ABBV @ $212.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 VRTX @ $428.01 at 2026-05-20 23:50:00+00:00
+  SELL 1 EDIT @ $2.62 at 2026-05-20 23:50:00+00:00
+  SELL 1 MAR @ $369.60 at 2026-05-20 23:50:00+00:00
+  SELL 1 KMI @ $33.63 at 2026-05-20 23:50:00+00:00
+  SELL 1 WMB @ $78.10 at 2026-05-20 23:50:00+00:00
+  SELL 1 DOW @ $36.28 at 2026-05-20 23:50:00+00:00
+  SELL 1 MOS @ $21.90 at 2026-05-20 23:50:00+00:00
+  SELL 1 CCI @ $92.64 at 2026-05-20 23:50:00+00:00
+  SELL 1 PENN @ $16.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 AEP @ $128.51 at 2026-05-20 23:50:00+00:00
+  SELL 1 COST @ $1074.94 at 2026-05-20 23:50:00+00:00
+  SELL 1 DDOG @ $211.40 at 2026-05-20 23:50:00+00:00
+  SELL 1 WDAY @ $123.85 at 2026-05-20 23:50:00+00:00
+  SELL 1 TXN @ $303.45 at 2026-05-20 23:50:00+00:00
+  SELL 1 USB @ $54.50 at 2026-05-20 23:50:00+00:00
+  SELL 1 CTRA @ $32.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 KSS @ $12.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 UPS @ $98.24 at 2026-05-20 23:50:00+00:00
+  SELL 1 OTIS @ $71.27 at 2026-05-20 23:50:00+00:00
+  SELL 1 SPG @ $204.10 at 2026-05-20 23:50:00+00:00
+  SELL 1 Z @ $36.12 at 2026-05-20 23:50:00+00:00
+  SELL 1 VLO @ $254.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 ICE @ $151.23 at 2026-05-20 23:50:00+00:00
+  SELL 1 DE @ $558.69 at 2026-05-20 23:50:00+00:00
+  SELL 1 NOW @ $102.11 at 2026-05-20 23:50:00+00:00
+  SELL 1 ESTC @ $54.68 at 2026-05-20 23:50:00+00:00
+  SELL 1 FDX @ $386.12 at 2026-05-20 23:50:00+00:00
+  SELL 1 BBY @ $60.90 at 2026-05-20 23:50:00+00:00
+  SELL 1 SPGI @ $416.01 at 2026-05-20 23:50:00+00:00
+  SELL 1 UNP @ $265.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 SWKS @ $74.01 at 2026-05-20 23:50:00+00:00
+  SELL 1 MS @ $197.75 at 2026-05-20 23:50:00+00:00
+  SELL 1 AXP @ $309.67 at 2026-05-20 23:50:00+00:00
+  SELL 1 JNJ @ $229.32 at 2026-05-20 23:50:00+00:00
+  SELL 1 DHR @ $170.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 ABT @ $88.21 at 2026-05-20 23:50:00+00:00
+  SELL 1 REGN @ $646.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 MDT @ $77.63 at 2026-05-20 23:50:00+00:00
+  SELL 1 SYK @ $321.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 CI @ $283.60 at 2026-05-20 23:50:00+00:00
+  SELL 1 ZTS @ $79.69 at 2026-05-20 23:50:00+00:00
+  SELL 1 HCA @ $396.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 HON @ $216.04 at 2026-05-20 23:50:00+00:00
+  SELL 1 EMR @ $132.86 at 2026-05-20 23:50:00+00:00
+  SELL 1 WM @ $219.59 at 2026-05-20 23:50:00+00:00
+  SELL 1 ROST @ $217.76 at 2026-05-20 23:50:00+00:00
+  SELL 1 LULU @ $124.66 at 2026-05-20 23:50:00+00:00
+  SELL 1 SYY @ $75.46 at 2026-05-20 23:50:00+00:00
+  SELL 1 STZ @ $150.45 at 2026-05-20 23:50:00+00:00
+  SELL 1 DG @ $104.58 at 2026-05-20 23:50:00+00:00
+  SELL 1 SRE @ $91.46 at 2026-05-20 23:50:00+00:00
+  SELL 1 RSI @ $28.38 at 2026-05-20 23:50:00+00:00
+  SELL 1 TER @ $341.18 at 2026-05-20 23:50:00+00:00
+  SELL 1 HLT @ $323.87 at 2026-05-20 23:50:00+00:00
+  SELL 1 WELL @ $217.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 VTR @ $88.60 at 2026-05-20 23:50:00+00:00
+  SELL 1 LOW @ $220.81 at 2026-05-20 23:50:00+00:00
+  SELL 1 ROK @ $436.29 at 2026-05-20 23:50:00+00:00
+  SELL 1 DUK @ $123.86 at 2026-05-20 23:50:00+00:00
+  SELL 1 HSY @ $190.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 FANG @ $204.45 at 2026-05-20 23:50:00+00:00
+  SELL 1 PGR @ $203.09 at 2026-05-20 23:50:00+00:00
+  SELL 1 INTU @ $332.62 at 2026-05-20 23:50:00+00:00
+  SELL 1 AES @ $14.64 at 2026-05-20 23:50:00+00:00
+  SELL 1 DLR @ $190.65 at 2026-05-20 23:50:00+00:00
+  SELL 1 CL @ $90.36 at 2026-05-20 23:50:00+00:00
+  SELL 1 MPC @ $258.37 at 2026-05-20 23:50:00+00:00
+  SELL 1 FAST @ $43.47 at 2026-05-20 23:50:00+00:00
+  SELL 1 CSX @ $45.74 at 2026-05-20 23:50:00+00:00
+  SELL 1 MCHP @ $93.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 LYB @ $72.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 SPLK @ $156.92 at 2026-05-20 23:50:00+00:00
+  SELL 1 ITW @ $250.77 at 2026-05-20 23:50:00+00:00
+  SELL 1 ULTA @ $491.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 EA @ $201.59 at 2026-05-20 23:50:00+00:00
+  SELL 1 CME @ $290.06 at 2026-05-20 23:50:00+00:00
+  SELL 1 XEL @ $79.91 at 2026-05-20 23:50:00+00:00
+  SELL 1 NXPI @ $308.57 at 2026-05-20 23:50:00+00:00
+  SELL 1 LMT @ $520.10 at 2026-05-20 23:50:00+00:00
+  SELL 1 JBHT @ $262.88 at 2026-05-20 23:50:00+00:00
+  SELL 1 CHRW @ $180.64 at 2026-05-20 23:50:00+00:00
+  SELL 1 ODFL @ $205.64 at 2026-05-20 23:50:00+00:00
+  SELL 1 KMB @ $97.25 at 2026-05-20 23:50:00+00:00
+  SELL 1 EQIX @ $1063.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 PSA @ $302.87 at 2026-05-20 23:50:00+00:00
+  SELL 1 HUBS @ $199.80 at 2026-05-20 23:50:00+00:00
+  SELL 1 FIS @ $42.70 at 2026-05-20 23:50:00+00:00
+  SELL 1 FISV @ $56.03 at 2026-05-20 23:50:00+00:00
+  SELL 1 GPN @ $70.65 at 2026-05-20 23:50:00+00:00
+  SELL 1 BLK @ $1051.57 at 2026-05-20 23:50:00+00:00
+  SELL 1 CB @ $328.38 at 2026-05-20 23:50:00+00:00
+  SELL 1 AON @ $321.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 MMC @ $182.70 at 2026-05-20 23:50:00+00:00
+  SELL 1 BK @ $137.16 at 2026-05-20 23:50:00+00:00
+  SELL 1 ARCT @ $6.84 at 2026-05-20 23:50:00+00:00
+  SELL 1 NOC @ $550.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 ETN @ $380.34 at 2026-05-20 23:50:00+00:00
+  SELL 1 GD @ $336.02 at 2026-05-20 23:50:00+00:00
+  SELL 1 RSG @ $212.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 NSC @ $312.04 at 2026-05-20 23:50:00+00:00
+  SELL 1 LSTR @ $189.37 at 2026-05-20 23:50:00+00:00
+  SELL 1 EXPD @ $158.42 at 2026-05-20 23:50:00+00:00
+  SELL 1 DPZ @ $316.50 at 2026-05-20 23:50:00+00:00
+  SELL 1 YUM @ $152.71 at 2026-05-20 23:50:00+00:00
+  SELL 1 CMG @ $32.90 at 2026-05-20 23:50:00+00:00
+  SELL 1 APD @ $289.19 at 2026-05-20 23:50:00+00:00
+  SELL 1 PPG @ $104.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 NUE @ $225.67 at 2026-05-20 23:50:00+00:00
+  SELL 1 STLD @ $223.32 at 2026-05-20 23:50:00+00:00
+  SELL 1 MLM @ $542.06 at 2026-05-20 23:50:00+00:00
+  SELL 1 VMC @ $264.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 PKG @ $213.21 at 2026-05-20 23:50:00+00:00
+  SELL 1 SO @ $93.79 at 2026-05-20 23:50:00+00:00
+  SELL 1 PEG @ $78.06 at 2026-05-20 23:50:00+00:00
+  SELL 1 ED @ $106.43 at 2026-05-20 23:50:00+00:00
+  SELL 1 AMT @ $184.02 at 2026-05-20 23:50:00+00:00
+  SELL 1 AVAV @ $162.90 at 2026-05-20 23:50:00+00:00
+  SELL 1 HII @ $322.28 at 2026-05-20 23:50:00+00:00
+  SELL 1 ECL @ $248.64 at 2026-05-20 23:50:00+00:00
 
 Buy Max Each Penguin:
-  SELL 209 SPY @ $737.33 at 2026-05-15 23:59:00+00:00
-  SELL 6 SSO @ $132.37 at 2026-05-15 23:59:00+00:00
-  SELL 1 XLF @ $51.00 at 2026-05-15 23:59:00+00:00
-  SELL 1 SOFI @ $15.52 at 2026-05-15 23:59:00+00:00
-  SELL 1 DNA @ $7.78 at 2026-05-15 23:59:00+00:00
+  SELL 6 SPY @ $738.25 at 2026-05-20 23:50:00+00:00
+  SELL 6 SSO @ $132.47 at 2026-05-20 23:50:00+00:00
+  SELL 6 QQQ @ $708.43 at 2026-05-20 23:50:00+00:00
+  SELL 6 IWM @ $278.70 at 2026-05-20 23:50:00+00:00
+  SELL 6 XLK @ $175.43 at 2026-05-20 23:50:00+00:00
+  SELL 6 XLF @ $51.60 at 2026-05-20 23:50:00+00:00
+  SELL 6 XLE @ $59.71 at 2026-05-20 23:50:00+00:00
+  SELL 6 XLP @ $86.21 at 2026-05-20 23:50:00+00:00
+  SELL 6 AAPL @ $1203.92 at 2026-05-20 23:50:00+00:00
+  SELL 6 NVDA @ $2207.03 at 2026-05-20 23:50:00+00:00
+  SELL 6 AMZN @ $5278.55 at 2026-05-20 23:50:00+00:00
+  SELL 6 GOOGL @ $7749.84 at 2026-05-20 23:50:00+00:00
+  SELL 6 TSLA @ $6225.16 at 2026-05-20 23:50:00+00:00
+  SELL 6 AMD @ $439.03 at 2026-05-20 23:50:00+00:00
+  SELL 6 INTC @ $116.92 at 2026-05-20 23:50:00+00:00
+  SELL 6 PLTR @ $135.85 at 2026-05-20 23:50:00+00:00
+  SELL 6 U @ $26.15 at 2026-05-20 23:50:00+00:00
+  SELL 6 UBER @ $74.47 at 2026-05-20 23:50:00+00:00
+  SELL 6 DIS @ $103.95 at 2026-05-20 23:50:00+00:00
+  SELL 6 SQ @ $87.17 at 2026-05-20 23:50:00+00:00
+  SELL 6 PYPL @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 6 COIN @ $191.48 at 2026-05-20 23:50:00+00:00
+  SELL 6 SOFI @ $15.60 at 2026-05-20 23:50:00+00:00
+  SELL 6 AFRM @ $66.60 at 2026-05-20 23:50:00+00:00
+  SELL 6 HOOD @ $75.38 at 2026-05-20 23:50:00+00:00
+  SELL 6 UPST @ $28.76 at 2026-05-20 23:50:00+00:00
+  SELL 6 NU @ $12.76 at 2026-05-20 23:50:00+00:00
+  SELL 6 BAC @ $51.18 at 2026-05-20 23:50:00+00:00
+  SELL 6 C @ $124.52 at 2026-05-20 23:50:00+00:00
+  SELL 6 PFE @ $25.79 at 2026-05-20 23:50:00+00:00
+  SELL 6 GILD @ $130.09 at 2026-05-20 23:50:00+00:00
+  SELL 6 DNA @ $7.78 at 2026-05-20 23:50:00+00:00
+  SELL 6 BLUE @ $4.99 at 2026-05-20 23:50:00+00:00
+  SELL 6 NKE @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 6 CHWY @ $20.12 at 2026-05-20 23:50:00+00:00
+  SELL 6 KHC @ $23.53 at 2026-05-20 23:50:00+00:00
+  SELL 6 EL @ $78.09 at 2026-05-20 23:50:00+00:00
+  SELL 6 XOM @ $156.21 at 2026-05-20 23:50:00+00:00
+  SELL 6 CVX @ $191.28 at 2026-05-20 23:50:00+00:00
+  SELL 6 ENPH @ $52.97 at 2026-05-20 23:50:00+00:00
+  SELL 6 RUN @ $13.61 at 2026-05-20 23:50:00+00:00
+  SELL 6 PLUG @ $3.28 at 2026-05-20 23:50:00+00:00
+  SELL 6 FCEL @ $20.52 at 2026-05-20 23:50:00+00:00
+  SELL 6 RIVN @ $13.68 at 2026-05-20 23:50:00+00:00
+  SELL 6 LCID @ $5.68 at 2026-05-20 23:50:00+00:00
+  SELL 6 NIO @ $5.65 at 2026-05-20 23:50:00+00:00
+  SELL 6 XPEV @ $15.16 at 2026-05-20 23:50:00+00:00
+  SELL 6 LI @ $16.20 at 2026-05-20 23:50:00+00:00
+  SELL 6 MP @ $56.25 at 2026-05-20 23:50:00+00:00
+  SELL 6 O @ $62.19 at 2026-05-20 23:50:00+00:00
+  SELL 6 RKLB @ $123.28 at 2026-05-20 23:50:00+00:00
+  SELL 6 SPCE @ $2.50 at 2026-05-20 23:50:00+00:00
+  SELL 6 AI @ $9.20 at 2026-05-20 23:50:00+00:00
+  SELL 6 PATH @ $10.68 at 2026-05-20 23:50:00+00:00
+  SELL 6 RIOT @ $23.67 at 2026-05-20 23:50:00+00:00
+  SELL 6 MARA @ $13.13 at 2026-05-20 23:50:00+00:00
+  SELL 6 CAN @ $0.45 at 2026-05-20 23:50:00+00:00
+  SELL 6 GREE @ $1.25 at 2026-05-20 23:50:00+00:00
+  SELL 6 OPEN @ $4.39 at 2026-05-20 23:50:00+00:00
+  SELL 6 RDFN @ $11.30 at 2026-05-20 23:50:00+00:00
+  SELL 6 DKNG @ $25.15 at 2026-05-20 23:50:00+00:00
+  SELL 6 BABA @ $134.27 at 2026-05-20 23:50:00+00:00
+  SELL 6 JD @ $32.49 at 2026-05-20 23:50:00+00:00
+  SELL 9 DIA @ $499.02 at 2026-05-20 23:50:00+00:00
+  SELL 9 ORCL @ $186.29 at 2026-05-20 23:50:00+00:00
+  SELL 9 QCOM @ $199.96 at 2026-05-20 23:50:00+00:00
+  SELL 9 SHOP @ $104.19 at 2026-05-20 23:50:00+00:00
+  SELL 9 RBLX @ $45.49 at 2026-05-20 23:50:00+00:00
+  SELL 9 MRNA @ $48.18 at 2026-05-20 23:50:00+00:00
+  SELL 9 M @ $19.85 at 2026-05-20 23:50:00+00:00
+  SELL 9 W @ $63.83 at 2026-05-20 23:50:00+00:00
+  SELL 9 CVNA @ $64.96 at 2026-05-20 23:50:00+00:00
+  SELL 9 MO @ $73.40 at 2026-05-20 23:50:00+00:00
+  SELL 9 OXY @ $59.03 at 2026-05-20 23:50:00+00:00
+  SELL 9 LAC @ $4.75 at 2026-05-20 23:50:00+00:00
+  SELL 9 BBAI @ $4.07 at 2026-05-20 23:50:00+00:00
+  SELL 9 TSM @ $400.11 at 2026-05-20 23:50:00+00:00
+  SELL 9 PDD @ $97.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 BHP @ $84.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 SOUN @ $8.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 VALE @ $16.41 at 2026-05-20 23:50:00+00:00
+  SELL 1 F @ $13.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 VERI @ $1.96 at 2026-05-20 23:50:00+00:00
+
+Buy Equal Price Each Penguin:
+  SELL 3 SPY @ $738.25 at 2026-05-20 23:50:00+00:00
+  SELL 24 SSO @ $132.47 at 2026-05-20 23:50:00+00:00
+  SELL 3 QQQ @ $708.43 at 2026-05-20 23:50:00+00:00
+  SELL 7 IWM @ $278.70 at 2026-05-20 23:50:00+00:00
+  SELL 8 XLK @ $175.43 at 2026-05-20 23:50:00+00:00
+  SELL 42 XLF @ $51.60 at 2026-05-20 23:50:00+00:00
+  SELL 18 XLE @ $59.71 at 2026-05-20 23:50:00+00:00
+  SELL 22 XLP @ $86.21 at 2026-05-20 23:50:00+00:00
+  SELL 2 AAPL @ $1203.92 at 2026-05-20 23:50:00+00:00
+  SELL 3 NVDA @ $2207.03 at 2026-05-20 23:50:00+00:00
+  SELL 10 AMD @ $439.03 at 2026-05-20 23:50:00+00:00
+  SELL 31 INTC @ $116.92 at 2026-05-20 23:50:00+00:00
+  SELL 91 PLTR @ $135.85 at 2026-05-20 23:50:00+00:00
+  SELL 39 U @ $26.15 at 2026-05-20 23:50:00+00:00
+  SELL 25 UBER @ $74.47 at 2026-05-20 23:50:00+00:00
+  SELL 17 DIS @ $103.95 at 2026-05-20 23:50:00+00:00
+  SELL 20 SQ @ $87.17 at 2026-05-20 23:50:00+00:00
+  SELL 25 PYPL @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 8 COIN @ $191.48 at 2026-05-20 23:50:00+00:00
+  SELL 160 SOFI @ $15.60 at 2026-05-20 23:50:00+00:00
+  SELL 31 AFRM @ $66.60 at 2026-05-20 23:50:00+00:00
+  SELL 122 HOOD @ $75.38 at 2026-05-20 23:50:00+00:00
+  SELL 38 UPST @ $28.76 at 2026-05-20 23:50:00+00:00
+  SELL 190 NU @ $12.76 at 2026-05-20 23:50:00+00:00
+  SELL 47 BAC @ $51.18 at 2026-05-20 23:50:00+00:00
+  SELL 30 C @ $124.52 at 2026-05-20 23:50:00+00:00
+  SELL 54 PFE @ $25.79 at 2026-05-20 23:50:00+00:00
+  SELL 19 GILD @ $130.09 at 2026-05-20 23:50:00+00:00
+  SELL 944 DNA @ $7.78 at 2026-05-20 23:50:00+00:00
+  SELL 1133 BLUE @ $4.99 at 2026-05-20 23:50:00+00:00
+  SELL 14 NKE @ $44.10 at 2026-05-20 23:50:00+00:00
+  SELL 67 CHWY @ $20.12 at 2026-05-20 23:50:00+00:00
+  SELL 42 KHC @ $23.53 at 2026-05-20 23:50:00+00:00
+  SELL 10 EL @ $78.09 at 2026-05-20 23:50:00+00:00
+  SELL 15 XOM @ $156.21 at 2026-05-20 23:50:00+00:00
+  SELL 10 CVX @ $191.28 at 2026-05-20 23:50:00+00:00
+  SELL 11 ENPH @ $52.97 at 2026-05-20 23:50:00+00:00
+  SELL 81 RUN @ $13.61 at 2026-05-20 23:50:00+00:00
+  SELL 345 PLUG @ $3.28 at 2026-05-20 23:50:00+00:00
+  SELL 991 FCEL @ $20.52 at 2026-05-20 23:50:00+00:00
+  SELL 67 RIVN @ $13.68 at 2026-05-20 23:50:00+00:00
+  SELL 373 LCID @ $5.68 at 2026-05-20 23:50:00+00:00
+  SELL 177 NIO @ $5.65 at 2026-05-20 23:50:00+00:00
+  SELL 107 XPEV @ $15.16 at 2026-05-20 23:50:00+00:00
+  SELL 44 LI @ $16.20 at 2026-05-20 23:50:00+00:00
+  SELL 79 MP @ $56.25 at 2026-05-20 23:50:00+00:00
+  SELL 27 O @ $62.19 at 2026-05-20 23:50:00+00:00
+  SELL 286 RKLB @ $123.28 at 2026-05-20 23:50:00+00:00
+  SELL 647 SPCE @ $2.50 at 2026-05-20 23:50:00+00:00
+  SELL 54 AI @ $9.20 at 2026-05-20 23:50:00+00:00
+  SELL 63 PATH @ $10.68 at 2026-05-20 23:50:00+00:00
+  SELL 91 RIOT @ $23.67 at 2026-05-20 23:50:00+00:00
+  SELL 58 MARA @ $13.13 at 2026-05-20 23:50:00+00:00
+  SELL 574 CAN @ $0.45 at 2026-05-20 23:50:00+00:00
+  SELL 197 GREE @ $1.25 at 2026-05-20 23:50:00+00:00
+  SELL 360 OPEN @ $4.39 at 2026-05-20 23:50:00+00:00
+  SELL 152 RDFN @ $11.30 at 2026-05-20 23:50:00+00:00
+  SELL 45 DKNG @ $25.15 at 2026-05-20 23:50:00+00:00
+  SELL 20 BABA @ $134.27 at 2026-05-20 23:50:00+00:00
+  SELL 56 JD @ $32.49 at 2026-05-20 23:50:00+00:00
+  SELL 1 DIA @ $499.02 at 2026-05-20 23:50:00+00:00
+  SELL 4 ORCL @ $186.29 at 2026-05-20 23:50:00+00:00
+  SELL 3 QCOM @ $199.96 at 2026-05-20 23:50:00+00:00
+  SELL 5 SHOP @ $104.19 at 2026-05-20 23:50:00+00:00
+  SELL 9 RBLX @ $45.49 at 2026-05-20 23:50:00+00:00
+  SELL 4 MRNA @ $48.18 at 2026-05-20 23:50:00+00:00
+  SELL 22 M @ $19.85 at 2026-05-20 23:50:00+00:00
+  SELL 7 W @ $63.83 at 2026-05-20 23:50:00+00:00
+  SELL 8 CVNA @ $64.96 at 2026-05-20 23:50:00+00:00
+  SELL 11 MO @ $73.40 at 2026-05-20 23:50:00+00:00
+  SELL 7 OXY @ $59.03 at 2026-05-20 23:50:00+00:00
+  SELL 68 LAC @ $4.75 at 2026-05-20 23:50:00+00:00
+  SELL 206 BBAI @ $4.07 at 2026-05-20 23:50:00+00:00
+  SELL 4 TSM @ $400.11 at 2026-05-20 23:50:00+00:00
+  SELL 3 PDD @ $97.99 at 2026-05-20 23:50:00+00:00
+  SELL 2 NET @ $208.99 at 2026-05-20 23:50:00+00:00
+  SELL 1 ALB @ $169.63 at 2026-05-20 23:50:00+00:00
+  SELL 1 DAL @ $73.70 at 2026-05-20 23:50:00+00:00
+  SELL 27 SOUN @ $8.39 at 2026-05-20 23:50:00+00:00
+  SELL 1 GM @ $75.87 at 2026-05-20 23:50:00+00:00
+  SELL 5 F @ $13.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 HAL @ $42.20 at 2026-05-20 23:50:00+00:00
+  SELL 1 BHP @ $84.17 at 2026-05-20 23:50:00+00:00
+  SELL 1 TWLO @ $187.83 at 2026-05-20 23:50:00+00:00
+  SELL 1 APP @ $477.97 at 2026-05-20 23:50:00+00:00
+  SELL 1 VALE @ $16.41 at 2026-05-20 23:50:00+00:00
+  SELL 1 SNAP @ $5.58 at 2026-05-20 23:50:00+00:00
+  SELL 3 VERI @ $1.96 at 2026-05-20 23:50:00+00:00
+  SELL 2 BLDP @ $4.74 at 2026-05-20 23:50:00+00:00
+  SELL 1 BE @ $280.83 at 2026-05-20 23:50:00+00:00
+
+CopilotPenguin:
+  SELL 1 XLP @ $86.21 at 2026-05-20 23:50:00+00:00
+  SELL 1 LLY @ $1015.84 at 2026-05-20 23:50:00+00:00
+  SELL 1 RTX @ $174.76 at 2026-05-20 23:50:00+00:00
+  SELL 1 PGR @ $203.09 at 2026-05-20 23:50:00+00:00
+  SELL 1 WM @ $219.59 at 2026-05-20 23:50:00+00:00
+  SELL 1 HCA @ $396.00 at 2026-05-20 23:50:00+00:00
+  SELL 1 ABBV @ $212.15 at 2026-05-20 23:50:00+00:00
+  SELL 1 SPLK @ $156.92 at 2026-05-20 23:50:00+00:00
+  SELL 1 BK @ $137.16 at 2026-05-20 23:50:00+00:00
 
 ================================================================================
 
@@ -2937,8 +3587,8 @@ STRATEGY SUMMARY
 
 
 SP500Penguin
-  Final Value:    $154,544.23
-  Total Return:   $54,544.23  (54.54%)
+  Final Value:    $154,734.93
+  Total Return:   $54,734.93  (54.73%)
   Max Drawdown:   -21.22%
   Sharpe Ratio:   0.04
   Total Trades:   2
@@ -2951,8 +3601,8 @@ SP500Penguin
 --------------------------------------------------------------------------------
 
 SP500x2Penguin
-  Final Value:    $209,349.43
-  Total Return:   $109,349.43  (109.35%)
+  Final Value:    $209,731.76
+  Total Return:   $109,731.76  (109.73%)
   Max Drawdown:   -34.76%
   Sharpe Ratio:   0.04
   Total Trades:   2
@@ -2964,80 +3614,47 @@ SP500x2Penguin
 
 --------------------------------------------------------------------------------
 
-RSI Mean Reversion Selective
-  Final Value:    $115,594.24
-  Total Return:   $15,594.24  (15.59%)
-  Max Drawdown:   -15.16%
-  Sharpe Ratio:   0.02
-  Total Trades:   598
-  Buy Trades:     299
-  Sell Trades:    299
-
-  Recent Trades (excluding liquidation):
-    BUY 1 MPC @ $167.59 at 2024-02-20 14:30:00+00:00
-    BUY 1 PEG @ $59.79 at 2024-02-20 14:30:00+00:00
-    BUY 1 PNC @ $147.25 at 2024-02-20 14:31:00+00:00
-    BUY 1 ICE @ $135.82 at 2024-02-21 14:32:00+00:00
-    BUY 1 PKG @ $170.05 at 2024-02-21 15:03:00+00:00
-    BUY 1 ULTA @ $545.39 at 2024-02-21 15:39:00+00:00
-    BUY 1 DD @ $68.30 at 2024-02-21 16:28:00+00:00
-    BUY 1 CB @ $249.98 at 2024-02-22 13:07:00+00:00
-    BUY 1 PG @ $159.89 at 2024-02-22 13:43:00+00:00
-    BUY 1 GD @ $270.80 at 2024-02-22 14:33:00+00:00
-    BUY 1 RSG @ $181.95 at 2024-02-23 14:26:00+00:00
-    BUY 1 BLK @ $812.50 at 2024-02-26 14:34:00+00:00
-    BUY 1 HCA @ $314.12 at 2024-02-26 15:22:00+00:00
-    BUY 1 ECL @ $220.43 at 2024-02-26 20:57:00+00:00
-    BUY 1 MMC @ $202.37 at 2024-02-27 14:33:00+00:00
-    BUY 1 ROST @ $149.42 at 2024-02-29 14:39:00+00:00
-    BUY 1 MO @ $40.70 at 2024-03-01 14:36:00+00:00
-    BUY 1 XLP @ $74.92 at 2024-03-08 14:35:00+00:00
-    BUY 1 SPY @ $514.24 at 2024-03-14 13:53:00+00:00
-    BUY 1 DIA @ $386.67 at 2024-04-09 14:39:00+00:00
-
---------------------------------------------------------------------------------
-
 Smart RSI Confluence
-  Final Value:    $131,932.69
-  Total Return:   $31,932.69  (31.93%)
-  Max Drawdown:   -26.49%
+  Final Value:    $133,898.88
+  Total Return:   $33,898.88  (33.90%)
+  Max Drawdown:   -26.46%
   Sharpe Ratio:   0.03
-  Total Trades:   520
-  Buy Trades:     260
-  Sell Trades:    260
+  Total Trades:   526
+  Buy Trades:     263
+  Sell Trades:    263
 
   Recent Trades (excluding liquidation):
     BUY 2 APD @ $238.05 at 2024-02-05 12:07:00+00:00
     BUY 2 KO @ $60.49 at 2024-02-05 13:18:00+00:00
     BUY 2 LIN @ $398.08 at 2024-02-05 14:25:00+00:00
     BUY 2 ECL @ $197.18 at 2024-02-05 14:33:00+00:00
+    BUY 2 GPS @ $19.65 at 2024-02-05 14:34:00+00:00
     BUY 2 EQIX @ $838.76 at 2024-02-05 14:35:00+00:00
     BUY 2 BLK @ $783.41 at 2024-02-05 14:36:00+00:00
-    BUY 2 PEP @ $169.74 at 2024-02-05 14:36:00+00:00
-    BUY 2 ROST @ $142.35 at 2024-02-05 14:37:00+00:00
-    BUY 2 OKE @ $67.25 at 2024-02-05 14:37:00+00:00
     BUY 2 EOG @ $109.52 at 2024-02-06 00:37:00+00:00
     BUY 2 FISV @ $148.92 at 2024-02-06 12:01:00+00:00
-    BUY 2 CMG @ $2499.32 at 2024-02-06 13:04:00+00:00
+    BUY 1 CMG @ $2499.32 at 2024-02-06 13:04:00+00:00
     BUY 2 MNST @ $55.18 at 2024-02-06 14:30:00+00:00
     BUY 2 ZTS @ $192.49 at 2024-02-06 14:31:00+00:00
     BUY 2 MS @ $86.10 at 2024-02-06 14:34:00+00:00
     BUY 2 PPG @ $139.00 at 2024-02-06 14:34:00+00:00
-    BUY 1 VMC @ $229.96 at 2024-02-06 14:34:00+00:00
+    BUY 2 VMC @ $229.96 at 2024-02-06 14:34:00+00:00
     BUY 2 VTR @ $45.03 at 2024-02-06 14:34:00+00:00
-    BUY 2 KHC @ $37.23 at 2024-02-06 14:37:00+00:00
-    BUY 1 D @ $44.72 at 2024-02-07 14:48:00+00:00
+    BUY 2 EXPD @ $125.67 at 2024-02-06 14:35:00+00:00
+    BUY 2 YUM @ $133.03 at 2024-02-07 00:16:00+00:00
+    BUY 2 TGT @ $147.20 at 2024-02-07 11:00:00+00:00
+    BUY 1 ICE @ $127.34 at 2024-02-07 14:31:00+00:00
 
 --------------------------------------------------------------------------------
 
 Buy One Each Penguin
-  Final Value:    $116,312.38
-  Total Return:   $16,312.38  (16.31%)
-  Max Drawdown:   -15.06%
+  Final Value:    $117,003.19
+  Total Return:   $17,003.19  (17.00%)
+  Max Drawdown:   -15.50%
   Sharpe Ratio:   0.02
-  Total Trades:   600
-  Buy Trades:     300
-  Sell Trades:    300
+  Total Trades:   620
+  Buy Trades:     310
+  Sell Trades:    310
 
   Recent Trades (excluding liquidation):
     BUY 1 NSC @ $234.30 at 2024-01-02 14:30:00+00:00
@@ -3064,19 +3681,100 @@ Buy One Each Penguin
 --------------------------------------------------------------------------------
 
 Buy Max Each Penguin
-  Final Value:    $154,971.52
-  Total Return:   $54,971.52  (54.97%)
-  Max Drawdown:   -21.38%
+  Final Value:    $183,933.38
+  Total Return:   $83,933.38  (83.93%)
+  Max Drawdown:   -36.45%
   Sharpe Ratio:   0.04
-  Total Trades:   10
-  Buy Trades:     5
-  Sell Trades:    5
+  Total Trades:   166
+  Buy Trades:     83
+  Sell Trades:    83
 
   Recent Trades (excluding liquidation):
-    BUY 209 SPY @ $476.36 at 2024-01-02 09:00:00+00:00
-    BUY 6 SSO @ $65.32 at 2024-01-02 09:00:00+00:00
-    BUY 1 XLF @ $37.76 at 2024-01-02 09:00:00+00:00
-    BUY 1 SOFI @ $9.90 at 2024-01-02 09:00:00+00:00
-    BUY 1 DNA @ $1.68 at 2024-01-02 09:00:00+00:00
+    BUY 9 DIA @ $378.02 at 2024-01-02 09:01:00+00:00
+    BUY 9 ORCL @ $105.36 at 2024-01-02 09:01:00+00:00
+    BUY 9 QCOM @ $145.05 at 2024-01-02 09:01:00+00:00
+    BUY 9 SHOP @ $78.13 at 2024-01-02 09:01:00+00:00
+    BUY 9 RBLX @ $45.50 at 2024-01-02 09:01:00+00:00
+    BUY 9 MRNA @ $99.91 at 2024-01-02 09:01:00+00:00
+    BUY 9 M @ $20.15 at 2024-01-02 09:01:00+00:00
+    BUY 9 W @ $61.65 at 2024-01-02 09:01:00+00:00
+    BUY 9 CVNA @ $53.76 at 2024-01-02 09:01:00+00:00
+    BUY 9 MO @ $40.35 at 2024-01-02 09:01:00+00:00
+    BUY 9 OXY @ $60.10 at 2024-01-02 09:01:00+00:00
+    BUY 9 LAC @ $6.50 at 2024-01-02 09:01:00+00:00
+    BUY 9 BBAI @ $2.16 at 2024-01-02 09:01:00+00:00
+    BUY 9 TSM @ $103.51 at 2024-01-02 09:01:00+00:00
+    BUY 9 PDD @ $145.63 at 2024-01-02 09:01:00+00:00
+    BUY 1 BHP @ $68.80 at 2024-01-02 09:06:00+00:00
+    BUY 1 SOUN @ $2.13 at 2024-01-02 09:06:00+00:00
+    BUY 1 VALE @ $15.95 at 2024-01-02 09:22:00+00:00
+    BUY 1 F @ $12.23 at 2024-01-02 10:17:00+00:00
+    BUY 1 VERI @ $1.68 at 2024-01-05 22:58:00+00:00
+
+--------------------------------------------------------------------------------
+
+Buy Equal Price Each Penguin
+  Final Value:    $199,542.31
+  Total Return:   $99,542.31  (99.54%)
+  Max Drawdown:   -37.61%
+  Sharpe Ratio:   0.04
+  Total Trades:   180
+  Buy Trades:     90
+  Sell Trades:    90
+
+  Recent Trades (excluding liquidation):
+    BUY 7 OXY @ $60.10 at 2024-01-02 09:01:00+00:00
+    BUY 68 LAC @ $6.50 at 2024-01-02 09:01:00+00:00
+    BUY 206 BBAI @ $2.16 at 2024-01-02 09:01:00+00:00
+    BUY 4 TSM @ $103.51 at 2024-01-02 09:01:00+00:00
+    BUY 3 PDD @ $145.63 at 2024-01-02 09:01:00+00:00
+    BUY 2 NET @ $83.01 at 2024-01-02 09:02:00+00:00
+    BUY 1 ALB @ $145.65 at 2024-01-02 09:03:00+00:00
+    BUY 1 DAL @ $40.29 at 2024-01-02 09:04:00+00:00
+    BUY 27 SOUN @ $2.13 at 2024-01-02 09:04:00+00:00
+    BUY 1 GM @ $36.05 at 2024-01-02 09:05:00+00:00
+    BUY 5 F @ $12.22 at 2024-01-02 09:05:00+00:00
+    BUY 1 HAL @ $36.74 at 2024-01-02 09:05:00+00:00
+    BUY 1 BHP @ $68.80 at 2024-01-02 09:06:00+00:00
+    BUY 1 TWLO @ $76.01 at 2024-01-02 09:16:00+00:00
+    BUY 1 APP @ $39.75 at 2024-01-02 09:18:00+00:00
+    BUY 1 VALE @ $15.95 at 2024-01-02 09:22:00+00:00
+    BUY 1 SNAP @ $16.93 at 2024-01-02 09:28:00+00:00
+    BUY 3 VERI @ $1.82 at 2024-01-02 09:39:00+00:00
+    BUY 2 BLDP @ $3.70 at 2024-01-02 09:50:00+00:00
+    BUY 1 BE @ $11.30 at 2024-02-07 10:18:00+00:00
+
+--------------------------------------------------------------------------------
+
+CopilotPenguin
+  Final Value:    $99,891.41
+  Total Return:   $-108.59  (-0.11%)
+  Max Drawdown:   -0.91%
+  Sharpe Ratio:   -0.00
+  Total Trades:   652
+  Buy Trades:     326
+  Sell Trades:    326
+
+  Recent Trades (excluding liquidation):
+    SELL 1 PKG @ $160.20 at 2024-02-02 14:42:00+00:00
+    SELL 1 KR @ $45.12 at 2024-02-06 20:05:00+00:00
+    SELL 1 MDLZ @ $71.04 at 2024-02-14 17:36:00+00:00
+    SELL 1 JNJ @ $155.06 at 2024-02-14 17:39:00+00:00
+    SELL 1 AMGN @ $284.84 at 2024-02-16 15:28:00+00:00
+    SELL 1 WMT @ $58.81 at 2024-02-26 09:00:00+00:00
+    SELL 1 HSY @ $182.36 at 2024-03-04 14:54:00+00:00
+    SELL 1 VRTX @ $402.71 at 2024-04-08 13:50:00+00:00
+    SELL 1 GPN @ $123.53 at 2024-04-11 14:15:00+00:00
+    SELL 1 MDT @ $81.00 at 2024-04-12 14:31:00+00:00
+    SELL 1 ABT @ $106.64 at 2024-04-17 11:41:00+00:00
+    SELL 1 SYY @ $71.87 at 2024-05-29 15:56:00+00:00
+    SELL 1 STZ @ $238.24 at 2024-08-05 15:16:00+00:00
+    SELL 1 MRK @ $107.34 at 2024-10-21 15:44:00+00:00
+    SELL 1 MPC @ $146.31 at 2024-10-29 16:30:00+00:00
+    SELL 1 REGN @ $844.06 at 2024-10-31 13:36:00+00:00
+    SELL 1 TMO @ $520.39 at 2024-11-15 14:55:00+00:00
+    SELL 1 XLV @ $133.16 at 2025-04-04 22:36:00+00:00
+    SELL 1 MMC @ $185.31 at 2025-10-16 13:56:00+00:00
+    SELL 1 PG @ $144.27 at 2025-11-10 18:36:00+00:00
 
 --------------------------------------------------------------------------------
