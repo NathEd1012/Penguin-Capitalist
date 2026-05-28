@@ -11,6 +11,9 @@ from penguins import (
     BuyMaxEachPenguin,
     BuyEqualPriceEachPenguin,
 )
+
+from penguins.ThreeFold_MeanRev_Peng import ThreeFoldMeanReversionTrendPenguin
+
 # from penguins.multitimeframe_reaction_sr_penguin import MultitimeframeReactionSRPenguin
 
 # ========== ACTIVE PENGUINS ==========
@@ -33,6 +36,7 @@ ACTIVE_PENGUINS = [
     BuyEqualPriceEachPenguin,         # Buy an equal dollar amount of each symbol once
 
     CopilotPenguin,                    # AI-assisted strategy
+    ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
     #MomentumPenguin,                  # Pure momentum following
     # MinMaxSRPenguin,                  # Single timeframe S/R
     # SRMultiframePenguin,              # Multiframe S/R placeholder

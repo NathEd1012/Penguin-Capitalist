@@ -1,72 +1,82 @@
 {
   "SP500Penguin": {
-    "total_return": 54734.93,
-    "return_pct": 54.73,
-    "max_drawdown": -21.22,
-    "sharpe_ratio": 0.04,
+    "total_return": 9853.29,
+    "return_pct": 9.85,
+    "max_drawdown": -9.84,
+    "sharpe_ratio": 0.05,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 154734.93
+    "final_value": 109853.29
   },
   "SP500x2Penguin": {
-    "total_return": 109731.76,
-    "return_pct": 109.73,
-    "max_drawdown": -34.76,
-    "sharpe_ratio": 0.04,
+    "total_return": 19706.58,
+    "return_pct": 19.71,
+    "max_drawdown": -19.24,
+    "sharpe_ratio": 0.05,
     "total_trades": 2,
     "buy_trades": 1,
     "sell_trades": 1,
-    "final_value": 209731.76
+    "final_value": 119706.58
   },
   "Smart RSI Confluence": {
-    "total_return": 33898.88,
-    "return_pct": 33.9,
-    "max_drawdown": -26.46,
+    "total_return": 7387.87,
+    "return_pct": 7.39,
+    "max_drawdown": -14.87,
     "sharpe_ratio": 0.03,
-    "total_trades": 526,
-    "buy_trades": 263,
-    "sell_trades": 263,
-    "final_value": 133898.88
+    "total_trades": 376,
+    "buy_trades": 188,
+    "sell_trades": 188,
+    "final_value": 107387.87
   },
   "Buy One Each Penguin": {
-    "total_return": 17003.19,
-    "return_pct": 17.0,
-    "max_drawdown": -15.5,
-    "sharpe_ratio": 0.02,
-    "total_trades": 620,
-    "buy_trades": 310,
-    "sell_trades": 310,
-    "final_value": 117003.19
+    "total_return": 5147.27,
+    "return_pct": 5.15,
+    "max_drawdown": -8.51,
+    "sharpe_ratio": 0.04,
+    "total_trades": 608,
+    "buy_trades": 304,
+    "sell_trades": 304,
+    "final_value": 105147.27
   },
   "Buy Max Each Penguin": {
-    "total_return": 83933.38,
-    "return_pct": 83.93,
-    "max_drawdown": -36.45,
-    "sharpe_ratio": 0.04,
-    "total_trades": 166,
-    "buy_trades": 83,
-    "sell_trades": 83,
-    "final_value": 183933.38
+    "total_return": 9041.72,
+    "return_pct": 9.04,
+    "max_drawdown": -18.37,
+    "sharpe_ratio": 0.03,
+    "total_trades": 100,
+    "buy_trades": 50,
+    "sell_trades": 50,
+    "final_value": 109041.72
   },
   "Buy Equal Price Each Penguin": {
-    "total_return": 99542.31,
-    "return_pct": 99.54,
-    "max_drawdown": -37.61,
+    "total_return": 11170.16,
+    "return_pct": 11.17,
+    "max_drawdown": -20.21,
     "sharpe_ratio": 0.04,
-    "total_trades": 180,
-    "buy_trades": 90,
-    "sell_trades": 90,
-    "final_value": 199542.31
+    "total_trades": 134,
+    "buy_trades": 67,
+    "sell_trades": 67,
+    "final_value": 111170.16
   },
   "CopilotPenguin": {
-    "total_return": -108.59,
-    "return_pct": -0.11,
-    "max_drawdown": -0.91,
-    "sharpe_ratio": -0.0,
-    "total_trades": 652,
-    "buy_trades": 326,
-    "sell_trades": 326,
-    "final_value": 99891.41
+    "total_return": 815.54,
+    "return_pct": 0.82,
+    "max_drawdown": -1.27,
+    "sharpe_ratio": 0.04,
+    "total_trades": 624,
+    "buy_trades": 312,
+    "sell_trades": 312,
+    "final_value": 100815.54
+  },
+  "ThreeFold_MeanReversion_TrendPenguin": {
+    "total_return": 12060.4,
+    "return_pct": 12.06,
+    "max_drawdown": -6.79,
+    "sharpe_ratio": 0.07,
+    "total_trades": 39028,
+    "buy_trades": 19514,
+    "sell_trades": 19514,
+    "final_value": 112060.4
   }
 }
