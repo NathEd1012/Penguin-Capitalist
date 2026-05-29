@@ -32,8 +32,7 @@ ACTIVE_PENGUINS = [
     #RSIMeanReversionSelectivePenguin,   # Low-frequency high-quality RSI mean reversion
     SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
     BuyOneEachPenguin,                  # Buy exactly 1 share for each symbol once
-    BuyMaxEachPenguin,                  # Buy the same maximum share count for each symbol once
-    BuyEqualPriceEachPenguin,         # Buy an equal dollar amount of each symbol once
+    BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
 
     CopilotPenguin,                    # AI-assisted strategy
     ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend

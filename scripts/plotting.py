@@ -53,6 +53,12 @@ def _save_strategy_summary_to_artifacts(
     csv_dir = artifacts_path / "csv"
     csv_dir.mkdir(parents=True, exist_ok=True)
     csv_file = csv_dir / f"{internal_name}_summary.csv"
+
+    total_qty_bought = sum(s["total_qty_bought"] for s in summary.values())
+    total_qty_sold = sum(s["total_qty_sold"] for s in summary.values())
+    realized_pnl = sum(s["realized_pnl"] for s in summary.values())
+    unrealized_pnl = sum(s["unrealized_pnl"] for s in summary.values())
+    open_positions = sum(1 for s in summary.values() if s["position_qty"] > 0)
     
     with open(csv_file, 'w', newline='') as f:
         writer = csv.writer(f)
@@ -64,15 +70,30 @@ def _save_strategy_summary_to_artifacts(
         # Portfolio totals
         writer.writerow(["Portfolio Totals"])
         writer.writerow(["Cash", f"${cash:,.2f}"])
-        writer.writerow(["Market Value", f"${market_value:,.2f}"])
         writer.writerow(["Total Value", f"${total_value:,.2f}"])
         writer.writerow(["Total Buy Count", total_buy_count])
         writer.writerow(["Total Sell Count", total_sell_count])
+        writer.writerow(["Total Shares Bought", total_qty_bought])
+        writer.writerow(["Total Shares Sold", total_qty_sold])
+        writer.writerow(["Realized PnL", f"${realized_pnl:,.2f}"])
         writer.writerow(["Total PnL", f"${total_pnl:,.2f}"])
+        writer.writerow(["Open Positions", open_positions])
         writer.writerow([])
         
         # Per-symbol summary
-        writer.writerow(["Symbol", "Buy Count", "Sell Count", "Shares Bought", "Total Cost", "Total Revenue", "Total PnL", "PnL %"])
+        writer.writerow([
+            "Symbol",
+            "Buy Count",
+            "Sell Count",
+            "Shares Bought",
+            "Shares Sold",
+            "Position Qty",
+            "Total Cost",
+            "Total Revenue",
+            "Realized PnL",
+            "Total PnL",
+            "PnL %",
+        ])
         for symbol in sorted(summary.keys()):
             s = summary[symbol]
             writer.writerow([
@@ -80,11 +101,46 @@ def _save_strategy_summary_to_artifacts(
                 s["buy_count"],
                 s["sell_count"],
                 s["total_qty_bought"],
+                s["total_qty_sold"],
+                s["position_qty"],
                 f"${s['total_cost']:,.2f}",
                 f"${s['total_revenue']:,.2f}",
+                f"${s['realized_pnl']:,.2f}",
                 f"${s['total_pnl']:,.2f}",
                 f"{s['pnl_pct']:+.2f}%",
             ])
+
+
+def _aggregate_strategy_summary(summary: dict) -> dict:
+    """Aggregate per-symbol summary data into strategy-level totals."""
+    totals = {
+        "buy_count": 0,
+        "sell_count": 0,
+        "total_qty_bought": 0,
+        "total_qty_sold": 0,
+        "total_cost": 0.0,
+        "total_revenue": 0.0,
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "open_positions": 0,
+    }
+
+    for symbol_summary in summary.values():
+        totals["buy_count"] += symbol_summary["buy_count"]
+        totals["sell_count"] += symbol_summary["sell_count"]
+        totals["total_qty_bought"] += symbol_summary["total_qty_bought"]
+        totals["total_qty_sold"] += symbol_summary["total_qty_sold"]
+        totals["total_cost"] += symbol_summary["total_cost"]
+        totals["total_revenue"] += symbol_summary["total_revenue"]
+        totals["realized_pnl"] += symbol_summary["realized_pnl"]
+        totals["unrealized_pnl"] += symbol_summary["unrealized_pnl"]
+        totals["total_pnl"] += symbol_summary["total_pnl"]
+        if symbol_summary["position_qty"] > 0:
+            totals["open_positions"] += 1
+
+    totals["total_trades"] = totals["buy_count"] + totals["sell_count"]
+    return totals
 
 
 
@@ -419,6 +475,11 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
     """
     if latest_prices is None:
         latest_prices = {}
+
+    # Determine final liquidation timestamp (last bar) to exclude forced closes
+    final_liquidation_timestamp = None
+    if bar_timestamps and len(bar_timestamps) > 0:
+        final_liquidation_timestamp = bar_timestamps[-1]
     
     # Calculate x-axis scaling if num_bars not provided
     if num_bars is None:
@@ -603,20 +664,27 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             total_value = cash + market_value
 
             # Calculate totals for display
-            total_pnl = 0
-            total_buy_count = 0
-            total_sell_count = 0
-            total_shares_bought = 0
-            for symbol in sorted(summary.keys()):
-                s = summary[symbol]
-                pnl = s["total_pnl"]
-                buy_cnt = s["buy_count"]
-                sell_cnt = s["sell_count"]
-                shares_bought = s["total_qty_bought"]
-                total_pnl += pnl
-                total_buy_count += buy_cnt
-                total_sell_count += sell_cnt
-                total_shares_bought += shares_bought
+            totals = _aggregate_strategy_summary(summary)
+
+            # Count sells excluding final-liquidation trades
+            preliq_sell_count = 0
+            preliq_qty_sold = 0
+            for t in portfolio.trades:
+                if t.action == "SELL":
+                    if final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp:
+                        # Skip liquidation sells
+                        continue
+                    preliq_sell_count += 1
+                    preliq_qty_sold += t.quantity
+
+            # Override sell count displayed to exclude liquidation
+            totals["sell_count"] = preliq_sell_count
+            totals["total_qty_sold"] = preliq_qty_sold
+
+            total_pnl = totals["total_pnl"]
+            total_buy_count = totals["buy_count"]
+            total_sell_count = totals["sell_count"]
+            total_shares_bought = totals["total_qty_bought"]
 
             # Save summary data to artifacts
             if artifacts_dir:
@@ -673,10 +741,12 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     ax.set_xlim(left=0, right=len(vals) * 1.15)
                 
                 # Add summary text above the plot
-                summary_text_lines = [
-                    f"Cash: ${cash:,.2f}  |  Market Value: ${market_value:,.2f}  |  Total Value: ${total_value:,.2f}",
-                    f"Buys: {total_buy_count}  |  Sells: {total_sell_count}",
-                ]
+                    summary_text_lines = [
+                        f"Cash: ${cash:,.2f}  |  Total Value: ${total_value:,.2f}",
+                        f"Buys: {total_buy_count}  |  Sells: {total_sell_count}",
+                        f"Shares Bought: {totals['total_qty_bought']}  |  Shares Sold: {totals['total_qty_sold']}  |  Open Positions: {totals['open_positions']}",
+                        f"Realized PnL: ${totals['realized_pnl']:,.2f}  |  Total PnL: ${total_pnl:,.2f}",
+                    ]
                 if parameter_text:
                     summary_text_lines.append(parameter_text)
                 
