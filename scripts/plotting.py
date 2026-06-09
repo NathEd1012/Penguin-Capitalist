@@ -744,8 +744,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     summary_text_lines = [
                         f"Cash: ${cash:,.2f}  |  Total Value: ${total_value:,.2f}",
                         f"Buys: {total_buy_count}  |  Sells: {total_sell_count}",
-                        f"Shares Bought: {totals['total_qty_bought']}  |  Shares Sold: {totals['total_qty_sold']}  |  Open Positions: {totals['open_positions']}",
-                        f"Realized PnL: ${totals['realized_pnl']:,.2f}  |  Total PnL: ${total_pnl:,.2f}",
+                        f"Total PnL: ${total_pnl:,.2f}",
                     ]
                 if parameter_text:
                     summary_text_lines.append(parameter_text)
