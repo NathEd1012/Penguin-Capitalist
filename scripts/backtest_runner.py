@@ -21,6 +21,7 @@ from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
 from scripts.multiframe import create_sr_multiframe_pdf_direct
+from corporate_actions import has_corporate_action_near
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
@@ -243,6 +244,31 @@ def run_backtest(
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
+
+    def _block_one_bar_jump(symbol: str, timestamp: datetime) -> bool:
+        history = price_history.get(symbol)
+        if not history or len(history) < 2:
+            return False
+
+        prev_price = history[-2]
+        curr_price = history[-1]
+        if prev_price <= 0:
+            return False
+
+        jump_pct = abs(curr_price / prev_price - 1.0)
+        if jump_pct <= 0.15:
+            return False
+
+        # Allow known split/reverse-split windows to pass through.
+        if has_corporate_action_near(
+            symbol=symbol,
+            timestamp=timestamp,
+            window_days=2,
+            action_types={"split", "reverse_split"},
+        ):
+            return False
+
+        return True
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -289,10 +315,15 @@ def run_backtest(
             if hasattr(penguin, "set_current_timestamp"):
                 penguin.set_current_timestamp(timestamp)
 
+            if bar_idx == len(sorted_timestamps) - 1:
+                continue
+
             if hasattr(penguin, "decide_batch"):
                 batch_orders = penguin.decide_batch(symbols, quotes, portfolio)
                 for order_symbol, action, quantity in batch_orders:
                     if order_symbol not in quotes or quantity <= 0:
+                        continue
+                    if _block_one_bar_jump(order_symbol, timestamp):
                         continue
 
                     bid, ask = quotes[order_symbol]
@@ -323,6 +354,8 @@ def run_backtest(
             
             for symbol in symbols_for_penguin:
                 if symbol not in current_prices:
+                    continue
+                if _block_one_bar_jump(symbol, timestamp):
                     continue
                 
                 # Pass only necessary price history window to penguin.
@@ -601,7 +634,7 @@ def main():
 
             # Create one combined PDF containing all multitimeframe PNG plots.
             if current_pngs:
-                current_sr_pdf = current_dir / "SR_Multiframe_plots.pdf"
+                current_sr_pdf = current_dir / "SR_Multiframe_plots_gallery.pdf"
                 create_png_gallery_pdf(current_pngs, current_sr_pdf)
                 print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
 
@@ -614,11 +647,22 @@ def main():
     if sr_histories:
         print("\nGenerating SR multiframe PDF...")
         try:
+            def _safe_name(name: str) -> str:
+                return "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in name)
+
             # Combine all penguin histories into one PDF
             combined_history = {}
             for penguin_name, history_by_symbol in sr_histories.items():
                 if history_by_symbol:
                     combined_history.update(history_by_symbol)
+
+                    penguin_sr_pdf = current_dir / f"SR_Multiframe_{_safe_name(penguin_name)}.pdf"
+                    create_sr_multiframe_pdf_direct(
+                        history_by_symbol,
+                        penguin_sr_pdf,
+                        bar_timestamps,
+                    )
+                    print(f"✅ SR multiframe PDF ({penguin_name}): {penguin_sr_pdf}")
             
             if combined_history:
                 current_sr_pdf = current_dir / "SR_Multiframe_plots.pdf"

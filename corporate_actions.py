@@ -50,12 +50,28 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "comment": "10-for-1 stock split",
         }
     ],
+    "MSTR": [
+        {
+            "date": "2024-08-08",
+            "type": "split",
+            "ratio": "10:1",
+            "comment": "10-for-1 stock split",
+        }
+    ],
     "SSO": [
         {
             "date": "2025-11-20",
             "type": "split",
             "ratio": "2:1",
             "comment": "Known split handling used by this backtest branch",
+        }
+    ],
+    "WMT": [
+        {
+            "date": "2024-02-26",
+            "type": "split",
+            "ratio": "3:1",
+            "comment": "3-for-1 stock split",
         }
     ],
     "TSLA": [

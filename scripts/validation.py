@@ -104,21 +104,45 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
         
         # 3) Suspicious price jumps detection in trade history
         if len(portfolio.trades) > 1:
-            trade_prices = [trade.price for trade in portfolio.trades]
             real_jumps = []           # Missing corporate actions, sustained anomalies
             faulty_data_jumps = []    # Single-tick anomalies, first-trade artifacts
+            boundary_bar_hits = 0
             skipped_corporate_action_jumps = 0
-            
-            for i in range(1, len(trade_prices)):
-                prev_price = trade_prices[i-1]
-                curr_price = trade_prices[i]
-                
-                if prev_price > 0:
+
+            trades_by_symbol: Dict[str, List[Tuple[int, float]]] = {}
+            for trade_idx, trade in enumerate(portfolio.trades):
+                trades_by_symbol.setdefault(trade.symbol, []).append((trade_idx, trade.price))
+
+            for symbol, symbol_trades in trades_by_symbol.items():
+                symbol_prices = [price for _, price in symbol_trades]
+
+                for local_idx in range(1, len(symbol_trades)):
+                    trade_idx, curr_price = symbol_trades[local_idx]
+                    _, prev_price = symbol_trades[local_idx - 1]
+
+                    if prev_price <= 0:
+                        continue
+
                     price_pct = (curr_price - prev_price) / prev_price
-                    
+
                     if abs(price_pct) > max_jump_pct:
-                        trade = portfolio.trades[i]
-                        
+                        trade = portfolio.trades[trade_idx]
+
+                        boundary_bar = False
+                        try:
+                            if bar_timestamps and trade.timestamp is not None:
+                                boundary_bar = trade.timestamp == bar_timestamps[0] or trade.timestamp == bar_timestamps[-1]
+                        except Exception:
+                            boundary_bar = False
+
+                        if boundary_bar:
+                            boundary_bar_hits += 1
+                            if penguin_name not in bad_bar_indices_by_penguin:
+                                bad_bar_indices_by_penguin[penguin_name] = set()
+                            if hasattr(trade, 'bar_index'):
+                                bad_bar_indices_by_penguin[penguin_name].add(trade.bar_index)
+                            continue
+
                         # Check for known corporate actions
                         if has_corporate_action_near(
                             symbol=trade.symbol,
@@ -131,14 +155,14 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
 
                         # Classify the jump
                         jump_type = classify_price_jump(
-                            trade_idx=i,
+                            trade_idx=local_idx,
                             price_pct=price_pct,
                             prev_price=prev_price,
                             curr_price=curr_price,
-                            trade_prices=trade_prices,
-                            is_first_trade=(i == 1),
+                            trade_prices=symbol_prices,
+                            is_first_trade=(local_idx == 1),
                         )
-                        
+
                         # Detect synthetic/stubbed bars at dataset boundaries
                         synthetic_flag = False
                         try:
@@ -149,7 +173,7 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                             synthetic_flag = False
 
                         jump_data = {
-                            'trade_idx': i,
+                            'trade_idx': trade_idx,
                             'symbol': trade.symbol,
                             'pct': price_pct,
                             'prev': prev_price,
@@ -157,11 +181,16 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                             'type': jump_type,
                             'synthetic': synthetic_flag,
                         }
-                        
+
                         if jump_type in ("first_trade_artifact", "data_tick_anomaly"):
                             faulty_data_jumps.append(jump_data)
                         else:
                             real_jumps.append(jump_data)
+
+            if boundary_bar_hits:
+                warnings.append(
+                    f"[{penguin_name}] Ignored {boundary_bar_hits} boundary-bar jump(s) from synthetic liquidation bars"
+                )
 
             if skipped_corporate_action_jumps:
                 warnings.append(

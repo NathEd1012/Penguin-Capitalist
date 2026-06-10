@@ -23,6 +23,7 @@ from scripts.multiframe import (
     set_precomputed_levels_on_penguins,
 )
 from scripts.generate_sr_reports import generate_sr_analysis
+from corporate_actions import has_corporate_action_near
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
@@ -278,6 +279,31 @@ def run_backtest(
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
+
+    def _block_one_bar_jump(symbol: str, timestamp: datetime) -> bool:
+        history = price_history.get(symbol)
+        if not history or len(history) < 2:
+            return False
+
+        prev_price = history[-2]
+        curr_price = history[-1]
+        if prev_price <= 0:
+            return False
+
+        jump_pct = abs(curr_price / prev_price - 1.0)
+        if jump_pct <= 0.15:
+            return False
+
+        # Allow known split/reverse-split windows to pass through.
+        if has_corporate_action_near(
+            symbol=symbol,
+            timestamp=timestamp,
+            window_days=2,
+            action_types={"split", "reverse_split"},
+        ):
+            return False
+
+        return True
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -324,10 +350,15 @@ def run_backtest(
             if hasattr(penguin, "set_current_timestamp"):
                 penguin.set_current_timestamp(timestamp)
 
+            if bar_idx == len(sorted_timestamps) - 1:
+                continue
+
             if hasattr(penguin, "decide_batch"):
                 batch_orders = penguin.decide_batch(symbols, quotes, portfolio)
                 for order_symbol, action, quantity in batch_orders:
                     if order_symbol not in quotes or quantity <= 0:
+                        continue
+                    if _block_one_bar_jump(order_symbol, timestamp):
                         continue
 
                     bid, ask = quotes[order_symbol]
@@ -356,6 +387,8 @@ def run_backtest(
             
             for symbol in symbols_for_penguin:
                 if symbol not in current_prices:
+                    continue
+                if _block_one_bar_jump(symbol, timestamp):
                     continue
                 
                 # Pass only necessary price history window to penguin.
