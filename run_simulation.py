@@ -2,6 +2,7 @@
 import os
 import shutil
 import sys
+import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -130,6 +131,7 @@ def run_backtest(
     List[datetime],
     Dict[str, Dict],
     Dict[str, List[Tuple[datetime, float]]],
+    str,
 ]:
     """
     Run historical backtest.
@@ -196,6 +198,9 @@ def run_backtest(
         )
         if sparse_warning:
             print(sparse_warning)
+        quality_report_text = loader.get_quality_report_text()
+        if quality_report_text:
+            print(f"\n{quality_report_text}")
     except Exception as e:
         print(f"Error loading data: {e}")
         print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
@@ -279,31 +284,6 @@ def run_backtest(
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
-
-    def _block_one_bar_jump(symbol: str, timestamp: datetime) -> bool:
-        history = price_history.get(symbol)
-        if not history or len(history) < 2:
-            return False
-
-        prev_price = history[-2]
-        curr_price = history[-1]
-        if prev_price <= 0:
-            return False
-
-        jump_pct = abs(curr_price / prev_price - 1.0)
-        if jump_pct <= 0.15:
-            return False
-
-        # Allow known split/reverse-split windows to pass through.
-        if has_corporate_action_near(
-            symbol=symbol,
-            timestamp=timestamp,
-            window_days=2,
-            action_types={"split", "reverse_split"},
-        ):
-            return False
-
-        return True
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -312,8 +292,8 @@ def run_backtest(
         # Get current prices
         current_prices = {}
         for symbol in symbols:
-            if timestamp in data[symbol]:
-                bar = data[symbol][timestamp]
+            bar = data[symbol].get(timestamp)
+            if bar and bar.get("data_quality", "OK") == "OK":
                 current_prices[symbol] = bar['close']
         
         if not current_prices:
@@ -321,14 +301,18 @@ def run_backtest(
         
         # Update price history for each symbol
         for symbol in symbols:
-            if timestamp in data[symbol]:
-                bar = data[symbol][timestamp]
+            bar = data[symbol].get(timestamp)
+            if bar is None:
+                if symbol in price_history and price_history[symbol]:
+                    # Keep last known price if data is missing entirely.
+                    price_history[symbol].append(price_history[symbol][-1])
+                else:
+                    price_history[symbol].append(current_prices.get(symbol, 0))
+            elif bar.get("data_quality", "OK") == "OK":
                 price_history[symbol].append(bar['close'])
-            elif symbol in price_history:
-                # Keep last known price if data missing
-                price_history[symbol].append(price_history[symbol][-1])
             else:
-                price_history[symbol].append(current_prices.get(symbol, 0))
+                # Quarantined bars are removed from the strategy-visible history.
+                continue
         
         # Let each penguin make decisions
         quotes = {}
@@ -358,8 +342,6 @@ def run_backtest(
                 for order_symbol, action, quantity in batch_orders:
                     if order_symbol not in quotes or quantity <= 0:
                         continue
-                    if _block_one_bar_jump(order_symbol, timestamp):
-                        continue
 
                     bid, ask = quotes[order_symbol]
                     if action == "BUY":
@@ -387,8 +369,6 @@ def run_backtest(
             
             for symbol in symbols_for_penguin:
                 if symbol not in current_prices:
-                    continue
-                if _block_one_bar_jump(symbol, timestamp):
                     continue
                 
                 # Pass only necessary price history window to penguin.
@@ -495,7 +475,25 @@ def run_backtest(
         if hasattr(penguin, "export_sr_history"):
             sr_histories[penguin_name] = penguin.export_sr_history()
     """
-    return results, trades_by_bar, sorted_timestamps, sr_histories, symbol_close_series
+    cleanup_start = time.perf_counter()
+    print("\nReleasing large backtest buffers before returning...", flush=True)
+    data = None
+    price_history = None
+    all_timestamps = None
+    penguins = None
+    portfolios = None
+    loader = None
+    spread_model = None
+    symbol_data = None
+    full_history = None
+    mid_prices = None
+    current_prices = None
+    quotes = None
+    final_prices = None
+    symbol_prices = None
+    bar = None
+    print(f"Released large backtest buffers in {time.perf_counter() - cleanup_start:.2f}s", flush=True)
+    return results, trades_by_bar, sorted_timestamps, sr_histories, symbol_close_series, quality_report_text
 
 
 def main():
@@ -515,7 +513,7 @@ def main():
     print("="*80)
     
     ################ Run backtest ################
-    results, trades_by_bar, bar_timestamps, sr_histories, _symbol_close_series = run_backtest(
+    results, trades_by_bar, bar_timestamps, sr_histories, _symbol_close_series, data_quality_report = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -524,6 +522,7 @@ def main():
         transaction_cost=TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
     )
+    print("\nrun_backtest() returned; generating results...", flush=True)
     
     # Identify S/R penguins from results
     """    sr_penguin_names = {name for name in sr_histories.keys()}
@@ -540,6 +539,11 @@ def main():
     current_dir = base_dir / "run_current"
     current_artifacts_dir = current_dir / "artifacts"
     current_artifacts_dir.mkdir(parents=True, exist_ok=True)
+
+    data_quality_report_path = current_artifacts_dir / "data_quality_report.txt"
+    with open(data_quality_report_path, 'w') as f:
+        f.write(data_quality_report)
+        f.write("\n")
     
     # Conditionally set up archive directory based on config
     if SAVE_TO_RUN_OLD:
@@ -689,6 +693,8 @@ def main():
     print(f"  - artifacts/curves_data.json")
     print(f"  - artifacts/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
+    print(f"  - artifacts/data_quality_report.txt")
+    print(f"  - artifacts/data_quality_report.txt")
     print(f"  - artifacts/consistency_warnings.txt (if warnings)")
     print(f"  - artifacts/support_resistance_zones.txt")
     

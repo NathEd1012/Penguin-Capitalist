@@ -92,6 +92,14 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
 
 # Reverse splits (price scales up after event date)
 REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
+    "DNA": [
+        {
+            "date": "2024-08-20",
+            "type": "reverse_split",
+            "ratio": "1:40",
+            "comment": "1-for-40 reverse split; split-adjusted trading began on NYSE",
+        }
+    ],
     "GE": [
         {
             "date": "2021-08-02",

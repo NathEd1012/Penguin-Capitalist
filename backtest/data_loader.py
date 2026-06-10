@@ -1,5 +1,6 @@
 """Data loader for historical market data from Alpaca."""
 import os
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Tuple, Optional
@@ -18,6 +19,8 @@ from market_data.cache import DataCache
 if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
     def get_price_adjustment_events(symbol: str):
         return []
+    def has_corporate_action_near(symbol, timestamp, window_days=2, action_types=None):
+        return False
 else:
     # Try the project's other_corporate_actions first, then fallback to corporate_actions.
     try:
@@ -25,8 +28,106 @@ else:
     except Exception:
         from corporate_actions import get_price_adjustment_events  # type: ignore
 
+    try:
+        from other_corporate_actions import has_corporate_action_near  # type: ignore
+    except Exception:
+        from corporate_actions import has_corporate_action_near  # type: ignore
+
 # Load environment variables from .env file
 load_dotenv()
+
+QUALITY_OK = "OK"
+QUALITY_MISSING_PREV = "MISSING_PREV"
+QUALITY_SYNTHETIC_JUMP = "SYNTHETIC_JUMP"
+QUALITY_SPLIT_SUSPECT = "SPLIT_SUSPECT"
+QUALITY_OUTLIER = "OUTLIER"
+
+STRICT_ANOMALY_SYMBOLS = {
+    "SPY",
+    "QQQ",
+    "IWM",
+    "DIA",
+    "XLK",
+    "XLF",
+    "XLE",
+    "XLV",
+    "XLI",
+    "XLP",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "ORCL",
+    "ADBE",
+    "CRM",
+    "CSCO",
+    "AMD",
+    "QCOM",
+    "TXN",
+    "INTU",
+    "NOW",
+    "AMAT",
+    "MU",
+    "INTC",
+    "LLY",
+    "UNH",
+    "JNJ",
+    "JPM",
+    "BAC",
+    "WMT",
+    "COST",
+    "XOM",
+    "CVX",
+    "HD",
+    "MCD",
+    "KO",
+    "PEP",
+}
+
+VOLATILE_ANOMALY_SYMBOLS = {
+    "COIN",
+    "SOFI",
+    "AFRM",
+    "HOOD",
+    "UPST",
+    "AI",
+    "PATH",
+    "RBLX",
+    "MSTR",
+    "RIOT",
+    "MARA",
+    "CAN",
+    "GREE",
+    "RIVN",
+    "LCID",
+    "NIO",
+    "XPEV",
+    "LI",
+    "CVNA",
+    "DKNG",
+    "PENN",
+    "CHWY",
+    "W",
+    "FSLY",
+    "PLUG",
+    "FCEL",
+    "BLDP",
+    "BE",
+    "MRNA",
+    "BNTX",
+    "DNA",
+    "CRSP",
+    "EDIT",
+    "NTLA",
+    "BEAM",
+    "BLUE",
+    "ARCT",
+    "SGEN",
+}
 
 class DataLoader:
     """Load historical OHLCV data from Alpaca."""
@@ -56,6 +157,8 @@ class DataLoader:
         project_root = Path(__file__).parent.parent
         cache_dir = project_root / "data_cache"
         self.cache = DataCache(str(cache_dir))
+        self.last_removed_bars: Dict[str, List[Dict[str, object]]] = {}
+        self.last_quality_summary: Dict[str, Dict[str, int]] = {}
     
     def _binning_to_timeframe(self, binning: str) -> Tuple[TimeFrame, int]:
         """
@@ -111,6 +214,168 @@ class DataLoader:
 
         return adjusted_rows
 
+    def _corporate_action_boundary_score(self, symbol: str, rows: Dict) -> float:
+        """Score discontinuities around known split boundaries."""
+        if not rows:
+            return 0.0
+
+        adjustments = get_price_adjustment_events(symbol)
+        if not adjustments:
+            return 0.0
+
+        timestamps = sorted(rows.keys())
+        score = 0.0
+        for effective_ts, _factor, _event in adjustments:
+            before_candidates = [ts for ts in timestamps if ts < effective_ts]
+            after_candidates = [ts for ts in timestamps if ts >= effective_ts]
+            if not before_candidates or not after_candidates:
+                continue
+
+            before_ts = before_candidates[-1]
+            after_ts = after_candidates[0]
+            before_close = float(rows[before_ts]["close"])
+            after_close = float(rows[after_ts]["close"])
+            if before_close > 0 and after_close > 0:
+                score += abs(after_close / before_close - 1.0)
+
+        return score
+
+    def _select_price_basis(self, symbol: str, rows: Dict) -> Dict:
+        """Choose the smoother of raw vs split-adjusted prices for a symbol."""
+        if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
+            return rows
+
+        adjusted_rows = self._apply_price_adjustments(symbol, rows)
+        if adjusted_rows is rows or not adjusted_rows:
+            return rows
+
+        raw_score = self._corporate_action_boundary_score(symbol, rows)
+        adjusted_score = self._corporate_action_boundary_score(symbol, adjusted_rows)
+
+        if adjusted_score + 1e-9 < raw_score:
+            return adjusted_rows
+        return rows
+
+    @staticmethod
+    def _anomaly_threshold_for_symbol(symbol: str) -> float:
+        normalized = symbol.strip().upper()
+        if normalized in STRICT_ANOMALY_SYMBOLS:
+            return 0.09
+        if normalized in VOLATILE_ANOMALY_SYMBOLS:
+            return 0.25
+        return 0.15
+
+    def _annotate_data_quality(self, symbol: str, rows: Dict) -> Dict:
+        """Attach a per-bar quality flag and record any quarantined bars."""
+        annotated_rows: Dict = {}
+        removed_bars: List[Dict[str, object]] = []
+
+        if not rows:
+            self.last_removed_bars[symbol] = []
+            return annotated_rows
+
+        timestamps = sorted(rows.keys())
+        threshold = self._anomaly_threshold_for_symbol(symbol)
+        previous_timestamp = None
+        previous_quality = None
+
+        for index, timestamp in enumerate(timestamps):
+            row = dict(rows[timestamp])
+            quality = QUALITY_OK
+            reason_detail = ""
+
+            if index == 0:
+                quality = QUALITY_MISSING_PREV
+                reason_detail = "first bar has no prior history"
+            else:
+                prev_row = rows[previous_timestamp]
+                prev_close = float(prev_row.get("close", 0.0))
+                curr_close = float(row.get("close", 0.0))
+
+                if prev_close <= 0 or curr_close <= 0:
+                    quality = QUALITY_OUTLIER
+                    reason_detail = "non-positive price in one-bar comparison"
+                else:
+                    jump_pct = abs(curr_close / prev_close - 1.0)
+                    if jump_pct > 0.50:
+                        quality = QUALITY_OUTLIER
+                        reason_detail = f"one-bar jump {jump_pct:.2%} exceeded 50% hard cap"
+                    elif jump_pct > threshold:
+                        if has_corporate_action_near(
+                            symbol=symbol,
+                            timestamp=timestamp,
+                            window_days=2,
+                            action_types={"split", "reverse_split"},
+                        ):
+                            quality = QUALITY_SPLIT_SUSPECT
+                            reason_detail = (
+                                f"jump {jump_pct:.2%} near known split/reverse-split event"
+                            )
+                        elif previous_quality == QUALITY_MISSING_PREV:
+                            quality = QUALITY_SYNTHETIC_JUMP
+                            reason_detail = (
+                                f"jump {jump_pct:.2%} immediately after missing history"
+                            )
+                        else:
+                            quality = QUALITY_OUTLIER
+                            reason_detail = f"jump {jump_pct:.2%} above {threshold:.2%} threshold"
+
+            row["data_quality"] = quality
+            if reason_detail:
+                row["quality_reason"] = reason_detail
+            annotated_rows[timestamp] = row
+
+            if quality != QUALITY_OK:
+                removed_bars.append(
+                    {
+                        "timestamp": timestamp,
+                        "reason": quality,
+                        "close": float(row.get("close", 0.0)),
+                        "detail": reason_detail,
+                    }
+                )
+
+            previous_timestamp = timestamp
+            previous_quality = quality
+
+        self.last_removed_bars[symbol] = removed_bars
+        return annotated_rows
+
+    def get_quality_report_text(self) -> str:
+        """Return a compact human-readable report of quarantined bars."""
+        if not self.last_removed_bars:
+            return "Historical data quality report: no quarantined bars detected."
+
+        lines = ["Historical data quality report", "=" * 40]
+        total_removed = 0
+
+        for symbol in sorted(self.last_removed_bars):
+            removed = self.last_removed_bars.get(symbol, [])
+            if not removed:
+                continue
+
+            visible_removed = [item for item in removed if item.get("reason") != QUALITY_MISSING_PREV]
+            if not visible_removed:
+                continue
+
+            total_removed += len(visible_removed)
+            reason_counts = defaultdict(int)
+            for item in visible_removed:
+                reason_counts[str(item.get("reason", "UNKNOWN"))] += 1
+
+            lines.append(f"{symbol}: {len(visible_removed)} quarantined bar(s)")
+            for reason, count in sorted(reason_counts.items()):
+                lines.append(f"  - {reason}: {count}")
+
+            for item in visible_removed[:5]:
+                timestamp = item.get("timestamp")
+                ts_text = timestamp.isoformat() if hasattr(timestamp, "isoformat") else str(timestamp)
+                detail = item.get("detail", "")
+                lines.append(f"    * {ts_text} | {item.get('reason')} | {detail}")
+
+        lines.append(f"Total quarantined bars: {total_removed}")
+        return "\n".join(lines)
+
     @staticmethod
     def _rows_to_dataframe(rows: Dict) -> pd.DataFrame:
         """Convert timestamp keyed OHLCV rows into a DataFrame."""
@@ -153,6 +418,8 @@ class DataLoader:
             - warning_message: String with info about actual data range if sparse
         """
         tf, minutes_per_bar = self._binning_to_timeframe(binning)
+        self.last_removed_bars = {}
+        self.last_quality_summary = {}
 
         def _fetch_symbol(symbol: str) -> Dict:
             def _df_to_symbol_rows(df: Optional[pd.DataFrame]) -> Dict:
@@ -239,8 +506,6 @@ class DataLoader:
                     missing_rows.update(_fetch_range(tail_start, end_date))
 
             symbol_rows.update(missing_rows)
-            adjusted_rows = self._apply_price_adjustments(symbol, symbol_rows)
-
             # Persist only newly fetched raw rows so cache grows incrementally.
             if missing_rows:
                 fetched_df = self._rows_to_dataframe(missing_rows)
@@ -251,7 +516,7 @@ class DataLoader:
                 else:
                     self.cache.merge_cache_and_new_data(symbol, binning, existing_df, fetched_df)
 
-            return adjusted_rows
+            return symbol_rows
         
         print(f"Fetching data for {len(symbols)} symbols from {start_date} to {end_date}...")
 
@@ -270,8 +535,16 @@ class DataLoader:
                     # Keep symbol empty if API call failed; stale-data filter will handle it.
                     symbol_rows = {}
 
-                data[symbol] = symbol_rows
-                all_timestamps.update(symbol_rows.keys())
+                selected_rows = self._select_price_basis(symbol, symbol_rows)
+                annotated_rows = self._annotate_data_quality(symbol, selected_rows)
+
+                summary = defaultdict(int)
+                for row in annotated_rows.values():
+                    summary[str(row.get("data_quality", QUALITY_OK))] += 1
+                self.last_quality_summary[symbol] = dict(summary)
+
+                data[symbol] = annotated_rows
+                all_timestamps.update(annotated_rows.keys())
         
         # Check for data sparseness and generate warning if needed
         warning_msg = ""
