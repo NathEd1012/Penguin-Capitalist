@@ -36,14 +36,19 @@ def rsi(prices: List[float], period: int = 14) -> float:
     """
     if len(prices) < period + 1:
         return 50  # Neutral
-    
-    deltas = [prices[i] - prices[i-1] for i in range(1, len(prices))]
-    
-    gains = [d if d > 0 else 0 for d in deltas]
-    losses = [-d if d < 0 else 0 for d in deltas]
-    
-    avg_gain = sum(gains[-period:]) / period
-    avg_loss = sum(losses[-period:]) / period
+
+    gain_sum = 0.0
+    loss_sum = 0.0
+    start = len(prices) - period
+    for i in range(start, len(prices)):
+        delta = prices[i] - prices[i - 1]
+        if delta > 0:
+            gain_sum += delta
+        elif delta < 0:
+            loss_sum -= delta
+
+    avg_gain = gain_sum / period
+    avg_loss = loss_sum / period
     
     if avg_loss == 0:
         return 100 if avg_gain > 0 else 50

@@ -78,9 +78,13 @@ class SyntheticSpreadModel:
         self.closing_spread_multiplier = closing_spread_multiplier
         
         self.timezone = pytz.timezone(timezone) if timezone != "UTC" else pytz.UTC
+        self.market_open_time = time(self.market_open_hour, self.market_open_minute)
+        self.market_close_time = time(self.market_close_hour, self.market_close_minute)
+        self._period_cache: Dict[Union[datetime, str], Tuple[bool, bool]] = {}
         
         # Volume tracking per symbol
         self.volume_history: Dict[str, List[float]] = {}
+        self.volume_window_sums: Dict[str, float] = {}
         self.volume_window = volume_window
     
     @staticmethod
@@ -106,8 +110,8 @@ class SyntheticSpreadModel:
             return 1.0  # Default if no history
         
         # Get average volume from recent window
-        recent_volumes = self.volume_history[symbol][-self.volume_window:]
-        avg_volume = sum(recent_volumes) / len(recent_volumes) if recent_volumes else 1.0
+        window_len = min(len(self.volume_history[symbol]), self.volume_window)
+        avg_volume = self.volume_window_sums.get(symbol, 0.0) / window_len if window_len else 1.0
         
         # Avoid division by zero
         if current_volume <= 0:
@@ -117,13 +121,21 @@ class SyntheticSpreadModel:
         volume_factor = avg_volume / current_volume
         
         # Clamp to reasonable range
-        return self._clamp(volume_factor, 0.5, 2.0)
+        if volume_factor < 0.5:
+            return 0.5
+        if volume_factor > 2.0:
+            return 2.0
+        return volume_factor
     
     def _track_volume(self, symbol: str, volume: float) -> None:
         """Track volume history for a symbol."""
-        if symbol not in self.volume_history:
-            self.volume_history[symbol] = []
-        self.volume_history[symbol].append(volume)
+        history = self.volume_history.setdefault(symbol, [])
+        history.append(volume)
+
+        window_sum = self.volume_window_sums.get(symbol, 0.0) + volume
+        if len(history) > self.volume_window:
+            window_sum -= history[-self.volume_window - 1]
+        self.volume_window_sums[symbol] = window_sum
     
     def _parse_timestamp(self, timestamp: Union[datetime, str]) -> datetime:
         """Parse and normalize timestamp to timezone-aware datetime."""
@@ -137,54 +149,51 @@ class SyntheticSpreadModel:
         # Ensure timezone-aware
         if dt.tzinfo is None:
             dt = self.timezone.localize(dt)
+        elif self.timezone is pytz.UTC and dt.utcoffset() is not None and dt.utcoffset().total_seconds() == 0:
+            return dt
         else:
             dt = dt.astimezone(self.timezone)
         
         return dt
+
+    def _get_period_flags(self, timestamp: Union[datetime, str]) -> Tuple[bool, bool]:
+        """Return cached opening/closing period flags for a timestamp."""
+        cached = self._period_cache.get(timestamp)
+        if cached is not None:
+            return cached
+
+        dt = self._parse_timestamp(timestamp)
+        current_time = dt.time()
+        if not (self.market_open_time <= current_time < self.market_close_time):
+            flags = (False, False)
+        else:
+            open_dt = dt.replace(
+                hour=self.market_open_hour,
+                minute=self.market_open_minute,
+                second=0,
+                microsecond=0,
+            )
+            close_dt = dt.replace(
+                hour=self.market_close_hour,
+                minute=self.market_close_minute,
+                second=0,
+                microsecond=0,
+            )
+            flags = (
+                int((dt - open_dt).total_seconds() / 60) < self.opening_period_minutes,
+                int((close_dt - dt).total_seconds() / 60) < self.closing_period_minutes,
+            )
+
+        self._period_cache[timestamp] = flags
+        return flags
     
     def _is_opening_period(self, timestamp: Union[datetime, str]) -> bool:
         """Check if timestamp is within first N minutes of market open."""
-        dt = self._parse_timestamp(timestamp)
-        current_time = dt.time()
-        market_open_time = time(self.market_open_hour, self.market_open_minute)
-        market_close_time = time(self.market_close_hour, self.market_close_minute)
-        
-        # Market must be open
-        if not (market_open_time <= current_time < market_close_time):
-            return False
-        
-        # Calculate minutes from open
-        open_dt = dt.replace(
-            hour=self.market_open_hour,
-            minute=self.market_open_minute,
-            second=0,
-            microsecond=0
-        )
-        minutes_from_open = int((dt - open_dt).total_seconds() / 60)
-        
-        return minutes_from_open < self.opening_period_minutes
+        return self._get_period_flags(timestamp)[0]
     
     def _is_closing_period(self, timestamp: Union[datetime, str]) -> bool:
         """Check if timestamp is within last N minutes before market close."""
-        dt = self._parse_timestamp(timestamp)
-        current_time = dt.time()
-        market_open_time = time(self.market_open_hour, self.market_open_minute)
-        market_close_time = time(self.market_close_hour, self.market_close_minute)
-        
-        # Market must be open
-        if not (market_open_time <= current_time < market_close_time):
-            return False
-        
-        # Calculate minutes to close
-        close_dt = dt.replace(
-            hour=self.market_close_hour,
-            minute=self.market_close_minute,
-            second=0,
-            microsecond=0
-        )
-        minutes_to_close = int((close_dt - dt).total_seconds() / 60)
-        
-        return minutes_to_close < self.closing_period_minutes
+        return self._get_period_flags(timestamp)[1]
     
     def get_bid_ask(
         self,
@@ -220,9 +229,10 @@ class SyntheticSpreadModel:
         spread = max(price_component, volatility_component)
         
         # Adjust spread for market hours
-        if self._is_opening_period(timestamp):
+        is_opening_period, is_closing_period = self._get_period_flags(timestamp)
+        if is_opening_period:
             spread *= self.opening_spread_multiplier
-        elif self._is_closing_period(timestamp):
+        elif is_closing_period:
             spread *= self.closing_spread_multiplier
         
         # Apply volume factor if volume data provided

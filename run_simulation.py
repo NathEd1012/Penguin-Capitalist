@@ -12,6 +12,17 @@ import numpy as np
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
+mpl_config_dir = Path(os.environ.get("MPLCONFIGDIR", "/private/tmp/penguin_mplconfig"))
+xdg_cache_dir = Path(os.environ.get("XDG_CACHE_HOME", "/private/tmp/penguin_xdg_cache"))
+try:
+    mpl_config_dir.mkdir(parents=True, exist_ok=True)
+    xdg_cache_dir.mkdir(parents=True, exist_ok=True)
+    os.environ.setdefault("MPLCONFIGDIR", str(mpl_config_dir))
+    os.environ.setdefault("XDG_CACHE_HOME", str(xdg_cache_dir))
+    os.environ.setdefault("MPLBACKEND", "Agg")
+except Exception:
+    pass
+
 from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
@@ -498,6 +509,11 @@ def run_backtest(
 
 def main():
     """Main entry point."""
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+    except Exception:
+        pass
+
     # Parse config dates
     try:
         start_dt = parse_datetime_string(START_DATE)

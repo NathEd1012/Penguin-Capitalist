@@ -56,19 +56,36 @@ class CopilotPenguin(BasePenguin):
             trend_strength += 0.30
         if sma_20 > sma_50:
             trend_strength += 0.25
-        trend_strength += 0.45 * self._clamp((roc_long - 0.002) / 0.04, 0.0, 1.0)
+        trend_component = (roc_long - 0.002) / 0.04
+        if trend_component < 0.0:
+            trend_component = 0.0
+        elif trend_component > 1.0:
+            trend_component = 1.0
+        trend_strength += 0.45 * trend_component
 
         weakness = 0.0
         if price < sma_20:
             weakness += 0.25
         if sma_20 < sma_50:
             weakness += 0.25
-        weakness += 0.50 * self._clamp((-roc_long - 0.002) / 0.04, 0.0, 1.0)
+        weakness_component = (-roc_long - 0.002) / 0.04
+        if weakness_component < 0.0:
+            weakness_component = 0.0
+        elif weakness_component > 1.0:
+            weakness_component = 1.0
+        weakness += 0.50 * weakness_component
 
-        flatness = self._clamp(1.0 - (abs(roc_long) / 0.02), 0.0, 1.0)
+        flatness = 1.0 - (abs(roc_long) / 0.02)
+        if flatness < 0.0:
+            flatness = 0.0
+        elif flatness > 1.0:
+            flatness = 1.0
 
         momentum_trust = 0.55 + (0.45 * trend_strength) - (0.55 * weakness) - (0.10 * flatness)
-        momentum_trust = self._clamp(momentum_trust, 0.10, 0.90)
+        if momentum_trust < 0.10:
+            momentum_trust = 0.10
+        elif momentum_trust > 0.90:
+            momentum_trust = 0.90
         mean_reversion_trust = 1.0 - momentum_trust
 
         is_trending = trend_strength >= 0.55

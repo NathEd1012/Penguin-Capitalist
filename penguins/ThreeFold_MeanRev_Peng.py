@@ -96,14 +96,18 @@ class ThreeFoldMeanReversionTrendPenguin(BasePenguin):
     # --------------------------------------------------
 
     def _rsi(self, prices: List[float], period: int = 14) -> float:
-        deltas = [prices[i] - prices[i - 1] for i in range(1, len(prices))]
-        recent = deltas[-period:]
+        gain_sum = 0.0
+        loss_sum = 0.0
+        start = len(prices) - period
+        for i in range(start, len(prices)):
+            delta = prices[i] - prices[i - 1]
+            if delta > 0:
+                gain_sum += delta
+            elif delta < 0:
+                loss_sum -= delta
 
-        gains = [d for d in recent if d > 0]
-        losses = [-d for d in recent if d < 0]
-
-        avg_gain = sum(gains) / period
-        avg_loss = sum(losses) / period
+        avg_gain = gain_sum / period
+        avg_loss = loss_sum / period
 
         if avg_loss == 0:
             return 100.0
@@ -166,13 +170,13 @@ class ThreeFoldMeanReversionTrendPenguin(BasePenguin):
     # --------------------------------------------------
 
     def _get_cash(self, portfolio: Portfolio) -> float:
-        return float(
-            getattr(portfolio, "cash", 0.0)
-        )
+        return float(portfolio.cash)
 
     def _get_position(self, portfolio: Portfolio, symbol: str) -> int:
-        positions = getattr(portfolio, "positions", {})
+        positions = portfolio.positions
         pos = positions.get(symbol, 0)
+        if type(pos) is int:
+            return pos
 
         if isinstance(pos, dict):
             return int(pos.get("quantity", 0))
@@ -183,10 +187,10 @@ class ThreeFoldMeanReversionTrendPenguin(BasePenguin):
         return int(pos)
 
     def _get_avg_entry(self, portfolio: Portfolio, symbol: str) -> float | None:
-        positions = getattr(portfolio, "positions", {})
+        positions = portfolio.positions
         pos = positions.get(symbol)
 
-        if pos is None:
+        if pos is None or type(pos) is int:
             return None
 
         if isinstance(pos, dict):

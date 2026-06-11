@@ -1,8 +1,23 @@
 """Enhanced plotting and PDF report generation using matplotlib and PdfPages."""
+import os
+from pathlib import Path
+
+mpl_config_dir = Path(os.environ.get("MPLCONFIGDIR", "/private/tmp/penguin_mplconfig"))
+xdg_cache_dir = Path(os.environ.get("XDG_CACHE_HOME", "/private/tmp/penguin_xdg_cache"))
+try:
+    mpl_config_dir.mkdir(parents=True, exist_ok=True)
+    xdg_cache_dir.mkdir(parents=True, exist_ok=True)
+    os.environ.setdefault("MPLCONFIGDIR", str(mpl_config_dir))
+    os.environ.setdefault("XDG_CACHE_HOME", str(xdg_cache_dir))
+    os.environ.setdefault("MPLBACKEND", "Agg")
+except Exception:
+    pass
+
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from datetime import datetime, timedelta
-from pathlib import Path
 import pytz
 import csv
 from config import INITIAL_CAPITAL
