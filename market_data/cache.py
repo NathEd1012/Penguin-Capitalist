@@ -2,7 +2,7 @@
 import os
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import pandas as pd
 
 
@@ -18,6 +18,49 @@ class DataCache:
         """
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
+        self._meta_cache = {}
+        self._missing_meta = set()
+
+    @staticmethod
+    def _cache_key(symbol: str, timeframe: str) -> tuple:
+        return symbol, timeframe
+
+    @staticmethod
+    def _normalize_dt(value):
+        """Return a timezone-aware UTC datetime/Timestamp for comparisons."""
+        if isinstance(value, pd.Timestamp):
+            if value.tzinfo is None:
+                return value.tz_localize(timezone.utc)
+            return value.tz_convert(timezone.utc)
+        if isinstance(value, datetime):
+            if value.tzinfo is None:
+                return value.replace(tzinfo=timezone.utc)
+            return value.astimezone(timezone.utc)
+        return pd.to_datetime(value, utc=True)
+
+    @staticmethod
+    def _parse_meta_timestamp(value: str) -> datetime:
+        """Parse ISO metadata timestamps without the heavier pandas parser."""
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            return parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc)
+
+    @staticmethod
+    def _ensure_utc_timestamp_column(df: pd.DataFrame) -> pd.DataFrame:
+        if df is None or df.empty or "timestamp" not in df.columns:
+            return df
+        timestamp = df["timestamp"]
+        needs_conversion = not pd.api.types.is_datetime64_any_dtype(timestamp)
+        if not needs_conversion:
+            try:
+                needs_conversion = timestamp.dt.tz is None
+            except AttributeError:
+                needs_conversion = True
+        if needs_conversion:
+            df = df.copy()
+            df["timestamp"] = pd.to_datetime(timestamp, utc=True)
+        return df
     
     def get_cache_path(self, symbol: str, timeframe: str) -> Path:
         """Get cache file path for symbol and timeframe."""
@@ -48,10 +91,34 @@ class DataCache:
         if cached_df is None or cached_df.empty or "timestamp" not in cached_df.columns:
             return None
 
-        cache_start = pd.to_datetime(cached_df["timestamp"].min(), utc=True)
-        cache_end = pd.to_datetime(cached_df["timestamp"].max(), utc=True)
+        cache_start = self._normalize_dt(cached_df["timestamp"].min())
+        cache_end = self._normalize_dt(cached_df["timestamp"].max())
         self._write_meta(symbol, timeframe, cache_start, cache_end, len(cached_df))
         return cache_start, cache_end
+
+    def get_cached_slice_with_bounds(
+        self,
+        symbol: str,
+        timeframe: str,
+        start: datetime,
+        end: datetime,
+    ):
+        """Return (cached rows in range, cache bounds), avoiding non-overlap parquet reads."""
+        path = self.get_cache_path(symbol, timeframe)
+        if not path.exists():
+            return None, None
+
+        bounds = self.get_cache_bounds(symbol, timeframe)
+        if bounds is None:
+            return None, None
+
+        cache_start, cache_end = bounds
+        start_utc = self._normalize_dt(start)
+        end_utc = self._normalize_dt(end)
+        if end_utc < cache_start or start_utc > cache_end:
+            return None, bounds
+
+        return self._read_cache_range_from_path(path, start_utc, end_utc), bounds
 
     def get_cached_slice(
         self,
@@ -61,7 +128,8 @@ class DataCache:
         end: datetime,
     ) -> pd.DataFrame:
         """Return cached rows in [start, end] even when cache does not fully cover the range."""
-        return self._read_cache_range(symbol, timeframe, start, end)
+        cached_df, _bounds = self.get_cached_slice_with_bounds(symbol, timeframe, start, end)
+        return cached_df
     
     def load_cache(self, symbol: str, timeframe: str) -> pd.DataFrame:
         """
@@ -81,8 +149,7 @@ class DataCache:
         try:
             df = pd.read_parquet(path)
             # Ensure timestamp is datetime
-            if "timestamp" in df.columns:
-                df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+            df = self._ensure_utc_timestamp_column(df)
             return df
         except Exception:
             # Silently return None if cache is corrupted
@@ -125,34 +192,75 @@ class DataCache:
     def _write_meta(self, symbol: str, timeframe: str, start_ts, end_ts, rows: int) -> None:
         """Write metadata sidecar. Failures are non-fatal."""
         try:
+            start_utc = self._normalize_dt(start_ts)
+            end_utc = self._normalize_dt(end_ts)
             meta = {
                 "symbol": symbol,
                 "timeframe": timeframe,
                 "rows": int(rows),
-                "start": pd.to_datetime(start_ts, utc=True).isoformat(),
-                "end": pd.to_datetime(end_ts, utc=True).isoformat(),
+                "start": start_utc.isoformat(),
+                "end": end_utc.isoformat(),
             }
             self.get_meta_path(symbol, timeframe).write_text(json.dumps(meta), encoding="utf-8")
+            key = self._cache_key(symbol, timeframe)
+            self._meta_cache[key] = {"start": start_utc, "end": end_utc, "rows": int(rows)}
+            self._missing_meta.discard(key)
         except Exception:
             pass
 
     def _load_meta(self, symbol: str, timeframe: str):
         """Load cache metadata sidecar if present and valid."""
+        key = self._cache_key(symbol, timeframe)
+        if key in self._meta_cache:
+            return self._meta_cache[key]
+        if key in self._missing_meta:
+            return None
+
         meta_path = self.get_meta_path(symbol, timeframe)
         if not meta_path.exists():
+            self._missing_meta.add(key)
             return None
 
         try:
             raw = json.loads(meta_path.read_text(encoding="utf-8"))
-            start = pd.to_datetime(raw.get("start"), utc=True)
-            end = pd.to_datetime(raw.get("end"), utc=True)
-            return {
-                "start": start,
-                "end": end,
+            meta = {
+                "start": self._parse_meta_timestamp(raw.get("start")),
+                "end": self._parse_meta_timestamp(raw.get("end")),
                 "rows": int(raw.get("rows", 0)),
             }
+            self._meta_cache[key] = meta
+            return meta
         except Exception:
+            self._missing_meta.add(key)
             return None
+
+    def _read_cache_range_from_path(
+        self,
+        path: Path,
+        start_utc,
+        end_utc,
+    ) -> pd.DataFrame:
+        try:
+            # Use parquet filters to avoid loading the full file when backend supports it.
+            df = pd.read_parquet(
+                path,
+                columns=["timestamp", "open", "high", "low", "close", "volume"],
+                filters=[
+                    ("timestamp", ">=", start_utc),
+                    ("timestamp", "<=", end_utc),
+                ],
+            )
+        except Exception:
+            # Fallback for engines that do not support pushdown filters.
+            df = pd.read_parquet(path)
+
+        if df is None or df.empty:
+            return None
+
+        df = self._ensure_utc_timestamp_column(df)
+        if "timestamp" in df.columns:
+            df = df[(df["timestamp"] >= start_utc) & (df["timestamp"] <= end_utc)].copy()
+        return df if not df.empty else None
 
     def _read_cache_range(
         self,
@@ -166,29 +274,11 @@ class DataCache:
         if not path.exists():
             return None
 
-        start_utc = pd.to_datetime(start, utc=True)
-        end_utc = pd.to_datetime(end, utc=True)
-
-        try:
-            # Use parquet filters to avoid loading the full file when backend supports it.
-            df = pd.read_parquet(
-                path,
-                filters=[
-                    ("timestamp", ">=", start_utc),
-                    ("timestamp", "<=", end_utc),
-                ],
-            )
-        except Exception:
-            # Fallback for engines that do not support pushdown filters.
-            df = pd.read_parquet(path)
-
-        if df is None or df.empty:
-            return None
-
-        if "timestamp" in df.columns:
-            df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
-            df = df[(df["timestamp"] >= start_utc) & (df["timestamp"] <= end_utc)].copy()
-        return df if not df.empty else None
+        return self._read_cache_range_from_path(
+            path,
+            self._normalize_dt(start),
+            self._normalize_dt(end),
+        )
     
     def get_cached_data_in_range(
         self,
@@ -207,22 +297,22 @@ class DataCache:
         if not path.exists():
             return None
 
-        start_utc = pd.to_datetime(start, utc=True)
-        end_utc = pd.to_datetime(end, utc=True)
+        start_utc = self._normalize_dt(start)
+        end_utc = self._normalize_dt(end)
 
         meta = self._load_meta(symbol, timeframe)
         if meta is not None:
             if meta["start"] > start_utc or meta["end"] < end_utc:
                 return None
-            return self._read_cache_range(symbol, timeframe, start, end)
+            return self._read_cache_range_from_path(path, start_utc, end_utc)
 
         # Backward-compatible fallback for older cache files without metadata.
         cached_df = self.load_cache(symbol, timeframe)
         if cached_df is None or cached_df.empty:
             return None
 
-        cache_start = cached_df["timestamp"].min()
-        cache_end = cached_df["timestamp"].max()
+        cache_start = self._normalize_dt(cached_df["timestamp"].min())
+        cache_end = self._normalize_dt(cached_df["timestamp"].max())
         # One-time migration for legacy cache files without sidecar metadata.
         self._write_meta(symbol, timeframe, cache_start, cache_end, len(cached_df))
         if cache_start > start_utc or cache_end < end_utc:

@@ -1,15 +1,15 @@
 Strategy Summary: SP500x2
 
 Portfolio Totals
-Cash,"$115,216.44"
-Total Value,"$115,216.44"
+Cash,"$210,253.72"
+Total Value,"$210,253.72"
 Total Buy Count,1
 Total Sell Count,0
-Total Shares Bought,292
-Total Shares Sold,292
-Realized PnL,"$15,216.44"
-Total PnL,"$15,216.44"
+Total Shares Bought,419
+Total Shares Sold,419
+Realized PnL,"$110,253.72"
+Total PnL,"$110,253.72"
 Open Positions,0
 
 Symbol,Buy Count,Sell Count,Shares Bought,Shares Sold,Position Qty,Total Cost,Total Revenue,Realized PnL,Total PnL,PnL %
-SPY,1,1,292,292,0,"$199,365.41","$214,581.85","$15,216.44","$15,216.44",+7.63%
+SPY,1,1,419,419,0,"$199,585.47","$309,839.19","$110,253.72","$110,253.72",+55.24%
