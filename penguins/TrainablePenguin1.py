@@ -1,35 +1,50 @@
-from typing import List
+from dataclasses import dataclass
 import math
+from typing import List
 
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 
 
-class TrainablePenguin1(BasePenguin):
-    LOOKBACK_BARS = 120
+# Manual tuning block:
+# Adjust these values here first so the strategy is easy to finetune by hand.
+TRAINABLE_PENGUIN1_RSI_PERIOD = 14
+TRAINABLE_PENGUIN1_BUY_RSI = 30.0
+TRAINABLE_PENGUIN1_SELL_RSI = 70.0
+TRAINABLE_PENGUIN1_MAX_CASH_FRACTION = 0.05
+TRAINABLE_PENGUIN1_STOP_LOSS_PCT = 0.04
+TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT = 0.08
+TRAINABLE_PENGUIN1_COOLDOWN_BARS = 10
+
+
+# Trainable Penguin, with Buy condition based on RSI and trend quality,
+# and Sell condition based on RSI breakdown, trend reversal, and profit taking.
+
 
 @dataclass
 class TrainablePenguin1Params:
-    rsi_period: int
-    buy_rsi: float
-    sell_rsi: float
-    max_cash_fraction: float
-    stop_loss_pct: float
-    take_profit_pct: float
-    cooldown_bars: int
+    rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD
+    buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI
+    sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI
+    max_cash_fraction: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION
+    stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT
+    take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT
+    cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS
 
-    # Trainable Penguin, with Buy condition based on RSI and the Amount by Trend compared between different Stocks, and Sell condition based on RS=Stock/SPY ratio and Trend Reversal
+
+class TrainablePenguin1(BasePenguin):
+    LOOKBACK_BARS = 120
 
     def __init__(
         self,
         name: str = "TrainablePenguin1",
-        rsi_period: int = 14,
-        buy_rsi: float = 30.0,
-        sell_rsi: float = 70.0,
-        max_cash_fraction_per_trade: float = 0.05,
-        stop_loss_pct: float = 0.04,
-        take_profit_pct: float = 0.08,
-        cooldown_bars: int = 10,
+        rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD,
+        buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI,
+        sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI,
+        max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION,
+        stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT,
+        take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT,
+        cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS,
     ):
         super().__init__(name)
         self.params = TrainablePenguin1Params(
@@ -40,7 +55,7 @@ class TrainablePenguin1Params:
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,
-        )   
+        )
 
     def decide(
         self,
@@ -50,7 +65,6 @@ class TrainablePenguin1Params:
         ask: float,
         portfolio: Portfolio,
     ) -> tuple[str, int]:
-
         if len(mid_prices) < max(60, self.params.rsi_period + 2):
             return "HOLD", 0
 
@@ -62,9 +76,7 @@ class TrainablePenguin1Params:
         avg_entry = self._get_avg_entry(portfolio, symbol)
 
         current_price = mid_prices[-1]
-        # -----------------
-        # SELL CONDITION
-        # -----------------
+
         if shares_owned > 0:
             loss_trigger = (
                 avg_entry is not None
@@ -77,19 +89,67 @@ class TrainablePenguin1Params:
                 and rsi > 60
                 and trend_score < 0.3
             )
+
             overbought_breakdown_trigger = (
                 rsi >= self.params.sell_rsi
                 and trend_score < 0.15
             )
+
             if loss_trigger or profit_reversal_trigger or overbought_breakdown_trigger:
                 return "SELL", shares_owned
-        # -----------------
-        # BUY CONDITION
         else:
             if rsi <= self.params.buy_rsi and trend_score > 0.5:
                 max_shares_to_buy = math.floor(
                     (cash * self.params.max_cash_fraction) / current_price
                 )
                 return "BUY", max_shares_to_buy
+
         return "HOLD", 0
-    
+
+    def _rsi(self, prices: List[float], period: int = 14) -> float:
+        gain_sum = 0.0
+        loss_sum = 0.0
+        start = len(prices) - period
+
+        for index in range(start, len(prices)):
+            delta = prices[index] - prices[index - 1]
+            if delta > 0:
+                gain_sum += delta
+            elif delta < 0:
+                loss_sum -= delta
+
+        avg_gain = gain_sum / period
+        avg_loss = loss_sum / period
+
+        if avg_loss == 0:
+            return 100.0
+
+        rs = avg_gain / avg_loss
+        return 100 - (100 / (1 + rs))
+
+    def _trend_quality(self, prices: List[float]) -> float:
+        sma_10 = sum(prices[-10:]) / 10
+        sma_30 = sum(prices[-30:]) / 30
+        sma_60 = sum(prices[-60:]) / 60
+
+        score = 0.0
+
+        if sma_10 > sma_30:
+            score += 0.35
+        if sma_30 > sma_60:
+            score += 0.35
+        if prices[-1] > sma_30:
+            score += 0.20
+        if prices[-1] > prices[-5]:
+            score += 0.10
+
+        return min(score, 1.0)
+
+    def _get_cash(self, portfolio: Portfolio) -> float:
+        return float(portfolio.cash)
+
+    def _get_position(self, portfolio: Portfolio, symbol: str) -> int:
+        return int(portfolio.get_position(symbol))
+
+    def _get_avg_entry(self, portfolio: Portfolio, symbol: str) -> float | None:
+        return portfolio.cost_basis.get(symbol)

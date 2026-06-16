@@ -5,6 +5,8 @@ from penguins import (
     CopilotPenguin,
     SP500,
     SP500x2,
+    TrainablePenguin1,
+    TrainablePenguin2,
     RSIMeanReversionSelectivePenguin,
     SmartRSIConfluencePenguin,
     BuyOneEachPenguin,
@@ -22,6 +24,9 @@ from penguins.ThreeFold_MeanRev_Peng import ThreeFoldMeanReversionTrendPenguin
 # Each strategy will be tested in parallel on the same data
 
 ACTIVE_PENGUINS = [
+    TrainablePenguin1,                  # Manual tuning first: RSI/trend strategy
+    TrainablePenguin2,                  # Manual tuning first: Bollinger/ADX strategy
+
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
     #RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion

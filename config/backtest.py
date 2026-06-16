@@ -38,7 +38,7 @@ SAVE_TO_RUN_OLD = int(os.getenv("SAVE_TO_RUN_OLD", "0"))
 # Controls extra visualization outputs like multitimeframe S/R line PNGs + combined PDF.
 # True  - Generate additional plot folders and a combined PDF
 # False - Skip all additional plotting
-ENABLE_ADDITIONAL_PLOTS = 1
+ENABLE_ADDITIONAL_PLOTS = 0
 
 # ========== EXTREMA FIT SETTINGS ==========
 # Centered window widths used for local-extrema based fit extraction.
