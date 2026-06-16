@@ -20,53 +20,53 @@
     "final_value": 210253.72
   },
   "Smart RSI Confluence": {
-    "total_return": 18975.51,
-    "return_pct": 18.98,
-    "max_drawdown": -23.93,
+    "total_return": 19182.55,
+    "return_pct": 19.18,
+    "max_drawdown": -24.0,
     "sharpe_ratio": 0.02,
-    "total_trades": 566,
-    "buy_trades": 283,
-    "sell_trades": 283,
-    "final_value": 118975.51
+    "total_trades": 556,
+    "buy_trades": 278,
+    "sell_trades": 278,
+    "final_value": 119182.55
   },
   "Buy One Each Penguin": {
-    "total_return": 11084.54,
-    "return_pct": 11.08,
-    "max_drawdown": -13.36,
+    "total_return": 10963.7,
+    "return_pct": 10.96,
+    "max_drawdown": -13.33,
     "sharpe_ratio": 0.02,
-    "total_trades": 620,
-    "buy_trades": 310,
-    "sell_trades": 310,
-    "final_value": 111084.54
+    "total_trades": 602,
+    "buy_trades": 301,
+    "sell_trades": 301,
+    "final_value": 110963.7
   },
   "Buy Max Each Penguin": {
-    "total_return": 98176.26,
-    "return_pct": 98.18,
-    "max_drawdown": -33.23,
+    "total_return": 98328.12,
+    "return_pct": 98.33,
+    "max_drawdown": -33.29,
     "sharpe_ratio": 0.04,
-    "total_trades": 104,
-    "buy_trades": 52,
-    "sell_trades": 52,
-    "final_value": 198176.26
+    "total_trades": 90,
+    "buy_trades": 45,
+    "sell_trades": 45,
+    "final_value": 198328.12
   },
   "CopilotPenguin": {
-    "total_return": 337.27,
-    "return_pct": 0.34,
+    "total_return": 256.53,
+    "return_pct": 0.26,
     "max_drawdown": -0.89,
     "sharpe_ratio": 0.01,
-    "total_trades": 650,
-    "buy_trades": 325,
-    "sell_trades": 325,
-    "final_value": 100337.27
+    "total_trades": 632,
+    "buy_trades": 316,
+    "sell_trades": 316,
+    "final_value": 100256.53
   },
   "ThreeFold_MeanReversion_TrendPenguin": {
-    "total_return": 48713.37,
-    "return_pct": 48.71,
-    "max_drawdown": -22.33,
+    "total_return": 44793.97,
+    "return_pct": 44.79,
+    "max_drawdown": -23.14,
     "sharpe_ratio": 0.04,
-    "total_trades": 250038,
-    "buy_trades": 125019,
-    "sell_trades": 125019,
-    "final_value": 148713.37
+    "total_trades": 245576,
+    "buy_trades": 122788,
+    "sell_trades": 122788,
+    "final_value": 144793.97
   }
 }
