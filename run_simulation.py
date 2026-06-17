@@ -1,5 +1,6 @@
 """Main entry point for historical backtesting simulation."""
 import json
+from contextlib import redirect_stderr, redirect_stdout
 import os
 import random
 import shutil
@@ -277,13 +278,12 @@ def _train_trainable_penguins(
         f"Step 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
         f"for {TRAINING_ITERATIONS} round(s) on {TRAINING_SUBSET_MONTHS} month(s) x {TRAINING_SUBSET_STOCKS} stock(s)..."
     )
-    print(f"\n{header}")
     log_lines.append(header)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
     log_lines.append(f"  Training window length: {TRAINING_SUBSET_MONTHS} month(s) per trial")
     log_lines.append(f"  Training stock subset size: {TRAINING_SUBSET_STOCKS} symbol(s) per trial")
 
-    for strategy_class in tqdm(TRAINABLE_PENGUINS, desc="Step 3b: training strategies"):
+    for strategy_class in TRAINABLE_PENGUINS:
         best_metrics = None
         best_score = None
         best_params: Dict[str, int | float] = {}
@@ -297,7 +297,6 @@ def _train_trainable_penguins(
                 best_params = dict(getattr(baseline_instance.params, "__dict__", {}))
 
         strategy_header = f"  Optimizing {strategy_class.__name__}"
-        print(f"\n{strategy_header}")
         log_lines.append("")
         log_lines.append(strategy_header)
         trial_iterator = tqdm(
@@ -331,16 +330,17 @@ def _train_trainable_penguins(
             selected_symbols = _format_training_symbols(trial_symbols)
             param_changes = _format_param_changes(params, previous_trial_params)
 
-            results, _, _, _, _, _ = run_backtest(
-                symbols=trial_symbols,
-                start_datetime=trial_window_start,
-                end_datetime=trial_window_end,
-                binning=binning,
-                initial_capital=initial_capital,
-                transaction_cost=transaction_cost,
-                penguin_classes=[candidate, SP500],
-                enable_training_step=False,
-            )
+            with open(os.devnull, "w", encoding="utf-8") as devnull, redirect_stdout(devnull), redirect_stderr(devnull):
+                results, _, _, _, _, _ = run_backtest(
+                    symbols=trial_symbols,
+                    start_datetime=trial_window_start,
+                    end_datetime=trial_window_end,
+                    binning=binning,
+                    initial_capital=initial_capital,
+                    transaction_cost=transaction_cost,
+                    penguin_classes=[candidate, SP500],
+                    enable_training_step=False,
+                )
 
             candidate_metrics = results[candidate.name][1]
             benchmark_metrics = results[SP500().name][1]
@@ -361,10 +361,6 @@ def _train_trainable_penguins(
             trial_line = (
                 f"      relative=${score[0]:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
             )
-            print(selection_line)
-            print(params_line)
-            print(change_line)
-            print(trial_line)
             trial_iterator.set_postfix_str(
                 f"relative={score[0]:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
             )
@@ -399,7 +395,6 @@ def _train_trainable_penguins(
             f"  Best {strategy_class.__name__}: relative=${(best_score[0] if best_score else 0.0):,.2f}, "
             f"buys={(best_metrics or {}).get('buy_trades', 0)}, params={_format_trainable_params(best_params)}"
         )
-        print(best_line)
         log_lines.append(best_line)
 
     return trained_parameters, log_lines, parameter_history

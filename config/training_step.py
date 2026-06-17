@@ -6,11 +6,11 @@ from penguins import TrainablePenguin1, TrainablePenguin2
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONS = 100
+TRAINING_ITERATIONS = 200
 
 # Training subsets are intentionally small to keep optimization tractable.
 TRAINING_SUBSET_MONTHS = 2
-TRAINING_SUBSET_STOCKS = 40
+TRAINING_SUBSET_STOCKS = 30
 
 # Match the training objective's per-buy cost penalty.
 TRAINING_TRANSACTION_COST = 1.0
