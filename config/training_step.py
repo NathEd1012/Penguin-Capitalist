@@ -29,6 +29,7 @@ TRAINABLE_PENGUINS = [
 
 # Saved alongside the run artifacts.
 TRAINING_RESULTS_FILENAME = "trainable_penguin_training.json"
+TRAINING_LOG_FILENAME = "trainable_penguin_training.log"
 
 __all__ = [
     "TRAINING_STEP_ENABLED",
@@ -40,4 +41,5 @@ __all__ = [
     "TRAINING_RANDOM_SEED",
     "TRAINABLE_PENGUINS",
     "TRAINING_RESULTS_FILENAME",
+    "TRAINING_LOG_FILENAME",
 ]

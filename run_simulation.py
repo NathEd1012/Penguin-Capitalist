@@ -60,6 +60,7 @@ from config import (
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
     TRAINING_RESULTS_FILENAME,
+    TRAINING_LOG_FILENAME,
 )
 
 
@@ -224,13 +225,15 @@ def _train_trainable_penguins(
 ) -> Dict[str, Dict[str, object]]:
     rng = random.Random(TRAINING_RANDOM_SEED)
     trained_parameters: Dict[str, Dict[str, object]] = {}
+    training_log_lines: List[str] = []
 
-    print(
+    header = (
         f"\nStep 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
         f"for {TRAINING_ITERATIONS} round(s) on {TRAINING_SUBSET_MONTHS} month(s) x {TRAINING_SUBSET_STOCKS} stock(s)..."
     )
+    training_log_lines.append(header.strip())
 
-    for strategy_class in TRAINABLE_PENGUINS:
+    for strategy_class in tqdm(TRAINABLE_PENGUINS, desc="Step 3b: training strategies"):
         best_metrics = None
         best_score = None
         best_params: Dict[str, int | float] = {}
@@ -242,12 +245,20 @@ def _train_trainable_penguins(
             except Exception:
                 best_params = dict(getattr(baseline_instance.params, "__dict__", {}))
 
-        print(f"\n  Optimizing {strategy_class.__name__}")
-        for trial_number in range(1, TRAINING_ITERATIONS + 1):
+        strategy_header = f"\n  Optimizing {strategy_class.__name__}"
+        training_log_lines.append(strategy_header.strip())
+
+        trial_iterator = tqdm(
+            range(1, TRAINING_ITERATIONS + 1),
+                desc=f"{strategy_class.__name__}",
+            leave=False,
+        )
+        for trial_number in trial_iterator:
             trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, TRAINING_BENCHMARK_SYMBOL, rng)
             trial_timestamps = _training_window_subset(sorted_timestamps, TRAINING_SUBSET_MONTHS, rng)
 
             if not trial_symbols or not trial_timestamps:
+                trial_iterator.set_postfix_str("skipped empty subset")
                 continue
 
             params = _sample_trainable_params(strategy_class, rng)
@@ -273,20 +284,43 @@ def _train_trainable_penguins(
                 best_metrics = candidate_metrics
                 best_params = params
 
-            print(
-                f"    Trial {trial_number:03d}: relative=${score[0]:,.2f}, "
-                f"buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+            trial_line = (
+                f"    Trial {trial_number:03d}: "
+                f"window={trial_timestamps[0].isoformat()} -> {trial_timestamps[-1].isoformat()}, "
+                f"symbols={','.join(trial_symbols)}, "
+                f"relative=${score[0]:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
             )
+            training_log_lines.append(trial_line.strip())
+            trial_iterator.set_postfix_str(f"relative={score[0]:.2f}, buys={candidate_metrics.get('buy_trades', 0)}")
 
         trained_parameters[strategy_class.__name__] = {
             "best_params": best_params,
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
         }
-        print(
+        summary_line = (
             f"  Best {strategy_class.__name__}: relative=${(best_score[0] if best_score else 0.0):,.2f}, "
             f"buys={(best_metrics or {}).get('buy_trades', 0)}"
         )
+        training_log_lines.append(summary_line)
+        if best_params:
+            params_line = f"    Best params: {json.dumps(best_params, sort_keys=True)}"
+            training_log_lines.append(params_line)
+
+    final_summary = "\nStep 3b: Final trained values"
+    training_log_lines.append(final_summary.strip())
+    for strategy_name, result in trained_parameters.items():
+        params_json = json.dumps(result.get("best_params", {}), sort_keys=True)
+        metrics_json = json.dumps(result.get("best_metrics", {}), sort_keys=True, default=str)
+        report_line = f"  {strategy_name}: params={params_json} metrics={metrics_json}"
+        training_log_lines.append(report_line)
+
+    training_output_dir = Path(__file__).parent / "run_current" / "artifacts"
+    training_output_dir.mkdir(parents=True, exist_ok=True)
+    training_log_path = training_output_dir / TRAINING_LOG_FILENAME
+    with open(training_log_path, "w", encoding="utf-8") as handle:
+        handle.write("\n".join(training_log_lines))
+        handle.write("\n")
 
     return trained_parameters
 

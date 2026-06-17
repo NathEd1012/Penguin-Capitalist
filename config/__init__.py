@@ -67,6 +67,7 @@ from config.training_step import (
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
     TRAINING_RESULTS_FILENAME,
+    TRAINING_LOG_FILENAME,
 )
 
 # ========== EXPORTS ==========
@@ -108,5 +109,6 @@ __all__ = [
     "TRAINING_RANDOM_SEED",
     "TRAINABLE_PENGUINS",
     "TRAINING_RESULTS_FILENAME",
+    "TRAINING_LOG_FILENAME",
     
 ]
