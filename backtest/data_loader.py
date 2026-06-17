@@ -607,8 +607,13 @@ class DataLoader:
         all_timestamps = set()
         stale_reasons = defaultdict(int)
 
-        # Too much parallelism triggers provider-side throttling on repeated runs.
-        max_workers = min(4, max(1, len(symbols)))
+        # Native client / dataframe handling has been unstable under higher thread fan-out on large symbol sets.
+        # Keep the default conservative, but allow an override for controlled experiments.
+        try:
+            max_workers = int(os.environ.get("DATA_LOADER_MAX_WORKERS", "1"))
+        except ValueError:
+            max_workers = 1
+        max_workers = max(1, min(max_workers, len(symbols)))
 
         probe_start = self._freshness_probe_start(start_date, end_date, minutes_per_bar)
         full_symbols = list(symbols)
