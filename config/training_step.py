@@ -6,11 +6,11 @@ from penguins import TrainablePenguin1, TrainablePenguin2
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONS = 12
+TRAINING_ITERATIONS = 100
 
 # Training subsets are intentionally small to keep optimization tractable.
 TRAINING_SUBSET_MONTHS = 2
-TRAINING_SUBSET_STOCKS = 20
+TRAINING_SUBSET_STOCKS = 40
 
 # Match the training objective's per-buy cost penalty.
 TRAINING_TRANSACTION_COST = 1.0
@@ -29,6 +29,8 @@ TRAINABLE_PENGUINS = [
 
 # Saved alongside the run artifacts.
 TRAINING_RESULTS_FILENAME = "trainable_penguin_training.json"
+TRAINING_LOG_FILENAME = "trainable_penguin_training.log"
+TRAINING_PARAMETER_LOG_FILENAME = "trainable_penguin_parameter_log.json"
 
 __all__ = [
     "TRAINING_STEP_ENABLED",
@@ -40,4 +42,6 @@ __all__ = [
     "TRAINING_RANDOM_SEED",
     "TRAINABLE_PENGUINS",
     "TRAINING_RESULTS_FILENAME",
+    "TRAINING_LOG_FILENAME",
+    "TRAINING_PARAMETER_LOG_FILENAME",
 ]

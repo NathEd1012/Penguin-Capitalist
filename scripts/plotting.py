@@ -417,8 +417,17 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     for name, vals in curves.items():
         if name not in (sma20_name, sp500_name):
             display_name = _display_strategy_name(name)
-            line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
-            line_colors[name] = line[0].get_color()
+            # Force SP500x2 to a dark grey for clarity
+            forced_color = None
+            if name == "SP500x2Penguin":
+                forced_color = "darkgrey"
+
+            if forced_color:
+                line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2, color=forced_color)
+                line_colors[name] = forced_color
+            else:
+                line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
+                line_colors[name] = line[0].get_color()
     
     # Plot SMA20 strategy last so it appears in foreground
     if sma20_name in curves:

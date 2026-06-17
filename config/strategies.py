@@ -44,7 +44,7 @@ ACTIVE_PENGUINS = [
     BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
 
     #CopilotPenguin,                    # AI-assisted strategy
-    ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
+    #ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
     #MomentumPenguin,                  # Pure momentum following
     # MinMaxSRPenguin,                  # Single timeframe S/R
     # SRMultiframePenguin,              # Multiframe S/R placeholder

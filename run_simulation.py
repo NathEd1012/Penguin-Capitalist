@@ -60,6 +60,8 @@ from config import (
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
     TRAINING_RESULTS_FILENAME,
+    TRAINING_LOG_FILENAME,
+    TRAINING_PARAMETER_LOG_FILENAME,
 )
 
 
@@ -215,25 +217,77 @@ def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float]):
         return penguin
 
 
+def _format_trainable_params(params: Dict[str, int | float]) -> str:
+    if not params:
+        return "<no parameters>"
+    return ", ".join(f"{key}={value}" for key, value in sorted(params.items()))
+
+
+def _format_training_timestamp(timestamp: datetime) -> str:
+    return timestamp.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+
+
+def _format_training_months(trial_timestamps: List[datetime]) -> str:
+    months = sorted({timestamp.astimezone(timezone.utc).strftime("%Y-%m") for timestamp in trial_timestamps})
+    return ", ".join(months) if months else "<none>"
+
+
+def _format_training_symbols(trial_symbols: List[str], limit: int = 20) -> str:
+    if not trial_symbols:
+        return "<none>"
+    if len(trial_symbols) <= limit:
+        return ", ".join(trial_symbols)
+    head = ", ".join(trial_symbols[:limit])
+    return f"{head}, ... (+{len(trial_symbols) - limit} more)"
+
+
+def _format_param_changes(current_params: Dict[str, int | float], previous_params: Dict[str, int | float] | None) -> str:
+    if not previous_params:
+        return "initial sample"
+
+    changes = []
+    for key in sorted(set(current_params) | set(previous_params)):
+        previous_value = previous_params.get(key)
+        current_value = current_params.get(key)
+        if previous_value == current_value:
+            continue
+        if key not in previous_params:
+            changes.append(f"{key}: <new> -> {current_value}")
+        elif key not in current_params:
+            changes.append(f"{key}: {previous_value} -> <removed>")
+        else:
+            changes.append(f"{key}: {previous_value} -> {current_value}")
+
+    return "; ".join(changes) if changes else "no parameter change"
+
+
 def _train_trainable_penguins(
     symbols: List[str],
     sorted_timestamps: List[datetime],
     binning: str,
     initial_capital: float,
     transaction_cost: float,
-) -> Dict[str, Dict[str, object]]:
+) -> Tuple[Dict[str, Dict[str, object]], List[str], List[Dict[str, object]]]:
     rng = random.Random(TRAINING_RANDOM_SEED)
     trained_parameters: Dict[str, Dict[str, object]] = {}
+    log_lines: List[str] = []
+    parameter_history: List[Dict[str, object]] = []
 
-    print(
-        f"\nStep 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
+    header = (
+        f"Step 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
         f"for {TRAINING_ITERATIONS} round(s) on {TRAINING_SUBSET_MONTHS} month(s) x {TRAINING_SUBSET_STOCKS} stock(s)..."
     )
+    print(f"\n{header}")
+    log_lines.append(header)
+    log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
+    log_lines.append(f"  Training window length: {TRAINING_SUBSET_MONTHS} month(s) per trial")
+    log_lines.append(f"  Training stock subset size: {TRAINING_SUBSET_STOCKS} symbol(s) per trial")
 
-    for strategy_class in TRAINABLE_PENGUINS:
+    for strategy_class in tqdm(TRAINABLE_PENGUINS, desc="Step 3b: training strategies"):
         best_metrics = None
         best_score = None
         best_params: Dict[str, int | float] = {}
+        previous_trial_params: Dict[str, int | float] | None = None
 
         baseline_instance = strategy_class()
         if hasattr(baseline_instance, "params"):
@@ -242,21 +296,45 @@ def _train_trainable_penguins(
             except Exception:
                 best_params = dict(getattr(baseline_instance.params, "__dict__", {}))
 
-        print(f"\n  Optimizing {strategy_class.__name__}")
-        for trial_number in range(1, TRAINING_ITERATIONS + 1):
+        strategy_header = f"  Optimizing {strategy_class.__name__}"
+        print(f"\n{strategy_header}")
+        log_lines.append("")
+        log_lines.append(strategy_header)
+        trial_iterator = tqdm(
+            range(1, TRAINING_ITERATIONS + 1),
+            desc=strategy_class.__name__,
+            leave=False,
+        )
+        for trial_number in trial_iterator:
             trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, TRAINING_BENCHMARK_SYMBOL, rng)
             trial_timestamps = _training_window_subset(sorted_timestamps, TRAINING_SUBSET_MONTHS, rng)
 
             if not trial_symbols or not trial_timestamps:
+                skipped_line = f"    Trial {trial_number:03d}: skipped (no subset available)"
+                log_lines.append(skipped_line)
+                trial_iterator.set_postfix_str("skipped empty subset")
+                parameter_history.append(
+                    {
+                        "strategy": strategy_class.__name__,
+                        "trial": trial_number,
+                        "status": "skipped",
+                    }
+                )
                 continue
 
             params = _sample_trainable_params(strategy_class, rng)
             candidate = strategy_class(**params)
+            trial_window_start = trial_timestamps[0]
+            trial_window_end = trial_timestamps[-1]
+            selected_month_list = sorted({timestamp.astimezone(timezone.utc).strftime("%Y-%m") for timestamp in trial_timestamps})
+            selected_months = ", ".join(selected_month_list)
+            selected_symbols = _format_training_symbols(trial_symbols)
+            param_changes = _format_param_changes(params, previous_trial_params)
 
             results, _, _, _, _, _ = run_backtest(
                 symbols=trial_symbols,
-                start_datetime=trial_timestamps[0],
-                end_datetime=trial_timestamps[-1],
+                start_datetime=trial_window_start,
+                end_datetime=trial_window_end,
                 binning=binning,
                 initial_capital=initial_capital,
                 transaction_cost=transaction_cost,
@@ -273,22 +351,58 @@ def _train_trainable_penguins(
                 best_metrics = candidate_metrics
                 best_params = params
 
-            print(
-                f"    Trial {trial_number:03d}: relative=${score[0]:,.2f}, "
-                f"buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+            selection_line = (
+                f"    Trial {trial_number:03d}: window={_format_training_timestamp(trial_window_start)}"
+                f" -> {_format_training_timestamp(trial_window_end)}, months=[{selected_months}],"
+                f" symbols=[{selected_symbols}]"
             )
+            params_line = f"      params={_format_trainable_params(params)}"
+            change_line = f"      change_vs_previous={param_changes}"
+            trial_line = (
+                f"      relative=${score[0]:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+            )
+            print(selection_line)
+            print(params_line)
+            print(change_line)
+            print(trial_line)
+            trial_iterator.set_postfix_str(
+                f"relative={score[0]:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
+            )
+            log_lines.append(selection_line)
+            log_lines.append(params_line)
+            log_lines.append(change_line)
+            log_lines.append(trial_line)
+            parameter_history.append(
+                {
+                    "strategy": strategy_class.__name__,
+                    "trial": trial_number,
+                    "status": "completed",
+                    "window_start": trial_window_start,
+                    "window_end": trial_window_end,
+                    "selected_months": selected_month_list,
+                    "selected_symbols": trial_symbols,
+                    "params": params,
+                    "param_changes_vs_previous": param_changes,
+                    "relative_value": float(score[0]),
+                    "buy_trades": int(candidate_metrics.get("buy_trades", 0)),
+                    "score": list(score),
+                }
+            )
+            previous_trial_params = params
 
         trained_parameters[strategy_class.__name__] = {
             "best_params": best_params,
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
         }
-        print(
+        best_line = (
             f"  Best {strategy_class.__name__}: relative=${(best_score[0] if best_score else 0.0):,.2f}, "
-            f"buys={(best_metrics or {}).get('buy_trades', 0)}"
+            f"buys={(best_metrics or {}).get('buy_trades', 0)}, params={_format_trainable_params(best_params)}"
         )
+        print(best_line)
+        log_lines.append(best_line)
 
-    return trained_parameters
+    return trained_parameters, log_lines, parameter_history
 
 
 def run_backtest(
@@ -452,13 +566,21 @@ def run_backtest(
             if penguin.__class__ in set(TRAINABLE_PENGUINS)
         ]
         if active_trainables:
-            trained_parameters = _train_trainable_penguins(
+            training_start = datetime.now(timezone.utc)
+            trained_parameters, training_log_lines, training_parameter_history = _train_trainable_penguins(
                 symbols=symbols,
                 sorted_timestamps=sorted_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
                 transaction_cost=TRAINING_TRANSACTION_COST,
             )
+            training_end = datetime.now(timezone.utc)
+            training_elapsed = training_end - training_start
+            # Format elapsed as H:MM:SS
+            total_seconds = int(training_elapsed.total_seconds())
+            hrs, rem = divmod(total_seconds, 3600)
+            mins, secs = divmod(rem, 60)
+            training_duration_str = f"{hrs}:{mins:02d}:{secs:02d}"
 
             for penguin_name, penguin in list(penguins.items()):
                 strategy_name = penguin.__class__.__name__
@@ -471,6 +593,8 @@ def run_backtest(
             training_output_dir = Path(__file__).parent / "run_current" / "artifacts"
             training_output_dir.mkdir(parents=True, exist_ok=True)
             training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
+            training_log_path = training_output_dir / TRAINING_LOG_FILENAME
+            training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
             with open(training_output_path, "w", encoding="utf-8") as handle:
                 json.dump(
                     {
@@ -486,7 +610,48 @@ def run_backtest(
                     indent=2,
                     default=str,
                 )
+            with open(training_parameter_log_path, "w", encoding="utf-8") as handle:
+                json.dump(
+                    {
+                        "generated_at": datetime.now(timezone.utc).isoformat(),
+                        "iterations": TRAINING_ITERATIONS,
+                        "subset_months": TRAINING_SUBSET_MONTHS,
+                        "subset_stocks": TRAINING_SUBSET_STOCKS,
+                        "benchmark_symbol": TRAINING_BENCHMARK_SYMBOL,
+                        "transaction_cost": TRAINING_TRANSACTION_COST,
+                        "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
+                        "trial_history": training_parameter_history,
+                    },
+                    handle,
+                    indent=2,
+                    default=str,
+                )
+            with open(training_log_path, "w", encoding="utf-8") as handle:
+                handle.write(
+                    "\n".join(
+                        [
+                            f"Step 3b training completed at {datetime.now(timezone.utc).isoformat()}",
+                            f"Total training time: {training_duration_str} (H:MM:SS)",
+                            f"Iterations: {TRAINING_ITERATIONS}",
+                            f"Subset months: {TRAINING_SUBSET_MONTHS}",
+                            f"Subset stocks: {TRAINING_SUBSET_STOCKS}",
+                            f"Benchmark symbol: {TRAINING_BENCHMARK_SYMBOL}",
+                            f"Transaction cost: {TRAINING_TRANSACTION_COST}",
+                            f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
+                            f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
+                            "",
+                            *training_log_lines,
+                        ]
+                    )
+                    + "\n"
+                )
             print(f"\nSaved training parameters to {training_output_path}")
+            print(f"Saved trainable parameter log to {training_parameter_log_path}")
+            print(f"Saved training log to {training_log_path}")
+            print(f"Total training time: {training_duration_str} (H:MM:SS)")
+            print("\nTrainable values selected at the end:")
+            for strategy_name, training_result in trained_parameters.items():
+                print(f"  {strategy_name}: {_format_trainable_params(training_result.get('best_params', {}))}")
 
     sr_penguin_names, precompute_sr_penguin_names = build_sr_strategy_sets(penguins)
 
