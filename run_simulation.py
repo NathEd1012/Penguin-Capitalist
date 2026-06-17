@@ -1,8 +1,11 @@
 """Main entry point for historical backtesting simulation."""
+import json
 import os
+import random
 import shutil
 import sys
 import time
+from dataclasses import asdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -36,6 +39,7 @@ from scripts.multiframe import (
 )
 from scripts.generate_sr_reports import generate_sr_analysis
 from corporate_actions import has_corporate_action_near
+from penguins import SP500
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
@@ -47,6 +51,15 @@ from config import (
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
     ENABLE_ADDITIONAL_PLOTS,
+    TRAINING_STEP_ENABLED,
+    TRAINING_ITERATIONS,
+    TRAINING_SUBSET_MONTHS,
+    TRAINING_SUBSET_STOCKS,
+    TRAINING_TRANSACTION_COST,
+    TRAINING_BENCHMARK_SYMBOL,
+    TRAINING_RANDOM_SEED,
+    TRAINABLE_PENGUINS,
+    TRAINING_RESULTS_FILENAME,
 )
 
 
@@ -128,6 +141,156 @@ def get_next_run_number(run_old_dir: Path) -> int:
     return max(run_numbers) + 1 if run_numbers else 1
 
 
+def _training_window_subset(sorted_timestamps: List[datetime], months: int, rng: random.Random) -> List[datetime]:
+    if not sorted_timestamps:
+        return []
+
+    window_length = timedelta(days=max(1, months) * 30)
+    latest_start = sorted_timestamps[-1] - window_length
+    eligible_starts = [timestamp for timestamp in sorted_timestamps if timestamp <= latest_start]
+    start_timestamp = rng.choice(eligible_starts) if eligible_starts else sorted_timestamps[0]
+    end_timestamp = start_timestamp + window_length
+    return [timestamp for timestamp in sorted_timestamps if start_timestamp <= timestamp <= end_timestamp]
+
+
+def _training_symbol_subset(symbols: List[str], target_count: int, benchmark_symbol: str, rng: random.Random) -> List[str]:
+    pool = list(dict.fromkeys(symbols))
+    if benchmark_symbol in pool:
+        pool.remove(benchmark_symbol)
+
+    sample_size = min(len(pool), max(0, target_count - 1))
+    subset = rng.sample(pool, sample_size) if sample_size > 0 else []
+    if benchmark_symbol not in subset:
+        subset.append(benchmark_symbol)
+    return sorted(subset)
+
+
+def _score_against_spy(candidate_metrics: Dict, benchmark_metrics: Dict) -> tuple[float, int, int]:
+    relative_value = float(candidate_metrics.get("final_value", 0.0)) - float(benchmark_metrics.get("final_value", 0.0))
+    return (
+        relative_value,
+        -int(candidate_metrics.get("buy_trades", 0)),
+        -int(candidate_metrics.get("total_trades", 0)),
+    )
+
+
+def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, int | float]:
+    strategy_name = strategy_class.__name__
+    if strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
+        buy_rsi = rng.uniform(18.0, 42.0)
+        sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
+        return {
+            "rsi_period": rng.randint(7, 28),
+            "buy_rsi": round(buy_rsi, 2),
+            "sell_rsi": round(sell_rsi, 2),
+            "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
+            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "cooldown_bars": rng.randint(0, 30),
+        }
+    if strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
+        return {
+            "bb_period": rng.randint(10, 40),
+            "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
+            "adx_period": rng.randint(7, 28),
+            "adx_threshold": round(rng.uniform(10.0, 40.0), 2),
+            "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
+            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "cooldown_bars": rng.randint(0, 30),
+        }
+    raise ValueError(f"No parameter sampler is defined for {strategy_name}")
+
+
+def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float]):
+    try:
+        updated_penguin = penguin.__class__(name=penguin.name, **params)
+        if hasattr(penguin, "record_history"):
+            updated_penguin.record_history = bool(getattr(penguin, "record_history"))
+        return updated_penguin
+    except Exception:
+        if hasattr(penguin, "params"):
+            for key, value in params.items():
+                setattr(penguin.params, key, value)
+        return penguin
+
+
+def _train_trainable_penguins(
+    symbols: List[str],
+    sorted_timestamps: List[datetime],
+    binning: str,
+    initial_capital: float,
+    transaction_cost: float,
+) -> Dict[str, Dict[str, object]]:
+    rng = random.Random(TRAINING_RANDOM_SEED)
+    trained_parameters: Dict[str, Dict[str, object]] = {}
+
+    print(
+        f"\nStep 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
+        f"for {TRAINING_ITERATIONS} round(s) on {TRAINING_SUBSET_MONTHS} month(s) x {TRAINING_SUBSET_STOCKS} stock(s)..."
+    )
+
+    for strategy_class in TRAINABLE_PENGUINS:
+        best_metrics = None
+        best_score = None
+        best_params: Dict[str, int | float] = {}
+
+        baseline_instance = strategy_class()
+        if hasattr(baseline_instance, "params"):
+            try:
+                best_params = asdict(baseline_instance.params)
+            except Exception:
+                best_params = dict(getattr(baseline_instance.params, "__dict__", {}))
+
+        print(f"\n  Optimizing {strategy_class.__name__}")
+        for trial_number in range(1, TRAINING_ITERATIONS + 1):
+            trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, TRAINING_BENCHMARK_SYMBOL, rng)
+            trial_timestamps = _training_window_subset(sorted_timestamps, TRAINING_SUBSET_MONTHS, rng)
+
+            if not trial_symbols or not trial_timestamps:
+                continue
+
+            params = _sample_trainable_params(strategy_class, rng)
+            candidate = strategy_class(**params)
+
+            results, _, _, _, _, _ = run_backtest(
+                symbols=trial_symbols,
+                start_datetime=trial_timestamps[0],
+                end_datetime=trial_timestamps[-1],
+                binning=binning,
+                initial_capital=initial_capital,
+                transaction_cost=transaction_cost,
+                penguin_classes=[candidate, SP500],
+                enable_training_step=False,
+            )
+
+            candidate_metrics = results[candidate.name][1]
+            benchmark_metrics = results[SP500().name][1]
+            score = _score_against_spy(candidate_metrics, benchmark_metrics)
+
+            if best_score is None or score > best_score:
+                best_score = score
+                best_metrics = candidate_metrics
+                best_params = params
+
+            print(
+                f"    Trial {trial_number:03d}: relative=${score[0]:,.2f}, "
+                f"buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+            )
+
+        trained_parameters[strategy_class.__name__] = {
+            "best_params": best_params,
+            "best_metrics": best_metrics,
+            "best_score": list(best_score) if best_score is not None else None,
+        }
+        print(
+            f"  Best {strategy_class.__name__}: relative=${(best_score[0] if best_score else 0.0):,.2f}, "
+            f"buys={(best_metrics or {}).get('buy_trades', 0)}"
+        )
+
+    return trained_parameters
+
+
 def run_backtest(
     symbols: List[str],
     start_datetime: datetime,
@@ -136,6 +299,7 @@ def run_backtest(
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
+    enable_training_step: bool = False,
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
@@ -257,14 +421,20 @@ def run_backtest(
     
     # Initialize synthetic spread model for realistic bid/ask
     spread_model = SyntheticSpreadModel()
+    trained_parameters: Dict[str, Dict[str, object]] = {}
 
     ################################ STEP 3 ################################
 
 
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
-    for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
+    for penguin_spec in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
-            penguin = penguin_class()
+            if isinstance(penguin_spec, type):
+                penguin = penguin_spec()
+            elif hasattr(penguin_spec, "decide"):
+                penguin = penguin_spec
+            else:
+                penguin = penguin_spec()
             if hasattr(penguin, "record_history"):
                 penguin.record_history = bool(getattr(penguin, "USES_SR_LINES", False)) or bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
@@ -272,20 +442,63 @@ def run_backtest(
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
             penguins[pen_name] = penguin
         except Exception as e:
-            print(f"  ✗ {penguin_class.__name__}: {e}")
-    """
+            penguin_name = getattr(penguin_spec, "__name__", getattr(penguin_spec, "name", str(penguin_spec)))
+            print(f"  ✗ {penguin_name}: {e}")
+
+    if enable_training_step:
+        active_trainables = [
+            penguin
+            for penguin in penguins.values()
+            if penguin.__class__ in set(TRAINABLE_PENGUINS)
+        ]
+        if active_trainables:
+            trained_parameters = _train_trainable_penguins(
+                symbols=symbols,
+                sorted_timestamps=sorted_timestamps,
+                binning=binning,
+                initial_capital=initial_capital,
+                transaction_cost=TRAINING_TRANSACTION_COST,
+            )
+
+            for penguin_name, penguin in list(penguins.items()):
+                strategy_name = penguin.__class__.__name__
+                if strategy_name in trained_parameters:
+                    penguins[penguin_name] = _replace_trainable_penguin_params(
+                        penguin,
+                        trained_parameters[strategy_name]["best_params"],
+                    )
+
+            training_output_dir = Path(__file__).parent / "run_current" / "artifacts"
+            training_output_dir.mkdir(parents=True, exist_ok=True)
+            training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
+            with open(training_output_path, "w", encoding="utf-8") as handle:
+                json.dump(
+                    {
+                        "generated_at": datetime.now(timezone.utc).isoformat(),
+                        "iterations": TRAINING_ITERATIONS,
+                        "subset_months": TRAINING_SUBSET_MONTHS,
+                        "subset_stocks": TRAINING_SUBSET_STOCKS,
+                        "benchmark_symbol": TRAINING_BENCHMARK_SYMBOL,
+                        "transaction_cost": TRAINING_TRANSACTION_COST,
+                        "trainable_strategies": trained_parameters,
+                    },
+                    handle,
+                    indent=2,
+                    default=str,
+                )
+            print(f"\nSaved training parameters to {training_output_path}")
+
     sr_penguin_names, precompute_sr_penguin_names = build_sr_strategy_sets(penguins)
-    
+
     # Precompute multiframe S/R levels only for strategies that explicitly require it.
     if precompute_sr_penguin_names:
-        print(f"\nStep 3b: Precomputing multiframe S/R levels for {len(precompute_sr_penguin_names)} strategy(ies)...")
+        print(f"\nStep 3c: Precomputing multiframe S/R levels for {len(precompute_sr_penguin_names)} strategy(ies)...")
         precomputed_sr_data = precompute_multiframe_levels(data, symbols, sorted_timestamps)
-        
+
         # Set precomputed data on all S/R-using penguins
         set_precomputed_levels_on_penguins(penguins, precompute_sr_penguin_names, precomputed_sr_data)
-        
+
         print(f"  ✓ Precomputed S/R levels for {len(precomputed_sr_data)} symbols\n")
-    """
 
     ################################ STEP 4 ################################
 
@@ -537,6 +750,7 @@ def main():
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
+        enable_training_step=TRAINING_STEP_ENABLED,
     )
     print("\nrun_backtest() returned; generating results...", flush=True)
     

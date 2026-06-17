@@ -6,7 +6,9 @@ from penguins import (
     SP500,
     SP500x2,
     TrainablePenguin1,
+    TrainablePenguin1_Manual,
     TrainablePenguin2,
+    TrainablePenguin2_Manual,
     RSIMeanReversionSelectivePenguin,
     SmartRSIConfluencePenguin,
     BuyOneEachPenguin,
@@ -25,7 +27,9 @@ from penguins.ThreeFold_MeanRev_Peng import ThreeFoldMeanReversionTrendPenguin
 
 ACTIVE_PENGUINS = [
     TrainablePenguin1,                  # Manual tuning first: RSI/trend strategy
+    TrainablePenguin1_Manual,           # Hand-tuned variant of TrainablePenguin1
     TrainablePenguin2,                  # Manual tuning first: Bollinger/ADX strategy
+    TrainablePenguin2_Manual,           # Hand-tuned variant of TrainablePenguin2
 
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
@@ -36,10 +40,10 @@ ACTIVE_PENGUINS = [
     #RSIMeanReversionMomentumPenguin,    # 3-stage momentum RSI - RISING/FALLING/HOLDING
     #RSIMeanReversionSelectivePenguin,   # Low-frequency high-quality RSI mean reversion
     SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
-    BuyOneEachPenguin,                  # Buy exactly 1 share for each symbol once
+    #BuyOneEachPenguin,                  # Buy exactly 1 share for each symbol once
     BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
 
-    CopilotPenguin,                    # AI-assisted strategy
+    #CopilotPenguin,                    # AI-assisted strategy
     ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
     #MomentumPenguin,                  # Pure momentum following
     # MinMaxSRPenguin,                  # Single timeframe S/R

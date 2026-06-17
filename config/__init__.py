@@ -56,6 +56,19 @@ from config.strategies import (
     ACTIVE_PENGUINS,
 )
 
+# ========== TRAINING STEP CONFIGURATION ==========
+from config.training_step import (
+    TRAINING_STEP_ENABLED,
+    TRAINING_ITERATIONS,
+    TRAINING_SUBSET_MONTHS,
+    TRAINING_SUBSET_STOCKS,
+    TRAINING_TRANSACTION_COST,
+    TRAINING_BENCHMARK_SYMBOL,
+    TRAINING_RANDOM_SEED,
+    TRAINABLE_PENGUINS,
+    TRAINING_RESULTS_FILENAME,
+)
+
 # ========== EXPORTS ==========
 __all__ = [
     # Active trading configuration
@@ -86,5 +99,14 @@ __all__ = [
     "SMA_EXTREMA_MIN_TOUCHES",  # Legacy alias for EXTREMA_MIN_TOUCHES
     "SMA_EXTREMA_MERGE_BAR_GAP",  # Legacy alias for EXTREMA_MERGE_BAR_GAP
     "ACTIVE_PENGUINS",      # List of active strategy classes
+    "TRAINING_STEP_ENABLED",
+    "TRAINING_ITERATIONS",
+    "TRAINING_SUBSET_MONTHS",
+    "TRAINING_SUBSET_STOCKS",
+    "TRAINING_TRANSACTION_COST",
+    "TRAINING_BENCHMARK_SYMBOL",
+    "TRAINING_RANDOM_SEED",
+    "TRAINABLE_PENGUINS",
+    "TRAINING_RESULTS_FILENAME",
     
 ]
