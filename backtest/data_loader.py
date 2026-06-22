@@ -42,6 +42,8 @@ QUALITY_SYNTHETIC_JUMP = "SYNTHETIC_JUMP"
 QUALITY_SPLIT_SUSPECT = "SPLIT_SUSPECT"
 QUALITY_OUTLIER = "OUTLIER"
 
+DEFAULT_MAX_UNEXPLAINED_JUMP_PCT = 0.15
+
 STRICT_ANOMALY_SYMBOLS = {
     "SPY",
     "QQQ",
@@ -186,7 +188,14 @@ class DataLoader:
             raise ValueError(f"Unsupported binning: {binning}. Use '1m', '5m', '15m', '1h', or '1d'")
 
     def _apply_price_adjustments(self, symbol: str, rows: Dict) -> Dict:
-        """Apply known split adjustments so the historical series stays on one scale."""
+        """Apply known split adjustments so the historical series stays on one scale.
+        
+        For timestamps BEFORE a split: multiply by split_factor (e.g., 10 for 10:1 split)
+        to bring historical prices up to post-split levels.
+        
+        For timestamps ON or AFTER a split: multiply by 1/split_factor to bring
+        post-split prices down to a normalized historical scale.
+        """
         # Allow disabling corporate-action adjustments for quick experiments
         if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
             return rows
@@ -201,8 +210,12 @@ class DataLoader:
 
             cumulative_factor = 1.0
             for effective_ts, factor, _event in adjustments:
-                if timestamp >= effective_ts:
+                if timestamp < effective_ts:
+                    # Before split: multiply by factor to normalize historical prices
                     cumulative_factor *= factor
+                else:
+                    # On or after split: divide by factor (multiply by 1/factor)
+                    cumulative_factor *= (1.0 / factor)
 
             if cumulative_factor != 1.0:
                 adjusted_row["open"] *= cumulative_factor
@@ -258,12 +271,25 @@ class DataLoader:
 
     @staticmethod
     def _anomaly_threshold_for_symbol(symbol: str) -> float:
+        try:
+            default_threshold = float(
+                os.environ.get(
+                    "DATA_CONSISTENCY_MAX_JUMP_PCT",
+                    str(DEFAULT_MAX_UNEXPLAINED_JUMP_PCT),
+                )
+            )
+        except ValueError:
+            default_threshold = DEFAULT_MAX_UNEXPLAINED_JUMP_PCT
+
+        if os.environ.get("DATA_CONSISTENCY_USE_SYMBOL_THRESHOLDS", "").lower() not in ("1", "true", "yes"):
+            return default_threshold
+
         normalized = symbol.strip().upper()
         if normalized in STRICT_ANOMALY_SYMBOLS:
             return 0.09
         if normalized in VOLATILE_ANOMALY_SYMBOLS:
             return 0.25
-        return 0.15
+        return default_threshold
 
     def _annotate_data_quality(self, symbol: str, rows: Dict) -> Dict:
         """Attach a per-bar quality flag and record any quarantined bars."""
@@ -278,13 +304,21 @@ class DataLoader:
         threshold = self._anomaly_threshold_for_symbol(symbol)
         previous_timestamp = None
         previous_quality = None
+        quarantine_after_unexplained_jump = os.environ.get(
+            "DATA_CONSISTENCY_QUARANTINE_AFTER_JUMP",
+            "1",
+        ).lower() in ("1", "true", "yes")
+        quarantined_series_detail = ""
 
         for index, timestamp in enumerate(timestamps):
             row = dict(rows[timestamp])
             quality = QUALITY_OK
             reason_detail = ""
 
-            if index == 0:
+            if quarantined_series_detail:
+                quality = QUALITY_OUTLIER
+                reason_detail = quarantined_series_detail
+            elif index == 0:
                 quality = QUALITY_MISSING_PREV
                 reason_detail = "first bar has no prior history"
             else:
@@ -319,6 +353,10 @@ class DataLoader:
                         else:
                             quality = QUALITY_OUTLIER
                             reason_detail = f"jump {jump_pct:.2%} above {threshold:.2%} threshold"
+                            if quarantine_after_unexplained_jump:
+                                quarantined_series_detail = (
+                                    f"after unexplained jump {jump_pct:.2%} at {timestamp.isoformat()}"
+                                )
 
             row["data_quality"] = quality
             if reason_detail:

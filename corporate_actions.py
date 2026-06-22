@@ -107,7 +107,15 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
             "ratio": "1:8",
             "comment": "1-for-8 reverse split",
         }
-    ]
+    ],
+    "SPCE": [
+        {
+            "date": "2024-06-17",
+            "type": "reverse_split",
+            "ratio": "1:20",
+            "comment": "1-for-20 reverse split; split-adjusted trading began on NYSE",
+        }
+    ],
 }
 
 # Ticker symbol changes (no direct price scaling by default)
@@ -128,7 +136,14 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {}
 
 
 def _ratio_to_factor(ratio: str) -> float:
-    """Convert ratio string like '10:1' or '1:8' to multiplicative factor."""
+    """Convert ratio string like '10:1' or '1:8' to multiplicative factor for historical data.
+    
+    For forward splits (e.g. '10:1'): returns 10.0
+    - multiply historical prices BEFORE split by this to normalize to post-split scale
+    
+    For reverse splits (e.g. '1:40'): returns 1/40 = 0.025
+    - multiply historical prices BEFORE split by this to normalize to post-split scale
+    """
     left, right = ratio.split(":", 1)
     numerator = float(left)
     denominator = float(right)
