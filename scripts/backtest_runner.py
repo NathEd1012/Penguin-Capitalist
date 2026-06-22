@@ -17,11 +17,9 @@ from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.synthetic_spread_model import SyntheticSpreadModel
-from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
 from scripts.multiframe import create_sr_multiframe_pdf_direct
-from scripts.corporate_actions import has_corporate_action_near
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
@@ -123,6 +121,7 @@ def run_backtest(
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
+    artifacts_dir: Path | None = None,
 ) -> Tuple[Dict[str, Tuple[Portfolio, Dict]], Dict, List[datetime], Dict[str, Dict], str]:
     """
     Run historical backtest.
@@ -192,6 +191,11 @@ def run_backtest(
         quality_report_text = loader.get_quality_report_text()
         if quality_report_text:
             print(f"\n{quality_report_text}")
+            if artifacts_dir is not None:
+                warnings_path = artifacts_dir / "consistency_warnings.txt"
+                with open(warnings_path, "w") as f:
+                    f.write(quality_report_text)
+                    f.write("\n")
     except Exception as e:
         print(f"Error loading data: {e}")
         print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
@@ -443,6 +447,11 @@ def main():
     print("\n" + "="*80)
     print("PENGUIN CAPITALIST - HISTORICAL BACKTEST")
     print("="*80)
+
+    base_dir = Path(__file__).parent.parent
+    current_dir = base_dir / "run_current"
+    current_artifacts_dir = current_dir / "artifacts"
+    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
     
     # Run backtest
     results, trades_by_bar, bar_timestamps, sr_histories, data_quality_report = run_backtest(
@@ -453,6 +462,7 @@ def main():
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
+        artifacts_dir=current_artifacts_dir,
     )
     
     # Identify S/R penguins from results
@@ -464,12 +474,6 @@ def main():
     print("="*80)
     
     Evaluator.print_summary(results)
-    
-    # Create archive and current directories
-    base_dir = Path(__file__).parent.parent
-    current_dir = base_dir / "run_current"
-    current_artifacts_dir = current_dir / "artifacts"
-    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     data_quality_report_path = current_artifacts_dir / "data_quality_report.txt"
     with open(data_quality_report_path, 'w') as f:
@@ -535,53 +539,6 @@ def main():
         latest_prices = {}
         curve_values = {}
         for penguin_name, (portfolio, metrics) in results.items():
-            if portfolio.trades:
-                # Get latest price for each symbol from last trade
-                for trade in portfolio.trades:
-                    latest_prices[trade.symbol] = trade.price
-            curve_values[penguin_name] = portfolio.value_history
-        
-        # Run consistency checks
-        warnings, bad_bar_indices = check_consistency(
-            results=results,
-            max_jump_pct=0.15,
-            bar_timestamps=bar_timestamps
-        )
-        
-        if warnings:
-            print(f"\n⚠️  Consistency warnings detected ({len(warnings)})")
-            for warning in warnings[:5]:  # Show first 5 warnings
-                print(f"  - {warning}")
-            if len(warnings) > 5:
-                print(f"  ... and {len(warnings) - 5} more")
-            
-            # Save warnings to file
-            current_warnings = current_artifacts_dir / "consistency_warnings.txt"
-            with open(current_warnings, 'w') as f:
-                f.write("Consistency Check Warnings (Real Issues + Faulty Data)\n")
-                f.write("="*60 + "\n\n")
-                for warning in warnings:
-                    f.write(f"• {warning}\n")
-                
-                if bad_bar_indices:
-                    f.write("\n" + "="*60 + "\n")
-                    f.write("Bars with faulty data (trades should be reverted):\n")
-                    f.write("="*60 + "\n\n")
-                    for penguin_name, bar_indices in sorted(bad_bar_indices.items()):
-                        if bar_indices:
-                            f.write(f"  {penguin_name}: bars {sorted(bar_indices)}\n")
-        else:
-            print("✅ All consistency checks passed")
-    except Exception as e:
-        print(f"⚠️  Consistency validation error: {e}")
-    
-    # Generate Support & Resistance zones
-    if sr_penguin_names:
-        print("\nAnalyzing support and resistance zones...")
-        try:
-            # Collect symbol prices only from active S/R-based strategies.
-            symbol_prices = defaultdict(list)
-            for penguin_name, (portfolio, metrics) in results.items():
                 if penguin_name not in sr_penguin_names:
                     continue
                 for trade in portfolio.trades:
@@ -672,7 +629,7 @@ def main():
         print(f"  - artifacts/curves_data.json")
         print(f"  - artifacts/metrics_summary.json")
         print(f"  - artifacts/trades_log.txt")
-        print(f"  - artifacts/consistency_warnings.txt (if warnings)")
+        print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
         print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\nCurrent run saved to: {current_dir}")
@@ -682,8 +639,7 @@ def main():
     print(f"  - artifacts/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
     print(f"  - artifacts/data_quality_report.txt")
-    print(f"  - artifacts/data_quality_report.txt")
-    print(f"  - artifacts/consistency_warnings.txt (if warnings)")
+    print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
     print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\n{'='*80}")

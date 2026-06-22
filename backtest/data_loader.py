@@ -380,19 +380,26 @@ class DataLoader:
         return annotated_rows
 
     def get_quality_report_text(self) -> str:
-        """Return a compact human-readable report of quarantined bars."""
+        """Return residual price-jump inconsistencies detected during data fetching."""
         if not self.last_removed_bars:
-            return "Historical data quality report: no quarantined bars detected."
+            return ""
 
-        lines = ["Historical data quality report", "=" * 40]
+        report_reasons = {QUALITY_OUTLIER, QUALITY_SYNTHETIC_JUMP}
+        lines = [
+            "Residual price-jump inconsistencies after corporate-action handling",
+            "=" * 72,
+            "Corporate actions are applied during data fetching. The entries below",
+            "are the remaining unexplained jumps that still exceeded the threshold.",
+            "",
+        ]
         total_removed = 0
 
         for symbol in sorted(self.last_removed_bars):
             removed = self.last_removed_bars.get(symbol, [])
-            if not removed:
-                continue
-
-            visible_removed = [item for item in removed if item.get("reason") != QUALITY_MISSING_PREV]
+            visible_removed = [
+                item for item in removed
+                if item.get("reason") in report_reasons
+            ]
             if not visible_removed:
                 continue
 
@@ -401,17 +408,22 @@ class DataLoader:
             for item in visible_removed:
                 reason_counts[str(item.get("reason", "UNKNOWN"))] += 1
 
-            lines.append(f"{symbol}: {len(visible_removed)} quarantined bar(s)")
+            lines.append(f"{symbol}: {len(visible_removed)} unresolved jump(s)")
             for reason, count in sorted(reason_counts.items()):
                 lines.append(f"  - {reason}: {count}")
 
-            for item in visible_removed[:5]:
+            for item in visible_removed[:10]:
                 timestamp = item.get("timestamp")
                 ts_text = timestamp.isoformat() if hasattr(timestamp, "isoformat") else str(timestamp)
                 detail = item.get("detail", "")
                 lines.append(f"    * {ts_text} | {item.get('reason')} | {detail}")
 
-        lines.append(f"Total quarantined bars: {total_removed}")
+            lines.append("")
+
+        if total_removed == 0:
+            return ""
+
+        lines.append(f"Total unresolved jumps: {total_removed}")
         return "\n".join(lines)
 
     @staticmethod
