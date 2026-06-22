@@ -424,3 +424,21 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 }
+
+# Combined lookup used by the helper module.
+CORPORATE_ACTIONS: Dict[str, List[Dict[str, str]]] = {
+    **SPLITS,
+    **REVERSE_SPLITS,
+    **TICKER_CHANGES,
+    **REORGANIZATIONS,
+    **MERGERS,
+}
+
+PRICE_ADJUSTMENT_ACTION_TYPES = {"split", "reverse_split"}
+DISLOCATION_ACTION_TYPES = {
+    "split",
+    "reverse_split",
+    "ticker_change",
+    "spin_off",
+    "merger",
+}
