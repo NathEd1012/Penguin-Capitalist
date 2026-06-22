@@ -21,7 +21,7 @@ from scripts.validation import check_consistency
 from scripts.support_resistance import compute_and_log_support_resistance_zones
 from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
 from scripts.multiframe import create_sr_multiframe_pdf_direct
-from corporate_actions import has_corporate_action_near
+from scripts.corporate_actions import has_corporate_action_near
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,

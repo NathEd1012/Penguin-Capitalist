@@ -39,7 +39,7 @@ from scripts.multiframe import (
     set_precomputed_levels_on_penguins,
 )
 from scripts.generate_sr_reports import generate_sr_analysis
-from corporate_actions import has_corporate_action_near
+from scripts.corporate_actions import has_corporate_action_near
 from penguins import SP500
 from config import (
     SYMBOLS,

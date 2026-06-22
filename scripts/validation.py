@@ -7,7 +7,7 @@ if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"
     def has_corporate_action_near(symbol, timestamp, window_days=2, action_types=None):
         return False
 else:
-    from corporate_actions import has_corporate_action_near  # type: ignore
+    from scripts.corporate_actions import has_corporate_action_near  # type: ignore
 
 
 def classify_price_jump(
