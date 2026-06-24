@@ -119,6 +119,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
+    "NFLX": [
+        {
+            "date": "2025-11-17",
+            "type": "split",
+            "ratio": "10:1",
+            "comment": "10-for-1 stock split",
+        }
+    ],
+
     "NEE": [
         {
             "date": "2020-10-27",
@@ -143,6 +152,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "type": "split",
             "ratio": "2:1",
             "comment": "2-for-1 ADR split",
+        }
+    ],
+
+    "NOW": [
+        {
+            "date": "2025-12-18",
+            "type": "split",
+            "ratio": "5:1",
+            "comment": "5-for-1 stock split",
         }
     ],
 
