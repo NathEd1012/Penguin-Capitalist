@@ -9,6 +9,10 @@ from penguins import (
     TrainablePenguin1_Manual,
     TrainablePenguin2,
     TrainablePenguin2_Manual,
+    TrainablePenguin3,
+    TrainablePenguin3_Manual,
+    TrainablePenguin4,
+    TrainablePenguin4_Manual,
     RSIMeanReversionSelectivePenguin,
     SmartRSIConfluencePenguin,
     BuyOneEachPenguin,
@@ -30,9 +34,13 @@ ACTIVE_PENGUINS = [
     TrainablePenguin1_Manual,           # Hand-tuned variant of TrainablePenguin1
     TrainablePenguin2,                  # Manual tuning first: Bollinger/ADX strategy
     TrainablePenguin2_Manual,           # Hand-tuned variant of TrainablePenguin2
+    TrainablePenguin3,                  # TP1 buy/sizing + TP2 sell logic
+    TrainablePenguin3_Manual,           # Manual variant of TP3
+    TrainablePenguin4,                  # TP2 buy/sizing + TP1 sell logic
+    TrainablePenguin4_Manual,           # Manual variant of TP4
 
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
-    # SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
+    #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
     #RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
     # RSIMeanReversionPenguinStrict1,     # RSI Mean Reversion variant 1
     # RSIMeanReversionPenguinStrict2,     # RSI Mean Reversion variant 2
