@@ -6,7 +6,7 @@ from penguins import TrainablePenguin1, TrainablePenguin2
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONS = 10
+TRAINING_ITERATIONS = 2
 
 # Training subsets are intentionally small to keep optimization tractable.
 TRAINING_SUBSET_MONTHS = 2

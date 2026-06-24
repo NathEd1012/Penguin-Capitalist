@@ -184,13 +184,13 @@ def run_backtest(
             symbols,
             start_datetime_utc,
             end_datetime_utc,
-            binning
+            binning,
+            enable_data_quality_checks=True,
         )
         if sparse_warning:
             print(sparse_warning)
         quality_report_text = loader.get_quality_report_text()
         if quality_report_text:
-            print(f"\n{quality_report_text}")
             if artifacts_dir is not None:
                 warnings_path = artifacts_dir / "consistency_warnings.txt"
                 with open(warnings_path, "w") as f:
@@ -465,9 +465,6 @@ def main():
         artifacts_dir=current_artifacts_dir,
     )
     
-    # Identify S/R penguins from results
-    sr_penguin_names = {name for name in sr_histories.keys()}
-    
     # Generate report
     print("\n" + "="*80)
     print("RESULTS")
@@ -475,11 +472,6 @@ def main():
     
     Evaluator.print_summary(results)
 
-    data_quality_report_path = current_artifacts_dir / "data_quality_report.txt"
-    with open(data_quality_report_path, 'w') as f:
-        f.write(data_quality_report)
-        f.write("\n")
-    
     # Conditionally set up archive directory based on config
     if SAVE_TO_RUN_OLD:
         run_old_base = base_dir / "run_old"
@@ -532,25 +524,8 @@ def main():
         ACTIVE_SYMBOL_LIST,
     )
     
-    # Validate consistency (check for price jumps)
-    print("\nValidating consistency...")
-    try:
-        # Collect latest prices and curve values for validation
-        latest_prices = {}
-        curve_values = {}
-        for penguin_name, (portfolio, metrics) in results.items():
-                if penguin_name not in sr_penguin_names:
-                    continue
-                for trade in portfolio.trades:
-                    symbol_prices[trade.symbol].append(trade.price)
-
-            # Compute S&R zones for current run.
-            compute_and_log_support_resistance_zones(symbol_prices, str(current_artifacts_dir))
-            print("✅ S&R zones computed and saved")
-        except Exception as e:
-            print(f"⚠️  S&R analysis error: {e}")
-    else:
-        print("\nSkipping support and resistance zone analysis (no active S/R-based strategies)")
+    # Consistency and S&R checks are disabled here to avoid extra compute cost.
+    print("\nSkipping consistency validation and support/resistance analysis (disabled)")
 
     # Generate multitimeframe S/R line plots (if enabled)
     if ENABLE_ADDITIONAL_PLOTS:
@@ -626,8 +601,8 @@ def main():
         print(f"\nArchive saved to:  {archive_dir}")
         print(f"  - report.pdf")
         print(f"  - artifacts/capital_curves.png")
-        print(f"  - artifacts/curves_data.json")
-        print(f"  - artifacts/metrics_summary.json")
+        print(f"  - artifacts/json/curves_data.json")
+        print(f"  - artifacts/json/metrics_summary.json")
         print(f"  - artifacts/trades_log.txt")
         print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
         print(f"  - artifacts/support_resistance_zones.txt")
@@ -635,10 +610,9 @@ def main():
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
     print(f"  - artifacts/capital_curves.png")
-    print(f"  - artifacts/curves_data.json")
-    print(f"  - artifacts/metrics_summary.json")
+    print(f"  - artifacts/json/curves_data.json")
+    print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
-    print(f"  - artifacts/data_quality_report.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
     print(f"  - artifacts/support_resistance_zones.txt")
     

@@ -171,6 +171,12 @@ class Evaluator:
         output_dirs = [current_dir]
         if archive_dir is not None:
             output_dirs.insert(0, archive_dir)
+
+        json_output_dirs = []
+        for output_dir in output_dirs:
+            json_dir = output_dir / "json"
+            json_dir.mkdir(parents=True, exist_ok=True)
+            json_output_dirs.append(json_dir)
         
         # Prepare data to save
         curves_data = {}
@@ -247,8 +253,8 @@ class Evaluator:
             
             trades_content += "\n" + "-" * 80 + "\n"
         
-        # Save to both directories
-        for output_dir in output_dirs:
+        # Save JSON artifacts to json/ and text logs to the run root.
+        for output_dir in json_output_dirs:
             curves_file = output_dir / "curves_data.json"
             with open(curves_file, 'w') as f:
                 json.dump(curves_data, f, indent=2)
@@ -256,7 +262,8 @@ class Evaluator:
             metrics_file = output_dir / "metrics_summary.json"
             with open(metrics_file, 'w') as f:
                 json.dump(metrics_data, f, indent=2)
-            
+
+        for output_dir in output_dirs:
             trades_file = output_dir / "trades_log.txt"
             with open(trades_file, 'w') as f:
                 f.write(trades_content)

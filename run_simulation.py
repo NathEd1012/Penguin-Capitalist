@@ -446,14 +446,16 @@ def run_backtest(
     # If every active penguin declares TRADED_SYMBOLS, we only load that union.
     # If at least one penguin is unrestricted, keep the full configured symbol list.
     restricted_sets = []
+    all_restricted = True
     for penguin_class in penguin_classes:
         traded = getattr(penguin_class, "TRADED_SYMBOLS", None)
         if traded is None:
-                    print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
+            all_restricted = False
             break
+
         restricted_sets.append(set(traded))
 
-    if restricted_sets and len(restricted_sets) == len(penguin_classes):
+    if all_restricted and restricted_sets:
         requested_symbols = sorted(set().union(*restricted_sets).intersection(set(symbols)))
         if requested_symbols:
             symbols = requested_symbols
@@ -477,13 +479,13 @@ def run_backtest(
             symbols,
             start_datetime_utc,
             end_datetime_utc,
-            binning
+            binning,
+            enable_data_quality_checks=True,
         )
         if sparse_warning:
             print(sparse_warning)
         quality_report_text = loader.get_quality_report_text()
         if quality_report_text:
-            print(f"\n{quality_report_text}")
             if artifacts_dir is not None:
                 warnings_path = artifacts_dir / "consistency_warnings.txt"
                 with open(warnings_path, "w") as f:
@@ -589,11 +591,11 @@ def run_backtest(
                         trained_parameters[strategy_name]["best_params"],
                     )
 
-            training_output_dir = Path(__file__).parent / "run_current" / "artifacts"
+            training_output_dir = Path(__file__).parent / "run_current" / "artifacts" / "json"
             training_output_dir.mkdir(parents=True, exist_ok=True)
             training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
-            training_log_path = training_output_dir / TRAINING_LOG_FILENAME
             training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
+            training_log_path = Path(__file__).parent / "run_current" / "artifacts" / TRAINING_LOG_FILENAME
             with open(training_output_path, "w", encoding="utf-8") as handle:
                 json.dump(
                     {
@@ -934,11 +936,6 @@ def main():
     
     Evaluator.print_summary(results)
 
-    data_quality_report_path = current_artifacts_dir / "data_quality_report.txt"
-    with open(data_quality_report_path, 'w') as f:
-        f.write(data_quality_report)
-        f.write("\n")
-    
     # Conditionally set up archive directory based on config
     if SAVE_TO_RUN_OLD:
         run_old_base = base_dir / "run_old"
@@ -1028,8 +1025,8 @@ def main():
         print(f"\nArchive saved to:  {archive_dir}")
         print(f"  - report.pdf")
         print(f"  - artifacts/capital_curves.png")
-        print(f"  - artifacts/curves_data.json")
-        print(f"  - artifacts/metrics_summary.json")
+        print(f"  - artifacts/json/curves_data.json")
+        print(f"  - artifacts/json/metrics_summary.json")
         print(f"  - artifacts/trades_log.txt")
         print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
         print(f"  - artifacts/support_resistance_zones.txt")
@@ -1037,10 +1034,9 @@ def main():
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
     print(f"  - artifacts/capital_curves.png")
-    print(f"  - artifacts/curves_data.json")
-    print(f"  - artifacts/metrics_summary.json")
+    print(f"  - artifacts/json/curves_data.json")
+    print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
-    print(f"  - artifacts/data_quality_report.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
     print(f"  - artifacts/support_resistance_zones.txt")
     

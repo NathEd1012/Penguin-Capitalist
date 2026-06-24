@@ -161,7 +161,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--binning", default=BINNING, help="Bar size to use during training.")
     parser.add_argument(
         "--output-dir",
-        default=str(ROOT / "training_results"),
+        default=str(ROOT / "training_results" / "json"),
         help="Directory for the JSON training report.",
     )
     return parser.parse_args()

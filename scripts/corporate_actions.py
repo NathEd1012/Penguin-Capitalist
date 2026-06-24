@@ -71,6 +71,47 @@ def has_corporate_action_near(
     return False
 
 
+def describe_corporate_action_near(
+    symbol: str,
+    timestamp: Optional[datetime],
+    window_days: int = 2,
+    action_types: Optional[Set[str]] = None,
+) -> Optional[str]:
+    """Return a short human-readable description for nearby corporate actions."""
+    if timestamp is None:
+        return None
+
+    normalized = symbol.strip().upper()
+
+    ts = timestamp
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=timezone.utc)
+    else:
+        ts = ts.astimezone(timezone.utc)
+
+    allowed_types = action_types or DISLOCATION_ACTION_TYPES
+    half_window = timedelta(days=window_days)
+    matches: List[str] = []
+
+    for event in CORPORATE_ACTIONS.get(normalized, []):
+        event_type = event.get("type", "")
+        if event_type not in allowed_types:
+            continue
+
+        event_ts = _parse_event_datetime(event["date"])
+        if not ((event_ts - half_window) <= ts <= (event_ts + half_window)):
+            continue
+
+        event_label = event_type.replace("_", " ")
+        event_comment = event.get("comment") or event.get("ratio") or "corporate action"
+        matches.append(f"{event_label} on {event['date']} ({event_comment})")
+
+    if not matches:
+        return None
+
+    return "; ".join(matches)
+
+
 def get_price_adjustment_events(symbol: str) -> List[Tuple[datetime, float, Dict[str, str]]]:
     """Return split and reverse-split events as (effective_datetime, factor, event)."""
     normalized = symbol.strip().upper()

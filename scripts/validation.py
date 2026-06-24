@@ -6,8 +6,10 @@ from typing import Dict, List, Tuple, Set
 if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
     def has_corporate_action_near(symbol, timestamp, window_days=2, action_types=None):
         return False
+    def describe_corporate_action_near(symbol, timestamp, window_days=2, action_types=None):
+        return None
 else:
-    from scripts.corporate_actions import has_corporate_action_near  # type: ignore
+    from scripts.corporate_actions import describe_corporate_action_near, has_corporate_action_near  # type: ignore
 
 
 def classify_price_jump(
@@ -208,9 +210,11 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                     trade = portfolio.trades[jump['trade_idx']]
                     date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
                     synth_tag = ' [synthetic_jump]' if jump.get('synthetic') else ''
+                    action_note = describe_corporate_action_near(trade.symbol, trade.timestamp)
+                    action_suffix = f" [{action_note}]" if action_note else ""
                     warnings.append(
                         f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
-                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}){synth_tag}"
+                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}){synth_tag}{action_suffix}"
                     )
                     # Mark bad bars for trading restrictions
                     if penguin_name not in bad_bar_indices_by_penguin:
@@ -228,9 +232,11 @@ def check_consistency(results, max_jump_pct=0.15, bar_timestamps=None) -> Tuple[
                     trade = portfolio.trades[jump['trade_idx']]
                     date_str = trade.timestamp.strftime('%Y-%m-%d %H:%M:%S') if trade.timestamp else 'N/A'
                     synth_tag = ' | synthetic_jump' if jump.get('synthetic') else ''
+                    action_note = describe_corporate_action_near(trade.symbol, trade.timestamp)
+                    action_suffix = f" [{action_note}]" if action_note else ""
                     warnings.append(
                         f"  Trade #{jump['trade_idx']} ({jump['symbol']}) @ {date_str}: "
-                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}) [{jump['type']}{synth_tag}]"
+                        f"{jump['pct']:+.2%} (${jump['prev']:.2f} → ${jump['curr']:.2f}) [{jump['type']}{synth_tag}]{action_suffix}"
                     )
                     # Mark bad bars so trades are reverted
                     if penguin_name not in bad_bar_indices_by_penguin:

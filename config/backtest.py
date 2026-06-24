@@ -16,7 +16,7 @@ START_DATE = "2024-01-01 0:00:00"
 # Examples:
 #   "TODAY"                - Use yesterday's end-of-day
 #   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATE = "TODAY" #"2025-08-01 0:00:00" #"TODAY"
+STOP_DATE = "TODAY" #"2025-01-01 0:00:00" #"TODAY"
 
 # ========== TIMEFRAME / BINNING ==========
 # Candle interval for bars
