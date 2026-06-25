@@ -32,8 +32,45 @@ def _display_strategy_name(name: str) -> str:
     display_name_map = {
         "SP500Penguin": "SP500",
         "SP500x2Penguin": "SP500x2",
+        "TrainablePenguin1": "TP1",
+        "TrainablePenguin1_Manual": "TP1 manual",
+        "TrainablePenguin2": "TP2",
+        "TrainablePenguin2_Manual": "TP2 manual",
+        "TrainablePenguin3": "TP3",
+        "TrainablePenguin3_Manual": "TP3 manual",
+        "TrainablePenguin4": "TP4",
+        "TrainablePenguin4_Manual": "TP4 manual",
     }
     return display_name_map.get(name, name)
+
+
+def _strategy_group_key(name: str) -> tuple[int, str]:
+    """Sort trainable/manual strategies into adjacent pairs."""
+    order_map = {
+        "SP500Penguin": 0,
+        "TrainablePenguin1": 10,
+        "TrainablePenguin1_Manual": 11,
+        "TrainablePenguin2": 12,
+        "TrainablePenguin2_Manual": 13,
+        "TrainablePenguin3": 14,
+        "TrainablePenguin3_Manual": 15,
+        "TrainablePenguin4": 16,
+        "TrainablePenguin4_Manual": 17,
+        "SP500x2Penguin": 20,
+        "SMA20Penguin": 30,
+    }
+    return order_map.get(name, 100), name
+
+
+def _strategy_base_key(name: str) -> str:
+    """Return the shared base key for a trainable/manual pair."""
+    if name.endswith("_Manual"):
+        return name[:-7]
+    return name
+
+
+def _strategy_line_style(name: str) -> str:
+    return "--" if name.endswith("_Manual") else "-"
 
 
 def _strategy_parameter_text(strategy_name: str) -> str | None:
@@ -398,6 +435,20 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     sp500_name = "SP500Penguin"
     sma20_name = "SMA20Penguin"
     line_colors = {}
+    pair_colors = {}
+    color_cycle = plt.rcParams.get("axes.prop_cycle", None)
+    color_list = color_cycle.by_key().get("color", []) if color_cycle is not None else []
+    color_index = 0
+
+    def _color_for_group(group_key: str) -> str:
+        nonlocal color_index
+        if group_key not in pair_colors:
+            if color_list:
+                pair_colors[group_key] = color_list[color_index % len(color_list)]
+                color_index += 1
+            else:
+                pair_colors[group_key] = "C0"
+        return pair_colors[group_key]
 
     # Draw SP500 first so it stays in the background.
     if sp500_name in curves:
@@ -414,20 +465,23 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         )
         line_colors[sp500_name] = line[0].get_color()
 
-    for name, vals in curves.items():
+    for name in sorted(curves.keys(), key=_strategy_group_key):
+        vals = curves[name]
         if name not in (sma20_name, sp500_name):
             display_name = _display_strategy_name(name)
-            # Force SP500x2 to a dark grey for clarity
-            forced_color = None
-            if name == "SP500x2Penguin":
-                forced_color = "darkgrey"
-
-            if forced_color:
-                line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2, color=forced_color)
-                line_colors[name] = forced_color
-            else:
-                line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
-                line_colors[name] = line[0].get_color()
+            group_key = _strategy_base_key(name)
+            color = "darkgrey" if name == "SP500x2Penguin" else _color_for_group(group_key)
+            line = plt.plot(
+                range(1, len(vals) + 1),
+                vals,
+                label=display_name,
+                linewidth=2,
+                alpha=0.9 if name.endswith("_Manual") else 0.8,
+                zorder=2,
+                color=color,
+                linestyle=_strategy_line_style(name),
+            )
+            line_colors[name] = line[0].get_color()
     
     # Plot SMA20 strategy last so it appears in foreground
     if sma20_name in curves:
@@ -437,7 +491,8 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         line_colors[sma20_name] = line[0].get_color()
     
     # Add text labels at the end of each curve on the right side
-    for name, vals in curves.items():
+    for name in sorted(curves.keys(), key=_strategy_group_key):
+        vals = curves[name]
         if vals:
             final_x = len(vals)
             final_y = vals[-1]
@@ -635,7 +690,8 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             line_colors[sma20_name] = line[0].get_color()
         
         # Add text labels at the end of each curve on the right side
-        for name, vals in curves.items():
+        for name in sorted(curves.keys(), key=_strategy_group_key):
+            vals = curves[name]
             if vals:
                 final_x = len(vals)
                 final_y = vals[-1]
@@ -673,7 +729,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         plt.close()
 
         # Pages 2+: Individual plots with summary info above (tables moved to artifacts)
-        for penguin_name in sorted(portfolios.keys()):
+        for penguin_name in sorted(portfolios.keys(), key=_strategy_group_key):
             portfolio = portfolios[penguin_name]
             display_penguin_name = _display_strategy_name(penguin_name)
             parameter_text = _strategy_parameter_text(penguin_name)

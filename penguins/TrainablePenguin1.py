@@ -8,7 +8,7 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-TRAINABLE_PENGUIN1_RSI_PERIOD = 14
+TRAINABLE_PENGUIN1_RSI_PERIOD = 12 #14
 TRAINABLE_PENGUIN1_BUY_RSI = 30.0
 TRAINABLE_PENGUIN1_SELL_RSI = 70.0
 TRAINABLE_PENGUIN1_MAX_CASH_FRACTION = 0.05
@@ -78,6 +78,7 @@ class TrainablePenguin1(BasePenguin):
         current_price = mid_prices[-1]
 
         if shares_owned > 0:
+            # SELL part
             loss_trigger = (
                 avg_entry is not None
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
@@ -98,7 +99,9 @@ class TrainablePenguin1(BasePenguin):
             if loss_trigger or profit_reversal_trigger or overbought_breakdown_trigger:
                 return "SELL", shares_owned
         else:
+            # BUY part
             if rsi <= self.params.buy_rsi and trend_score > 0.5:
+                # AMOUNT part
                 max_shares_to_buy = math.floor(
                     (cash * self.params.max_cash_fraction) / current_price
                 )
@@ -153,3 +156,27 @@ class TrainablePenguin1(BasePenguin):
 
     def _get_avg_entry(self, portfolio: Portfolio, symbol: str) -> float | None:
         return portfolio.cost_basis.get(symbol)
+
+
+class TrainablePenguin1_Manual(TrainablePenguin1):
+    def __init__(
+        self,
+        name: str = "TrainablePenguin1_Manual",
+        rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD,
+        buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI,
+        sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI,
+        max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION,
+        stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT,
+        take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT,
+        cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS,
+    ):
+        super().__init__(
+            name=name,
+            rsi_period=rsi_period,
+            buy_rsi=buy_rsi,
+            sell_rsi=sell_rsi,
+            max_cash_fraction_per_trade=max_cash_fraction_per_trade,
+            stop_loss_pct=stop_loss_pct,
+            take_profit_pct=take_profit_pct,
+            cooldown_bars=cooldown_bars,
+        )

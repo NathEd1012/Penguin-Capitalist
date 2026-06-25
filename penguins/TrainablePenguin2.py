@@ -8,7 +8,7 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-TRAINABLE_PENGUIN2_BB_PERIOD = 20
+TRAINABLE_PENGUIN2_BB_PERIOD = 20 #20
 TRAINABLE_PENGUIN2_BB_STDDEV = 2.0
 TRAINABLE_PENGUIN2_ADX_PERIOD = 14
 TRAINABLE_PENGUIN2_ADX_THRESHOLD = 25.0
@@ -89,6 +89,7 @@ class TrainablePenguin2(BasePenguin):
         current_price = mid_prices[-1]
 
         if shares_owned > 0:
+            # SELL part
             loss_trigger = (
                 avg_entry is not None
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
@@ -105,10 +106,12 @@ class TrainablePenguin2(BasePenguin):
             ):
                 return "SELL", shares_owned
         else:
+            # BUY part
             buy_signal = current_price <= lower_band and adx_value >= self.params.adx_threshold
             trend_confirmation = adx_slope >= 0 or current_price <= middle_band
 
             if buy_signal and trend_confirmation:
+                # AMOUNT part
                 strength = min(
                     1.5,
                     max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
@@ -160,3 +163,29 @@ class TrainablePenguin2(BasePenguin):
 
     def _get_avg_entry(self, portfolio: Portfolio, symbol: str) -> float | None:
         return portfolio.cost_basis.get(symbol)
+
+
+class TrainablePenguin2_Manual(TrainablePenguin2):
+    def __init__(
+        self,
+        name: str = "TrainablePenguin2_Manual",
+        bb_period: int = TRAINABLE_PENGUIN2_BB_PERIOD,
+        bb_stddev: float = TRAINABLE_PENGUIN2_BB_STDDEV,
+        adx_period: int = TRAINABLE_PENGUIN2_ADX_PERIOD,
+        adx_threshold: float = TRAINABLE_PENGUIN2_ADX_THRESHOLD,
+        max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN2_MAX_CASH_FRACTION,
+        stop_loss_pct: float = TRAINABLE_PENGUIN2_STOP_LOSS_PCT,
+        take_profit_pct: float = TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT,
+        cooldown_bars: int = TRAINABLE_PENGUIN2_COOLDOWN_BARS,
+    ):
+        super().__init__(
+            name=name,
+            bb_period=bb_period,
+            bb_stddev=bb_stddev,
+            adx_period=adx_period,
+            adx_threshold=adx_threshold,
+            max_cash_fraction_per_trade=max_cash_fraction_per_trade,
+            stop_loss_pct=stop_loss_pct,
+            take_profit_pct=take_profit_pct,
+            cooldown_bars=cooldown_bars,
+        )

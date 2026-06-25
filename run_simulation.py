@@ -200,6 +200,27 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
         }
+    if strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
+        return {
+            "bb_period": rng.randint(10, 40),
+            "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
+            "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
+            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "cooldown_bars": rng.randint(0, 30),
+        }
+    if strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
+        buy_rsi = rng.uniform(18.0, 42.0)
+        sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
+        return {
+            "rsi_period": rng.randint(7, 28),
+            "buy_rsi": round(buy_rsi, 2),
+            "sell_rsi": round(sell_rsi, 2),
+            "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
+            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "cooldown_bars": rng.randint(0, 30),
+        }
     raise ValueError(f"No parameter sampler is defined for {strategy_name}")
 
 

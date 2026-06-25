@@ -1,6 +1,15 @@
 """Configuration for the in-simulation training step."""
 
-from penguins import TrainablePenguin1, TrainablePenguin2
+from penguins import (
+    TrainablePenguin1,
+    TrainablePenguin1_Manual,
+    TrainablePenguin2,
+    TrainablePenguin2_Manual,
+    TrainablePenguin3,
+    TrainablePenguin3_Manual,
+    TrainablePenguin4,
+    TrainablePenguin4_Manual,
+)
 
 # Toggle the training pass that runs after strategy initialization.
 TRAINING_STEP_ENABLED = True
@@ -21,10 +30,25 @@ TRAINING_BENCHMARK_SYMBOL = "SPY"
 # Keep the search reproducible unless the user changes the seed.
 TRAINING_RANDOM_SEED = 42
 
-# The trainable strategies that participate in the optimization pass.
-TRAINABLE_PENGUINS = [
+# When True, the trainer executes the manual strategies as baseline runs.
+# They are not optimized; only the trainable strategies below are sampled.
+Manual = True
+
+# These are the only strategies that participate in parameter search.
+# The matching manual variants are executed separately with their starting
+# parameters so the final report can compare baseline vs trained behavior.
+TRAINING_PENGUINS = [
     TrainablePenguin1,
     TrainablePenguin2,
+    TrainablePenguin3,
+    TrainablePenguin4,
+]
+
+TRAINING_MANUAL_PENGUINS = [
+    TrainablePenguin1_Manual,
+    TrainablePenguin2_Manual,
+    TrainablePenguin3_Manual,
+    TrainablePenguin4_Manual,
 ]
 
 # Saved alongside the run artifacts.
@@ -40,7 +64,9 @@ __all__ = [
     "TRAINING_TRANSACTION_COST",
     "TRAINING_BENCHMARK_SYMBOL",
     "TRAINING_RANDOM_SEED",
-    "TRAINABLE_PENGUINS",
+    "Manual",
+    "TRAINING_PENGUINS",
+    "TRAINING_MANUAL_PENGUINS",
     "TRAINING_RESULTS_FILENAME",
     "TRAINING_LOG_FILENAME",
     "TRAINING_PARAMETER_LOG_FILENAME",

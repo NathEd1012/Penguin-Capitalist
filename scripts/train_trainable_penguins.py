@@ -23,6 +23,8 @@ if str(ROOT) not in sys.path:
 from config.backtest import BINNING, START_DATE, STOP_DATE
 from config.portfolio import INITIAL_CAPITAL
 from config.training import (
+    Manual as TRAINING_MANUAL,
+    TRAINING_MANUAL_PENGUINS,
     TRAINING_PENGUINS,
     TRAINING_SYMBOLS,
     TRAINING_TRANSACTION_COST,
@@ -60,12 +62,43 @@ def _sample_trainable_penguin2(rng: random.Random) -> ParameterDict:
     }
 
 
+def _sample_trainable_penguin3(rng: random.Random) -> ParameterDict:
+    return {
+        "bb_period": rng.randint(10, 40),
+        "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
+        "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+        "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
+        "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+        "cooldown_bars": rng.randint(0, 30),
+    }
+
+
+def _sample_trainable_penguin4(rng: random.Random) -> ParameterDict:
+    buy_rsi = rng.uniform(18.0, 42.0)
+    sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
+    return {
+        "rsi_period": rng.randint(7, 28),
+        "buy_rsi": round(buy_rsi, 2),
+        "sell_rsi": round(sell_rsi, 2),
+        "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+        "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
+        "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+        "cooldown_bars": rng.randint(0, 30),
+    }
+
+
 def _strategy_sampler(strategy_class) -> Callable[[random.Random], ParameterDict]:
+    # Each trainable family has its own parameter space; the manual variants
+    # reuse the same sampler because they are evaluated, not optimized, in this script.
     strategy_name = strategy_class.__name__
     if strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
         return _sample_trainable_penguin1
     if strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
         return _sample_trainable_penguin2
+    if strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
+        return _sample_trainable_penguin3
+    if strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
+        return _sample_trainable_penguin4
     raise ValueError(f"No parameter sampler is defined for {strategy_name}")
 
 
@@ -105,13 +138,21 @@ def train_strategy(
     rng = random.Random(seed)
     sampler = _strategy_sampler(strategy_class)
 
-    baseline_instance = strategy_class()
+    # Baseline run: execute the strategy with its starting parameters before
+    # any randomized search so the report can compare manual/default behavior
+    # against the trained result.
+    baseline_kwargs = {}
+    if TRAINING_MANUAL and strategy_class.__name__ in {"TrainablePenguin1", "TrainablePenguin2"}:
+        baseline_kwargs["Manual"] = True
+    baseline_instance = strategy_class(**baseline_kwargs)
     baseline_metrics = _evaluate_strategy(baseline_instance, symbols, start_dt, end_dt, binning)
     best_params = asdict(getattr(baseline_instance, "params", {})) if hasattr(baseline_instance, "params") else {}
     best_metrics = baseline_metrics
     best_score = _score_metrics(baseline_metrics)
     trial_history: list[dict[str, Any]] = []
 
+    # Optimization loop: sample candidate parameters, evaluate each candidate,
+    # and keep the lexicographically best result.
     for trial_number in range(1, trials + 1):
         params = sampler(rng)
         candidate = strategy_class(**params)
@@ -188,21 +229,24 @@ def main() -> None:
         "trained_strategies": [],
     }
 
-    print("Training manual baselines")
-    for manual_class in TRAINING_MANUAL_PENGUINS:
-        metrics = _evaluate_strategy(manual_class(), list(args.symbols), start_dt, end_dt, args.binning)
-        report["manual_baselines"].append(
-            {
-                "strategy": manual_class.__name__,
-                "metrics": metrics,
-                "score": list(_score_metrics(metrics)),
-            }
-        )
-        print(
-            f"  {manual_class.__name__}: final=${metrics.get('final_value', 0.0):,.2f}, "
-            f"trades={metrics.get('total_trades', 0)}"
-        )
+    if TRAINING_MANUAL:
+        # Manual penguins are only executed here as baselines.
+        print("Training manual baselines")
+        for manual_class in TRAINING_MANUAL_PENGUINS:
+            metrics = _evaluate_strategy(manual_class(), list(args.symbols), start_dt, end_dt, args.binning)
+            report["manual_baselines"].append(
+                {
+                    "strategy": manual_class.__name__,
+                    "metrics": metrics,
+                    "score": list(_score_metrics(metrics)),
+                }
+            )
+            print(
+                f"  {manual_class.__name__}: final=${metrics.get('final_value', 0.0):,.2f}, "
+                f"trades={metrics.get('total_trades', 0)}"
+            )
 
+    # Only the trainable penguins are optimized in this pass.
     print("\nTraining automated strategies")
     for strategy_class in TRAINING_PENGUINS:
         print(f"\nOptimizing {strategy_class.__name__}")

@@ -1,8 +1,12 @@
 from .base_penguin import BasePenguin
 from .TrainablePenguin1 import TrainablePenguin1
-from .TrainablePenguin1_manual import TrainablePenguin1_Manual
+from .TrainablePenguin1 import TrainablePenguin1_Manual
 from .TrainablePenguin2 import TrainablePenguin2
-from .TrainablePenguin2_manual import TrainablePenguin2_Manual
+from .TrainablePenguin2 import TrainablePenguin2_Manual
+from .TrainablePenguin3 import TrainablePenguin3
+from .TrainablePenguin3 import TrainablePenguin3_Manual
+from .TrainablePenguin4 import TrainablePenguin4
+from .TrainablePenguin4 import TrainablePenguin4_Manual
 from .rsi_mr_selective import RSIMeanReversionSelectivePenguin
 from .smart_rsi_confluence_penguin import SmartRSIConfluencePenguin
 from .copilot_penguin import CopilotPenguin
@@ -18,6 +22,10 @@ __all__ = [
     "TrainablePenguin1_Manual",
     "TrainablePenguin2",
     "TrainablePenguin2_Manual",
+    "TrainablePenguin3",
+    "TrainablePenguin3_Manual",
+    "TrainablePenguin4",
+    "TrainablePenguin4_Manual",
     "MomentumPenguin",
     "RSIMeanReversionPenguin",
     "RSIMeanReversionPenguinStrict1",
