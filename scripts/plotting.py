@@ -73,6 +73,38 @@ def _strategy_line_style(name: str) -> str:
     return "--" if name.endswith("_Manual") else "-"
 
 
+def _build_report_page_groups(strategy_names: list[str]) -> list[list[str]]:
+    """Group paired trainable/manual strategies onto the same report page."""
+    ordered_names = sorted(strategy_names, key=_strategy_group_key)
+    available_names = set(strategy_names)
+    consumed_names: set[str] = set()
+    page_groups: list[list[str]] = []
+
+    paired_bases = {
+        "TrainablePenguin1",
+        "TrainablePenguin2",
+        "TrainablePenguin3",
+        "TrainablePenguin4",
+    }
+
+    for name in ordered_names:
+        if name in consumed_names:
+            continue
+
+        base_name = _strategy_base_key(name)
+        manual_name = f"{base_name}_Manual"
+        if base_name in paired_bases and name == base_name and manual_name in available_names:
+            page_groups.append([name, manual_name])
+            consumed_names.add(name)
+            consumed_names.add(manual_name)
+            continue
+
+        page_groups.append([name])
+        consumed_names.add(name)
+
+    return page_groups
+
+
 def _strategy_parameter_text(strategy_name: str) -> str | None:
     """Return a short parameter summary for RSI strategies."""
     rsi_parameter_map = {
@@ -728,114 +760,154 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         pdf.savefig(fig, bbox_inches="tight")
         plt.close()
 
-        # Pages 2+: Individual plots with summary info above (tables moved to artifacts)
-        for penguin_name in sorted(portfolios.keys(), key=_strategy_group_key):
-            portfolio = portfolios[penguin_name]
-            display_penguin_name = _display_strategy_name(penguin_name)
-            parameter_text = _strategy_parameter_text(penguin_name)
-            
-            summary = portfolio.get_symbol_summary(latest_prices)
+        # Pages 2+: One page per strategy or paired trainable/manual group.
+        for page_names in _build_report_page_groups(list(portfolios.keys())):
+            page_items = []
+            for penguin_name in page_names:
+                if penguin_name not in curves or penguin_name not in portfolios:
+                    continue
 
-            cash = portfolio.cash
-            market_value = 0.0
-            for symbol, pos_qty in portfolio.positions.items():
-                if symbol in latest_prices and pos_qty > 0:
-                    market_value += pos_qty * latest_prices[symbol]
-            total_value = cash + market_value
+                portfolio = portfolios[penguin_name]
+                display_penguin_name = _display_strategy_name(penguin_name)
+                parameter_text = _strategy_parameter_text(penguin_name)
+                summary = portfolio.get_symbol_summary(latest_prices)
 
-            # Calculate totals for display
-            totals = _aggregate_strategy_summary(summary)
+                cash = portfolio.cash
+                market_value = 0.0
+                for symbol, pos_qty in portfolio.positions.items():
+                    if symbol in latest_prices and pos_qty > 0:
+                        market_value += pos_qty * latest_prices[symbol]
+                total_value = cash + market_value
 
-            # Count sells excluding final-liquidation trades
-            preliq_sell_count = 0
-            preliq_qty_sold = 0
-            for t in portfolio.trades:
-                if t.action == "SELL":
-                    if final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp:
-                        # Skip liquidation sells
-                        continue
-                    preliq_sell_count += 1
-                    preliq_qty_sold += t.quantity
+                totals = _aggregate_strategy_summary(summary)
 
-            # Override sell count displayed to exclude liquidation
-            totals["sell_count"] = preliq_sell_count
-            totals["total_qty_sold"] = preliq_qty_sold
+                preliq_sell_count = 0
+                preliq_qty_sold = 0
+                for t in portfolio.trades:
+                    if t.action == "SELL":
+                        if final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp:
+                            continue
+                        preliq_sell_count += 1
+                        preliq_qty_sold += t.quantity
 
-            total_pnl = totals["total_pnl"]
-            total_buy_count = totals["buy_count"]
-            total_sell_count = totals["sell_count"]
-            total_shares_bought = totals["total_qty_bought"]
+                totals["sell_count"] = preliq_sell_count
+                totals["total_qty_sold"] = preliq_qty_sold
 
-            # Save summary data to artifacts
-            if artifacts_dir:
-                _save_strategy_summary_to_artifacts(
-                    penguin_name,
-                    display_penguin_name,
-                    summary,
-                    cash,
-                    market_value,
-                    total_value,
-                    total_buy_count,
-                    total_sell_count,
-                    total_pnl,
-                    artifacts_dir,
+                page_items.append(
+                    {
+                        "name": penguin_name,
+                        "display_name": display_penguin_name,
+                        "parameter_text": parameter_text,
+                        "summary": summary,
+                        "cash": cash,
+                        "market_value": market_value,
+                        "total_value": total_value,
+                        "total_pnl": totals["total_pnl"],
+                        "buy_count": totals["buy_count"],
+                        "sell_count": totals["sell_count"],
+                    }
                 )
 
-            # Create individual plot page with summary info above
-            if penguin_name in curves:
-                fig, ax = plt.subplots(figsize=(12, 8))
-                
+                if artifacts_dir:
+                    _save_strategy_summary_to_artifacts(
+                        penguin_name,
+                        display_penguin_name,
+                        summary,
+                        cash,
+                        market_value,
+                        total_value,
+                        totals["buy_count"],
+                        totals["sell_count"],
+                        totals["total_pnl"],
+                        artifacts_dir,
+                    )
+
+            if not page_items:
+                continue
+
+            fig, ax = plt.subplots(figsize=(12, 8))
+            page_title_names = ", ".join(item["display_name"] for item in page_items)
+
+            for item in page_items:
+                penguin_name = item["name"]
                 vals = curves[penguin_name]
-                # Use the same color from the first plot
                 color = line_colors.get(penguin_name, None)
-                line = ax.plot(range(1, len(vals) + 1), vals, label=display_penguin_name, linewidth=2, alpha=0.8, color=color)
-                
-                # Add text label at the end of the curve
+                line = ax.plot(
+                    range(1, len(vals) + 1),
+                    vals,
+                    label=item["display_name"],
+                    linewidth=2,
+                    alpha=0.8,
+                    color=color,
+                    linestyle=_strategy_line_style(penguin_name),
+                )
+
                 if vals:
                     final_x = len(vals)
                     final_y = vals[-1]
                     actual_color = line[0].get_color()
-                    ax.text(final_x + 50, final_y, f" {display_penguin_name}", fontsize=9, va="center", 
-                           bbox=dict(boxstyle="round,pad=0.3", facecolor=actual_color, alpha=0.3, edgecolor="none"))
-                
-                ax.axhline(
-                    y=INITIAL_CAPITAL,
-                    color="gray",
-                    linestyle="--",
-                    alpha=0.7,
-                    label="Initial Capital",
-                )
-                ax.set_xticks(x_ticks)
-                ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=9)
-                ax.set_xlabel(x_label_text)
-                ax.set_ylabel("Total Capital ($)")
-                individual_title = f"Capital Curve: {display_penguin_name}"
-                if symbol_list_name:
-                    individual_title = f"{individual_title} ({symbol_list_name})"
-                ax.set_title(individual_title)
-                ax.legend(fontsize=10, loc='best')
-                ax.grid(True, alpha=0.3)
-                
-                # Extend x-axis to accommodate right-side label
-                if vals:
-                    ax.set_xlim(left=0, right=len(vals) * 1.15)
-                
-                # Add summary text above the plot
-                    summary_text_lines = [
-                        f"Cash: ${cash:,.2f}  |  Total Value: ${total_value:,.2f}",
-                        f"Buys: {total_buy_count}  |  Sells: {total_sell_count}",
-                        f"Total PnL: ${total_pnl:,.2f}",
+                    ax.text(
+                        final_x + 50,
+                        final_y,
+                        f" {item['display_name']}",
+                        fontsize=9,
+                        va="center",
+                        bbox=dict(boxstyle="round,pad=0.3", facecolor=actual_color, alpha=0.3, edgecolor="none"),
+                    )
+
+            ax.axhline(
+                y=INITIAL_CAPITAL,
+                color="gray",
+                linestyle="--",
+                alpha=0.7,
+                label="Initial Capital",
+            )
+            ax.set_xticks(x_ticks)
+            ax.set_xticklabels(x_labels, rotation=45, ha='right', fontsize=9)
+            ax.set_xlabel(x_label_text)
+            ax.set_ylabel("Total Capital ($)")
+            individual_title = f"Capital Curve: {page_title_names}"
+            if symbol_list_name:
+                individual_title = f"{individual_title} ({symbol_list_name})"
+            ax.set_title(individual_title)
+            ax.legend(fontsize=10, loc='best')
+            ax.grid(True, alpha=0.3)
+
+            max_len = max(len(curves[item["name"]]) for item in page_items)
+            ax.set_xlim(left=0, right=max_len * 1.15)
+
+            summary_text_lines: list[str] = []
+            for item in page_items:
+                summary_text_lines.extend(
+                    [
+                        f"{item['display_name']}",
+                        f"Cash: ${item['cash']:,.2f}  |  Total Value: ${item['total_value']:,.2f}",
+                        f"Buys: {item['buy_count']}  |  Sells: {item['sell_count']}",
+                        f"Total PnL: ${item['total_pnl']:,.2f}",
                     ]
-                if parameter_text:
-                    summary_text_lines.append(parameter_text)
-                
-                summary_text = "\n".join(summary_text_lines)
-                fig.text(0.5, 0.98, summary_text, ha="center", va="top", fontsize=9, 
-                        wrap=True, family="monospace", bbox=dict(boxstyle="round,pad=0.5", 
-                        facecolor="lightyellow", alpha=0.3, edgecolor="gray"))
-                
-                plt.tight_layout(rect=[0, 0, 1, 0.94])
-                pdf.savefig(fig, bbox_inches="tight")
-                plt.close()
+                )
+                if item["parameter_text"]:
+                    summary_text_lines.append(item["parameter_text"])
+                summary_text_lines.append("")
+
+            if summary_text_lines and summary_text_lines[-1] == "":
+                summary_text_lines.pop()
+
+            summary_text = "\n".join(summary_text_lines)
+            fig.text(
+                0.5,
+                0.98,
+                summary_text,
+                ha="center",
+                va="top",
+                fontsize=9,
+                wrap=True,
+                family="monospace",
+                bbox=dict(boxstyle="round,pad=0.5", facecolor="lightyellow", alpha=0.3, edgecolor="gray"),
+            )
+
+            plt.tight_layout(rect=[0, 0, 1, 0.94])
+            pdf.savefig(fig, bbox_inches="tight")
+            plt.close()
 
     print(f"📄 Final report saved to {filename}")
