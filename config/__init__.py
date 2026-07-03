@@ -76,6 +76,11 @@ from config.training_step import (
     TRAINING_PARETO_FILENAME,
 )
 
+# ========== STRATEGY CONFIGURATION ==========
+from config.strategies import (
+    ACTIVE_PENGUINS,
+)
+
 # ========== EXPORTS ==========
 __all__ = [
     # Active trading configuration
