@@ -227,6 +227,62 @@ def _aggregate_strategy_summary(summary: dict) -> dict:
     return totals
 
 
+def create_training_pareto_pdf(training_history: dict[str, list[dict]], output_pdf, title: str = "Training Pareto Front"):
+    """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
+    output_path = Path(output_pdf)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with PdfPages(output_path) as pdf:
+        for strategy_name in sorted(training_history):
+            trial_history = training_history.get(strategy_name, [])
+            completed_trials = [trial for trial in trial_history if trial.get("status") == "completed"]
+
+            fig, ax = plt.subplots(figsize=(10, 7))
+            fig.suptitle(f"{title}: {strategy_name}", fontsize=16, fontweight="bold")
+
+            if completed_trials:
+                x_values = [int(trial.get("buy_trades", 0)) for trial in completed_trials]
+                y_values = [float(trial.get("profit_amount", 0.0)) for trial in completed_trials]
+                trial_numbers = [int(trial.get("trial", 0)) for trial in completed_trials]
+
+                scatter = ax.scatter(
+                    x_values,
+                    y_values,
+                    c=trial_numbers,
+                    cmap="viridis",
+                    s=55,
+                    alpha=0.85,
+                    edgecolors="black",
+                    linewidths=0.5,
+                )
+
+                for x_value, y_value, trial_number in zip(x_values, y_values, trial_numbers):
+                    ax.annotate(
+                        str(trial_number),
+                        (x_value, y_value),
+                        textcoords="offset points",
+                        xytext=(5, 4),
+                        fontsize=8,
+                    )
+
+                cbar = fig.colorbar(scatter, ax=ax)
+                cbar.set_label("Trial number")
+            else:
+                ax.text(0.5, 0.5, "No completed trials available", ha="center", va="center", transform=ax.transAxes)
+
+            ax.set_xlabel("Number of buys")
+            ax.set_ylabel("Profit amount ($)")
+            ax.grid(True, alpha=0.25)
+            ax.axhline(0.0, color="gray", linestyle="--", linewidth=1, alpha=0.6)
+            ax.axvline(0.0, color="gray", linestyle=":", linewidth=1, alpha=0.4)
+            ax.set_title(f"{strategy_name} buy-count vs profit")
+
+            pdf.savefig(fig, bbox_inches="tight")
+            plt.close(fig)
+
+    print(f"Training Pareto PDF saved to {output_path}")
+
+
 
 def _parse_datetime_string(dt_str: str) -> datetime:
     """Parse datetime from config format string."""

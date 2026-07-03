@@ -52,11 +52,14 @@ from config import (
     TRAINING_BENCHMARK_SYMBOL,
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
+    PLOT_PARETO,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
     TRAINING_PARAMETER_LOG_FILENAME,
     TRAINING_PARAMETER_DELTA_FILENAME,
+    TRAINING_PARETO_FILENAME,
 )
+from scripts.plotting import create_training_pareto_pdf
 
 
 def percent_progress(iterable, desc: str):
@@ -348,11 +351,12 @@ def _train_trainable_penguins(
     binning: str,
     initial_capital: float,
     transaction_cost: float,
-) -> Tuple[Dict[str, Dict[str, object]], List[str], List[Dict[str, object]]]:
+) -> Tuple[Dict[str, Dict[str, object]], List[str], List[Dict[str, object]], Dict[str, List[Dict[str, object]]]]:
     rng = random.Random(TRAINING_RANDOM_SEED)
     trained_parameters: Dict[str, Dict[str, object]] = {}
     log_lines: List[str] = []
     parameter_history: List[Dict[str, object]] = []
+    pareto_history: Dict[str, List[Dict[str, object]]] = {}
 
     header = (
         f"Step 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
@@ -369,6 +373,7 @@ def _train_trainable_penguins(
         best_params: Dict[str, int | float] = {}
         initial_params: Dict[str, int | float] = {}
         previous_trial_params: Dict[str, int | float] | None = None
+        pareto_history[strategy_class.__name__] = []
 
         baseline_instance = strategy_class()
         if hasattr(baseline_instance, "params"):
@@ -427,6 +432,8 @@ def _train_trainable_penguins(
             candidate_metrics = results[candidate.name][1]
             benchmark_metrics = results[SP500().name][1]
             score = _score_against_spy(candidate_metrics, benchmark_metrics)
+            profit_amount = float(candidate_metrics.get("total_return", 0.0))
+            final_value = float(candidate_metrics.get("final_value", 0.0))
 
             if best_score is None or score > best_score:
                 best_score = score
@@ -441,15 +448,25 @@ def _train_trainable_penguins(
             params_line = f"      params={_format_trainable_params(params)}"
             change_line = f"      change_vs_previous={param_changes}"
             trial_line = (
-                f"      relative=${score[0]:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+                f"      relative=${score[0]:,.2f}, profit=${profit_amount:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
             )
             trial_iterator.set_postfix_str(
-                f"relative={score[0]:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
+                f"profit={profit_amount:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
             )
             log_lines.append(selection_line)
             log_lines.append(params_line)
             log_lines.append(change_line)
             log_lines.append(trial_line)
+            pareto_history[strategy_class.__name__].append(
+                {
+                    "trial": trial_number,
+                    "buy_trades": int(candidate_metrics.get("buy_trades", 0)),
+                    "profit_amount": profit_amount,
+                    "final_value": final_value,
+                    "score": list(score),
+                    "status": "completed",
+                }
+            )
             parameter_history.append(
                 {
                     "strategy": strategy_class.__name__,
@@ -461,6 +478,8 @@ def _train_trainable_penguins(
                     "selected_symbols": trial_symbols,
                     "params": params,
                     "param_changes_vs_previous": param_changes,
+                    "profit_amount": profit_amount,
+                    "final_value": final_value,
                     "relative_value": float(score[0]),
                     "buy_trades": int(candidate_metrics.get("buy_trades", 0)),
                     "score": list(score),
@@ -480,7 +499,7 @@ def _train_trainable_penguins(
         )
         log_lines.append(best_line)
 
-    return trained_parameters, log_lines, parameter_history
+    return trained_parameters, log_lines, parameter_history, pareto_history
 
 
 def run_backtest(
@@ -659,7 +678,7 @@ def run_backtest(
         ]
         if active_trainables:
             training_start = datetime.now(timezone.utc)
-            trained_parameters, training_log_lines, training_parameter_history = _train_trainable_penguins(
+            trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
                 symbols=symbols,
                 tradeable_timestamps=tradeable_timestamps,
                 binning=binning,
@@ -689,6 +708,7 @@ def run_backtest(
             training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
             training_parameter_delta_path = training_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
             training_log_path = training_artifacts_dir / TRAINING_LOG_FILENAME
+            training_pareto_path = training_artifacts_dir / TRAINING_PARETO_FILENAME
             with open(training_output_path, "w", encoding="utf-8") as handle:
                 json.dump(
                     {
@@ -742,10 +762,16 @@ def run_backtest(
                     )
                     + "\n"
                 )
+
+                if PLOT_PARETO:
+                    create_training_pareto_pdf(training_pareto_history, training_pareto_path)
+
             print(f"\nSaved training parameters to {training_output_path}")
             print(f"Saved trainable parameter log to {training_parameter_log_path}")
             print(f"Saved trainable parameter delta report to {training_parameter_delta_path}")
             print(f"Saved training log to {training_log_path}")
+            if PLOT_PARETO:
+                print(f"Saved training Pareto PDF to {training_pareto_path}")
             print(f"Total training time: {training_duration_str} (H:MM:SS)")
             print("\nTrainable values selected at the end:")
             for strategy_name, training_result in trained_parameters.items():
