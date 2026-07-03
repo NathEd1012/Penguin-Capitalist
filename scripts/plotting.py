@@ -825,7 +825,39 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             if not page_items:
                 continue
 
-            fig, ax = plt.subplots(figsize=(12, 8))
+            def _build_summary_lines(item: dict[str, object]) -> list[str]:
+                lines = [
+                    f"{item['display_name']}",
+                    f"Cash: ${item['cash']:,.2f}  |  Total Value: ${item['total_value']:,.2f}",
+                    f"Buys: {item['buy_count']}  |  Sells: {item['sell_count']}",
+                    f"Total PnL: ${item['total_pnl']:,.2f}",
+                ]
+                if item["parameter_text"]:
+                    lines.append(item["parameter_text"])
+                return lines
+
+            summary_text_blocks = [_build_summary_lines(item) for item in page_items]
+            summary_height_units = max(1.8, 0.28 * max(len(lines) for lines in summary_text_blocks))
+            fig = plt.figure(figsize=(12, 8))
+            grid = fig.add_gridspec(2, 1, height_ratios=[summary_height_units, 6.0], hspace=0.18)
+            summary_grid = grid[0].subgridspec(1, len(page_items), wspace=0.25)
+            summary_axes = [fig.add_subplot(summary_grid[0, idx]) for idx in range(len(page_items))]
+            ax = fig.add_subplot(grid[1])
+
+            for summary_ax, item, lines in zip(summary_axes, page_items, summary_text_blocks):
+                summary_ax.axis("off")
+                summary_ax.text(
+                    0.5,
+                    0.5,
+                    "\n".join(lines),
+                    ha="center",
+                    va="center",
+                    fontsize=9,
+                    wrap=True,
+                    family="monospace",
+                    bbox=dict(boxstyle="round,pad=0.5", facecolor="lightyellow", alpha=0.3, edgecolor="gray"),
+                )
+
             page_title_names = ", ".join(item["display_name"] for item in page_items)
 
             for item in page_items:
@@ -876,37 +908,6 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             max_len = max(len(curves[item["name"]]) for item in page_items)
             ax.set_xlim(left=0, right=max_len * 1.15)
 
-            summary_text_lines: list[str] = []
-            for item in page_items:
-                summary_text_lines.extend(
-                    [
-                        f"{item['display_name']}",
-                        f"Cash: ${item['cash']:,.2f}  |  Total Value: ${item['total_value']:,.2f}",
-                        f"Buys: {item['buy_count']}  |  Sells: {item['sell_count']}",
-                        f"Total PnL: ${item['total_pnl']:,.2f}",
-                    ]
-                )
-                if item["parameter_text"]:
-                    summary_text_lines.append(item["parameter_text"])
-                summary_text_lines.append("")
-
-            if summary_text_lines and summary_text_lines[-1] == "":
-                summary_text_lines.pop()
-
-            summary_text = "\n".join(summary_text_lines)
-            fig.text(
-                0.5,
-                0.98,
-                summary_text,
-                ha="center",
-                va="top",
-                fontsize=9,
-                wrap=True,
-                family="monospace",
-                bbox=dict(boxstyle="round,pad=0.5", facecolor="lightyellow", alpha=0.3, edgecolor="gray"),
-            )
-
-            plt.tight_layout(rect=[0, 0, 1, 0.94])
             pdf.savefig(fig, bbox_inches="tight")
             plt.close()
 

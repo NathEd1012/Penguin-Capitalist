@@ -32,12 +32,6 @@ from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.synthetic_spread_model import SyntheticSpreadModel
-from scripts.multiframe import (
-    build_sr_strategy_sets,
-    precompute_multiframe_levels,
-    set_precomputed_levels_on_penguins,
-)
-from scripts.generate_sr_reports import generate_sr_analysis
 from penguins import SP500
 from config import (
     SYMBOLS,
@@ -61,6 +55,7 @@ from config import (
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
     TRAINING_PARAMETER_LOG_FILENAME,
+    TRAINING_PARAMETER_DELTA_FILENAME,
 )
 
 
@@ -237,6 +232,46 @@ def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float]):
         return penguin
 
 
+def _penguin_history_requirements(penguin) -> tuple[int, int]:
+    """Return (visible history window, minimum history before trading)."""
+    try:
+        lookback_bars = int(getattr(penguin, "LOOKBACK_BARS", 1000))
+    except (TypeError, ValueError):
+        lookback_bars = 1000
+
+    try:
+        min_history_required = int(getattr(penguin, "MIN_HISTORY_REQUIRED", 0))
+    except (TypeError, ValueError):
+        min_history_required = 0
+
+    lookback_bars = max(1, lookback_bars)
+    min_history_required = max(0, min_history_required)
+    required_history_bars = max(lookback_bars, min_history_required)
+    return lookback_bars, required_history_bars
+
+
+def _binning_to_minutes(binning: str) -> int:
+    mapping = {
+        "1m": 1,
+        "5m": 5,
+        "15m": 15,
+        "1h": 60,
+        "1d": 1440,
+    }
+    try:
+        return mapping[binning.strip().lower()]
+    except KeyError as exc:
+        raise ValueError(f"Unsupported binning: {binning}") from exc
+
+
+def _history_warmup_bars(penguin_classes: List) -> int:
+    warmup_bars = 0
+    for penguin_class in penguin_classes:
+        _, required_history_bars = _penguin_history_requirements(penguin_class)
+        warmup_bars = max(warmup_bars, required_history_bars)
+    return warmup_bars
+
+
 def _format_trainable_params(params: Dict[str, int | float]) -> str:
     if not params:
         return "<no parameters>"
@@ -281,9 +316,35 @@ def _format_param_changes(current_params: Dict[str, int | float], previous_param
     return "; ".join(changes) if changes else "no parameter change"
 
 
+def _format_trainable_parameter_delta_report(trained_parameters: Dict[str, Dict[str, object]]) -> str:
+    lines: List[str] = [
+        f"Trainable parameter delta report generated at {datetime.now(timezone.utc).isoformat()}",
+        "Format: initial -> after_training",
+    ]
+
+    for strategy_name in sorted(trained_parameters):
+        strategy_result = trained_parameters.get(strategy_name, {})
+        initial_params = dict(strategy_result.get("initial_params") or {})
+        final_params = dict(strategy_result.get("best_params") or {})
+
+        lines.append("")
+        lines.append(f"{strategy_name}:")
+        param_keys = sorted(set(initial_params) | set(final_params))
+        if not param_keys:
+            lines.append("  <no parameters>")
+            continue
+
+        for key in param_keys:
+            initial_value = initial_params.get(key, "<missing>")
+            final_value = final_params.get(key, "<missing>")
+            lines.append(f"  {key}: {initial_value} -> {final_value}")
+
+    return "\n".join(lines) + "\n"
+
+
 def _train_trainable_penguins(
     symbols: List[str],
-    sorted_timestamps: List[datetime],
+    tradeable_timestamps: List[datetime],
     binning: str,
     initial_capital: float,
     transaction_cost: float,
@@ -306,6 +367,7 @@ def _train_trainable_penguins(
         best_metrics = None
         best_score = None
         best_params: Dict[str, int | float] = {}
+        initial_params: Dict[str, int | float] = {}
         previous_trial_params: Dict[str, int | float] | None = None
 
         baseline_instance = strategy_class()
@@ -314,6 +376,7 @@ def _train_trainable_penguins(
                 best_params = asdict(baseline_instance.params)
             except Exception:
                 best_params = dict(getattr(baseline_instance.params, "__dict__", {}))
+        initial_params = dict(best_params)
 
         strategy_header = f"  Optimizing {strategy_class.__name__}"
         log_lines.append("")
@@ -325,7 +388,7 @@ def _train_trainable_penguins(
         )
         for trial_number in trial_iterator:
             trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, TRAINING_BENCHMARK_SYMBOL, rng)
-            trial_timestamps = _training_window_subset(sorted_timestamps, TRAINING_SUBSET_MONTHS, rng)
+            trial_timestamps = _training_window_subset(tradeable_timestamps, TRAINING_SUBSET_MONTHS, rng)
 
             if not trial_symbols or not trial_timestamps:
                 skipped_line = f"    Trial {trial_number:03d}: skipped (no subset available)"
@@ -406,6 +469,7 @@ def _train_trainable_penguins(
             previous_trial_params = params
 
         trained_parameters[strategy_class.__name__] = {
+            "initial_params": initial_params,
             "best_params": best_params,
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
@@ -462,6 +526,10 @@ def run_backtest(
     # Convert to UTC if needed
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
+
+    warmup_bars = _history_warmup_bars(penguin_classes)
+    warmup_minutes = _binning_to_minutes(binning)
+    warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
     
     # Determine required symbols from active penguins when possible.
     # If every active penguin declares TRADED_SYMBOLS, we only load that union.
@@ -498,7 +566,7 @@ def run_backtest(
     try:
         data, sparse_warning = loader.load_bars(
             symbols,
-            start_datetime_utc,
+            warmup_start_datetime_utc,
             end_datetime_utc,
             binning,
             enable_data_quality_checks=True,
@@ -539,9 +607,11 @@ def run_backtest(
     
     sorted_timestamps = sorted(all_timestamps)
     print(f"\n  Total bars across all symbols: {len(sorted_timestamps)}")
+    tradeable_timestamps = [timestamp for timestamp in sorted_timestamps if timestamp >= start_datetime_utc]
+    print(f"  Tradeable bars from configured start: {len(tradeable_timestamps)}")
     
-    # Build close-price series only if S/R analysis or additional plots are enabled.
-    # This step is expensive with large datasets and is currently unused (commented out).
+    # Build close-price series only if additional plots are enabled.
+    # This step is expensive with large datasets, so only build it when needed.
     symbol_close_series: Dict[str, List[Tuple[datetime, float]]] = {}
     if ENABLE_ADDITIONAL_PLOTS:
         print("\n  Building close-price series for analytics...")
@@ -572,7 +642,7 @@ def run_backtest(
             else:
                 penguin = penguin_spec()
             if hasattr(penguin, "record_history"):
-                penguin.record_history = bool(getattr(penguin, "USES_SR_LINES", False)) or bool(ENABLE_ADDITIONAL_PLOTS)
+                penguin.record_history = bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
@@ -591,7 +661,7 @@ def run_backtest(
             training_start = datetime.now(timezone.utc)
             trained_parameters, training_log_lines, training_parameter_history = _train_trainable_penguins(
                 symbols=symbols,
-                sorted_timestamps=sorted_timestamps,
+                tradeable_timestamps=tradeable_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
                 transaction_cost=TRAINING_TRANSACTION_COST,
@@ -612,11 +682,13 @@ def run_backtest(
                         trained_parameters[strategy_name]["best_params"],
                     )
 
-            training_output_dir = Path(__file__).parent / "run_current" / "artifacts" / "json"
+            training_artifacts_dir = Path(__file__).parent / "run_current" / "artifacts"
+            training_output_dir = training_artifacts_dir / "json"
             training_output_dir.mkdir(parents=True, exist_ok=True)
             training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
             training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
-            training_log_path = Path(__file__).parent / "run_current" / "artifacts" / TRAINING_LOG_FILENAME
+            training_parameter_delta_path = training_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
+            training_log_path = training_artifacts_dir / TRAINING_LOG_FILENAME
             with open(training_output_path, "w", encoding="utf-8") as handle:
                 json.dump(
                     {
@@ -648,6 +720,8 @@ def run_backtest(
                     indent=2,
                     default=str,
                 )
+            with open(training_parameter_delta_path, "w", encoding="utf-8") as handle:
+                handle.write(_format_trainable_parameter_delta_report(trained_parameters))
             with open(training_log_path, "w", encoding="utf-8") as handle:
                 handle.write(
                     "\n".join(
@@ -661,6 +735,7 @@ def run_backtest(
                             f"Transaction cost: {TRAINING_TRANSACTION_COST}",
                             f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
                             f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
+                            f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
                             "",
                             *training_log_lines,
                         ]
@@ -669,23 +744,12 @@ def run_backtest(
                 )
             print(f"\nSaved training parameters to {training_output_path}")
             print(f"Saved trainable parameter log to {training_parameter_log_path}")
+            print(f"Saved trainable parameter delta report to {training_parameter_delta_path}")
             print(f"Saved training log to {training_log_path}")
             print(f"Total training time: {training_duration_str} (H:MM:SS)")
             print("\nTrainable values selected at the end:")
             for strategy_name, training_result in trained_parameters.items():
                 print(f"  {strategy_name}: {_format_trainable_params(training_result.get('best_params', {}))}")
-
-    sr_penguin_names, precompute_sr_penguin_names = build_sr_strategy_sets(penguins)
-
-    # Precompute multiframe S/R levels only for strategies that explicitly require it.
-    if precompute_sr_penguin_names:
-        print(f"\nStep 3c: Precomputing multiframe S/R levels for {len(precompute_sr_penguin_names)} strategy(ies)...")
-        precomputed_sr_data = precompute_multiframe_levels(data, symbols, sorted_timestamps)
-
-        # Set precomputed data on all S/R-using penguins
-        set_precomputed_levels_on_penguins(penguins, precompute_sr_penguin_names, precomputed_sr_data)
-
-        print(f"  ✓ Precomputed S/R levels for {len(precomputed_sr_data)} symbols\n")
 
     ################################ STEP 4 ################################
 
@@ -698,6 +762,7 @@ def run_backtest(
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
+    trade_bar_idx = -1
     
     for bar_idx, timestamp in percent_progress(sorted_timestamps, desc="Executing bars"):
         # Get current prices
@@ -724,6 +789,11 @@ def run_backtest(
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
+
+        if timestamp < start_datetime_utc:
+            continue
+
+        trade_bar_idx += 1
         
         # Let each penguin make decisions
         quotes = {}
@@ -748,52 +818,53 @@ def run_backtest(
             if bar_idx == len(sorted_timestamps) - 1:
                 continue
 
+            lookback_bars, required_history_bars = _penguin_history_requirements(penguin)
+            penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
+            if penguin_symbols is not None:
+                symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
+            else:
+                symbols_for_penguin = symbols
+
             if hasattr(penguin, "decide_batch"):
-                batch_orders = penguin.decide_batch(symbols, quotes, portfolio)
+                ready_symbols = [
+                    symbol
+                    for symbol in symbols_for_penguin
+                    if symbol in quotes and len(price_history[symbol]) >= required_history_bars
+                ]
+                ready_quotes = {symbol: quotes[symbol] for symbol in ready_symbols}
+
+                batch_orders = penguin.decide_batch(ready_symbols, ready_quotes, portfolio)
                 for order_symbol, action, quantity in batch_orders:
-                    if order_symbol not in quotes or quantity <= 0:
+                    if order_symbol not in ready_quotes or quantity <= 0:
                         continue
 
-                    bid, ask = quotes[order_symbol]
+                    bid, ask = ready_quotes[order_symbol]
                     if action == "BUY":
                         if portfolio.buy(order_symbol, quantity, ask, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
                             )
                     elif action == "SELL":
                         if portfolio.sell(order_symbol, quantity, bid, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
                             )
 
                 value = portfolio.get_total_value(current_prices)
                 portfolio.add_value_snapshot(value)
                 continue
-            penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
-            if penguin_symbols is not None:
-                symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
-            else:
-                symbols_for_penguin = symbols
-            
-            # Get lookback requirement for this penguin
-            lookback_bars = getattr(penguin, "LOOKBACK_BARS", 1000)
             
             for symbol in symbols_for_penguin:
                 if symbol not in current_prices:
                     continue
                 
-                # Pass only necessary price history window to penguin.
-                # This dramatically improves performance for large backtests.
+                # Pass only data-backed windows to strategies. No penguin may trade
+                # until its configured lookback/minimum history is available.
                 full_history = price_history[symbol]
-                
-                # Only enforce minimum history requirement if penguin explicitly needs it
-                min_history_required = getattr(penguin, "MIN_HISTORY_REQUIRED", 0)
-                if len(full_history) < min_history_required:
+                if len(full_history) < required_history_bars:
                     continue
                 
-                # Slice only the last lookback_bars from history
-                mid_prices = full_history[-lookback_bars:] if len(full_history) > lookback_bars else full_history
-                
+                mid_prices = full_history[-lookback_bars:]
                 bid, ask = quotes[symbol]
                 
                 try:
@@ -807,12 +878,12 @@ def run_backtest(
                     
                     if action == "BUY" and quantity > 0:
                         if portfolio.buy(symbol, quantity, ask, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: BUY {quantity} {symbol} @ ${ask:.2f}"
                             )
                     elif action == "SELL" and quantity > 0:
                         if portfolio.sell(symbol, quantity, bid, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: SELL {quantity} {symbol} @ ${bid:.2f}"
                             )
                 
@@ -824,17 +895,11 @@ def run_backtest(
             value = portfolio.get_total_value(current_prices)
             portfolio.add_value_snapshot(value)
         
-        # Advance bar index for S/R penguins using precomputed levels
-        """for penguin_name in sr_penguin_names:
-            penguin = penguins[penguin_name]
-            if hasattr(penguin, "_advance_bar"):
-                penguin._advance_bar()"""
-    
     # ======================== FINAL LIQUIDATION ========================
     # CRITICAL CONSTRAINTS for end-of-backtest liquidation:
     # 1. DO NOT call penguin.decide() or any signal evaluation methods
     # 2. DO NOT rerank penguins
-    # 3. DO NOT recompute indicators or refresh S/R levels
+    # 3. DO NOT recompute indicators during liquidation
     # 4. ONLY close existing open positions at fair prices
     #
     # This ensures final positions are closed cleanly without artificially
@@ -881,11 +946,6 @@ def run_backtest(
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     
-    sr_histories = {}
-    """for penguin_name, penguin in penguins.items():
-        if hasattr(penguin, "export_sr_history"):
-            sr_histories[penguin_name] = penguin.export_sr_history()
-    """
     cleanup_start = time.perf_counter()
     print("\nReleasing large backtest buffers before returning...", flush=True)
     data = None
@@ -904,7 +964,7 @@ def run_backtest(
     symbol_prices = None
     bar = None
     print(f"Released large backtest buffers in {time.perf_counter() - cleanup_start:.2f}s", flush=True)
-    return results, trades_by_bar, sorted_timestamps, sr_histories, symbol_close_series, quality_report_text
+    return results, trades_by_bar, tradeable_timestamps, {}, symbol_close_series, quality_report_text
 
 
 def main():
@@ -934,7 +994,7 @@ def main():
     current_artifacts_dir.mkdir(parents=True, exist_ok=True)
     
     ################ Run backtest ################
-    results, trades_by_bar, bar_timestamps, sr_histories, _symbol_close_series, data_quality_report = run_backtest(
+    results, trades_by_bar, bar_timestamps, _unused_histories, _symbol_close_series, data_quality_report = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -947,9 +1007,6 @@ def main():
     )
     print("\nrun_backtest() returned; generating results...", flush=True)
     
-    # Identify S/R penguins from results
-    """    sr_penguin_names = {name for name in sr_histories.keys()}
-    """    
     # Generate report
     print("\n" + "="*80)
     print("RESULTS")
@@ -1024,16 +1081,6 @@ def main():
     except Exception as e:
         print(f"\n⚠️  PDF generation failed: {e}")
         print("Skipping PDF report (fonts or rendering issue).")
-    
-    # Generate Support & Resistance analysis reports
-    """generate_sr_analysis(
-        results=results,
-        sr_histories=sr_histories,
-        sr_penguin_names=sr_penguin_names,
-        bar_timestamps=bar_timestamps,
-        artifacts_dir=current_artifacts_dir,
-        enable_additional_plots=ENABLE_ADDITIONAL_PLOTS,
-    )"""
     
     # Mirror run_current into run_old only after current run is fully written.
     if archive_dir:

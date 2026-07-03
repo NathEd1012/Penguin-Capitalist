@@ -65,6 +65,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
+    "FAST": [
+        {
+            "date": "2025-05-22",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 stock split; ex/split-adjusted trading began",
+        }
+    ],
+
     "GOOGL": [
         {
             "date": "2022-07-18",

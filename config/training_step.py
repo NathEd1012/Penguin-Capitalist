@@ -55,6 +55,7 @@ TRAINING_MANUAL_PENGUINS = [
 TRAINING_RESULTS_FILENAME = "trainable_penguin_training.json"
 TRAINING_LOG_FILENAME = "trainable_penguin_training.log"
 TRAINING_PARAMETER_LOG_FILENAME = "trainable_penguin_parameter_log.json"
+TRAINING_PARAMETER_DELTA_FILENAME = "trainable_penguin_parameter_delta.txt"
 
 __all__ = [
     "TRAINING_STEP_ENABLED",
@@ -70,4 +71,5 @@ __all__ = [
     "TRAINING_RESULTS_FILENAME",
     "TRAINING_LOG_FILENAME",
     "TRAINING_PARAMETER_LOG_FILENAME",
+    "TRAINING_PARAMETER_DELTA_FILENAME",
 ]

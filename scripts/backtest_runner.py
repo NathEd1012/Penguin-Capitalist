@@ -113,6 +113,29 @@ def get_next_run_number(run_old_dir: Path) -> int:
     return max(run_numbers) + 1 if run_numbers else 1
 
 
+def _binning_to_minutes(binning: str) -> int:
+    mapping = {
+        "1m": 1,
+        "5m": 5,
+        "15m": 15,
+        "1h": 60,
+        "1d": 1440,
+    }
+    try:
+        return mapping[binning.strip().lower()]
+    except KeyError as exc:
+        raise ValueError(f"Unsupported binning: {binning}") from exc
+
+
+def _history_warmup_bars(penguin_classes: List) -> int:
+    warmup_bars = 0
+    for penguin_class in penguin_classes:
+        lookback_bars = int(getattr(penguin_class, "LOOKBACK_BARS", 1000))
+        min_history_required = int(getattr(penguin_class, "MIN_HISTORY_REQUIRED", 0))
+        warmup_bars = max(warmup_bars, max(1, lookback_bars), max(0, min_history_required))
+    return warmup_bars
+
+
 def run_backtest(
     symbols: List[str],
     start_datetime: datetime,
@@ -148,6 +171,10 @@ def run_backtest(
     # Convert to UTC if needed
     start_datetime_utc = start_datetime.astimezone(pytz.UTC)
     end_datetime_utc = end_datetime.astimezone(pytz.UTC)
+
+    warmup_bars = _history_warmup_bars(penguin_classes)
+    warmup_minutes = _binning_to_minutes(binning)
+    warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
     
     # Determine required symbols from active penguins when possible.
     # If every active penguin declares TRADED_SYMBOLS, we only load that union.
@@ -182,7 +209,7 @@ def run_backtest(
     try:
         data, sparse_warning = loader.load_bars(
             symbols,
-            start_datetime_utc,
+            warmup_start_datetime_utc,
             end_datetime_utc,
             binning,
             enable_data_quality_checks=True,
@@ -221,6 +248,8 @@ def run_backtest(
     
     sorted_timestamps = sorted(all_timestamps)
     print(f"\n  Total bars across all symbols: {len(sorted_timestamps)}")
+    tradeable_timestamps = [timestamp for timestamp in sorted_timestamps if timestamp >= start_datetime_utc]
+    print(f"  Tradeable bars from configured start: {len(tradeable_timestamps)}")
     
     # Initialize portfolios and penguins
     portfolios = {}
@@ -251,21 +280,22 @@ def run_backtest(
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
-    
+
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
-    
+    trade_bar_idx = -1
+
     for bar_idx, timestamp in percent_progress(sorted_timestamps, desc="Executing bars"):
         # Get current prices
         current_prices = {}
         for symbol in symbols:
             bar = data[symbol].get(timestamp)
             if bar and bar.get("data_quality", "OK") == "OK":
-                current_prices[symbol] = bar['close']
-        
+                current_prices[symbol] = bar["close"]
+
         if not current_prices:
             continue
-        
+
         # Update price history for each symbol
         for symbol in symbols:
             bar = data[symbol].get(timestamp)
@@ -276,11 +306,16 @@ def run_backtest(
                 else:
                     price_history[symbol].append(current_prices.get(symbol, 0))
             elif bar.get("data_quality", "OK") == "OK":
-                price_history[symbol].append(bar['close'])
+                price_history[symbol].append(bar["close"])
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
-        
+
+        if timestamp < start_datetime_utc:
+            continue
+
+        trade_bar_idx += 1
+
         # Let each penguin make decisions
         quotes = {}
         for symbol in current_prices:
@@ -313,54 +348,54 @@ def run_backtest(
                     bid, ask = quotes[order_symbol]
                     if action == "BUY":
                         if portfolio.buy(order_symbol, quantity, ask, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
                             )
                     elif action == "SELL":
                         if portfolio.sell(order_symbol, quantity, bid, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
                             )
 
                 value = portfolio.get_total_value(current_prices)
                 portfolio.add_value_snapshot(value)
                 continue
-            
+
             # Set current timestamp for S/R penguins that track history
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
             else:
                 symbols_for_penguin = symbols
-            
+
             # Get lookback requirement for this penguin
             lookback_bars = getattr(penguin, "LOOKBACK_BARS", 1000)
-            
+
             for symbol in symbols_for_penguin:
                 if symbol not in current_prices:
                     continue
-                
+
                 # Pass only necessary price history window to penguin.
                 # This dramatically improves performance for large backtests.
                 full_history = price_history[symbol]
-                
+
                 # Only enforce minimum history requirement if penguin explicitly needs it
                 min_history_required = getattr(penguin, "MIN_HISTORY_REQUIRED", 0)
                 if len(full_history) < min_history_required:
                     continue
-                
+
                 # Slice only the last lookback_bars from history
                 mid_prices = full_history[-lookback_bars:] if len(full_history) > lookback_bars else full_history
-                
+
                 bid, ask = quotes[symbol]
-                
+
                 try:
                     action, quantity = penguin.decide(
                         symbol,
                         mid_prices,
                         bid,
                         ask,
-                        portfolio
+                        portfolio,
                     )
 
                     # For non-leveraged SPY strategies, cap quantity to cash affordability.
@@ -369,22 +404,22 @@ def run_backtest(
                             max(portfolio.cash - portfolio.transaction_cost, 0) // ask
                         )
                         quantity = max_affordable_qty
-                    
+
                     if action == "BUY" and quantity > 0:
                         if portfolio.buy(symbol, quantity, ask, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: BUY {quantity} {symbol} @ ${ask:.2f}"
                             )
                     elif action == "SELL" and quantity > 0:
                         if portfolio.sell(symbol, quantity, bid, timestamp):
-                            trades_by_bar[bar_idx].append(
+                            trades_by_bar[trade_bar_idx].append(
                                 f"  {penguin_name}: SELL {quantity} {symbol} @ ${bid:.2f}"
                             )
-                
-                except Exception as e:
+
+                except Exception:
                     # Silently skip errors to continue backtest
                     pass
-            
+
             # Record portfolio value
             value = portfolio.get_total_value(current_prices)
             portfolio.add_value_snapshot(value)
@@ -429,7 +464,7 @@ def run_backtest(
         if hasattr(penguin, "export_sr_history"):
             sr_histories[penguin_name] = penguin.export_sr_history()
 
-    return results, trades_by_bar, sorted_timestamps, sr_histories, quality_report_text
+    return results, trades_by_bar, tradeable_timestamps, sr_histories, quality_report_text
 
 
 def main():
