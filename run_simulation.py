@@ -49,7 +49,7 @@ from config import (
     TRAINING_SUBSET_MONTHS,
     TRAINING_SUBSET_STOCKS,
     TRAINING_TRANSACTION_COST,
-    TRAINING_BENCHMARK_SYMBOL,
+    TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
     PLOT_PARETO,
@@ -164,13 +164,30 @@ def _training_symbol_subset(symbols: List[str], target_count: int, benchmark_sym
     return sorted(subset)
 
 
-def _score_against_spy(candidate_metrics: Dict, benchmark_metrics: Dict) -> tuple[float, int, int]:
-    relative_value = float(candidate_metrics.get("final_value", 0.0)) - float(benchmark_metrics.get("final_value", 0.0))
+def _training_profit_amount(candidate_metrics: Dict, benchmark_metrics: Dict, relative_to: int | str) -> float:
+    candidate_profit = float(candidate_metrics.get("total_return", 0.0))
+    if relative_to == "SPY":
+        return candidate_profit - float(benchmark_metrics.get("total_return", 0.0))
+    return candidate_profit
+
+
+def _score_training_candidate(
+    candidate_metrics: Dict,
+    benchmark_metrics: Dict,
+    transaction_cost: float,
+    relative_to: int | str,
+) -> tuple[float, int, int]:
+    buy_trades = int(candidate_metrics.get("buy_trades", candidate_metrics.get("total_trades", 0)))
+    relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, relative_to)
     return (
-        relative_value,
-        -int(candidate_metrics.get("buy_trades", 0)),
+        relative_profit_amount - (buy_trades * transaction_cost),
+        -buy_trades,
         -int(candidate_metrics.get("total_trades", 0)),
     )
+
+
+def _training_benchmark_symbol(relative_to: int | str) -> str:
+    return "SPY" if relative_to == 0 else str(relative_to)
 
 
 def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, int | float]:
@@ -392,7 +409,8 @@ def _train_trainable_penguins(
             leave=False,
         )
         for trial_number in trial_iterator:
-            trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, TRAINING_BENCHMARK_SYMBOL, rng)
+            benchmark_symbol = _training_benchmark_symbol(TRAINING_RELATIVE_TO)
+            trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, benchmark_symbol, rng)
             trial_timestamps = _training_window_subset(tradeable_timestamps, TRAINING_SUBSET_MONTHS, rng)
 
             if not trial_symbols or not trial_timestamps:
@@ -431,8 +449,10 @@ def _train_trainable_penguins(
 
             candidate_metrics = results[candidate.name][1]
             benchmark_metrics = results[SP500().name][1]
-            score = _score_against_spy(candidate_metrics, benchmark_metrics)
             profit_amount = float(candidate_metrics.get("total_return", 0.0))
+            benchmark_profit_amount = float(benchmark_metrics.get("total_return", 0.0))
+            relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, TRAINING_RELATIVE_TO)
+            score = _score_training_candidate(candidate_metrics, benchmark_metrics, transaction_cost, TRAINING_RELATIVE_TO)
             final_value = float(candidate_metrics.get("final_value", 0.0))
 
             if best_score is None or score > best_score:
@@ -448,10 +468,10 @@ def _train_trainable_penguins(
             params_line = f"      params={_format_trainable_params(params)}"
             change_line = f"      change_vs_previous={param_changes}"
             trial_line = (
-                f"      relative=${score[0]:,.2f}, profit=${profit_amount:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+                f"      relative_profit=${relative_profit_amount:,.2f}, absolute_profit=${profit_amount:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
             )
             trial_iterator.set_postfix_str(
-                f"profit={profit_amount:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
+                f"profit={relative_profit_amount:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
             )
             log_lines.append(selection_line)
             log_lines.append(params_line)
@@ -461,7 +481,11 @@ def _train_trainable_penguins(
                 {
                     "trial": trial_number,
                     "buy_trades": int(candidate_metrics.get("buy_trades", 0)),
+                    "total_trades": int(candidate_metrics.get("total_trades", 0)),
                     "profit_amount": profit_amount,
+                    "benchmark_profit_amount": benchmark_profit_amount,
+                    "relative_profit_amount": relative_profit_amount,
+                    "relative_to": TRAINING_RELATIVE_TO,
                     "final_value": final_value,
                     "score": list(score),
                     "status": "completed",
@@ -479,9 +503,14 @@ def _train_trainable_penguins(
                     "params": params,
                     "param_changes_vs_previous": param_changes,
                     "profit_amount": profit_amount,
+                    "benchmark_profit_amount": benchmark_profit_amount,
+                    "relative_profit_amount": relative_profit_amount,
+                    "relative_to": TRAINING_RELATIVE_TO,
                     "final_value": final_value,
                     "relative_value": float(score[0]),
+                    "relative_net_gain": float(score[0]),
                     "buy_trades": int(candidate_metrics.get("buy_trades", 0)),
+                    "total_trades": int(candidate_metrics.get("total_trades", 0)),
                     "score": list(score),
                 }
             )
@@ -494,8 +523,8 @@ def _train_trainable_penguins(
             "best_score": list(best_score) if best_score is not None else None,
         }
         best_line = (
-            f"  Best {strategy_class.__name__}: relative=${(best_score[0] if best_score else 0.0):,.2f}, "
-            f"buys={(best_metrics or {}).get('buy_trades', 0)}, params={_format_trainable_params(best_params)}"
+            f"  Best {strategy_class.__name__}: relative_net=${(best_score[0] if best_score else 0.0):,.2f}, "
+            f"trades={(best_metrics or {}).get('total_trades', 0)}, params={_format_trainable_params(best_params)}"
         )
         log_lines.append(best_line)
 
@@ -576,7 +605,11 @@ def run_backtest(
     print(f"Binning:           {binning}")
     print(f"Initial Capital:   ${initial_capital:,.2f}")
     print(f"Transaction Cost:  ${transaction_cost:.2f}")
+    print(f"Symbol List:       {ACTIVE_SYMBOL_LIST}")
     print(f"Symbols:           {len(symbols)}")
+    if enable_training_step:
+        print(f"Training Steps:    {TRAINING_ITERATIONS}")
+        print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"{'='*80}\n")
     
     # Load data
@@ -716,7 +749,8 @@ def run_backtest(
                         "iterations": TRAINING_ITERATIONS,
                         "subset_months": TRAINING_SUBSET_MONTHS,
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
-                        "benchmark_symbol": TRAINING_BENCHMARK_SYMBOL,
+                        "relative_to": TRAINING_RELATIVE_TO,
+                        "benchmark_symbol": benchmark_symbol,
                         "transaction_cost": TRAINING_TRANSACTION_COST,
                         "trainable_strategies": trained_parameters,
                     },
@@ -731,7 +765,8 @@ def run_backtest(
                         "iterations": TRAINING_ITERATIONS,
                         "subset_months": TRAINING_SUBSET_MONTHS,
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
-                        "benchmark_symbol": TRAINING_BENCHMARK_SYMBOL,
+                        "relative_to": TRAINING_RELATIVE_TO,
+                        "benchmark_symbol": benchmark_symbol,
                         "transaction_cost": TRAINING_TRANSACTION_COST,
                         "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
                         "trial_history": training_parameter_history,
@@ -751,7 +786,8 @@ def run_backtest(
                             f"Iterations: {TRAINING_ITERATIONS}",
                             f"Subset months: {TRAINING_SUBSET_MONTHS}",
                             f"Subset stocks: {TRAINING_SUBSET_STOCKS}",
-                            f"Benchmark symbol: {TRAINING_BENCHMARK_SYMBOL}",
+                            f"Relative to: {TRAINING_RELATIVE_TO}",
+                            f"Benchmark symbol: {benchmark_symbol}",
                             f"Transaction cost: {TRAINING_TRANSACTION_COST}",
                             f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
                             f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
@@ -769,6 +805,7 @@ def run_backtest(
                         training_parameter_history,
                         trained_parameters,
                         training_pareto_path,
+                        relative_to=TRAINING_RELATIVE_TO,
                         transaction_cost=TRAINING_TRANSACTION_COST,
                     )
 

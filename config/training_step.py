@@ -24,8 +24,8 @@ TRAINING_SUBSET_STOCKS = 30
 # Match the training objective's per-buy cost penalty.
 TRAINING_TRANSACTION_COST = 2.0
 
-# Benchmark symbol used to score performance relative to SPY.
-TRAINING_BENCHMARK_SYMBOL = "SPY"
+# Set to 0 for absolute profit or to the benchmark symbol for relative profit.
+TRAINING_RELATIVE_TO = "SPY"
 
 # Keep the search reproducible unless the user changes the seed.
 TRAINING_RANDOM_SEED = 42
@@ -67,7 +67,7 @@ __all__ = [
     "TRAINING_SUBSET_MONTHS",
     "TRAINING_SUBSET_STOCKS",
     "TRAINING_TRANSACTION_COST",
-    "TRAINING_BENCHMARK_SYMBOL",
+    "TRAINING_RELATIVE_TO",
     "TRAINING_RANDOM_SEED",
     "Manual",
     "TRAINING_PENGUINS",

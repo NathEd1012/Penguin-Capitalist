@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.colors import Normalize
 from datetime import datetime, timedelta
 import pytz
 import csv
@@ -292,11 +293,18 @@ def create_training_pareto_pdf(
     trained_parameters: dict[str, dict],
     output_pdf,
     title: str = "Pareto Front",
+    relative_to: int | str = 0,
     transaction_cost: float = 0.0,
 ):
     """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
     output_path = Path(output_pdf)
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    use_relative_benchmark = relative_to == "SPY"
+    profit_axis_label = (
+        f"Profit amount relative to {relative_to} ($)" if use_relative_benchmark else "Profit amount ($)"
+    )
+    best_profit_label = f"profit relative to {relative_to}" if use_relative_benchmark else "profit"
+    plot_title_suffix = f" relative to {relative_to}" if use_relative_benchmark else ""
 
     parameter_history_by_strategy: dict[str, dict[int, dict[str, int | float]]] = {}
     for entry in parameter_history:
@@ -320,19 +328,29 @@ def create_training_pareto_pdf(
             fig.subplots_adjust(top=0.82)
 
             if completed_trials:
-                x_values = [int(trial.get("buy_trades", 0)) for trial in completed_trials]
-                y_values = [float(trial.get("profit_amount", 0.0)) for trial in completed_trials]
+                x_values = [int(trial.get("buy_trades", trial.get("total_trades", 0))) for trial in completed_trials]
+                y_values = [float(trial.get("relative_profit_amount", trial.get("profit_amount", 0.0))) for trial in completed_trials]
                 trial_numbers = [int(trial.get("trial", 0)) for trial in completed_trials]
                 distance_values = [
                     _parameter_l2_distance(trial_parameter_map.get(trial_number, {}), optimal_params)
                     for trial_number in trial_numbers
                 ]
+                finite_distance_values = [value for value in distance_values if math.isfinite(value)]
+                if finite_distance_values:
+                    min_distance = min(finite_distance_values)
+                    max_distance = max(finite_distance_values)
+                    if max_distance == min_distance:
+                        max_distance = min_distance + 1e-9
+                    color_norm = Normalize(vmin=min_distance, vmax=max_distance)
+                else:
+                    color_norm = None
 
                 scatter = ax.scatter(
                     x_values,
                     y_values,
                     c=distance_values,
                     cmap="viridis_r",
+                    norm=color_norm,
                     s=55,
                     alpha=0.85,
                     edgecolors="black",
@@ -358,8 +376,8 @@ def create_training_pareto_pdf(
                     key=lambda trial: float((trial.get("score") or [float("-inf")])[0]),
                 )
                 best_trial_number = int(best_trial.get("trial", 0))
-                best_x = int(best_trial.get("buy_trades", 0))
-                best_y = float(best_trial.get("profit_amount", 0.0))
+                best_x = int(best_trial.get("buy_trades", best_trial.get("total_trades", 0)))
+                best_y = float(best_trial.get("relative_profit_amount", best_trial.get("profit_amount", 0.0)))
                 best_params = dict(trial_parameter_map.get(best_trial_number, {}))
 
                 ax.scatter(
@@ -375,7 +393,7 @@ def create_training_pareto_pdf(
 
                 best_box_text = (
                     f"Best / chosen\n"
-                    f"trial {best_trial_number:03d}; relative=${float(best_trial.get('score', [0.0])[0]):,.2f}; profit=${best_y:,.2f}\n"
+                    f"trial {best_trial_number:03d}; net=${float(best_trial.get('score', [0.0])[0]):,.2f}; {best_profit_label}=${best_y:,.2f}\n"
                     f"\n"
                     f"params={_format_param_summary(best_params)}"
                 )
@@ -392,15 +410,15 @@ def create_training_pareto_pdf(
                 ax.text(0.5, 0.5, "No completed trials available", ha="center", va="center", transform=ax.transAxes)
 
             ax.set_xlabel("Number of buys")
-            ax.set_ylabel("Profit amount ($)")
+            ax.set_ylabel(profit_axis_label)
             ax.grid(True, alpha=0.25)
 
-            # Net profit is zero when gross profit equals transaction_cost * number_of_buys.
+            # Net score is zero when relative profit equals transaction_cost * number_of_buys.
             if completed_trials:
-                max_buys = max(x_values) if x_values else 0
+                max_trades = max(x_values) if x_values else 0
             else:
-                max_buys = 0
-            x_line_max = max(max_buys, 1)
+                max_trades = 0
+            x_line_max = max(max_trades, 1)
             ax.plot(
                 [0, x_line_max],
                 [0, float(transaction_cost) * x_line_max],
@@ -408,12 +426,12 @@ def create_training_pareto_pdf(
                 linestyle="--",
                 linewidth=0.8,
                 alpha=0.9,
-                label="0Line (net profit = 0)",
+                label="net score = 0",
                 zorder=1,
             )
 
             ax.axvline(0.0, color="gray", linestyle=":", linewidth=1, alpha=0.4)
-            ax.set_title(f"{strategy_name} buy-count vs profit")
+            ax.set_title(f"{strategy_name} buy-count vs profit{plot_title_suffix}")
             if completed_trials:
                 ax.legend(loc="best", fontsize=9)
 

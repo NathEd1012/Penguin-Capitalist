@@ -1,8 +1,6 @@
 """Train the trainable penguin strategies on a compact stock subset.
 
-The search objective is lexicographic:
-1. Maximize final portfolio value.
-2. Minimize the number of trades when final value is tied.
+The search objective is to maximize net gain after transaction costs.
 """
 
 from __future__ import annotations
@@ -123,7 +121,11 @@ def _evaluate_strategy(
 
 
 def _score_metrics(metrics: dict[str, Any]) -> tuple[float, int]:
-    return float(metrics.get("final_value", 0.0)), -int(metrics.get("total_trades", 0))
+    total_trades = int(metrics.get("total_trades", 0))
+    raw_gain = metrics.get("total_return")
+    gain = float(raw_gain) if raw_gain is not None else float(metrics.get("final_value", INITIAL_CAPITAL)) - INITIAL_CAPITAL
+    net_gain = gain - (total_trades * TRAINING_TRANSACTION_COST)
+    return net_gain, -total_trades
 
 
 def train_strategy(
@@ -152,7 +154,7 @@ def train_strategy(
     trial_history: list[dict[str, Any]] = []
 
     # Optimization loop: sample candidate parameters, evaluate each candidate,
-    # and keep the lexicographically best result.
+    # and keep the lexicographically best net-gain result.
     for trial_number in range(1, trials + 1):
         params = sampler(rng)
         candidate = strategy_class(**params)
@@ -167,14 +169,14 @@ def train_strategy(
         }
         trial_history.append(trial_entry)
 
-        if score > best_score:
+        if score[0] > best_score[0]:
             best_score = score
             best_params = params
             best_metrics = metrics
 
         print(
             f"  Trial {trial_number:03d}: final=${metrics.get('final_value', 0.0):,.2f}, "
-            f"trades={metrics.get('total_trades', 0)}, score={score}"
+            f"trades={metrics.get('total_trades', 0)}, net=${score[0]:,.2f}, score={score}"
         )
 
     return {
