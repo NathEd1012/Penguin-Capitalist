@@ -48,6 +48,9 @@ def _collect_files(run_current_dir: Path) -> list[Path]:
 	if report_file.exists():
 		files.append(report_file)
 
+	# Collect PDF artifacts too, including training Pareto plots and any future reports.
+	files.extend(sorted(run_current_dir.rglob("*.pdf")))
+
 	# Collect json/txt files from run_current (including nested artifacts folder).
 	files.extend(sorted(run_current_dir.rglob("*.json")))
 	files.extend(sorted(run_current_dir.rglob("*.txt")))

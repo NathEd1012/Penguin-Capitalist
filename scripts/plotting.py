@@ -1,5 +1,6 @@
 """Enhanced plotting and PDF report generation using matplotlib and PdfPages."""
 import os
+import math
 from pathlib import Path
 
 mpl_config_dir = Path(os.environ.get("MPLCONFIGDIR", "/private/tmp/penguin_mplconfig"))
@@ -227,33 +228,116 @@ def _aggregate_strategy_summary(summary: dict) -> dict:
     return totals
 
 
-def create_training_pareto_pdf(training_history: dict[str, list[dict]], output_pdf, title: str = "Training Pareto Front"):
+def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str:
+    if not params:
+        return "<no parameters>"
+
+    display_name_map = {
+        "adx_period": "adx_period",
+        "adx_threshold": "adx_thr",
+        "bb_period": "bb_period",
+        "bb_stddev": "bb_std",
+        "buy_rsi": "buy_rsi",
+        "cooldown_bars": "cooldown",
+        "max_cash_fraction_per_trade": "max_cash_fpt",
+        "rsi_period": "rsi_period",
+        "sell_rsi": "sell_rsi",
+        "stop_loss_pct": "stop_loss",
+        "take_profit_pct": "take_profit",
+    }
+
+    def format_value(value: int | float) -> str:
+        if isinstance(value, bool):
+            return str(value)
+        if isinstance(value, int):
+            return str(value)
+        try:
+            return f"{float(value):.2f}"
+        except (TypeError, ValueError):
+            return str(value)
+
+    ordered_items = sorted(params.items())
+    if len(ordered_items) <= limit:
+        return ", ".join(
+            f"{display_name_map.get(key, key)}={format_value(value)}" for key, value in ordered_items
+        )
+
+    head = ", ".join(
+        f"{display_name_map.get(key, key)}={format_value(value)}" for key, value in ordered_items[:limit]
+    )
+    return f"{head}, ... (+{len(ordered_items) - limit} more)"
+
+
+def _parameter_l2_distance(current_params: dict[str, int | float], optimal_params: dict[str, int | float]) -> float:
+    if not current_params or not optimal_params:
+        return float("nan")
+
+    squared_distance = 0.0
+    for key in sorted(set(current_params) | set(optimal_params)):
+        current_value = current_params.get(key)
+        optimal_value = optimal_params.get(key)
+        if current_value is None or optimal_value is None:
+            continue
+        try:
+            delta = float(current_value) - float(optimal_value)
+        except (TypeError, ValueError):
+            continue
+        squared_distance += delta * delta
+    return math.sqrt(squared_distance)
+
+
+def create_training_pareto_pdf(
+    training_history: dict[str, list[dict]],
+    parameter_history: list[dict],
+    trained_parameters: dict[str, dict],
+    output_pdf,
+    title: str = "Training Pareto Front",
+    transaction_cost: float = 0.0,
+):
     """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
     output_path = Path(output_pdf)
     output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    parameter_history_by_strategy: dict[str, dict[int, dict[str, int | float]]] = {}
+    for entry in parameter_history:
+        strategy_name = entry.get("strategy")
+        trial_number = entry.get("trial")
+        params = entry.get("params")
+        if not isinstance(strategy_name, str) or not isinstance(trial_number, int) or not isinstance(params, dict):
+            continue
+        strategy_map = parameter_history_by_strategy.setdefault(strategy_name, {})
+        strategy_map[trial_number] = params
 
     with PdfPages(output_path) as pdf:
         for strategy_name in sorted(training_history):
             trial_history = training_history.get(strategy_name, [])
             completed_trials = [trial for trial in trial_history if trial.get("status") == "completed"]
+            optimal_params = dict((trained_parameters.get(strategy_name) or {}).get("best_params") or {})
+            trial_parameter_map = parameter_history_by_strategy.get(strategy_name, {})
 
             fig, ax = plt.subplots(figsize=(10, 7))
             fig.suptitle(f"{title}: {strategy_name}", fontsize=16, fontweight="bold")
+            fig.subplots_adjust(top=0.82)
 
             if completed_trials:
                 x_values = [int(trial.get("buy_trades", 0)) for trial in completed_trials]
                 y_values = [float(trial.get("profit_amount", 0.0)) for trial in completed_trials]
                 trial_numbers = [int(trial.get("trial", 0)) for trial in completed_trials]
+                distance_values = [
+                    _parameter_l2_distance(trial_parameter_map.get(trial_number, {}), optimal_params)
+                    for trial_number in trial_numbers
+                ]
 
                 scatter = ax.scatter(
                     x_values,
                     y_values,
-                    c=trial_numbers,
-                    cmap="viridis",
+                    c=distance_values,
+                    cmap="viridis_r",
                     s=55,
                     alpha=0.85,
                     edgecolors="black",
                     linewidths=0.5,
+                    zorder=2,
                 )
 
                 for x_value, y_value, trial_number in zip(x_values, y_values, trial_numbers):
@@ -263,19 +347,75 @@ def create_training_pareto_pdf(training_history: dict[str, list[dict]], output_p
                         textcoords="offset points",
                         xytext=(5, 4),
                         fontsize=8,
+                        zorder=3,
                     )
 
                 cbar = fig.colorbar(scatter, ax=ax)
-                cbar.set_label("Trial number")
+                cbar.set_label("L2 distance to optimal parameters")
+
+                best_trial = max(
+                    completed_trials,
+                    key=lambda trial: float((trial.get("score") or [float("-inf")])[0]),
+                )
+                best_trial_number = int(best_trial.get("trial", 0))
+                best_x = int(best_trial.get("buy_trades", 0))
+                best_y = float(best_trial.get("profit_amount", 0.0))
+                best_params = dict(trial_parameter_map.get(best_trial_number, {}))
+
+                ax.scatter(
+                    [best_x],
+                    [best_y],
+                    s=120,
+                    color="red",
+                    edgecolors="black",
+                    linewidths=1.0,
+                    zorder=6,
+                    label="Best / chosen",
+                )
+
+                best_box_text = (
+                    f"Best / chosen\n"
+                    f"trial {best_trial_number:03d}; relative=${float(best_trial.get('score', [0.0])[0]):,.2f}; profit=${best_y:,.2f}\n"
+                    f"\n"
+                    f"params={_format_param_summary(best_params)}"
+                )
+                fig.text(
+                    0.5,
+                    0.955,
+                    best_box_text,
+                    ha="center",
+                    va="top",
+                    fontsize=7,
+                    bbox={"boxstyle": "round,pad=0.22", "fc": "white", "ec": "black", "alpha": 0.96},
+                )
             else:
                 ax.text(0.5, 0.5, "No completed trials available", ha="center", va="center", transform=ax.transAxes)
 
             ax.set_xlabel("Number of buys")
             ax.set_ylabel("Profit amount ($)")
             ax.grid(True, alpha=0.25)
-            ax.axhline(0.0, color="gray", linestyle="--", linewidth=1, alpha=0.6)
+
+            # Net profit is zero when gross profit equals transaction_cost * number_of_buys.
+            if completed_trials:
+                max_buys = max(x_values) if x_values else 0
+            else:
+                max_buys = 0
+            x_line_max = max(max_buys, 1)
+            ax.plot(
+                [0, x_line_max],
+                [0, float(transaction_cost) * x_line_max],
+                color="gray",
+                linestyle="--",
+                linewidth=0.8,
+                alpha=0.9,
+                label="0Line (net profit = 0)",
+                zorder=1,
+            )
+
             ax.axvline(0.0, color="gray", linestyle=":", linewidth=1, alpha=0.4)
             ax.set_title(f"{strategy_name} buy-count vs profit")
+            if completed_trials:
+                ax.legend(loc="best", fontsize=9)
 
             pdf.savefig(fig, bbox_inches="tight")
             plt.close(fig)

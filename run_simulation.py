@@ -764,7 +764,13 @@ def run_backtest(
                 )
 
                 if PLOT_PARETO:
-                    create_training_pareto_pdf(training_pareto_history, training_pareto_path)
+                    create_training_pareto_pdf(
+                        training_pareto_history,
+                        training_parameter_history,
+                        trained_parameters,
+                        training_pareto_path,
+                        transaction_cost=TRAINING_TRANSACTION_COST,
+                    )
 
             print(f"\nSaved training parameters to {training_output_path}")
             print(f"Saved trainable parameter log to {training_parameter_log_path}")
@@ -1018,6 +1024,7 @@ def main():
     current_dir = base_dir / "run_current"
     current_artifacts_dir = current_dir / "artifacts"
     current_artifacts_dir.mkdir(parents=True, exist_ok=True)
+    enable_training_step = TRAINING_STEP_ENABLED
     
     ################ Run backtest ################
     results, trades_by_bar, bar_timestamps, _unused_histories, _symbol_close_series, data_quality_report = run_backtest(
@@ -1118,6 +1125,8 @@ def main():
     if archive_dir:
         print(f"\nArchive saved to:  {archive_dir}")
         print(f"  - report.pdf")
+        if enable_training_step and PLOT_PARETO:
+            print(f"  - artifacts/{TRAINING_PARETO_FILENAME}")
         print(f"  - artifacts/capital_curves.png")
         print(f"  - artifacts/json/curves_data.json")
         print(f"  - artifacts/json/metrics_summary.json")
@@ -1127,6 +1136,8 @@ def main():
     
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
+    if enable_training_step and PLOT_PARETO:
+        print(f"  - artifacts/{TRAINING_PARETO_FILENAME}")
     print(f"  - artifacts/capital_curves.png")
     print(f"  - artifacts/json/curves_data.json")
     print(f"  - artifacts/json/metrics_summary.json")
