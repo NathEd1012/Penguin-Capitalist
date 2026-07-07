@@ -269,7 +269,37 @@ def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str
     return f"{head}, ... (+{len(ordered_items) - limit} more)"
 
 
-def _parameter_l2_distance(current_params: dict[str, int | float], optimal_params: dict[str, int | float]) -> float:
+def _parameter_normalization_scales(parameter_sets: list[dict[str, int | float]]) -> dict[str, float]:
+    scales: dict[str, float] = {}
+    values_by_key: dict[str, list[float]] = {}
+
+    for params in parameter_sets:
+        if not isinstance(params, dict):
+            continue
+        for key, value in params.items():
+            try:
+                numeric_value = float(value)
+            except (TypeError, ValueError):
+                continue
+            values_by_key.setdefault(key, []).append(numeric_value)
+
+    for key, values in values_by_key.items():
+        if not values:
+            continue
+        min_value = min(values)
+        max_value = max(values)
+        span = max_value - min_value
+        scales[key] = span if span > 0 else 1.0
+    print(scales)
+
+    return scales
+
+
+def _parameter_l2_distance(
+    current_params: dict[str, int | float],
+    optimal_params: dict[str, int | float],
+    normalization_scales: dict[str, float] | None = None,
+) -> float:
     if not current_params or not optimal_params:
         return float("nan")
 
@@ -280,7 +310,10 @@ def _parameter_l2_distance(current_params: dict[str, int | float], optimal_param
         if current_value is None or optimal_value is None:
             continue
         try:
-            delta = float(current_value) - float(optimal_value)
+            scale = float((normalization_scales or {}).get(key, 1.0))
+            if not math.isfinite(scale) or scale <= 0:
+                scale = 1.0
+            delta = (float(current_value) - float(optimal_value)) / scale
         except (TypeError, ValueError):
             continue
         squared_distance += delta * delta
@@ -322,6 +355,7 @@ def create_training_pareto_pdf(
             completed_trials = [trial for trial in trial_history if trial.get("status") == "completed"]
             optimal_params = dict((trained_parameters.get(strategy_name) or {}).get("best_params") or {})
             trial_parameter_map = parameter_history_by_strategy.get(strategy_name, {})
+            normalization_scales = _parameter_normalization_scales([optimal_params, *trial_parameter_map.values()])
 
             fig, ax = plt.subplots(figsize=(10, 7))
             fig.suptitle(f"{title}: {strategy_name}", fontsize=16, fontweight="bold", x=0.5, y=0.975, ha="center")
@@ -332,7 +366,11 @@ def create_training_pareto_pdf(
                 y_values = [float(trial.get("relative_profit_amount", trial.get("profit_amount", 0.0))) for trial in completed_trials]
                 trial_numbers = [int(trial.get("trial", 0)) for trial in completed_trials]
                 distance_values = [
-                    _parameter_l2_distance(trial_parameter_map.get(trial_number, {}), optimal_params)
+                    _parameter_l2_distance(
+                        trial_parameter_map.get(trial_number, {}),
+                        optimal_params,
+                        normalization_scales,
+                    )
                     for trial_number in trial_numbers
                 ]
                 finite_distance_values = [value for value in distance_values if math.isfinite(value)]
@@ -369,7 +407,7 @@ def create_training_pareto_pdf(
                     )
 
                 cbar = fig.colorbar(scatter, ax=ax)
-                cbar.set_label("L2 distance to optimal parameters")
+                cbar.set_label("Normalized L2 distance to optimal parameters")
 
                 best_trial = max(
                     completed_trials,

@@ -603,13 +603,18 @@ def run_backtest(
     print(f"Start Time (UTC):  {start_datetime_utc}")
     print(f"End Time (UTC):    {end_datetime_utc}")
     print(f"Binning:           {binning}")
+    print(f"\nPORTFOLIO CONFIGURATION")
     print(f"Initial Capital:   ${initial_capital:,.2f}")
     print(f"Transaction Cost:  ${transaction_cost:.2f}")
     print(f"Symbol List:       {ACTIVE_SYMBOL_LIST}")
     print(f"Symbols:           {len(symbols)}")
     if enable_training_step:
+        print(f"\nTRAINING CONFIGURATION")
+        print(f"Relative To:       {TRAINING_RELATIVE_TO}")
         print(f"Training Steps:    {TRAINING_ITERATIONS}")
         print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
+        print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+        print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print(f"{'='*80}\n")
     
     # Load data

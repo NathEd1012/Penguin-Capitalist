@@ -25,7 +25,7 @@ TRAINING_SUBSET_STOCKS = 30
 TRAINING_TRANSACTION_COST = 2.0
 
 # Set to 0 for absolute profit or to the benchmark symbol for relative profit.
-TRAINING_RELATIVE_TO = 0 #"SPY"
+TRAINING_RELATIVE_TO = "SPY"
 
 # Keep the search reproducible unless the user changes the seed.
 TRAINING_RANDOM_SEED = 42
