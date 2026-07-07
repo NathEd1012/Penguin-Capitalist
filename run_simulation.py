@@ -737,6 +737,7 @@ def run_backtest(
             training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_current" / "artifacts"
             training_output_dir = training_artifacts_dir / "json"
             training_output_dir.mkdir(parents=True, exist_ok=True)
+            benchmark_symbol = _training_benchmark_symbol(TRAINING_RELATIVE_TO)
             training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
             training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
             training_parameter_delta_path = training_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
