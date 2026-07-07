@@ -291,7 +291,7 @@ def create_training_pareto_pdf(
     parameter_history: list[dict],
     trained_parameters: dict[str, dict],
     output_pdf,
-    title: str = "Training Pareto Front",
+    title: str = "Pareto Front",
     transaction_cost: float = 0.0,
 ):
     """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
@@ -316,7 +316,7 @@ def create_training_pareto_pdf(
             trial_parameter_map = parameter_history_by_strategy.get(strategy_name, {})
 
             fig, ax = plt.subplots(figsize=(10, 7))
-            fig.suptitle(f"{title}: {strategy_name}", fontsize=16, fontweight="bold")
+            fig.suptitle(f"{title}: {strategy_name}", fontsize=16, fontweight="bold", x=0.5, y=0.975, ha="center")
             fig.subplots_adjust(top=0.82)
 
             if completed_trials:
@@ -381,7 +381,7 @@ def create_training_pareto_pdf(
                 )
                 fig.text(
                     0.5,
-                    0.955,
+                    0.935,
                     best_box_text,
                     ha="center",
                     va="top",

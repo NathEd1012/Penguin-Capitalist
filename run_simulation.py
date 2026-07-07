@@ -708,7 +708,7 @@ def run_backtest(
             training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
             training_parameter_delta_path = training_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
             training_log_path = training_artifacts_dir / TRAINING_LOG_FILENAME
-            training_pareto_path = training_artifacts_dir / TRAINING_PARETO_FILENAME
+            training_pareto_path = current_dir / TRAINING_PARETO_FILENAME
             with open(training_output_path, "w", encoding="utf-8") as handle:
                 json.dump(
                     {

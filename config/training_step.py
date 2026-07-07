@@ -15,7 +15,7 @@ from penguins import (
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONS = 3
+TRAINING_ITERATIONS = 10
 
 # Training subsets are intentionally small to keep optimization tractable.
 TRAINING_SUBSET_MONTHS = 2
