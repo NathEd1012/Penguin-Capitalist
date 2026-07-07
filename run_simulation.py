@@ -701,14 +701,14 @@ def run_backtest(
                         trained_parameters[strategy_name]["best_params"],
                     )
 
-            training_artifacts_dir = Path(__file__).parent / "run_current" / "artifacts"
+            training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_current" / "artifacts"
             training_output_dir = training_artifacts_dir / "json"
             training_output_dir.mkdir(parents=True, exist_ok=True)
             training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
             training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
             training_parameter_delta_path = training_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
             training_log_path = training_artifacts_dir / TRAINING_LOG_FILENAME
-            training_pareto_path = current_dir / TRAINING_PARETO_FILENAME
+            training_pareto_path = training_artifacts_dir.parent / TRAINING_PARETO_FILENAME
             with open(training_output_path, "w", encoding="utf-8") as handle:
                 json.dump(
                     {
