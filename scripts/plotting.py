@@ -23,10 +23,6 @@ from datetime import datetime, timedelta
 import pytz
 import csv
 from config import INITIAL_CAPITAL
-from scripts.multiframe import (
-    plot_multitimeframe_sr_history as _plot_multitimeframe_sr_history,
-    create_multiframe_png_gallery_pdf as _create_multiframe_png_gallery_pdf,
-)
 
 
 def _display_strategy_name(name: str) -> str:
@@ -290,7 +286,6 @@ def _parameter_normalization_scales(parameter_sets: list[dict[str, int | float]]
         max_value = max(values)
         span = max_value - min_value
         scales[key] = span if span > 0 else 1.0
-    print(scales)
 
     return scales
 
@@ -332,12 +327,12 @@ def create_training_pareto_pdf(
     """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
     output_path = Path(output_pdf)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    use_relative_benchmark = relative_to == "SPY"
+    use_relative_benchmark = relative_to not in (0, "0", None, False)
     profit_axis_label = (
-        f"Profit amount relative to {relative_to} ($)" if use_relative_benchmark else "Profit amount ($)"
+        f"Profit amount relative to {relative_to} ($)" if use_relative_benchmark else "Profit amount relative to 0 ($)"
     )
-    best_profit_label = f"profit relative to {relative_to}" if use_relative_benchmark else "profit"
-    plot_title_suffix = f" relative to {relative_to}" if use_relative_benchmark else ""
+    best_profit_label = f"profit relative to {relative_to}" if use_relative_benchmark else "profit relative to 0"
+    plot_title_suffix = f" relative to {relative_to}" if use_relative_benchmark else " relative to 0"
 
     parameter_history_by_strategy: dict[str, dict[int, dict[str, int | float]]] = {}
     for entry in parameter_history:
@@ -808,17 +803,6 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     plt.savefig(filename, dpi=120, bbox_inches="tight")
     print(f"📈 Saved capital curves plot to {filename}")
     plt.close()
-
-
-def plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timestamps=None):
-    """Compatibility wrapper for centralized multiframe plotting logic."""
-    return _plot_multitimeframe_sr_history(sr_history_by_symbol, output_dir, bar_timestamps)
-
-
-def create_png_gallery_pdf(png_files, output_pdf, page_title_prefix="Multitimeframe S/R"):
-    """Compatibility wrapper for centralized multiframe gallery PDF logic."""
-    _ = page_title_prefix  # kept for backward-compatible signature
-    return _create_multiframe_png_gallery_pdf(png_files, output_pdf)
 
 
 def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, num_bars=None, binning="1m", start_date_str=None, stop_date_str=None, bar_timestamps=None, artifacts_dir=None, symbol_list_name=None):

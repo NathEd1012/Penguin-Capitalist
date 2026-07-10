@@ -16,10 +16,7 @@ from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
-from scripts.synthetic_spread_model import SyntheticSpreadModel
-from scripts.support_resistance import compute_and_log_support_resistance_zones
-from scripts.plotting import plot_multitimeframe_sr_history, create_png_gallery_pdf
-from scripts.multiframe import create_sr_multiframe_pdf_direct
+from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
@@ -30,7 +27,6 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
-    ENABLE_ADDITIONAL_PLOTS,
 )
 
 
@@ -262,8 +258,6 @@ def run_backtest(
     for penguin_class in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
             penguin = penguin_class()
-            if hasattr(penguin, "record_history"):
-                penguin.record_history = bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
@@ -271,10 +265,6 @@ def run_backtest(
         except Exception as e:
             print(f"  ✗ {penguin_class.__name__}: {e}")
 
-    sr_penguin_names = {
-        name for name, penguin in penguins.items() if getattr(penguin, "USES_SR_LINES", False)
-    }
-    
     # Run simulation
     print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
     
@@ -459,12 +449,7 @@ def run_backtest(
         metrics = Evaluator.calculate_metrics(portfolio, initial_capital)
         results[penguin_name] = (portfolio, metrics)
     
-    sr_histories = {}
-    for penguin_name, penguin in penguins.items():
-        if hasattr(penguin, "export_sr_history"):
-            sr_histories[penguin_name] = penguin.export_sr_history()
-
-    return results, trades_by_bar, tradeable_timestamps, sr_histories, quality_report_text
+    return results, trades_by_bar, tradeable_timestamps, quality_report_text
 
 
 def main():
@@ -489,7 +474,7 @@ def main():
     current_artifacts_dir.mkdir(parents=True, exist_ok=True)
     
     # Run backtest
-    results, trades_by_bar, bar_timestamps, sr_histories, data_quality_report = run_backtest(
+    results, trades_by_bar, bar_timestamps, data_quality_report = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -559,71 +544,7 @@ def main():
         ACTIVE_SYMBOL_LIST,
     )
     
-    # Consistency and S&R checks are disabled here to avoid extra compute cost.
-    print("\nSkipping consistency validation and support/resistance analysis (disabled)")
-
-    # Generate multitimeframe S/R line plots (if enabled)
-    if ENABLE_ADDITIONAL_PLOTS:
-        print("\nGenerating multitimeframe S/R line plots...")
-        try:
-            current_pngs = []
-
-            for penguin_name, history_by_symbol in sr_histories.items():
-                if not history_by_symbol:
-                    continue
-
-                current_sr_dir = current_artifacts_dir / f"{penguin_name}_sr_lines"
-                created_current = plot_multitimeframe_sr_history(
-                    history_by_symbol,
-                    current_sr_dir,
-                    bar_timestamps,
-                )
-                current_pngs.extend(created_current)
-
-                print(f"✅ {penguin_name}: generated {len(created_current)} S&R line plot(s)")
-
-            # Create one combined PDF containing all multitimeframe PNG plots.
-            if current_pngs:
-                current_sr_pdf = current_dir / "SR_Multiframe_plots_gallery.pdf"
-                create_png_gallery_pdf(current_pngs, current_sr_pdf)
-                print(f"✅ Combined multitimeframe PDF: {current_sr_pdf}")
-
-        except Exception as e:
-            print(f"⚠️  Multitimeframe S&R plotting error: {e}")
-    else:
-        print("\nSkipping additional multitimeframe plots (ENABLE_ADDITIONAL_PLOTS=False)")
-    
-    # Always create PDF from SR history (even if PNG generation was skipped)
-    if sr_histories:
-        print("\nGenerating SR multiframe PDF...")
-        try:
-            def _safe_name(name: str) -> str:
-                return "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in name)
-
-            # Combine all penguin histories into one PDF
-            combined_history = {}
-            for penguin_name, history_by_symbol in sr_histories.items():
-                if history_by_symbol:
-                    combined_history.update(history_by_symbol)
-
-                    penguin_sr_pdf = current_dir / f"SR_Multiframe_{_safe_name(penguin_name)}.pdf"
-                    create_sr_multiframe_pdf_direct(
-                        history_by_symbol,
-                        penguin_sr_pdf,
-                        bar_timestamps,
-                    )
-                    print(f"✅ SR multiframe PDF ({penguin_name}): {penguin_sr_pdf}")
-            
-            if combined_history:
-                current_sr_pdf = current_dir / "SR_Multiframe_plots.pdf"
-                create_sr_multiframe_pdf_direct(
-                    combined_history,
-                    current_sr_pdf,
-                    bar_timestamps,
-                )
-                print(f"✅ SR multiframe PDF: {current_sr_pdf}")
-        except Exception as e:
-            print(f"⚠️  SR multiframe PDF error: {e}")
+    print("\nSkipping consistency validation (removed)")
     
     # Mirror run_current into run_old only after current run is fully written.
     if archive_dir:
@@ -640,7 +561,6 @@ def main():
         print(f"  - artifacts/json/metrics_summary.json")
         print(f"  - artifacts/trades_log.txt")
         print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
-        print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
@@ -649,7 +569,6 @@ def main():
     print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
-    print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\n{'='*80}")
     if archive_dir:

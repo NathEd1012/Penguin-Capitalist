@@ -31,7 +31,7 @@ from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
-from scripts.synthetic_spread_model import SyntheticSpreadModel
+from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
 from penguins import SP500
 from config import (
     SYMBOLS,
@@ -43,12 +43,10 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
-    ENABLE_ADDITIONAL_PLOTS,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
     TRAINING_SUBSET_MONTHS,
     TRAINING_SUBSET_STOCKS,
-    TRAINING_TRANSACTION_COST,
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
@@ -166,7 +164,7 @@ def _training_symbol_subset(symbols: List[str], target_count: int, benchmark_sym
 
 def _training_profit_amount(candidate_metrics: Dict, benchmark_metrics: Dict, relative_to: int | str) -> float:
     candidate_profit = float(candidate_metrics.get("total_return", 0.0))
-    if relative_to == "SPY":
+    if relative_to not in (0, "0", None, False):
         return candidate_profit - float(benchmark_metrics.get("total_return", 0.0))
     return candidate_profit
 
@@ -363,6 +361,7 @@ def _format_trainable_parameter_delta_report(trained_parameters: Dict[str, Dict[
 
 
 def _train_trainable_penguins(
+    trainable_strategy_classes: List,
     symbols: List[str],
     tradeable_timestamps: List[datetime],
     binning: str,
@@ -376,7 +375,7 @@ def _train_trainable_penguins(
     pareto_history: Dict[str, List[Dict[str, object]]] = {}
 
     header = (
-        f"Step 3b: Training {len(TRAINABLE_PENGUINS)} trainable strategy(ies) "
+        f"Step 3b: Training {len(trainable_strategy_classes)} trainable strategy(ies) "
         f"for {TRAINING_ITERATIONS} round(s) on {TRAINING_SUBSET_MONTHS} month(s) x {TRAINING_SUBSET_STOCKS} stock(s)..."
     )
     log_lines.append(header)
@@ -384,7 +383,7 @@ def _train_trainable_penguins(
     log_lines.append(f"  Training window length: {TRAINING_SUBSET_MONTHS} month(s) per trial")
     log_lines.append(f"  Training stock subset size: {TRAINING_SUBSET_STOCKS} symbol(s) per trial")
 
-    for strategy_class in TRAINABLE_PENGUINS:
+    for strategy_class in trainable_strategy_classes:
         best_metrics = None
         best_score = None
         best_params: Dict[str, int | float] = {}
@@ -613,7 +612,7 @@ def run_backtest(
         print(f"Relative To:       {TRAINING_RELATIVE_TO}")
         print(f"Training Steps:    {TRAINING_ITERATIONS}")
         print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
-        print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+        print(f"Training Cost:     ${TRANSACTION_COST:.2f}")
         print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print(f"{'='*80}\n")
     
@@ -667,17 +666,7 @@ def run_backtest(
     tradeable_timestamps = [timestamp for timestamp in sorted_timestamps if timestamp >= start_datetime_utc]
     print(f"  Tradeable bars from configured start: {len(tradeable_timestamps)}")
     
-    # Build close-price series only if additional plots are enabled.
-    # This step is expensive with large datasets, so only build it when needed.
     symbol_close_series: Dict[str, List[Tuple[datetime, float]]] = {}
-    if ENABLE_ADDITIONAL_PLOTS:
-        print("\n  Building close-price series for analytics...")
-        for symbol in symbols:
-            # `load_bars()` inserts bars in timestamp order, so we can reuse that order here.
-            symbol_close_series[symbol] = [
-                (ts, float(bar["close"])) for ts, bar in data[symbol].items()
-            ]
-        print(f"  ✓ Close-price series built for {len(symbol_close_series)} symbols")
     # Initialize portfolios and penguins
     portfolios = {}
     penguins = {}
@@ -698,8 +687,6 @@ def run_backtest(
                 penguin = penguin_spec
             else:
                 penguin = penguin_spec()
-            if hasattr(penguin, "record_history"):
-                penguin.record_history = bool(ENABLE_ADDITIONAL_PLOTS)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
@@ -709,19 +696,22 @@ def run_backtest(
             print(f"  ✗ {penguin_name}: {e}")
 
     if enable_training_step:
-        active_trainables = [
-            penguin
-            for penguin in penguins.values()
-            if penguin.__class__ in set(TRAINABLE_PENGUINS)
-        ]
+        active_trainables = []
+        seen_trainable_classes = set()
+        for penguin in penguins.values():
+            penguin_class = penguin.__class__
+            if penguin_class in set(TRAINABLE_PENGUINS) and penguin_class not in seen_trainable_classes:
+                active_trainables.append(penguin_class)
+                seen_trainable_classes.add(penguin_class)
         if active_trainables:
             training_start = datetime.now(timezone.utc)
             trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
+                trainable_strategy_classes=active_trainables,
                 symbols=symbols,
                 tradeable_timestamps=tradeable_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
-                transaction_cost=TRAINING_TRANSACTION_COST,
+                transaction_cost=TRANSACTION_COST,
             )
             training_end = datetime.now(timezone.utc)
             training_elapsed = training_end - training_start
@@ -757,7 +747,7 @@ def run_backtest(
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
                         "relative_to": TRAINING_RELATIVE_TO,
                         "benchmark_symbol": benchmark_symbol,
-                        "transaction_cost": TRAINING_TRANSACTION_COST,
+                        "transaction_cost": TRANSACTION_COST,
                         "trainable_strategies": trained_parameters,
                     },
                     handle,
@@ -773,7 +763,7 @@ def run_backtest(
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
                         "relative_to": TRAINING_RELATIVE_TO,
                         "benchmark_symbol": benchmark_symbol,
-                        "transaction_cost": TRAINING_TRANSACTION_COST,
+                        "transaction_cost": TRANSACTION_COST,
                         "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
                         "trial_history": training_parameter_history,
                     },
@@ -794,7 +784,7 @@ def run_backtest(
                             f"Subset stocks: {TRAINING_SUBSET_STOCKS}",
                             f"Relative to: {TRAINING_RELATIVE_TO}",
                             f"Benchmark symbol: {benchmark_symbol}",
-                            f"Transaction cost: {TRAINING_TRANSACTION_COST}",
+                            f"Transaction cost: {TRANSACTION_COST}",
                             f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
                             f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
                             f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
@@ -812,7 +802,7 @@ def run_backtest(
                         trained_parameters,
                         training_pareto_path,
                         relative_to=TRAINING_RELATIVE_TO,
-                        transaction_cost=TRAINING_TRANSACTION_COST,
+                        transaction_cost=TRANSACTION_COST,
                     )
 
             print(f"\nSaved training parameters to {training_output_path}")
@@ -1175,7 +1165,6 @@ def main():
         print(f"  - artifacts/json/metrics_summary.json")
         print(f"  - artifacts/trades_log.txt")
         print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
-        print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
@@ -1186,7 +1175,6 @@ def main():
     print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
-    print(f"  - artifacts/support_resistance_zones.txt")
     
     print(f"\n{'='*80}")
     if archive_dir:

@@ -1,5 +1,5 @@
 """Configuration for the in-simulation training step."""
-
+from .symbols import SYMBOLS as TRAINING_SYMBOLS
 from penguins import (
     TrainablePenguin1,
     TrainablePenguin1_Manual,
@@ -15,16 +15,13 @@ from penguins import (
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONS = 10
+TRAINING_ITERATIONS = 3
 
 # Training subsets are intentionally small to keep optimization tractable.
 TRAINING_SUBSET_MONTHS = 2
 TRAINING_SUBSET_STOCKS = 30
 
-# Match the training objective's per-buy cost penalty.
-TRAINING_TRANSACTION_COST = 2.0
-
-# Set to 0 for absolute profit or to the benchmark symbol for relative profit.
+# Set to 0 for absolute profit or to a benchmark symbol like SPY for relative profit.
 TRAINING_RELATIVE_TO = 0
 
 # Keep the search reproducible unless the user changes the seed.
@@ -62,20 +59,20 @@ PLOT_PARETO = True
 TRAINING_PARETO_FILENAME = "trainable_penguin_pareto_front.pdf"
 
 __all__ = [
-    "TRAINING_STEP_ENABLED",
-    "TRAINING_ITERATIONS",
-    "TRAINING_SUBSET_MONTHS",
-    "TRAINING_SUBSET_STOCKS",
-    "TRAINING_TRANSACTION_COST",
-    "TRAINING_RELATIVE_TO",
-    "TRAINING_RANDOM_SEED",
-    "Manual",
-    "TRAINING_PENGUINS",
-    "TRAINING_MANUAL_PENGUINS",
-    "TRAINING_RESULTS_FILENAME",
-    "TRAINING_LOG_FILENAME",
-    "TRAINING_PARAMETER_LOG_FILENAME",
-    "TRAINING_PARAMETER_DELTA_FILENAME",
-    "PLOT_PARETO",
-    "TRAINING_PARETO_FILENAME",
+	"TRAINING_SYMBOLS",
+	"TRAINING_STEP_ENABLED",
+	"TRAINING_ITERATIONS",
+	"TRAINING_SUBSET_MONTHS",
+	"TRAINING_SUBSET_STOCKS",
+	"TRAINING_RELATIVE_TO",
+	"TRAINING_RANDOM_SEED",
+	"Manual",
+	"TRAINING_PENGUINS",
+	"TRAINING_MANUAL_PENGUINS",
+	"TRAINING_PARAMETER_DELTA_FILENAME",
+	"TRAINING_RESULTS_FILENAME",
+	"TRAINING_LOG_FILENAME",
+	"TRAINING_PARAMETER_LOG_FILENAME",
+	"PLOT_PARETO",
+	"TRAINING_PARETO_FILENAME",
 ]
