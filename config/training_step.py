@@ -1,5 +1,5 @@
 """Configuration for the in-simulation training step."""
-
+import os
 from penguins import (
     TrainablePenguin1,
     TrainablePenguin1_Manual,
@@ -15,7 +15,8 @@ from penguins import (
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONS = 10
+TRAINING_ITERATIONSX = 100
+TRAINING_ITERATIONS = int(os.getenv("FIXED_TS", TRAINING_ITERATIONSX))
 
 # Training subsets are intentionally small to keep optimization tractable.
 TRAINING_SUBSET_MONTHS = 2
@@ -24,8 +25,17 @@ TRAINING_SUBSET_STOCKS = 30
 # Match the training objective's per-buy cost penalty.
 TRAINING_TRANSACTION_COST = 2.0
 
-# Set to 0 for absolute profit or to the benchmark symbol for relative profit.
-TRAINING_RELATIVE_TO = 0
+def _parse_training_relative_to(raw_value):
+    value = str(raw_value).strip().upper()
+    if value in {"", "SPY"}:
+        return "SPY"
+    if value == "0":
+        return 0
+    raise ValueError("FIXED_REL must be 0 or SPY")
+
+
+# Set to 0 for absolute profit or SPY for relative profit.
+TRAINING_RELATIVE_TO = _parse_training_relative_to(os.getenv("FIXED_REL", "SPY"))
 
 # Keep the search reproducible unless the user changes the seed.
 TRAINING_RANDOM_SEED = 42

@@ -334,7 +334,7 @@ def create_training_pareto_pdf(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     use_relative_benchmark = relative_to == "SPY"
     profit_axis_label = (
-        f"Profit amount relative to {relative_to} ($)" if use_relative_benchmark else "Profit amount ($)"
+        f"Profit amount relative to {relative_to} ($)" if use_relative_benchmark else "Profit amount relative to 0 ($)"
     )
     best_profit_label = f"profit relative to {relative_to}" if use_relative_benchmark else "profit"
     plot_title_suffix = f" relative to {relative_to}" if use_relative_benchmark else ""
