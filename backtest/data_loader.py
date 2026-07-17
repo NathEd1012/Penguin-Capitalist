@@ -26,19 +26,19 @@ if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"
 else:
     # Import the corporate-action helpers from the scripts package.
     try:
-        from scripts.corporate_actions import get_price_adjustment_events  # type: ignore
+        from scripts.data_fixes.corporate_actions import get_price_adjustment_events  # type: ignore
     except Exception:
-        from scripts.corporate_actions import get_price_adjustment_events  # type: ignore
+        from scripts.data_fixes.corporate_actions import get_price_adjustment_events  # type: ignore
 
     try:
-        from scripts.corporate_actions import has_corporate_action_near  # type: ignore
+        from scripts.data_fixes.corporate_actions import has_corporate_action_near  # type: ignore
     except Exception:
-        from scripts.corporate_actions import has_corporate_action_near  # type: ignore
+        from scripts.data_fixes.corporate_actions import has_corporate_action_near  # type: ignore
 
     try:
-        from scripts.corporate_actions import describe_corporate_action_near  # type: ignore
+        from scripts.data_fixes.corporate_actions import describe_corporate_action_near  # type: ignore
     except Exception:
-        from scripts.corporate_actions import describe_corporate_action_near  # type: ignore
+        from scripts.data_fixes.corporate_actions import describe_corporate_action_near  # type: ignore
 
 # Load environment variables from .env file
 load_dotenv()
