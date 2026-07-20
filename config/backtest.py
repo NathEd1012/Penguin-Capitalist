@@ -39,7 +39,7 @@ SAVE_TO_RUN_OLD = int(os.getenv("SAVE_TO_RUN_OLD", "0"))
 INITIAL_CAPITAL = 100000.0
 
 # Transaction cost per trade (USD)
-TRANSACTION_COST = 2.0
+TRANSACTION_COST = 0.0
 
 __all__ = [
     "START_DATE",

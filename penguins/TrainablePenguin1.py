@@ -8,7 +8,7 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-TRAINABLE_PENGUIN1_RSI_PERIOD = 12 #14
+TRAINABLE_PENGUIN1_RSI_PERIOD = 13 #14
 TRAINABLE_PENGUIN1_BUY_RSI = 30.0
 TRAINABLE_PENGUIN1_SELL_RSI = 70.0
 TRAINABLE_PENGUIN1_MAX_CASH_FRACTION = 0.05
