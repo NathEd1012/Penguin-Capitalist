@@ -13,8 +13,10 @@ from penguins import (
     TrainablePenguin3_Manual,
     TrainablePenguin4,
     TrainablePenguin4_Manual,
+    TrainablePenguin5,
+    TrainablePenguin5_Manual,
     RSIMeanReversionSelectivePenguin,
-    SmartRSIConfluencePenguin,
+    RSIConfluencePenguin,
     BuyOneEachPenguin,
     BuyMaxEachPenguin,
     BuyEqualPriceEachPenguin,
@@ -30,14 +32,16 @@ from penguins.ThreeFold_MeanRev_Peng import ThreeFoldMeanReversionTrendPenguin
 # Each strategy will be tested in parallel on the same data
 
 ACTIVE_PENGUINS = [
-    TrainablePenguin1,                  # Manual tuning first: RSI/trend strategy
+    TrainablePenguin1,                  # RSI/trend buy; volume-explosion sell
     TrainablePenguin1_Manual,           # Hand-tuned variant of TrainablePenguin1
-    #TrainablePenguin2,                  # Manual tuning first: Bollinger/ADX strategy
-    #TrainablePenguin2_Manual,           # Hand-tuned variant of TrainablePenguin2
-    #TrainablePenguin3,                  # TP1 buy/sizing + TP2 sell logic
-    #TrainablePenguin3_Manual,           # Manual variant of TP3
-    #TrainablePenguin4,                  # TP2 buy/sizing + TP1 sell logic
-    #TrainablePenguin4_Manual,           # Manual variant of TP4
+    TrainablePenguin2,                  # Bollinger/ADX buy; volume-explosion sell
+    TrainablePenguin2_Manual,           # Hand-tuned variant of TrainablePenguin2
+    TrainablePenguin3,                  # Bollinger/ADX buy; Stock/SPY RS sell
+    TrainablePenguin3_Manual,           # Manual variant of TP3
+    TrainablePenguin4,                  # RSI/trend buy; Stock/SPY RS sell
+    TrainablePenguin4_Manual,           # Manual variant of TP4
+    TrainablePenguin5,                  # TP1-style refined entry/exit with minimum hold
+    TrainablePenguin5_Manual,           # Hand-tuned variant of TrainablePenguin5
 
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
@@ -47,7 +51,7 @@ ACTIVE_PENGUINS = [
     #RSIMeanReversionReducedPenguin,     # Adaptive RSI - targets 1-10 trades/day (LIST 2 symbols)
     #RSIMeanReversionMomentumPenguin,    # 3-stage momentum RSI - RISING/FALLING/HOLDING
     #RSIMeanReversionSelectivePenguin,   # Low-frequency high-quality RSI mean reversion
-    SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
+    RSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
     #BuyOneEachPenguin,                  # Buy exactly 1 share for each symbol once
     BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
 

@@ -1,12 +1,13 @@
 """Main entry point for historical backtesting simulation."""
 import json
 from contextlib import redirect_stderr, redirect_stdout
+from dataclasses import asdict, dataclass
+import math
 import os
 import random
 import shutil
 import sys
 import time
-from dataclasses import asdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -37,7 +38,7 @@ from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
     INITIAL_CAPITAL,
-    TRANSACTION_COST,
+    EXEC_TRANSACTION_COST,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -49,7 +50,11 @@ from config import (
     TRAINING_SUBSET_STOCKS,
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
+    DIFFERENT_TRAINING_TIME,
+    TRAINING_START_DATE,
+    TRAINING_STOP_DATE,
     TRAINABLE_PENGUINS,
+    TRAINING_TRANSACTION_COST,
     PLOT_PARETO,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
@@ -172,13 +177,13 @@ def _training_profit_amount(candidate_metrics: Dict, benchmark_metrics: Dict, re
 def _score_training_candidate(
     candidate_metrics: Dict,
     benchmark_metrics: Dict,
-    transaction_cost: float,
+    training_transaction_cost: float,
     relative_to: int | str,
 ) -> tuple[float, int, int]:
     buy_trades = int(candidate_metrics.get("buy_trades", candidate_metrics.get("total_trades", 0)))
     relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, relative_to)
     return (
-        relative_profit_amount - (buy_trades * transaction_cost),
+        relative_profit_amount - (buy_trades * training_transaction_cost),
         -buy_trades,
         -int(candidate_metrics.get("total_trades", 0)),
     )
@@ -188,18 +193,225 @@ def _training_benchmark_symbol(relative_to: int | str) -> str:
     return "SPY" if relative_to == 0 else str(relative_to)
 
 
+@dataclass(frozen=True)
+class _TrainableParameterSpec:
+    low: float
+    high: float
+    kind: str
+    decimals: int | None = None
+
+    def sample(self, rng: random.Random) -> int | float:
+        if self.kind == "int":
+            return rng.randint(int(self.low), int(self.high))
+        value = rng.uniform(self.low, self.high)
+        return round(value, self.decimals) if self.decimals is not None else value
+
+    def denormalize(self, normalized_value: float) -> int | float:
+        normalized_value = min(max(normalized_value, 0.0), 1.0)
+        value = self.low + (self.high - self.low) * normalized_value
+        if self.kind == "int":
+            return int(round(value))
+        return round(value, self.decimals) if self.decimals is not None else value
+
+
+def _trainable_parameter_space(strategy_class) -> List[tuple[str, _TrainableParameterSpec]]:
+    strategy_name = strategy_class.__name__
+    if strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
+        return [
+            ("rsi_period", _TrainableParameterSpec(7, 28, "int")),
+            ("buy_rsi", _TrainableParameterSpec(18.0, 42.0, "float", 2)),
+            ("max_cash_fraction_per_trade", _TrainableParameterSpec(0.02, 0.20, "float", 4)),
+            ("volume_lookback", _TrainableParameterSpec(5, 40, "int")),
+            ("volume_multiplier", _TrainableParameterSpec(1.25, 4.0, "float", 2)),
+            ("cooldown_bars", _TrainableParameterSpec(0, 30, "int")),
+        ]
+    if strategy_name.endswith("TrainablePenguin5") or strategy_name.endswith("TrainablePenguin5_Manual"):
+        return [
+            ("rsi_period", _TrainableParameterSpec(7, 28, "int")),
+            ("buy_rsi", _TrainableParameterSpec(18.0, 42.0, "float", 2)),
+            ("max_cash_fraction_per_trade", _TrainableParameterSpec(0.02, 0.20, "float", 4)),
+            ("volume_lookback", _TrainableParameterSpec(5, 40, "int")),
+            ("volume_multiplier", _TrainableParameterSpec(1.25, 4.0, "float", 2)),
+            ("volume_confirmation_bars", _TrainableParameterSpec(1, 5, "int")),
+            ("falling_momentum_lookback", _TrainableParameterSpec(2, 12, "int")),
+            ("falling_momentum_threshold", _TrainableParameterSpec(-0.01, 0.0, "float", 5)),
+            ("min_hold_bars", _TrainableParameterSpec(0, 10, "int")),
+            ("cooldown_bars", _TrainableParameterSpec(0, 30, "int")),
+        ]
+    if strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
+        return [
+            ("bb_period", _TrainableParameterSpec(10, 40, "int")),
+            ("bb_stddev", _TrainableParameterSpec(1.0, 3.5, "float", 2)),
+            ("adx_period", _TrainableParameterSpec(7, 28, "int")),
+            ("adx_threshold", _TrainableParameterSpec(10.0, 40.0, "float", 2)),
+            ("max_cash_fraction_per_trade", _TrainableParameterSpec(0.02, 0.20, "float", 4)),
+            ("volume_lookback", _TrainableParameterSpec(5, 40, "int")),
+            ("volume_multiplier", _TrainableParameterSpec(1.25, 4.0, "float", 2)),
+            ("cooldown_bars", _TrainableParameterSpec(0, 30, "int")),
+        ]
+    if strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
+        return [
+            ("bb_period", _TrainableParameterSpec(10, 40, "int")),
+            ("bb_stddev", _TrainableParameterSpec(1.0, 3.5, "float", 2)),
+            ("adx_period", _TrainableParameterSpec(7, 28, "int")),
+            ("adx_threshold", _TrainableParameterSpec(10.0, 40.0, "float", 2)),
+            ("max_cash_fraction_per_trade", _TrainableParameterSpec(0.02, 0.20, "float", 4)),
+            ("rs_lookback", _TrainableParameterSpec(2, 20, "int")),
+            ("rs_sell_threshold", _TrainableParameterSpec(-0.005, 0.002, "float", 5)),
+            ("cooldown_bars", _TrainableParameterSpec(0, 30, "int")),
+        ]
+    if strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
+        return [
+            ("rsi_period", _TrainableParameterSpec(7, 28, "int")),
+            ("buy_rsi", _TrainableParameterSpec(18.0, 42.0, "float", 2)),
+            ("max_cash_fraction_per_trade", _TrainableParameterSpec(0.02, 0.20, "float", 4)),
+            ("rs_lookback", _TrainableParameterSpec(2, 20, "int")),
+            ("rs_sell_threshold", _TrainableParameterSpec(-0.005, 0.002, "float", 5)),
+            ("cooldown_bars", _TrainableParameterSpec(0, 30, "int")),
+        ]
+    raise ValueError(f"No parameter space is defined for {strategy_name}")
+
+
 def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, int | float]:
+    return {name: spec.sample(rng) for name, spec in _trainable_parameter_space(strategy_class)}
+
+
+def _trainable_params_signature(params: Dict[str, int | float]) -> tuple[tuple[str, int | float], ...]:
+    return tuple(sorted(params.items()))
+
+
+def _trainable_params_to_vector(
+    params: Dict[str, int | float],
+    parameter_space: List[tuple[str, _TrainableParameterSpec]],
+) -> np.ndarray:
+    vector = []
+    for name, spec in parameter_space:
+        if spec.high == spec.low:
+            vector.append(0.0)
+            continue
+        value = float(params[name])
+        normalized = (value - spec.low) / (spec.high - spec.low)
+        vector.append(min(max(normalized, 0.0), 1.0))
+    return np.asarray(vector, dtype=float)
+
+
+def _squared_exponential_kernel_matrix(features: np.ndarray, length_scale: float = 0.35) -> np.ndarray:
+    deltas = features[:, None, :] - features[None, :, :]
+    squared_distances = np.sum(deltas * deltas, axis=-1)
+    return np.exp(-0.5 * squared_distances / max(length_scale**2, 1e-9))
+
+
+def _squared_exponential_kernel_vector(
+    features: np.ndarray,
+    candidate: np.ndarray,
+    length_scale: float = 0.35,
+) -> np.ndarray:
+    deltas = features - candidate[None, :]
+    squared_distances = np.sum(deltas * deltas, axis=-1)
+    return np.exp(-0.5 * squared_distances / max(length_scale**2, 1e-9))
+
+
+def _expected_improvement(mean: float, std_dev: float, best_value: float, exploration: float = 0.01) -> float:
+    if std_dev <= 1e-12:
+        return 0.0
+
+    improvement = mean - best_value - exploration
+    z_score = improvement / std_dev
+    normal_cdf = 0.5 * (1.0 + math.erf(z_score / math.sqrt(2.0)))
+    normal_pdf = math.exp(-0.5 * z_score * z_score) / math.sqrt(2.0 * math.pi)
+    return improvement * normal_cdf + std_dev * normal_pdf
+
+
+def _vector_to_trainable_params(
+    vector: np.ndarray,
+    parameter_space: List[tuple[str, _TrainableParameterSpec]],
+) -> Dict[str, int | float]:
+    params: Dict[str, int | float] = {}
+    for index, (name, spec) in enumerate(parameter_space):
+        params[name] = spec.denormalize(float(vector[index]))
+    return params
+
+
+def _suggest_bayesian_trainable_params(
+    strategy_class,
+    rng: random.Random,
+    observations: List[Dict[str, object]],
+) -> tuple[Dict[str, int | float], str, float | None]:
+    parameter_space = _trainable_parameter_space(strategy_class)
+    if len(observations) < max(3, len(parameter_space) + 1):
+        return _sample_trainable_params(strategy_class, rng), "random_warmup", None
+
+    observed_vectors = np.asarray(
+        [
+            _trainable_params_to_vector(dict(observation["params"]), parameter_space)
+            for observation in observations
+        ],
+        dtype=float,
+    )
+    observed_scores = np.asarray([float(observation["score_value"]) for observation in observations], dtype=float)
+    score_mean = float(observed_scores.mean())
+    centered_scores = observed_scores - score_mean
+
+    kernel_matrix = _squared_exponential_kernel_matrix(observed_vectors)
+    noise_floor = max(1e-6, float(np.var(centered_scores)) * 1e-3)
+    kernel_matrix = kernel_matrix + np.eye(len(observations)) * (noise_floor + 1e-9)
+
+    try:
+        cholesky = np.linalg.cholesky(kernel_matrix)
+        alpha = np.linalg.solve(cholesky.T, np.linalg.solve(cholesky, centered_scores))
+    except np.linalg.LinAlgError:
+        return _sample_trainable_params(strategy_class, rng), "random_fallback", None
+
+    best_observed_score = float(observed_scores.max())
+    seen_signatures = {_trainable_params_signature(dict(observation["params"])) for observation in observations}
+    candidate_pool_size = max(128, 32 * len(parameter_space))
+    best_candidate = None
+    best_acquisition = float("-inf")
+
+    for _ in range(candidate_pool_size):
+        candidate_params = _sample_trainable_params(strategy_class, rng)
+        if _trainable_params_signature(candidate_params) in seen_signatures:
+            continue
+
+        candidate_vector = _trainable_params_to_vector(candidate_params, parameter_space)
+        kernel_vector = _squared_exponential_kernel_vector(observed_vectors, candidate_vector)
+        predicted_mean = score_mean + float(kernel_vector @ alpha)
+        solve_vector = np.linalg.solve(cholesky, kernel_vector)
+        predicted_variance = max(0.0, 1.0 - float(solve_vector @ solve_vector))
+        predicted_std_dev = math.sqrt(predicted_variance)
+        acquisition = _expected_improvement(predicted_mean, predicted_std_dev, best_observed_score)
+
+        if acquisition > best_acquisition:
+            best_candidate = candidate_params
+            best_acquisition = acquisition
+
+    if best_candidate is None:
+        return _sample_trainable_params(strategy_class, rng), "random_fallback", None
+
+    return best_candidate, "bayes_expected_improvement", best_acquisition
     strategy_name = strategy_class.__name__
     if strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
         buy_rsi = rng.uniform(18.0, 42.0)
-        sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
         return {
             "rsi_period": rng.randint(7, 28),
             "buy_rsi": round(buy_rsi, 2),
-            "sell_rsi": round(sell_rsi, 2),
             "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
-            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
-            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "volume_lookback": rng.randint(5, 40),
+            "volume_multiplier": round(rng.uniform(1.25, 4.0), 2),
+            "cooldown_bars": rng.randint(0, 30),
+        }
+    if strategy_name.endswith("TrainablePenguin5") or strategy_name.endswith("TrainablePenguin5_Manual"):
+        buy_rsi = rng.uniform(18.0, 42.0)
+        return {
+            "rsi_period": rng.randint(7, 28),
+            "buy_rsi": round(buy_rsi, 2),
+            "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
+            "volume_lookback": rng.randint(5, 40),
+            "volume_multiplier": round(rng.uniform(1.25, 4.0), 2),
+            "volume_confirmation_bars": rng.randint(1, 5),
+            "falling_momentum_lookback": rng.randint(2, 12),
+            "falling_momentum_threshold": round(rng.uniform(-0.01, 0.0), 5),
+            "min_hold_bars": rng.randint(0, 10),
             "cooldown_bars": rng.randint(0, 30),
         }
     if strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
@@ -209,29 +421,29 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "adx_period": rng.randint(7, 28),
             "adx_threshold": round(rng.uniform(10.0, 40.0), 2),
             "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
-            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
-            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "volume_lookback": rng.randint(5, 40),
+            "volume_multiplier": round(rng.uniform(1.25, 4.0), 2),
             "cooldown_bars": rng.randint(0, 30),
         }
     if strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
         return {
             "bb_period": rng.randint(10, 40),
             "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
+            "adx_period": rng.randint(7, 28),
+            "adx_threshold": round(rng.uniform(10.0, 40.0), 2),
             "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
-            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
-            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "rs_lookback": rng.randint(2, 20),
+            "rs_sell_threshold": round(rng.uniform(-0.005, 0.002), 5),
             "cooldown_bars": rng.randint(0, 30),
         }
     if strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
         buy_rsi = rng.uniform(18.0, 42.0)
-        sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
         return {
             "rsi_period": rng.randint(7, 28),
             "buy_rsi": round(buy_rsi, 2),
-            "sell_rsi": round(sell_rsi, 2),
             "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
-            "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
-            "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
+            "rs_lookback": rng.randint(2, 20),
+            "rs_sell_threshold": round(rng.uniform(-0.005, 0.002), 5),
             "cooldown_bars": rng.randint(0, 30),
         }
     raise ValueError(f"No parameter sampler is defined for {strategy_name}")
@@ -366,7 +578,7 @@ def _train_trainable_penguins(
     tradeable_timestamps: List[datetime],
     binning: str,
     initial_capital: float,
-    transaction_cost: float,
+    training_transaction_cost: float,
 ) -> Tuple[Dict[str, Dict[str, object]], List[str], List[Dict[str, object]], Dict[str, List[Dict[str, object]]]]:
     rng = random.Random(TRAINING_RANDOM_SEED)
     trained_parameters: Dict[str, Dict[str, object]] = {}
@@ -380,6 +592,7 @@ def _train_trainable_penguins(
     )
     log_lines.append(header)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
+    log_lines.append("  Parameter search: Bayesian optimization with a random warmup phase")
     log_lines.append(f"  Training window length: {TRAINING_SUBSET_MONTHS} month(s) per trial")
     log_lines.append(f"  Training stock subset size: {TRAINING_SUBSET_STOCKS} symbol(s) per trial")
 
@@ -389,6 +602,7 @@ def _train_trainable_penguins(
         best_params: Dict[str, int | float] = {}
         initial_params: Dict[str, int | float] = {}
         previous_trial_params: Dict[str, int | float] | None = None
+        strategy_observations: List[Dict[str, object]] = []
         pareto_history[strategy_class.__name__] = []
 
         baseline_instance = strategy_class()
@@ -402,6 +616,8 @@ def _train_trainable_penguins(
         strategy_header = f"  Optimizing {strategy_class.__name__}"
         log_lines.append("")
         log_lines.append(strategy_header)
+        parameter_space = _trainable_parameter_space(strategy_class)
+        bo_warmup_trials = max(3, len(parameter_space) + 1)
         trial_iterator = tqdm(
             range(1, TRAINING_ITERATIONS + 1),
             desc=strategy_class.__name__,
@@ -425,7 +641,11 @@ def _train_trainable_penguins(
                 )
                 continue
 
-            params = _sample_trainable_params(strategy_class, rng)
+            params, proposal_method, acquisition_value = _suggest_bayesian_trainable_params(
+                strategy_class,
+                rng,
+                strategy_observations,
+            )
             candidate = strategy_class(**params)
             trial_window_start = trial_timestamps[0]
             trial_window_end = trial_timestamps[-1]
@@ -433,6 +653,9 @@ def _train_trainable_penguins(
             selected_months = ", ".join(selected_month_list)
             selected_symbols = _format_training_symbols(trial_symbols)
             param_changes = _format_param_changes(params, previous_trial_params)
+            acquisition_line = f"      proposal={proposal_method}"
+            if acquisition_value is not None:
+                acquisition_line += f", acquisition={acquisition_value:.6f}"
 
             with open(os.devnull, "w", encoding="utf-8") as devnull, redirect_stdout(devnull), redirect_stderr(devnull):
                 results, _, _, _, _, _ = run_backtest(
@@ -441,7 +664,7 @@ def _train_trainable_penguins(
                     end_datetime=trial_window_end,
                     binning=binning,
                     initial_capital=initial_capital,
-                    transaction_cost=transaction_cost,
+                    transaction_cost=0.0,
                     penguin_classes=[candidate, SP500],
                     enable_training_step=False,
                 )
@@ -451,7 +674,7 @@ def _train_trainable_penguins(
             profit_amount = float(candidate_metrics.get("total_return", 0.0))
             benchmark_profit_amount = float(benchmark_metrics.get("total_return", 0.0))
             relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, TRAINING_RELATIVE_TO)
-            score = _score_training_candidate(candidate_metrics, benchmark_metrics, transaction_cost, TRAINING_RELATIVE_TO)
+            score = _score_training_candidate(candidate_metrics, benchmark_metrics, training_transaction_cost, TRAINING_RELATIVE_TO)
             final_value = float(candidate_metrics.get("final_value", 0.0))
 
             if best_score is None or score > best_score:
@@ -475,6 +698,7 @@ def _train_trainable_penguins(
             log_lines.append(selection_line)
             log_lines.append(params_line)
             log_lines.append(change_line)
+            log_lines.append(acquisition_line)
             log_lines.append(trial_line)
             pareto_history[strategy_class.__name__].append(
                 {
@@ -495,6 +719,8 @@ def _train_trainable_penguins(
                     "strategy": strategy_class.__name__,
                     "trial": trial_number,
                     "status": "completed",
+                    "proposal_method": proposal_method,
+                    "acquisition_value": acquisition_value,
                     "window_start": trial_window_start,
                     "window_end": trial_window_end,
                     "selected_months": selected_month_list,
@@ -513,6 +739,12 @@ def _train_trainable_penguins(
                     "score": list(score),
                 }
             )
+            strategy_observations.append(
+                {
+                    "params": params,
+                    "score_value": float(score[0]),
+                }
+            )
             previous_trial_params = params
 
         trained_parameters[strategy_class.__name__] = {
@@ -520,6 +752,8 @@ def _train_trainable_penguins(
             "best_params": best_params,
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
+            "optimization_method": "bayesian_optimization",
+            "warmup_trials": min(bo_warmup_trials, TRAINING_ITERATIONS),
         }
         best_line = (
             f"  Best {strategy_class.__name__}: relative_net=${(best_score[0] if best_score else 0.0):,.2f}, "
@@ -612,7 +846,7 @@ def run_backtest(
         print(f"Relative To:       {TRAINING_RELATIVE_TO}")
         print(f"Training Steps:    {TRAINING_ITERATIONS}")
         print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
-        print(f"Training Cost:     ${TRANSACTION_COST:.2f}")
+        print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
         print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print(f"{'='*80}\n")
     
@@ -704,14 +938,64 @@ def run_backtest(
                 active_trainables.append(penguin_class)
                 seen_trainable_classes.add(penguin_class)
         if active_trainables:
+            training_warmup_trials = {
+                trainable_class.__name__: min(
+                    max(3, len(_trainable_parameter_space(trainable_class)) + 1),
+                    TRAINING_ITERATIONS,
+                )
+                for trainable_class in active_trainables
+            }
+            training_tradeable_timestamps = tradeable_timestamps
+            training_symbols = symbols
+            if DIFFERENT_TRAINING_TIME:
+                training_start_dt = parse_datetime_string(TRAINING_START_DATE)
+                training_end_dt = parse_datetime_string(TRAINING_STOP_DATE)
+                training_start_dt_utc = training_start_dt.astimezone(timezone.utc)
+                training_end_dt_utc = training_end_dt.astimezone(timezone.utc)
+                training_warmup_bars = _history_warmup_bars(active_trainables)
+                training_warmup_minutes = _binning_to_minutes(binning)
+                training_warmup_start_dt_utc = training_start_dt_utc - timedelta(minutes=training_warmup_bars * training_warmup_minutes)
+
+                print(f"\nTraining Window (UTC): {training_start_dt_utc} -> {training_end_dt_utc}")
+                print(f"Training Uses Separate Timeframe: {DIFFERENT_TRAINING_TIME}")
+
+                training_loader = DataLoader()
+                try:
+                    training_data, training_sparse_warning = training_loader.load_bars(
+                        symbols,
+                        training_warmup_start_dt_utc,
+                        training_end_dt_utc,
+                        binning,
+                        enable_data_quality_checks=True,
+                    )
+                    if training_sparse_warning:
+                        print(training_sparse_warning)
+                except Exception as e:
+                    print(f"Error loading training data: {e}")
+                    print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
+                    sys.exit(1)
+
+                training_valid_symbols, training_stale_symbols = training_loader.detect_stale_data(training_data)
+                print(f"  Training valid symbols: {len(training_valid_symbols)}")
+                if training_stale_symbols:
+                    print(f"  Training stale symbols ({len(training_stale_symbols)}): {', '.join(training_stale_symbols)}")
+
+                training_symbols = training_valid_symbols if training_valid_symbols else symbols
+                training_all_timestamps = set()
+                for symbol_data in training_data.values():
+                    training_all_timestamps.update(symbol_data.keys())
+
+                training_sorted_timestamps = sorted(training_all_timestamps)
+                training_tradeable_timestamps = [timestamp for timestamp in training_sorted_timestamps if timestamp >= training_start_dt_utc]
+
             training_start = datetime.now(timezone.utc)
             trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
                 trainable_strategy_classes=active_trainables,
-                symbols=symbols,
-                tradeable_timestamps=tradeable_timestamps,
+                symbols=training_symbols,
+                tradeable_timestamps=training_tradeable_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
-                transaction_cost=TRANSACTION_COST,
+                training_transaction_cost=TRAINING_TRANSACTION_COST,
             )
             training_end = datetime.now(timezone.utc)
             training_elapsed = training_end - training_start
@@ -745,9 +1029,14 @@ def run_backtest(
                         "iterations": TRAINING_ITERATIONS,
                         "subset_months": TRAINING_SUBSET_MONTHS,
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
+                        "optimization_method": "bayesian_optimization",
+                        "warmup_trials": training_warmup_trials,
                         "relative_to": TRAINING_RELATIVE_TO,
                         "benchmark_symbol": benchmark_symbol,
-                        "transaction_cost": TRANSACTION_COST,
+                        "different_training_time": DIFFERENT_TRAINING_TIME,
+                        "training_start_date": TRAINING_START_DATE,
+                        "training_stop_date": TRAINING_STOP_DATE,
+                        "transaction_cost": TRAINING_TRANSACTION_COST,
                         "trainable_strategies": trained_parameters,
                     },
                     handle,
@@ -761,9 +1050,14 @@ def run_backtest(
                         "iterations": TRAINING_ITERATIONS,
                         "subset_months": TRAINING_SUBSET_MONTHS,
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
+                        "optimization_method": "bayesian_optimization",
+                        "warmup_trials": training_warmup_trials,
                         "relative_to": TRAINING_RELATIVE_TO,
                         "benchmark_symbol": benchmark_symbol,
-                        "transaction_cost": TRANSACTION_COST,
+                        "different_training_time": DIFFERENT_TRAINING_TIME,
+                        "training_start_date": TRAINING_START_DATE,
+                        "training_stop_date": TRAINING_STOP_DATE,
+                        "transaction_cost": TRAINING_TRANSACTION_COST,
                         "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
                         "trial_history": training_parameter_history,
                     },
@@ -779,12 +1073,16 @@ def run_backtest(
                         [
                             f"Step 3b training completed at {datetime.now(timezone.utc).isoformat()}",
                             f"Total training time: {training_duration_str} (H:MM:SS)",
+                            f"Optimization method: Bayesian optimization with random warmup",
                             f"Iterations: {TRAINING_ITERATIONS}",
                             f"Subset months: {TRAINING_SUBSET_MONTHS}",
                             f"Subset stocks: {TRAINING_SUBSET_STOCKS}",
                             f"Relative to: {TRAINING_RELATIVE_TO}",
                             f"Benchmark symbol: {benchmark_symbol}",
-                            f"Transaction cost: {TRANSACTION_COST}",
+                            f"Different training time: {DIFFERENT_TRAINING_TIME}",
+                            f"Training start date: {TRAINING_START_DATE}",
+                            f"Training stop date: {TRAINING_STOP_DATE}",
+                            f"Transaction cost: {TRAINING_TRANSACTION_COST}",
                             f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
                             f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
                             f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
@@ -802,7 +1100,7 @@ def run_backtest(
                         trained_parameters,
                         training_pareto_path,
                         relative_to=TRAINING_RELATIVE_TO,
-                        transaction_cost=TRANSACTION_COST,
+                        transaction_cost=TRAINING_TRANSACTION_COST,
                     )
 
             print(f"\nSaved training parameters to {training_output_path}")
@@ -822,8 +1120,12 @@ def run_backtest(
     # Run simulation
     print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
     
-    # Prepare price history for each symbol
+    # Prepare shared market histories. The dictionaries and their lists are
+    # updated in place, so strategies always see the current bar's context.
     price_history = defaultdict(list)
+    volume_history = defaultdict(list)
+    for penguin in penguins.values():
+        penguin.set_market_context(price_history, volume_history)
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -851,6 +1153,7 @@ def run_backtest(
                     price_history[symbol].append(current_prices.get(symbol, 0))
             elif bar.get("data_quality", "OK") == "OK":
                 price_history[symbol].append(bar['close'])
+                volume_history[symbol].append(float(bar.get("volume", 0)))
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
@@ -1066,7 +1369,7 @@ def main():
         end_datetime=end_dt,
         binning=BINNING,
         initial_capital=INITIAL_CAPITAL,
-        transaction_cost=TRANSACTION_COST,
+        transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
         enable_training_step=TRAINING_STEP_ENABLED,
         artifacts_dir=current_artifacts_dir,

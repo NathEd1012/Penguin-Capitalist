@@ -32,7 +32,7 @@ from config.backtest import (
     BINNING,
     SAVE_TO_RUN_OLD,
     INITIAL_CAPITAL,
-    TRANSACTION_COST,
+    EXEC_TRANSACTION_COST,
 )
 
 # ========== STRATEGY CONFIGURATION ==========
@@ -48,6 +48,9 @@ from config.training_step import (
     TRAINING_SUBSET_STOCKS,
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
+    DIFFERENT_TRAINING_TIME,
+    TRAINING_START_DATE,
+    TRAINING_STOP_DATE,
     Manual,
     TRAINING_PENGUINS as TRAINABLE_PENGUINS,
     TRAINING_MANUAL_PENGUINS,
@@ -55,6 +58,7 @@ from config.training_step import (
     TRAINING_LOG_FILENAME,
     TRAINING_PARAMETER_LOG_FILENAME,
     TRAINING_PARAMETER_DELTA_FILENAME,
+    TRAINING_TRANSACTION_COST,
     PLOT_PARETO,
     TRAINING_PARETO_FILENAME,
 )
@@ -72,7 +76,7 @@ __all__ = [
     "ACTIVE_SYMBOLS",       # Explicit active symbols
     "SYMBOLS_LIST",         # Alias
     "INITIAL_CAPITAL",      # Starting capital (USD)
-    "TRANSACTION_COST",     # Cost per trade (USD)
+    "EXEC_TRANSACTION_COST",     # Cost per trade (USD)
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
@@ -84,6 +88,9 @@ __all__ = [
     "TRAINING_SUBSET_STOCKS",
     "TRAINING_RELATIVE_TO",
     "TRAINING_RANDOM_SEED",
+    "DIFFERENT_TRAINING_TIME",
+    "TRAINING_START_DATE",
+    "TRAINING_STOP_DATE",
     "Manual",
     "TRAINABLE_PENGUINS",
     "TRAINING_MANUAL_PENGUINS",
@@ -91,7 +98,9 @@ __all__ = [
     "TRAINING_LOG_FILENAME",
     "TRAINING_PARAMETER_LOG_FILENAME",
     "TRAINING_PARAMETER_DELTA_FILENAME",
+    "TRAINING_TRANSACTION_COST",
     "PLOT_PARETO",
     "TRAINING_PARETO_FILENAME",
+    "EXEC_TRANSACTION_COST",
     
 ]

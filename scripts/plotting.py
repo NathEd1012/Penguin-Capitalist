@@ -38,6 +38,8 @@ def _display_strategy_name(name: str) -> str:
         "TrainablePenguin3_Manual": "TP3 manual",
         "TrainablePenguin4": "TP4",
         "TrainablePenguin4_Manual": "TP4 manual",
+        "TrainablePenguin5": "TP5",
+        "TrainablePenguin5_Manual": "TP5 manual",
     }
     return display_name_map.get(name, name)
 
@@ -54,6 +56,8 @@ def _strategy_group_key(name: str) -> tuple[int, str]:
         "TrainablePenguin3_Manual": 15,
         "TrainablePenguin4": 16,
         "TrainablePenguin4_Manual": 17,
+        "TrainablePenguin5": 18,
+        "TrainablePenguin5_Manual": 19,
         "SP500x2Penguin": 20,
         "SMA20Penguin": 30,
     }
@@ -83,6 +87,7 @@ def _build_report_page_groups(strategy_names: list[str]) -> list[list[str]]:
         "TrainablePenguin2",
         "TrainablePenguin3",
         "TrainablePenguin4",
+        "TrainablePenguin5",
     }
 
     for name in ordered_names:
@@ -238,9 +243,10 @@ def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str
         "cooldown_bars": "cooldown",
         "max_cash_fraction_per_trade": "max_cash_fpt",
         "rsi_period": "rsi_period",
-        "sell_rsi": "sell_rsi",
-        "stop_loss_pct": "stop_loss",
-        "take_profit_pct": "take_profit",
+        "rs_lookback": "rs_lookback",
+        "rs_sell_threshold": "rs_sell_thr",
+        "volume_lookback": "vol_lookback",
+        "volume_multiplier": "vol_mult",
     }
 
     def format_value(value: int | float) -> str:

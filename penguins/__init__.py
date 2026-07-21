@@ -7,8 +7,10 @@ from .TrainablePenguin3 import TrainablePenguin3
 from .TrainablePenguin3 import TrainablePenguin3_Manual
 from .TrainablePenguin4 import TrainablePenguin4
 from .TrainablePenguin4 import TrainablePenguin4_Manual
+from .TrainablePenguin5 import TrainablePenguin5
+from .TrainablePenguin5 import TrainablePenguin5_Manual
 from .rsi_mr_selective import RSIMeanReversionSelectivePenguin
-from .smart_rsi_confluence_penguin import SmartRSIConfluencePenguin
+from .rsi_confluence_penguin import RSIConfluencePenguin
 from .copilot_penguin import CopilotPenguin
 from .SP500 import SP500
 from .SP500x2 import SP500x2
@@ -26,6 +28,8 @@ __all__ = [
     "TrainablePenguin3_Manual",
     "TrainablePenguin4",
     "TrainablePenguin4_Manual",
+    "TrainablePenguin5",
+    "TrainablePenguin5_Manual",
     "MomentumPenguin",
     "RSIMeanReversionPenguin",
     "RSIMeanReversionPenguinStrict1",
@@ -33,7 +37,7 @@ __all__ = [
     "RSIMeanReversionReducedPenguin",
     "RSIMeanReversionMomentumPenguin",
     "RSIMeanReversionSelectivePenguin",
-    "SmartRSIConfluencePenguin",
+    "RSIConfluencePenguin",
     "CopilotPenguin",
     "MinMaxSRPenguin",
     "SRMultiframePenguin",

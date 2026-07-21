@@ -21,7 +21,7 @@ from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
     INITIAL_CAPITAL,
-    TRANSACTION_COST,
+    EXEC_TRANSACTION_COST,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -268,8 +268,12 @@ def run_backtest(
     # Run simulation
     print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
     
-    # Prepare price history for each symbol
+    # Prepare shared market histories. The dictionaries and their lists are
+    # updated in place, so strategies always see the current bar's context.
     price_history = defaultdict(list)
+    volume_history = defaultdict(list)
+    for penguin in penguins.values():
+        penguin.set_market_context(price_history, volume_history)
 
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -297,6 +301,7 @@ def run_backtest(
                     price_history[symbol].append(current_prices.get(symbol, 0))
             elif bar.get("data_quality", "OK") == "OK":
                 price_history[symbol].append(bar["close"])
+                volume_history[symbol].append(float(bar.get("volume", 0)))
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
@@ -480,7 +485,7 @@ def main():
         end_datetime=end_dt,
         binning=BINNING,
         initial_capital=INITIAL_CAPITAL,
-        transaction_cost=TRANSACTION_COST,
+        transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
         artifacts_dir=current_artifacts_dir,
     )

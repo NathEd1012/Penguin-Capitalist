@@ -13,14 +13,20 @@ TRAINABLE_PENGUIN2_BB_STDDEV = 2.0
 TRAINABLE_PENGUIN2_ADX_PERIOD = 14
 TRAINABLE_PENGUIN2_ADX_THRESHOLD = 25.0
 TRAINABLE_PENGUIN2_MAX_CASH_FRACTION = 0.05
+TRAINABLE_PENGUIN2_VOLUME_LOOKBACK = 20
+TRAINABLE_PENGUIN2_VOLUME_MULTIPLIER = 2.0
+TRAINABLE_PENGUIN2_VOLUME_CONFIRMATION_BARS = 3
+TRAINABLE_PENGUIN2_FALLING_MOMENTUM_LOOKBACK = 5
+TRAINABLE_PENGUIN2_FALLING_MOMENTUM_THRESHOLD = -0.002
+TRAINABLE_PENGUIN2_MIN_HOLD_BARS = 3
 TRAINABLE_PENGUIN2_STOP_LOSS_PCT = 0.04
 TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT = 0.08
 TRAINABLE_PENGUIN2_COOLDOWN_BARS = 10
 
 
-# Trainable Penguin, with Buy condition based on Bollinger Bands
-# and the Amount by ADX compared between different Stocks,
-# and Sell condition based on ADX trend reversal and taking profit at the upper Bollinger Band.
+# Buy on Bollinger Bands plus ADX, size by ADX, and sell after a minimum hold
+# on stop loss, take profit, or a confirmed multi-bar volume surge with
+# falling momentum.
 
 
 @dataclass
@@ -30,6 +36,12 @@ class TrainablePenguin2Params:
     adx_period: int = TRAINABLE_PENGUIN2_ADX_PERIOD
     adx_threshold: float = TRAINABLE_PENGUIN2_ADX_THRESHOLD
     max_cash_fraction: float = TRAINABLE_PENGUIN2_MAX_CASH_FRACTION
+    volume_lookback: int = TRAINABLE_PENGUIN2_VOLUME_LOOKBACK
+    volume_multiplier: float = TRAINABLE_PENGUIN2_VOLUME_MULTIPLIER
+    volume_confirmation_bars: int = TRAINABLE_PENGUIN2_VOLUME_CONFIRMATION_BARS
+    falling_momentum_lookback: int = TRAINABLE_PENGUIN2_FALLING_MOMENTUM_LOOKBACK
+    falling_momentum_threshold: float = TRAINABLE_PENGUIN2_FALLING_MOMENTUM_THRESHOLD
+    min_hold_bars: int = TRAINABLE_PENGUIN2_MIN_HOLD_BARS
     stop_loss_pct: float = TRAINABLE_PENGUIN2_STOP_LOSS_PCT
     take_profit_pct: float = TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT
     cooldown_bars: int = TRAINABLE_PENGUIN2_COOLDOWN_BARS
@@ -46,6 +58,12 @@ class TrainablePenguin2(BasePenguin):
         adx_period: int = TRAINABLE_PENGUIN2_ADX_PERIOD,
         adx_threshold: float = TRAINABLE_PENGUIN2_ADX_THRESHOLD,
         max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN2_MAX_CASH_FRACTION,
+        volume_lookback: int = TRAINABLE_PENGUIN2_VOLUME_LOOKBACK,
+        volume_multiplier: float = TRAINABLE_PENGUIN2_VOLUME_MULTIPLIER,
+        volume_confirmation_bars: int = TRAINABLE_PENGUIN2_VOLUME_CONFIRMATION_BARS,
+        falling_momentum_lookback: int = TRAINABLE_PENGUIN2_FALLING_MOMENTUM_LOOKBACK,
+        falling_momentum_threshold: float = TRAINABLE_PENGUIN2_FALLING_MOMENTUM_THRESHOLD,
+        min_hold_bars: int = TRAINABLE_PENGUIN2_MIN_HOLD_BARS,
         stop_loss_pct: float = TRAINABLE_PENGUIN2_STOP_LOSS_PCT,
         take_profit_pct: float = TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT,
         cooldown_bars: int = TRAINABLE_PENGUIN2_COOLDOWN_BARS,
@@ -57,10 +75,17 @@ class TrainablePenguin2(BasePenguin):
             adx_period=adx_period,
             adx_threshold=adx_threshold,
             max_cash_fraction=max_cash_fraction_per_trade,
+            volume_lookback=volume_lookback,
+            volume_multiplier=volume_multiplier,
+            volume_confirmation_bars=volume_confirmation_bars,
+            falling_momentum_lookback=falling_momentum_lookback,
+            falling_momentum_threshold=falling_momentum_threshold,
+            min_hold_bars=min_hold_bars,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,
         )
+        self._entry_bar_index: dict[str, int] = {}
 
     def decide(
         self,
@@ -71,7 +96,51 @@ class TrainablePenguin2(BasePenguin):
         portfolio: Portfolio,
     ) -> tuple[str, int]:
         min_required = max(self.params.bb_period, self.params.adx_period) + 2
-        if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
+        volumes = self._market_volume_history.get(symbol, ())
+        shares_owned = self._get_position(portfolio, symbol)
+        current_bar = len(mid_prices)
+        if shares_owned > 0:
+            entry_bar = self._entry_bar_index.get(symbol)
+            if entry_bar is None:
+                self._entry_bar_index[symbol] = current_bar
+                entry_bar = current_bar
+
+            bars_held = max(0, current_bar - entry_bar)
+            if bars_held < self.params.min_hold_bars:
+                return "HOLD", 0
+
+            avg_entry = self._get_avg_entry(portfolio, symbol)
+            current_price = bid if bid > 0 else mid_prices[-1]
+
+            stop_loss_trigger = (
+                avg_entry is not None
+                and current_price <= avg_entry * (1.0 - self.params.stop_loss_pct)
+            )
+            take_profit_trigger = (
+                avg_entry is not None
+                and current_price >= avg_entry * (1.0 + self.params.take_profit_pct)
+            )
+            volume_reversal_trigger = self._has_confirmed_volume_reversal(
+                mid_prices,
+                volumes,
+                self.params.volume_lookback,
+                self.params.volume_multiplier,
+                self.params.volume_confirmation_bars,
+                self.params.falling_momentum_lookback,
+                self.params.falling_momentum_threshold,
+            )
+
+            if stop_loss_trigger or take_profit_trigger or volume_reversal_trigger:
+                self._entry_bar_index.pop(symbol, None)
+                return "SELL", shares_owned
+            return "HOLD", 0
+
+        if (
+            bid <= 0
+            or ask <= 0
+            or len(mid_prices) < min_required
+            or len(volumes) < self.params.volume_lookback + 1
+        ):
             return "HOLD", 0
 
         upper_band, middle_band, lower_band = self._bollinger_bands(
@@ -84,44 +153,90 @@ class TrainablePenguin2(BasePenguin):
         adx_slope = adx_value - adx_previous
 
         cash = self._get_cash(portfolio)
-        shares_owned = self._get_position(portfolio, symbol)
-        avg_entry = self._get_avg_entry(portfolio, symbol)
         current_price = mid_prices[-1]
 
-        if shares_owned > 0:
-            # SELL part
-            loss_trigger = (
-                avg_entry is not None
-                and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
-            )
-            upper_band_take_profit = (
-                current_price >= upper_band
-                and avg_entry is not None
-                and current_price >= avg_entry * (1 + self.params.take_profit_pct)
-            )
-            adx_trend_reversal = adx_slope < 0 and adx_value < self.params.adx_threshold
+        buy_signal = current_price <= lower_band and adx_value >= self.params.adx_threshold
+        trend_confirmation = adx_slope >= 0 or current_price <= middle_band
 
-            if loss_trigger or (upper_band_take_profit and adx_trend_reversal) or (
-                upper_band_take_profit and adx_value < self.params.adx_threshold * 0.85
-            ):
-                return "SELL", shares_owned
-        else:
-            # BUY part
-            buy_signal = current_price <= lower_band and adx_value >= self.params.adx_threshold
-            trend_confirmation = adx_slope >= 0 or current_price <= middle_band
-
-            if buy_signal and trend_confirmation:
-                # AMOUNT part
-                strength = min(
-                    1.5,
-                    max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
-                )
-                max_trade_value = cash * self.params.max_cash_fraction
-                qty = math.floor((max_trade_value * strength) / ask)
-                if qty > 0:
-                    return "BUY", qty
+        if buy_signal and trend_confirmation:
+            strength = min(
+                1.5,
+                max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
+            )
+            max_trade_value = cash * self.params.max_cash_fraction
+            qty = math.floor((max_trade_value * strength) / ask)
+            if qty > 0:
+                self._entry_bar_index[symbol] = current_bar
+                return "BUY", qty
 
         return "HOLD", 0
+
+    def _has_confirmed_volume_reversal(
+        self,
+        prices: List[float],
+        volumes: List[float],
+        volume_lookback: int,
+        volume_multiplier: float,
+        confirmation_bars: int,
+        momentum_lookback: int,
+        momentum_threshold: float,
+    ) -> bool:
+        if confirmation_bars <= 0:
+            return False
+
+        if not self._is_multi_bar_volume_explosion(
+            volumes,
+            volume_lookback,
+            volume_multiplier,
+            confirmation_bars,
+        ):
+            return False
+
+        return self._has_falling_momentum(prices, momentum_lookback, momentum_threshold)
+
+    def _is_multi_bar_volume_explosion(
+        self,
+        volumes: List[float],
+        lookback: int,
+        multiplier: float,
+        confirmation_bars: int,
+    ) -> bool:
+        if lookback <= 0 or multiplier <= 0 or confirmation_bars <= 0:
+            return False
+
+        if len(volumes) < lookback + confirmation_bars:
+            return False
+
+        for offset in range(confirmation_bars):
+            end_index = len(volumes) - offset
+            current_volume = float(volumes[end_index - 1])
+            previous_volumes = [
+                float(value)
+                for value in volumes[end_index - lookback - 1 : end_index - 1]
+            ]
+            average_volume = sum(previous_volumes) / lookback
+            if average_volume <= 0 or current_volume < average_volume * multiplier:
+                return False
+
+        return True
+
+    def _has_falling_momentum(
+        self,
+        prices: List[float],
+        lookback: int,
+        threshold: float,
+    ) -> bool:
+        if lookback <= 0 or len(prices) < lookback + 1:
+            return False
+
+        start_price = prices[-lookback - 1]
+        end_price = prices[-1]
+
+        if start_price <= 0:
+            return False
+
+        momentum_return = (end_price - start_price) / start_price
+        return momentum_return <= threshold
 
     def _bollinger_bands(self, prices: List[float], period: int, num_std: float) -> tuple[float, float, float]:
         recent = prices[-period:]
@@ -162,8 +277,10 @@ class TrainablePenguin2(BasePenguin):
         return int(portfolio.get_position(symbol))
 
     def _get_avg_entry(self, portfolio: Portfolio, symbol: str) -> float | None:
-        return portfolio.cost_basis.get(symbol)
-
+        avg_entry = portfolio.cost_basis.get(symbol)
+        if avg_entry is None or avg_entry <= 0:
+            return None
+        return float(avg_entry)
 
 class TrainablePenguin2_Manual(TrainablePenguin2):
     def __init__(
@@ -174,6 +291,12 @@ class TrainablePenguin2_Manual(TrainablePenguin2):
         adx_period: int = TRAINABLE_PENGUIN2_ADX_PERIOD,
         adx_threshold: float = TRAINABLE_PENGUIN2_ADX_THRESHOLD,
         max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN2_MAX_CASH_FRACTION,
+        volume_lookback: int = TRAINABLE_PENGUIN2_VOLUME_LOOKBACK,
+        volume_multiplier: float = TRAINABLE_PENGUIN2_VOLUME_MULTIPLIER,
+        volume_confirmation_bars: int = TRAINABLE_PENGUIN2_VOLUME_CONFIRMATION_BARS,
+        falling_momentum_lookback: int = TRAINABLE_PENGUIN2_FALLING_MOMENTUM_LOOKBACK,
+        falling_momentum_threshold: float = TRAINABLE_PENGUIN2_FALLING_MOMENTUM_THRESHOLD,
+        min_hold_bars: int = TRAINABLE_PENGUIN2_MIN_HOLD_BARS,
         stop_loss_pct: float = TRAINABLE_PENGUIN2_STOP_LOSS_PCT,
         take_profit_pct: float = TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT,
         cooldown_bars: int = TRAINABLE_PENGUIN2_COOLDOWN_BARS,
@@ -185,6 +308,12 @@ class TrainablePenguin2_Manual(TrainablePenguin2):
             adx_period=adx_period,
             adx_threshold=adx_threshold,
             max_cash_fraction_per_trade=max_cash_fraction_per_trade,
+            volume_lookback=volume_lookback,
+            volume_multiplier=volume_multiplier,
+            volume_confirmation_bars=volume_confirmation_bars,
+            falling_momentum_lookback=falling_momentum_lookback,
+            falling_momentum_threshold=falling_momentum_threshold,
+            min_hold_bars=min_hold_bars,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,

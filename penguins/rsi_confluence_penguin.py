@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime
 
 
-class SmartRSIConfluencePenguin(BasePenguin):
+class RSIConfluencePenguin(BasePenguin):
     LOOKBACK_BARS = 100  # More context for stable filters
 
     def __init__(
@@ -21,7 +21,7 @@ class SmartRSIConfluencePenguin(BasePenguin):
         cooldown_bars=20,
         max_spread_pct=1.5,
     ):
-        super().__init__("Smart RSI Confluence")
+        super().__init__("RSI Confluence")
 
         self.rsi_period = rsi_period
         self.oversold = oversold
