@@ -30,11 +30,11 @@ from penguins.ThreeFold_MeanRev_Peng import ThreeFoldMeanReversionTrendPenguin
 # Each strategy will be tested in parallel on the same data
 
 ACTIVE_PENGUINS = [
-    TrainablePenguin1,                  # Manual tuning first: RSI/trend strategy
+    TrainablePenguin1,                  # Manual tuning first: RSI/ADX strategy
     TrainablePenguin1_Manual,           # Hand-tuned variant of TrainablePenguin1
     TrainablePenguin2,                  # Manual tuning first: Bollinger/ADX strategy
     TrainablePenguin2_Manual,           # Hand-tuned variant of TrainablePenguin2
-    TrainablePenguin3,                  # TP1 buy/sizing + TP2 sell logic
+    TrainablePenguin3,                  # Bollinger/trend buy + TP2 sell logic
     TrainablePenguin3_Manual,           # Manual variant of TP3
     TrainablePenguin4,                  # TP2 buy/sizing + TP1 sell logic
     TrainablePenguin4_Manual,           # Manual variant of TP4

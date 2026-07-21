@@ -11,13 +11,15 @@ from penguins.base_penguin import BasePenguin
 TRAINABLE_PENGUIN1_RSI_PERIOD = 13 #14
 TRAINABLE_PENGUIN1_BUY_RSI = 30.0
 TRAINABLE_PENGUIN1_SELL_RSI = 70.0
+TRAINABLE_PENGUIN1_ADX_PERIOD = 14
+TRAINABLE_PENGUIN1_ADX_THRESHOLD = 25.0
 TRAINABLE_PENGUIN1_MAX_CASH_FRACTION = 0.05
 TRAINABLE_PENGUIN1_STOP_LOSS_PCT = 0.04
 TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT = 0.08
 TRAINABLE_PENGUIN1_COOLDOWN_BARS = 10
 
 
-# Trainable Penguin, with Buy condition based on RSI and trend quality,
+# Trainable Penguin, with Buy condition based on RSI and ADX strength,
 # and Sell condition based on RSI breakdown, trend reversal, and profit taking.
 
 
@@ -26,6 +28,8 @@ class TrainablePenguin1Params:
     rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD
     buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI
     sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI
+    adx_period: int = TRAINABLE_PENGUIN1_ADX_PERIOD
+    adx_threshold: float = TRAINABLE_PENGUIN1_ADX_THRESHOLD
     max_cash_fraction: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION
     stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT
     take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT
@@ -41,6 +45,8 @@ class TrainablePenguin1(BasePenguin):
         rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD,
         buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI,
         sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI,
+        adx_period: int = TRAINABLE_PENGUIN1_ADX_PERIOD,
+        adx_threshold: float = TRAINABLE_PENGUIN1_ADX_THRESHOLD,
         max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION,
         stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT,
         take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT,
@@ -51,6 +57,8 @@ class TrainablePenguin1(BasePenguin):
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
+            adx_period=adx_period,
+            adx_threshold=adx_threshold,
             max_cash_fraction=max_cash_fraction_per_trade,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -65,10 +73,12 @@ class TrainablePenguin1(BasePenguin):
         ask: float,
         portfolio: Portfolio,
     ) -> tuple[str, int]:
-        if len(mid_prices) < max(60, self.params.rsi_period + 2):
+        min_required = max(60, self.params.rsi_period, self.params.adx_period) + 2
+        if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
         rsi = self._rsi(mid_prices, self.params.rsi_period)
+        adx_value = self._adx_proxy(mid_prices, self.params.adx_period)
         trend_score = self._trend_quality(mid_prices)
 
         cash = self._get_cash(portfolio)
@@ -100,12 +110,23 @@ class TrainablePenguin1(BasePenguin):
                 return "SELL", shares_owned
         else:
             # BUY part
-            if rsi <= self.params.buy_rsi and trend_score > 0.5:
+            buy_signal = (
+                rsi <= self.params.buy_rsi
+                and adx_value >= self.params.adx_threshold
+            )
+            if buy_signal:
                 # AMOUNT part
-                max_shares_to_buy = math.floor(
-                    (cash * self.params.max_cash_fraction) / current_price
+                strength = min(
+                    1.5,
+                    max(
+                        0.25,
+                        adx_value / max(self.params.adx_threshold, 1e-6),
+                    ),
                 )
-                return "BUY", max_shares_to_buy
+                max_trade_value = cash * self.params.max_cash_fraction
+                qty = math.floor((max_trade_value * strength) / ask)
+                if qty > 0:
+                    return "BUY", qty
 
         return "HOLD", 0
 
@@ -148,6 +169,29 @@ class TrainablePenguin1(BasePenguin):
 
         return min(score, 1.0)
 
+    def _adx_proxy(self, prices: List[float], period: int) -> float:
+        if len(prices) < period + 1:
+            return 0.0
+
+        directional_up = 0.0
+        directional_down = 0.0
+        true_range = 0.0
+
+        start = len(prices) - period
+        for index in range(start, len(prices)):
+            change = prices[index] - prices[index - 1]
+            true_range += abs(change)
+            if change > 0:
+                directional_up += change
+            elif change < 0:
+                directional_down -= change
+
+        if true_range <= 0:
+            return 0.0
+
+        directional_strength = abs(directional_up - directional_down) / true_range
+        return 100.0 * directional_strength
+
     def _get_cash(self, portfolio: Portfolio) -> float:
         return float(portfolio.cash)
 
@@ -165,6 +209,8 @@ class TrainablePenguin1_Manual(TrainablePenguin1):
         rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD,
         buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI,
         sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI,
+        adx_period: int = TRAINABLE_PENGUIN1_ADX_PERIOD,
+        adx_threshold: float = TRAINABLE_PENGUIN1_ADX_THRESHOLD,
         max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION,
         stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT,
         take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT,
@@ -175,6 +221,8 @@ class TrainablePenguin1_Manual(TrainablePenguin1):
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
+            adx_period=adx_period,
+            adx_threshold=adx_threshold,
             max_cash_fraction_per_trade=max_cash_fraction_per_trade,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,

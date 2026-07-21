@@ -197,6 +197,8 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "rsi_period": rng.randint(7, 28),
             "buy_rsi": round(buy_rsi, 2),
             "sell_rsi": round(sell_rsi, 2),
+            "adx_period": rng.randint(7, 28),
+            "adx_threshold": round(rng.uniform(10.0, 40.0), 2),
             "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
@@ -217,6 +219,8 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
         return {
             "bb_period": rng.randint(10, 40),
             "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
+            "adx_period": rng.randint(7, 28),
+            "adx_threshold": round(rng.uniform(10.0, 40.0), 2),
             "max_cash_fraction_per_trade": round(rng.uniform(0.02, 0.20), 4),
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
