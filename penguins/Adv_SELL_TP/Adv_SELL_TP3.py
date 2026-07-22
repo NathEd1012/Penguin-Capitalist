@@ -158,14 +158,14 @@ class Adv_SELL_TP3_Manual(Adv_SELL_TP3):
 	def __init__(
 		self,
 		name: str = "TrainablePenguin3_Manual",
-		bb_period: int = TRAINABLE_PENGUIN3_BB_PERIOD,
-		bb_stddev: float = TRAINABLE_PENGUIN3_BB_STDDEV,
-		adx_period: int = TRAINABLE_PENGUIN3_ADX_PERIOD,
-		adx_threshold: float = TRAINABLE_PENGUIN3_ADX_THRESHOLD,
-		max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN3_MAX_CASH_FRACTION,
-		stop_loss_pct: float = TRAINABLE_PENGUIN3_STOP_LOSS_PCT,
-		take_profit_pct: float = TRAINABLE_PENGUIN3_TAKE_PROFIT_PCT,
-		cooldown_bars: int = TRAINABLE_PENGUIN3_COOLDOWN_BARS,
+		bb_period: int = BB_PERIOD,
+		bb_stddev: float = BB_STDDEV,
+		adx_period: int = ADX_PERIOD,
+		adx_threshold: float = ADX_THRESHOLD,
+		max_cash_fraction_per_trade: float = MAX_CASH_FRACTION,
+		stop_loss_pct: float = STOP_LOSS_PCT,
+		take_profit_pct: float = TAKE_PROFIT_PCT,
+		cooldown_bars: int = COOLDOWN_BARS,
 	):
 		super().__init__(
 			name=name,

@@ -142,14 +142,14 @@ class OG_TP4_Manual(OG_TP4):
 	def __init__(
 		self,
 		name: str = "TrainablePenguin4_Manual",
-		rsi_period: int = TRAINABLE_PENGUIN4_RSI_PERIOD,
-		buy_rsi: float = TRAINABLE_PENGUIN4_BUY_RSI,
-		sell_rsi: float = TRAINABLE_PENGUIN4_SELL_RSI,
-		max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN4_MAX_CASH_FRACTION,
-		stop_loss_pct: float = TRAINABLE_PENGUIN4_STOP_LOSS_PCT,
-		take_profit_pct: float = TRAINABLE_PENGUIN4_TAKE_PROFIT_PCT,
-		cooldown_bars: int = TRAINABLE_PENGUIN4_COOLDOWN_BARS,
-		strength_cap: float = TRAINABLE_PENGUIN4_STRENGTH_CAP,
+		rsi_period: int = RSI_PERIOD,
+		buy_rsi: float = BUY_RSI,
+		sell_rsi: float = SELL_RSI,
+		max_cash_fraction_per_trade: float = MAX_CASH_FRACTION,
+		stop_loss_pct: float = STOP_LOSS_PCT,
+		take_profit_pct: float = TAKE_PROFIT_PCT,
+		cooldown_bars: int = COOLDOWN_BARS,
+		strength_cap: float = STRENGTH_CAP,
 	):
 		super().__init__(
 			name=name,
