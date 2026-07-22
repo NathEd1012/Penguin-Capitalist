@@ -1,6 +1,7 @@
 """Backtest timing and execution configuration."""
 
 import os
+from datetime import datetime, timezone, timedelta
 
 # ========== BACKTEST TIMING SETTINGS ==========
 
@@ -8,7 +9,53 @@ import os
 # Examples:
 #   "2026-01-03 10:30:00"  - Specific datetime
 #   "2026-01-03"           - Defaults to 00:00:00
-START_DATE = "2024-01-01 0:00:00"
+
+def _parse_config_date(value):
+    """Parse a configuration date value.
+
+    Accepts:
+    - integer/epoch seconds (int or numeric string)
+    - ISO datetime string: "YYYY-MM-DD HH:MM:SS" (assumed UTC if no tz)
+    - date-only string: "YYYY-MM-DD"
+    - special keyword: "TODAY" (resolves to yesterday at 23:50 UTC)
+    """
+    if value is None:
+        return None
+
+    # If already a datetime, return as-is
+    if isinstance(value, datetime):
+        return value
+
+    s = str(value).strip()
+    # Special keyword
+    if s.upper() == "TODAY":
+        return (datetime.now(timezone.utc).replace(hour=23, minute=50, second=0, microsecond=0)
+                - timedelta(days=1))
+
+    # Try numeric epoch
+    try:
+        if s.isdigit() or (s.startswith("-") and s[1:].isdigit()):
+            return datetime.fromtimestamp(int(s), tz=timezone.utc)
+    except Exception:
+        pass
+
+    # Try parsing with common formats
+    for fmt in ("%Y-%m-%d %H:%M:%S%z", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+        try:
+            dt = datetime.strptime(s, fmt)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt
+        except Exception:
+            continue
+
+    raise ValueError(f"Cannot parse date from config value: {value!r}")
+
+START_DATEx = "2024-01-01 00:00:00"
+START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
+
+
+
 
 # Stop date for backtest
 # Special keyword "TODAY" resolves to yesterday at 23:50 UTC 
@@ -16,7 +63,8 @@ START_DATE = "2024-01-01 0:00:00"
 # Examples:
 #   "TODAY"                - Use yesterday's end-of-day
 #   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATE = "2026-07-01 0:00:00" #"TODAY"
+STOP_DATEx = "2026-07-01 00:00:00" #"TODAY"
+STOP_DATE = _parse_config_date(os.getenv("FIXED_STOP", STOP_DATEx))
 
 # ========== TIMEFRAME / BINNING ==========
 # Candle interval for bars

@@ -2,29 +2,29 @@
 import os
 from .symbols import SYMBOLS as TRAINING_SYMBOLS
 from penguins import (
-    TrainablePenguin1,
-    TrainablePenguin1_Manual,
-    TrainablePenguin2,
-    TrainablePenguin2_Manual,
-    TrainablePenguin3,
-    TrainablePenguin3_Manual,
-    TrainablePenguin4,
-    TrainablePenguin4_Manual,
+    OG_TP1,
+    OG_TP1_Manual,
+    OG_TP2,
+    OG_TP2_Manual,
+    OG_TP3,
+    OG_TP3_Manual,
+    OG_TP4,
+    OG_TP4_Manual,
 )
 
 # Toggle the training pass that runs after strategy initialization.
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONSX = 100
-TRAINING_ITERATIONS = int(os.getenv("FIXED_TS", TRAINING_ITERATIONSX))
+TRAINING_ITERATIONSx = 100
+TRAINING_ITERATIONS = int(os.getenv("FIXED_TS", TRAINING_ITERATIONSx))
 
 # Training subsets are intentionally small to keep optimization tractable.
-TRAINING_SUBSET_MONTHSX = 2
-TRAINING_SUBSET_MONTHS = int(os.getenv("FIXED_MONTH", TRAINING_SUBSET_MONTHSX))
+TRAINING_SUBSET_MONTHSx = 2
+TRAINING_SUBSET_MONTHS = int(os.getenv("FIXED_MONTH", TRAINING_SUBSET_MONTHSx))
 
-TRAINING_SUBSET_STOCKSX = 30
-TRAINING_SUBSET_STOCKS = int(os.getenv("FIXED_SYMB", TRAINING_SUBSET_STOCKSX))
+TRAINING_SUBSET_STOCKSx = 30
+TRAINING_SUBSET_STOCKS = int(os.getenv("FIXED_SYMB", TRAINING_SUBSET_STOCKSx))
 
 
 # Match the training objective's per-buy cost penalty.
@@ -53,17 +53,17 @@ Manual = True
 # The matching manual variants are executed separately with their starting
 # parameters so the final report can compare baseline vs trained behavior.
 TRAINING_PENGUINS = [
-    TrainablePenguin1,
-    TrainablePenguin2,
-    TrainablePenguin3,
-    TrainablePenguin4,
+    OG_TP1,
+    OG_TP2,
+    OG_TP3,
+    OG_TP4,
 ]
 
 TRAINING_MANUAL_PENGUINS = [
-    TrainablePenguin1_Manual,
-    TrainablePenguin2_Manual,
-    TrainablePenguin3_Manual,
-    TrainablePenguin4_Manual,
+    OG_TP1_Manual,
+    OG_TP2_Manual,
+    OG_TP3_Manual,
+    OG_TP4_Manual,
 ]
 
 # Saved alongside the run artifacts.

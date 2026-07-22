@@ -16,6 +16,7 @@ TRAINABLE_PENGUIN3_MAX_CASH_FRACTION = 0.05
 TRAINABLE_PENGUIN3_STOP_LOSS_PCT = 0.04
 TRAINABLE_PENGUIN3_TAKE_PROFIT_PCT = 0.08
 TRAINABLE_PENGUIN3_COOLDOWN_BARS = 10
+TRAINABLE_PENGUIN3_STRENGTH_CAP = 1.5
 
 
 @dataclass
@@ -28,9 +29,10 @@ class TrainablePenguin3Params:
 	stop_loss_pct: float = TRAINABLE_PENGUIN3_STOP_LOSS_PCT
 	take_profit_pct: float = TRAINABLE_PENGUIN3_TAKE_PROFIT_PCT
 	cooldown_bars: int = TRAINABLE_PENGUIN3_COOLDOWN_BARS
+	strength_cap: float = TRAINABLE_PENGUIN3_STRENGTH_CAP
 
 
-class TrainablePenguin3(BasePenguin):
+class OG_TP3(BasePenguin):
 	LOOKBACK_BARS = 120
 
 	def __init__(
@@ -44,6 +46,7 @@ class TrainablePenguin3(BasePenguin):
 		stop_loss_pct: float = TRAINABLE_PENGUIN3_STOP_LOSS_PCT,
 		take_profit_pct: float = TRAINABLE_PENGUIN3_TAKE_PROFIT_PCT,
 		cooldown_bars: int = TRAINABLE_PENGUIN3_COOLDOWN_BARS,
+		strength_cap: float = TRAINABLE_PENGUIN3_STRENGTH_CAP,
 	):
 		super().__init__(name)
 		self.params = TrainablePenguin3Params(
@@ -55,6 +58,7 @@ class TrainablePenguin3(BasePenguin):
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
 			cooldown_bars=cooldown_bars,
+			strength_cap=strength_cap,
 		)
 
 	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio) -> tuple[str, int]:
@@ -86,7 +90,7 @@ class TrainablePenguin3(BasePenguin):
 			buy_signal = current_price <= lower_band and trend_score > 0.5
 			if buy_signal:
 				# AMOUNT part
-				strength = min(1.5, max(0.25, trend_score / 0.5))
+				strength = min(self.params.strength_cap, max(0.25, trend_score / 0.5))
 				max_trade_value = cash * self.params.max_cash_fraction
 				qty = math.floor((max_trade_value * strength) / ask)
 				if qty > 0:
@@ -152,7 +156,7 @@ class TrainablePenguin3(BasePenguin):
 		return portfolio.cost_basis.get(symbol)
 
 
-class TrainablePenguin3_Manual(TrainablePenguin3):
+class OG_TP3_Manual(OG_TP3):
 	LOOKBACK_BARS = 120
 
 	def __init__(
@@ -166,6 +170,7 @@ class TrainablePenguin3_Manual(TrainablePenguin3):
 		stop_loss_pct: float = TRAINABLE_PENGUIN3_STOP_LOSS_PCT,
 		take_profit_pct: float = TRAINABLE_PENGUIN3_TAKE_PROFIT_PCT,
 		cooldown_bars: int = TRAINABLE_PENGUIN3_COOLDOWN_BARS,
+		strength_cap: float = TRAINABLE_PENGUIN3_STRENGTH_CAP,
 	):
 		super().__init__(
 			name=name,
@@ -177,4 +182,5 @@ class TrainablePenguin3_Manual(TrainablePenguin3):
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
 			cooldown_bars=cooldown_bars,
+			strength_cap=strength_cap,
 		)

@@ -36,7 +36,7 @@ class TrainablePenguin1Params:
     cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS
 
 
-class TrainablePenguin1(BasePenguin):
+class Adv_SELL_TP1(BasePenguin):
     LOOKBACK_BARS = 120
 
     def __init__(
@@ -202,7 +202,7 @@ class TrainablePenguin1(BasePenguin):
         return portfolio.cost_basis.get(symbol)
 
 
-class TrainablePenguin1_Manual(TrainablePenguin1):
+class Adv_SELL_TP1_Manual(Adv_SELL_TP1):
     def __init__(
         self,
         name: str = "TrainablePenguin1_Manual",

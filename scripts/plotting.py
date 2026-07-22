@@ -26,36 +26,32 @@ from config import INITIAL_CAPITAL
 
 
 def _display_strategy_name(name: str) -> str:
-    """Normalize strategy names for plot/report labels."""
-    display_name_map = {
-        "SP500Penguin": "SP500",
-        "SP500x2Penguin": "SP500x2",
-        "TrainablePenguin1": "TP1",
-        "TrainablePenguin1_Manual": "TP1 manual",
-        "TrainablePenguin2": "TP2",
-        "TrainablePenguin2_Manual": "TP2 manual",
-        "TrainablePenguin3": "TP3",
-        "TrainablePenguin3_Manual": "TP3 manual",
-        "TrainablePenguin4": "TP4",
-        "TrainablePenguin4_Manual": "TP4 manual",
-    }
-    return display_name_map.get(name, name)
+    """Use the Penguin class name directly for plot/report labels."""
+    return name
 
 
 def _strategy_group_key(name: str) -> tuple[int, str]:
     """Sort trainable/manual strategies into adjacent pairs."""
     order_map = {
         "SP500Penguin": 0,
-        "TrainablePenguin1": 10,
-        "TrainablePenguin1_Manual": 11,
-        "TrainablePenguin2": 12,
-        "TrainablePenguin2_Manual": 13,
-        "TrainablePenguin3": 14,
-        "TrainablePenguin3_Manual": 15,
-        "TrainablePenguin4": 16,
-        "TrainablePenguin4_Manual": 17,
-        "SP500x2Penguin": 20,
-        "SMA20Penguin": 30,
+        "OG_TP1": 10,
+        "OG_TP1_Manual": 11,
+        "OG_TP2": 12,
+        "OG_TP2_Manual": 13,
+        "OG_TP3": 14,
+        "OG_TP3_Manual": 15,
+        "OG_TP4": 16,
+        "OG_TP4_Manual": 17,
+        "Adv_SELL_TP1": 20,
+        "Adv_SELL_TP1_Manual": 21,
+        "Adv_SELL_TP2": 22,
+        "Adv_SELL_TP2_Manual": 23,
+        "Adv_SELL_TP3": 24,
+        "Adv_SELL_TP3_Manual": 25,
+        "Adv_SELL_TP4": 26,
+        "Adv_SELL_TP4_Manual": 27,
+        "SP500x2Penguin": 40,
+        "SMA20Penguin": 50,
     }
     return order_map.get(name, 100), name
 
@@ -79,10 +75,14 @@ def _build_report_page_groups(strategy_names: list[str]) -> list[list[str]]:
     page_groups: list[list[str]] = []
 
     paired_bases = {
-        "TrainablePenguin1",
-        "TrainablePenguin2",
-        "TrainablePenguin3",
-        "TrainablePenguin4",
+        "OG_TP1",
+        "OG_TP2",
+        "OG_TP3",
+        "OG_TP4",
+        "Adv_SELL_TP1",
+        "Adv_SELL_TP2",
+        "Adv_SELL_TP3",
+        "Adv_SELL_TP4",
     }
 
     for name in ordered_names:

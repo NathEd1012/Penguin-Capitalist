@@ -1,66 +1,69 @@
 """Active trading strategy (penguin) configuration."""
 
-# Import all available penguin strategies
 from penguins import (
-    CopilotPenguin,
+    BuyEqualPriceEachPenguin,
+    BuyMaxEachPenguin,
+    OG_TP1,
+    OG_TP1_Manual,
+    OG_TP2,
+    OG_TP2_Manual,
+    OG_TP3,
+    OG_TP3_Manual,
+    OG_TP4,
+    OG_TP4_Manual,
     SP500,
     SP500x2,
-    TrainablePenguin1,
-    TrainablePenguin1_Manual,
-    TrainablePenguin2,
-    TrainablePenguin2_Manual,
-    TrainablePenguin3,
-    TrainablePenguin3_Manual,
-    TrainablePenguin4,
-    TrainablePenguin4_Manual,
-    RSIMeanReversionSelectivePenguin,
     SmartRSIConfluencePenguin,
-    BuyOneEachPenguin,
-    BuyMaxEachPenguin,
-    BuyEqualPriceEachPenguin,
+    ThreeFoldMeanReversionTrendPenguin,
+    Adv_SELL_TP1,
+    Adv_SELL_TP1_Manual,
+    Adv_SELL_TP2,
+    Adv_SELL_TP2_Manual,
+    Adv_SELL_TP3,
+    Adv_SELL_TP3_Manual,
+    Adv_SELL_TP4,
+    Adv_SELL_TP4_Manual,
 )
-
-from penguins.ThreeFold_MeanRev_Peng import ThreeFoldMeanReversionTrendPenguin
 
 # from penguins.multitimeframe_reaction_sr_penguin import MultitimeframeReactionSRPenguin
 
 # ========== ACTIVE PENGUINS ==========
-# List of penguin strategy classes to run in the backtest
-# Comment out strategies you don't want to run
-# Each strategy will be tested in parallel on the same data
+# List of penguin strategy classes to run in the backtest.
+
+OG_TP = [
+    OG_TP1,
+    OG_TP1_Manual,
+    OG_TP2,
+    OG_TP2_Manual,
+    OG_TP3,
+    OG_TP3_Manual,
+    OG_TP4,
+    OG_TP4_Manual,
+]
+
+ADV_SELL = [
+    Adv_SELL_TP1,
+    Adv_SELL_TP1_Manual,
+    Adv_SELL_TP2,
+    Adv_SELL_TP2_Manual,
+    Adv_SELL_TP3,
+    Adv_SELL_TP3_Manual,
+    Adv_SELL_TP4,
+    Adv_SELL_TP4_Manual,
+]
 
 ACTIVE_PENGUINS = [
-    TrainablePenguin1,                  # Manual tuning first: RSI/ADX strategy
-    TrainablePenguin1_Manual,           # Hand-tuned variant of TrainablePenguin1
-    TrainablePenguin2,                  # Manual tuning first: Bollinger/ADX strategy
-    TrainablePenguin2_Manual,           # Hand-tuned variant of TrainablePenguin2
-    TrainablePenguin3,                  # Bollinger/trend buy + TP2 sell logic
-    TrainablePenguin3_Manual,           # Manual variant of TP3
-    TrainablePenguin4,                  # TP2 buy/sizing + TP1 sell logic
-    TrainablePenguin4_Manual,           # Manual variant of TP4
-
+    *OG_TP,
+    *ADV_SELL,
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
-    #RSIMeanReversionPenguin,            # Baseline RSI Mean Reversion
-    # RSIMeanReversionPenguinStrict1,     # RSI Mean Reversion variant 1
-    # RSIMeanReversionPenguinStrict2,     # RSI Mean Reversion variant 2
-    #RSIMeanReversionReducedPenguin,     # Adaptive RSI - targets 1-10 trades/day (LIST 2 symbols)
-    #RSIMeanReversionMomentumPenguin,    # 3-stage momentum RSI - RISING/FALLING/HOLDING
-    #RSIMeanReversionSelectivePenguin,   # Low-frequency high-quality RSI mean reversion
     SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
-    #BuyOneEachPenguin,                  # Buy exactly 1 share for each symbol once
     BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
-
-    #CopilotPenguin,                    # AI-assisted strategy
     #ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
-    #MomentumPenguin,                  # Pure momentum following
-    # MinMaxSRPenguin,                  # Single timeframe S/R
-    # SRMultiframePenguin,              # Multiframe S/R placeholder
-    # MultitimeframeReactionSRPenguin,  # Multi-TF reaction S/R
-    # SMA20Penguin,                     # SMA crossover
-    # SMA20AdvancedPenguin,             # SMA crossover with sizing
 ]
 
 __all__ = [
+    "OG_TP",
+    "ADV_SELL",
     "ACTIVE_PENGUINS",
 ]

@@ -94,6 +94,13 @@ def parse_datetime_string(dt_str: str) -> datetime:
     
     Assumes UTC if no timezone specified.
     """
+    # If caller already passed a datetime, normalize and return it
+    if isinstance(dt_str, datetime):
+        dt = dt_str
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+
     dt_str = dt_str.strip()
     
     # Handle special keyword "TODAY"
@@ -191,7 +198,7 @@ def _training_benchmark_symbol(relative_to: int | str) -> str:
 
 def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, int | float]:
     strategy_name = strategy_class.__name__
-    if strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
+    if strategy_name.endswith("OG_TP1") or strategy_name.endswith("OG_TP1_Manual") or strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
         buy_rsi = rng.uniform(18.0, 42.0)
         sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
         return {
@@ -204,8 +211,9 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
+            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
-    if strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
+    if strategy_name.endswith("OG_TP2") or strategy_name.endswith("OG_TP2_Manual") or strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
         return {
             "bb_period": rng.randint(10, 40),
             "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
@@ -215,8 +223,9 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
+            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
-    if strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
+    if strategy_name.endswith("OG_TP3") or strategy_name.endswith("OG_TP3_Manual") or strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
         return {
             "bb_period": rng.randint(10, 40),
             "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
@@ -226,8 +235,9 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
+            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
-    if strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
+    if strategy_name.endswith("OG_TP4") or strategy_name.endswith("OG_TP4_Manual") or strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
         buy_rsi = rng.uniform(18.0, 42.0)
         sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
         return {
@@ -238,6 +248,7 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
+            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
     raise ValueError(f"No parameter sampler is defined for {strategy_name}")
 

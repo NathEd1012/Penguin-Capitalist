@@ -9,7 +9,7 @@ class BasePenguin(ABC):
     LOOKBACK_BARS = 1000
     
     def __init__(self, name: str):
-        self.name = name
+        self.name = self.__class__.__name__
 
     @abstractmethod
     def decide(
