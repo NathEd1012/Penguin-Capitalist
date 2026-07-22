@@ -54,7 +54,7 @@ ADV_SELL = [
 
 ACTIVE_PENGUINS = [
     *OG_TP,
-    *ADV_SELL,
+    #*ADV_SELL,
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
     SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy

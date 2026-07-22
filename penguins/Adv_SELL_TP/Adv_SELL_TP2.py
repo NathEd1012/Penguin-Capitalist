@@ -8,14 +8,14 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-TRAINABLE_PENGUIN2_BB_PERIOD = 20 #20
-TRAINABLE_PENGUIN2_BB_STDDEV = 2.0
-TRAINABLE_PENGUIN2_ADX_PERIOD = 14
-TRAINABLE_PENGUIN2_ADX_THRESHOLD = 25.0
-TRAINABLE_PENGUIN2_MAX_CASH_FRACTION = 0.05
-TRAINABLE_PENGUIN2_STOP_LOSS_PCT = 0.04
-TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT = 0.08
-TRAINABLE_PENGUIN2_COOLDOWN_BARS = 10
+BB_PERIOD = 20 #20
+BB_STDDEV = 2.0
+ADX_PERIOD = 14
+ADX_THRESHOLD = 25.0
+MAX_CASH_FRACTION = 0.05
+STOP_LOSS_PCT = 0.04
+TAKE_PROFIT_PCT = 0.08
+COOLDOWN_BARS = 10
 
 
 # Trainable Penguin, with Buy condition based on Bollinger Bands
@@ -24,15 +24,15 @@ TRAINABLE_PENGUIN2_COOLDOWN_BARS = 10
 
 
 @dataclass
-class TrainablePenguin2Params:
-    bb_period: int = TRAINABLE_PENGUIN2_BB_PERIOD
-    bb_stddev: float = TRAINABLE_PENGUIN2_BB_STDDEV
-    adx_period: int = TRAINABLE_PENGUIN2_ADX_PERIOD
-    adx_threshold: float = TRAINABLE_PENGUIN2_ADX_THRESHOLD
-    max_cash_fraction: float = TRAINABLE_PENGUIN2_MAX_CASH_FRACTION
-    stop_loss_pct: float = TRAINABLE_PENGUIN2_STOP_LOSS_PCT
-    take_profit_pct: float = TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT
-    cooldown_bars: int = TRAINABLE_PENGUIN2_COOLDOWN_BARS
+class Adv_SELL_TP2Params:
+    bb_period: int = BB_PERIOD
+    bb_stddev: float = BB_STDDEV
+    adx_period: int = ADX_PERIOD
+    adx_threshold: float = ADX_THRESHOLD
+    max_cash_fraction: float = MAX_CASH_FRACTION
+    stop_loss_pct: float = STOP_LOSS_PCT
+    take_profit_pct: float = TAKE_PROFIT_PCT
+    cooldown_bars: int = COOLDOWN_BARS
 
 
 class Adv_SELL_TP2(BasePenguin):
@@ -41,17 +41,17 @@ class Adv_SELL_TP2(BasePenguin):
     def __init__(
         self,
         name: str = "TrainablePenguin2",
-        bb_period: int = TRAINABLE_PENGUIN2_BB_PERIOD,
-        bb_stddev: float = TRAINABLE_PENGUIN2_BB_STDDEV,
-        adx_period: int = TRAINABLE_PENGUIN2_ADX_PERIOD,
-        adx_threshold: float = TRAINABLE_PENGUIN2_ADX_THRESHOLD,
-        max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN2_MAX_CASH_FRACTION,
-        stop_loss_pct: float = TRAINABLE_PENGUIN2_STOP_LOSS_PCT,
-        take_profit_pct: float = TRAINABLE_PENGUIN2_TAKE_PROFIT_PCT,
-        cooldown_bars: int = TRAINABLE_PENGUIN2_COOLDOWN_BARS,
+        bb_period: int = BB_PERIOD,
+        bb_stddev: float = BB_STDDEV,
+        adx_period: int = ADX_PERIOD,
+        adx_threshold: float = ADX_THRESHOLD,
+        max_cash_fraction_per_trade: float = MAX_CASH_FRACTION,
+        stop_loss_pct: float = STOP_LOSS_PCT,
+        take_profit_pct: float = TAKE_PROFIT_PCT,
+        cooldown_bars: int = COOLDOWN_BARS,
     ):
         super().__init__(name)
-        self.params = TrainablePenguin2Params(
+        self.params = Adv_SELL_TP2Params(
             bb_period=bb_period,
             bb_stddev=bb_stddev,
             adx_period=adx_period,

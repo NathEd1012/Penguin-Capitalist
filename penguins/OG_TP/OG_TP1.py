@@ -8,16 +8,16 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-TRAINABLE_PENGUIN1_RSI_PERIOD = 13 #14
-TRAINABLE_PENGUIN1_BUY_RSI = 30.0
-TRAINABLE_PENGUIN1_SELL_RSI = 70.0
-TRAINABLE_PENGUIN1_ADX_PERIOD = 14
-TRAINABLE_PENGUIN1_ADX_THRESHOLD = 25.0
-TRAINABLE_PENGUIN1_MAX_CASH_FRACTION = 0.05
-TRAINABLE_PENGUIN1_STOP_LOSS_PCT = 0.04
-TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT = 0.08
-TRAINABLE_PENGUIN1_COOLDOWN_BARS = 10
-TRAINABLE_PENGUIN1_STRENGTH_CAP = 1.5
+RSI_PERIOD = 13 #14
+BUY_RSI = 30.0
+SELL_RSI = 70.0
+ADX_PERIOD = 14
+ADX_THRESHOLD = 25.0
+MAX_CASH_FRACTION = 0.05
+STOP_LOSS_PCT = 0.04
+TAKE_PROFIT_PCT = 0.08
+COOLDOWN_BARS = 10
+STRENGTH_CAP = 1.5
 
 
 
@@ -26,17 +26,17 @@ TRAINABLE_PENGUIN1_STRENGTH_CAP = 1.5
 
 
 @dataclass
-class TrainablePenguin1Params:
-    rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD
-    buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI
-    sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI
-    adx_period: int = TRAINABLE_PENGUIN1_ADX_PERIOD
-    adx_threshold: float = TRAINABLE_PENGUIN1_ADX_THRESHOLD
-    max_cash_fraction: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION
-    stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT
-    take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT
-    cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS
-    strength_cap: float = TRAINABLE_PENGUIN1_STRENGTH_CAP
+class OG_TP1Params:
+    rsi_period: int = RSI_PERIOD
+    buy_rsi: float = BUY_RSI
+    sell_rsi: float = SELL_RSI
+    adx_period: int = ADX_PERIOD
+    adx_threshold: float = ADX_THRESHOLD
+    max_cash_fraction: float = MAX_CASH_FRACTION
+    stop_loss_pct: float = STOP_LOSS_PCT
+    take_profit_pct: float = TAKE_PROFIT_PCT
+    cooldown_bars: int = COOLDOWN_BARS
+    strength_cap: float = STRENGTH_CAP
 
 class OG_TP1(BasePenguin):
     LOOKBACK_BARS = 120
@@ -44,19 +44,19 @@ class OG_TP1(BasePenguin):
     def __init__(
         self,
         name: str = "TrainablePenguin1",
-        rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD,
-        buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI,
-        sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI,
-        adx_period: int = TRAINABLE_PENGUIN1_ADX_PERIOD,
-        adx_threshold: float = TRAINABLE_PENGUIN1_ADX_THRESHOLD,
-        max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION,
-        stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT,
-        take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT,
-        cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS,
-        strength_cap: float = TRAINABLE_PENGUIN1_STRENGTH_CAP,
+        rsi_period: int = RSI_PERIOD,
+        buy_rsi: float = BUY_RSI,
+        sell_rsi: float = SELL_RSI,
+        adx_period: int = ADX_PERIOD,
+        adx_threshold: float = ADX_THRESHOLD,
+        max_cash_fraction_per_trade: float = MAX_CASH_FRACTION,
+        stop_loss_pct: float = STOP_LOSS_PCT,
+        take_profit_pct: float = TAKE_PROFIT_PCT,
+        cooldown_bars: int = COOLDOWN_BARS,
+        strength_cap: float = STRENGTH_CAP,
     ):
         super().__init__(name)
-        self.params = TrainablePenguin1Params(
+        self.params = OG_TP1Params(
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
@@ -210,16 +210,16 @@ class OG_TP1_Manual(OG_TP1):
     def __init__(
         self,
         name: str = "TrainablePenguin1_Manual",
-        rsi_period: int = TRAINABLE_PENGUIN1_RSI_PERIOD,
-        buy_rsi: float = TRAINABLE_PENGUIN1_BUY_RSI,
-        sell_rsi: float = TRAINABLE_PENGUIN1_SELL_RSI,
-        adx_period: int = TRAINABLE_PENGUIN1_ADX_PERIOD,
-        adx_threshold: float = TRAINABLE_PENGUIN1_ADX_THRESHOLD,
-        max_cash_fraction_per_trade: float = TRAINABLE_PENGUIN1_MAX_CASH_FRACTION,
-        stop_loss_pct: float = TRAINABLE_PENGUIN1_STOP_LOSS_PCT,
-        take_profit_pct: float = TRAINABLE_PENGUIN1_TAKE_PROFIT_PCT,
-        cooldown_bars: int = TRAINABLE_PENGUIN1_COOLDOWN_BARS,
-        strength_cap: float = TRAINABLE_PENGUIN1_STRENGTH_CAP,
+        rsi_period: int = RSI_PERIOD,
+        buy_rsi: float = BUY_RSI,
+        sell_rsi: float = SELL_RSI,
+        adx_period: int = ADX_PERIOD,
+        adx_threshold: float = ADX_THRESHOLD,
+        max_cash_fraction_per_trade: float = MAX_CASH_FRACTION,
+        stop_loss_pct: float = STOP_LOSS_PCT,
+        take_profit_pct: float = TAKE_PROFIT_PCT,
+        cooldown_bars: int = COOLDOWN_BARS,
+        strength_cap: float = STRENGTH_CAP,
     ):
         super().__init__(
             name=name,
