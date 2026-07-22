@@ -54,8 +54,12 @@ def _collect_files(run_current_dir: Path) -> list[Path]:
 	# Collect json/txt files from run_current (including nested artifacts folder).
 	files.extend(sorted(run_current_dir.rglob("*.json")))
 	files.extend(sorted(run_current_dir.rglob("*.txt")))
-	files.extend(sorted(run_current_dir.rglob("*.out")))
 	files.extend(sorted(run_current_dir.rglob("*.err")))
+
+	# Keep only the newest .out file, while preserving all other artifacts.
+	out_files = sorted(run_current_dir.rglob("*.out"), key=lambda path: path.stat().st_mtime, reverse=True)
+	if out_files:
+		files.append(out_files[0])
 
 	# Remove potential duplicates while preserving order.
 	deduped: list[Path] = []

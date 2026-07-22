@@ -21,7 +21,7 @@ from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
     INITIAL_CAPITAL,
-    TRANSACTION_COST,
+    EXEC_TRANSACTION_COST,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -480,7 +480,7 @@ def main():
         end_datetime=end_dt,
         binning=BINNING,
         initial_capital=INITIAL_CAPITAL,
-        transaction_cost=TRANSACTION_COST,
+        transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
         artifacts_dir=current_artifacts_dir,
     )

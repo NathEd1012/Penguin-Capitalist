@@ -16,7 +16,7 @@ START_DATE = "2024-01-01 0:00:00"
 # Examples:
 #   "TODAY"                - Use yesterday's end-of-day
 #   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATE = "TODAY" #"2025-06-01 0:00:00" #"TODAY"
+STOP_DATE = "2026-07-01 0:00:00" #"TODAY"
 
 # ========== TIMEFRAME / BINNING ==========
 # Candle interval for bars
@@ -38,8 +38,8 @@ SAVE_TO_RUN_OLD = int(os.getenv("SAVE_TO_RUN_OLD", "0"))
 # Initial capital to start backtesting with (USD)
 INITIAL_CAPITAL = 100000.0
 
-# Transaction cost per trade (USD)
-TRANSACTION_COST = 2.0
+# Execution transaction cost per trade (USD)
+EXEC_TRANSACTION_COST = 0.0
 
 __all__ = [
     "START_DATE",
@@ -47,5 +47,5 @@ __all__ = [
     "BINNING",
     "SAVE_TO_RUN_OLD",
     "INITIAL_CAPITAL",
-    "TRANSACTION_COST",
+    "EXEC_TRANSACTION_COST",
 ]

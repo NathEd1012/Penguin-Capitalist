@@ -37,7 +37,8 @@ from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
     INITIAL_CAPITAL,
-    TRANSACTION_COST,
+    EXEC_TRANSACTION_COST,
+    TRAINING_TRANSACTION_COST,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -616,7 +617,7 @@ def run_backtest(
         print(f"Relative To:       {TRAINING_RELATIVE_TO}")
         print(f"Training Steps:    {TRAINING_ITERATIONS}")
         print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
-        print(f"Training Cost:     ${TRANSACTION_COST:.2f}")
+        print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
         print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print(f"{'='*80}\n")
     
@@ -715,7 +716,7 @@ def run_backtest(
                 tradeable_timestamps=tradeable_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
-                transaction_cost=TRANSACTION_COST,
+                transaction_cost=TRAINING_TRANSACTION_COST,
             )
             training_end = datetime.now(timezone.utc)
             training_elapsed = training_end - training_start
@@ -751,7 +752,7 @@ def run_backtest(
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
                         "relative_to": TRAINING_RELATIVE_TO,
                         "benchmark_symbol": benchmark_symbol,
-                        "transaction_cost": TRANSACTION_COST,
+                        "training_transaction_cost": TRAINING_TRANSACTION_COST,
                         "trainable_strategies": trained_parameters,
                     },
                     handle,
@@ -767,7 +768,7 @@ def run_backtest(
                         "subset_stocks": TRAINING_SUBSET_STOCKS,
                         "relative_to": TRAINING_RELATIVE_TO,
                         "benchmark_symbol": benchmark_symbol,
-                        "transaction_cost": TRANSACTION_COST,
+                        "training_transaction_cost": TRAINING_TRANSACTION_COST,
                         "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
                         "trial_history": training_parameter_history,
                     },
@@ -788,7 +789,7 @@ def run_backtest(
                             f"Subset stocks: {TRAINING_SUBSET_STOCKS}",
                             f"Relative to: {TRAINING_RELATIVE_TO}",
                             f"Benchmark symbol: {benchmark_symbol}",
-                            f"Transaction cost: {TRANSACTION_COST}",
+                            f"Training transaction cost: {TRAINING_TRANSACTION_COST}",
                             f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
                             f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
                             f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
@@ -806,7 +807,7 @@ def run_backtest(
                         trained_parameters,
                         training_pareto_path,
                         relative_to=TRAINING_RELATIVE_TO,
-                        transaction_cost=TRANSACTION_COST,
+                        transaction_cost=TRAINING_TRANSACTION_COST,
                     )
 
             print(f"\nSaved training parameters to {training_output_path}")
@@ -1070,7 +1071,7 @@ def main():
         end_datetime=end_dt,
         binning=BINNING,
         initial_capital=INITIAL_CAPITAL,
-        transaction_cost=TRANSACTION_COST,
+        transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
         enable_training_step=TRAINING_STEP_ENABLED,
         artifacts_dir=current_artifacts_dir,

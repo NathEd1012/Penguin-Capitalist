@@ -32,7 +32,7 @@ from config.backtest import (
     BINNING,
     SAVE_TO_RUN_OLD,
     INITIAL_CAPITAL,
-    TRANSACTION_COST,
+    EXEC_TRANSACTION_COST,
 )
 
 # ========== STRATEGY CONFIGURATION ==========
@@ -48,6 +48,7 @@ from config.training_step import (
     TRAINING_SUBSET_STOCKS,
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
+    TRAINING_TRANSACTION_COST,
     Manual,
     TRAINING_PENGUINS as TRAINABLE_PENGUINS,
     TRAINING_MANUAL_PENGUINS,
@@ -72,7 +73,8 @@ __all__ = [
     "ACTIVE_SYMBOLS",       # Explicit active symbols
     "SYMBOLS_LIST",         # Alias
     "INITIAL_CAPITAL",      # Starting capital (USD)
-    "TRANSACTION_COST",     # Cost per trade (USD)
+    "EXEC_TRANSACTION_COST", # Execution cost per trade (USD)
+    "TRAINING_TRANSACTION_COST", # Training penalty cost per buy (USD)
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
