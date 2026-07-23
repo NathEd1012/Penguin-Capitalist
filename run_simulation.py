@@ -356,13 +356,13 @@ def _format_trainable_parameter_delta_report(trained_parameters: Dict[str, Dict[
         "Format: initial -> after_training",
     ]
 
-    for strategy_name in sorted(trained_parameters):
+    for run_index, strategy_name in enumerate(sorted(trained_parameters), start=1):
         strategy_result = trained_parameters.get(strategy_name, {})
         initial_params = dict(strategy_result.get("initial_params") or {})
         final_params = dict(strategy_result.get("best_params") or {})
 
         lines.append("")
-        lines.append(f"{strategy_name}:")
+        lines.append(f"{run_index}. {strategy_name}:")
         param_keys = sorted(set(initial_params) | set(final_params))
         if not param_keys:
             lines.append("  <no parameters>")
@@ -469,8 +469,9 @@ def _train_trainable_penguins(
             relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, TRAINING_RELATIVE_TO)
             score = _score_training_candidate(candidate_metrics, benchmark_metrics, transaction_cost, TRAINING_RELATIVE_TO)
             final_value = float(candidate_metrics.get("final_value", 0.0))
+            buy_trades = int(candidate_metrics.get("buy_trades", 0))
 
-            if best_score is None or score > best_score:
+            if buy_trades > 0 and (best_score is None or score > best_score):
                 best_score = score
                 best_metrics = candidate_metrics
                 best_params = params
@@ -483,10 +484,10 @@ def _train_trainable_penguins(
             params_line = f"      params={_format_trainable_params(params)}"
             change_line = f"      change_vs_previous={param_changes}"
             trial_line = (
-                f"      relative_profit=${relative_profit_amount:,.2f}, absolute_profit=${profit_amount:,.2f}, buys={candidate_metrics.get('buy_trades', 0)}, score={score}"
+                f"      relative_profit=${relative_profit_amount:,.2f}, absolute_profit=${profit_amount:,.2f}, buys={buy_trades}, score={score}"
             )
             trial_iterator.set_postfix_str(
-                f"profit={relative_profit_amount:.2f}, buys={candidate_metrics.get('buy_trades', 0)}"
+                f"profit={relative_profit_amount:.2f}, buys={buy_trades}"
             )
             log_lines.append(selection_line)
             log_lines.append(params_line)
@@ -524,7 +525,7 @@ def _train_trainable_penguins(
                     "final_value": final_value,
                     "relative_value": float(score[0]),
                     "relative_net_gain": float(score[0]),
-                    "buy_trades": int(candidate_metrics.get("buy_trades", 0)),
+                    "buy_trades": buy_trades,
                     "total_trades": int(candidate_metrics.get("total_trades", 0)),
                     "score": list(score),
                 }
@@ -537,10 +538,16 @@ def _train_trainable_penguins(
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
         }
-        best_line = (
-            f"  Best {strategy_class.__name__}: relative_net=${(best_score[0] if best_score else 0.0):,.2f}, "
-            f"trades={(best_metrics or {}).get('total_trades', 0)}, params={_format_trainable_params(best_params)}"
-        )
+        if best_score is None:
+            best_line = (
+                f"  Best {strategy_class.__name__}: no qualifying trial with buys, "
+                f"params={_format_trainable_params(best_params)}"
+            )
+        else:
+            best_line = (
+                f"  Best {strategy_class.__name__}: relative_net=${best_score[0]:,.2f}, "
+                f"trades={(best_metrics or {}).get('total_trades', 0)}, params={_format_trainable_params(best_params)}"
+            )
         log_lines.append(best_line)
 
     return trained_parameters, log_lines, parameter_history, pareto_history

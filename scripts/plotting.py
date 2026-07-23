@@ -26,14 +26,20 @@ from config import INITIAL_CAPITAL
 
 
 def _display_strategy_name(name: str) -> str:
-    """Use the Penguin class name directly for plot/report labels."""
+    """Use a stable plot label for known benchmark names and the penguin name otherwise."""
+    if name.startswith("SP500"):
+        return "SP500"
     return name
+
+
+def _is_sp500_benchmark(name: str) -> bool:
+    return name.startswith("SP500")
 
 
 def _strategy_group_key(name: str) -> tuple[int, str]:
     """Sort trainable/manual strategies into adjacent pairs."""
     order_map = {
-        "SP500Penguin": 0,
+        "SP500": 0,
         "OG_TP1": 10,
         "OG_TP1_Manual": 11,
         "OG_TP2": 12,
@@ -50,7 +56,7 @@ def _strategy_group_key(name: str) -> tuple[int, str]:
         "Adv_SELL_TP3_Manual": 25,
         "Adv_SELL_TP4": 26,
         "Adv_SELL_TP4_Manual": 27,
-        "SP500x2Penguin": 40,
+        "SP500x2": 40,
         "SMA20Penguin": 50,
     }
     return order_map.get(name, 100), name
@@ -388,7 +394,7 @@ def create_training_pareto_pdf(
                     alpha=0.85,
                     edgecolors="black",
                     linewidths=0.5,
-                    zorder=2,
+                    zorder=4,
                 )
 
                 for x_value, y_value, trial_number in zip(x_values, y_values, trial_numbers):
@@ -398,7 +404,7 @@ def create_training_pareto_pdf(
                         textcoords="offset points",
                         xytext=(5, 4),
                         fontsize=8,
-                        zorder=3,
+                        zorder=1,
                     )
 
                 cbar = fig.colorbar(scatter, ax=ax)
@@ -711,7 +717,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         x_labels = [f"Bar {i}" for i in x_ticks]
     
     # Plot curves with transparency (SMA20 strategy plotted last for foreground)
-    sp500_name = "SP500Penguin"
+    sp500_name = next((name for name in curves if _is_sp500_benchmark(name)), None)
     sma20_name = "SMA20Penguin"
     line_colors = {}
     pair_colors = {}
@@ -749,7 +755,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         if name not in (sma20_name, sp500_name):
             display_name = _display_strategy_name(name)
             group_key = _strategy_base_key(name)
-            color = "darkgrey" if name == "SP500x2Penguin" else _color_for_group(group_key)
+            color = "darkgrey" if _is_sp500_benchmark(name) else _color_for_group(group_key)
             line = plt.plot(
                 range(1, len(vals) + 1),
                 vals,
@@ -925,7 +931,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         # Page 1: Capital Curves
         fig, ax = plt.subplots(figsize=(12, 8))
 
-        sp500_name = "SP500Penguin"
+        sp500_name = next((name for name in curves if _is_sp500_benchmark(name)), None)
         sma20_name = "SMA20Penguin"
         line_colors = {}
 
