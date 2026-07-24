@@ -54,6 +54,16 @@ from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
 
 
+def _print_training_configuration() -> None:
+    print("\nTRAINING CONFIGURATION")
+    print(f"Relative To:       {TRAINING_RELATIVE_TO}")
+    print(f"Training Steps:    {TRAINING_ITERATIONS}")
+    print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
+    print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
+    print("=" * 80)
+
+
 def _train_trainable_penguins(
     trainable_strategy_classes,
     symbols,
@@ -74,6 +84,13 @@ def _train_trainable_penguins(
         f"for {TRAINING_ITERATIONS} round(s) on {TRAINING_SUBSET_MONTHS} month(s) x {TRAINING_SUBSET_STOCKS} stock(s)..."
     )
     log_lines.append(header)
+    log_lines.append("TRAINING CONFIGURATION")
+    log_lines.append(f"  Relative To:       {TRAINING_RELATIVE_TO}")
+    log_lines.append(f"  Training Steps:    {TRAINING_ITERATIONS}")
+    log_lines.append(f"  Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
+    log_lines.append(f"  Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    log_lines.append(f"  Training Seed:     {TRAINING_RANDOM_SEED}")
+    log_lines.append("=" * 80)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
     log_lines.append("  Parameter search: random warm-up followed by Bayesian expected improvement")
     log_lines.append(f"  Training window length: {TRAINING_SUBSET_MONTHS} month(s) per trial")
@@ -239,6 +256,7 @@ def run_training_step(
     if artifacts_dir is None:
         artifacts_dir = Path(__file__).resolve().parent.parent / "run_current" / "artifacts"
 
+    _print_training_configuration()
     training_start = datetime.now(timezone.utc)
     trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
         trainable_strategy_classes=trainable_strategy_classes,

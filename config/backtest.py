@@ -87,7 +87,9 @@ SAVE_TO_RUN_OLD = int(os.getenv("SAVE_TO_RUN_OLD", "0"))
 INITIAL_CAPITAL = 100000.0
 
 # Execution transaction cost per trade (USD)
-EXEC_TRANSACTION_COST = 0.0
+EXEC_TRANSACTION_COSTx = 0.0
+EXEC_TRANSACTION_COST = _parse_config_date(os.getenv("FIXED_EXEC_TC", EXEC_TRANSACTION_COSTx))
+
 
 __all__ = [
     "START_DATE",
