@@ -223,62 +223,30 @@ def _train_trainable_penguins(
     return trained_parameters, log_lines, parameter_history, pareto_history
 
 
-def main() -> None:
-    try:
-        sys.stdout.reconfigure(line_buffering=True)
-    except Exception:
-        pass
-
-    try:
-        start_dt = parse_datetime_string(START_DATE)
-        end_dt = parse_datetime_string(STOP_DATE)
-    except ValueError as exc:
-        print(f"Error parsing config dates: {exc}")
-        print(f"  START_DATE: {START_DATE}")
-        print(f"  STOP_DATE: {STOP_DATE}")
-        sys.exit(1)
-
-    print("\n" + "=" * 80)
-    print("PENGUIN CAPITALIST - TRAINABLE PENGUIN TRAINING")
-    print("=" * 80)
-
-    base_dir = Path(__file__).resolve().parent.parent
-    current_dir = base_dir / "run_current"
-    current_artifacts_dir = current_dir / "artifacts"
-    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
-
-    print("Step 1: Preparing training data...")
-    valid_symbols, _sorted_timestamps, tradeable_timestamps, quality_report_text = prepare_training_context(
-        symbols=SYMBOLS,
-        start_datetime=start_dt,
-        end_datetime=end_dt,
-        binning=BINNING,
-        penguin_classes=TRAINABLE_PENGUINS,
-    )
-
-    if quality_report_text:
-        warnings_path = current_artifacts_dir / "consistency_warnings.txt"
-        with open(warnings_path, "w", encoding="utf-8") as handle:
-            handle.write(quality_report_text)
-            handle.write("\n")
-
-    active_trainables = list(dict.fromkeys(TRAINABLE_PENGUINS))
-    if not active_trainables:
+def run_training_step(
+    trainable_strategy_classes,
+    symbols,
+    tradeable_timestamps,
+    binning,
+    initial_capital,
+    transaction_cost,
+    artifacts_dir: Path | None = None,
+):
+    if not trainable_strategy_classes:
         print("No trainable penguins are configured.")
-        sys.exit(1)
+        return {}
 
-    print(
-        f"\nStep 2: Training {len(active_trainables)} trainable strategy(ies) "
-        f"for the configured optimization rounds..."
-    )
+    if artifacts_dir is None:
+        artifacts_dir = Path(__file__).resolve().parent.parent / "run_current" / "artifacts"
+
     training_start = datetime.now(timezone.utc)
     trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
-        trainable_strategy_classes=active_trainables,
-        symbols=valid_symbols,
+        trainable_strategy_classes=trainable_strategy_classes,
+        symbols=symbols,
         tradeable_timestamps=tradeable_timestamps,
-        binning=BINNING,
-        initial_capital=INITIAL_CAPITAL,
-        transaction_cost=TRAINING_TRANSACTION_COST,
+        binning=binning,
+        initial_capital=initial_capital,
+        transaction_cost=transaction_cost,
     )
     training_end = datetime.now(timezone.utc)
     training_elapsed = training_end - training_start
@@ -287,14 +255,14 @@ def main() -> None:
     mins, secs = divmod(rem, 60)
     training_duration_str = f"{hrs}:{mins:02d}:{secs:02d}"
 
-    training_output_dir = current_artifacts_dir / "json"
+    training_output_dir = artifacts_dir / "json"
     training_output_dir.mkdir(parents=True, exist_ok=True)
     benchmark_symbol = _training_benchmark_symbol(TRAINING_RELATIVE_TO)
     training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
     training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
-    training_parameter_delta_path = current_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
-    training_log_path = current_artifacts_dir / TRAINING_LOG_FILENAME
-    training_pareto_path = current_artifacts_dir.parent / TRAINING_PARETO_FILENAME
+    training_parameter_delta_path = artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
+    training_log_path = artifacts_dir / TRAINING_LOG_FILENAME
+    training_pareto_path = artifacts_dir.parent / TRAINING_PARETO_FILENAME
 
     with open(training_output_path, "w", encoding="utf-8") as handle:
         json.dump(
@@ -372,6 +340,67 @@ def main() -> None:
     print("\nTrainable values selected at the end:")
     for strategy_name, training_result in trained_parameters.items():
         print(f"  {strategy_name}: {_format_trainable_params(training_result.get('best_params', {}))}")
+
+    return trained_parameters
+
+
+def main() -> None:
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+    except Exception:
+        pass
+
+    try:
+        start_dt = parse_datetime_string(START_DATE)
+        end_dt = parse_datetime_string(STOP_DATE)
+    except ValueError as exc:
+        print(f"Error parsing config dates: {exc}")
+        print(f"  START_DATE: {START_DATE}")
+        print(f"  STOP_DATE: {STOP_DATE}")
+        sys.exit(1)
+
+    print("\n" + "=" * 80)
+    print("PENGUIN CAPITALIST - TRAINABLE PENGUIN TRAINING")
+    print("=" * 80)
+
+    base_dir = Path(__file__).resolve().parent.parent
+    current_dir = base_dir / "run_current"
+    current_artifacts_dir = current_dir / "artifacts"
+    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
+
+    print("Step 1: Preparing training data...")
+    valid_symbols, _sorted_timestamps, tradeable_timestamps, quality_report_text = prepare_training_context(
+        symbols=SYMBOLS,
+        start_datetime=start_dt,
+        end_datetime=end_dt,
+        binning=BINNING,
+        penguin_classes=TRAINABLE_PENGUINS,
+    )
+
+    if quality_report_text:
+        warnings_path = current_artifacts_dir / "consistency_warnings.txt"
+        with open(warnings_path, "w", encoding="utf-8") as handle:
+            handle.write(quality_report_text)
+            handle.write("\n")
+
+    active_trainables = list(dict.fromkeys(TRAINABLE_PENGUINS))
+    if not active_trainables:
+        print("No trainable penguins are configured.")
+        sys.exit(1)
+
+    print(
+        f"\nStep 2: Training {len(active_trainables)} trainable strategy(ies) "
+        f"for the configured optimization rounds..."
+    )
+    run_training_step(
+        trainable_strategy_classes=active_trainables,
+        symbols=valid_symbols,
+        tradeable_timestamps=tradeable_timestamps,
+        binning=BINNING,
+        initial_capital=INITIAL_CAPITAL,
+        transaction_cost=TRAINING_TRANSACTION_COST,
+        artifacts_dir=current_artifacts_dir,
+    )
 
 
 if __name__ == "__main__":

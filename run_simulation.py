@@ -119,6 +119,159 @@ def parse_datetime_string(dt_str: str) -> datetime:
     raise ValueError(f"Cannot parse datetime: {dt_str}")
 
 
+TRAINING_BAYESIAN_MIN_WARMUP_TRIALS = 4
+TRAINING_BAYESIAN_CANDIDATE_POOL_SIZE = 64
+TRAINING_BAYESIAN_LOCAL_CANDIDATE_COUNT = 32
+TRAINING_BAYESIAN_LOCAL_JITTER = 0.08
+TRAINING_BAYESIAN_LENGTH_SCALE = 0.35
+TRAINING_BAYESIAN_OBSERVATION_NOISE = 0.15
+
+
+def get_next_run_number(run_old_dir: Path) -> int:
+    """Get the next run number for archives (e.g., run1, run2, run3, ...)."""
+    current_date = datetime.now().strftime("%y%m%d")
+    date_dir = run_old_dir / current_date
+    date_dir.mkdir(parents=True, exist_ok=True)
+
+    existing_runs = [d for d in date_dir.iterdir() if d.is_dir() and d.name.startswith("run")]
+    if not existing_runs:
+        return 1
+
+    run_numbers = []
+    for run_dir in existing_runs:
+        try:
+            run_numbers.append(int(run_dir.name[3:]))
+        except ValueError:
+            continue
+
+    return max(run_numbers) + 1 if run_numbers else 1
+
+
+def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, float]]:
+    strategy_name = strategy_class.__name__
+    if strategy_name.endswith(("Adv_SELL_TP1", "Adv_SELL_TP1_Manual")):
+        return [
+            ("rsi_period", "int", 7, 28),
+            ("buy_rsi", "float", 18.0, 42.0),
+            ("sell_rsi", "float", 55.0, 88.0),
+            ("adx_period", "int", 7, 28),
+            ("adx_threshold", "float", 10.0, 40.0),
+            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("stop_loss_pct", "float", 0.01, 0.10),
+            ("take_profit_pct", "float", 0.02, 0.20),
+            ("cooldown_bars", "int", 0, 30),
+            ("relative_strength_period", "int", 7, 40),
+            ("relative_strength_threshold", "float", -1.0, 1.0),
+            ("rvol_period", "int", 7, 40),
+            ("rvol_threshold", "float", 0.5, 4.0),
+        ]
+    if strategy_name.endswith(("Adv_SELL_TP2", "Adv_SELL_TP2_Manual", "Adv_SELL_TP3", "Adv_SELL_TP3_Manual")):
+        return [
+            ("bb_period", "int", 10, 40),
+            ("bb_stddev", "float", 1.0, 3.5),
+            ("adx_period", "int", 7, 28),
+            ("adx_threshold", "float", 10.0, 40.0),
+            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("stop_loss_pct", "float", 0.01, 0.10),
+            ("take_profit_pct", "float", 0.02, 0.20),
+            ("cooldown_bars", "int", 0, 30),
+            ("relative_strength_period", "int", 7, 40),
+            ("relative_strength_threshold", "float", -1.0, 1.0),
+            ("rvol_period", "int", 7, 40),
+            ("rvol_threshold", "float", 0.5, 4.0),
+        ]
+    if strategy_name.endswith(("Adv_SELL_TP4", "Adv_SELL_TP4_Manual")):
+        return [
+            ("rsi_period", "int", 7, 28),
+            ("buy_rsi", "float", 18.0, 42.0),
+            ("sell_rsi", "float", 55.0, 88.0),
+            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("stop_loss_pct", "float", 0.01, 0.10),
+            ("take_profit_pct", "float", 0.02, 0.20),
+            ("cooldown_bars", "int", 0, 30),
+            ("relative_strength_period", "int", 7, 40),
+            ("relative_strength_threshold", "float", -1.0, 1.0),
+            ("rvol_period", "int", 7, 40),
+            ("rvol_threshold", "float", 0.5, 4.0),
+        ]
+    if strategy_name.endswith(("OG_TP1", "OG_TP1_Manual", "TrainablePenguin1", "TrainablePenguin1_Manual", "OG_TP4", "OG_TP4_Manual", "TrainablePenguin4", "TrainablePenguin4_Manual")):
+        return [
+            ("rsi_period", "int", 7, 28),
+            ("buy_rsi", "float", 18.0, 42.0),
+            ("sell_rsi", "float", 55.0, 88.0),
+            ("adx_period", "int", 7, 28),
+            ("adx_threshold", "float", 10.0, 40.0),
+            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("stop_loss_pct", "float", 0.01, 0.10),
+            ("take_profit_pct", "float", 0.02, 0.20),
+            ("cooldown_bars", "int", 0, 30),
+            ("strength_cap", "float", 1.0, 2.0),
+        ]
+    if strategy_name.endswith(("OG_TP2", "OG_TP2_Manual", "TrainablePenguin2", "TrainablePenguin2_Manual", "OG_TP3", "OG_TP3_Manual", "TrainablePenguin3", "TrainablePenguin3_Manual")):
+        return [
+            ("bb_period", "int", 10, 40),
+            ("bb_stddev", "float", 1.0, 3.5),
+            ("adx_period", "int", 7, 28),
+            ("adx_threshold", "float", 10.0, 40.0),
+            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("stop_loss_pct", "float", 0.01, 0.10),
+            ("take_profit_pct", "float", 0.02, 0.20),
+            ("cooldown_bars", "int", 0, 30),
+            ("strength_cap", "float", 1.0, 2.0),
+        ]
+    raise ValueError(f"No parameter space is defined for {strategy_name}")
+
+
+def _training_benchmark_symbol(relative_to: int | str) -> str:
+    return "SPY" if relative_to == 0 else str(relative_to)
+
+
+def _training_symbol_subset(symbols: List[str], target_count: int, benchmark_symbol: str, rng: random.Random) -> List[str]:
+    pool = list(dict.fromkeys(symbols))
+    if benchmark_symbol in pool:
+        pool.remove(benchmark_symbol)
+
+    sample_size = min(len(pool), max(0, target_count - 1))
+    subset = rng.sample(pool, sample_size) if sample_size > 0 else []
+    if benchmark_symbol not in subset:
+        subset.append(benchmark_symbol)
+    return sorted(subset)
+
+
+def _training_window_subset(sorted_timestamps: List[datetime], months: int, rng: random.Random) -> List[datetime]:
+    if not sorted_timestamps:
+        return []
+
+    window_length = timedelta(days=max(1, months) * 30)
+    latest_start = sorted_timestamps[-1] - window_length
+    eligible_starts = [timestamp for timestamp in sorted_timestamps if timestamp <= latest_start]
+    start_timestamp = rng.choice(eligible_starts) if eligible_starts else sorted_timestamps[0]
+    end_timestamp = start_timestamp + window_length
+    return [timestamp for timestamp in sorted_timestamps if start_timestamp <= timestamp <= end_timestamp]
+
+
+def _training_profit_amount(candidate_metrics: Dict, benchmark_metrics: Dict, relative_to: int | str) -> float:
+    candidate_profit = float(candidate_metrics.get("total_return", 0.0))
+    if relative_to not in (0, "0", None, False):
+        return candidate_profit - float(benchmark_metrics.get("total_return", 0.0))
+    return candidate_profit
+
+
+def _score_training_candidate(
+    candidate_metrics: Dict,
+    benchmark_metrics: Dict,
+    transaction_cost: float,
+    relative_to: int | str,
+) -> tuple[float, int, int]:
+    buy_trades = int(candidate_metrics.get("buy_trades", candidate_metrics.get("total_trades", 0)))
+    relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, relative_to)
+    return (
+        relative_profit_amount - (buy_trades * transaction_cost),
+        -buy_trades,
+        -int(candidate_metrics.get("total_trades", 0)),
+    )
+
+
 def _sample_parameters_from_space(
     parameter_space: List[tuple[str, str, float, float]],
     rng: random.Random,
@@ -836,7 +989,37 @@ def run_backtest(
     ################################ STEP 3b ################################
 
     if training_step_allowed:
-        print("Training step is disabled in run_simulation.py; use scripts/train_trainable_penguins.py for parameter optimization.")
+        active_trainables = []
+        seen_trainable_classes = set()
+        for penguin in penguins.values():
+            penguin_class = penguin.__class__
+            if penguin_class in set(TRAINABLE_PENGUINS) and penguin_class not in seen_trainable_classes:
+                active_trainables.append(penguin_class)
+                seen_trainable_classes.add(penguin_class)
+
+        if active_trainables:
+            from scripts.train_trainable_penguins import run_training_step
+
+            training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_current" / "artifacts"
+            trained_parameters = run_training_step(
+                trainable_strategy_classes=active_trainables,
+                symbols=symbols,
+                tradeable_timestamps=tradeable_timestamps,
+                binning=binning,
+                initial_capital=initial_capital,
+                transaction_cost=TRAINING_TRANSACTION_COST,
+                artifacts_dir=training_artifacts_dir,
+            )
+
+            for penguin_name, penguin in list(penguins.items()):
+                strategy_name = penguin.__class__.__name__
+                if strategy_name in trained_parameters:
+                    penguins[penguin_name] = _replace_trainable_penguin_params(
+                        penguin,
+                        trained_parameters[strategy_name]["best_params"],
+                    )
+        else:
+            print("No trainable penguins are active; skipping Step 3b training.")
 
     ################################ STEP 4 ################################
 

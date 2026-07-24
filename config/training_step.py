@@ -24,7 +24,7 @@ from penguins import (
 TRAINING_STEP_ENABLED = True
 
 # Number of optimization rounds per trainable strategy.
-TRAINING_ITERATIONSx = 100
+TRAINING_ITERATIONSx = 10
 TRAINING_ITERATIONS = int(os.getenv("FIXED_TS", TRAINING_ITERATIONSx))
 
 # Training subsets are intentionally small to keep optimization tractable.
