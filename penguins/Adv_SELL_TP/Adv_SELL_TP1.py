@@ -4,6 +4,7 @@ from typing import List
 
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
+from indicators.market_context import relative_strength, relative_volume
 
 
 # Manual tuning block:
@@ -17,6 +18,10 @@ MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
 COOLDOWN_BARS = 10
+RELATIVE_STRENGTH_PERIOD = 20
+RELATIVE_STRENGTH_THRESHOLD = 0.0
+RVOL_PERIOD = 20
+RVOL_THRESHOLD = 2.0
 
 
 # Trainable Penguin, with Buy condition based on RSI and ADX strength,
@@ -34,6 +39,10 @@ class Adv_SELL_TP1Params:
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
     cooldown_bars: int = COOLDOWN_BARS
+    relative_strength_period: int = RELATIVE_STRENGTH_PERIOD
+    relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
+    rvol_period: int = RVOL_PERIOD
+    rvol_threshold: float = RVOL_THRESHOLD
 
 
 class Adv_SELL_TP1(BasePenguin):
@@ -51,6 +60,10 @@ class Adv_SELL_TP1(BasePenguin):
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
         cooldown_bars: int = COOLDOWN_BARS,
+        relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
+        relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+        rvol_period: int = RVOL_PERIOD,
+        rvol_threshold: float = RVOL_THRESHOLD,
     ):
         super().__init__(name)
         self.params = Adv_SELL_TP1Params(
@@ -63,6 +76,10 @@ class Adv_SELL_TP1(BasePenguin):
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,
+            relative_strength_period=relative_strength_period,
+            relative_strength_threshold=relative_strength_threshold,
+            rvol_period=rvol_period,
+            rvol_threshold=rvol_threshold,
         )
 
     def decide(
@@ -72,14 +89,28 @@ class Adv_SELL_TP1(BasePenguin):
         bid: float,
         ask: float,
         portfolio: Portfolio,
+        spy_prices: List[float] | None = None,
+        volumes: List[float] | None = None,
     ) -> tuple[str, int]:
-        min_required = max(60, self.params.rsi_period, self.params.adx_period) + 2
+        min_required = max(
+            60,
+            self.params.rsi_period,
+            self.params.adx_period,
+            self.params.relative_strength_period,
+            self.params.rvol_period,
+        ) + 2
         if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
         rsi = self._rsi(mid_prices, self.params.rsi_period)
         adx_value = self._adx_proxy(mid_prices, self.params.adx_period)
         trend_score = self._trend_quality(mid_prices)
+        relative_strength_value = relative_strength(
+            mid_prices,
+            spy_prices,
+            self.params.relative_strength_period,
+        )
+        rvol = relative_volume(volumes, self.params.rvol_period)
 
         cash = self._get_cash(portfolio)
         shares_owned = self._get_position(portfolio, symbol)
@@ -100,13 +131,28 @@ class Adv_SELL_TP1(BasePenguin):
                 and rsi > 60
                 and trend_score < 0.3
             )
+            is_profitable = avg_entry is not None and current_price > avg_entry
+            relative_strength_exit_trigger = (
+                is_profitable
+                and relative_strength_value < self.params.relative_strength_threshold
+            )
+            rvol_exit_trigger = (
+                is_profitable
+                and rvol > self.params.rvol_threshold
+            )
 
             overbought_breakdown_trigger = (
                 rsi >= self.params.sell_rsi
                 and trend_score < 0.15
             )
 
-            if loss_trigger or profit_reversal_trigger or overbought_breakdown_trigger:
+            if (
+                loss_trigger
+                or profit_reversal_trigger
+                or overbought_breakdown_trigger
+                or relative_strength_exit_trigger
+                or rvol_exit_trigger
+            ):
                 return "SELL", shares_owned
         else:
             # BUY part
@@ -215,6 +261,10 @@ class Adv_SELL_TP1_Manual(Adv_SELL_TP1):
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
         cooldown_bars: int = COOLDOWN_BARS,
+        relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
+        relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+        rvol_period: int = RVOL_PERIOD,
+        rvol_threshold: float = RVOL_THRESHOLD,
     ):
         super().__init__(
             name=name,
@@ -227,4 +277,8 @@ class Adv_SELL_TP1_Manual(Adv_SELL_TP1):
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,
+            relative_strength_period=relative_strength_period,
+            relative_strength_threshold=relative_strength_threshold,
+            rvol_period=rvol_period,
+            rvol_threshold=rvol_threshold,
         )

@@ -33,12 +33,12 @@ from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
 from penguins import SP500
+from penguins.decision_utils import call_penguin_decide
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
     INITIAL_CAPITAL,
     EXEC_TRANSACTION_COST,
-    TRAINING_TRANSACTION_COST,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -51,14 +51,14 @@ from config import (
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
     TRAINABLE_PENGUINS,
-    PLOT_PARETO,
+    TRAINING_TRANSACTION_COST,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
     TRAINING_PARAMETER_LOG_FILENAME,
     TRAINING_PARAMETER_DELTA_FILENAME,
+    PLOT_PARETO,
     TRAINING_PARETO_FILENAME,
 )
-from scripts.plotting import create_training_pareto_pdf
 
 
 def percent_progress(iterable, desc: str):
@@ -198,10 +198,19 @@ def _training_benchmark_symbol(relative_to: int | str) -> str:
 
 def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, int | float]:
     strategy_name = strategy_class.__name__
-    if strategy_name.endswith("OG_TP1") or strategy_name.endswith("OG_TP1_Manual") or strategy_name.endswith("TrainablePenguin1") or strategy_name.endswith("TrainablePenguin1_Manual"):
+    is_adv_family = strategy_name.startswith("Adv_SELL_TP")
+
+    if (
+        strategy_name.endswith("OG_TP1")
+        or strategy_name.endswith("OG_TP1_Manual")
+        or strategy_name.endswith("TrainablePenguin1")
+        or strategy_name.endswith("TrainablePenguin1_Manual")
+        or strategy_name.endswith("Adv_SELL_TP1")
+        or strategy_name.endswith("Adv_SELL_TP1_Manual")
+    ):
         buy_rsi = rng.uniform(18.0, 42.0)
         sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
-        return {
+        params = {
             "rsi_period": rng.randint(7, 28),
             "buy_rsi": round(buy_rsi, 2),
             "sell_rsi": round(sell_rsi, 2),
@@ -211,10 +220,19 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
-            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
-    if strategy_name.endswith("OG_TP2") or strategy_name.endswith("OG_TP2_Manual") or strategy_name.endswith("TrainablePenguin2") or strategy_name.endswith("TrainablePenguin2_Manual"):
-        return {
+        if not is_adv_family:
+            params["strength_cap"] = round(rng.uniform(1.0, 2.0), 2)
+        return params
+    if (
+        strategy_name.endswith("OG_TP2")
+        or strategy_name.endswith("OG_TP2_Manual")
+        or strategy_name.endswith("TrainablePenguin2")
+        or strategy_name.endswith("TrainablePenguin2_Manual")
+        or strategy_name.endswith("Adv_SELL_TP2")
+        or strategy_name.endswith("Adv_SELL_TP2_Manual")
+    ):
+        params = {
             "bb_period": rng.randint(10, 40),
             "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
             "adx_period": rng.randint(7, 28),
@@ -223,10 +241,19 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
-            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
-    if strategy_name.endswith("OG_TP3") or strategy_name.endswith("OG_TP3_Manual") or strategy_name.endswith("TrainablePenguin3") or strategy_name.endswith("TrainablePenguin3_Manual"):
-        return {
+        if not is_adv_family:
+            params["strength_cap"] = round(rng.uniform(1.0, 2.0), 2)
+        return params
+    if (
+        strategy_name.endswith("OG_TP3")
+        or strategy_name.endswith("OG_TP3_Manual")
+        or strategy_name.endswith("TrainablePenguin3")
+        or strategy_name.endswith("TrainablePenguin3_Manual")
+        or strategy_name.endswith("Adv_SELL_TP3")
+        or strategy_name.endswith("Adv_SELL_TP3_Manual")
+    ):
+        params = {
             "bb_period": rng.randint(10, 40),
             "bb_stddev": round(rng.uniform(1.0, 3.5), 2),
             "adx_period": rng.randint(7, 28),
@@ -235,12 +262,21 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
-            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
-    if strategy_name.endswith("OG_TP4") or strategy_name.endswith("OG_TP4_Manual") or strategy_name.endswith("TrainablePenguin4") or strategy_name.endswith("TrainablePenguin4_Manual"):
+        if not is_adv_family:
+            params["strength_cap"] = round(rng.uniform(1.0, 2.0), 2)
+        return params
+    if (
+        strategy_name.endswith("OG_TP4")
+        or strategy_name.endswith("OG_TP4_Manual")
+        or strategy_name.endswith("TrainablePenguin4")
+        or strategy_name.endswith("TrainablePenguin4_Manual")
+        or strategy_name.endswith("Adv_SELL_TP4")
+        or strategy_name.endswith("Adv_SELL_TP4_Manual")
+    ):
         buy_rsi = rng.uniform(18.0, 42.0)
         sell_rsi = rng.uniform(max(buy_rsi + 8.0, 55.0), 88.0)
-        return {
+        params = {
             "rsi_period": rng.randint(7, 28),
             "buy_rsi": round(buy_rsi, 2),
             "sell_rsi": round(sell_rsi, 2),
@@ -248,8 +284,10 @@ def _sample_trainable_params(strategy_class, rng: random.Random) -> Dict[str, in
             "stop_loss_pct": round(rng.uniform(0.01, 0.10), 4),
             "take_profit_pct": round(rng.uniform(0.02, 0.20), 4),
             "cooldown_bars": rng.randint(0, 30),
-            "strength_cap": round(rng.uniform(1.0, 2.0), 2),
         }
+        if not is_adv_family:
+            params["strength_cap"] = round(rng.uniform(1.0, 2.0), 2)
+        return params
     raise ValueError(f"No parameter sampler is defined for {strategy_name}")
 
 
@@ -304,6 +342,79 @@ def _history_warmup_bars(penguin_classes: List) -> int:
         _, required_history_bars = _penguin_history_requirements(penguin_class)
         warmup_bars = max(warmup_bars, required_history_bars)
     return warmup_bars
+
+
+def prepare_training_context(
+    symbols: List[str],
+    start_datetime: datetime,
+    end_datetime: datetime,
+    binning: str,
+    penguin_classes: List,
+) -> tuple[List[str], List[datetime], List[datetime], str]:
+    """Load the data context needed by the standalone training script."""
+    if start_datetime.tzinfo is None:
+        start_datetime = start_datetime.replace(tzinfo=timezone.utc)
+    if end_datetime.tzinfo is None:
+        end_datetime = end_datetime.replace(tzinfo=timezone.utc)
+
+    start_datetime_utc = start_datetime.astimezone(timezone.utc)
+    end_datetime_utc = end_datetime.astimezone(timezone.utc)
+
+    warmup_bars = _history_warmup_bars(penguin_classes)
+    warmup_minutes = _binning_to_minutes(binning)
+    warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
+
+    restricted_sets = []
+    all_restricted = True
+    for penguin_class in penguin_classes:
+        traded = getattr(penguin_class, "TRADED_SYMBOLS", None)
+        if traded is None:
+            all_restricted = False
+            break
+
+        restricted_sets.append(set(traded))
+
+    if all_restricted and restricted_sets:
+        requested_symbols = sorted(set().union(*restricted_sets).intersection(set(symbols)))
+        if requested_symbols:
+            symbols = requested_symbols
+
+    loader = DataLoader()
+    try:
+        data, sparse_warning = loader.load_bars(
+            symbols,
+            warmup_start_datetime_utc,
+            end_datetime_utc,
+            binning,
+            enable_data_quality_checks=True,
+        )
+        if sparse_warning:
+            print(sparse_warning)
+        quality_report_text = loader.get_quality_report_text()
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
+        sys.exit(1)
+
+    valid_symbols, stale_symbols = loader.detect_stale_data(data)
+    print(f"  Valid symbols: {len(valid_symbols)}")
+    if stale_symbols:
+        print(f"  Stale symbols ({len(stale_symbols)}): {', '.join(stale_symbols)}")
+
+    if not valid_symbols:
+        print("No valid symbols to trade!")
+        sys.exit(1)
+
+    all_timestamps = set()
+    for symbol_data in data.values():
+        all_timestamps.update(symbol_data.keys())
+
+    sorted_timestamps = sorted(all_timestamps)
+    print(f"\n  Total bars across all symbols: {len(sorted_timestamps)}")
+    tradeable_timestamps = [timestamp for timestamp in sorted_timestamps if timestamp >= start_datetime_utc]
+    print(f"  Tradeable bars from configured start: {len(tradeable_timestamps)}")
+
+    return valid_symbols, sorted_timestamps, tradeable_timestamps, quality_report_text
 
 
 def _format_trainable_params(params: Dict[str, int | float]) -> str:
@@ -459,7 +570,7 @@ def _train_trainable_penguins(
                     initial_capital=initial_capital,
                     transaction_cost=transaction_cost,
                     penguin_classes=[candidate, SP500],
-                    enable_training_step=False,
+                    training_step_allowed=False,
                 )
 
             candidate_metrics = results[candidate.name][1]
@@ -561,8 +672,8 @@ def run_backtest(
     initial_capital: float,
     transaction_cost: float,
     penguin_classes: List,
-    enable_training_step: bool = False,
     artifacts_dir: Path | None = None,
+    training_step_allowed: bool = True,
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
@@ -630,13 +741,6 @@ def run_backtest(
     print(f"Transaction Cost:  ${transaction_cost:.2f}")
     print(f"Symbol List:       {ACTIVE_SYMBOL_LIST}")
     print(f"Symbols:           {len(symbols)}")
-    if enable_training_step:
-        print(f"\nTRAINING CONFIGURATION")
-        print(f"Relative To:       {TRAINING_RELATIVE_TO}")
-        print(f"Training Steps:    {TRAINING_ITERATIONS}")
-        print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
-        print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
-        print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print(f"{'='*80}\n")
     
     # Load data
@@ -696,7 +800,6 @@ def run_backtest(
     
     # Initialize synthetic spread model for realistic bid/ask
     spread_model = SyntheticSpreadModel()
-    trained_parameters: Dict[str, Dict[str, object]] = {}
 
     ################################ STEP 3 ################################
 
@@ -718,17 +821,21 @@ def run_backtest(
             penguin_name = getattr(penguin_spec, "__name__", getattr(penguin_spec, "name", str(penguin_spec)))
             print(f"  ✗ {penguin_name}: {e}")
 
-    if enable_training_step:
-        active_trainables = []
-        seen_trainable_classes = set()
-        for penguin in penguins.values():
-            penguin_class = penguin.__class__
-            if penguin_class in set(TRAINABLE_PENGUINS) and penguin_class not in seen_trainable_classes:
-                active_trainables.append(penguin_class)
-                seen_trainable_classes.add(penguin_class)
+    ################################ STEP 3b ################################
+
+    # Optionally run training in-between strategy initialization and running the
+    # main backtest. Training must be explicitly allowed on the top-level run
+    # to avoid recursive training during trial evaluations.
+    if training_step_allowed and TRAINING_STEP_ENABLED:
+        active_trainables = list(dict.fromkeys(TRAINABLE_PENGUINS))
         if active_trainables:
             training_start = datetime.now(timezone.utc)
-            trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
+            (
+                trained_parameters,
+                training_log_lines,
+                training_parameter_history,
+                training_pareto_history,
+            ) = _train_trainable_penguins(
                 trainable_strategy_classes=active_trainables,
                 symbols=symbols,
                 tradeable_timestamps=tradeable_timestamps,
@@ -738,106 +845,113 @@ def run_backtest(
             )
             training_end = datetime.now(timezone.utc)
             training_elapsed = training_end - training_start
-            # Format elapsed as H:MM:SS
-            total_seconds = int(training_elapsed.total_seconds())
-            hrs, rem = divmod(total_seconds, 3600)
-            mins, secs = divmod(rem, 60)
-            training_duration_str = f"{hrs}:{mins:02d}:{secs:02d}"
 
-            for penguin_name, penguin in list(penguins.items()):
-                strategy_name = penguin.__class__.__name__
-                if strategy_name in trained_parameters:
-                    penguins[penguin_name] = _replace_trainable_penguin_params(
-                        penguin,
-                        trained_parameters[strategy_name]["best_params"],
+            # Persist training artifacts into the artifacts directory when available
+            if artifacts_dir is not None:
+                training_output_dir = Path(artifacts_dir) / "json"
+                training_output_dir.mkdir(parents=True, exist_ok=True)
+                benchmark_symbol = _training_benchmark_symbol(TRAINING_RELATIVE_TO)
+                training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
+                training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
+                training_parameter_delta_path = Path(artifacts_dir) / TRAINING_PARAMETER_DELTA_FILENAME
+                training_log_path = Path(artifacts_dir) / TRAINING_LOG_FILENAME
+
+                with open(training_output_path, "w", encoding="utf-8") as handle:
+                    json.dump(
+                        {
+                            "generated_at": datetime.now(timezone.utc).isoformat(),
+                            "iterations": TRAINING_ITERATIONS,
+                            "subset_months": TRAINING_SUBSET_MONTHS,
+                            "subset_stocks": TRAINING_SUBSET_STOCKS,
+                            "relative_to": TRAINING_RELATIVE_TO,
+                            "benchmark_symbol": benchmark_symbol,
+                            "training_transaction_cost": TRAINING_TRANSACTION_COST,
+                            "trainable_strategies": trained_parameters,
+                        },
+                        handle,
+                        indent=2,
+                        default=str,
                     )
 
-            training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_current" / "artifacts"
-            training_output_dir = training_artifacts_dir / "json"
-            training_output_dir.mkdir(parents=True, exist_ok=True)
-            benchmark_symbol = _training_benchmark_symbol(TRAINING_RELATIVE_TO)
-            training_output_path = training_output_dir / TRAINING_RESULTS_FILENAME
-            training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
-            training_parameter_delta_path = training_artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
-            training_log_path = training_artifacts_dir / TRAINING_LOG_FILENAME
-            training_pareto_path = training_artifacts_dir.parent / TRAINING_PARETO_FILENAME
-            with open(training_output_path, "w", encoding="utf-8") as handle:
-                json.dump(
-                    {
-                        "generated_at": datetime.now(timezone.utc).isoformat(),
-                        "iterations": TRAINING_ITERATIONS,
-                        "subset_months": TRAINING_SUBSET_MONTHS,
-                        "subset_stocks": TRAINING_SUBSET_STOCKS,
-                        "relative_to": TRAINING_RELATIVE_TO,
-                        "benchmark_symbol": benchmark_symbol,
-                        "training_transaction_cost": TRAINING_TRANSACTION_COST,
-                        "trainable_strategies": trained_parameters,
-                    },
-                    handle,
-                    indent=2,
-                    default=str,
-                )
-            with open(training_parameter_log_path, "w", encoding="utf-8") as handle:
-                json.dump(
-                    {
-                        "generated_at": datetime.now(timezone.utc).isoformat(),
-                        "iterations": TRAINING_ITERATIONS,
-                        "subset_months": TRAINING_SUBSET_MONTHS,
-                        "subset_stocks": TRAINING_SUBSET_STOCKS,
-                        "relative_to": TRAINING_RELATIVE_TO,
-                        "benchmark_symbol": benchmark_symbol,
-                        "training_transaction_cost": TRAINING_TRANSACTION_COST,
-                        "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
-                        "trial_history": training_parameter_history,
-                    },
-                    handle,
-                    indent=2,
-                    default=str,
-                )
-            with open(training_parameter_delta_path, "w", encoding="utf-8") as handle:
-                handle.write(_format_trainable_parameter_delta_report(trained_parameters))
-            with open(training_log_path, "w", encoding="utf-8") as handle:
-                handle.write(
-                    "\n".join(
-                        [
-                            f"Step 3b training completed at {datetime.now(timezone.utc).isoformat()}",
+                with open(training_parameter_log_path, "w", encoding="utf-8") as handle:
+                    json.dump(
+                        {
+                            "generated_at": datetime.now(timezone.utc).isoformat(),
+                            "iterations": TRAINING_ITERATIONS,
+                            "subset_months": TRAINING_SUBSET_MONTHS,
+                            "subset_stocks": TRAINING_SUBSET_STOCKS,
+                            "relative_to": TRAINING_RELATIVE_TO,
+                            "benchmark_symbol": benchmark_symbol,
+                            "training_transaction_cost": TRAINING_TRANSACTION_COST,
+                            "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
+                            "trial_history": training_parameter_history,
+                        },
+                        handle,
+                        indent=2,
+                        default=str,
+                    )
+
+                with open(training_parameter_delta_path, "w", encoding="utf-8") as handle:
+                    handle.write(_format_trainable_parameter_delta_report(trained_parameters))
+
+                with open(training_log_path, "w", encoding="utf-8") as handle:
+                    total_seconds = int(training_elapsed.total_seconds())
+                    hrs, rem = divmod(total_seconds, 3600)
+                    mins, secs = divmod(rem, 60)
+                    training_duration_str = f"{hrs}:{mins:02d}:{secs:02d}"
+                    handle.write(
+                        "\n".join([
+                            f"Training completed at {datetime.now(timezone.utc).isoformat()}",
                             f"Total training time: {training_duration_str} (H:MM:SS)",
-                            f"Iterations: {TRAINING_ITERATIONS}",
-                            f"Subset months: {TRAINING_SUBSET_MONTHS}",
-                            f"Subset stocks: {TRAINING_SUBSET_STOCKS}",
                             f"Relative to: {TRAINING_RELATIVE_TO}",
                             f"Benchmark symbol: {benchmark_symbol}",
                             f"Training transaction cost: {TRAINING_TRANSACTION_COST}",
-                            f"Resampling cadence: one fresh stock subset and one fresh time window per trial",
                             f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
                             f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
                             "",
                             *training_log_lines,
-                        ]
+                        ])
+                        + "\n"
                     )
-                    + "\n"
-                )
 
+                # Generate Pareto PDF if enabled
                 if PLOT_PARETO:
-                    create_training_pareto_pdf(
-                        training_pareto_history,
-                        training_parameter_history,
-                        trained_parameters,
-                        training_pareto_path,
-                        relative_to=TRAINING_RELATIVE_TO,
-                        transaction_cost=TRAINING_TRANSACTION_COST,
-                    )
+                    try:
+                        from scripts.plotting import create_training_pareto_pdf
 
-            print(f"\nSaved training parameters to {training_output_path}")
-            print(f"Saved trainable parameter log to {training_parameter_log_path}")
-            print(f"Saved trainable parameter delta report to {training_parameter_delta_path}")
-            print(f"Saved training log to {training_log_path}")
-            if PLOT_PARETO:
-                print(f"Saved training Pareto PDF to {training_pareto_path}")
-            print(f"Total training time: {training_duration_str} (H:MM:SS)")
-            print("\nTrainable values selected at the end:")
-            for strategy_name, training_result in trained_parameters.items():
-                print(f"  {strategy_name}: {_format_trainable_params(training_result.get('best_params', {}))}")
+                        training_pareto_path = Path(artifacts_dir).parent / TRAINING_PARETO_FILENAME
+                        create_training_pareto_pdf(
+                            training_pareto_history,
+                            training_parameter_history,
+                            trained_parameters,
+                            training_pareto_path,
+                            relative_to=TRAINING_RELATIVE_TO,
+                            transaction_cost=TRAINING_TRANSACTION_COST,
+                        )
+                    except Exception as e:
+                        print(f"⚠️  Pareto plot generation failed: {e}")
+        else:
+            print("No trainable penguins are configured. Skipping training step.")
+
+        # Rebuild the live trainable instances from the selected parameters so Step 4
+        # runs on the optimized values rather than the manual defaults.
+        if 'trained_parameters' in locals() and trained_parameters:
+            applied_trainables = 0
+            for penguin_name, penguin in list(penguins.items()):
+                strategy_name = penguin.__class__.__name__
+                strategy_result = trained_parameters.get(strategy_name)
+                if not strategy_result:
+                    continue
+
+                best_params = dict(strategy_result.get("best_params") or {})
+                if not best_params:
+                    continue
+
+                penguins[penguin_name] = _replace_trainable_penguin_params(penguin, best_params)
+                applied_trainables += 1
+
+            if applied_trainables:
+                print(f"Applied trained parameters to {applied_trainables} active penguin(s) before Step 4.")
 
     ################################ STEP 4 ################################
 
@@ -847,6 +961,7 @@ def run_backtest(
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
+    volume_history = defaultdict(list)
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -872,8 +987,13 @@ def run_backtest(
                     price_history[symbol].append(price_history[symbol][-1])
                 else:
                     price_history[symbol].append(current_prices.get(symbol, 0))
+                if symbol in volume_history and volume_history[symbol]:
+                    volume_history[symbol].append(volume_history[symbol][-1])
+                else:
+                    volume_history[symbol].append(0.0)
             elif bar.get("data_quality", "OK") == "OK":
                 price_history[symbol].append(bar['close'])
+                volume_history[symbol].append(bar.get('volume', 0))
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
@@ -953,15 +1073,22 @@ def run_backtest(
                     continue
                 
                 mid_prices = full_history[-lookback_bars:]
+                spy_prices = price_history.get("SPY", [])
+                spy_window = spy_prices[-lookback_bars:] if len(spy_prices) > lookback_bars else spy_prices
+                volumes = volume_history[symbol]
+                volumes_window = volumes[-lookback_bars:] if len(volumes) > lookback_bars else volumes
                 bid, ask = quotes[symbol]
                 
                 try:
-                    action, quantity = penguin.decide(
+                    action, quantity = call_penguin_decide(
+                        penguin,
                         symbol,
                         mid_prices,
                         bid,
                         ask,
-                        portfolio
+                        portfolio,
+                        spy_prices=spy_window,
+                        volumes=volumes_window,
                     )
                     
                     if action == "BUY" and quantity > 0:
@@ -1080,7 +1207,8 @@ def main():
     current_dir = base_dir / "run_current"
     current_artifacts_dir = current_dir / "artifacts"
     current_artifacts_dir.mkdir(parents=True, exist_ok=True)
-    enable_training_step = TRAINING_STEP_ENABLED
+
+    # Training is executed inside `run_backtest` as Step 3b when enabled.
     
     ################ Run backtest ################
     results, trades_by_bar, bar_timestamps, _unused_histories, _symbol_close_series, data_quality_report = run_backtest(
@@ -1091,7 +1219,6 @@ def main():
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
-        enable_training_step=TRAINING_STEP_ENABLED,
         artifacts_dir=current_artifacts_dir,
     )
     print("\nrun_backtest() returned; generating results...", flush=True)
@@ -1181,8 +1308,6 @@ def main():
     if archive_dir:
         print(f"\nArchive saved to:  {archive_dir}")
         print(f"  - report.pdf")
-        if enable_training_step and PLOT_PARETO:
-            print(f"  - artifacts/{TRAINING_PARETO_FILENAME}")
         print(f"  - artifacts/capital_curves.png")
         print(f"  - artifacts/json/curves_data.json")
         print(f"  - artifacts/json/metrics_summary.json")
@@ -1191,8 +1316,6 @@ def main():
     
     print(f"\nCurrent run saved to: {current_dir}")
     print(f"  - report.pdf")
-    if enable_training_step and PLOT_PARETO:
-        print(f"  - artifacts/{TRAINING_PARETO_FILENAME}")
     print(f"  - artifacts/capital_curves.png")
     print(f"  - artifacts/json/curves_data.json")
     print(f"  - artifacts/json/metrics_summary.json")

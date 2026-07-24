@@ -4,6 +4,7 @@ from typing import List
 
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
+from indicators.market_context import relative_strength, relative_volume
 
 
 # Manual tuning block:
@@ -15,6 +16,10 @@ MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
 COOLDOWN_BARS = 10
+RELATIVE_STRENGTH_PERIOD = 20
+RELATIVE_STRENGTH_THRESHOLD = 0.0
+RVOL_PERIOD = 20
+RVOL_THRESHOLD = 2.0
 
 
 @dataclass
@@ -26,6 +31,10 @@ class Adv_SELL_TP4Params:
 	stop_loss_pct: float = STOP_LOSS_PCT
 	take_profit_pct: float = TAKE_PROFIT_PCT
 	cooldown_bars: int = COOLDOWN_BARS
+	relative_strength_period: int = RELATIVE_STRENGTH_PERIOD
+	relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
+	rvol_period: int = RVOL_PERIOD
+	rvol_threshold: float = RVOL_THRESHOLD
 
 
 class Adv_SELL_TP4(BasePenguin):
@@ -41,6 +50,10 @@ class Adv_SELL_TP4(BasePenguin):
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
 		cooldown_bars: int = COOLDOWN_BARS,
+		relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
+		relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+		rvol_period: int = RVOL_PERIOD,
+		rvol_threshold: float = RVOL_THRESHOLD,
 	):
 		super().__init__(name)
 		self.params = Adv_SELL_TP4Params(
@@ -51,15 +64,21 @@ class Adv_SELL_TP4(BasePenguin):
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
 			cooldown_bars=cooldown_bars,
+			relative_strength_period=relative_strength_period,
+			relative_strength_threshold=relative_strength_threshold,
+			rvol_period=rvol_period,
+			rvol_threshold=rvol_threshold,
 		)
 
-	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio) -> tuple[str, int]:
-		min_required = max(60, self.params.rsi_period + 2) + 2
+	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio, spy_prices: List[float] | None = None, volumes: List[float] | None = None) -> tuple[str, int]:
+		min_required = max(60, self.params.rsi_period, self.params.relative_strength_period, self.params.rvol_period) + 2
 		if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
 			return "HOLD", 0
 
 		rsi = self._rsi(mid_prices, self.params.rsi_period)
 		trend_score = self._trend_quality(mid_prices)
+		relative_strength_value = relative_strength(mid_prices, spy_prices, self.params.relative_strength_period)
+		rvol = relative_volume(volumes, self.params.rvol_period)
 		cash = self._get_cash(portfolio)
 		shares_owned = self._get_position(portfolio, symbol)
 		avg_entry = self._get_avg_entry(portfolio, symbol)
@@ -70,7 +89,10 @@ class Adv_SELL_TP4(BasePenguin):
 			loss_trigger = avg_entry is not None and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
 			profit_reversal_trigger = avg_entry is not None and current_price >= avg_entry * (1 + self.params.take_profit_pct) and rsi > 60 and trend_score < 0.3
 			overbought_breakdown_trigger = rsi >= self.params.sell_rsi and trend_score < 0.15
-			if loss_trigger or profit_reversal_trigger or overbought_breakdown_trigger:
+			is_profitable = avg_entry is not None and current_price > avg_entry
+			relative_strength_exit_trigger = is_profitable and relative_strength_value < self.params.relative_strength_threshold
+			rvol_exit_trigger = is_profitable and rvol > self.params.rvol_threshold
+			if loss_trigger or profit_reversal_trigger or overbought_breakdown_trigger or relative_strength_exit_trigger or rvol_exit_trigger:
 				return "SELL", shares_owned
 		else:
 			# BUY part

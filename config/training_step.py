@@ -2,6 +2,14 @@
 import os
 from .symbols import SYMBOLS as TRAINING_SYMBOLS
 from penguins import (
+    Adv_SELL_TP1,
+    Adv_SELL_TP1_Manual,
+    Adv_SELL_TP2,
+    Adv_SELL_TP2_Manual,
+    Adv_SELL_TP3,
+    Adv_SELL_TP3_Manual,
+    Adv_SELL_TP4,
+    Adv_SELL_TP4_Manual,
     OG_TP1,
     OG_TP1_Manual,
     OG_TP2,
@@ -57,6 +65,10 @@ TRAINING_PENGUINS = [
     OG_TP2,
     OG_TP3,
     OG_TP4,
+    Adv_SELL_TP1,
+    Adv_SELL_TP2,
+    Adv_SELL_TP3,
+    Adv_SELL_TP4,
 ]
 
 TRAINING_MANUAL_PENGUINS = [
@@ -64,6 +76,10 @@ TRAINING_MANUAL_PENGUINS = [
     OG_TP2_Manual,
     OG_TP3_Manual,
     OG_TP4_Manual,
+    Adv_SELL_TP1_Manual,
+    Adv_SELL_TP2_Manual,
+    Adv_SELL_TP3_Manual,
+    Adv_SELL_TP4_Manual,
 ]
 
 # Saved alongside the run artifacts.

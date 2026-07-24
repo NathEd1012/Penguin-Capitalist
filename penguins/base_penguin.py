@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 from backtest.portfolio import Portfolio
 
 
@@ -7,7 +7,7 @@ class BasePenguin(ABC):
     """Base class for all trading strategies."""
     # Default lookback window: can be overridden by subclasses
     LOOKBACK_BARS = 1000
-    
+
     def __init__(self, name: str):
         self.name = self.__class__.__name__
 
@@ -19,6 +19,8 @@ class BasePenguin(ABC):
         bid: float,
         ask: float,
         portfolio: Portfolio,
+        spy_prices: Optional[List[float]] = None,
+        volumes: Optional[List[float]] = None,
     ) -> tuple[str, int]:
         """
         Make trading decision based on mid-price history and current bid/ask.

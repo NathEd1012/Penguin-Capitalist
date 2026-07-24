@@ -17,6 +17,7 @@ from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
+from penguins.decision_utils import call_penguin_decide
 from config import (
     SYMBOLS,
     ACTIVE_SYMBOL_LIST,
@@ -270,6 +271,7 @@ def run_backtest(
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
+    volume_history = defaultdict(list)
 
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -295,8 +297,13 @@ def run_backtest(
                     price_history[symbol].append(price_history[symbol][-1])
                 else:
                     price_history[symbol].append(current_prices.get(symbol, 0))
+                if symbol in volume_history and volume_history[symbol]:
+                    volume_history[symbol].append(volume_history[symbol][-1])
+                else:
+                    volume_history[symbol].append(0.0)
             elif bar.get("data_quality", "OK") == "OK":
                 price_history[symbol].append(bar["close"])
+                volume_history[symbol].append(bar.get("volume", 0))
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
@@ -376,16 +383,23 @@ def run_backtest(
 
                 # Slice only the last lookback_bars from history
                 mid_prices = full_history[-lookback_bars:] if len(full_history) > lookback_bars else full_history
+                spy_prices = price_history.get("SPY", [])
+                spy_window = spy_prices[-lookback_bars:] if len(spy_prices) > lookback_bars else spy_prices
+                volumes = volume_history[symbol]
+                volumes_window = volumes[-lookback_bars:] if len(volumes) > lookback_bars else volumes
 
                 bid, ask = quotes[symbol]
 
                 try:
-                    action, quantity = penguin.decide(
+                    action, quantity = call_penguin_decide(
+                        penguin,
                         symbol,
                         mid_prices,
                         bid,
                         ask,
                         portfolio,
+                        spy_prices=spy_window,
+                        volumes=volumes_window,
                     )
 
                     # For non-leveraged SPY strategies, cap quantity to cash affordability.
