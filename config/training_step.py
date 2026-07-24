@@ -57,10 +57,9 @@ TRAINING_RANDOM_SEED = 42
 # They are not optimized; only the trainable strategies below are sampled.
 Manual = True
 
-# These are the only strategies that participate in parameter search.
-# The matching manual variants are executed separately with their starting
-# parameters so the final report can compare baseline vs trained behavior.
-TRAINING_PENGUINS = [
+# These strategy groups are derived from the class-level TRAINABLE flag so the
+# optimizer and reporting logic do not need to match class names.
+_ALL_TRAINING_PENGUINS = [
     OG_TP1,
     OG_TP2,
     OG_TP3,
@@ -69,9 +68,6 @@ TRAINING_PENGUINS = [
     Adv_SELL_TP2,
     Adv_SELL_TP3,
     Adv_SELL_TP4,
-]
-
-TRAINING_MANUAL_PENGUINS = [
     OG_TP1_Manual,
     OG_TP2_Manual,
     OG_TP3_Manual,
@@ -81,6 +77,9 @@ TRAINING_MANUAL_PENGUINS = [
     Adv_SELL_TP3_Manual,
     Adv_SELL_TP4_Manual,
 ]
+
+TRAINING_PENGUINS = [strategy for strategy in _ALL_TRAINING_PENGUINS if getattr(strategy, "TRAINABLE", False)]
+TRAINING_MANUAL_PENGUINS = [strategy for strategy in _ALL_TRAINING_PENGUINS if not getattr(strategy, "TRAINABLE", False)]
 
 # Saved alongside the run artifacts.
 TRAINING_RESULTS_FILENAME = "trainable_penguin_training.json"

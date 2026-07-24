@@ -47,6 +47,7 @@ class Adv_SELL_TP1Params:
 
 class Adv_SELL_TP1(BasePenguin):
     LOOKBACK_BARS = 120
+    TRAINABLE = True
 
     def __init__(
         self,
@@ -249,6 +250,8 @@ class Adv_SELL_TP1(BasePenguin):
 
 
 class Adv_SELL_TP1_Manual(Adv_SELL_TP1):
+    TRAINABLE = False
+
     def __init__(
         self,
         name: str = "TrainablePenguin1_Manual",
