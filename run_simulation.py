@@ -180,7 +180,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("rvol_period", "int", 7, 40),
             ("rvol_threshold", "float", 0.5, 4.0),
         ]
-    if strategy_name.endswith(("Adv_SELL_TP4", "Adv_SELL_TP4_Manual")):
+    if strategy_name.endswith(("OG_TP4", "OG_TP4_Manual", "Adv_SELL_TP4", "Adv_SELL_TP4_Manual")):
         return [
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
@@ -194,7 +194,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("rvol_period", "int", 7, 40),
             ("rvol_threshold", "float", 0.5, 4.0),
         ]
-    if strategy_name.endswith(("OG_TP1", "OG_TP1_Manual", "TrainablePenguin1", "TrainablePenguin1_Manual", "OG_TP4", "OG_TP4_Manual", "TrainablePenguin4", "TrainablePenguin4_Manual")):
+    if strategy_name.endswith(("OG_TP1", "OG_TP1_Manual", "TrainablePenguin1", "TrainablePenguin1_Manual")):
         return [
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
