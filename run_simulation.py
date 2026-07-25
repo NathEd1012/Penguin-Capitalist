@@ -39,6 +39,8 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
+    TRAINING_START_DATE,
+    TRAINING_STOP_DATE,
 )
 
 
@@ -340,13 +342,29 @@ def run_backtest(
                 seen_trainable_classes.add(penguin_class)
 
         if active_trainables:
-            from scripts.train_trainable_penguins import run_training_step
+            from scripts.train_trainable_penguins import prepare_training_context, run_training_step
+
+            training_start_dt = parse_datetime_string(TRAINING_START_DATE)
+            training_end_dt = parse_datetime_string(TRAINING_STOP_DATE)
+            training_symbols, _training_sorted_timestamps, training_tradeable_timestamps, training_quality_report_text = prepare_training_context(
+                symbols=symbols,
+                start_datetime=training_start_dt,
+                end_datetime=training_end_dt,
+                binning=binning,
+                penguin_classes=active_trainables,
+            )
+
+            if training_quality_report_text and artifacts_dir is not None:
+                training_warnings_path = Path(artifacts_dir) / "training_consistency_warnings.txt"
+                with open(training_warnings_path, "w") as f:
+                    f.write(training_quality_report_text)
+                    f.write("\n")
 
             training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_current" / "artifacts"
             trained_parameters = run_training_step(
                 trainable_strategy_classes=active_trainables,
-                symbols=symbols,
-                tradeable_timestamps=tradeable_timestamps,
+                symbols=training_symbols,
+                tradeable_timestamps=training_tradeable_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
                 artifacts_dir=training_artifacts_dir,

@@ -1,5 +1,6 @@
 """Configuration for the in-simulation training step."""
 import os
+from .backtest import START_DATE as EXECUTION_START_DATE, STOP_DATE as EXECUTION_STOP_DATE
 from .symbols import SYMBOLS as TRAINING_SYMBOLS
 from penguins import (
     Adv_SELL_TP1,
@@ -38,6 +39,10 @@ TRAINING_SUBSET_STOCKS = int(os.getenv("FIXED_SYMB", TRAINING_SUBSET_STOCKSx))
 # Match the training objective's per-buy cost penalty.
 TRAINING_TRANSACTION_COSTx = 2.0
 TRAINING_TRANSACTION_COST = float(os.getenv("FIXED_TRAIN_TC", TRAINING_TRANSACTION_COSTx))
+
+# Train on a different date window from the live execution window when requested.
+TRAINING_START_DATE = os.getenv("FIXED_TRAIN_START", EXECUTION_START_DATE)
+TRAINING_STOP_DATE = os.getenv("FIXED_TRAIN_STOP", EXECUTION_STOP_DATE)
 
 def _parse_training_relative_to(raw_value):
     value = str(raw_value).strip().upper()
@@ -100,6 +105,8 @@ __all__ = [
 	"TRAINING_SUBSET_STOCKS",
 	"TRAINING_RELATIVE_TO",
 	"TRAINING_RANDOM_SEED",
+    "TRAINING_START_DATE",
+    "TRAINING_STOP_DATE",
 	"Manual",
 	"TRAINING_PENGUINS",
 	"TRAINING_MANUAL_PENGUINS",

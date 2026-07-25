@@ -19,8 +19,8 @@ from backtest.data_loader import DataLoader
 from config import (
     INITIAL_CAPITAL,
     BINNING,
-    START_DATE,
-    STOP_DATE,
+    TRAINING_START_DATE,
+    TRAINING_STOP_DATE,
     SYMBOLS,
     TRAINABLE_PENGUINS,
     TRAINING_ITERATIONS,
@@ -839,12 +839,12 @@ def main() -> None:
         pass
 
     try:
-        start_dt = parse_datetime_string(START_DATE)
-        end_dt = parse_datetime_string(STOP_DATE)
+        start_dt = parse_datetime_string(TRAINING_START_DATE)
+        end_dt = parse_datetime_string(TRAINING_STOP_DATE)
     except ValueError as exc:
         print(f"Error parsing config dates: {exc}")
-        print(f"  START_DATE: {START_DATE}")
-        print(f"  STOP_DATE: {STOP_DATE}")
+        print(f"  TRAINING_START_DATE: {TRAINING_START_DATE}")
+        print(f"  TRAINING_STOP_DATE: {TRAINING_STOP_DATE}")
         sys.exit(1)
 
     print("\n" + "=" * 80)
