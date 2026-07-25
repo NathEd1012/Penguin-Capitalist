@@ -1,9 +1,5 @@
 """Main entry point for historical backtesting simulation."""
-import json
-from contextlib import redirect_stderr, redirect_stdout
-import math
 import os
-import random
 import shutil
 import sys
 import time
@@ -32,7 +28,6 @@ from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
-from penguins import SP500
 from penguins.decision_utils import call_penguin_decide
 from config import (
     SYMBOLS,
@@ -44,19 +39,6 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
-    TRAINING_STEP_ENABLED,
-    TRAINING_ITERATIONS,
-    TRAINING_SUBSET_MONTHS,
-    TRAINING_SUBSET_STOCKS,
-    TRAINING_RELATIVE_TO,
-    TRAINING_RANDOM_SEED,
-    TRAINING_TRANSACTION_COST,
-    TRAINING_RESULTS_FILENAME,
-    TRAINING_LOG_FILENAME,
-    TRAINING_PARAMETER_LOG_FILENAME,
-    TRAINING_PARAMETER_DELTA_FILENAME,
-    PLOT_PARETO,
-    TRAINING_PARETO_FILENAME,
 )
 
 
@@ -367,7 +349,6 @@ def run_backtest(
                 tradeable_timestamps=tradeable_timestamps,
                 binning=binning,
                 initial_capital=initial_capital,
-                transaction_cost=TRAINING_TRANSACTION_COST,
                 artifacts_dir=training_artifacts_dir,
             )
 
@@ -639,7 +620,7 @@ def main():
     # Training is executed inside `run_backtest` as Step 3b when enabled.
     
     ################ Run backtest ################
-    results, trades_by_bar, bar_timestamps, _unused_histories, _symbol_close_series, data_quality_report = run_backtest(
+    results, trades_by_bar, bar_timestamps, _, _, _ = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,

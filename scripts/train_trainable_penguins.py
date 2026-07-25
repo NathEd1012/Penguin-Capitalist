@@ -92,7 +92,18 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("rvol_period", "int", 7, 40),
             ("rvol_threshold", "float", 0.5, 4.0),
         ]
-    if strategy_name.endswith(("OG_TP4", "OG_TP4_Manual", "Adv_SELL_TP4", "Adv_SELL_TP4_Manual")):
+    if strategy_name.endswith(("OG_TP4", "OG_TP4_Manual")):
+        return [
+            ("rsi_period", "int", 7, 28),
+            ("buy_rsi", "float", 18.0, 42.0),
+            ("sell_rsi", "float", 55.0, 88.0),
+            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("stop_loss_pct", "float", 0.01, 0.10),
+            ("take_profit_pct", "float", 0.02, 0.20),
+            ("cooldown_bars", "int", 0, 30),
+            ("strength_cap", "float", 1.0, 2.0),
+        ]
+    if strategy_name.endswith(("Adv_SELL_TP4", "Adv_SELL_TP4_Manual")):
         return [
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
@@ -609,7 +620,7 @@ def _train_trainable_penguins(
                     end_datetime=trial_window_end,
                     binning=binning,
                     initial_capital=initial_capital,
-                    transaction_cost=transaction_cost,
+                    transaction_cost=TRAINING_TRANSACTION_COST,
                     penguin_classes=[candidate, SP500],
                     training_step_allowed=False,
                 )
@@ -619,7 +630,7 @@ def _train_trainable_penguins(
             profit_amount = float(candidate_metrics.get("total_return", 0.0))
             benchmark_profit_amount = float(benchmark_metrics.get("total_return", 0.0))
             relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, TRAINING_RELATIVE_TO)
-            score = _score_training_candidate(candidate_metrics, benchmark_metrics, transaction_cost, TRAINING_RELATIVE_TO)
+            score = _score_training_candidate(candidate_metrics, benchmark_metrics, TRAINING_TRANSACTION_COST, TRAINING_RELATIVE_TO)
             objective_value = _objective_from_score(score)
             final_value = float(candidate_metrics.get("final_value", 0.0))
             buy_trades = int(candidate_metrics.get("buy_trades", 0))
@@ -706,7 +717,6 @@ def run_training_step(
     tradeable_timestamps,
     binning,
     initial_capital,
-    transaction_cost,
     artifacts_dir: Path | None = None,
 ):
     if not trainable_strategy_classes:
@@ -724,7 +734,7 @@ def run_training_step(
         tradeable_timestamps=tradeable_timestamps,
         binning=binning,
         initial_capital=initial_capital,
-        transaction_cost=transaction_cost,
+        transaction_cost=TRAINING_TRANSACTION_COST,
     )
     training_end = datetime.now(timezone.utc)
     training_elapsed = training_end - training_start
