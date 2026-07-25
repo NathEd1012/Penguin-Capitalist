@@ -36,7 +36,8 @@ TRAINING_SUBSET_STOCKS = int(os.getenv("FIXED_SYMB", TRAINING_SUBSET_STOCKSx))
 
 
 # Match the training objective's per-buy cost penalty.
-TRAINING_TRANSACTION_COST = 2.0
+TRAINING_TRANSACTION_COSTx = 2.0
+TRAINING_TRANSACTION_COST = float(os.getenv("FIXED_TRAIN_TC", TRAINING_TRANSACTION_COSTx))
 
 def _parse_training_relative_to(raw_value):
     value = str(raw_value).strip().upper()
