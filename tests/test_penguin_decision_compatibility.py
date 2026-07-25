@@ -1,6 +1,8 @@
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import call_penguin_decide
+from penguins.OG_TP.OG_TP4 import OG_TP4
+from scripts.train_trainable_penguins import _strategy_parameter_space
 
 
 class LegacyPenguin(BasePenguin):
@@ -49,3 +51,27 @@ def test_call_penguin_decide_passes_context_to_supported_penguins():
 
     assert action == "SELL"
     assert quantity == 2
+
+
+def test_training_parameter_space_for_og_tp4_matches_constructor():
+    parameter_space = _strategy_parameter_space(OG_TP4)
+    parameter_names = {name for name, _, _, _ in parameter_space}
+
+    assert parameter_names == {
+        "rsi_period",
+        "buy_rsi",
+        "sell_rsi",
+        "max_cash_fraction_per_trade",
+        "stop_loss_pct",
+        "take_profit_pct",
+        "cooldown_bars",
+        "strength_cap",
+    }
+
+    params = {
+        name: (int(low) if kind == "int" else float(low))
+        for name, kind, low, _ in parameter_space
+    }
+    strategy = OG_TP4(**params)
+
+    assert strategy.name == "TrainablePenguin4"

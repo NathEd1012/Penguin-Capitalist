@@ -7,6 +7,7 @@ class BasePenguin(ABC):
     """Base class for all trading strategies."""
     # Default lookback window: can be overridden by subclasses
     LOOKBACK_BARS = 1000
+    TRAINABLE = False
 
     def __init__(self, name: str):
         self.name = self.__class__.__name__

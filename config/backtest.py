@@ -50,6 +50,15 @@ def _parse_config_date(value):
             continue
 
     raise ValueError(f"Cannot parse date from config value: {value!r}")
+
+
+def _parse_config_float(value, setting_name: str) -> float:
+    """Parse numeric config values provided via environment variables."""
+    try:
+        return float(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"Cannot parse float for {setting_name}: {value!r}") from exc
+
 START_DATEx = "2024-01-01 00:00:00"
 START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
 
@@ -87,7 +96,8 @@ INITIAL_CAPITAL = 100000.0
 
 # Execution transaction cost per trade (USD)
 EXEC_TRANSACTION_COSTx = 0.0
-EXEC_TRANSACTION_COST = float(os.getenv("FIXED_EXEC_TC", EXEC_TRANSACTION_COSTx))
+EXEC_TRANSACTION_COST = _parse_config_float(os.getenv("FIXED_EXEC_TC", EXEC_TRANSACTION_COSTx), "FIXED_EXEC_TC")
+
 
 __all__ = [
     "START_DATE",

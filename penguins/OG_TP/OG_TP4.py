@@ -32,6 +32,7 @@ class OG_TP4Params:
 
 class OG_TP4(BasePenguin):
 	LOOKBACK_BARS = 120
+	TRAINABLE = True
 
 	def __init__(
 		self,
@@ -138,6 +139,7 @@ class OG_TP4(BasePenguin):
 
 class OG_TP4_Manual(OG_TP4):
 	LOOKBACK_BARS = 120
+	TRAINABLE = False
 
 	def __init__(
 		self,
