@@ -39,8 +39,15 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
+    TRAINING_STEP_ENABLED,
+    TRAINING_ITERATIONS,
+    TRAINING_SUBSET_MONTHS,
+    TRAINING_SUBSET_STOCKS,
+    TRAINING_RELATIVE_TO,
+    TRAINING_RANDOM_SEED,
     TRAINING_START_DATE,
     TRAINING_STOP_DATE,
+    TRAINING_TRANSACTION_COST,
 )
 
 
@@ -99,6 +106,58 @@ def parse_datetime_string(dt_str: str) -> datetime:
             continue
 
     raise ValueError(f"Cannot parse datetime: {dt_str}")
+
+
+def _format_runtime_configuration_banner(
+    *,
+    start_datetime_utc,
+    end_datetime_utc,
+    binning,
+    initial_capital,
+    transaction_cost,
+    symbols,
+    active_symbol_list,
+    training_step_enabled,
+    training_relative_to,
+    training_iterations,
+    training_subset_stocks,
+    training_subset_months,
+    training_transaction_cost,
+    training_random_seed,
+    training_start_datetime_utc,
+    training_end_datetime_utc,
+) -> str:
+    """Return the runtime banner text for backtest and training configuration."""
+
+    lines = [
+        f"{'=' * 80}",
+        "BACKTEST CONFIGURATION",
+        f"{'=' * 80}",
+        f"Start Time (UTC):  {start_datetime_utc}",
+        f"End Time (UTC):    {end_datetime_utc}",
+        f"Binning:           {binning}",
+        "",
+        "PORTFOLIO CONFIGURATION",
+        f"Initial Capital:   ${initial_capital:,.2f}",
+        f"Transaction Cost:  ${transaction_cost:.2f}",
+        f"Symbol List:       {active_symbol_list}",
+        f"Symbols:           {len(symbols)}",
+        f"{'=' * 80}",
+        "",
+        f"{'=' * 80}",
+        "TRAINING CONFIGURATION",
+        f"{'=' * 80}",
+        f"Training Step Enabled: {str(training_step_enabled).lower()}",
+        f"Training Relative To:  {training_relative_to}",
+        f"Training Steps:        {training_iterations}",
+        f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
+        f"Training Transaction Cost: ${training_transaction_cost:.2f}",
+        f"Training Seed:         {training_random_seed}",
+        f"Training Start (UTC):  {training_start_datetime_utc}",
+        f"Training End (UTC):    {training_end_datetime_utc}",
+        f"{'=' * 80}",
+    ]
+    return "\n".join(lines)
 
 
 def get_next_run_number(run_old_dir: Path) -> int:
@@ -239,18 +298,24 @@ def run_backtest(
         if requested_symbols:
             symbols = requested_symbols
 
-    print(f"\n{'='*80}")
-    print(f"BACKTEST CONFIGURATION")
-    print(f"{'='*80}")
-    print(f"Start Time (UTC):  {start_datetime_utc}")
-    print(f"End Time (UTC):    {end_datetime_utc}")
-    print(f"Binning:           {binning}")
-    print(f"\nPORTFOLIO CONFIGURATION")
-    print(f"Initial Capital:   ${initial_capital:,.2f}")
-    print(f"Transaction Cost:  ${transaction_cost:.2f}")
-    print(f"Symbol List:       {ACTIVE_SYMBOL_LIST}")
-    print(f"Symbols:           {len(symbols)}")
-    print(f"{'='*80}\n")
+    print("\n" + _format_runtime_configuration_banner(
+        start_datetime_utc=start_datetime_utc,
+        end_datetime_utc=end_datetime_utc,
+        binning=binning,
+        initial_capital=initial_capital,
+        transaction_cost=transaction_cost,
+        symbols=symbols,
+        active_symbol_list=ACTIVE_SYMBOL_LIST,
+        training_step_enabled=TRAINING_STEP_ENABLED,
+        training_relative_to=TRAINING_RELATIVE_TO,
+        training_iterations=TRAINING_ITERATIONS,
+        training_subset_stocks=TRAINING_SUBSET_STOCKS,
+        training_subset_months=TRAINING_SUBSET_MONTHS,
+        training_transaction_cost=TRAINING_TRANSACTION_COST,
+        training_random_seed=TRAINING_RANDOM_SEED,
+        training_start_datetime_utc=TRAINING_START_DATE,
+        training_end_datetime_utc=TRAINING_STOP_DATE,
+    ))
     
     # Load data
     print("Step 1: Loading historical data from Alpaca...")

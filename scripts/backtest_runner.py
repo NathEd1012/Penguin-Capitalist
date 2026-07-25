@@ -28,6 +28,15 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     SAVE_TO_RUN_OLD,
+    TRAINING_STEP_ENABLED,
+    TRAINING_ITERATIONS,
+    TRAINING_SUBSET_MONTHS,
+    TRAINING_SUBSET_STOCKS,
+    TRAINING_RELATIVE_TO,
+    TRAINING_RANDOM_SEED,
+    TRAINING_START_DATE,
+    TRAINING_STOP_DATE,
+    TRAINING_TRANSACTION_COST,
 )
 
 
@@ -195,9 +204,22 @@ def run_backtest(
     print(f"Start Time (UTC):  {start_datetime_utc}")
     print(f"End Time (UTC):    {end_datetime_utc}")
     print(f"Binning:           {binning}")
+    print(f"\nPORTFOLIO CONFIGURATION")
     print(f"Initial Capital:   ${initial_capital:,.2f}")
     print(f"Transaction Cost:  ${transaction_cost:.2f}")
+    print(f"Symbol List:       {ACTIVE_SYMBOL_LIST}")
     print(f"Symbols:           {len(symbols)}")
+    print(f"{'='*80}")
+    print("")
+    print("TRAINING CONFIGURATION")
+    print(f"Training Step Enabled: {str(TRAINING_STEP_ENABLED).lower()}")
+    print(f"Training Relative To:  {TRAINING_RELATIVE_TO}")
+    print(f"Training Steps:        {TRAINING_ITERATIONS}")
+    print(f"Training Sample:       {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
+    print(f"Training Transaction Cost: ${TRAINING_TRANSACTION_COST:.2f}")
+    print(f"Training Seed:         {TRAINING_RANDOM_SEED}")
+    print(f"Training Start (UTC):  {TRAINING_START_DATE}")
+    print(f"Training End (UTC):    {TRAINING_STOP_DATE}")
     print(f"{'='*80}\n")
     
     # Load data

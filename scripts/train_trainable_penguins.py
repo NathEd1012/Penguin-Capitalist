@@ -711,6 +711,12 @@ def _train_trainable_penguins(
     return trained_parameters, log_lines, parameter_history, pareto_history
 
 
+def _training_pareto_output_path(artifacts_dir: Path | None = None) -> Path:
+    output_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).resolve().parent.parent / "run_current" / "artifacts"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir / TRAINING_PARETO_FILENAME
+
+
 def run_training_step(
     trainable_strategy_classes,
     symbols,
@@ -750,7 +756,7 @@ def run_training_step(
     training_parameter_log_path = training_output_dir / TRAINING_PARAMETER_LOG_FILENAME
     training_parameter_delta_path = artifacts_dir / TRAINING_PARAMETER_DELTA_FILENAME
     training_log_path = artifacts_dir / TRAINING_LOG_FILENAME
-    training_pareto_path = artifacts_dir.parent / TRAINING_PARETO_FILENAME
+    training_pareto_path = _training_pareto_output_path(artifacts_dir)
 
     with open(training_output_path, "w", encoding="utf-8") as handle:
         json.dump(

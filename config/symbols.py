@@ -10,7 +10,7 @@ This module contains:
 # This is the primary list used by the backtest engine
 # Choose active list by changing just this variable:
 # "LIST_1" | "LIST_2" | "LIST_3" | "LIST_4" | "LIST_5"
-ACTIVE_SYMBOL_LIST = "LIST_2"
+ACTIVE_SYMBOL_LIST = "LIST_5"
 
 # List 1: 5 large-cap stocks
 SYMBOL_LIST_1 = [
