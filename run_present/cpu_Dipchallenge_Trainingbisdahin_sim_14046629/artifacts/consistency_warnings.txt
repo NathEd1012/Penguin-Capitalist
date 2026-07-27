@@ -1,0 +1,171 @@
+Data consistency events
+========================================================================
+Known corporate actions and one-bar outliers are summarized below.
+Unresolved inconsistencies are shown only when they persist for more than one bar.
+
+Corporate actions:
+  - FAST | 2025-05-22T00:00:00+00:00 | split on 2025-05-22 (2-for-1 stock split; ex/split-adjusted trading began)
+  - KLAC | 2026-06-12T00:00:00+00:00 | split on 2026-06-12 (10-for-1 stock split; split-adjusted trading began)
+  - NFLX | 2025-11-17T00:00:00+00:00 | split on 2025-11-17 (10-for-1 stock split)
+  - NOW | 2025-12-18T00:00:00+00:00 | split on 2025-12-18 (5-for-1 stock split)
+
+One-bar outliers:
+  - BBY | 2026-03-03T13:00:00+00:00 | one-bar outlier 11.65%; next bar reverted to within 1.03% of previous close | close=59.9
+  - BLDP | 2025-01-22T11:16:00+00:00 | one-bar outlier 24.34%; next bar reverted to within 1.97% of previous close | close=1.89
+  - CRSP | 2025-10-27T12:00:00+00:00 | one-bar outlier 14.71%; next bar reverted to within 0.90% of previous close | close=69.25
+  - CSCO | 2026-05-14T13:25:00+00:00 | one-bar outlier 13.08%; next bar reverted to within 0.57% of previous close | close=101.9
+  - CVNA | 2025-04-04T12:00:00+00:00 | one-bar outlier 8.86%; next bar reverted to within 0.76% of previous close | close=182.9
+  - DLR | 2025-01-28T13:00:00+00:00 | one-bar outlier 10.20%; next bar reverted to within 0.14% of previous close | close=147.5
+  - EL | 2025-04-04T12:00:00+00:00 | one-bar outlier 11.04%; next bar reverted to within 0.02% of previous close | close=59.13
+  - EMR | 2026-04-21T08:35:00+00:00 | one-bar outlier 8.93%; next bar reverted to within 0.50% of previous close | close=133.9
+  - EXPD | 2026-05-29T11:06:00+00:00 | one-bar outlier 19.53%; next bar reverted to within 0.16% of previous close | close=190
+  - FCX | 2025-04-04T12:00:00+00:00 | one-bar outlier 9.70%; next bar reverted to within 0.13% of previous close | close=33.46
+  - GREE | 2025-01-07T09:33:00+00:00 | one-bar outlier 8.65%; next bar reverted to within 0.54% of previous close | close=1.69
+  - LLY | 2025-04-17T12:09:00+00:00 | one-bar outlier 10.05%; next bar reverted to within 0.19% of previous close | close=734.9
+  - MRNA | 2025-03-31T12:00:00+00:00 | one-bar outlier 10.81%; next bar reverted to within 1.57% of previous close | close=30.33
+  - MRNA | 2025-08-01T12:00:00+00:00 | one-bar outlier 8.97%; next bar reverted to within 0.80% of previous close | close=29.88
+  - MTCH | 2025-03-10T20:00:00+00:00 | one-bar outlier 10.77%; next bar reverted to within 0.53% of previous close | close=28.58
+  - NVO | 2025-11-24T13:01:00+00:00 | one-bar outlier 12.55%; next bar reverted to within 0.46% of previous close | close=47.99
+  - NVO | 2026-02-04T13:59:00+00:00 | one-bar outlier 16.58%; next bar reverted to within 0.09% of previous close | close=55.9
+  - NXPI | 2025-03-10T20:00:00+00:00 | one-bar outlier 13.75%; next bar reverted to within 0.01% of previous close | close=180.1
+  - ORCL | 2026-02-02T13:01:00+00:00 | one-bar outlier 10.93%; next bar reverted to within 0.07% of previous close | close=156
+  - ORCL | 2026-02-02T13:12:00+00:00 | one-bar outlier 9.76%; next bar reverted to within 0.27% of previous close | close=156.2
+  - PENN | 2025-03-10T20:00:00+00:00 | one-bar outlier 13.97%; next bar reverted to within 0.73% of previous close | close=18.85
+  - PENN | 2025-11-06T12:00:00+00:00 | one-bar outlier 10.73%; next bar reverted to within 2.97% of previous close | close=14.73
+  - PYPL | 2026-02-03T13:01:00+00:00 | one-bar outlier 20.75%; next bar reverted to within 0.55% of previous close | close=53.13
+  - PYPL | 2026-02-03T13:03:00+00:00 | one-bar outlier 21.84%; next bar reverted to within 0.05% of previous close | close=53.9
+  - PYPL | 2026-02-03T13:08:00+00:00 | one-bar outlier 23.43%; next bar reverted to within 0.07% of previous close | close=54.1
+  - SBUX | 2026-01-28T13:02:00+00:00 | one-bar outlier 10.17%; next bar reverted to within 0.57% of previous close | close=94.05
+  - SNOW | 2025-02-26T22:08:00+00:00 | one-bar outlier 10.00%; next bar reverted to within 0.12% of previous close | close=166.2
+  - SQM | 2025-11-04T13:03:00+00:00 | one-bar outlier 8.74%; next bar reverted to within 0.63% of previous close | close=43.35
+  - TGT | 2025-08-20T12:00:00+00:00 | one-bar outlier 10.77%; next bar reverted to within 0.19% of previous close | close=105.2
+  - TMO | 2025-04-15T15:37:00+00:00 | one-bar outlier 21.35%; next bar reverted to within 0.22% of previous close | close=538.4
+  - VERI | 2025-01-02T13:00:00+00:00 | one-bar outlier 14.43%; next bar reverted to within 0.68% of previous close | close=3.387
+  - WELL | 2025-04-07T12:00:00+00:00 | one-bar outlier 11.16%; next bar reverted to within 1.87% of previous close | close=125.3
+
+Unresolved inconsistencies (>1 bar):
+  - ABBV | 2026-06-01T11:01:00+00:00 -> 2026-06-30T23:39:00+00:00 | 8779 bars | jump 17.10% above 8.00% threshold | first_close=217.1, last_close=251.3
+  - ABNB | 2025-02-13T21:03:00+00:00 -> 2026-06-30T21:32:00+00:00 | 144175 bars | jump 8.43% above 8.00% threshold | first_close=153.4, last_close=143.1
+  - ADBE | 2026-06-01T08:00:00+00:00 -> 2026-06-30T23:58:00+00:00 | 13577 bars | jump 30.43% above 8.00% threshold | first_close=268.7, last_close=204.8
+  - AES | 2025-10-01T08:00:00+00:00 -> 2026-06-30T22:47:00+00:00 | 81406 bars | jump 11.85% above 8.00% threshold | first_close=14.76, last_close=14.62
+  - AFRM | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:20:00+00:00 | 147085 bars | jump 10.18% above 8.00% threshold | first_close=32.11, last_close=81.22
+  - AI | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:31:00+00:00 | 162996 bars | jump 9.10% above 8.00% threshold | first_close=17.09, last_close=9.08
+  - ALB | 2026-02-02T09:00:00+00:00 -> 2026-06-30T23:06:00+00:00 | 42493 bars | jump 8.11% above 8.00% threshold | first_close=156.8, last_close=133.5
+  - AON | 2026-06-01T08:34:00+00:00 -> 2026-06-30T20:38:00+00:00 | 8193 bars | jump 11.41% above 8.00% threshold | first_close=316.1, last_close=331.7
+  - APP | 2025-02-12T21:05:00+00:00 -> 2026-06-30T23:31:00+00:00 | 62409 bars | jump 10.77% above 8.00% threshold | first_close=415.4, last_close=515.9
+  - ARCT | 2025-01-17T10:15:00+00:00 -> 2026-06-30T21:25:00+00:00 | 101778 bars | jump 8.26% above 8.00% threshold | first_close=17.7, last_close=6.98
+  - ASML | 2025-01-27T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 175132 bars | jump 8.20% above 8.00% threshold | first_close=672, last_close=1989
+  - AVAV | 2025-03-04T21:10:00+00:00 -> 2026-06-30T23:59:00+00:00 | 129499 bars | jump 11.49% above 8.00% threshold | first_close=125.6, last_close=166.2
+  - AVGO | 2025-10-13T13:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 142694 bars | jump 8.20% above 8.00% threshold | first_close=361, last_close=378.4
+  - BABA | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:51:00+00:00 | 217157 bars | jump 10.56% above 8.00% threshold | first_close=103.3, last_close=96.18
+  - BAC | 2026-06-01T08:00:00+00:00 -> 2026-06-30T23:49:00+00:00 | 10079 bars | jump 8.67% above 8.00% threshold | first_close=51.39, last_close=56.93
+  - BBAI | 2025-01-27T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 292198 bars | jump 9.18% above 8.00% threshold | first_close=3.82, last_close=3.7
+  - BE | 2025-01-27T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 199162 bars | jump 9.06% above 8.00% threshold | first_close=27.1, last_close=330.6
+  - BEAM | 2025-03-10T11:00:00+00:00 -> 2026-06-30T23:56:00+00:00 | 131758 bars | jump 8.20% above 8.00% threshold | first_close=30.9, last_close=35.11
+  - BILL | 2025-02-06T21:05:00+00:00 -> 2026-06-30T20:06:00+00:00 | 138226 bars | jump 9.18% above 8.00% threshold | first_close=89, last_close=36.15
+  - BLDP | 2025-03-12T10:59:00+00:00 -> 2026-06-30T23:46:00+00:00 | 135514 bars | jump 14.17% above 8.00% threshold | first_close=1.37, last_close=4
+  - BNTX | 2025-09-05T12:01:00+00:00 -> 2026-06-30T23:23:00+00:00 | 66876 bars | jump 8.35% above 8.00% threshold | first_close=111.7, last_close=93.1
+  - CAN | 2025-02-03T09:00:00+00:00 -> 2026-06-30T23:42:00+00:00 | 199922 bars | jump 11.05% above 8.00% threshold | first_close=1.85, last_close=0.2894
+  - CMG | 2025-02-04T21:10:00+00:00 -> 2026-06-30T23:40:00+00:00 | 166945 bars | jump 8.78% above 8.00% threshold | first_close=53.91, last_close=33.89
+  - COIN | 2025-03-03T09:00:00+00:00 -> 2026-06-30T23:58:00+00:00 | 233395 bars | jump 9.79% above 8.00% threshold | first_close=235.5, last_close=145.4
+  - COP | 2026-01-05T09:00:00+00:00 -> 2026-06-30T23:52:00+00:00 | 53829 bars | jump 8.80% above 8.00% threshold | first_close=105.1, last_close=103.9
+  - CRM | 2025-02-26T21:01:00+00:00 -> 2026-06-30T23:57:00+00:00 | 164832 bars | jump 8.32% above 8.00% threshold | first_close=284, last_close=156.6
+  - CVNA | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:58:00+00:00 | 141779 bars | jump 8.36% above 8.00% threshold | first_close=145.7, last_close=65.64
+  - CVX | 2026-01-05T09:00:00+00:00 -> 2026-06-30T23:53:00+00:00 | 62369 bars | jump 9.06% above 8.00% threshold | first_close=170, last_close=165.9
+  - D | 2026-05-18T08:00:00+00:00 -> 2026-06-30T20:04:00+00:00 | 12391 bars | jump 10.11% above 8.00% threshold | first_close=67.94, last_close=68.29
+  - DD | 2025-11-03T09:18:00+00:00 -> 2026-06-30T20:06:00+00:00 | 64923 bars | one-bar jump 55.49% exceeded 50% hard cap | first_close=36.5, last_close=135.6
+  - DDOG | 2025-02-13T12:00:00+00:00 -> 2026-06-30T23:46:00+00:00 | 149833 bars | jump 10.72% above 8.00% threshold | first_close=135.6, last_close=258.2
+  - DKNG | 2025-11-06T21:15:00+00:00 -> 2026-06-30T23:57:00+00:00 | 75045 bars | jump 8.50% above 8.00% threshold | first_close=25.52, last_close=25.05
+  - DNA | 2025-04-04T12:00:00+00:00 -> 2026-06-30T22:56:00+00:00 | 117138 bars | jump 9.87% above 8.00% threshold | first_close=5.867, last_close=9.74
+  - EA | 2025-01-22T21:05:00+00:00 -> 2026-06-30T20:35:00+00:00 | 136111 bars | jump 8.68% above 8.00% threshold | first_close=130, last_close=205
+  - EDIT | 2025-01-03T13:06:00+00:00 -> 2026-06-30T23:49:00+00:00 | 142364 bars | jump 8.38% above 8.00% threshold | first_close=1.31, last_close=3.191
+  - EL | 2025-08-20T10:00:00+00:00 -> 2026-06-30T23:55:00+00:00 | 87716 bars | jump 9.09% above 8.00% threshold | first_close=78.19, last_close=79.06
+  - ENPH | 2025-02-04T21:05:00+00:00 -> 2026-06-30T23:57:00+00:00 | 172522 bars | jump 14.62% above 8.00% threshold | first_close=74.8, last_close=49.46
+  - ESTC | 2025-02-27T21:05:00+00:00 -> 2026-06-30T20:00:00+00:00 | 40126 bars | jump 10.58% above 8.00% threshold | first_close=112, last_close=57.02
+  - ETN | 2026-02-03T13:00:00+00:00 -> 2026-06-30T23:40:00+00:00 | 43965 bars | jump 8.46% above 8.00% threshold | first_close=366.5, last_close=425
+  - FAST | 2026-01-20T13:00:00+00:00 -> 2026-06-30T20:38:00+00:00 | 45104 bars | jump 8.80% above 8.00% threshold | first_close=44.5, last_close=48.03
+  - FCEL | 2025-01-22T12:30:00+00:00 -> 2026-06-30T23:59:00+00:00 | 153405 bars | jump 16.11% above 8.00% threshold | first_close=10.45, last_close=36.88
+  - FISV | 2025-10-29T11:01:00+00:00 -> 2026-06-30T23:57:00+00:00 | 74855 bars | jump 16.30% above 8.00% threshold | first_close=107.5, last_close=49.01
+  - FSLY | 2025-02-12T21:05:00+00:00 -> 2026-06-30T23:59:00+00:00 | 153022 bars | jump 10.89% above 8.00% threshold | first_close=9, last_close=18.01
+  - GOOGL | 2025-02-05T13:41:00+00:00 -> 2026-06-30T23:58:00+00:00 | 261659 bars | jump 8.10% above 8.00% threshold | first_close=206.4, last_close=357.2
+  - GPN | 2025-07-15T20:01:00+00:00 -> 2026-06-30T22:22:00+00:00 | 92600 bars | jump 10.81% above 8.00% threshold | first_close=86, last_close=72.55
+  - GREE | 2025-02-06T09:23:00+00:00 -> 2026-06-30T20:07:00+00:00 | 46473 bars | jump 8.73% above 8.00% threshold | first_close=1.15, last_close=1.772
+  - HAL | 2026-01-05T09:00:00+00:00 -> 2026-06-30T23:49:00+00:00 | 55706 bars | jump 12.00% above 8.00% threshold | first_close=33.14, last_close=33.88
+  - HCA | 2025-03-31T08:05:00+00:00 -> 2026-06-30T23:52:00+00:00 | 114125 bars | jump 8.15% above 8.00% threshold | first_close=340.7, last_close=390.1
+  - HOOD | 2025-02-12T21:05:00+00:00 -> 2026-06-30T23:57:00+00:00 | 97234 bars | jump 8.23% above 8.00% threshold | first_close=60.61, last_close=100.3
+  - HSY | 2026-06-01T08:04:00+00:00 -> 2026-06-30T20:04:00+00:00 | 7936 bars | jump 15.11% above 8.00% threshold | first_close=192.5, last_close=176.3
+  - HUBS | 2025-02-12T21:09:00+00:00 -> 2026-06-30T22:34:00+00:00 | 121796 bars | jump 8.55% above 8.00% threshold | first_close=731.6, last_close=182.5
+  - IFF | 2025-08-06T20:33:00+00:00 -> 2026-06-30T20:00:00+00:00 | 83803 bars | jump 11.37% above 8.00% threshold | first_close=73.68, last_close=79.22
+  - INTC | 2025-09-18T11:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 176454 bars | jump 11.41% above 8.00% threshold | first_close=28.13, last_close=139.4
+  - JD | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:58:00+00:00 | 180933 bars | jump 9.78% above 8.00% threshold | first_close=33.1, last_close=25.42
+  - KMI | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:52:00+00:00 | 129084 bars | jump 8.09% above 8.00% threshold | first_close=23.18, last_close=31.97
+  - KSS | 2025-07-22T13:22:00+00:00 -> 2026-06-30T23:56:00+00:00 | 101280 bars | jump 12.16% above 8.00% threshold | first_close=18.73, last_close=17.7
+  - KTOS | 2025-04-07T10:39:00+00:00 -> 2026-06-30T23:53:00+00:00 | 145595 bars | jump 8.13% above 8.00% threshold | first_close=27.14, last_close=50.18
+  - LAC | 2025-08-11T08:00:00+00:00 -> 2026-06-30T23:51:00+00:00 | 136320 bars | jump 8.16% above 8.00% threshold | first_close=3.05, last_close=3.9
+  - LCID | 2025-02-25T21:05:00+00:00 -> 2026-06-30T23:56:00+00:00 | 221124 bars | jump 8.02% above 8.00% threshold | first_close=2.83, last_close=6.552
+  - LI | 2025-02-25T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 159817 bars | jump 15.39% above 8.00% threshold | first_close=30.29, last_close=11.81
+  - LULU | 2025-06-05T20:05:00+00:00 -> 2026-06-30T23:28:00+00:00 | 123056 bars | jump 11.23% above 8.00% threshold | first_close=295, last_close=113.8
+  - LYB | 2025-04-07T08:03:00+00:00 -> 2026-06-30T23:40:00+00:00 | 127076 bars | jump 9.48% above 8.00% threshold | first_close=55.56, last_close=52.99
+  - MARA | 2025-03-03T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 261271 bars | jump 8.85% above 8.00% threshold | first_close=15.25, last_close=13.8
+  - MCHP | 2025-02-06T21:15:00+00:00 -> 2026-06-30T22:43:00+00:00 | 147803 bars | jump 8.49% above 8.00% threshold | first_close=48.5, last_close=91.72
+  - MDB | 2025-03-05T21:05:00+00:00 -> 2026-06-30T23:28:00+00:00 | 141313 bars | jump 8.55% above 8.00% threshold | first_close=242.5, last_close=335.2
+  - MNST | 2026-04-08T09:40:00+00:00 -> 2026-06-30T20:21:00+00:00 | 23527 bars | jump 8.59% above 8.00% threshold | first_close=79.57, last_close=96.12
+  - MP | 2025-04-14T08:00:00+00:00 -> 2026-06-30T23:47:00+00:00 | 184038 bars | jump 9.89% above 8.00% threshold | first_close=25.01, last_close=56.33
+  - MPWR | 2026-06-01T08:00:00+00:00 -> 2026-06-30T23:54:00+00:00 | 9726 bars | one-bar jump 128.74% exceeded 50% hard cap | first_close=1673, last_close=1385
+  - MSTR | 2025-03-03T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 260044 bars | jump 11.51% above 8.00% threshold | first_close=286.6, last_close=86.37
+  - MTCH | 2026-02-03T21:11:00+00:00 -> 2026-06-30T20:17:00+00:00 | 39869 bars | jump 8.14% above 8.00% threshold | first_close=31.35, last_close=38
+  - MU | 2026-06-23T08:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 5750 bars | jump 9.22% above 8.00% threshold | first_close=1117, last_close=1156
+  - NET | 2025-02-06T21:16:00+00:00 -> 2026-06-30T23:37:00+00:00 | 150066 bars | jump 8.45% above 8.00% threshold | first_close=141.1, last_close=245.4
+  - NFLX | 2026-06-01T08:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 16625 bars | jump 35.70% above 8.00% threshold | first_close=86.1, last_close=71.8
+  - NIO | 2025-03-11T08:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 240228 bars | jump 9.34% above 8.00% threshold | first_close=4.8, last_close=5.082
+  - NOW | 2026-04-22T20:10:00+00:00 -> 2026-06-30T23:59:00+00:00 | 40247 bars | jump 9.69% above 8.00% threshold | first_close=93.2, last_close=99.53
+  - NTLA | 2025-01-10T09:00:00+00:00 -> 2026-06-30T23:57:00+00:00 | 174451 bars | jump 8.79% above 8.00% threshold | first_close=11, last_close=16.79
+  - NU | 2025-02-20T22:06:00+00:00 -> 2026-06-30T23:47:00+00:00 | 179247 bars | jump 8.28% above 8.00% threshold | first_close=13.34, last_close=13.34
+  - NUE | 2025-02-10T09:00:00+00:00 -> 2026-06-30T20:00:00+00:00 | 132493 bars | jump 8.17% above 8.00% threshold | first_close=142, last_close=222.8
+  - NXPI | 2026-02-02T21:11:00+00:00 -> 2026-06-30T21:40:00+00:00 | 40610 bars | jump 8.36% above 8.00% threshold | first_close=217.2, last_close=281.5
+  - OKTA | 2025-03-03T21:01:00+00:00 -> 2026-06-30T22:07:00+00:00 | 141848 bars | jump 10.43% above 8.00% threshold | first_close=96.26, last_close=136.1
+  - ON | 2025-02-10T12:30:00+00:00 -> 2026-06-30T23:59:00+00:00 | 155732 bars | jump 11.11% above 8.00% threshold | first_close=44.8, last_close=94.94
+  - OPEN | 2025-05-06T20:05:00+00:00 -> 2026-06-30T23:59:00+00:00 | 225798 bars | jump 11.35% above 8.00% threshold | first_close=0.79, last_close=4.6
+  - OTIS | 2025-07-23T10:27:00+00:00 -> 2026-06-30T20:38:00+00:00 | 91602 bars | jump 10.80% above 8.00% threshold | first_close=90.09, last_close=71.6
+  - PATH | 2025-03-12T20:10:00+00:00 -> 2026-06-30T23:58:00+00:00 | 193578 bars | jump 19.66% above 8.00% threshold | first_close=9.48, last_close=10.87
+  - PDD | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:09:00+00:00 | 161084 bars | jump 9.27% above 8.00% threshold | first_close=93.38, last_close=76.31
+  - PINS | 2025-02-06T21:06:00+00:00 -> 2026-06-30T23:19:00+00:00 | 159037 bars | jump 19.30% above 8.00% threshold | first_close=39.5, last_close=20.99
+  - PLTR | 2025-02-03T21:05:00+00:00 -> 2026-06-30T23:59:00+00:00 | 308332 bars | jump 9.93% above 8.00% threshold | first_close=92.88, last_close=117.3
+  - PLUG | 2025-08-11T20:01:00+00:00 -> 2026-06-30T23:58:00+00:00 | 176389 bars | jump 8.81% above 8.00% threshold | first_close=1.45, last_close=2.737
+  - QRVO | 2025-01-28T21:00:00+00:00 -> 2026-06-30T23:06:00+00:00 | 130304 bars | jump 11.96% above 8.00% threshold | first_close=96.04, last_close=93.27
+  - RBLX | 2025-02-06T13:00:00+00:00 -> 2026-06-30T23:58:00+00:00 | 167878 bars | jump 15.11% above 8.00% threshold | first_close=61.97, last_close=54.1
+  - REGN | 2025-05-30T12:00:00+00:00 -> 2026-06-30T20:38:00+00:00 | 96446 bars | jump 8.44% above 8.00% threshold | first_close=591, last_close=623.5
+  - RIOT | 2025-02-03T09:00:00+00:00 -> 2026-06-30T23:32:00+00:00 | 226360 bars | jump 8.42% above 8.00% threshold | first_close=10.88, last_close=27.28
+  - ROK | 2026-02-05T13:01:00+00:00 -> 2026-06-30T23:29:00+00:00 | 37634 bars | jump 10.69% above 8.00% threshold | first_close=443.1, last_close=499.9
+  - ROKU | 2025-10-30T20:02:00+00:00 -> 2026-06-30T22:59:00+00:00 | 69033 bars | jump 10.31% above 8.00% threshold | first_close=87, last_close=138.2
+  - ROST | 2025-08-21T20:02:00+00:00 -> 2026-06-30T20:00:00+00:00 | 82092 bars | jump 8.99% above 8.00% threshold | first_close=150, last_close=212.8
+  - RSI | 2025-02-26T21:17:00+00:00 -> 2026-06-30T23:43:00+00:00 | 118547 bars | jump 11.97% above 8.00% threshold | first_close=14.5, last_close=30.29
+  - RUN | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 152410 bars | jump 9.99% above 8.00% threshold | first_close=6.21, last_close=13.42
+  - SEDG | 2025-01-08T13:00:00+00:00 -> 2026-06-30T23:40:00+00:00 | 168666 bars | jump 8.56% above 8.00% threshold | first_close=17.83, last_close=59.45
+  - SHOP | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:36:00+00:00 | 149328 bars | jump 8.14% above 8.00% threshold | first_close=70, last_close=114.1
+  - SLB | 2026-01-05T09:00:00+00:00 -> 2026-06-30T23:40:00+00:00 | 55483 bars | jump 11.35% above 8.00% threshold | first_close=44.82, last_close=46.38
+  - SNAP | 2025-02-04T21:10:00+00:00 -> 2026-06-30T23:58:00+00:00 | 71665 bars | jump 12.66% above 8.00% threshold | first_close=13.16, last_close=4.431
+  - SNOW | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:50:00+00:00 | 145230 bars | jump 8.82% above 8.00% threshold | first_close=118.3, last_close=254.5
+  - SOFI | 2025-04-04T12:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 258635 bars | jump 8.17% above 8.00% threshold | first_close=10.59, last_close=17.91
+  - SOUN | 2025-01-27T09:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 280177 bars | jump 11.33% above 8.00% threshold | first_close=14.17, last_close=6.48
+  - SPCE | 2025-04-07T12:05:00+00:00 -> 2026-06-30T23:57:00+00:00 | 150170 bars | jump 9.06% above 8.00% threshold | first_close=2.53, last_close=2.873
+  - SRE | 2025-02-25T13:00:00+00:00 -> 2026-06-30T20:04:00+00:00 | 131977 bars | jump 8.10% above 8.00% threshold | first_close=91.13, last_close=92.71
+  - SWKS | 2025-02-05T21:43:00+00:00 -> 2026-06-30T20:42:00+00:00 | 139810 bars | jump 16.65% above 8.00% threshold | first_close=69.31, last_close=67.51
+  - TEAM | 2025-01-30T21:05:00+00:00 -> 2026-06-30T21:28:00+00:00 | 149323 bars | jump 24.34% above 8.00% threshold | first_close=332, last_close=77.91
+  - TER | 2025-10-28T21:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 73322 bars | jump 12.15% above 8.00% threshold | first_close=162, last_close=485
+  - TMO | 2025-04-15T15:42:00+00:00 -> 2026-06-30T23:03:00+00:00 | 118158 bars | jump 12.10% above 8.00% threshold | first_close=496, last_close=499.5
+  - TSLA | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 289961 bars | jump 8.40% above 8.00% threshold | first_close=215.5, last_close=415.9
+  - TSM | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:59:00+00:00 | 220451 bars | jump 8.52% above 8.00% threshold | first_close=132.1, last_close=476.3
+  - U | 2025-01-02T09:00:00+00:00 -> 2026-06-30T23:38:00+00:00 | 194851 bars | jump 8.69% above 8.00% threshold | first_close=24.4, last_close=28.6
+  - VERI | 2025-01-15T13:00:00+00:00 -> 2026-06-30T23:47:00+00:00 | 143605 bars | jump 9.22% above 8.00% threshold | first_close=3.025, last_close=1.36
+  - VLO | 2026-01-05T09:14:00+00:00 -> 2026-06-30T22:26:00+00:00 | 50269 bars | jump 8.61% above 8.00% threshold | first_close=179.2, last_close=261
+  - W | 2025-05-12T08:00:00+00:00 -> 2026-06-30T20:28:00+00:00 | 22846 bars | jump 9.24% above 8.00% threshold | first_close=35.94, last_close=92.42
+  - WFC | 2025-04-07T08:00:00+00:00 -> 2026-06-30T23:56:00+00:00 | 134875 bars | jump 8.06% above 8.00% threshold | first_close=56, last_close=82.76
+  - XLE | 2025-12-05T09:00:00+00:00 -> 2026-06-30T23:04:00+00:00 | 90760 bars | jump 39.92% above 8.00% threshold | first_close=55.37, last_close=53.22
+  - XLK | 2025-12-05T09:00:00+00:00 -> 2026-06-30T23:50:00+00:00 | 76126 bars | jump 49.22% above 8.00% threshold | first_close=147.9, last_close=190.5
+  - XPEV | 2025-01-14T09:00:00+00:00 -> 2026-06-30T23:58:00+00:00 | 211000 bars | jump 9.43% above 8.00% threshold | first_close=13, last_close=13.3
+  - Z | 2025-02-11T21:10:00+00:00 -> 2026-06-30T23:53:00+00:00 | 136965 bars | jump 9.74% above 8.00% threshold | first_close=78.22, last_close=31.86
+  - ZG | 2025-02-11T21:10:00+00:00 -> 2026-06-30T21:54:00+00:00 | 113651 bars | jump 8.65% above 8.00% threshold | first_close=76.59, last_close=30.92
+  - ZS | 2025-09-02T20:05:00+00:00 -> 2026-06-30T23:50:00+00:00 | 93746 bars | jump 8.56% above 8.00% threshold | first_close=298.1, last_close=141.1
+
+Totals: corporate_actions=4, one_bar_outliers=32, unresolved_inconsistencies=123, unresolved_affected_bars=15697310

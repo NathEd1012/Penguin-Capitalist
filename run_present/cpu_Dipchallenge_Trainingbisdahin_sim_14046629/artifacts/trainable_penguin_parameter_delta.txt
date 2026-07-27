@@ -1,0 +1,62 @@
+Trainable parameter delta report generated at 2026-07-25T23:39:24.407779+00:00
+Format: initial -> after_training
+
+Adv_SELL_TP1:
+  adx_period: 14 -> 28
+  adx_threshold: 25.0 -> 29.4963
+  buy_rsi: 30.0 -> 35.1108
+  cooldown_bars: 10 -> 7
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.0989
+  relative_strength_period: 20 -> 11
+  relative_strength_threshold: 0.0 -> -0.3238
+  rsi_period: 13 -> 13
+  rvol_period: 20 -> 21
+  rvol_threshold: 2.0 -> 2.5595
+  sell_rsi: 70.0 -> 68.1667
+  stop_loss_pct: 0.04 -> 0.0566
+  take_profit_pct: 0.08 -> 0.0418
+
+Adv_SELL_TP2:
+  adx_period: 14 -> 20
+  adx_threshold: 25.0 -> 34.2193
+  bb_period: 20 -> 34
+  bb_stddev: 2.0 -> 3.4118
+  cooldown_bars: 10 -> 12
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.1574
+  relative_strength_period: 20 -> 22
+  relative_strength_threshold: 0.0 -> -0.5469
+  rvol_period: 20 -> 11
+  rvol_threshold: 2.0 -> 0.8971
+  stop_loss_pct: 0.04 -> 0.0389
+  take_profit_pct: 0.08 -> 0.1815
+
+Adv_SELL_TP3:
+  adx_period: 14 -> 14
+  adx_threshold: 25.0 -> 12.4603
+  bb_period: 20 -> 28
+  bb_stddev: 2.0 -> 3.3491
+  cooldown_bars: 10 -> 27
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.0503
+  relative_strength_period: 20 -> 13
+  relative_strength_threshold: 0.0 -> 0.2617
+  rvol_period: 20 -> 8
+  rvol_threshold: 2.0 -> 2.1461
+  stop_loss_pct: 0.04 -> 0.0684
+  take_profit_pct: 0.08 -> 0.1224
+
+Adv_SELL_TP4:
+  buy_rsi: 30.0 -> 28.2576
+  cooldown_bars: 10 -> 9
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.1625
+  relative_strength_period: 20 -> 40
+  relative_strength_threshold: 0.0 -> -0.1015
+  rsi_period: 13 -> 23
+  rvol_period: 20 -> 30
+  rvol_threshold: 2.0 -> 1.4985
+  sell_rsi: 70.0 -> 76.2969
+  stop_loss_pct: 0.04 -> 0.06
+  take_profit_pct: 0.08 -> 0.0266

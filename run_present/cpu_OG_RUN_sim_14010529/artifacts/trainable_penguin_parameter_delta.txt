@@ -1,0 +1,46 @@
+Trainable parameter delta report generated at 2026-07-21T19:53:19.341608+00:00
+Format: initial -> after_training
+
+TrainablePenguin1:
+  adx_period: 14 -> 9
+  adx_threshold: 25.0 -> 35.66
+  buy_rsi: 30.0 -> 19.67
+  cooldown_bars: 10 -> 26
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.176
+  rsi_period: 13 -> 16
+  sell_rsi: 70.0 -> 76.82
+  stop_loss_pct: 0.04 -> 0.0442
+  take_profit_pct: 0.08 -> 0.1016
+
+TrainablePenguin2:
+  adx_period: 14 -> 17
+  adx_threshold: 25.0 -> 37.78
+  bb_period: 20 -> 19
+  bb_stddev: 2.0 -> 1.65
+  cooldown_bars: 10 -> 14
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.0907
+  stop_loss_pct: 0.04 -> 0.0849
+  take_profit_pct: 0.08 -> 0.0787
+
+TrainablePenguin3:
+  adx_period: 14 -> 15
+  adx_threshold: 25.0 -> 21.94
+  bb_period: 20 -> 34
+  bb_stddev: 2.0 -> 3.29
+  cooldown_bars: 10 -> 13
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.155
+  stop_loss_pct: 0.04 -> 0.0215
+  take_profit_pct: 0.08 -> 0.1146
+
+TrainablePenguin4:
+  buy_rsi: 30.0 -> 21.71
+  cooldown_bars: 10 -> 30
+  max_cash_fraction: 0.05 -> <missing>
+  max_cash_fraction_per_trade: <missing> -> 0.1631
+  rsi_period: 13 -> 13
+  sell_rsi: 70.0 -> 62.3
+  stop_loss_pct: 0.04 -> 0.0603
+  take_profit_pct: 0.08 -> 0.1441
