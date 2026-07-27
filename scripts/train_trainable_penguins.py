@@ -712,7 +712,11 @@ def _train_trainable_penguins(
 
 
 def _training_pareto_output_path(artifacts_dir: Path | None = None) -> Path:
-    output_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).resolve().parent.parent / "run_current" / "artifacts"
+    output_dir = (
+        Path(artifacts_dir).parent
+        if artifacts_dir is not None
+        else Path(__file__).resolve().parent.parent / "run_current"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     return output_dir / TRAINING_PARETO_FILENAME
 
