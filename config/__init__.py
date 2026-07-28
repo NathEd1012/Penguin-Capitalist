@@ -30,7 +30,9 @@ from config.backtest import (
     START_DATE,
     STOP_DATE,
     BINNING,
-    SAVE_TO_RUN_OLD,
+    SAVE_TO_RUN_LOG,
+    DIREKTORY_NAME,
+    get_run_output_dir,
     INITIAL_CAPITAL,
     EXEC_TRANSACTION_COST,
 )
@@ -80,7 +82,9 @@ __all__ = [
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
-    "SAVE_TO_RUN_OLD",      # Archive completed runs
+    "SAVE_TO_RUN_LOG",      # Archive completed runs
+    "DIREKTORY_NAME",       # Optional archive directory prefix
+    "get_run_output_dir",    # Resolve active run output directory
     "ACTIVE_PENGUINS",      # List of active strategy classes
     "TRAINING_STEP_ENABLED",
     "TRAINING_ITERATIONS",

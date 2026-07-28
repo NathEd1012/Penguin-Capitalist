@@ -271,7 +271,7 @@ class Evaluator:
         print(f"\nSaved results to:")
         if archive_dir is not None:
             print(f"  Archive:   {archive_dir}")
-        print(f"  Current:   {current_dir}")
+        print(f"  Output:    {current_dir}")
     
     @staticmethod
     def print_summary(results: Dict[str, Tuple[Portfolio, Dict]]):

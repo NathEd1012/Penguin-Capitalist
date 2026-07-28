@@ -717,7 +717,7 @@ def _training_pareto_output_path(artifacts_dir: Path | None = None) -> Path:
     output_dir = (
         Path(artifacts_dir).parent
         if artifacts_dir is not None
-        else Path(__file__).resolve().parent.parent / "run_current"
+        else Path(__file__).resolve().parent.parent / "run_test"
     )
     output_dir.mkdir(parents=True, exist_ok=True)
     return output_dir / TRAINING_PARETO_FILENAME
@@ -736,7 +736,7 @@ def run_training_step(
         return {}
 
     if artifacts_dir is None:
-        artifacts_dir = Path(__file__).resolve().parent.parent / "run_current" / "artifacts"
+        artifacts_dir = Path(__file__).resolve().parent.parent / "run_test" / "artifacts"
 
     _print_training_configuration()
     training_start = datetime.now(timezone.utc)
@@ -864,9 +864,9 @@ def main() -> None:
     print("=" * 80)
 
     base_dir = Path(__file__).resolve().parent.parent
-    current_dir = base_dir / "run_current"
-    current_artifacts_dir = current_dir / "artifacts"
-    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
+    run_dir = base_dir / "run_test"
+    run_artifacts_dir = run_dir / "artifacts"
+    run_artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     print("Step 1: Preparing training data...")
     valid_symbols, _sorted_timestamps, tradeable_timestamps, quality_report_text = prepare_training_context(
@@ -878,7 +878,7 @@ def main() -> None:
     )
 
     if quality_report_text:
-        warnings_path = current_artifacts_dir / "consistency_warnings.txt"
+        warnings_path = run_artifacts_dir / "consistency_warnings.txt"
         with open(warnings_path, "w", encoding="utf-8") as handle:
             handle.write(quality_report_text)
             handle.write("\n")
@@ -899,7 +899,7 @@ def main() -> None:
         binning=BINNING,
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=TRAINING_TRANSACTION_COST,
-        artifacts_dir=current_artifacts_dir,
+        artifacts_dir=run_artifacts_dir,
     )
 
 
