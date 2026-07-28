@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime, timezone, timedelta
+from pathlib import Path
 
 # ========== BACKTEST TIMING SETTINGS ==========
 
@@ -59,6 +60,50 @@ def _parse_config_float(value, setting_name: str) -> float:
     except (TypeError, ValueError) as exc:
         raise ValueError(f"Cannot parse float for {setting_name}: {value!r}") from exc
 
+
+def _normalize_run_directory_name(name: str) -> str:
+    run_name = str(name).strip()
+    if not run_name:
+        return "run"
+
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
+    if any(ch not in allowed for ch in run_name):
+        raise ValueError("DIREKTORY_NAME may only contain letters, numbers, '-' and '_'.")
+
+    return run_name
+
+
+def _next_available_run_name(run_log_dir: Path, directory_name: str) -> str:
+    base_name = _normalize_run_directory_name(directory_name)
+
+    if base_name == "run":
+        counter = 1
+        while (run_log_dir / f"run{counter}").exists():
+            counter += 1
+        return f"run{counter}"
+
+    candidate = base_name
+    suffix = 1
+    while (run_log_dir / candidate).exists():
+        candidate = f"{base_name}{suffix}"
+        suffix += 1
+    return candidate
+
+
+def get_run_output_dir(base_dir: Path, save_to_run_log: bool, directory_name: str) -> Path:
+    """Return the directory where the current run should be written."""
+    if not save_to_run_log:
+        run_test_dir = base_dir / "run_test"
+        run_test_dir.mkdir(parents=True, exist_ok=True)
+        return run_test_dir
+
+    run_log_dir = base_dir / "run_log"
+    run_log_dir.mkdir(parents=True, exist_ok=True)
+    run_name = _next_available_run_name(run_log_dir, directory_name)
+    run_dir = run_log_dir / run_name
+    run_dir.mkdir(parents=True, exist_ok=False)
+    return run_dir
+
 START_DATEx = "2024-01-01 00:00:00"
 START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
 
@@ -85,10 +130,13 @@ STOP_DATE = _parse_config_date(os.getenv("FIXED_STOP", STOP_DATEx))
 BINNING = "1m"
 
 # ========== RUN ARCHIVING SETTINGS ==========
-# Whether to save completed runs to run_old/ directory
-# True  - Archive each run with timestamp (for historical comparison)
-# False - Only update run_current/ (saves disk space)
-SAVE_TO_RUN_OLD = int(os.getenv("SAVE_TO_RUN_OLD", "0"))
+# Whether to save completed runs to run_log/ directory
+# True  - Archive each run to a dedicated run_log folder
+# False - Only update run_test/
+SAVE_TO_RUN_LOG = int(os.getenv("SAVE_TO_RUN_LOG", "0"))
+
+DIREKTORY_NAME = os.getenv("DIREKTORY_NAME", "NAME")
+
 
 # ========== PORTFOLIO SETTINGS ==========
 # Initial capital to start backtesting with (USD)
@@ -103,7 +151,9 @@ __all__ = [
     "START_DATE",
     "STOP_DATE",
     "BINNING",
-    "SAVE_TO_RUN_OLD",
+    "SAVE_TO_RUN_LOG",
+    "DIREKTORY_NAME",
     "INITIAL_CAPITAL",
     "EXEC_TRANSACTION_COST",
+    "get_run_output_dir",
 ]

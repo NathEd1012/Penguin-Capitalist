@@ -41,23 +41,23 @@ def _parse_args(argv: list[str]) -> tuple[str, str]:
 	return "snapshot", _validate_name(raw)
 
 
-def _collect_files(run_current_dir: Path) -> list[Path]:
+def _collect_files(run_test_dir: Path) -> list[Path]:
 	files: list[Path] = []
 
-	report_file = run_current_dir / "report.pdf"
+	report_file = run_test_dir / "report.pdf"
 	if report_file.exists():
 		files.append(report_file)
 
 	# Collect PDF artifacts too, including training Pareto plots and any future reports.
-	files.extend(sorted(run_current_dir.rglob("*.pdf")))
+	files.extend(sorted(run_test_dir.rglob("*.pdf")))
 
-	# Collect json/txt files from run_current (including nested artifacts folder).
-	files.extend(sorted(run_current_dir.rglob("*.json")))
-	files.extend(sorted(run_current_dir.rglob("*.txt")))
-	files.extend(sorted(run_current_dir.rglob("*.err")))
+	# Collect json/txt files from run_test (including nested artifacts folder).
+	files.extend(sorted(run_test_dir.rglob("*.json")))
+	files.extend(sorted(run_test_dir.rglob("*.txt")))
+	files.extend(sorted(run_test_dir.rglob("*.err")))
 
 	# Keep only the newest .out file, while preserving all other artifacts.
-	out_files = sorted(run_current_dir.rglob("*.out"), key=lambda path: path.stat().st_mtime, reverse=True)
+	out_files = sorted(run_test_dir.rglob("*.out"), key=lambda path: path.stat().st_mtime, reverse=True)
 	if out_files:
 		files.append(out_files[0])
 
@@ -81,15 +81,15 @@ def main() -> int:
 		return 1
 
 	project_root = Path(__file__).resolve().parent
-	run_current_dir = project_root / "run_current"
-	if not run_current_dir.exists():
-		print(f"Error: Missing source folder: {run_current_dir}")
+	run_test_dir = project_root / "run_test"
+	if not run_test_dir.exists():
+		print(f"Error: Missing source folder: {run_test_dir}")
 		return 1
 
 	destination_root = project_root / "run_interesting"
 
 	if mode == "report":
-		report_source = run_current_dir / "report.pdf"
+		report_source = run_test_dir / "report.pdf"
 		if not report_source.exists():
 			print(f"Error: Missing report file: {report_source}")
 			return 1
@@ -110,16 +110,16 @@ def main() -> int:
 		print(f"Error: Destination already exists: {destination_dir}")
 		return 1
 
-	files_to_copy = _collect_files(run_current_dir)
+	files_to_copy = _collect_files(run_test_dir)
 	if not files_to_copy:
-		print("Error: No report/json/txt files found in run_current.")
+		print("Error: No report/json/txt files found in run_test.")
 		return 1
 
 	destination_dir.mkdir(parents=True, exist_ok=False)
 
 	copied = 0
 	for source_file in files_to_copy:
-		relative = source_file.relative_to(run_current_dir)
+		relative = source_file.relative_to(run_test_dir)
 		target_file = destination_dir / relative
 		target_file.parent.mkdir(parents=True, exist_ok=True)
 		shutil.copy2(source_file, target_file)

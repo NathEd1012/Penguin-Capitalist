@@ -1,6 +1,5 @@
 """Main backtest runner - executes historical backtests for all penguins."""
 import os
-import shutil
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -27,7 +26,9 @@ from config import (
     STOP_DATE,
     BINNING,
     ACTIVE_PENGUINS,
-    SAVE_TO_RUN_OLD,
+    SAVE_TO_RUN_LOG,
+    DIREKTORY_NAME,
+    get_run_output_dir,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
     TRAINING_SUBSET_MONTHS,
@@ -93,30 +94,6 @@ def parse_datetime_string(dt_str: str) -> datetime:
             continue
     
     raise ValueError(f"Cannot parse datetime: {dt_str}")
-
-
-def get_next_run_number(run_old_dir: Path) -> int:
-    """Get the next run number for archives (e.g., run1, run2, run3, ...)."""
-    current_date = datetime.now().strftime("%y%m%d")
-    date_dir = run_old_dir / current_date
-    date_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Find all existing run folders
-    existing_runs = [d for d in date_dir.iterdir() if d.is_dir() and d.name.startswith("run")]
-    
-    if not existing_runs:
-        return 1
-    
-    # Extract numbers and find max
-    run_numbers = []
-    for run_dir in existing_runs:
-        try:
-            num = int(run_dir.name[3:])  # Extract number from "runX"
-            run_numbers.append(num)
-        except ValueError:
-            continue
-    
-    return max(run_numbers) + 1 if run_numbers else 1
 
 
 def _binning_to_minutes(binning: str) -> int:
@@ -505,9 +482,9 @@ def main():
     print("="*80)
 
     base_dir = Path(__file__).parent.parent
-    current_dir = base_dir / "run_current"
-    current_artifacts_dir = current_dir / "artifacts"
-    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
+    run_output_dir = get_run_output_dir(base_dir, bool(SAVE_TO_RUN_LOG), DIREKTORY_NAME)
+    run_artifacts_dir = run_output_dir / "artifacts"
+    run_artifacts_dir.mkdir(parents=True, exist_ok=True)
     
     # Run backtest
     results, trades_by_bar, bar_timestamps, data_quality_report = run_backtest(
@@ -518,7 +495,7 @@ def main():
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
-        artifacts_dir=current_artifacts_dir,
+        artifacts_dir=run_artifacts_dir,
     )
     
     # Generate report
@@ -528,23 +505,11 @@ def main():
     
     Evaluator.print_summary(results)
 
-    # Conditionally set up archive directory based on config
-    if SAVE_TO_RUN_OLD:
-        run_old_base = base_dir / "run_old"
-        next_run_num = get_next_run_number(run_old_base)
-        current_date = datetime.now().strftime("%y%m%d")
-        archive_dir = run_old_base / current_date / f"run{next_run_num}"
-        archived_run_num = next_run_num
-    else:
-        archive_dir = None
-        archived_run_num = None
-    
-    # Always write run_current first.
-    Evaluator.save_results(results, None, current_artifacts_dir, trades_by_bar, bar_timestamps)
+    Evaluator.save_results(results, None, run_output_dir, trades_by_bar, bar_timestamps)
     
     # Generate plots
     print("\nGenerating visualization...")
-    current_plot = current_artifacts_dir / "capital_curves.png"
+    run_plot = run_artifacts_dir / "capital_curves.png"
     
     # Get number of bars from first portfolio
     num_bars = None
@@ -554,7 +519,7 @@ def main():
     
     Evaluator.plot_capital_curves(
         results,
-        current_plot,
+        run_plot,
         num_bars,
         BINNING,
         START_DATE,
@@ -565,40 +530,29 @@ def main():
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
-    current_pdf = current_dir / "report.pdf"
+    run_pdf = run_output_dir / "report.pdf"
     
     Evaluator.generate_pdf_report(
         results,
-        current_pdf,
-        current_plot,
+        run_pdf,
+        run_plot,
         num_bars,
         BINNING,
         START_DATE,
         STOP_DATE,
         bar_timestamps,
-        current_artifacts_dir,
+        run_artifacts_dir,
         ACTIVE_SYMBOL_LIST,
     )
     
     print("\nSkipping consistency validation (removed)")
     
-    # Mirror run_current into run_old only after current run is fully written.
-    if archive_dir:
-        archive_dir.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(current_dir, archive_dir)
-
     print(f"\n✅ Backtest complete!")
-    
-    if archive_dir:
-        print(f"\nArchive saved to:  {archive_dir}")
-        print(f"  - report.pdf")
-        print(f"  - artifacts/capital_curves.png")
-        print(f"  - artifacts/json/curves_data.json")
-        print(f"  - artifacts/json/metrics_summary.json")
-        print(f"  - artifacts/trades_log.txt")
-        print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
-    
-    print(f"\nCurrent run saved to: {current_dir}")
+
+    if SAVE_TO_RUN_LOG:
+        print(f"\nLog saved to:  {run_output_dir}")
+    else:
+        print(f"\nTest run saved to: {run_output_dir}")
     print(f"  - report.pdf")
     print(f"  - artifacts/capital_curves.png")
     print(f"  - artifacts/json/curves_data.json")
@@ -607,10 +561,10 @@ def main():
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
     
     print(f"\n{'='*80}")
-    if archive_dir:
-        print(f"Run #{archived_run_num} archived")
+    if SAVE_TO_RUN_LOG:
+        print("Run archived in run_log")
     else:
-        print("Run updated (not archived - SAVE_TO_RUN_OLD is False)")
+        print("Run saved in run_test")
 
 
 if __name__ == "__main__":

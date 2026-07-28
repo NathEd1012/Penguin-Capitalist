@@ -1,6 +1,5 @@
 """Main entry point for historical backtesting simulation."""
 import os
-import shutil
 import sys
 import time
 from datetime import datetime, timezone, timedelta
@@ -38,7 +37,9 @@ from config import (
     STOP_DATE,
     BINNING,
     ACTIVE_PENGUINS,
-    SAVE_TO_RUN_OLD,
+    SAVE_TO_RUN_LOG,
+    DIREKTORY_NAME,
+    get_run_output_dir,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
     TRAINING_SUBSET_MONTHS,
@@ -158,26 +159,6 @@ def _format_runtime_configuration_banner(
         f"{'=' * 80}",
     ]
     return "\n".join(lines)
-
-
-def get_next_run_number(run_old_dir: Path) -> int:
-    """Get the next run number for archives (e.g., run1, run2, run3, ...)."""
-    current_date = datetime.now().strftime("%y%m%d")
-    date_dir = run_old_dir / current_date
-    date_dir.mkdir(parents=True, exist_ok=True)
-
-    existing_runs = [d for d in date_dir.iterdir() if d.is_dir() and d.name.startswith("run")]
-    if not existing_runs:
-        return 1
-
-    run_numbers = []
-    for run_dir in existing_runs:
-        try:
-            run_numbers.append(int(run_dir.name[3:]))
-        except ValueError:
-            continue
-
-    return max(run_numbers) + 1 if run_numbers else 1
 
 
 def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float]):
@@ -425,7 +406,7 @@ def run_backtest(
                     f.write(training_quality_report_text)
                     f.write("\n")
 
-            training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_current" / "artifacts"
+            training_artifacts_dir = Path(artifacts_dir) if artifacts_dir is not None else Path(__file__).parent / "run_test" / "artifacts"
             trained_parameters = run_training_step(
                 trainable_strategy_classes=active_trainables,
                 symbols=training_symbols,
@@ -696,9 +677,9 @@ def main():
     print("="*80)
 
     base_dir = Path(__file__).parent
-    current_dir = base_dir / "run_current"
-    current_artifacts_dir = current_dir / "artifacts"
-    current_artifacts_dir.mkdir(parents=True, exist_ok=True)
+    run_output_dir = get_run_output_dir(base_dir, bool(SAVE_TO_RUN_LOG), DIREKTORY_NAME)
+    run_artifacts_dir = run_output_dir / "artifacts"
+    run_artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     # Training is executed inside `run_backtest` as Step 3b when enabled.
     
@@ -711,7 +692,7 @@ def main():
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
-        artifacts_dir=current_artifacts_dir,
+        artifacts_dir=run_artifacts_dir,
     )
     print("\nrun_backtest() returned; generating results...", flush=True)
     
@@ -722,26 +703,14 @@ def main():
     
     Evaluator.print_summary(results)
 
-    # Conditionally set up archive directory based on config
-    if SAVE_TO_RUN_OLD:
-        run_old_base = base_dir / "run_old"
-        next_run_num = get_next_run_number(run_old_base)
-        current_date = datetime.now().strftime("%y%m%d")
-        archive_dir = run_old_base / current_date / f"run{next_run_num}"
-        archived_run_num = next_run_num
-    else:
-        archive_dir = None
-        archived_run_num = None
-    
-    # Always write run_current first.
-    Evaluator.save_results(results, None, current_artifacts_dir, trades_by_bar, bar_timestamps)
+    Evaluator.save_results(results, None, run_output_dir, trades_by_bar, bar_timestamps)
 
     # SMA artifact export intentionally disabled.
     print("\nSkipping SMA artifact export (no sma folder requested)")
     
     # Generate plots
     print("\nGenerating visualization...")
-    current_plot = current_artifacts_dir / "capital_curves.png"
+    run_plot = run_artifacts_dir / "capital_curves.png"
     
     # Get number of bars from first portfolio
     num_bars = None
@@ -751,7 +720,7 @@ def main():
     
     Evaluator.plot_capital_curves(
         results,
-        current_plot,
+        run_plot,
         num_bars,
         BINNING,
         START_DATE,
@@ -762,7 +731,7 @@ def main():
     
     # Generate PDF reports
     print("\nGenerating PDF report...")
-    current_pdf = current_dir / "report.pdf"
+    run_pdf = run_output_dir / "report.pdf"
     # Ensure matplotlib has sensible fallback fonts on systems missing DejaVu.
     try:
         import matplotlib
@@ -776,37 +745,26 @@ def main():
     try:
         Evaluator.generate_pdf_report(
             results,
-            current_pdf,
-            current_plot,
+            run_pdf,
+            run_plot,
             num_bars,
             BINNING,
             START_DATE,
             STOP_DATE,
             bar_timestamps,
-            current_artifacts_dir,
+            run_artifacts_dir,
             ACTIVE_SYMBOL_LIST,
         )
     except Exception as e:
         print(f"\n⚠️  PDF generation failed: {e}")
         print("Skipping PDF report (fonts or rendering issue).")
     
-    # Mirror run_current into run_old only after current run is fully written.
-    if archive_dir:
-        archive_dir.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(current_dir, archive_dir)
-
     print(f"\n✅ Backtest complete!")
-    
-    if archive_dir:
-        print(f"\nArchive saved to:  {archive_dir}")
-        print(f"  - report.pdf")
-        print(f"  - artifacts/capital_curves.png")
-        print(f"  - artifacts/json/curves_data.json")
-        print(f"  - artifacts/json/metrics_summary.json")
-        print(f"  - artifacts/trades_log.txt")
-        print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
-    
-    print(f"\nCurrent run saved to: {current_dir}")
+
+    if SAVE_TO_RUN_LOG:
+        print(f"\nLog saved to:  {run_output_dir}")
+    else:
+        print(f"\nTest run saved to: {run_output_dir}")
     print(f"  - report.pdf")
     print(f"  - artifacts/capital_curves.png")
     print(f"  - artifacts/json/curves_data.json")
@@ -815,10 +773,10 @@ def main():
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
     
     print(f"\n{'='*80}")
-    if archive_dir:
-        print(f"Run #{archived_run_num} archived")
+    if SAVE_TO_RUN_LOG:
+        print("Run archived in run_log")
     else:
-        print("Run updated (not archived - SAVE_TO_RUN_OLD is False)")
+        print("Run saved in run_test")
 
     # Attempt a clean shutdown: close plotting resources and detect background threads.
     try:
