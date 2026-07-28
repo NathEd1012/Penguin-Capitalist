@@ -242,7 +242,7 @@ def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str
         "bb_stddev": "bb_std",
         "buy_rsi": "buy_rsi",
         "cooldown_bars": "cooldown",
-        "max_cash_fraction_per_trade": "max_cash_fpt",
+        "max_cash_fraction": "max_cash_fpt",
         "rsi_period": "rsi_period",
         "sell_rsi": "sell_rsi",
         "stop_loss_pct": "stop_loss",

@@ -61,7 +61,7 @@ def test_training_parameter_space_for_og_tp4_matches_constructor():
         "rsi_period",
         "buy_rsi",
         "sell_rsi",
-        "max_cash_fraction_per_trade",
+        "max_cash_fraction",
         "stop_loss_pct",
         "take_profit_pct",
         "cooldown_bars",
