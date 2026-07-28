@@ -37,8 +37,7 @@ from config import (
     STOP_DATE,
     BINNING,
     ACTIVE_PENGUINS,
-    SAVE_TO_RUN_LOG,
-    DIREKTORY_NAME,
+    RUN_LOG_NAME,
     get_run_output_dir,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
@@ -677,7 +676,7 @@ def main():
     print("="*80)
 
     base_dir = Path(__file__).parent
-    run_output_dir = get_run_output_dir(base_dir, bool(SAVE_TO_RUN_LOG), DIREKTORY_NAME)
+    run_output_dir = get_run_output_dir(base_dir, RUN_LOG_NAME)
     run_artifacts_dir = run_output_dir / "artifacts"
     run_artifacts_dir.mkdir(parents=True, exist_ok=True)
 
@@ -761,7 +760,7 @@ def main():
     
     print(f"\n✅ Backtest complete!")
 
-    if SAVE_TO_RUN_LOG:
+    if RUN_LOG_NAME != "0":
         print(f"\nLog saved to:  {run_output_dir}")
     else:
         print(f"\nTest run saved to: {run_output_dir}")
@@ -773,7 +772,7 @@ def main():
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
     
     print(f"\n{'='*80}")
-    if SAVE_TO_RUN_LOG:
+    if RUN_LOG_NAME != "0":
         print("Run archived in run_log")
     else:
         print("Run saved in run_test")
