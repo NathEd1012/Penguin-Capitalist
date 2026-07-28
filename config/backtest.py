@@ -68,7 +68,7 @@ def _normalize_run_directory_name(name: str) -> str:
 
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
     if any(ch not in allowed for ch in run_name):
-        raise ValueError("DIREKTORY_NAME may only contain letters, numbers, '-' and '_'.")
+        raise ValueError("RUN_LOG_NAME may only contain letters, numbers, '-' and '_'.")
 
     return run_name
 
@@ -90,21 +90,21 @@ def _next_available_run_name(run_log_dir: Path, directory_name: str) -> str:
     return candidate
 
 
-def get_run_output_dir(base_dir: Path, save_to_run_log: bool, directory_name: str) -> Path:
+def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
     """Return the directory where the current run should be written."""
-    if not save_to_run_log:
+    if str(run_log_name).strip() == "0":
         run_test_dir = base_dir / "run_test"
         run_test_dir.mkdir(parents=True, exist_ok=True)
         return run_test_dir
 
     run_log_dir = base_dir / "run_log"
     run_log_dir.mkdir(parents=True, exist_ok=True)
-    run_name = _next_available_run_name(run_log_dir, directory_name)
+    run_name = _next_available_run_name(run_log_dir, run_log_name)
     run_dir = run_log_dir / run_name
     run_dir.mkdir(parents=True, exist_ok=False)
     return run_dir
 
-START_DATEx = "2024-01-01 00:00:00"
+START_DATEx = "2026-01-01 00:00:00"
 START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
 
 
@@ -130,12 +130,11 @@ STOP_DATE = _parse_config_date(os.getenv("FIXED_STOP", STOP_DATEx))
 BINNING = "1m"
 
 # ========== RUN ARCHIVING SETTINGS ==========
-# Whether to save completed runs to run_log/ directory
-# True  - Archive each run to a dedicated run_log folder
-# False - Only update run_test/
-SAVE_TO_RUN_LOG = int(os.getenv("SAVE_TO_RUN_LOG", "0"))
-
-DIREKTORY_NAME = os.getenv("DIREKTORY_NAME", "NAME")
+# Run output folder name.
+# "0" - Only update run_test/
+# Any other valid name - Archive each run to a dedicated run_log folder
+RUN_LOG_NAMEx = "0"
+RUN_LOG_NAME = os.getenv("RUN_LOG_NAME", RUN_LOG_NAMEx)
 
 
 # ========== PORTFOLIO SETTINGS ==========
@@ -151,8 +150,7 @@ __all__ = [
     "START_DATE",
     "STOP_DATE",
     "BINNING",
-    "SAVE_TO_RUN_LOG",
-    "DIREKTORY_NAME",
+    "RUN_LOG_NAME",
     "INITIAL_CAPITAL",
     "EXEC_TRANSACTION_COST",
     "get_run_output_dir",
