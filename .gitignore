@@ -10,3 +10,5 @@ run_interesting/
 assistive_scripts/
 data_cache/
 a_docs/
+run_present/**/artifacts/trades_log.txt
+run_present/**/artifacts/json/
