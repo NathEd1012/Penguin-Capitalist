@@ -133,7 +133,7 @@ BINNING = "1m"
 # Run output folder name.
 # "0" - Only update run_test/
 # Any other valid name - Archive each run to a dedicated run_log folder
-RUN_LOG_NAMEx = "0"
+RUN_LOG_NAMEx = "TestRun"
 RUN_LOG_NAME = os.getenv("RUN_LOG_NAME", RUN_LOG_NAMEx)
 
 
@@ -142,7 +142,7 @@ RUN_LOG_NAME = os.getenv("RUN_LOG_NAME", RUN_LOG_NAMEx)
 INITIAL_CAPITAL = 100000.0
 
 # Execution transaction cost per trade (USD)
-EXEC_TRANSACTION_COSTx = 0.0
+EXEC_TRANSACTION_COSTx = 1.0
 EXEC_TRANSACTION_COST = _parse_config_float(os.getenv("FIXED_EXEC_TC", EXEC_TRANSACTION_COSTx), "FIXED_EXEC_TC")
 
 
