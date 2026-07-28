@@ -31,6 +31,7 @@ from config.backtest import (
     STOP_DATE,
     BINNING,
     RUN_LOG_NAME,
+    SAVE_CSV,
     get_run_output_dir,
     INITIAL_CAPITAL,
     EXEC_TRANSACTION_COST,
@@ -82,6 +83,7 @@ __all__ = [
     "STOP_DATE",            # Backtest end datetime
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
     "RUN_LOG_NAME",         # "0" disables archiving; otherwise archive folder name
+    "SAVE_CSV",             # 0 disables per-strategy CSV summaries
     "get_run_output_dir",    # Resolve active run output directory
     "ACTIVE_PENGUINS",      # List of active strategy classes
     "TRAINING_STEP_ENABLED",

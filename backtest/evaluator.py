@@ -150,6 +150,7 @@ class Evaluator:
         current_dir: Path,
         trades_by_bar: Dict = None,
         bar_timestamps: List = None,
+        artifacts_dir: Path | None = None,
     ):
         """
         Save backtest results to both archive and current directories.
@@ -160,23 +161,19 @@ class Evaluator:
             current_dir: Current run directory path (always latest)
             trades_by_bar: Dict[bar_idx] = [trade_strings] for detailed logging
             bar_timestamps: List of datetime objects for each bar (optional)
+            artifacts_dir: Optional artifacts directory to save JSON/log outputs once
         """
         archive_dir = Path(archive_dir) if archive_dir is not None else None
         current_dir = Path(current_dir)
+        output_dir = Path(artifacts_dir) if artifacts_dir is not None else current_dir
 
         if archive_dir is not None:
             archive_dir.mkdir(parents=True, exist_ok=True)
         current_dir.mkdir(parents=True, exist_ok=True)
 
-        output_dirs = [current_dir]
-        if archive_dir is not None:
-            output_dirs.insert(0, archive_dir)
-
-        json_output_dirs = []
-        for output_dir in output_dirs:
-            json_dir = output_dir / "json"
-            json_dir.mkdir(parents=True, exist_ok=True)
-            json_output_dirs.append(json_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        json_dir = output_dir / "json"
+        json_dir.mkdir(parents=True, exist_ok=True)
         
         # Prepare data to save
         curves_data = {}
@@ -253,25 +250,23 @@ class Evaluator:
             
             trades_content += "\n" + "-" * 80 + "\n"
         
-        # Save JSON artifacts to json/ and text logs to the run root.
-        for output_dir in json_output_dirs:
-            curves_file = output_dir / "curves_data.json"
-            with open(curves_file, 'w') as f:
-                json.dump(curves_data, f, indent=2)
-            
-            metrics_file = output_dir / "metrics_summary.json"
-            with open(metrics_file, 'w') as f:
-                json.dump(metrics_data, f, indent=2)
+        # Save JSON artifacts and text logs once under the artifacts/output directory.
+        curves_file = json_dir / "curves_data.json"
+        with open(curves_file, 'w') as f:
+            json.dump(curves_data, f, indent=2)
 
-        for output_dir in output_dirs:
-            trades_file = output_dir / "trades_log.txt"
-            with open(trades_file, 'w') as f:
-                f.write(trades_content)
+        metrics_file = json_dir / "metrics_summary.json"
+        with open(metrics_file, 'w') as f:
+            json.dump(metrics_data, f, indent=2)
+
+        trades_file = output_dir / "trades_log.txt"
+        with open(trades_file, 'w') as f:
+            f.write(trades_content)
         
         print(f"\nSaved results to:")
         if archive_dir is not None:
             print(f"  Archive:   {archive_dir}")
-        print(f"  Output:    {current_dir}")
+        print(f"  Output:    {output_dir}")
     
     @staticmethod
     def print_summary(results: Dict[str, Tuple[Portfolio, Dict]]):

@@ -27,6 +27,7 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     RUN_LOG_NAME,
+    SAVE_CSV,
     get_run_output_dir,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
@@ -504,7 +505,14 @@ def main():
     
     Evaluator.print_summary(results)
 
-    Evaluator.save_results(results, None, run_output_dir, trades_by_bar, bar_timestamps)
+    Evaluator.save_results(
+        results,
+        None,
+        run_output_dir,
+        trades_by_bar,
+        bar_timestamps,
+        artifacts_dir=run_artifacts_dir,
+    )
     
     # Generate plots
     print("\nGenerating visualization...")
@@ -558,6 +566,8 @@ def main():
     print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
+    if SAVE_CSV:
+        print(f"  - artifacts/csv/*_summary.csv")
     
     print(f"\n{'='*80}")
     if RUN_LOG_NAME != "0":
