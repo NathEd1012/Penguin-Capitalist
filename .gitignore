@@ -8,6 +8,7 @@ run_old/
 run_current/
 run_interesting/
 run_present/
+run_**/
 assistive_scripts/
 data_cache/
 a_docs/
