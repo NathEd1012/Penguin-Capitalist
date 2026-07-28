@@ -1,180 +1,0 @@
-
-[notice] A new release of pip is available: 24.3.1 -> 26.1.2
-[notice] To update, run: pip install --upgrade pip
-
-================================================================================
-PENGUIN CAPITALIST - HISTORICAL BACKTEST
-================================================================================
-
-================================================================================
-BACKTEST CONFIGURATION
-================================================================================
-Start Time (UTC):  2026-01-01 00:00:00+00:00
-End Time (UTC):    2026-07-01 00:00:00+00:00
-Binning:           1m
-
-PORTFOLIO CONFIGURATION
-Initial Capital:   $100,000.00
-Transaction Cost:  $2.00
-Symbol List:       LIST_5
-Symbols:           323
-================================================================================
-
-Step 1: Loading historical data from Alpaca...
-Fetching data for 323 symbols from 2025-12-31 22:00:00+00:00 to 2026-07-01 00:00:00+00:00...
-Prechecking recent data from 2026-06-17 00:00:00+00:00 to 2026-07-01 00:00:00+00:00...
-Checking recent data:   0%|          | 0/323 [00:00<?, ?it/s]Checking recent data:  86%|████████▋ | 279/323 [00:30<00:04,  9.28it/s]Checking recent data: 100%|██████████| 323/323 [00:34<00:00,  9.36it/s]
-  Recent-data precheck kept 307 symbol(s), skipped 16.
-  Precheck stale reasons: low recent volume: 4, no data: 12
-Fetching/organizing data:   0%|          | 0/307 [00:00<?, ?it/s]Fetching/organizing data:   0%|          | 0/307 [00:15<?, ?it/s]Fetching/organizing data:  51%|█████     | 156/307 [01:00<00:58,  2.59it/s]Fetching/organizing data: 100%|██████████| 307/307 [01:53<00:00,  2.71it/s]
-
-⚠️  DATA SPARSENESS WARNING:
-   Requested: 2025-12-31 22:00:00+00:00 to 2026-07-01 00:00:00+00:00
-   Actual:    2025-12-31 22:00:00+00:00 to 2026-06-30 23:59:00+00:00
-   (Using only the 118253 available timestamps)
-
-
-Step 2: Detecting stale data...
-  Valid symbols: 301
-  Stale symbols (17): SPLK, SQ, ADYEY, MELI, PGR, MMC, BK, ISRG, CI, BLUE, SGEN, FDX, BKNG, GPS, HES, CTRA, RDFN
-
-  Total bars across all symbols: 118253
-  Tradeable bars from configured start: 118133
-
-Step 3: Initializing 11 strategies...
-Initializing strategies:   0%|          | 0/11 [00:00<?, ?it/s]Initializing strategies: 100%|██████████| 11/11 [00:00<00:00, 76767.63it/s]
-Fetching data for 301 symbols from 2023-12-31 22:00:00+00:00 to 2026-01-01 00:00:00+00:00...
-Prechecking recent data from 2025-12-18 00:00:00+00:00 to 2026-01-01 00:00:00+00:00...
-Checking recent data:   0%|          | 0/301 [00:00<?, ?it/s]Checking recent data: 100%|██████████| 301/301 [00:11<00:00, 26.91it/s]
-  Recent-data precheck kept 271 symbol(s), skipped 30.
-  Precheck stale reasons: low recent volume: 1, no data: 29
-Fetching/organizing data:   0%|          | 0/271 [00:00<?, ?it/s]Fetching/organizing data:   0%|          | 0/271 [00:12<?, ?it/s]Fetching/organizing data:   6%|▋         | 17/271 [01:01<15:20,  3.62s/it]Fetching/organizing data:  27%|██▋       | 74/271 [02:01<04:55,  1.50s/it]Fetching/organizing data:  46%|████▌     | 125/271 [03:02<03:15,  1.34s/it]Fetching/organizing data:  64%|██████▍   | 173/271 [04:02<02:07,  1.30s/it]Fetching/organizing data:  82%|████████▏ | 222/271 [05:02<01:02,  1.27s/it]Fetching/organizing data:  99%|█████████▉| 268/271 [06:08<00:03,  1.33s/it]Fetching/organizing data: 100%|██████████| 271/271 [06:09<00:00,  1.36s/it]
-
-⚠️  DATA SPARSENESS WARNING:
-   Requested: 2023-12-31 22:00:00+00:00 to 2026-01-01 00:00:00+00:00
-   Actual:    2024-01-02 09:00:00+00:00 to 2026-01-01 00:00:00+00:00
-   (Using only the 480406 available timestamps)
-
-  Valid symbols: 271
-  Stale symbols (30): SSO, QQQ, IWM, XLV, XLP, AAPL, ADBE, AMD, MPWR, CRWD, DOCU, TWLO, APP, ESTC, NFLX, SNAP, HOOD, UPST, BAC, BLK, AON, TFC, ABBV, W, HSY, FANG, RIVN, BALL, SPG, RKLB
-
-  Total bars across all symbols: 480406
-  Tradeable bars from configured start: 480406
-
-TRAINING CONFIGURATION
-Relative To:       SPY
-Training Steps:    10
-Training Sample:   30 stocks x 2 month(s)
-Training Cost:     $5.00
-Training Seed:     42
-================================================================================
-Adv_SELL_TP1:   0%|          | 0/10 [00:00<?, ?it/s]Adv_SELL_TP1:   0%|          | 0/10 [00:31<?, ?it/s, profit=-105581.51, buys=10048]Adv_SELL_TP1:  10%|█         | 1/10 [00:31<04:40, 31.19s/it, profit=-105581.51, buys=10048]Adv_SELL_TP1:  10%|█         | 1/10 [01:00<04:40, 31.19s/it, profit=-44272.73, buys=5181]  Adv_SELL_TP1:  20%|██        | 2/10 [01:00<03:58, 29.81s/it, profit=-44272.73, buys=5181]Adv_SELL_TP1:  20%|██        | 2/10 [01:29<03:58, 29.81s/it, profit=-85570.00, buys=10444]Adv_SELL_TP1:  30%|███       | 3/10 [01:29<03:26, 29.44s/it, profit=-85570.00, buys=10444]Adv_SELL_TP1:  30%|███       | 3/10 [01:59<03:26, 29.44s/it, profit=-108225.91, buys=10466]Adv_SELL_TP1:  40%|████      | 4/10 [01:59<02:59, 29.90s/it, profit=-108225.91, buys=10466]Adv_SELL_TP1:  40%|████      | 4/10 [02:29<02:59, 29.90s/it, profit=-46215.65, buys=4978]  Adv_SELL_TP1:  50%|█████     | 5/10 [02:29<02:29, 29.81s/it, profit=-46215.65, buys=4978]Adv_SELL_TP1:  50%|█████     | 5/10 [03:01<02:29, 29.81s/it, profit=-46424.40, buys=5855]Adv_SELL_TP1:  60%|██████    | 6/10 [03:01<02:02, 30.58s/it, profit=-46424.40, buys=5855]Adv_SELL_TP1:  60%|██████    | 6/10 [03:27<02:02, 30.58s/it, profit=-47360.14, buys=5042]Adv_SELL_TP1:  70%|███████   | 7/10 [03:27<01:27, 29.29s/it, profit=-47360.14, buys=5042]Adv_SELL_TP1:  70%|███████   | 7/10 [03:59<01:27, 29.29s/it, profit=-25102.27, buys=4279]Adv_SELL_TP1:  80%|████████  | 8/10 [03:59<00:59, 29.96s/it, profit=-25102.27, buys=4279]Adv_SELL_TP1:  80%|████████  | 8/10 [04:30<00:59, 29.96s/it, profit=-26253.77, buys=3243]Adv_SELL_TP1:  90%|█████████ | 9/10 [04:30<00:30, 30.34s/it, profit=-26253.77, buys=3243]Adv_SELL_TP1:  90%|█████████ | 9/10 [05:00<00:30, 30.34s/it, profit=-21996.99, buys=3631]Adv_SELL_TP1: 100%|██████████| 10/10 [05:00<00:00, 30.22s/it, profit=-21996.99, buys=3631]                                                                                          Adv_SELL_TP2:   0%|          | 0/10 [00:00<?, ?it/s]Adv_SELL_TP2:   0%|          | 0/10 [00:30<?, ?it/s, profit=-48682.54, buys=4606]Adv_SELL_TP2:  10%|█         | 1/10 [00:30<04:32, 30.28s/it, profit=-48682.54, buys=4606]Adv_SELL_TP2:  10%|█         | 1/10 [01:06<04:32, 30.28s/it, profit=-20280.64, buys=3292]Adv_SELL_TP2:  20%|██        | 2/10 [01:06<04:30, 33.78s/it, profit=-20280.64, buys=3292]Adv_SELL_TP2:  20%|██        | 2/10 [01:40<04:30, 33.78s/it, profit=-30989.56, buys=3540]Adv_SELL_TP2:  30%|███       | 3/10 [01:40<03:55, 33.68s/it, profit=-30989.56, buys=3540]Adv_SELL_TP2:  30%|███       | 3/10 [02:09<03:55, 33.68s/it, profit=-69853.64, buys=8209]Adv_SELL_TP2:  40%|████      | 4/10 [02:09<03:11, 31.89s/it, profit=-69853.64, buys=8209]Adv_SELL_TP2:  40%|████      | 4/10 [02:42<03:11, 31.89s/it, profit=-14068.05, buys=2039]Adv_SELL_TP2:  50%|█████     | 5/10 [02:42<02:41, 32.25s/it, profit=-14068.05, buys=2039]Adv_SELL_TP2:  50%|█████     | 5/10 [03:19<02:41, 32.25s/it, profit=-2354.62, buys=2521] Adv_SELL_TP2:  60%|██████    | 6/10 [03:19<02:15, 33.87s/it, profit=-2354.62, buys=2521]Adv_SELL_TP2:  60%|██████    | 6/10 [03:49<02:15, 33.87s/it, profit=-9180.78, buys=1811]Adv_SELL_TP2:  70%|███████   | 7/10 [03:49<01:38, 32.78s/it, profit=-9180.78, buys=1811]Adv_SELL_TP2:  70%|███████   | 7/10 [04:20<01:38, 32.78s/it, profit=-11029.41, buys=2014]Adv_SELL_TP2:  80%|████████  | 8/10 [04:20<01:04, 32.26s/it, profit=-11029.41, buys=2014]Adv_SELL_TP2:  80%|████████  | 8/10 [04:57<01:04, 32.26s/it, profit=-4153.06, buys=2366] Adv_SELL_TP2:  90%|█████████ | 9/10 [04:57<00:33, 33.61s/it, profit=-4153.06, buys=2366]Adv_SELL_TP2:  90%|█████████ | 9/10 [05:32<00:33, 33.61s/it, profit=93.78, buys=2015]   Adv_SELL_TP2: 100%|██████████| 10/10 [05:32<00:00, 33.96s/it, profit=93.78, buys=2015]                                                                                      Adv_SELL_TP3:   0%|          | 0/10 [00:00<?, ?it/s]Adv_SELL_TP3:   0%|          | 0/10 [00:31<?, ?it/s, profit=-19503.16, buys=2115]Adv_SELL_TP3:  10%|█         | 1/10 [00:31<04:46, 31.85s/it, profit=-19503.16, buys=2115]Adv_SELL_TP3:  10%|█         | 1/10 [01:01<04:46, 31.85s/it, profit=-6823.89, buys=588]  Adv_SELL_TP3:  20%|██        | 2/10 [01:01<04:02, 30.27s/it, profit=-6823.89, buys=588]Adv_SELL_TP3:  20%|██        | 2/10 [01:31<04:02, 30.27s/it, profit=-2403.46, buys=755]Adv_SELL_TP3:  30%|███       | 3/10 [01:31<03:31, 30.18s/it, profit=-2403.46, buys=755]Adv_SELL_TP3:  30%|███       | 3/10 [02:09<03:31, 30.18s/it, profit=2664.66, buys=320] Adv_SELL_TP3:  40%|████      | 4/10 [02:09<03:20, 33.47s/it, profit=2664.66, buys=320]Adv_SELL_TP3:  40%|████      | 4/10 [02:45<03:20, 33.47s/it, profit=5905.08, buys=400]Adv_SELL_TP3:  50%|█████     | 5/10 [02:45<02:52, 34.43s/it, profit=5905.08, buys=400]Adv_SELL_TP3:  50%|█████     | 5/10 [03:19<02:52, 34.43s/it, profit=3776.13, buys=287]Adv_SELL_TP3:  60%|██████    | 6/10 [03:19<02:17, 34.35s/it, profit=3776.13, buys=287]Adv_SELL_TP3:  60%|██████    | 6/10 [03:55<02:17, 34.35s/it, profit=-2639.84, buys=585]Adv_SELL_TP3:  70%|███████   | 7/10 [03:55<01:43, 34.64s/it, profit=-2639.84, buys=585]Adv_SELL_TP3:  70%|███████   | 7/10 [04:26<01:43, 34.64s/it, profit=-5451.57, buys=186]Adv_SELL_TP3:  80%|████████  | 8/10 [04:26<01:07, 33.73s/it, profit=-5451.57, buys=186]Adv_SELL_TP3:  80%|████████  | 8/10 [04:59<01:07, 33.73s/it, profit=15740.48, buys=480]Adv_SELL_TP3:  90%|█████████ | 9/10 [04:59<00:33, 33.49s/it, profit=15740.48, buys=480]Adv_SELL_TP3:  90%|█████████ | 9/10 [05:34<00:33, 33.49s/it, profit=-6629.15, buys=552]Adv_SELL_TP3: 100%|██████████| 10/10 [05:34<00:00, 33.88s/it, profit=-6629.15, buys=552]                                                                                        Adv_SELL_TP4:   0%|          | 0/10 [00:00<?, ?it/s]Adv_SELL_TP4:   0%|          | 0/10 [00:27<?, ?it/s, profit=-2347.29, buys=370]Adv_SELL_TP4:  10%|█         | 1/10 [00:27<04:07, 27.52s/it, profit=-2347.29, buys=370]Adv_SELL_TP4:  10%|█         | 1/10 [00:51<04:07, 27.52s/it, profit=-66447.29, buys=6448]Adv_SELL_TP4:  20%|██        | 2/10 [00:51<03:25, 25.69s/it, profit=-66447.29, buys=6448]Adv_SELL_TP4:  20%|██        | 2/10 [01:20<03:25, 25.69s/it, profit=-88265.55, buys=8810]Adv_SELL_TP4:  30%|███       | 3/10 [01:20<03:08, 26.93s/it, profit=-88265.55, buys=8810]Adv_SELL_TP4:  30%|███       | 3/10 [01:46<03:08, 26.93s/it, profit=-9028.61, buys=1065] Adv_SELL_TP4:  40%|████      | 4/10 [01:46<02:40, 26.70s/it, profit=-9028.61, buys=1065]Adv_SELL_TP4:  40%|████      | 4/10 [02:16<02:40, 26.70s/it, profit=-8821.41, buys=303] Adv_SELL_TP4:  50%|█████     | 5/10 [02:16<02:19, 27.98s/it, profit=-8821.41, buys=303]Adv_SELL_TP4:  50%|█████     | 5/10 [02:42<02:19, 27.98s/it, profit=-8002.72, buys=842]Adv_SELL_TP4:  60%|██████    | 6/10 [02:42<01:48, 27.25s/it, profit=-8002.72, buys=842]Adv_SELL_TP4:  60%|██████    | 6/10 [03:13<01:48, 27.25s/it, profit=3149.04, buys=650] Adv_SELL_TP4:  70%|███████   | 7/10 [03:13<01:25, 28.37s/it, profit=3149.04, buys=650]Adv_SELL_TP4:  70%|███████   | 7/10 [03:42<01:25, 28.37s/it, profit=-7275.83, buys=392]Adv_SELL_TP4:  80%|████████  | 8/10 [03:42<00:57, 28.70s/it, profit=-7275.83, buys=392]Adv_SELL_TP4:  80%|████████  | 8/10 [04:12<00:57, 28.70s/it, profit=482.04, buys=604]  Adv_SELL_TP4:  90%|█████████ | 9/10 [04:12<00:28, 28.95s/it, profit=482.04, buys=604]Adv_SELL_TP4:  90%|█████████ | 9/10 [04:39<00:28, 28.95s/it, profit=-9736.38, buys=341]Adv_SELL_TP4: 100%|██████████| 10/10 [04:39<00:00, 28.29s/it, profit=-9736.38, buys=341]                                                                                        Training Pareto PDF saved to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/trainable_penguin_pareto_front.pdf
-
-Saved training parameters to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/json/trainable_penguin_training.json
-Saved trainable parameter log to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/json/trainable_penguin_parameter_log.json
-Saved trainable parameter delta report to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/trainable_penguin_parameter_delta.txt
-Saved training log to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/trainable_penguin_training.log
-Saved training Pareto PDF to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/trainable_penguin_pareto_front.pdf
-Total training time: 0:20:46 (H:MM:SS)
-
-Trainable values selected at the end:
-  Adv_SELL_TP1: adx_period=13, adx_threshold=16.6135, buy_rsi=25.8646, cooldown_bars=14, max_cash_fraction_per_trade=0.086, relative_strength_period=20, relative_strength_threshold=0.7402, rsi_period=27, rvol_period=7, rvol_threshold=1.7621, sell_rsi=78.2177, stop_loss_pct=0.0729, take_profit_pct=0.1239
-  Adv_SELL_TP2: adx_period=28, adx_threshold=10.0, bb_period=39, bb_stddev=3.5, cooldown_bars=10, max_cash_fraction_per_trade=0.1085, relative_strength_period=34, relative_strength_threshold=0.2976, rvol_period=26, rvol_threshold=2.8828, stop_loss_pct=0.0431, take_profit_pct=0.0243
-  Adv_SELL_TP3: adx_period=28, adx_threshold=28.9092, bb_period=32, bb_stddev=2.4448, cooldown_bars=4, max_cash_fraction_per_trade=0.1434, relative_strength_period=33, relative_strength_threshold=0.1541, rvol_period=9, rvol_threshold=1.3159, stop_loss_pct=0.0876, take_profit_pct=0.1547
-  Adv_SELL_TP4: buy_rsi=28.5115, cooldown_bars=6, max_cash_fraction_per_trade=0.1202, relative_strength_period=28, relative_strength_threshold=0.1092, rsi_period=21, rvol_period=9, rvol_threshold=1.2399, sell_rsi=68.6123, stop_loss_pct=0.0651, take_profit_pct=0.0657
-
-Step 4: Running backtest (118253 bars)...
-
-Executing bars:   0%|          | 0/118253 [00:00<?, ?it/s]Executing bars:   1%|          | 1183/118253 [00:42<1:10:51, 27.53it/s]Executing bars:   1%|          | 1183/118253 [00:53<1:10:51, 27.53it/s]Executing bars:   2%|▏         | 2366/118253 [01:28<1:12:24, 26.68it/s]Executing bars:   2%|▏         | 2366/118253 [01:43<1:12:24, 26.68it/s]Executing bars:   3%|▎         | 3548/118253 [02:28<1:23:06, 23.00it/s]Executing bars:   3%|▎         | 3548/118253 [02:43<1:23:06, 23.00it/s]Executing bars:   4%|▍         | 4731/118253 [03:30<1:28:58, 21.26it/s]Executing bars:   4%|▍         | 4731/118253 [03:43<1:28:58, 21.26it/s]Executing bars:   5%|▌         | 5913/118253 [04:16<1:22:34, 22.67it/s]Executing bars:   5%|▌         | 5913/118253 [04:33<1:22:34, 22.67it/s]Executing bars:   6%|▌         | 7096/118253 [05:01<1:18:17, 23.66it/s]Executing bars:   6%|▌         | 7096/118253 [05:13<1:18:17, 23.66it/s]Executing bars:   7%|▋         | 8278/118253 [05:55<1:19:15, 23.12it/s]Executing bars:   7%|▋         | 8278/118253 [06:13<1:19:15, 23.12it/s]Executing bars:   8%|▊         | 9461/118253 [06:58<1:24:21, 21.49it/s]Executing bars:   8%|▊         | 9461/118253 [07:13<1:24:21, 21.49it/s]Executing bars:   9%|▉         | 10643/118253 [07:50<1:21:43, 21.94it/s]Executing bars:   9%|▉         | 10643/118253 [08:03<1:21:43, 21.94it/s]Executing bars:  10%|█         | 11826/118253 [08:36<1:17:31, 22.88it/s]Executing bars:  10%|█         | 11826/118253 [08:53<1:17:31, 22.88it/s]Executing bars:  11%|█         | 13008/118253 [09:25<1:15:04, 23.37it/s]Executing bars:  11%|█         | 13008/118253 [09:43<1:15:04, 23.37it/s]Executing bars:  12%|█▏        | 14191/118253 [10:26<1:19:13, 21.89it/s]Executing bars:  12%|█▏        | 14191/118253 [10:43<1:19:13, 21.89it/s]Executing bars:  13%|█▎        | 15373/118253 [11:23<1:19:16, 21.63it/s]Executing bars:  13%|█▎        | 15373/118253 [11:33<1:19:16, 21.63it/s]Executing bars:  14%|█▍        | 16556/118253 [12:07<1:13:51, 22.95it/s]Executing bars:  14%|█▍        | 16556/118253 [12:23<1:13:51, 22.95it/s]Executing bars:  15%|█▌        | 17738/118253 [12:53<1:10:37, 23.72it/s]Executing bars:  15%|█▌        | 17738/118253 [13:03<1:10:37, 23.72it/s]Executing bars:  16%|█▌        | 18921/118253 [13:51<1:13:14, 22.60it/s]Executing bars:  16%|█▌        | 18921/118253 [14:03<1:13:14, 22.60it/s]Executing bars:  17%|█▋        | 20104/118253 [14:53<1:16:14, 21.45it/s]Executing bars:  17%|█▋        | 20104/118253 [15:03<1:16:14, 21.45it/s]Executing bars:  18%|█▊        | 21286/118253 [15:37<1:10:58, 22.77it/s]Executing bars:  18%|█▊        | 21286/118253 [15:53<1:10:58, 22.77it/s]Executing bars:  19%|█▉        | 22469/118253 [16:21<1:06:54, 23.86it/s]Executing bars:  19%|█▉        | 22469/118253 [16:33<1:06:54, 23.86it/s]Executing bars:  20%|██        | 23651/118253 [17:16<1:08:20, 23.07it/s]Executing bars:  20%|██        | 23651/118253 [17:33<1:08:20, 23.07it/s]Executing bars:  21%|██        | 24834/118253 [18:15<1:10:17, 22.15it/s]Executing bars:  21%|██        | 24834/118253 [18:33<1:10:17, 22.15it/s]Executing bars:  22%|██▏       | 26016/118253 [19:02<1:07:02, 22.93it/s]Executing bars:  22%|██▏       | 26016/118253 [19:13<1:07:02, 22.93it/s]Executing bars:  23%|██▎       | 27199/118253 [19:44<1:02:20, 24.34it/s]Executing bars:  23%|██▎       | 27199/118253 [20:03<1:02:20, 24.34it/s]Executing bars:  24%|██▍       | 28381/118253 [20:29<1:00:16, 24.85it/s]Executing bars:  24%|██▍       | 28381/118253 [20:43<1:00:16, 24.85it/s]Executing bars:  25%|██▌       | 29564/118253 [21:25<1:02:41, 23.58it/s]Executing bars:  25%|██▌       | 29564/118253 [21:43<1:02:41, 23.58it/s]Executing bars:  26%|██▌       | 30746/118253 [22:15<1:01:47, 23.60it/s]Executing bars:  26%|██▌       | 30746/118253 [22:33<1:01:47, 23.60it/s]Executing bars:  27%|██▋       | 31929/118253 [22:54<57:03, 25.22it/s]  Executing bars:  27%|██▋       | 31929/118253 [23:13<57:03, 25.22it/s]Executing bars:  28%|██▊       | 33111/118253 [23:35<53:54, 26.32it/s]Executing bars:  28%|██▊       | 33111/118253 [23:53<53:54, 26.32it/s]Executing bars:  29%|██▉       | 34294/118253 [24:28<56:17, 24.86it/s]Executing bars:  29%|██▉       | 34294/118253 [24:43<56:17, 24.86it/s]Executing bars:  30%|███       | 35476/118253 [25:24<58:17, 23.67it/s]Executing bars:  30%|███       | 35476/118253 [25:43<58:17, 23.67it/s]Executing bars:  31%|███       | 36659/118253 [26:06<54:40, 24.87it/s]Executing bars:  31%|███       | 36659/118253 [26:24<54:40, 24.87it/s]Executing bars:  32%|███▏      | 37841/118253 [26:47<51:47, 25.88it/s]Executing bars:  32%|███▏      | 37841/118253 [27:04<51:47, 25.88it/s]Executing bars:  33%|███▎      | 39024/118253 [27:39<53:01, 24.90it/s]Executing bars:  33%|███▎      | 39024/118253 [27:54<53:01, 24.90it/s]Executing bars:  34%|███▍      | 40207/118253 [28:35<55:00, 23.65it/s]Executing bars:  34%|███▍      | 40207/118253 [28:54<55:00, 23.65it/s]Executing bars:  35%|███▌      | 41389/118253 [29:19<52:19, 24.48it/s]Executing bars:  35%|███▌      | 41389/118253 [29:34<52:19, 24.48it/s]Executing bars:  36%|███▌      | 42572/118253 [30:00<49:11, 25.64it/s]Executing bars:  36%|███▌      | 42572/118253 [30:14<49:11, 25.64it/s]Executing bars:  37%|███▋      | 43754/118253 [30:46<48:17, 25.71it/s]Executing bars:  37%|███▋      | 43754/118253 [31:04<48:17, 25.71it/s]Executing bars:  38%|███▊      | 44937/118253 [31:41<50:16, 24.31it/s]Executing bars:  38%|███▊      | 44937/118253 [31:54<50:16, 24.31it/s]Executing bars:  39%|███▉      | 46119/118253 [32:29<49:24, 24.34it/s]Executing bars:  39%|███▉      | 46119/118253 [32:44<49:24, 24.34it/s]Executing bars:  40%|████      | 47302/118253 [33:09<45:53, 25.77it/s]Executing bars:  40%|████      | 47302/118253 [33:24<45:53, 25.77it/s]Executing bars:  41%|████      | 48484/118253 [33:48<43:15, 26.88it/s]Executing bars:  41%|████      | 48484/118253 [34:04<43:15, 26.88it/s]Executing bars:  42%|████▏     | 49667/118253 [34:42<45:22, 25.19it/s]Executing bars:  42%|████▏     | 49667/118253 [34:54<45:22, 25.19it/s]Executing bars:  43%|████▎     | 50849/118253 [35:36<46:35, 24.11it/s]Executing bars:  43%|████▎     | 50849/118253 [35:54<46:35, 24.11it/s]Executing bars:  44%|████▍     | 52032/118253 [36:16<43:20, 25.47it/s]Executing bars:  44%|████▍     | 52032/118253 [36:34<43:20, 25.47it/s]Executing bars:  45%|████▌     | 53214/118253 [36:57<41:00, 26.44it/s]Executing bars:  45%|████▌     | 53214/118253 [37:14<41:00, 26.44it/s]Executing bars:  46%|████▌     | 54397/118253 [37:48<41:49, 25.45it/s]Executing bars:  46%|████▌     | 54397/118253 [38:04<41:49, 25.45it/s]Executing bars:  47%|████▋     | 55579/118253 [38:41<42:58, 24.31it/s]Executing bars:  47%|████▋     | 55579/118253 [38:54<42:58, 24.31it/s]Executing bars:  48%|████▊     | 56762/118253 [39:24<40:29, 25.31it/s]Executing bars:  48%|████▊     | 56762/118253 [39:34<40:29, 25.31it/s]Executing bars:  49%|████▉     | 57944/118253 [40:04<37:57, 26.48it/s]Executing bars:  49%|████▉     | 57944/118253 [40:14<37:57, 26.48it/s]Executing bars:  50%|█████     | 59127/118253 [40:50<37:32, 26.25it/s]Executing bars:  50%|█████     | 59127/118253 [41:04<37:32, 26.25it/s]Executing bars:  51%|█████     | 60310/118253 [41:44<39:09, 24.66it/s]Executing bars:  51%|█████     | 60310/118253 [42:04<39:09, 24.66it/s]Executing bars:  52%|█████▏    | 61492/118253 [42:30<37:44, 25.07it/s]Executing bars:  52%|█████▏    | 61492/118253 [42:44<37:44, 25.07it/s]Executing bars:  53%|█████▎    | 62675/118253 [43:11<35:34, 26.04it/s]Executing bars:  53%|█████▎    | 62675/118253 [43:24<35:34, 26.04it/s]Executing bars:  54%|█████▍    | 63857/118253 [43:53<33:59, 26.67it/s]Executing bars:  54%|█████▍    | 63857/118253 [44:04<33:59, 26.67it/s]Executing bars:  55%|█████▌    | 65040/118253 [44:47<35:22, 25.07it/s]Executing bars:  55%|█████▌    | 65040/118253 [45:04<35:22, 25.07it/s]Executing bars:  56%|█████▌    | 66222/118253 [45:38<35:33, 24.38it/s]Executing bars:  56%|█████▌    | 66222/118253 [45:54<35:33, 24.38it/s]Executing bars:  57%|█████▋    | 67405/118253 [46:19<33:08, 25.57it/s]Executing bars:  57%|█████▋    | 67405/118253 [46:34<33:08, 25.57it/s]Executing bars:  58%|█████▊    | 68587/118253 [47:00<31:13, 26.51it/s]Executing bars:  58%|█████▊    | 68587/118253 [47:14<31:13, 26.51it/s]Executing bars:  59%|█████▉    | 69770/118253 [47:51<31:48, 25.40it/s]Executing bars:  59%|█████▉    | 69770/118253 [48:04<31:48, 25.40it/s]Executing bars:  60%|██████    | 70952/118253 [48:45<32:36, 24.17it/s]Executing bars:  60%|██████    | 70952/118253 [49:04<32:36, 24.17it/s]Executing bars:  61%|██████    | 72135/118253 [49:27<30:24, 25.28it/s]Executing bars:  61%|██████    | 72135/118253 [49:44<30:24, 25.28it/s]Executing bars:  62%|██████▏   | 73317/118253 [50:08<28:26, 26.34it/s]Executing bars:  62%|██████▏   | 73317/118253 [50:24<28:26, 26.34it/s]Executing bars:  63%|██████▎   | 74500/118253 [50:54<27:56, 26.10it/s]Executing bars:  63%|██████▎   | 74500/118253 [51:04<27:56, 26.10it/s]Executing bars:  64%|██████▍   | 75682/118253 [51:47<28:37, 24.79it/s]Executing bars:  64%|██████▍   | 75682/118253 [52:05<28:37, 24.79it/s]Executing bars:  65%|██████▌   | 76865/118253 [52:33<27:33, 25.03it/s]Executing bars:  65%|██████▌   | 76865/118253 [52:45<27:33, 25.03it/s]Executing bars:  66%|██████▌   | 78047/118253 [53:13<25:31, 26.26it/s]Executing bars:  66%|██████▌   | 78047/118253 [53:25<25:31, 26.26it/s]Executing bars:  67%|██████▋   | 79230/118253 [53:54<24:02, 27.05it/s]Executing bars:  67%|██████▋   | 79230/118253 [54:05<24:02, 27.05it/s]Executing bars:  68%|██████▊   | 80413/118253 [54:48<24:55, 25.29it/s]Executing bars:  68%|██████▊   | 80413/118253 [55:05<24:55, 25.29it/s]Executing bars:  69%|██████▉   | 81595/118253 [55:38<24:39, 24.78it/s]Executing bars:  69%|██████▉   | 81595/118253 [55:55<24:39, 24.78it/s]Executing bars:  70%|███████   | 82778/118253 [56:20<23:06, 25.59it/s]Executing bars:  70%|███████   | 82778/118253 [56:35<23:06, 25.59it/s]Executing bars:  71%|███████   | 83960/118253 [57:01<21:28, 26.61it/s]Executing bars:  71%|███████   | 83960/118253 [57:15<21:28, 26.61it/s]Executing bars:  72%|███████▏  | 85143/118253 [57:51<21:31, 25.64it/s]Executing bars:  72%|███████▏  | 85143/118253 [58:05<21:31, 25.64it/s]Executing bars:  73%|███████▎  | 86325/118253 [58:44<21:44, 24.47it/s]Executing bars:  73%|███████▎  | 86325/118253 [58:55<21:44, 24.47it/s]Executing bars:  74%|███████▍  | 87508/118253 [59:24<19:51, 25.80it/s]Executing bars:  74%|███████▍  | 87508/118253 [59:35<19:51, 25.80it/s]Executing bars:  75%|███████▌  | 88690/118253 [1:00:04<18:20, 26.87it/s]Executing bars:  75%|███████▌  | 88690/118253 [1:00:15<18:20, 26.87it/s]Executing bars:  76%|███████▌  | 89873/118253 [1:00:52<18:02, 26.23it/s]Executing bars:  76%|███████▌  | 89873/118253 [1:01:05<18:02, 26.23it/s]Executing bars:  77%|███████▋  | 91055/118253 [1:01:47<18:27, 24.57it/s]Executing bars:  77%|███████▋  | 91055/118253 [1:02:05<18:27, 24.57it/s]Executing bars:  78%|███████▊  | 92238/118253 [1:02:33<17:24, 24.90it/s]Executing bars:  78%|███████▊  | 92238/118253 [1:02:45<17:24, 24.90it/s]Executing bars:  79%|███████▉  | 93420/118253 [1:03:13<15:52, 26.07it/s]Executing bars:  79%|███████▉  | 93420/118253 [1:03:25<15:52, 26.07it/s]Executing bars:  80%|████████  | 94603/118253 [1:03:56<14:52, 26.50it/s]Executing bars:  80%|████████  | 94603/118253 [1:04:15<14:52, 26.50it/s]Executing bars:  81%|████████  | 95785/118253 [1:04:52<15:09, 24.71it/s]Executing bars:  81%|████████  | 95785/118253 [1:05:05<15:09, 24.71it/s]Executing bars:  82%|████████▏ | 96968/118253 [1:05:42<14:35, 24.30it/s]Executing bars:  82%|████████▏ | 96968/118253 [1:05:55<14:35, 24.30it/s]Executing bars:  83%|████████▎ | 98150/118253 [1:06:24<13:12, 25.36it/s]Executing bars:  83%|████████▎ | 98150/118253 [1:06:35<13:12, 25.36it/s]Executing bars:  84%|████████▍ | 99333/118253 [1:07:11<12:28, 25.28it/s]Executing bars:  84%|████████▍ | 99333/118253 [1:07:25<12:28, 25.28it/s]Executing bars:  85%|████████▌ | 100516/118253 [1:08:10<12:34, 23.51it/s]Executing bars:  85%|████████▌ | 100516/118253 [1:08:25<12:34, 23.51it/s]Executing bars:  86%|████████▌ | 101698/118253 [1:09:13<12:37, 21.86it/s]Executing bars:  86%|████████▌ | 101698/118253 [1:09:25<12:37, 21.86it/s]Executing bars:  87%|████████▋ | 102881/118253 [1:09:58<11:10, 22.94it/s]Executing bars:  87%|████████▋ | 102881/118253 [1:10:15<11:10, 22.94it/s]Executing bars:  88%|████████▊ | 104063/118253 [1:10:42<09:52, 23.96it/s]Executing bars:  88%|████████▊ | 104063/118253 [1:10:55<09:52, 23.96it/s]Executing bars:  89%|████████▉ | 105246/118253 [1:11:35<09:14, 23.47it/s]Executing bars:  89%|████████▉ | 105246/118253 [1:11:45<09:14, 23.47it/s]Executing bars:  90%|█████████ | 106428/118253 [1:12:36<08:54, 22.11it/s]Executing bars:  90%|█████████ | 106428/118253 [1:12:55<08:54, 22.11it/s]Executing bars:  91%|█████████ | 107611/118253 [1:13:26<07:51, 22.58it/s]Executing bars:  91%|█████████ | 107611/118253 [1:13:45<07:51, 22.58it/s]Executing bars:  92%|█████████▏| 108793/118253 [1:14:11<06:41, 23.58it/s]Executing bars:  92%|█████████▏| 108793/118253 [1:14:25<06:41, 23.58it/s]Executing bars:  93%|█████████▎| 109976/118253 [1:14:57<05:42, 24.14it/s]Executing bars:  93%|█████████▎| 109976/118253 [1:15:15<05:42, 24.14it/s]Executing bars:  94%|█████████▍| 111158/118253 [1:15:58<05:15, 22.49it/s]Executing bars:  94%|█████████▍| 111158/118253 [1:16:15<05:15, 22.49it/s]Executing bars:  95%|█████████▌| 112341/118253 [1:16:52<04:24, 22.36it/s]Executing bars:  95%|█████████▌| 112341/118253 [1:17:05<04:24, 22.36it/s]Executing bars:  96%|█████████▌| 113523/118253 [1:17:36<03:21, 23.45it/s]Executing bars:  96%|█████████▌| 113523/118253 [1:17:55<03:21, 23.45it/s]Executing bars:  97%|█████████▋| 114706/118253 [1:18:20<02:25, 24.35it/s]Executing bars:  97%|█████████▋| 114706/118253 [1:18:36<02:25, 24.35it/s]Executing bars:  98%|█████████▊| 115888/118253 [1:19:17<01:42, 23.17it/s]Executing bars:  98%|█████████▊| 115888/118253 [1:19:36<01:42, 23.17it/s]Executing bars:  99%|█████████▉| 117071/118253 [1:20:16<00:53, 22.17it/s]Executing bars:  99%|█████████▉| 117071/118253 [1:20:36<00:53, 22.17it/s]Executing bars: 100%|██████████| 118253/118253 [1:20:59<00:00, 23.57it/s]Executing bars: 100%|██████████| 118253/118253 [1:20:59<00:00, 24.34it/s]
-
-Closing all positions...
-Closing positions:   0%|          | 0/11 [00:00<?, ?it/s]Closing positions: 100%|██████████| 11/11 [00:00<00:00, 520.92it/s]
-
-Calculating performance metrics...
-Computing metrics:   0%|          | 0/11 [00:00<?, ?it/s]
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [A
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [AComputing metrics:  18%|█▊        | 2/11 [00:00<00:00, 12.04it/s]
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [A
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [AComputing metrics:  36%|███▋      | 4/11 [00:00<00:00, 12.63it/s]
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [A
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [AComputing metrics:  55%|█████▍    | 6/11 [00:00<00:00, 12.87it/s]
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [A
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [AComputing metrics:  73%|███████▎  | 8/11 [00:00<00:00, 12.79it/s]
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [A
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [AComputing metrics:  91%|█████████ | 10/11 [00:00<00:00, 12.97it/s]
-Calc metrics:   0%|          | 0/118133 [00:00<?, ?it/s][A
-                                                        [AComputing metrics: 100%|██████████| 11/11 [00:00<00:00, 12.88it/s]
-
-Releasing large backtest buffers before returning...
-Released large backtest buffers in 3.40s
-
-run_backtest() returned; generating results...
-
-================================================================================
-RESULTS
-================================================================================
-
-====================================================================================================
-STRATEGY                                FINAL VALUE     RETURN %     TRADES     SHARPE
-====================================================================================================
-Adv_SELL_TP3                        $    188,182.91       88.18%      31354       0.33
-Adv_SELL_TP4                        $    125,161.50       25.16%      31690       0.16
-SP500                               $    109,246.31        9.25%          2       0.04
-BuyMaxEachPenguin                   $    108,610.78        8.61%         62       0.03
-SmartRSIConfluencePenguin           $    103,494.29        3.49%        542       0.02
-Adv_SELL_TP3_Manual                 $      3,181.35      -96.82%      51040      -3.09
-Adv_SELL_TP2                        $      2,913.79      -97.09%      70826      -2.12
-Adv_SELL_TP4_Manual                 $      2,394.53      -97.61%      50436      -3.23
-Adv_SELL_TP1                        $      2,000.09      -98.00%      53506      -2.73
-Adv_SELL_TP2_Manual                 $      1,602.47      -98.40%      51102      -2.91
-Adv_SELL_TP1_Manual                 $      1,083.21      -98.92%      50704      -2.64
-====================================================================================================
-
-🏆 Best Performer: Adv_SELL_TP3
-   Final Value: $188,182.91
-   Return: 88.18%
-   Max Drawdown: -3.76%
-   Sharpe Ratio: 0.33
-
-
-Saved results to:
-  Current:   /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts
-
-Skipping SMA artifact export (no sma folder requested)
-
-Generating visualization...
-📈 Saved capital curves plot to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/capital_curves.png
-
-Generating PDF report...
-📄 Final report saved to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/report.pdf
-
-✅ Backtest complete!
-
-Archive saved to:  /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_old/260726/run1
-  - report.pdf
-  - artifacts/capital_curves.png
-  - artifacts/json/curves_data.json
-  - artifacts/json/metrics_summary.json
-  - artifacts/trades_log.txt
-  - artifacts/consistency_warnings.txt (if residual jumps)
-
-Current run saved to: /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current
-  - report.pdf
-  - artifacts/capital_curves.png
-  - artifacts/json/curves_data.json
-  - artifacts/json/metrics_summary.json
-  - artifacts/trades_log.txt
-  - artifacts/consistency_warnings.txt (if residual jumps)
-
-================================================================================
-Run #1 archived
