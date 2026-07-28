@@ -1,184 +1,0 @@
-
-[notice] A new release of pip is available: 24.3.1 -> 26.1.2
-[notice] To update, run: pip install --upgrade pip
-
-================================================================================
-PENGUIN CAPITALIST - HISTORICAL BACKTEST
-================================================================================
-
-================================================================================
-BACKTEST CONFIGURATION
-================================================================================
-Start Time (UTC):  2026-03-01 00:00:00+00:00
-End Time (UTC):    2026-04-01 00:00:00+00:00
-Binning:           1m
-
-PORTFOLIO CONFIGURATION
-Initial Capital:   $100,000.00
-Transaction Cost:  $0.00
-Symbol List:       LIST_5
-Symbols:           323
-
-TRAINING CONFIGURATION
-Relative To:       SPY
-Training Steps:    2
-Training Sample:   10 stocks x 2 month(s)
-Training Cost:     $2.00
-Training Seed:     42
-================================================================================
-
-Step 1: Loading historical data from Alpaca...
-Fetching data for 323 symbols from 2026-02-28 22:00:00+00:00 to 2026-04-01 00:00:00+00:00...
-Prechecking recent data from 2026-03-18 00:00:00+00:00 to 2026-04-01 00:00:00+00:00...
-Checking recent data:   0%|          | 0/323 [00:00<?, ?it/s]Checking recent data: 100%|██████████| 323/323 [00:29<00:00, 10.79it/s]
-  Recent-data precheck kept 279 symbol(s), skipped 44.
-  Precheck stale reasons: low recent volume: 4, no data: 40
-Fetching/organizing data:   0%|          | 0/279 [00:00<?, ?it/s]Fetching/organizing data:   0%|          | 0/279 [00:19<?, ?it/s]Fetching/organizing data: 100%|██████████| 279/279 [00:23<00:00, 11.92it/s]
-
-⚠️  DATA SPARSENESS WARNING:
-   Requested: 2026-02-28 22:00:00+00:00 to 2026-04-01 00:00:00+00:00
-   Actual:    2026-03-02 09:00:00+00:00 to 2026-03-31 23:59:00+00:00
-   (Using only the 21113 available timestamps)
-
-
-Step 2: Detecting stale data...
-  Valid symbols: 274
-  Stale symbols (44): SSO, QQQ, IWM, XLV, XLP, AAPL, ADBE, AMD, MPWR, CRWD, DOCU, TWLO, APP, ESTC, SPLK, NFLX, SNAP, SQ, HOOD, UPST, ADYEY, MELI, BAC, GS, PGR, AON, MMC, TFC, ABBV, CI, BLUE, SGEN, LMT, GPS, W, HSY, FANG, HES, RIVN, BALL, SPG, RKLB, AVAV, RDFN
-
-  Total bars across all symbols: 21113
-  Tradeable bars from configured start: 21113
-
-Step 3: Initializing 19 strategies...
-Initializing strategies:   0%|          | 0/19 [00:00<?, ?it/s]  ✗ Adv_SELL_TP3: Adv_SELL_TP3Params.__init__() got an unexpected keyword argument 'adx_period'. Did you mean 'ax_period'?
-  ✗ Adv_SELL_TP3_Manual: Adv_SELL_TP3Params.__init__() got an unexpected keyword argument 'adx_period'. Did you mean 'ax_period'?
-Initializing strategies: 100%|██████████| 19/19 [00:00<00:00, 83012.27it/s]
-OG_TP1:   0%|          | 0/2 [00:00<?, ?it/s]OG_TP1:   0%|          | 0/2 [00:03<?, ?it/s, profit=5288.53, buys=444]OG_TP1:  50%|█████     | 1/2 [00:03<00:03,  3.10s/it, profit=5288.53, buys=444]OG_TP1:  50%|█████     | 1/2 [00:06<00:03,  3.10s/it, profit=2214.91, buys=176]OG_TP1: 100%|██████████| 2/2 [00:06<00:00,  3.07s/it, profit=2214.91, buys=176]                                                                               OG_TP2:   0%|          | 0/2 [00:00<?, ?it/s]OG_TP2:   0%|          | 0/2 [00:03<?, ?it/s, profit=1881.96, buys=89]OG_TP2:  50%|█████     | 1/2 [00:03<00:03,  3.53s/it, profit=1881.96, buys=89]OG_TP2:  50%|█████     | 1/2 [00:06<00:03,  3.53s/it, profit=2592.97, buys=40]OG_TP2: 100%|██████████| 2/2 [00:06<00:00,  3.32s/it, profit=2592.97, buys=40]                                                                              OG_TP3:   0%|          | 0/2 [00:00<?, ?it/s]OG_TP3:   0%|          | 0/2 [00:03<?, ?it/s, profit=160.32, buys=22]OG_TP3:  50%|█████     | 1/2 [00:03<00:03,  3.45s/it, profit=160.32, buys=22]OG_TP3:  50%|█████     | 1/2 [00:07<00:03,  3.45s/it, profit=5442.15, buys=11]OG_TP3: 100%|██████████| 2/2 [00:07<00:00,  3.76s/it, profit=5442.15, buys=11]                                                                              OG_TP4:   0%|          | 0/2 [00:00<?, ?it/s]OG_TP4:   0%|          | 0/2 [00:03<?, ?it/s, profit=-1768.01, buys=37]OG_TP4:  50%|█████     | 1/2 [00:03<00:03,  3.35s/it, profit=-1768.01, buys=37]OG_TP4:  50%|█████     | 1/2 [00:06<00:03,  3.35s/it, profit=2268.68, buys=93] OG_TP4: 100%|██████████| 2/2 [00:06<00:00,  3.00s/it, profit=2268.68, buys=93]                                                                              Training Pareto PDF saved to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/trainable_penguin_pareto_front.pdf
-
-Saved training parameters to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/json/trainable_penguin_training.json
-Saved trainable parameter log to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/json/trainable_penguin_parameter_log.json
-Saved trainable parameter delta report to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/trainable_penguin_parameter_delta.txt
-Saved training log to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/trainable_penguin_training.log
-Saved training Pareto PDF to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/trainable_penguin_pareto_front.pdf
-Total training time: 0:00:26 (H:MM:SS)
-
-Trainable values selected at the end:
-  OG_TP1: adx_period=23, adx_threshold=28.06, buy_rsi=18.76, cooldown_bars=13, max_cash_fraction_per_trade=0.121, rsi_period=14, sell_rsi=58.09, stop_loss_pct=0.0744, strength_cap=1.22, take_profit_pct=0.1462
-  OG_TP2: adx_period=8, adx_threshold=16.87, bb_period=36, bb_stddev=2.92, cooldown_bars=6, max_cash_fraction_per_trade=0.0258, stop_loss_pct=0.0384, strength_cap=1.91, take_profit_pct=0.0682
-  OG_TP3: adx_period=23, adx_threshold=17.54, bb_period=29, bb_stddev=3.49, cooldown_bars=3, max_cash_fraction_per_trade=0.1196, stop_loss_pct=0.0948, strength_cap=1.68, take_profit_pct=0.1425
-  OG_TP4: buy_rsi=20.68, cooldown_bars=2, max_cash_fraction_per_trade=0.0631, rsi_period=16, sell_rsi=66.98, stop_loss_pct=0.0317, strength_cap=1.09, take_profit_pct=0.1221
-
-Step 4: Running backtest (21113 bars)...
-
-Executing bars:   0%|          | 0/21113 [00:00<?, ?it/s]Executing bars:   1%|          | 212/21113 [00:00<01:00, 343.37it/s]Executing bars:   2%|▏         | 423/21113 [00:04<04:27, 77.44it/s] Executing bars:   3%|▎         | 634/21113 [00:11<07:17, 46.76it/s]Executing bars:   4%|▍         | 845/21113 [00:14<06:35, 51.22it/s]Executing bars:   5%|▌         | 1056/21113 [00:16<04:51, 68.81it/s]Executing bars:   6%|▌         | 1267/21113 [00:17<04:04, 81.30it/s]Executing bars:   7%|▋         | 1478/21113 [00:24<05:53, 55.58it/s]Executing bars:   8%|▊         | 1690/21113 [00:30<07:08, 45.30it/s]Executing bars:   9%|▉         | 1901/21113 [00:31<05:22, 59.51it/s]Executing bars:  10%|█         | 2112/21113 [00:32<04:12, 75.30it/s]Executing bars:  11%|█         | 2323/21113 [00:36<04:28, 70.04it/s]Executing bars:  12%|█▏        | 2534/21113 [00:43<06:03, 51.13it/s]Executing bars:  13%|█▎        | 2745/21113 [00:47<05:57, 51.36it/s]Executing bars:  14%|█▍        | 2956/21113 [00:48<04:32, 66.58it/s]Executing bars:  15%|█▌        | 3167/21113 [00:49<03:36, 83.02it/s]Executing bars:  16%|█▌        | 3379/21113 [00:55<04:55, 60.01it/s]Executing bars:  17%|█▋        | 3590/21113 [01:01<06:11, 47.22it/s]Executing bars:  18%|█▊        | 3801/21113 [01:03<04:51, 59.40it/s]Executing bars:  19%|█▉        | 4012/21113 [01:03<03:42, 76.75it/s]Executing bars:  20%|██        | 4223/21113 [01:07<03:49, 73.74it/s]Executing bars:  21%|██        | 4434/21113 [01:13<05:17, 52.58it/s]Executing bars:  22%|██▏       | 4645/21113 [01:18<05:28, 50.18it/s]Executing bars:  23%|██▎       | 4856/21113 [01:19<04:12, 64.41it/s]Executing bars:  24%|██▍       | 5068/21113 [01:20<03:23, 78.78it/s]Executing bars:  25%|██▌       | 5279/21113 [01:26<04:25, 59.63it/s]Executing bars:  26%|██▌       | 5490/21113 [01:33<05:32, 47.00it/s]Executing bars:  27%|██▋       | 5701/21113 [01:35<04:32, 56.53it/s]Executing bars:  28%|██▊       | 5912/21113 [01:36<03:30, 72.32it/s]Executing bars:  29%|██▉       | 6123/21113 [01:38<03:18, 75.67it/s]Executing bars:  30%|███       | 6334/21113 [01:45<04:37, 53.25it/s]Executing bars:  31%|███       | 6546/21113 [01:50<04:53, 49.57it/s]Executing bars:  32%|███▏      | 6757/21113 [01:51<03:42, 64.64it/s]Executing bars:  33%|███▎      | 6968/21113 [01:52<02:51, 82.50it/s]Executing bars:  34%|███▍      | 7179/21113 [01:57<03:36, 64.35it/s]Executing bars:  35%|███▌      | 7390/21113 [02:03<04:38, 49.23it/s]Executing bars:  36%|███▌      | 7601/21113 [02:06<03:57, 56.91it/s]Executing bars:  37%|███▋      | 7812/21113 [02:07<03:02, 73.03it/s]Executing bars:  38%|███▊      | 8023/21113 [02:08<02:39, 81.89it/s]Executing bars:  39%|███▉      | 8235/21113 [02:15<03:53, 55.12it/s]Executing bars:  40%|████      | 8446/21113 [02:21<04:20, 48.71it/s]Executing bars:  41%|████      | 8657/21113 [02:22<03:18, 62.72it/s]Executing bars:  42%|████▏     | 8868/21113 [02:23<02:31, 80.91it/s]Executing bars:  43%|████▎     | 9079/21113 [02:27<03:01, 66.31it/s]Executing bars:  44%|████▍     | 9290/21113 [02:34<03:57, 49.78it/s]Executing bars:  45%|████▌     | 9501/21113 [02:37<03:30, 55.15it/s]Executing bars:  46%|████▌     | 9712/21113 [02:38<02:39, 71.57it/s]Executing bars:  47%|████▋     | 9924/21113 [02:39<02:12, 84.67it/s]Executing bars:  48%|████▊     | 10135/21113 [02:46<03:15, 56.04it/s]Executing bars:  49%|████▉     | 10346/21113 [02:52<03:44, 47.88it/s]Executing bars:  50%|█████     | 10557/21113 [02:53<02:48, 62.55it/s]Executing bars:  51%|█████     | 10768/21113 [02:53<02:06, 82.02it/s]Executing bars:  52%|█████▏    | 10979/21113 [02:57<02:22, 70.92it/s]Executing bars:  53%|█████▎    | 11190/21113 [03:04<03:11, 51.78it/s]Executing bars:  54%|█████▍    | 11402/21113 [03:07<02:57, 54.75it/s]Executing bars:  55%|█████▌    | 11613/21113 [03:08<02:12, 71.65it/s]Executing bars:  56%|█████▌    | 11824/21113 [03:09<01:48, 85.73it/s]Executing bars:  57%|█████▋    | 12035/21113 [03:16<02:35, 58.27it/s]Executing bars:  58%|█████▊    | 12246/21113 [03:22<03:08, 47.07it/s]Executing bars:  59%|█████▉    | 12457/21113 [03:23<02:23, 60.41it/s]Executing bars:  60%|██████    | 12668/21113 [03:24<01:49, 77.26it/s]Executing bars:  61%|██████    | 12879/21113 [03:28<01:57, 70.29it/s]Executing bars:  62%|██████▏   | 13091/21113 [03:35<02:36, 51.23it/s]Executing bars:  63%|██████▎   | 13302/21113 [03:39<02:30, 51.90it/s]Executing bars:  64%|██████▍   | 13513/21113 [03:40<01:52, 67.78it/s]Executing bars:  65%|██████▌   | 13724/21113 [03:41<01:27, 84.19it/s]Executing bars:  66%|██████▌   | 13935/21113 [03:46<01:58, 60.44it/s]Executing bars:  67%|██████▋   | 14146/21113 [03:53<02:27, 47.29it/s]Executing bars:  68%|██████▊   | 14357/21113 [03:55<01:56, 58.12it/s]Executing bars:  69%|██████▉   | 14568/21113 [03:56<01:28, 73.73it/s]Executing bars:  70%|███████   | 14780/21113 [04:00<01:33, 67.97it/s]Executing bars:  71%|███████   | 14991/21113 [04:06<02:01, 50.50it/s]Executing bars:  72%|███████▏  | 15202/21113 [04:11<01:59, 49.52it/s]Executing bars:  73%|███████▎  | 15413/21113 [04:12<01:27, 65.25it/s]Executing bars:  74%|███████▍  | 15624/21113 [04:12<01:05, 83.75it/s]Executing bars:  75%|███████▌  | 15835/21113 [04:18<01:24, 62.76it/s]Executing bars:  76%|███████▌  | 16046/21113 [04:24<01:44, 48.42it/s]Executing bars:  77%|███████▋  | 16258/21113 [04:27<01:24, 57.44it/s]Executing bars:  78%|███████▊  | 16469/21113 [04:28<01:02, 73.73it/s]Executing bars:  79%|███████▉  | 16680/21113 [04:30<00:57, 76.97it/s]Executing bars:  80%|████████  | 16891/21113 [04:37<01:18, 53.80it/s]Executing bars:  81%|████████  | 17102/21113 [04:42<01:20, 49.95it/s]Executing bars:  82%|████████▏ | 17313/21113 [04:42<00:57, 65.71it/s]Executing bars:  83%|████████▎ | 17524/21113 [04:43<00:42, 83.70it/s]Executing bars:  84%|████████▍ | 17735/21113 [04:48<00:51, 65.88it/s]Executing bars:  85%|████████▌ | 17947/21113 [04:55<01:03, 49.78it/s]Executing bars:  86%|████████▌ | 18158/21113 [04:57<00:51, 57.14it/s]Executing bars:  87%|████████▋ | 18369/21113 [04:58<00:36, 74.40it/s]Executing bars:  88%|████████▊ | 18580/21113 [05:00<00:30, 83.37it/s]Executing bars:  89%|████████▉ | 18791/21113 [05:07<00:41, 56.20it/s]Executing bars:  90%|█████████ | 19002/21113 [05:12<00:42, 49.13it/s]Executing bars:  91%|█████████ | 19213/21113 [05:13<00:29, 63.39it/s]Executing bars:  92%|█████████▏| 19424/21113 [05:14<00:21, 79.66it/s]Executing bars:  93%|█████████▎| 19636/21113 [05:19<00:22, 66.56it/s]Executing bars:  94%|█████████▍| 19847/21113 [05:25<00:25, 50.13it/s]Executing bars:  95%|█████████▌| 20058/21113 [05:28<00:19, 55.34it/s]Executing bars:  96%|█████████▌| 20269/21113 [05:29<00:11, 71.45it/s]Executing bars:  97%|█████████▋| 20480/21113 [05:30<00:07, 85.23it/s]Executing bars:  98%|█████████▊| 20691/21113 [05:37<00:07, 57.02it/s]Executing bars:  99%|█████████▉| 20902/21113 [05:43<00:04, 48.19it/s]Executing bars: 100%|██████████| 21113/21113 [05:44<00:00, 62.22it/s]Executing bars: 100%|██████████| 21113/21113 [05:44<00:00, 61.28it/s]
-
-Closing all positions...
-Closing positions:   0%|          | 0/17 [00:00<?, ?it/s]Closing positions: 100%|██████████| 17/17 [00:00<00:00, 387.72it/s]
-
-Calculating performance metrics...
-Computing metrics:   0%|          | 0/17 [00:00<?, ?it/s]
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [AComputing metrics:  47%|████▋     | 8/17 [00:00<00:00, 72.15it/s]
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [A
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [AComputing metrics:  94%|█████████▍| 16/17 [00:00<00:00, 75.23it/s]
-Calc metrics:   0%|          | 0/21112 [00:00<?, ?it/s][A
-                                                       [AComputing metrics: 100%|██████████| 17/17 [00:00<00:00, 74.89it/s]
-
-Releasing large backtest buffers before returning...
-Released large backtest buffers in 0.76s
-
-run_backtest() returned; generating results...
-
-================================================================================
-RESULTS
-================================================================================
-
-====================================================================================================
-STRATEGY                                FINAL VALUE     RETURN %     TRADES     SHARPE
-====================================================================================================
-Adv_SELL_TP2                        $    102,518.59        2.52%      65188       0.07
-Adv_SELL_TP2_Manual                 $    102,518.59        2.52%      65188       0.07
-Adv_SELL_TP1                        $     99,822.78       -0.18%      96210      -0.00
-Adv_SELL_TP1_Manual                 $     99,822.78       -0.18%      96210      -0.00
-OG_TP1                              $     99,778.66       -0.22%      23032      -0.00
-SmartRSIConfluencePenguin           $     98,497.54       -1.50%        446      -0.06
-OG_TP1_Manual                       $     98,149.41       -1.85%      12892      -0.04
-OG_TP2                              $     97,914.41       -2.09%       2062      -0.04
-OG_TP4                              $     97,809.41       -2.19%       4702      -0.05
-Adv_SELL_TP4                        $     97,732.47       -2.27%      30176      -0.06
-Adv_SELL_TP4_Manual                 $     97,732.47       -2.27%      30176      -0.06
-OG_TP2_Manual                       $     97,117.93       -2.88%       2738      -0.06
-OG_TP4_Manual                       $     96,999.52       -3.00%       9734      -0.06
-OG_TP3                              $     96,991.74       -3.01%        462      -0.04
-BuyMaxEachPenguin                   $     96,386.62       -3.61%        210      -0.05
-SP500                               $     96,084.95       -3.92%          2      -0.05
-OG_TP3_Manual                       $     94,729.85       -5.27%       2556      -0.11
-====================================================================================================
-
-🏆 Best Performer: Adv_SELL_TP2
-   Final Value: $102,518.59
-   Return: 2.52%
-   Max Drawdown: -3.66%
-   Sharpe Ratio: 0.07
-
-
-Saved results to:
-  Current:   /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts
-
-Skipping SMA artifact export (no sma folder requested)
-
-Generating visualization...
-📈 Saved capital curves plot to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/artifacts/capital_curves.png
-
-Generating PDF report...
-📄 Final report saved to /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current/report.pdf
-
-✅ Backtest complete!
-
-Archive saved to:  /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_old/260723/run11
-  - report.pdf
-  - artifacts/trainable_penguin_pareto_front.pdf
-  - artifacts/capital_curves.png
-  - artifacts/json/curves_data.json
-  - artifacts/json/metrics_summary.json
-  - artifacts/trades_log.txt
-  - artifacts/consistency_warnings.txt (if residual jumps)
-
-Current run saved to: /gpfs/bwfor/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_current
-  - report.pdf
-  - artifacts/trainable_penguin_pareto_front.pdf
-  - artifacts/capital_curves.png
-  - artifacts/json/curves_data.json
-  - artifacts/json/metrics_summary.json
-  - artifacts/trades_log.txt
-  - artifacts/consistency_warnings.txt (if residual jumps)
-
-================================================================================
-Run #11 archived
