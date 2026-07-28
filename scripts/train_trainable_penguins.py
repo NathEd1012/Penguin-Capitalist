@@ -68,7 +68,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("sell_rsi", "float", 55.0, 88.0),
             ("adx_period", "int", 7, 28),
             ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("max_cash_fraction", "float", 0.02, 0.20),
             ("stop_loss_pct", "float", 0.01, 0.10),
             ("take_profit_pct", "float", 0.02, 0.20),
             ("cooldown_bars", "int", 0, 30),
@@ -83,7 +83,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("bb_stddev", "float", 1.0, 3.5),
             ("adx_period", "int", 7, 28),
             ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("max_cash_fraction", "float", 0.02, 0.20),
             ("stop_loss_pct", "float", 0.01, 0.10),
             ("take_profit_pct", "float", 0.02, 0.20),
             ("cooldown_bars", "int", 0, 30),
@@ -97,7 +97,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
             ("sell_rsi", "float", 55.0, 88.0),
-            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("max_cash_fraction", "float", 0.02, 0.20),
             ("stop_loss_pct", "float", 0.01, 0.10),
             ("take_profit_pct", "float", 0.02, 0.20),
             ("cooldown_bars", "int", 0, 30),
@@ -108,7 +108,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
             ("sell_rsi", "float", 55.0, 88.0),
-            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("max_cash_fraction", "float", 0.02, 0.20),
             ("stop_loss_pct", "float", 0.01, 0.10),
             ("take_profit_pct", "float", 0.02, 0.20),
             ("cooldown_bars", "int", 0, 30),
@@ -124,7 +124,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("sell_rsi", "float", 55.0, 88.0),
             ("adx_period", "int", 7, 28),
             ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("max_cash_fraction", "float", 0.02, 0.20),
             ("stop_loss_pct", "float", 0.01, 0.10),
             ("take_profit_pct", "float", 0.02, 0.20),
             ("cooldown_bars", "int", 0, 30),
@@ -136,7 +136,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("bb_stddev", "float", 1.0, 3.5),
             ("adx_period", "int", 7, 28),
             ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction_per_trade", "float", 0.02, 0.20),
+            ("max_cash_fraction", "float", 0.02, 0.20),
             ("stop_loss_pct", "float", 0.01, 0.10),
             ("take_profit_pct", "float", 0.02, 0.20),
             ("cooldown_bars", "int", 0, 30),
@@ -402,6 +402,8 @@ def _format_trainable_parameter_delta_report(trained_parameters: Dict[str, Dict[
         "Format: initial -> after_training",
     ]
 
+    # List every parameter and its change; alias handling is unnecessary.
+
     for strategy_name in sorted(trained_parameters):
         strategy_result = trained_parameters.get(strategy_name, {})
         initial_params = dict(strategy_result.get("initial_params") or {})
@@ -409,12 +411,12 @@ def _format_trainable_parameter_delta_report(trained_parameters: Dict[str, Dict[
 
         lines.append("")
         lines.append(f"{strategy_name}:")
-        param_keys = sorted(set(initial_params) | set(final_params))
-        if not param_keys:
+        all_keys = set(initial_params) | set(final_params)
+        if not all_keys:
             lines.append("  <no parameters>")
             continue
 
-        for key in param_keys:
+        for key in sorted(all_keys):
             initial_value = initial_params.get(key, "<missing>")
             final_value = final_params.get(key, "<missing>")
             lines.append(f"  {key}: {initial_value} -> {final_value}")

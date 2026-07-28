@@ -14,7 +14,7 @@ class ThreeFoldMeanReversionTrendPenguin(BasePenguin):
         rsi_period: int = 14,
         buy_rsi: float = 30.0,
         sell_rsi: float = 70.0,
-        max_cash_fraction_per_trade: float = 0.05,
+        max_cash_fraction: float = 0.05,
         stop_loss_pct: float = 0.04,
         take_profit_pct: float = 0.08,
     ):
@@ -22,7 +22,7 @@ class ThreeFoldMeanReversionTrendPenguin(BasePenguin):
         self.rsi_period = rsi_period
         self.buy_rsi = buy_rsi
         self.sell_rsi = sell_rsi
-        self.max_cash_fraction_per_trade = max_cash_fraction_per_trade
+        self.max_cash_fraction = max_cash_fraction
         self.stop_loss_pct = stop_loss_pct
         self.take_profit_pct = take_profit_pct
 
@@ -160,7 +160,7 @@ class ThreeFoldMeanReversionTrendPenguin(BasePenguin):
         if cash <= 0 or ask <= 0:
             return 0
 
-        max_trade_value = cash * self.max_cash_fraction_per_trade
+        max_trade_value = cash * self.max_cash_fraction
         adjusted_trade_value = max_trade_value * quality
 
         return max(0, math.floor(adjusted_trade_value / ask))
