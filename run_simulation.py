@@ -191,7 +191,6 @@ def _penguin_history_requirements(penguin) -> tuple[int, int]:
     required_history_bars = max(lookback_bars, min_history_required)
     return lookback_bars, required_history_bars
 
-
 def _binning_to_minutes(binning: str) -> int:
     mapping = {
         "1m": 1,
@@ -204,7 +203,6 @@ def _binning_to_minutes(binning: str) -> int:
         return mapping[binning.strip().lower()]
     except KeyError as exc:
         raise ValueError(f"Unsupported binning: {binning}") from exc
-
 
 def _history_warmup_bars(penguin_classes: List) -> int:
     warmup_bars = 0
