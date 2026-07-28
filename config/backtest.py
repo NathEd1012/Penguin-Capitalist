@@ -116,7 +116,7 @@ START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
 # Examples:
 #   "TODAY"                - Use yesterday's end-of-day
 #   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATEx = "2026-07-01 00:00:00" #"TODAY"
+STOP_DATEx = "2026-03-01 00:00:00" #"TODAY"
 STOP_DATE = _parse_config_date(os.getenv("FIXED_STOP", STOP_DATEx))
 
 # ========== TIMEFRAME / BINNING ==========
@@ -136,6 +136,12 @@ BINNING = "1m"
 RUN_LOG_NAMEx = "TestRun"
 RUN_LOG_NAME = os.getenv("RUN_LOG_NAME", RUN_LOG_NAMEx)
 
+# ========== ARTIFACT EXPORT SETTINGS ==========
+# 0 - Do not save per-strategy CSV summaries
+# 1 - Save per-strategy CSV summaries in artifacts/csv
+SAVE_CSVx = 0
+SAVE_CSV = int(os.getenv("SAVE_CSV", SAVE_CSVx))
+
 
 # ========== PORTFOLIO SETTINGS ==========
 # Initial capital to start backtesting with (USD)
@@ -151,6 +157,7 @@ __all__ = [
     "STOP_DATE",
     "BINNING",
     "RUN_LOG_NAME",
+    "SAVE_CSV",
     "INITIAL_CAPITAL",
     "EXEC_TRANSACTION_COST",
     "get_run_output_dir",

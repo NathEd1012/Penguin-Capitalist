@@ -22,7 +22,7 @@ from matplotlib.colors import Normalize
 from datetime import datetime, timedelta
 import pytz
 import csv
-from config import INITIAL_CAPITAL
+from config import INITIAL_CAPITAL, SAVE_CSV
 
 
 def _display_strategy_name(name: str) -> str:
@@ -134,6 +134,9 @@ def _save_strategy_summary_to_artifacts(
     artifacts_dir,
 ):
     """Save strategy summary data to a CSV file in artifacts/csv directory."""
+    if not SAVE_CSV:
+        return
+
     artifacts_path = Path(artifacts_dir)
     artifacts_path.mkdir(parents=True, exist_ok=True)
     

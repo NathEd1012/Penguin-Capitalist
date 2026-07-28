@@ -38,6 +38,7 @@ from config import (
     BINNING,
     ACTIVE_PENGUINS,
     RUN_LOG_NAME,
+    SAVE_CSV,
     get_run_output_dir,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
@@ -398,8 +399,11 @@ def run_backtest(
             )
 
             if training_quality_report_text and artifacts_dir is not None:
-                training_warnings_path = Path(artifacts_dir) / "training_consistency_warnings.txt"
-                with open(training_warnings_path, "w") as f:
+                training_warnings_path = Path(artifacts_dir) / "consistency_warnings.txt"
+                with open(training_warnings_path, "a") as f:
+                    f.write("\n" + "=" * 80 + "\n")
+                    f.write("TRAINING CONSISTENCY WARNINGS\n")
+                    f.write("=" * 80 + "\n")
                     f.write(training_quality_report_text)
                     f.write("\n")
 
@@ -700,7 +704,14 @@ def main():
     
     Evaluator.print_summary(results)
 
-    Evaluator.save_results(results, None, run_output_dir, trades_by_bar, bar_timestamps)
+    Evaluator.save_results(
+        results,
+        None,
+        run_output_dir,
+        trades_by_bar,
+        bar_timestamps,
+        artifacts_dir=run_artifacts_dir,
+    )
 
     # SMA artifact export intentionally disabled.
     print("\nSkipping SMA artifact export (no sma folder requested)")
@@ -768,6 +779,8 @@ def main():
     print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")
+    if SAVE_CSV:
+        print(f"  - artifacts/csv/*_summary.csv")
     
     print(f"\n{'='*80}")
     if RUN_LOG_NAME != "0":
