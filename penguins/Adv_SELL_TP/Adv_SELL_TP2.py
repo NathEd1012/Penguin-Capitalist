@@ -9,18 +9,18 @@ from indicators.market_context import relative_strength, relative_volume
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-BB_PERIOD = 20 #20
-BB_STDDEV = 2.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
-MAX_CASH_FRACTION = 0.05
-STOP_LOSS_PCT = 0.04
-TAKE_PROFIT_PCT = 0.08
-COOLDOWN_BARS = 10
-RELATIVE_STRENGTH_PERIOD = 20
-RELATIVE_STRENGTH_THRESHOLD = 0.0
-RVOL_PERIOD = 20
-RVOL_THRESHOLD = 2.0
+BB_PERIOD = 32
+BB_STDDEV = 3.5
+ADX_PERIOD = 28
+ADX_THRESHOLD = 31.6774
+MAX_CASH_FRACTION = 0.1603
+STOP_LOSS_PCT = 0.0573
+TAKE_PROFIT_PCT = 0.0881
+COOLDOWN_BARS = 9
+RELATIVE_STRENGTH_PERIOD = 14
+RELATIVE_STRENGTH_THRESHOLD = 0.6258
+RVOL_PERIOD = 39
+RVOL_THRESHOLD = 1.2117
 
 
 # Trainable Penguin, with Buy condition based on Bollinger Bands

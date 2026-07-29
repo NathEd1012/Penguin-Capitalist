@@ -9,19 +9,19 @@ from indicators.market_context import relative_strength, relative_volume
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-RSI_PERIOD = 13 #14
-BUY_RSI = 30.0
-SELL_RSI = 70.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
-MAX_CASH_FRACTION = 0.05
-STOP_LOSS_PCT = 0.04
-TAKE_PROFIT_PCT = 0.08
-COOLDOWN_BARS = 10
-RELATIVE_STRENGTH_PERIOD = 20
-RELATIVE_STRENGTH_THRESHOLD = 0.0
-RVOL_PERIOD = 20
-RVOL_THRESHOLD = 2.0
+RSI_PERIOD = 27
+BUY_RSI = 21.4735
+SELL_RSI = 85.2274
+ADX_PERIOD = 17
+ADX_THRESHOLD = 26.0744
+MAX_CASH_FRACTION = 0.0431
+STOP_LOSS_PCT = 0.0499
+TAKE_PROFIT_PCT = 0.2
+COOLDOWN_BARS = 27
+RELATIVE_STRENGTH_PERIOD = 23
+RELATIVE_STRENGTH_THRESHOLD = -0.642
+RVOL_PERIOD = 38
+RVOL_THRESHOLD = 3.454
 
 
 # Trainable Penguin, with Buy condition based on RSI and ADX strength,

@@ -8,15 +8,15 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-BB_PERIOD = 20 #20
-BB_STDDEV = 2.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
-MAX_CASH_FRACTION = 0.05
-STOP_LOSS_PCT = 0.04
-TAKE_PROFIT_PCT = 0.08
-COOLDOWN_BARS = 10
-STRENGTH_CAP = 1.5
+BB_PERIOD = 10
+BB_STDDEV = 1.0924
+ADX_PERIOD = 21
+ADX_THRESHOLD = 20.216
+MAX_CASH_FRACTION = 0.1091
+STOP_LOSS_PCT = 0.0645
+TAKE_PROFIT_PCT = 0.1864
+COOLDOWN_BARS = 29
+STRENGTH_CAP = 1.5404
 
 
 # Trainable Penguin, with Buy condition based on Bollinger Bands

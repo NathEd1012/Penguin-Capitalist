@@ -8,16 +8,16 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-RSI_PERIOD = 13 #14
-BUY_RSI = 30.0
-SELL_RSI = 70.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
-MAX_CASH_FRACTION = 0.05
-STOP_LOSS_PCT = 0.04
-TAKE_PROFIT_PCT = 0.08
-COOLDOWN_BARS = 10
-STRENGTH_CAP = 1.5
+RSI_PERIOD = 25
+BUY_RSI = 19.1946
+SELL_RSI = 75.7195
+ADX_PERIOD = 17
+ADX_THRESHOLD = 20.2333
+MAX_CASH_FRACTION = 0.1491
+STOP_LOSS_PCT = 0.0848
+TAKE_PROFIT_PCT = 0.1907
+COOLDOWN_BARS = 22
+STRENGTH_CAP = 1.6872
 
 
 

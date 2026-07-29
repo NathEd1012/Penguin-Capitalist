@@ -8,15 +8,15 @@ from penguins.base_penguin import BasePenguin
 
 # Manual tuning block:
 # Adjust these values here first so the strategy is easy to finetune by hand.
-BB_PERIOD = 20
-BB_STDDEV = 2.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
-MAX_CASH_FRACTION = 0.05
-STOP_LOSS_PCT = 0.04
-TAKE_PROFIT_PCT = 0.08
-COOLDOWN_BARS = 10
-STRENGTH_CAP = 1.5
+BB_PERIOD = 39
+BB_STDDEV = 1.5076
+ADX_PERIOD = 16
+ADX_THRESHOLD = 17.132
+MAX_CASH_FRACTION = 0.1875
+STOP_LOSS_PCT = 0.0702
+TAKE_PROFIT_PCT = 0.2
+COOLDOWN_BARS = 26
+STRENGTH_CAP = 1.4852
 
 
 @dataclass
