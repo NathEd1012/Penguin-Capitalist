@@ -78,14 +78,14 @@ def _next_available_run_name(run_log_dir: Path, directory_name: str) -> str:
 
     if base_name == "run":
         counter = 1
-        while (run_log_dir / f"run{counter}").exists():
+        while (run_log_dir / f"run_{counter}").exists():
             counter += 1
-        return f"run{counter}"
+        return f"run_{counter}"
 
     candidate = base_name
     suffix = 1
     while (run_log_dir / candidate).exists():
-        candidate = f"{base_name}{suffix}"
+        candidate = f"{base_name}_{suffix}"
         suffix += 1
     return candidate
 

@@ -5,12 +5,14 @@ This module contains:
 2. SYMBOL_CATEGORIES - Organized categorization of available symbols
 3. Helper lists for different market segments
 """
+import os
 
 # ========== ACTIVE SYMBOLS FOR BACKTESTING ==========
 # This is the primary list used by the backtest engine
 # Choose active list by changing just this variable:
 # "LIST_1" | "LIST_2" | "LIST_3" | "LIST_4" | "LIST_5"
-ACTIVE_SYMBOL_LIST = "LIST_2"
+ACTIVE_SYMBOL_LISTx = "LIST_5"
+ACTIVE_SYMBOL_LIST = os.getenv("ACTIVE_SYMBOL_LIST", ACTIVE_SYMBOL_LISTx)
 
 # List 1: 5 large-cap stocks
 SYMBOL_LIST_1 = [
