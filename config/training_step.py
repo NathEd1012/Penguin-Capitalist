@@ -4,13 +4,17 @@ from .backtest import START_DATE as EXECUTION_START_DATE, STOP_DATE as EXECUTION
 from .symbols import SYMBOLS as TRAINING_SYMBOLS
 from penguins import (
     Adv_SELL_TP1,
-    Adv_SELL_TP1_Manual,
+    ManualTuneAdvSELL_TP1,
+    ManualTuneAdvSELL_TP1_Manual,
     Adv_SELL_TP2,
-    Adv_SELL_TP2_Manual,
+    ManualTuneAdvSELL_TP2,
+    ManualTuneAdvSELL_TP2_Manual,
     Adv_SELL_TP3,
-    Adv_SELL_TP3_Manual,
+    ManualTuneAdvSELL_TP3,
+    ManualTuneAdvSELL_TP3_Manual,
     Adv_SELL_TP4,
-    Adv_SELL_TP4_Manual,
+    ManualTuneAdvSELL_TP4,
+    ManualTuneAdvSELL_TP4_Manual,
     OG_TP1,
     OG_TP1_Manual,
     OG_TP2,
@@ -77,10 +81,10 @@ _ALL_TRAINING_PENGUINS = [
     OG_TP2_Manual,
     OG_TP3_Manual,
     OG_TP4_Manual,
-    Adv_SELL_TP1_Manual,
-    Adv_SELL_TP2_Manual,
-    Adv_SELL_TP3_Manual,
-    Adv_SELL_TP4_Manual,
+    ManualTuneAdvSELL_TP1_Manual,
+    ManualTuneAdvSELL_TP2_Manual,
+    ManualTuneAdvSELL_TP3_Manual,
+    ManualTuneAdvSELL_TP4_Manual,
 ]
 
 TRAINING_PENGUINS = [strategy for strategy in _ALL_TRAINING_PENGUINS if getattr(strategy, "TRAINABLE", False)]

@@ -61,7 +61,7 @@ TRAINING_BAYESIAN_OBSERVATION_NOISE = 0.15
 
 def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, float]]:
     strategy_name = strategy_class.__name__
-    if strategy_name.endswith(("Adv_SELL_TP1", "Adv_SELL_TP1_Manual")):
+    if strategy_name.endswith(("Adv_SELL_TP1", "Adv_SELL_TP1_Manual", "ManualTuneAdvSELL_TP1", "ManualTuneAdvSELL_TP1_Manual")):
         return [
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
@@ -77,7 +77,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("rvol_period", "int", 7, 40),
             ("rvol_threshold", "float", 0.5, 4.0),
         ]
-    if strategy_name.endswith(("Adv_SELL_TP2", "Adv_SELL_TP2_Manual", "Adv_SELL_TP3", "Adv_SELL_TP3_Manual")):
+    if strategy_name.endswith(("Adv_SELL_TP2", "Adv_SELL_TP2_Manual", "Adv_SELL_TP3", "Adv_SELL_TP3_Manual", "ManualTuneAdvSELL_TP2", "ManualTuneAdvSELL_TP2_Manual", "ManualTuneAdvSELL_TP3", "ManualTuneAdvSELL_TP3_Manual")):
         return [
             ("bb_period", "int", 10, 40),
             ("bb_stddev", "float", 1.0, 3.5),
@@ -103,7 +103,7 @@ def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, flo
             ("cooldown_bars", "int", 0, 30),
             ("strength_cap", "float", 1.0, 2.0),
         ]
-    if strategy_name.endswith(("Adv_SELL_TP4", "Adv_SELL_TP4_Manual")):
+    if strategy_name.endswith(("Adv_SELL_TP4", "Adv_SELL_TP4_Manual", "ManualTuneAdvSELL_TP4", "ManualTuneAdvSELL_TP4_Manual")):
         return [
             ("rsi_period", "int", 7, 28),
             ("buy_rsi", "float", 18.0, 42.0),
@@ -601,12 +601,16 @@ def _train_trainable_penguins(
                 parameter_history.append({"strategy": strategy_class.__name__, "trial": trial_number, "status": "skipped"})
                 continue
 
-            params, proposal_source = _suggest_bayesian_trainable_params(
-                strategy_class=strategy_class,
-                completed_trials=completed_trials,
-                rng=rng,
-                np_rng=np_rng,
-            )
+            if trial_number == 1:
+                params = dict(initial_params)
+                proposal_source = "initial_params"
+            else:
+                params, proposal_source = _suggest_bayesian_trainable_params(
+                    strategy_class=strategy_class,
+                    completed_trials=completed_trials,
+                    rng=rng,
+                    np_rng=np_rng,
+                )
             candidate = strategy_class(**params)
             trial_window_start = trial_timestamps[0]
             trial_window_end = trial_timestamps[-1]

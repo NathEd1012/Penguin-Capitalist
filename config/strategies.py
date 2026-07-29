@@ -16,13 +16,17 @@ from penguins import (
     SmartRSIConfluencePenguin,
     ThreeFoldMeanReversionTrendPenguin,
     Adv_SELL_TP1,
-    Adv_SELL_TP1_Manual,
     Adv_SELL_TP2,
-    Adv_SELL_TP2_Manual,
     Adv_SELL_TP3,
-    Adv_SELL_TP3_Manual,
     Adv_SELL_TP4,
-    Adv_SELL_TP4_Manual,
+    ManualTuneAdvSELL_TP1,
+    ManualTuneAdvSELL_TP1_Manual,
+    ManualTuneAdvSELL_TP2,
+    ManualTuneAdvSELL_TP2_Manual,
+    ManualTuneAdvSELL_TP3,
+    ManualTuneAdvSELL_TP3_Manual,
+    ManualTuneAdvSELL_TP4,
+    ManualTuneAdvSELL_TP4_Manual,
 )
 
 # from penguins.multitimeframe_reaction_sr_penguin import MultitimeframeReactionSRPenguin
@@ -43,13 +47,17 @@ OG_TP = [
 
 ADV_SELL = [
     Adv_SELL_TP1,
-    Adv_SELL_TP1_Manual,
+    ManualTuneAdvSELL_TP1,
+    ManualTuneAdvSELL_TP1_Manual,
     Adv_SELL_TP2,
-    Adv_SELL_TP2_Manual,
+    ManualTuneAdvSELL_TP2,
+    ManualTuneAdvSELL_TP2_Manual,
     Adv_SELL_TP3,
-    Adv_SELL_TP3_Manual,
+    ManualTuneAdvSELL_TP3,
+    ManualTuneAdvSELL_TP3_Manual,
     Adv_SELL_TP4,
-    Adv_SELL_TP4_Manual,
+    ManualTuneAdvSELL_TP4,
+    ManualTuneAdvSELL_TP4_Manual,
 ]
 
 ACTIVE_PENGUINS = [

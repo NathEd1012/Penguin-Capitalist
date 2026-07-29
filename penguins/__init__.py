@@ -15,6 +15,10 @@ from .Adv_SELL_TP.Adv_SELL_TP1 import Adv_SELL_TP1_Manual
 from .Adv_SELL_TP.Adv_SELL_TP2 import Adv_SELL_TP2_Manual
 from .Adv_SELL_TP.Adv_SELL_TP3 import Adv_SELL_TP3_Manual
 from .Adv_SELL_TP.Adv_SELL_TP4 import Adv_SELL_TP4_Manual
+from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP1 import ManualTuneAdvSELL_TP1, ManualTuneAdvSELL_TP1_Manual
+from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP2 import ManualTuneAdvSELL_TP2, ManualTuneAdvSELL_TP2_Manual
+from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP3 import ManualTuneAdvSELL_TP3, ManualTuneAdvSELL_TP3_Manual
+from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP4 import ManualTuneAdvSELL_TP4, ManualTuneAdvSELL_TP4_Manual
 from .smart_rsi_confluence_penguin import SmartRSIConfluencePenguin
 from .SP500 import SP500
 from .SP500x2 import SP500x2
@@ -48,6 +52,14 @@ __all__ = [
     "Adv_SELL_TP3_Manual",
     "Adv_SELL_TP4",
     "Adv_SELL_TP4_Manual",
+    "ManualTuneAdvSELL_TP1",
+    "ManualTuneAdvSELL_TP1_Manual",
+    "ManualTuneAdvSELL_TP2",
+    "ManualTuneAdvSELL_TP2_Manual",
+    "ManualTuneAdvSELL_TP3",
+    "ManualTuneAdvSELL_TP3_Manual",
+    "ManualTuneAdvSELL_TP4",
+    "ManualTuneAdvSELL_TP4_Manual",
     "SmartRSIConfluencePenguin",
     "ThreeFoldMeanReversionTrendPenguin",
     "SP500",

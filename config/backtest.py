@@ -104,7 +104,7 @@ def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
     run_dir.mkdir(parents=True, exist_ok=False)
     return run_dir
 
-START_DATEx = "2026-01-01 00:00:00"
+START_DATEx = "2024-01-01 00:00:00"
 START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
 
 
@@ -116,7 +116,7 @@ START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
 # Examples:
 #   "TODAY"                - Use yesterday's end-of-day
 #   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATEx = "2026-03-01 00:00:00" #"TODAY"
+STOP_DATEx = "2026-07-01 00:00:00" #"TODAY"
 STOP_DATE = _parse_config_date(os.getenv("FIXED_STOP", STOP_DATEx))
 
 # ========== TIMEFRAME / BINNING ==========
