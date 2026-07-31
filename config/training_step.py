@@ -81,9 +81,13 @@ _ALL_TRAINING_PENGUINS = [
     OG_TP2_Manual,
     OG_TP3_Manual,
     OG_TP4_Manual,
-    ManualTuneAdvSELL_TP1_Manual,
+    ManualTuneAdvSELL_TP1,
+    ManualTuneAdvSELL_TP1_Manual,    
+    ManualTuneAdvSELL_TP2,
     ManualTuneAdvSELL_TP2_Manual,
+    ManualTuneAdvSELL_TP3,
     ManualTuneAdvSELL_TP3_Manual,
+    ManualTuneAdvSELL_TP4,
     ManualTuneAdvSELL_TP4_Manual,
 ]
 

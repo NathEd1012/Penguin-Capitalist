@@ -92,6 +92,27 @@ def _next_available_run_name(run_log_dir: Path, directory_name: str) -> str:
 
 def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
     """Return the directory where the current run should be written."""
+    reserved_dir_value = os.getenv("PENGUIN_RUN_OUTPUT_DIR")
+    if reserved_dir_value:
+        reserved_dir = Path(reserved_dir_value).expanduser().resolve()
+        if str(run_log_name).strip() == "0":
+            expected_dir = (base_dir / "run_test").resolve()
+            if reserved_dir != expected_dir:
+                raise ValueError(
+                    "PENGUIN_RUN_OUTPUT_DIR must point to the run_test directory "
+                    "when RUN_LOG_NAME is '0'."
+                )
+        else:
+            run_log_dir = (base_dir / "run_log").resolve()
+            if reserved_dir.parent != run_log_dir:
+                raise ValueError(
+                    "PENGUIN_RUN_OUTPUT_DIR must point to a direct child of "
+                    "the run_log directory."
+                )
+
+        reserved_dir.mkdir(parents=True, exist_ok=True)
+        return reserved_dir
+
     if str(run_log_name).strip() == "0":
         run_test_dir = base_dir / "run_test"
         run_test_dir.mkdir(parents=True, exist_ok=True)
@@ -99,9 +120,8 @@ def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
 
     run_log_dir = base_dir / "run_log"
     run_log_dir.mkdir(parents=True, exist_ok=True)
-    run_name = _next_available_run_name(run_log_dir, run_log_name)
-    run_dir = run_log_dir / run_name
-    run_dir.mkdir(parents=True, exist_ok=False)
+    run_dir = run_log_dir / _normalize_run_directory_name(run_log_name)
+    run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 
 START_DATEx = "2024-01-01 00:00:00"
