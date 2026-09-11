@@ -15,6 +15,7 @@ from .Adv_SELL_TP.Adv_SELL_TP1 import Adv_SELL_TP1_Manual
 from .Adv_SELL_TP.Adv_SELL_TP2 import Adv_SELL_TP2_Manual
 from .Adv_SELL_TP.Adv_SELL_TP3 import Adv_SELL_TP3_Manual
 from .Adv_SELL_TP.Adv_SELL_TP4 import Adv_SELL_TP4_Manual
+from .Adv_SELL_TP.Adv_SELL_ALL import Adv_SELL_ALL
 from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP1 import ManualTuneAdvSELL_TP1, ManualTuneAdvSELL_TP1_Manual
 from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP2 import ManualTuneAdvSELL_TP2, ManualTuneAdvSELL_TP2_Manual
 from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP3 import ManualTuneAdvSELL_TP3, ManualTuneAdvSELL_TP3_Manual
@@ -52,6 +53,7 @@ __all__ = [
     "Adv_SELL_TP3_Manual",
     "Adv_SELL_TP4",
     "Adv_SELL_TP4_Manual",
+    "Adv_SELL_ALL",
     "ManualTuneAdvSELL_TP1",
     "ManualTuneAdvSELL_TP1_Manual",
     "ManualTuneAdvSELL_TP2",

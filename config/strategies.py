@@ -23,6 +23,7 @@ from penguins import (
     Adv_SELL_TP3_Manual,
     Adv_SELL_TP4,
     Adv_SELL_TP4_Manual,
+    Adv_SELL_ALL,
     ManualTuneAdvSELL_TP1,
     ManualTuneAdvSELL_TP1_Manual,
     ManualTuneAdvSELL_TP2,
@@ -58,6 +59,7 @@ ADV_SELL = [
     Adv_SELL_TP3_Manual,
     Adv_SELL_TP4,
     Adv_SELL_TP4_Manual,
+    Adv_SELL_ALL,
 ]
 
 MANUAL_TUNE_ADV_SELL = [
@@ -72,13 +74,14 @@ MANUAL_TUNE_ADV_SELL = [
 ]
 
 ACTIVE_PENGUINSx = [
-    *OG_TP,
-    *ADV_SELL,
-    *MANUAL_TUNE_ADV_SELL,
+    #*OG_TP,
+    #*ADV_SELL,
+    #*MANUAL_TUNE_ADV_SELL,
+    Adv_SELL_ALL,
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
-    SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
-    BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
+    #SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
+    #BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
     #ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
 ]
 
