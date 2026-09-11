@@ -16,16 +16,21 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 
 # Update this directory when you want to point the script at a different run.
 LOGFILE_DIR = Path("/home/hd/hd_hd/hd_qp268/Penguin-Capitalist/run_log/ManualTuning_St100_t24-267/artifacts")
 LOGFILE_NAME = "trainable_penguin_training.log"
-OUTPUT_NAME = "trainable_penguin_pareto_distance.png"
+OUTPUT_NAME = "trainable_penguin_pareto_distance.pdf"
 
 # Use the optimization score from the log by default. Switch to
 # "relative_profit" if you want the raw training PnL on the y-axis instead.
 Y_METRIC = "objective"
+
+# Set this to "BEST" to measure distance to the best parameter vector for the
+# strategy, or "ZERO" to measure distance to the origin.
+RELATIVE_TO = "BEST"
 
 
 TRIAL_RE = re.compile(r"^\s*Trial\s+(?P<trial>\d+):")
@@ -60,28 +65,33 @@ def parse_params(raw_params: str) -> dict[str, float | int | str]:
     return params
 
 
-def normalized_l2_distance(current: dict[str, float | int | str], optimal: dict[str, float | int | str]) -> float:
-    if not current or not optimal:
+def normalized_l2_distance(
+    current: dict[str, float | int | str],
+    relative_to: dict[str, float | int | str] | None,
+) -> float:
+    if not current:
         return float("nan")
 
     squared_distance = 0.0
-    for key in sorted(set(current) | set(optimal)):
+    reference = relative_to or {}
+    for key in sorted(set(current) | set(reference)):
         current_value = current.get(key)
-        optimal_value = optimal.get(key)
+        reference_value = reference.get(key, 0.0)
         try:
             current_float = float(current_value)
-            optimal_float = float(optimal_value)
+            reference_float = float(reference_value)
         except (TypeError, ValueError):
             continue
-        squared_distance += (current_float - optimal_float) ** 2
+        squared_distance += (current_float - reference_float) ** 2
     return math.sqrt(squared_distance)
 
 
-def parse_log_file(log_file: Path) -> list[dict[str, object]]:
+def parse_log_file(log_file: Path, relative_to: str) -> list[dict[str, object]]:
     trials: list[dict[str, object]] = []
     current_strategy = "unknown"
     current_trial: dict[str, object] | None = None
     best_params_by_strategy: dict[str, dict[str, float | int | str]] = {}
+    best_trial_number_by_strategy: dict[str, int] = {}
 
     for raw_line in log_file.read_text(encoding="utf-8", errors="replace").splitlines():
         strategy_match = STRATEGY_RE.match(raw_line)
@@ -117,35 +127,56 @@ def parse_log_file(log_file: Path) -> list[dict[str, object]]:
             current_trial["absolute_profit"] = parse_number(result_match.group("absolute_profit"))
             current_trial["objective"] = parse_number(result_match.group("objective"))
             current_trial["buys"] = int(result_match.group("buys"))
+            strategy = str(current_trial["strategy"])
+            current_score = float(current_trial["objective"])
+            previous_best_trial = best_trial_number_by_strategy.get(strategy)
+            if previous_best_trial is None:
+                best_trial_number_by_strategy[strategy] = int(current_trial["trial"])
+            else:
+                previous_best = next(
+                    (trial for trial in trials if trial["strategy"] == strategy and int(trial["trial"]) == previous_best_trial),
+                    None,
+                )
+                if previous_best is not None and current_score > float(previous_best["objective"]):
+                    best_trial_number_by_strategy[strategy] = int(current_trial["trial"])
             trials.append(current_trial)
             current_trial = None
 
+    relative_to_mode = relative_to.upper()
     for trial in trials:
         strategy = str(trial["strategy"])
-        optimal_params = best_params_by_strategy.get(strategy, {})
+        if relative_to_mode == "ZERO":
+            optimal_params: dict[str, float | int | str] | None = {}
+        else:
+            optimal_params = best_params_by_strategy.get(strategy, {})
         trial["distance"] = normalized_l2_distance(
             trial.get("params", {}),
             optimal_params,
         )
 
+    for trial in trials:
+        strategy = str(trial["strategy"])
+        trial["is_best"] = int(trial["trial"]) == best_trial_number_by_strategy.get(strategy)
+
     return trials
 
 
-def plot_trials(trials: list[dict[str, object]], output_path: Path) -> None:
+def plot_strategy_trials(strategy: str, trials: list[dict[str, object]], title_suffix: str = ""):
     if not trials:
         raise ValueError("No completed trials were found in the training log.")
 
     fig, ax = plt.subplots(figsize=(11, 7))
 
-    strategies = sorted({str(trial["strategy"]) for trial in trials})
     palette = list(plt.get_cmap("tab10").colors)
-    color_map = {strategy: palette[index % len(palette)] for index, strategy in enumerate(strategies)}
+    color = palette[0]
 
-    for strategy in strategies:
-        strategy_trials = [trial for trial in trials if trial["strategy"] == strategy]
-        x_values = [float(trial["distance"]) for trial in strategy_trials]
-        y_values = [float(trial[Y_METRIC]) for trial in strategy_trials]
-        trial_labels = [int(trial["trial"]) for trial in strategy_trials]
+    regular_trials = [trial for trial in trials if not trial.get("is_best")]
+    best_trials = [trial for trial in trials if trial.get("is_best")]
+
+    if regular_trials:
+        x_values = [float(trial["distance"]) for trial in regular_trials]
+        y_values = [float(trial[Y_METRIC]) for trial in regular_trials]
+        trial_labels = [int(trial["trial"]) for trial in regular_trials]
 
         ax.scatter(
             x_values,
@@ -153,7 +184,7 @@ def plot_trials(trials: list[dict[str, object]], output_path: Path) -> None:
             s=55,
             alpha=0.85,
             label=strategy,
-            color=color_map[strategy],
+            color=color,
             edgecolors="black",
             linewidths=0.5,
         )
@@ -167,16 +198,39 @@ def plot_trials(trials: list[dict[str, object]], output_path: Path) -> None:
                 fontsize=8,
             )
 
-    ax.set_title("Trainable Penguin Pareto Distance Plot")
+    if best_trials:
+        best_trial = best_trials[0]
+        ax.scatter(
+            [float(best_trial["distance"])],
+            [float(best_trial[Y_METRIC])],
+            s=130,
+            color="red",
+            edgecolors="black",
+            linewidths=1.0,
+            zorder=5,
+            label="Best trial",
+        )
+        ax.annotate(
+            f"Best {int(best_trial['trial'])}",
+            (float(best_trial["distance"]), float(best_trial[Y_METRIC])),
+            textcoords="offset points",
+            xytext=(8, 8),
+            fontsize=9,
+            fontweight="bold",
+            color="red",
+        )
+
+    title = "Trainable Penguin Pareto Distance Plot"
+    if title_suffix:
+        title = f"{title} ({title_suffix})"
+    ax.set_title(title)
     ax.set_xlabel("L2 distance to best parameters")
     ax.set_ylabel("Training objective" if Y_METRIC == "objective" else "Relative profit ($)")
     ax.grid(True, alpha=0.25)
     ax.legend(loc="best", fontsize=8)
     fig.tight_layout()
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
+    return fig
 
 
 def find_log_files(log_dir: Path) -> list[Path]:
@@ -199,7 +253,13 @@ def main() -> None:
         "--output",
         type=Path,
         default=None,
-        help="Output image path. Defaults next to the first log file found.",
+        help="Output PDF path. Defaults to the run directory when available.",
+    )
+    parser.add_argument(
+        "--relative-to",
+        choices=["BEST", "ZERO"],
+        default=RELATIVE_TO,
+        help="Measure distance to the best parameter vector or the origin.",
     )
     args = parser.parse_args()
 
@@ -207,11 +267,41 @@ def main() -> None:
     if not log_files:
         raise FileNotFoundError(f"No {LOGFILE_NAME} files found under {args.logfile_dir}")
 
-    for log_file in log_files:
-        trials = parse_log_file(log_file)
-        output_path = args.output or log_file.with_name(OUTPUT_NAME)
-        plot_trials(trials, output_path)
-        print(f"Saved {output_path}")
+    if args.output is not None:
+        output_path = args.output
+    elif args.logfile_dir.is_dir() and args.logfile_dir.name == "artifacts":
+        output_path = args.logfile_dir.parent / OUTPUT_NAME
+    elif args.logfile_dir.is_file():
+        output_path = args.logfile_dir.with_name(OUTPUT_NAME)
+    else:
+        output_path = args.logfile_dir / OUTPUT_NAME
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with PdfPages(output_path) as pdf:
+        for log_file in log_files:
+            trials = parse_log_file(log_file, args.relative_to)
+            try:
+                log_label = log_file.relative_to(args.logfile_dir).as_posix()
+            except ValueError:
+                log_label = log_file.name
+
+            trials_by_strategy: dict[str, list[dict[str, object]]] = {}
+            for trial in trials:
+                strategy = str(trial.get("strategy", "unknown"))
+                trials_by_strategy.setdefault(strategy, []).append(trial)
+
+            for strategy in sorted(trials_by_strategy):
+                fig = plot_strategy_trials(
+                    strategy,
+                    trials_by_strategy[strategy],
+                    title_suffix=f"{log_label} | {args.relative_to}",
+                )
+                pdf.savefig(fig, bbox_inches="tight")
+                plt.close(fig)
+                print(f"Added {log_file} :: {strategy}")
+
+    print(f"Saved {output_path}")
 
 
 if __name__ == "__main__":
