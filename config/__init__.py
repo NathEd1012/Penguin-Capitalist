@@ -64,6 +64,12 @@ from config.training_step import (
     TRAINING_PARETO_FILENAME,
 )
 
+# ========== PARAMETER SEARCH CONFIGURATION ==========
+from config.parameter_search import (
+    PARAMETER_SEARCH_METHOD,
+    PARAMETER_SEARCH_GRID_POINTS,
+)
+
 # ========== EXPORTS ==========
 __all__ = [
     # Active trading configuration
@@ -103,5 +109,7 @@ __all__ = [
     "TRAINING_PARAMETER_DELTA_FILENAME",
     "PLOT_PARETO",
     "TRAINING_PARETO_FILENAME",
+    "PARAMETER_SEARCH_METHOD",
+    "PARAMETER_SEARCH_GRID_POINTS",
     
 ]

@@ -39,6 +39,7 @@ from config import (
 from run_simulation import parse_datetime_string, run_backtest
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
+from scripts.parameter_search import suggest_parameters
 
 
 def _print_training_configuration() -> None:
@@ -605,7 +606,7 @@ def _train_trainable_penguins(
                 params = dict(initial_params)
                 proposal_source = "initial_params"
             else:
-                params, proposal_source = _suggest_bayesian_trainable_params(
+                params, proposal_source = suggest_parameters(
                     strategy_class=strategy_class,
                     completed_trials=completed_trials,
                     rng=rng,

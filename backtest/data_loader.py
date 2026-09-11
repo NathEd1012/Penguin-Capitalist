@@ -219,7 +219,7 @@ class DataLoader:
         previous_quality = None
         quarantine_after_unexplained_jump = os.environ.get(
             "DATA_CONSISTENCY_QUARANTINE_AFTER_JUMP",
-            "1",
+            "0",
         ).lower() in ("1", "true", "yes")
         quarantined_series_detail = ""
         reported_outlier_events = set()
@@ -455,6 +455,8 @@ class DataLoader:
                             }
                         )
                         reported_outlier_events.add(event_key)
+                previous_timestamp = timestamp
+                previous_quality = quality
                 continue
 
             _finish_unresolved_event()
