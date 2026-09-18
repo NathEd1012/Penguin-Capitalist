@@ -67,7 +67,7 @@ from config.training_step import (
 # ========== PARAMETER SEARCH CONFIGURATION ==========
 from config.parameter_search import (
     PARAMETER_SEARCH_METHOD,
-    PARAMETER_SEARCH_GRID_POINTS,
+    PARAMETER_SEARCH_WARMUP_TRIALS,
 )
 
 # ========== EXPORTS ==========
@@ -110,6 +110,6 @@ __all__ = [
     "PLOT_PARETO",
     "TRAINING_PARETO_FILENAME",
     "PARAMETER_SEARCH_METHOD",
-    "PARAMETER_SEARCH_GRID_POINTS",
+    "PARAMETER_SEARCH_WARMUP_TRIALS",
     
 ]

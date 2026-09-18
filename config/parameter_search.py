@@ -1,12 +1,18 @@
 """Parameter-search methods and ranges for trainable strategies."""
 import os
 
-PARAMETER_SEARCH_METHODx = "bayesian_grid"  # Select: random, grid, bayesian, or bayesian_grid.
-PARAMETER_SEARCH_METHOD = os.getenv("PARAMETER_SEARCH_METHOD", PARAMETER_SEARCH_METHODx).strip().lower()
+PARAMETER_SEARCH_METHODx = "bayesian_grid"  # Select: random, grid, bayesian, bayesian_grid, or rand_baysian.
+_configured_search_method = os.getenv("PARAMETER_SEARCH_METHOD", PARAMETER_SEARCH_METHODx).strip().lower()
+PARAMETER_SEARCH_METHOD = {
+    "baysian": "bayesian",
+    "baysian_grid": "bayesian_grid",
+    "rand_bayesian": "rand_baysian",
+}.get(_configured_search_method, _configured_search_method)
 
-# Number of deterministic grid proposals used by the hybrid method.
-PARAMETER_SEARCH_GRID_POINTSx = 4
-PARAMETER_SEARCH_GRID_POINTS = int(os.getenv("PARAMETER_SEARCH_GRID_POINTS", PARAMETER_SEARCH_GRID_POINTSx))
+PARAMETER_SEARCH_WARMUP_TRIALSx = 4
+PARAMETER_SEARCH_WARMUP_TRIALS = int(os.getenv("PARAMETER_SEARCH_WARMUP_TRIALS", PARAMETER_SEARCH_WARMUP_TRIALSx))
+
+# Number of initial proposals before Bayesian search takes over.
 
 # Bayesian-search controls.
 PARAMETER_SEARCH_BAYESIAN_MIN_WARMUP_TRIALS = 4

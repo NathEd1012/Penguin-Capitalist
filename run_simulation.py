@@ -52,7 +52,11 @@ from config import (
     TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
 )
-from config.parameter_search import PARAMETERS_EXECUTED
+from config.parameter_search import (
+    PARAMETERS_EXECUTED,
+    PARAMETER_SEARCH_METHOD,
+    PARAMETER_SEARCH_WARMUP_TRIALS,
+)
 
 
 def percent_progress(iterable, desc: str):
@@ -128,6 +132,8 @@ def _format_runtime_configuration_banner(
     training_subset_months,
     training_transaction_cost,
     training_random_seed,
+    parameter_search_method,
+    parameter_search_warmup_trials,
     training_start_datetime_utc,
     training_end_datetime_utc,
 ) -> str:
@@ -157,6 +163,8 @@ def _format_runtime_configuration_banner(
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
         f"Training Seed:         {training_random_seed}",
+        f"Parameter Search:      {parameter_search_method}",
+        f"Search Warmup Trials:  {parameter_search_warmup_trials}",
         f"Training Start (UTC):  {training_start_datetime_utc}",
         f"Training End (UTC):    {training_end_datetime_utc}",
         f"{'=' * 80}",
@@ -300,6 +308,8 @@ def run_backtest(
         training_subset_months=TRAINING_SUBSET_MONTHS,
         training_transaction_cost=TRAINING_TRANSACTION_COST,
         training_random_seed=TRAINING_RANDOM_SEED,
+        parameter_search_method=PARAMETER_SEARCH_METHOD,
+        parameter_search_warmup_trials=PARAMETER_SEARCH_WARMUP_TRIALS,
         training_start_datetime_utc=TRAINING_START_DATE,
         training_end_datetime_utc=TRAINING_STOP_DATE,
     ))

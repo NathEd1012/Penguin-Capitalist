@@ -12,7 +12,7 @@ from config.parameter_search import (
     PARAMETER_SEARCH_BAYESIAN_LOCAL_JITTER,
     PARAMETER_SEARCH_BAYESIAN_MIN_WARMUP_TRIALS,
     PARAMETER_SEARCH_BAYESIAN_OBSERVATION_NOISE,
-    PARAMETER_SEARCH_GRID_POINTS,
+    PARAMETER_SEARCH_WARMUP_TRIALS,
     PARAMETER_SEARCH_METHOD,
     strategy_parameter_space,
 )
@@ -94,8 +94,9 @@ def _expected_improvement(mu, sigma, best_y, xi=0.01):
     return improvement * normal_cdf + safe_sigma * normal_pdf
 
 
-def _bayesian_parameters(parameter_space, completed_trials, rng, np_rng):
-    warmup_trials = min(PARAMETER_SEARCH_BAYESIAN_MIN_WARMUP_TRIALS, max(2, len(parameter_space)))
+def _bayesian_parameters(parameter_space, completed_trials, rng, np_rng, warmup_trials=None):
+    if warmup_trials is None:
+        warmup_trials = min(PARAMETER_SEARCH_BAYESIAN_MIN_WARMUP_TRIALS, max(2, len(parameter_space)))
     completed = [trial for trial in completed_trials if trial.get("status") == "completed"]
     if len(completed) < warmup_trials:
         return _sample_parameters_from_space(parameter_space, rng), "random_warmup"
@@ -130,11 +131,15 @@ def suggest_parameters(strategy_class, completed_trials, rng, np_rng):
     if method == "random":
         return _sample_parameters_from_space(parameter_space, rng), "random"
     if method == "grid":
-        return _grid_parameters_from_space(parameter_space, completed_count, max(1, PARAMETER_SEARCH_GRID_POINTS)), "grid"
-    if method == "bayesian_grid" and completed_count < PARAMETER_SEARCH_GRID_POINTS:
-        return _grid_parameters_from_space(parameter_space, completed_count, PARAMETER_SEARCH_GRID_POINTS), "grid"
-    if method not in {"bayesian", "bayesian_grid"}:
+        return _grid_parameters_from_space(parameter_space, completed_count, max(1, PARAMETER_SEARCH_WARMUP_TRIALS)), "grid"
+    if method == "bayesian_grid" and completed_count < PARAMETER_SEARCH_WARMUP_TRIALS:
+        return _grid_parameters_from_space(parameter_space, completed_count, PARAMETER_SEARCH_WARMUP_TRIALS), "grid"
+    if method == "rand_baysian" and completed_count < PARAMETER_SEARCH_WARMUP_TRIALS:
+        return _sample_parameters_from_space(parameter_space, rng), "random_warmup"
+    if method not in {"bayesian", "bayesian_grid", "rand_baysian"}:
         raise ValueError(f"Unsupported PARAMETER_SEARCH_METHOD: {method}")
+    if method == "rand_baysian":
+        return _bayesian_parameters(parameter_space, completed_trials, rng, np_rng, warmup_trials=0)
     return _bayesian_parameters(parameter_space, completed_trials, rng, np_rng)
 
 

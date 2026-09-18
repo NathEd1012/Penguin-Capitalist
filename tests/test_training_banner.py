@@ -22,6 +22,8 @@ def test_runtime_banner_includes_training_configuration() -> None:
         training_subset_months=2,
         training_transaction_cost=5.0,
         training_random_seed=42,
+        parameter_search_method="rand_baysian",
+        parameter_search_warmup_trials=4,
         training_start_datetime_utc="2024-01-01 00:00:00+00:00",
         training_end_datetime_utc="2025-01-01 00:00:00+00:00",
     )
@@ -30,5 +32,7 @@ def test_runtime_banner_includes_training_configuration() -> None:
     assert "Training Step Enabled:" in banner
     assert "Training Steps:" in banner
     assert "Training Transaction Cost:" in banner
+    assert "Parameter Search:      rand_baysian" in banner
+    assert "Search Warmup Trials:  4" in banner
     assert "Training Start (UTC):" in banner
     assert "Training End (UTC):" in banner
