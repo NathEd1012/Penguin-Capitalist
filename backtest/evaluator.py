@@ -87,7 +87,7 @@ class Evaluator:
         if buy_trades is None or sell_trades is None:
             buy_trades = sum(1 for trade in portfolio.trades if trade.action == "BUY")
             sell_trades = sum(1 for trade in portfolio.trades if trade.action == "SELL")
-        total_trades = len(portfolio.trades)
+        total_trades = getattr(portfolio, "total_trade_count", len(portfolio.trades))
         
         return {
             'total_return': round(total_return, 2),

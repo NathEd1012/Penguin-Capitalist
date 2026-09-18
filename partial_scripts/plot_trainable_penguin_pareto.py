@@ -17,6 +17,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.ticker import MaxNLocator
 
 
 # Update this directory when you want to point the script at a different run.
@@ -233,6 +234,38 @@ def plot_strategy_trials(strategy: str, trials: list[dict[str, object]], title_s
     return fig
 
 
+def plot_training_performance(
+    trials_by_strategy: dict[str, list[dict[str, object]]],
+    title_suffix: str = "",
+):
+    """Plot each strategy's benchmark-relative performance by training step."""
+    fig, ax = plt.subplots(figsize=(11, 7))
+
+    for strategy, trials in sorted(trials_by_strategy.items()):
+        x_values = [int(trial["trial"]) for trial in trials]
+        y_values = [float(trial["relative_profit"]) for trial in trials]
+        ax.plot(
+            x_values,
+            y_values,
+            marker="o",
+            linewidth=1.3,
+            markersize=3.5,
+            label=strategy,
+        )
+
+    title = "Training Performance Relative to Benchmark"
+    if title_suffix:
+        title = f"{title} ({title_suffix})"
+    ax.set_title(title)
+    ax.set_xlabel("Training step")
+    ax.set_ylabel("Performance relative to benchmark ($)")
+    ax.xaxis.set_major_locator(MaxNLocator(nbins=10, integer=True))
+    ax.grid(True, alpha=0.25)
+    ax.legend(loc="best", fontsize=8)
+    fig.tight_layout()
+    return fig
+
+
 def find_log_files(log_dir: Path) -> list[Path]:
     if log_dir.is_file():
         return [log_dir]
@@ -290,6 +323,14 @@ def main() -> None:
             for trial in trials:
                 strategy = str(trial.get("strategy", "unknown"))
                 trials_by_strategy.setdefault(strategy, []).append(trial)
+
+            performance_fig = plot_training_performance(
+                trials_by_strategy,
+                title_suffix=log_label,
+            )
+            pdf.savefig(performance_fig, bbox_inches="tight")
+            plt.close(performance_fig)
+            print(f"Added performance overview :: {log_file}")
 
             for strategy in sorted(trials_by_strategy):
                 fig = plot_strategy_trials(

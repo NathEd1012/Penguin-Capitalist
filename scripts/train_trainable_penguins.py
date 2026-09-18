@@ -5,6 +5,8 @@ import math
 import os
 import random
 import sys
+import gc
+import ctypes
 from dataclasses import asdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -36,10 +38,19 @@ from config import (
     TRAINING_PARETO_FILENAME,
     PLOT_PARETO,
 )
+from config.parameter_search import PARAMETERS_EXECUTED
 from run_simulation import parse_datetime_string, run_backtest
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
 from scripts.parameter_search import suggest_parameters
+
+
+def _release_training_trial_memory() -> None:
+    gc.collect()
+    try:
+        ctypes.CDLL(None).malloc_trim(0)
+    except (AttributeError, OSError):
+        pass
 
 
 def _print_training_configuration() -> None:
@@ -577,6 +588,7 @@ def _train_trainable_penguins(
         initial_params = {}
         previous_trial_params = None
         completed_trials = []
+        qualifying_candidates = []
         pareto_history[strategy_class.__name__] = []
 
         baseline_instance = strategy_class()
@@ -630,6 +642,7 @@ def _train_trainable_penguins(
                     transaction_cost=TRAINING_TRANSACTION_COST,
                     penguin_classes=[candidate, SP500],
                     training_step_allowed=False,
+                    collect_trade_details=False,
                 )
 
             candidate_metrics = results[candidate.name][1]
@@ -642,10 +655,24 @@ def _train_trainable_penguins(
             final_value = float(candidate_metrics.get("final_value", 0.0))
             buy_trades = int(candidate_metrics.get("buy_trades", 0))
 
+            del results
+            del candidate
+            _release_training_trial_memory()
+
             if buy_trades > 0 and (best_score is None or score > best_score):
                 best_score = score
                 best_metrics = candidate_metrics
                 best_params = params
+
+            if buy_trades > 0:
+                qualifying_candidates.append(
+                    {
+                        "trial": trial_number,
+                        "params": dict(params),
+                        "metrics": candidate_metrics,
+                        "score": list(score),
+                    }
+                )
 
             log_lines.append(
                 f"    Trial {trial_number:03d}: window={_format_training_timestamp(trial_window_start)}"
@@ -700,11 +727,18 @@ def _train_trainable_penguins(
             completed_trials.append({"status": "completed", "params": dict(params), "objective_value": objective_value})
             previous_trial_params = params
 
+        ranked_candidates = sorted(
+            qualifying_candidates,
+            key=lambda candidate: tuple(candidate["score"]),
+            reverse=True,
+        )
+        top_candidates = ranked_candidates[:PARAMETERS_EXECUTED]
         trained_parameters[str(strategy_class.__name__)] = {
             "initial_params": initial_params,
             "best_params": best_params,
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
+            "top_params": top_candidates,
         }
         if best_score is None:
             log_lines.append(

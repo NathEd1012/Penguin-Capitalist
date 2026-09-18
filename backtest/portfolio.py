@@ -29,11 +29,12 @@ class Portfolio:
     Never use a global/shared previous_price variable.
     """
     
-    def __init__(self, initial_capital: float = 5000.0, transaction_cost: float = 0.0):
+    def __init__(self, initial_capital: float = 5000.0, transaction_cost: float = 0.0, record_trades: bool = True):
         self.initial_capital = initial_capital
         self.cash = initial_capital
         self.transaction_cost = transaction_cost
         self.max_leverage = 1.0
+        self.record_trades = record_trades
         
         # Positions: symbol -> quantity (last_price_by_symbol equivalent)
         self.positions: Dict[str, int] = {}
@@ -52,6 +53,7 @@ class Portfolio:
         # Cached trade counts for fast reporting
         self.buy_trade_count = 0
         self.sell_trade_count = 0
+        self.total_trade_count = 0
         
         # Value snapshots for curve tracking
         self.value_history: List[float] = []
@@ -167,8 +169,10 @@ class Portfolio:
             price=price,
             timestamp=timestamp
         )
-        self.trades.append(trade)
+        if self.record_trades:
+            self.trades.append(trade)
         self.buy_trade_count += 1
+        self.total_trade_count += 1
         
         return True
     
@@ -212,8 +216,10 @@ class Portfolio:
             price=price,
             timestamp=timestamp
         )
-        self.trades.append(trade)
+        if self.record_trades:
+            self.trades.append(trade)
         self.sell_trade_count += 1
+        self.total_trade_count += 1
         
         return True
     

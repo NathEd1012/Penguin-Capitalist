@@ -1,12 +1,12 @@
 """Parameter-search methods and ranges for trainable strategies."""
 import os
 
-
-# Select: random, grid, bayesian, or bayesian_grid.
-PARAMETER_SEARCH_METHOD = os.getenv("PARAMETER_SEARCH_METHOD", "bayesian_grid").strip().lower()
+PARAMETER_SEARCH_METHODx = "bayesian_grid"  # Select: random, grid, bayesian, or bayesian_grid.
+PARAMETER_SEARCH_METHOD = os.getenv("PARAMETER_SEARCH_METHOD", PARAMETER_SEARCH_METHODx).strip().lower()
 
 # Number of deterministic grid proposals used by the hybrid method.
-PARAMETER_SEARCH_GRID_POINTS = int(os.getenv("PARAMETER_SEARCH_GRID_POINTS", "4"))
+PARAMETER_SEARCH_GRID_POINTSx = 4
+PARAMETER_SEARCH_GRID_POINTS = int(os.getenv("PARAMETER_SEARCH_GRID_POINTS", PARAMETER_SEARCH_GRID_POINTSx))
 
 # Bayesian-search controls.
 PARAMETER_SEARCH_BAYESIAN_MIN_WARMUP_TRIALS = 4
@@ -16,16 +16,17 @@ PARAMETER_SEARCH_BAYESIAN_LOCAL_JITTER = 0.08
 PARAMETER_SEARCH_BAYESIAN_LENGTH_SCALE = 0.35
 PARAMETER_SEARCH_BAYESIAN_OBSERVATION_NOISE = 0.15
 
+PARAMETERS_EXECUTED = max(1, int(os.getenv("PARAMETERS_EXECUTED", "1")))
 
 # Each entry is (parameter name, type, minimum, maximum).
 _RSI_PARAMETERS = (
-    ("rsi_period", "int", 7, 28),
+    ("rsi_period", "int", 7, 30), #28->30
     ("buy_rsi", "float", 18.0, 42.0),
     ("sell_rsi", "float", 55.0, 88.0),
 )
 
 _BOLLINGER_PARAMETERS = (
-    ("bb_period", "int", 10, 40),
+    ("bb_period", "int", 10, 50), #40->50
     ("bb_stddev", "float", 1.0, 3.5),
 )
 
@@ -35,17 +36,17 @@ _ADX_PARAMETERS = (
 )
 
 _RISK_PARAMETERS = (
-    ("max_cash_fraction", "float", 0.02, 0.20),
+    ("max_cash_fraction", "float", 0.02, 0.25), #0.20->0.25
     ("stop_loss_pct", "float", 0.01, 0.10),
     ("take_profit_pct", "float", 0.02, 0.20),
     ("cooldown_bars", "int", 0, 30),
 )
 
 _RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 7, 40),
-    ("relative_strength_threshold", "float", -1.0, 1.0),
+    ("relative_strength_period", "int", 7, 50), #40->50
+    ("relative_strength_threshold", "float", -1.5, 1.0), # -1.0->-1.5
     ("rvol_period", "int", 7, 40),
-    ("rvol_threshold", "float", 0.5, 4.0),
+    ("rvol_threshold", "float", 0.5, 6.0), #4.0->6.0
 )
 
 _STRENGTH_CAP_PARAMETERS = (("strength_cap", "float", 1.0, 2.0),)
@@ -96,6 +97,7 @@ def strategy_parameter_space(strategy_class):
 
 
 __all__ = [
+    "PARAMETERS_EXECUTED",
     "PARAMETER_SEARCH_METHOD",
     "PARAMETER_SEARCH_GRID_POINTS",
     "PARAMETER_SEARCH_BAYESIAN_MIN_WARMUP_TRIALS",

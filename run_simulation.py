@@ -2,6 +2,8 @@
 import os
 import sys
 import time
+import gc
+import ctypes
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -50,6 +52,7 @@ from config import (
     TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
 )
+from config.parameter_search import PARAMETERS_EXECUTED
 
 
 def percent_progress(iterable, desc: str):
@@ -161,9 +164,12 @@ def _format_runtime_configuration_banner(
     return "\n".join(lines)
 
 
-def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float]):
+def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float], name: str | None = None):
+    requested_name = name or penguin.name
     try:
-        updated_penguin = penguin.__class__(name=penguin.name, **params)
+        updated_penguin = penguin.__class__(name=requested_name, **params)
+        # Some BasePenguin implementations normalize the constructor name.
+        updated_penguin.name = requested_name
         if hasattr(penguin, "record_history"):
             updated_penguin.record_history = bool(getattr(penguin, "record_history"))
         return updated_penguin
@@ -171,6 +177,7 @@ def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float]):
         if hasattr(penguin, "params"):
             for key, value in params.items():
                 setattr(penguin.params, key, value)
+        penguin.name = requested_name
         return penguin
 
 
@@ -221,6 +228,7 @@ def run_backtest(
     penguin_classes: List,
     artifacts_dir: Path | None = None,
     training_step_allowed: bool = True,
+    collect_trade_details: bool = True,
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
@@ -367,7 +375,11 @@ def run_backtest(
             else:
                 penguin = penguin_spec()
             pen_name = penguin.name
-            portfolios[pen_name] = Portfolio(initial_capital, transaction_cost)
+            portfolios[pen_name] = Portfolio(
+                initial_capital,
+                transaction_cost,
+                record_trades=collect_trade_details,
+            )
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
             penguins[pen_name] = penguin
         except Exception as e:
@@ -420,10 +432,23 @@ def run_backtest(
             for penguin_name, penguin in list(penguins.items()):
                 strategy_name = penguin.__class__.__name__
                 if strategy_name in trained_parameters:
-                    penguins[penguin_name] = _replace_trainable_penguin_params(
-                        penguin,
-                        trained_parameters[strategy_name]["best_params"],
-                    )
+                    training_result = trained_parameters[strategy_name]
+                    top_candidates = training_result.get("top_params") or [
+                        {"params": training_result.get("best_params", {})}
+                    ]
+                    for rank, candidate in enumerate(top_candidates[:PARAMETERS_EXECUTED], start=1):
+                        variant_name = penguin_name if rank == 1 else f"{penguin_name}_Top{rank:03d}"
+                        variant = _replace_trainable_penguin_params(
+                            penguin,
+                            candidate.get("params", {}),
+                            name=variant_name,
+                        )
+                        penguins[variant_name] = variant
+                        if variant_name != penguin_name:
+                            portfolios[variant_name] = Portfolio(initial_capital, transaction_cost)
+                            portfolios[variant_name].max_leverage = float(
+                                getattr(variant, "MAX_LEVERAGE", 1.0)
+                            )
         else:
             print("No trainable penguins are active; skipping Step 3b training.")
 
@@ -523,14 +548,16 @@ def run_backtest(
                     bid, ask = ready_quotes[order_symbol]
                     if action == "BUY":
                         if portfolio.buy(order_symbol, quantity, ask, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
-                            )
+                            if collect_trade_details:
+                                trades_by_bar[trade_bar_idx].append(
+                                    f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
+                                )
                     elif action == "SELL":
                         if portfolio.sell(order_symbol, quantity, bid, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
-                            )
+                            if collect_trade_details:
+                                trades_by_bar[trade_bar_idx].append(
+                                    f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
+                                )
 
                 value = portfolio.get_total_value(current_prices)
                 portfolio.add_value_snapshot(value)
@@ -567,14 +594,16 @@ def run_backtest(
                     
                     if action == "BUY" and quantity > 0:
                         if portfolio.buy(symbol, quantity, ask, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: BUY {quantity} {symbol} @ ${ask:.2f}"
-                            )
+                            if collect_trade_details:
+                                trades_by_bar[trade_bar_idx].append(
+                                    f"  {penguin_name}: BUY {quantity} {symbol} @ ${ask:.2f}"
+                                )
                     elif action == "SELL" and quantity > 0:
                         if portfolio.sell(symbol, quantity, bid, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: SELL {quantity} {symbol} @ ${bid:.2f}"
-                            )
+                            if collect_trade_details:
+                                trades_by_bar[trade_bar_idx].append(
+                                    f"  {penguin_name}: SELL {quantity} {symbol} @ ${bid:.2f}"
+                                )
                 
                 except Exception as e:
                     # Silently skip errors to continue backtest
