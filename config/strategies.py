@@ -52,14 +52,13 @@ OG_TP = [
 
 ADV_SELL = [
     Adv_SELL_TP1,
-    Adv_SELL_TP1_Manual,
+    #Adv_SELL_TP1_Manual,
     Adv_SELL_TP2,
-    Adv_SELL_TP2_Manual,
+    #Adv_SELL_TP2_Manual,
     Adv_SELL_TP3,
-    Adv_SELL_TP3_Manual,
+    #Adv_SELL_TP3_Manual,
     Adv_SELL_TP4,
-    Adv_SELL_TP4_Manual,
-    Adv_SELL_ALL,
+    #Adv_SELL_TP4_Manual,
 ]
 
 MANUAL_TUNE_ADV_SELL = [
@@ -73,7 +72,7 @@ MANUAL_TUNE_ADV_SELL = [
     ManualTuneAdvSELL_TP4_Manual,
 ]
 
-ACTIVE_PENGUINSx = [
+ACTIVE_PENGUINS = [
     #*OG_TP,
     #*ADV_SELL,
     #*MANUAL_TUNE_ADV_SELL,
@@ -81,7 +80,7 @@ ACTIVE_PENGUINSx = [
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
     #SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
-    #BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
+    BuyMaxEachPenguin,                  # Buy maximum affordable shares for each symbol once
     #ThreeFoldMeanReversionTrendPenguin, # ThreeFold mean-reversion + trend
 ]
 
@@ -93,13 +92,17 @@ _STRATEGY_GROUPS = {
 
 _STRATEGY_CLASSES = {
     strategy.__name__: strategy
-    for strategy in ACTIVE_PENGUINSx
+    for strategy in ACTIVE_PENGUINS
+}
+_STRATEGY_NAMES = {
+    name.casefold(): name
+    for name in (*_STRATEGY_GROUPS, *_STRATEGY_CLASSES)
 }
 
 
 def _resolve_active_penguins(raw_value):
     if raw_value is None:
-        return ACTIVE_PENGUINSx
+        return ACTIVE_PENGUINS
 
     selected = []
     seen = set()
@@ -111,6 +114,7 @@ def _resolve_active_penguins(raw_value):
             continue
         if name.startswith("*"):
             name = name[1:]
+        name = _STRATEGY_NAMES.get(name.casefold(), name)
 
         if name in _STRATEGY_GROUPS:
             strategies = _STRATEGY_GROUPS[name]
@@ -124,7 +128,7 @@ def _resolve_active_penguins(raw_value):
                 selected.append(strategy)
                 seen.add(strategy)
 
-    return selected or ACTIVE_PENGUINSx
+    return selected or ACTIVE_PENGUINS
 
 
 ACTIVE_PENGUINS = _resolve_active_penguins(os.getenv("ACTIVE_PENGUINS"))

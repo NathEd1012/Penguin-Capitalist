@@ -148,6 +148,12 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
 
     "NVDA": [
         {
+            "date": "2021-07-20",
+            "type": "split",
+            "ratio": "4:1",
+            "comment": "4-for-1 stock split",
+        },
+        {
             "date": "2024-06-10",
             "type": "split",
             "ratio": "10:1",
@@ -272,6 +278,15 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
+    "FCEL": [
+        {
+            "date": "2024-11-11",
+            "type": "reverse_split",
+            "ratio": "1:30",
+            "comment": "1-for-30 reverse stock split",
+        }
+    ],
+
     "GE": [
         {
             "date": "2021-08-02",
@@ -393,6 +408,15 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
+    "MTCH": [
+        {
+            "date": "2020-07-01",
+            "type": "spin_off",
+            "ratio": "reorganization",
+            "comment": "IAC separated Match Group in a complex merger/reorganization; no simple price multiplier applied",
+        }
+    ],
+
     "RTX": [
         {
             "date": "2020-04-03",
@@ -453,13 +477,10 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {
 }
 
 # Combined lookup used by the helper module.
-CORPORATE_ACTIONS: Dict[str, List[Dict[str, str]]] = {
-    **SPLITS,
-    **REVERSE_SPLITS,
-    **TICKER_CHANGES,
-    **REORGANIZATIONS,
-    **MERGERS,
-}
+CORPORATE_ACTIONS: Dict[str, List[Dict[str, str]]] = {}
+for action_table in (SPLITS, REVERSE_SPLITS, TICKER_CHANGES, REORGANIZATIONS, MERGERS):
+    for symbol, events in action_table.items():
+        CORPORATE_ACTIONS.setdefault(symbol, []).extend(events)
 
 PRICE_ADJUSTMENT_ACTION_TYPES = {"split", "reverse_split"}
 DISLOCATION_ACTION_TYPES = {

@@ -14,7 +14,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[1]
 if str(PROJECT_DIR) not in sys.path:
 	sys.path.insert(0, str(PROJECT_DIR))
 
-from config.parameter_search import strategy_parameter_space
+from config.parameter_search_con import strategy_parameter_space
 
 
 RUN_LOG_NAME = ""

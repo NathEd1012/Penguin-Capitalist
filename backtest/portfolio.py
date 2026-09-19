@@ -1,5 +1,5 @@
 """Portfolio management for backtesting."""
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -57,6 +57,20 @@ class Portfolio:
         
         # Value snapshots for curve tracking
         self.value_history: List[float] = []
+        self._applied_price_adjustments: Set[Tuple[str, datetime]] = set()
+
+    def apply_price_adjustments(self, timestamp: datetime, events_by_symbol: Dict[str, List[Tuple[datetime, float, Dict]]]) -> None:
+        """Apply share-count changes for split-adjusted price data."""
+        for symbol, events in events_by_symbol.items():
+            for effective_timestamp, price_factor, _event in events:
+                event_key = (symbol, effective_timestamp)
+                if timestamp < effective_timestamp or event_key in self._applied_price_adjustments:
+                    continue
+
+                quantity = self.positions.get(symbol, 0)
+                if quantity > 0 and price_factor > 0:
+                    self.positions[symbol] = quantity / price_factor
+                self._applied_price_adjustments.add(event_key)
         
     def get_position(self, symbol: str) -> int:
         """Get current quantity of a symbol."""

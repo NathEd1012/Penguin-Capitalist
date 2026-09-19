@@ -16,6 +16,7 @@ from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
+from scripts.data_fixes.corporate_actions import get_price_adjustment_events
 from penguins.decision_utils import call_penguin_decide
 from config import (
     SYMBOLS,
@@ -271,6 +272,10 @@ def run_backtest(
     # Prepare price history for each symbol
     price_history = defaultdict(list)
     volume_history = defaultdict(list)
+    price_adjustment_events = {
+        symbol: get_price_adjustment_events(symbol)
+        for symbol in symbols
+    }
 
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -286,6 +291,9 @@ def run_backtest(
 
         if not current_prices:
             continue
+
+        for portfolio in portfolios.values():
+            portfolio.apply_price_adjustments(timestamp, price_adjustment_events)
 
         # Update price history for each symbol
         for symbol in symbols:

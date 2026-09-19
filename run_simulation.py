@@ -29,6 +29,7 @@ from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
+from scripts.data_fixes.corporate_actions import get_price_adjustment_events
 from penguins.decision_utils import call_penguin_decide
 from config import (
     SYMBOLS,
@@ -52,8 +53,11 @@ from config import (
     TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
 )
-from config.parameter_search import (
+from config.parameter_search_con import (
     PARAMETERS_EXECUTED,
+    PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
+    PARAMETER_SEARCH_BAYESIAN_SAMPLER,
+    PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
     PARAMETER_SEARCH_METHOD,
     PARAMETER_SEARCH_WARMUP_TRIALS,
 )
@@ -136,6 +140,9 @@ def _format_runtime_configuration_banner(
     parameter_search_warmup_trials,
     training_start_datetime_utc,
     training_end_datetime_utc,
+    parameter_search_bayesian_sampler="gp",
+    parameter_search_bayesian_acquisition="ei",
+    parameter_search_bayesian_ucb_kappa=2.0,
 ) -> str:
     """Return the runtime banner text for backtest and training configuration."""
 
@@ -164,6 +171,9 @@ def _format_runtime_configuration_banner(
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
         f"Training Seed:         {training_random_seed}",
         f"Parameter Search:      {parameter_search_method}",
+        f"Bayesian Sampler:      {parameter_search_bayesian_sampler}",
+        f"Acquisition Function:  {parameter_search_bayesian_acquisition}",
+        f"UCB Kappa:             {parameter_search_bayesian_ucb_kappa}",
         f"Search Warmup Trials:  {parameter_search_warmup_trials}",
         f"Training Start (UTC):  {training_start_datetime_utc}",
         f"Training End (UTC):    {training_end_datetime_utc}",
@@ -310,6 +320,9 @@ def run_backtest(
         training_random_seed=TRAINING_RANDOM_SEED,
         parameter_search_method=PARAMETER_SEARCH_METHOD,
         parameter_search_warmup_trials=PARAMETER_SEARCH_WARMUP_TRIALS,
+        parameter_search_bayesian_sampler=PARAMETER_SEARCH_BAYESIAN_SAMPLER,
+        parameter_search_bayesian_acquisition=PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
+        parameter_search_bayesian_ucb_kappa=PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
         training_start_datetime_utc=TRAINING_START_DATE,
         training_end_datetime_utc=TRAINING_STOP_DATE,
     ))
@@ -471,6 +484,10 @@ def run_backtest(
     # Prepare price history for each symbol
     price_history = defaultdict(list)
     volume_history = defaultdict(list)
+    price_adjustment_events = {
+        symbol: get_price_adjustment_events(symbol)
+        for symbol in symbols
+    }
     
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
@@ -486,6 +503,9 @@ def run_backtest(
         
         if not current_prices:
             continue
+
+        for portfolio in portfolios.values():
+            portfolio.apply_price_adjustments(timestamp, price_adjustment_events)
         
         # Update price history for each symbol
         for symbol in symbols:

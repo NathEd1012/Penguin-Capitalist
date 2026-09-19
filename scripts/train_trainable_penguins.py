@@ -38,7 +38,12 @@ from config import (
     TRAINING_PARETO_FILENAME,
     PLOT_PARETO,
 )
-from config.parameter_search import PARAMETERS_EXECUTED
+from config.parameter_search_con import (
+    PARAMETERS_EXECUTED,
+    PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
+    PARAMETER_SEARCH_BAYESIAN_SAMPLER,
+    PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
+)
 from run_simulation import parse_datetime_string, run_backtest
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
@@ -61,258 +66,6 @@ def _print_training_configuration() -> None:
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print("=" * 80)
-
-
-TRAINING_BAYESIAN_MIN_WARMUP_TRIALS = 4
-TRAINING_BAYESIAN_CANDIDATE_POOL_SIZE = 64
-TRAINING_BAYESIAN_LOCAL_CANDIDATE_COUNT = 32
-TRAINING_BAYESIAN_LOCAL_JITTER = 0.08
-TRAINING_BAYESIAN_LENGTH_SCALE = 0.35
-TRAINING_BAYESIAN_OBSERVATION_NOISE = 0.15
-
-
-def _strategy_parameter_space(strategy_class) -> List[tuple[str, str, float, float]]:
-    strategy_name = strategy_class.__name__
-    if strategy_name.endswith(("Adv_SELL_TP1", "Adv_SELL_TP1_Manual", "ManualTuneAdvSELL_TP1", "ManualTuneAdvSELL_TP1_Manual")):
-        return [
-            ("rsi_period", "int", 7, 28),
-            ("buy_rsi", "float", 18.0, 42.0),
-            ("sell_rsi", "float", 55.0, 88.0),
-            ("adx_period", "int", 7, 28),
-            ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction", "float", 0.02, 0.20),
-            ("stop_loss_pct", "float", 0.01, 0.10),
-            ("take_profit_pct", "float", 0.02, 0.20),
-            ("cooldown_bars", "int", 0, 30),
-            ("relative_strength_period", "int", 7, 40),
-            ("relative_strength_threshold", "float", -1.0, 1.0),
-            ("rvol_period", "int", 7, 40),
-            ("rvol_threshold", "float", 0.5, 4.0),
-        ]
-    if strategy_name.endswith(("Adv_SELL_TP2", "Adv_SELL_TP2_Manual", "Adv_SELL_TP3", "Adv_SELL_TP3_Manual", "ManualTuneAdvSELL_TP2", "ManualTuneAdvSELL_TP2_Manual", "ManualTuneAdvSELL_TP3", "ManualTuneAdvSELL_TP3_Manual")):
-        return [
-            ("bb_period", "int", 10, 40),
-            ("bb_stddev", "float", 1.0, 3.5),
-            ("adx_period", "int", 7, 28),
-            ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction", "float", 0.02, 0.20),
-            ("stop_loss_pct", "float", 0.01, 0.10),
-            ("take_profit_pct", "float", 0.02, 0.20),
-            ("cooldown_bars", "int", 0, 30),
-            ("relative_strength_period", "int", 7, 40),
-            ("relative_strength_threshold", "float", -1.0, 1.0),
-            ("rvol_period", "int", 7, 40),
-            ("rvol_threshold", "float", 0.5, 4.0),
-        ]
-    if strategy_name.endswith(("OG_TP4", "OG_TP4_Manual")):
-        return [
-            ("rsi_period", "int", 7, 28),
-            ("buy_rsi", "float", 18.0, 42.0),
-            ("sell_rsi", "float", 55.0, 88.0),
-            ("max_cash_fraction", "float", 0.02, 0.20),
-            ("stop_loss_pct", "float", 0.01, 0.10),
-            ("take_profit_pct", "float", 0.02, 0.20),
-            ("cooldown_bars", "int", 0, 30),
-            ("strength_cap", "float", 1.0, 2.0),
-        ]
-    if strategy_name.endswith(("Adv_SELL_TP4", "Adv_SELL_TP4_Manual", "ManualTuneAdvSELL_TP4", "ManualTuneAdvSELL_TP4_Manual")):
-        return [
-            ("rsi_period", "int", 7, 28),
-            ("buy_rsi", "float", 18.0, 42.0),
-            ("sell_rsi", "float", 55.0, 88.0),
-            ("max_cash_fraction", "float", 0.02, 0.20),
-            ("stop_loss_pct", "float", 0.01, 0.10),
-            ("take_profit_pct", "float", 0.02, 0.20),
-            ("cooldown_bars", "int", 0, 30),
-            ("relative_strength_period", "int", 7, 40),
-            ("relative_strength_threshold", "float", -1.0, 1.0),
-            ("rvol_period", "int", 7, 40),
-            ("rvol_threshold", "float", 0.5, 4.0),
-        ]
-    if strategy_name.endswith(("OG_TP1", "OG_TP1_Manual", "TrainablePenguin1", "TrainablePenguin1_Manual")):
-        return [
-            ("rsi_period", "int", 7, 28),
-            ("buy_rsi", "float", 18.0, 42.0),
-            ("sell_rsi", "float", 55.0, 88.0),
-            ("adx_period", "int", 7, 28),
-            ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction", "float", 0.02, 0.20),
-            ("stop_loss_pct", "float", 0.01, 0.10),
-            ("take_profit_pct", "float", 0.02, 0.20),
-            ("cooldown_bars", "int", 0, 30),
-            ("strength_cap", "float", 1.0, 2.0),
-        ]
-    if strategy_name.endswith(("OG_TP2", "OG_TP2_Manual", "TrainablePenguin2", "TrainablePenguin2_Manual", "OG_TP3", "OG_TP3_Manual", "TrainablePenguin3", "TrainablePenguin3_Manual")):
-        return [
-            ("bb_period", "int", 10, 40),
-            ("bb_stddev", "float", 1.0, 3.5),
-            ("adx_period", "int", 7, 28),
-            ("adx_threshold", "float", 10.0, 40.0),
-            ("max_cash_fraction", "float", 0.02, 0.20),
-            ("stop_loss_pct", "float", 0.01, 0.10),
-            ("take_profit_pct", "float", 0.02, 0.20),
-            ("cooldown_bars", "int", 0, 30),
-            ("strength_cap", "float", 1.0, 2.0),
-        ]
-    raise ValueError(f"No parameter space is defined for {strategy_name}")
-
-
-def _sample_parameters_from_space(
-    parameter_space: List[tuple[str, str, float, float]],
-    rng: random.Random,
-) -> Dict[str, int | float]:
-    sampled: Dict[str, int | float] = {}
-    for name, kind, low, high in parameter_space:
-        if kind == "int":
-            sampled[name] = rng.randint(int(low), int(high))
-        else:
-            sampled[name] = round(rng.uniform(float(low), float(high)), 4)
-    return sampled
-
-
-def _trainable_params_to_vector(
-    params: Dict[str, int | float],
-    parameter_space: List[tuple[str, str, float, float]],
-) -> np.ndarray:
-    values = []
-    for name, kind, low, high in parameter_space:
-        span = float(high) - float(low)
-        if span <= 0:
-            values.append(0.0)
-            continue
-
-        raw_value = params[name]
-        normalized_value = (float(raw_value) - float(low)) / span
-        values.append(float(np.clip(normalized_value, 0.0, 1.0)))
-    return np.asarray(values, dtype=float)
-
-
-def _vector_to_trainable_params(
-    vector: np.ndarray,
-    parameter_space: List[tuple[str, str, float, float]],
-) -> Dict[str, int | float]:
-    params: Dict[str, int | float] = {}
-    bounded_vector = np.clip(np.asarray(vector, dtype=float), 0.0, 1.0)
-    for index, (name, kind, low, high) in enumerate(parameter_space):
-        value = float(low) + bounded_vector[index] * (float(high) - float(low))
-        if kind == "int":
-            params[name] = int(round(value))
-        else:
-            params[name] = float(round(value, 4))
-    return params
-
-
-def _rbf_kernel(left: np.ndarray, right: np.ndarray, length_scale: float) -> np.ndarray:
-    left = np.atleast_2d(np.asarray(left, dtype=float))
-    right = np.atleast_2d(np.asarray(right, dtype=float))
-    diff = left[:, None, :] - right[None, :, :]
-    squared_distance = np.sum(diff * diff, axis=2)
-    scaled_length = max(float(length_scale), 1e-6)
-    return np.exp(-0.5 * squared_distance / (scaled_length * scaled_length))
-
-
-def _predict_gaussian_process(
-    train_x: np.ndarray,
-    train_y: np.ndarray,
-    candidate_x: np.ndarray,
-    length_scale: float,
-    observation_noise: float,
-) -> tuple[np.ndarray, np.ndarray]:
-    if len(train_x) == 0:
-        candidate_count = len(candidate_x)
-        return np.zeros(candidate_count, dtype=float), np.ones(candidate_count, dtype=float)
-
-    train_x = np.asarray(train_x, dtype=float)
-    train_y = np.asarray(train_y, dtype=float)
-    candidate_x = np.asarray(candidate_x, dtype=float)
-
-    y_mean = float(train_y.mean())
-    y_std = float(train_y.std())
-    if y_std < 1e-9:
-        y_std = 1.0
-
-    y_normalized = (train_y - y_mean) / y_std
-    kernel = _rbf_kernel(train_x, train_x, length_scale)
-    kernel += (observation_noise * observation_noise + 1e-8) * np.eye(len(train_x), dtype=float)
-
-    try:
-        cholesky_factor = np.linalg.cholesky(kernel)
-        alpha = np.linalg.solve(cholesky_factor.T, np.linalg.solve(cholesky_factor, y_normalized))
-        cross_kernel = _rbf_kernel(candidate_x, train_x, length_scale)
-        normalized_mean = cross_kernel @ alpha
-        projection = np.linalg.solve(cholesky_factor, cross_kernel.T)
-        normalized_variance = np.maximum(0.0, 1.0 - np.sum(projection * projection, axis=0))
-    except np.linalg.LinAlgError:
-        normalized_mean = np.full(len(candidate_x), float(y_normalized.mean()), dtype=float)
-        normalized_variance = np.full(len(candidate_x), float(y_normalized.var() if len(y_normalized) > 1 else 1.0), dtype=float)
-
-    return normalized_mean * y_std + y_mean, np.sqrt(np.maximum(normalized_variance, 0.0)) * y_std
-
-
-def _expected_improvement(mu: np.ndarray, sigma: np.ndarray, best_y: float, xi: float = 0.01) -> np.ndarray:
-    improvement = mu - best_y - xi
-    safe_sigma = np.maximum(sigma, 1e-12)
-    z = improvement / safe_sigma
-    normal_pdf = np.exp(-0.5 * z * z) / math.sqrt(2.0 * math.pi)
-    normal_cdf = np.vectorize(lambda value: 0.5 * (1.0 + math.erf(value / math.sqrt(2.0))))(z)
-    return improvement * normal_cdf + safe_sigma * normal_pdf
-
-
-def _suggest_bayesian_trainable_params(
-    strategy_class,
-    completed_trials: List[Dict[str, object]],
-    rng: random.Random,
-    np_rng: np.random.Generator,
-) -> tuple[Dict[str, int | float], str]:
-    parameter_space = _strategy_parameter_space(strategy_class)
-    warmup_trials = min(TRAINING_BAYESIAN_MIN_WARMUP_TRIALS, max(2, len(parameter_space)))
-
-    completed_candidates = [trial for trial in completed_trials if trial.get("status") == "completed"]
-    if len(completed_candidates) < warmup_trials:
-        return _sample_parameters_from_space(parameter_space, rng), "random_warmup"
-
-    train_x = np.asarray([
-        _trainable_params_to_vector(dict(trial["params"]), parameter_space)
-        for trial in completed_candidates
-    ], dtype=float)
-    train_y = np.asarray([float(trial["objective_value"]) for trial in completed_candidates], dtype=float)
-
-    candidate_params: List[Dict[str, int | float]] = []
-    candidate_vectors: List[np.ndarray] = []
-    candidate_sources: List[str] = []
-
-    random_candidate_count = max(TRAINING_BAYESIAN_CANDIDATE_POOL_SIZE, len(parameter_space) * 8)
-    for _ in range(random_candidate_count):
-        params = _sample_parameters_from_space(parameter_space, rng)
-        candidate_params.append(params)
-        candidate_vectors.append(_trainable_params_to_vector(params, parameter_space))
-        candidate_sources.append("random")
-
-    best_trial_index = int(np.argmax(train_y))
-    best_vector = train_x[best_trial_index]
-    local_candidate_count = max(TRAINING_BAYESIAN_LOCAL_CANDIDATE_COUNT, len(parameter_space) * 2)
-    for _ in range(local_candidate_count):
-        perturbation = np_rng.normal(0.0, TRAINING_BAYESIAN_LOCAL_JITTER, size=len(parameter_space))
-        candidate_vector = np.clip(best_vector + perturbation, 0.0, 1.0)
-        params = _vector_to_trainable_params(candidate_vector, parameter_space)
-        candidate_params.append(params)
-        candidate_vectors.append(_trainable_params_to_vector(params, parameter_space))
-        candidate_sources.append("local")
-
-    candidate_matrix = np.asarray(candidate_vectors, dtype=float)
-    predicted_mean, predicted_sigma = _predict_gaussian_process(
-        train_x=train_x,
-        train_y=train_y,
-        candidate_x=candidate_matrix,
-        length_scale=TRAINING_BAYESIAN_LENGTH_SCALE,
-        observation_noise=TRAINING_BAYESIAN_OBSERVATION_NOISE,
-    )
-    acquisition = _expected_improvement(predicted_mean, predicted_sigma, float(np.max(train_y)))
-    if not np.isfinite(acquisition).any():
-        return _sample_parameters_from_space(parameter_space, rng), "random_fallback"
-
-    best_candidate_index = int(np.nanargmax(acquisition))
-    return candidate_params[best_candidate_index], f"bayesian_ei/{candidate_sources[best_candidate_index]}"
 
 
 def _objective_from_score(score: tuple[float, int, int]) -> float:
@@ -577,7 +330,12 @@ def _train_trainable_penguins(
     log_lines.append(f"  Training Seed:     {TRAINING_RANDOM_SEED}")
     log_lines.append("=" * 80)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
-    log_lines.append("  Parameter search: random warm-up followed by Bayesian expected improvement")
+    log_lines.append(
+        "  Parameter search: random warm-up followed by "
+        f"Optuna {PARAMETER_SEARCH_BAYESIAN_SAMPLER.upper()} optimization"
+    )
+    log_lines.append(f"  Acquisition function: {PARAMETER_SEARCH_BAYESIAN_ACQUISITION.upper()}")
+    log_lines.append(f"  UCB kappa: {PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA}")
     log_lines.append(f"  Training window length: {TRAINING_SUBSET_MONTHS} month(s) per trial")
     log_lines.append(f"  Training stock subset size: {TRAINING_SUBSET_STOCKS} symbol(s) per trial")
 

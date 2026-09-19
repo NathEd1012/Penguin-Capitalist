@@ -4,6 +4,9 @@ numpy>=1.24.0
 python-dotenv>=1.0.0
 pathlib
 tqdm
+optuna>=5.0.0
+torch>=2.0.0
+scipy>=1.15.0
 
 # Core
 python-dotenv>=1.0.0
