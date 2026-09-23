@@ -17,13 +17,8 @@ from config.symbols import (
     SYMBOL_LIST_3,
     SYMBOL_LIST_4,
     SYMBOL_LISTS,
-    ACTIVE_SYMBOLS,
-    SYMBOLS_LIST,
     SYMBOLS,
 )
-
-# Keep alias explicit at package level for compatibility.
-SYMBOLS = ACTIVE_SYMBOLS
 
 # ========== BACKTEST CONFIGURATION ==========
 from config.backtest import (
@@ -53,9 +48,6 @@ from config.training_step import (
     TRAINING_START_DATE,
     TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
-    Manual,
-    TRAINING_PENGUINS as TRAINABLE_PENGUINS,
-    TRAINING_MANUAL_PENGUINS,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
     TRAINING_PARAMETER_LOG_FILENAME,
@@ -83,8 +75,6 @@ __all__ = [
     "SYMBOL_LIST_3",        # Custom list
     "SYMBOL_LIST_4",        # Expanded universe list
     "SYMBOL_LISTS",         # Mapping of selectable lists
-    "ACTIVE_SYMBOLS",       # Explicit active symbols
-    "SYMBOLS_LIST",         # Alias
     "INITIAL_CAPITAL",      # Starting capital (USD)
     "EXEC_TRANSACTION_COST", # Execution cost per trade (USD)
     "TRAINING_TRANSACTION_COST", # Training penalty cost per buy (USD)
@@ -103,9 +93,6 @@ __all__ = [
     "TRAINING_RANDOM_SEED",
     "TRAINING_START_DATE",
     "TRAINING_STOP_DATE",
-    "Manual",
-    "TRAINABLE_PENGUINS",
-    "TRAINING_MANUAL_PENGUINS",
     "TRAINING_RESULTS_FILENAME",
     "TRAINING_LOG_FILENAME",
     "TRAINING_PARAMETER_LOG_FILENAME",

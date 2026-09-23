@@ -28,6 +28,7 @@ from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
 from backtest.evaluator import Evaluator
+from backtest.history import binning_to_minutes, history_warmup_bars, penguin_history_requirements
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
 from scripts.data_fixes.corporate_actions import get_price_adjustment_events
 from penguins.decision_utils import call_penguin_decide
@@ -199,43 +200,6 @@ def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float], n
         return penguin
 
 
-def _penguin_history_requirements(penguin) -> tuple[int, int]:
-    """Return (visible history window, minimum history before trading)."""
-    try:
-        lookback_bars = int(getattr(penguin, "LOOKBACK_BARS", 1000))
-    except (TypeError, ValueError):
-        lookback_bars = 1000
-
-    try:
-        min_history_required = int(getattr(penguin, "MIN_HISTORY_REQUIRED", 0))
-    except (TypeError, ValueError):
-        min_history_required = 0
-
-    lookback_bars = max(1, lookback_bars)
-    min_history_required = max(0, min_history_required)
-    required_history_bars = max(lookback_bars, min_history_required)
-    return lookback_bars, required_history_bars
-
-def _binning_to_minutes(binning: str) -> int:
-    mapping = {
-        "1m": 1,
-        "5m": 5,
-        "15m": 15,
-        "1h": 60,
-        "1d": 1440,
-    }
-    try:
-        return mapping[binning.strip().lower()]
-    except KeyError as exc:
-        raise ValueError(f"Unsupported binning: {binning}") from exc
-
-def _history_warmup_bars(penguin_classes: List) -> int:
-    warmup_bars = 0
-    for penguin_class in penguin_classes:
-        _, required_history_bars = _penguin_history_requirements(penguin_class)
-        warmup_bars = max(warmup_bars, required_history_bars)
-    return warmup_bars
-
 def run_backtest(
     symbols: List[str],
     start_datetime: datetime,
@@ -281,9 +245,23 @@ def run_backtest(
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
-    warmup_bars = _history_warmup_bars(penguin_classes)
-    warmup_minutes = _binning_to_minutes(binning)
+    warmup_bars = history_warmup_bars(penguin_classes)
+    warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
+
+    if training_step_allowed and TRAINING_STEP_ENABLED:
+        trainable_classes = [
+            penguin_class
+            for penguin_class in penguin_classes
+            if getattr(penguin_class, "TRAINABLE", False)
+        ]
+        if trainable_classes:
+            training_start_datetime_utc = parse_datetime_string(TRAINING_START_DATE).astimezone(timezone.utc)
+            training_warmup = history_warmup_bars(trainable_classes)
+            training_warmup_start = training_start_datetime_utc - timedelta(
+                minutes=training_warmup * warmup_minutes
+            )
+            warmup_start_datetime_utc = min(warmup_start_datetime_utc, training_warmup_start)
     
     # Determine required symbols from active penguins when possible.
     # If every active penguin declares TRADED_SYMBOLS, we only load that union.
@@ -411,7 +389,7 @@ def run_backtest(
 
     ################################ STEP 3b ################################
 
-    if training_step_allowed:
+    if training_step_allowed and TRAINING_STEP_ENABLED:
         active_trainables = []
         seen_trainable_classes = set()
         for penguin in penguins.values():
@@ -431,6 +409,8 @@ def run_backtest(
                 end_datetime=training_end_dt,
                 binning=binning,
                 penguin_classes=active_trainables,
+                loaded_data=data if training_end_dt <= end_datetime_utc else None,
+                loaded_quality_report_text=quality_report_text,
             )
 
             if training_quality_report_text and artifacts_dir is not None:
@@ -555,7 +535,7 @@ def run_backtest(
             if bar_idx == len(sorted_timestamps) - 1:
                 continue
 
-            lookback_bars, required_history_bars = _penguin_history_requirements(penguin)
+            lookback_bars, required_history_bars = penguin_history_requirements(penguin)
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]
@@ -753,6 +733,7 @@ def main():
         transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
         artifacts_dir=run_artifacts_dir,
+        training_step_allowed=TRAINING_STEP_ENABLED,
     )
     print("\nrun_backtest() returned; generating results...", flush=True)
     

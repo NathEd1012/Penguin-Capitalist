@@ -114,7 +114,6 @@ class Adv_SELL_ALL(BasePenguin):
         adx_slope = adx_value - self._adx_proxy(mid_prices[:-1], self.params.adx_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
-        two_bars_ago_trend_score = self._trend_quality(mid_prices[:-2])
         relative_strength_value = relative_strength(
             mid_prices, spy_prices, self.params.relative_strength_period
         )
@@ -153,14 +152,11 @@ class Adv_SELL_ALL(BasePenguin):
                 is_profitable
                 and relative_strength_value < self.params.relative_strength_threshold
             )
-            negative_trend = trend_score < 0.15
-            falling_trend = (
-                trend_score < previous_trend_score < two_bars_ago_trend_score
-            )
+            falling_trend = trend_score < previous_trend_score
             rvol_exit_trigger = (
                 is_profitable
                 and rvol > self.params.rvol_threshold
-                and (negative_trend or falling_trend)
+                and falling_trend
             )
 
             if (
@@ -179,11 +175,14 @@ class Adv_SELL_ALL(BasePenguin):
                 and (adx_slope >= 0 or current_price <= middle_band)
             )
             rsi_buy_signal = rsi <= self.params.buy_rsi and adx_value >= self.params.adx_threshold
+            trend_buy_signal = trend_score > 0.5
 
-            if bb_buy_signal or rsi_buy_signal:
+            if bb_buy_signal or rsi_buy_signal or (
+                current_price <= lower_band and trend_buy_signal
+            ) or (rsi <= self.params.buy_rsi and trend_buy_signal):
                 strength = min(
                     1.5,
-                    max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
+                    max(0.25, max(adx_value / max(self.params.adx_threshold, 1e-6), trend_score / 0.5)),
                 )
                 qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
                 if qty > 0:

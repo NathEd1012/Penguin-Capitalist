@@ -2,7 +2,8 @@ from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import call_penguin_decide
 from penguins.OG_TP.OG_TP4 import OG_TP4
-from scripts.train_trainable_penguins import _strategy_parameter_space
+from penguins.Puffins import Puffin1, Puffin2, Puffin3, Puffin4
+from config.parameter_search_con import strategy_parameter_space as _strategy_parameter_space
 
 
 class LegacyPenguin(BasePenguin):
@@ -75,3 +76,16 @@ def test_training_parameter_space_for_og_tp4_matches_constructor():
     strategy = OG_TP4(**params)
 
     assert strategy.name == "TrainablePenguin4"
+
+
+def test_training_parameter_spaces_match_puffin_constructors():
+    for strategy_class in (Puffin1, Puffin2, Puffin3, Puffin4):
+        parameter_space = _strategy_parameter_space(strategy_class)
+        params = {
+            name: (int(low) if kind == "int" else float(low))
+            for name, kind, low, _ in parameter_space
+        }
+
+        strategy = strategy_class(**params)
+
+        assert strategy.name == strategy_class.__name__

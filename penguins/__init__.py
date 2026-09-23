@@ -16,6 +16,7 @@ from .Adv_SELL_TP.Adv_SELL_TP2 import Adv_SELL_TP2_Manual
 from .Adv_SELL_TP.Adv_SELL_TP3 import Adv_SELL_TP3_Manual
 from .Adv_SELL_TP.Adv_SELL_TP4 import Adv_SELL_TP4_Manual
 from .Adv_SELL_TP.Adv_SELL_ALL import Adv_SELL_ALL
+from .Emperor_Penguin import Emperor_Penguin
 from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP1 import ManualTuneAdvSELL_TP1, ManualTuneAdvSELL_TP1_Manual
 from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP2 import ManualTuneAdvSELL_TP2, ManualTuneAdvSELL_TP2_Manual
 from .ManualTune_Adv_SELL_TP.ManualTune_Adv_SELL_TP3 import ManualTuneAdvSELL_TP3, ManualTuneAdvSELL_TP3_Manual
@@ -26,6 +27,7 @@ from .SP500x2 import SP500x2
 from .ThreeFoldMeanReversionTrendPenguin import ThreeFoldMeanReversionTrendPenguin
 from .buy_max_each_penguin import BuyMaxEachPenguin
 from .buy_equal_price_each_penguin import BuyEqualPriceEachPenguin
+from .Puffins import Puffin1, Puffin2, Puffin3, Puffin4
 
 __all__ = [
     "BasePenguin",
@@ -54,6 +56,7 @@ __all__ = [
     "Adv_SELL_TP4",
     "Adv_SELL_TP4_Manual",
     "Adv_SELL_ALL",
+    "Emperor_Penguin",
     "ManualTuneAdvSELL_TP1",
     "ManualTuneAdvSELL_TP1_Manual",
     "ManualTuneAdvSELL_TP2",
@@ -68,6 +71,10 @@ __all__ = [
     "SP500x2",
     "BuyMaxEachPenguin",
     "BuyEqualPriceEachPenguin",
+    "Puffin1",
+    "Puffin2",
+    "Puffin3",
+    "Puffin4",
 ]
 
 # Backward-compatible aliases for older registry names.

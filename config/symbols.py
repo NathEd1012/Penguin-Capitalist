@@ -46,18 +46,20 @@ SYMBOL_LIST_2 = [
     # International
     "NVO",    # Novo Nordisk (Denmark)
 
-    # --- ETFs / Commodity ETFs ---
-    "GLD",    # Gold
-    "SLV",    # Silver
-    "PPLT",   # Platinum
-    "COPX",   # Copper miners
-    "JO",     # Coffee
-    "LIT",    # Lithium & Battery Tech
-    "URTH",   # MSCI World
-    "GDXJ",   # Junior gold miners
-    "SIL",    # Silver miners
-    "REMX",   # Rare earth / critical metals
-    "PICK",   # Global metals & mining
+    # Additional diversified large caps
+    "GOOGL",  # Alphabet
+    "AMZN",   # Amazon
+    "META",   # Meta Platforms
+    "AVGO",   # Broadcom
+    "ORCL",   # Oracle
+    "QCOM",   # Qualcomm
+    "JPM",    # JPMorgan Chase
+    "BAC",    # Bank of America
+    "COST",   # Costco
+    "WMT",    # Walmart
+    "XOM",    # Exxon Mobil
+    "CVX",    # Chevron
+    "CAT",    # Caterpillar
 ]
 
 # List 3: intentionally empty for custom manual additions
@@ -67,11 +69,11 @@ SYMBOL_LIST_3 = [
     "CRM","INTC","CSCO","AMD","QCOM","TXN","NOW","INTU","AMAT","MU",
 
     # ===== COMMUNICATION / INTERNET =====
-    "NFLX","DIS","CMCSA","TMUS","T","VZ","SNAP","PINS","MTCH","EA",
+    "NFLX","DIS","CMCSA","SNAP","PINS","MTCH","EA",
 
     # ===== FINANCIALS =====
     "JPM","BAC","WFC","C","GS","MS","BLK","SCHW","AXP","SPGI",
-    "CME","ICE","CB","PGR","AON","MMC","USB","PNC","TFC","BK",
+    "CME","ICE","CB","PGR","AON","USB","PNC","TFC","BK",
 
     # ===== HEALTHCARE =====
     "LLY","JNJ","UNH","PFE","ABBV","MRK","TMO","DHR","ABT","BMY",
@@ -82,8 +84,8 @@ SYMBOL_LIST_3 = [
     "EMR","ETN","PH","ITW","GD","WM","RSG","OTIS","ROK","FAST",
 
     # ===== CONSUMER DISCRETIONARY =====
-    "HD","MCD","SBUX","NKE","LOW","TJX","BKNG","MAR","HLT","GM",
-    "F","RIVN","EBAY","ETSY","ROST","LULU","ULTA","DPZ","YUM","CMG",
+    "HD","MCD","SBUX","NKE","LOW","TJX","MAR","HLT","GM",
+    "F","RIVN","ETSY","ROST","LULU","ULTA","DPZ","YUM","CMG",
 
     # ===== CONSUMER STAPLES =====
     "PG","KO","PEP","WMT","COST","PM","MO","MDLZ","CL","KMB",
@@ -91,7 +93,7 @@ SYMBOL_LIST_3 = [
 
     # ===== ENERGY =====
     "XOM","CVX","COP","EOG","SLB","PXD","MPC","VLO","PSX","OXY",
-    "DVN","HAL","BKR","KMI","WMB","OKE","FANG","HES","APA","CTRA",
+    "DVN","HAL","BKR","KMI","WMB","OKE","FANG","APA",
 
     # ===== MATERIALS =====
     "LIN","APD","ECL","SHW","FCX","NEM","DOW","DD","PPG","NUE",
@@ -104,7 +106,7 @@ SYMBOL_LIST_3 = [
     "AMT","PLD","CCI","EQIX","PSA","O","WELL","SPG","DLR","VTR",
 
     # ===== MID-CAP / HIGH LIQUIDITY GROWTH =====
-    "SQ","SHOP","SNOW","CRWD","NET","DDOG","ZS","OKTA","UBER","LYFT",
+    "SHOP","SNOW","CRWD","NET","DDOG","ZS","OKTA","UBER",
     "ABNB","COIN","AFRM","SOFI","RBLX","PATH","PLTR","AI","UPST","HOOD",
 
     # ===== SEMICONDUCTOR ECOSYSTEM =====
@@ -304,13 +306,7 @@ if ACTIVE_SYMBOL_LIST not in SYMBOL_LISTS:
         f"Use one of: {', '.join(SYMBOL_LISTS.keys())}."
     )
 
-ACTIVE_SYMBOLS = SYMBOL_LISTS[ACTIVE_SYMBOL_LIST]
-
-# Legacy alias for compatibility
-SYMBOLS_LIST = ACTIVE_SYMBOLS
-
-# Backwards compatibility alias: keep SYMBOLS as active trading list.
-SYMBOLS = ACTIVE_SYMBOLS
+SYMBOLS = SYMBOL_LISTS[ACTIVE_SYMBOL_LIST]
 
 __all__ = [
     "ACTIVE_SYMBOL_LIST",
@@ -319,7 +315,5 @@ __all__ = [
     "SYMBOL_LIST_3",
     "SYMBOL_LIST_4",
     "SYMBOL_LISTS",
-    "ACTIVE_SYMBOLS",
-    "SYMBOLS_LIST",
-    "SYMBOLS",  # Alias for backwards compatibility
+    "SYMBOLS",
 ]

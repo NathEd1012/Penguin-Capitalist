@@ -47,21 +47,30 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
-    "BKNG": [
-        {
-            "date": "2026-04-06",
-            "type": "split",
-            "ratio": "25:1",
-            "comment": "25-for-1 stock split; split-adjusted trading began",
-        }
-    ],
-
     "CMG": [
         {
             "date": "2024-06-26",
             "type": "split",
             "ratio": "50:1",
             "comment": "50-for-1 stock split",
+        }
+    ],
+
+    "CSX": [
+        {
+            "date": "2021-06-29",
+            "type": "split",
+            "ratio": "3:1",
+            "comment": "3-for-1 stock split",
+        }
+    ],
+
+    "CVNA": [
+        {
+            "date": "2026-05-08",
+            "type": "split",
+            "ratio": "5:1",
+            "comment": "5-for-1 stock split; split-adjusted trading began",
         }
     ],
 
@@ -113,6 +122,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
     "MCHP": [
         {
             "date": "2021-10-13",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 stock split",
+        }
+    ],
+
+    "MNST": [
+        {
+            "date": "2023-03-28",
             "type": "split",
             "ratio": "2:1",
             "comment": "2-for-1 stock split",
@@ -200,6 +218,24 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "type": "split",
             "ratio": "10:1",
             "comment": "10-for-1 stock split",
+        }
+    ],
+
+    "SHW": [
+        {
+            "date": "2021-04-01",
+            "type": "split",
+            "ratio": "3:1",
+            "comment": "3-for-1 stock split; split-adjusted trading began",
+        }
+    ],
+
+    "SRE": [
+        {
+            "date": "2023-08-22",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 stock split",
         }
     ],
 
@@ -397,6 +433,15 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "ratio": "1 GEV:4 GE",
             "comment": "GE Vernova spin-off; GE holders received 1 GEV share for every 4 GE shares",
         },
+    ],
+
+    "CTRA": [
+        {
+            "date": "2021-10-04",
+            "type": "merger",
+            "ratio": "stock",
+            "comment": "Cabot Oil & Gas and Cimarex merger; Coterra Energy began regular-way trading",
+        }
     ],
 
     "LAC": [

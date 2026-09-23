@@ -18,13 +18,14 @@ from tqdm import tqdm
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from backtest.data_loader import DataLoader
+from backtest.history import binning_to_minutes, history_warmup_bars
 from config import (
     INITIAL_CAPITAL,
     BINNING,
     TRAINING_START_DATE,
     TRAINING_STOP_DATE,
     SYMBOLS,
-    TRAINABLE_PENGUINS,
+    ACTIVE_PENGUINS,
     TRAINING_ITERATIONS,
     TRAINING_RELATIVE_TO,
     TRAINING_SUBSET_MONTHS,
@@ -189,52 +190,14 @@ def _format_trainable_parameter_delta_report(trained_parameters: Dict[str, Dict[
     return "\n".join(lines) + "\n"
 
 
-def _penguin_history_requirements(penguin) -> tuple[int, int]:
-    """Return (visible history window, minimum history before trading)."""
-    try:
-        lookback_bars = int(getattr(penguin, "LOOKBACK_BARS", 1000))
-    except (TypeError, ValueError):
-        lookback_bars = 1000
-
-    try:
-        min_history_required = int(getattr(penguin, "MIN_HISTORY_REQUIRED", 0))
-    except (TypeError, ValueError):
-        min_history_required = 0
-
-    lookback_bars = max(1, lookback_bars)
-    min_history_required = max(0, min_history_required)
-    required_history_bars = max(lookback_bars, min_history_required)
-    return lookback_bars, required_history_bars
-
-
-def _binning_to_minutes(binning: str) -> int:
-    mapping = {
-        "1m": 1,
-        "5m": 5,
-        "15m": 15,
-        "1h": 60,
-        "1d": 1440,
-    }
-    try:
-        return mapping[binning.strip().lower()]
-    except KeyError as exc:
-        raise ValueError(f"Unsupported binning: {binning}") from exc
-
-
-def _history_warmup_bars(penguin_classes: List) -> int:
-    warmup_bars = 0
-    for penguin_class in penguin_classes:
-        _, required_history_bars = _penguin_history_requirements(penguin_class)
-        warmup_bars = max(warmup_bars, required_history_bars)
-    return warmup_bars
-
-
 def prepare_training_context(
     symbols: List[str],
     start_datetime: datetime,
     end_datetime: datetime,
     binning: str,
     penguin_classes: List,
+    loaded_data: Dict | None = None,
+    loaded_quality_report_text: str = "",
 ) -> tuple[List[str], List[datetime], List[datetime], str]:
     """Load the data context needed by the standalone training script."""
     if start_datetime.tzinfo is None:
@@ -245,8 +208,8 @@ def prepare_training_context(
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
-    warmup_bars = _history_warmup_bars(penguin_classes)
-    warmup_minutes = _binning_to_minutes(binning)
+    warmup_bars = history_warmup_bars(penguin_classes)
+    warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
 
     restricted_sets = []
@@ -264,24 +227,37 @@ def prepare_training_context(
         if requested_symbols:
             symbols = requested_symbols
 
-    loader = DataLoader()
-    try:
-        data, sparse_warning = loader.load_bars(
-            symbols,
-            warmup_start_datetime_utc,
-            end_datetime_utc,
-            binning,
-            enable_data_quality_checks=True,
-        )
-        if sparse_warning:
-            print(sparse_warning)
-        quality_report_text = loader.get_quality_report_text()
-    except Exception as e:
-        print(f"Error loading data: {e}")
-        print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
-        sys.exit(1)
+    if loaded_data is None:
+        loader = DataLoader()
+        try:
+            data, sparse_warning = loader.load_bars(
+                symbols,
+                warmup_start_datetime_utc,
+                end_datetime_utc,
+                binning,
+                enable_data_quality_checks=True,
+            )
+            if sparse_warning:
+                print(sparse_warning)
+            quality_report_text = loader.get_quality_report_text()
+        except Exception as e:
+            print(f"Error loading data: {e}")
+            print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
+            sys.exit(1)
 
-    valid_symbols, stale_symbols = loader.detect_stale_data(data)
+        valid_symbols, stale_symbols = loader.detect_stale_data(data)
+    else:
+        data = {
+            symbol: {
+                timestamp: row
+                for timestamp, row in symbol_data.items()
+                if timestamp <= end_datetime_utc
+            }
+            for symbol, symbol_data in loaded_data.items()
+        }
+        quality_report_text = loaded_quality_report_text
+        valid_symbols = sorted(set(symbols).intersection(data))
+        stale_symbols = []
     print(f"  Valid symbols: {len(valid_symbols)}")
     if stale_symbols:
         print(f"  Stale symbols ({len(stale_symbols)}): {', '.join(stale_symbols)}")
@@ -666,12 +642,20 @@ def main() -> None:
     run_artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     print("Step 1: Preparing training data...")
+    active_trainables = [
+        strategy for strategy in ACTIVE_PENGUINS
+        if getattr(strategy, "TRAINABLE", False)
+    ]
+    if not active_trainables:
+        print("No active trainable penguins are configured.")
+        sys.exit(1)
+
     valid_symbols, _sorted_timestamps, tradeable_timestamps, quality_report_text = prepare_training_context(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
         binning=BINNING,
-        penguin_classes=TRAINABLE_PENGUINS,
+        penguin_classes=active_trainables,
     )
 
     if quality_report_text:
@@ -679,11 +663,6 @@ def main() -> None:
         with open(warnings_path, "w", encoding="utf-8") as handle:
             handle.write(quality_report_text)
             handle.write("\n")
-
-    active_trainables = [strategy for strategy in TRAINABLE_PENGUINS if getattr(strategy, "TRAINABLE", False)]
-    if not active_trainables:
-        print("No trainable penguins are configured.")
-        sys.exit(1)
 
     print(
         f"\nStep 2: Training {len(active_trainables)} trainable strategy(ies) "

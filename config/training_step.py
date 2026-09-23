@@ -1,30 +1,6 @@
 """Configuration for the in-simulation training step."""
 import os
 from .backtest import START_DATE as EXECUTION_START_DATE, STOP_DATE as EXECUTION_STOP_DATE
-from .symbols import SYMBOLS as TRAINING_SYMBOLS
-from penguins import (
-    Adv_SELL_TP1,
-    ManualTuneAdvSELL_TP1,
-    ManualTuneAdvSELL_TP1_Manual,
-    Adv_SELL_TP2,
-    ManualTuneAdvSELL_TP2,
-    ManualTuneAdvSELL_TP2_Manual,
-    Adv_SELL_TP3,
-    ManualTuneAdvSELL_TP3,
-    ManualTuneAdvSELL_TP3_Manual,
-    Adv_SELL_TP4,
-    Adv_SELL_ALL,
-    ManualTuneAdvSELL_TP4,
-    ManualTuneAdvSELL_TP4_Manual,
-    OG_TP1,
-    OG_TP1_Manual,
-    OG_TP2,
-    OG_TP2_Manual,
-    OG_TP3,
-    OG_TP3_Manual,
-    OG_TP4,
-    OG_TP4_Manual,
-)
 
 # Toggle the training pass that runs after strategy initialization.
 TRAINING_STEP_ENABLED = True
@@ -63,39 +39,6 @@ TRAINING_RELATIVE_TO = _parse_training_relative_to(os.getenv("FIXED_REL", "SPY")
 # Keep the search reproducible unless the user changes the seed.
 TRAINING_RANDOM_SEED = 42
 
-# When True, the trainer executes the manual strategies as baseline runs.
-# They are not optimized; only the trainable strategies below are sampled.
-Manual = True
-
-# These strategy groups are derived from the class-level TRAINABLE flag so the
-# optimizer and reporting logic do not need to match class names.
-_ALL_TRAINING_PENGUINS = [
-    OG_TP1,
-    OG_TP2,
-    OG_TP3,
-    OG_TP4,
-    Adv_SELL_TP1,
-    Adv_SELL_TP2,
-    Adv_SELL_TP3,
-    Adv_SELL_TP4,
-    Adv_SELL_ALL,
-    OG_TP1_Manual,
-    OG_TP2_Manual,
-    OG_TP3_Manual,
-    OG_TP4_Manual,
-    ManualTuneAdvSELL_TP1,
-    ManualTuneAdvSELL_TP1_Manual,    
-    ManualTuneAdvSELL_TP2,
-    ManualTuneAdvSELL_TP2_Manual,
-    ManualTuneAdvSELL_TP3,
-    ManualTuneAdvSELL_TP3_Manual,
-    ManualTuneAdvSELL_TP4,
-    ManualTuneAdvSELL_TP4_Manual,
-]
-
-TRAINING_PENGUINS = [strategy for strategy in _ALL_TRAINING_PENGUINS if getattr(strategy, "TRAINABLE", False)]
-TRAINING_MANUAL_PENGUINS = [strategy for strategy in _ALL_TRAINING_PENGUINS if not getattr(strategy, "TRAINABLE", False)]
-
 # Saved alongside the run artifacts.
 TRAINING_RESULTS_FILENAME = "trainable_penguin_training.json"
 TRAINING_LOG_FILENAME = "trainable_penguin_training.log"
@@ -107,7 +50,6 @@ PLOT_PARETO = True
 TRAINING_PARETO_FILENAME = "trainable_penguin_pareto_front.pdf"
 
 __all__ = [
-	"TRAINING_SYMBOLS",
 	"TRAINING_STEP_ENABLED",
 	"TRAINING_ITERATIONS",
 	"TRAINING_SUBSET_MONTHS",
@@ -116,9 +58,6 @@ __all__ = [
 	"TRAINING_RANDOM_SEED",
     "TRAINING_START_DATE",
     "TRAINING_STOP_DATE",
-	"Manual",
-	"TRAINING_PENGUINS",
-	"TRAINING_MANUAL_PENGUINS",
 	"TRAINING_PARAMETER_DELTA_FILENAME",
 	"TRAINING_RESULTS_FILENAME",
 	"TRAINING_LOG_FILENAME",

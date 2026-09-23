@@ -12,8 +12,9 @@ BUY_RSI = 30.0
 SELL_RSI = 70.0
 BB_PERIOD = 20
 BB_STDDEV = 2.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
+TREND_REVERSAL_THRESHOLD = 0.3
+TREND_NEGATIVE_THRESHOLD = 0.15
+TREND_ENTRY_THRESHOLD = 0.5
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -25,14 +26,15 @@ RVOL_THRESHOLD = 2.0
 
 
 @dataclass
-class Adv_SELL_ALLParams:
+class Puffin1Params:
     rsi_period: int = RSI_PERIOD
     buy_rsi: float = BUY_RSI
     sell_rsi: float = SELL_RSI
     bb_period: int = BB_PERIOD
     bb_stddev: float = BB_STDDEV
-    adx_period: int = ADX_PERIOD
-    adx_threshold: float = ADX_THRESHOLD
+    trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD
+    trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD
+    trend_entry_threshold: float = TREND_ENTRY_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -43,20 +45,21 @@ class Adv_SELL_ALLParams:
     rvol_threshold: float = RVOL_THRESHOLD
 
 
-class Adv_SELL_ALL(BasePenguin):
+class Puffin1(BasePenguin):
     LOOKBACK_BARS = 120
     TRAINABLE = True
 
     def __init__(
         self,
-        name: str = "Adv_SELL_ALL",
+        name: str = "Puffin1",
         rsi_period: int = RSI_PERIOD,
         buy_rsi: float = BUY_RSI,
         sell_rsi: float = SELL_RSI,
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
-        adx_period: int = ADX_PERIOD,
-        adx_threshold: float = ADX_THRESHOLD,
+        trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD,
+        trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD,
+        trend_entry_threshold: float = TREND_ENTRY_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -67,14 +70,17 @@ class Adv_SELL_ALL(BasePenguin):
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
         super().__init__(name)
-        self.params = Adv_SELL_ALLParams(
+        self._last_trade_bar: dict[str, int] = {}
+        self._decision_bar: dict[str, int] = {}
+        self.params = Puffin1Params(
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
             bb_period=bb_period,
             bb_stddev=bb_stddev,
-            adx_period=adx_period,
-            adx_threshold=adx_threshold,
+            trend_reversal_threshold=trend_reversal_threshold,
+            trend_negative_threshold=trend_negative_threshold,
+            trend_entry_threshold=trend_entry_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -99,7 +105,6 @@ class Adv_SELL_ALL(BasePenguin):
             60,
             self.params.rsi_period,
             self.params.bb_period,
-            self.params.adx_period,
             self.params.relative_strength_period,
             self.params.rvol_period,
         ) + 2
@@ -110,8 +115,6 @@ class Adv_SELL_ALL(BasePenguin):
         upper_band, middle_band, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        adx_value = self._adx_proxy(mid_prices, self.params.adx_period)
-        adx_slope = adx_value - self._adx_proxy(mid_prices[:-1], self.params.adx_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = self._trend_quality(mid_prices[:-2])
@@ -124,6 +127,8 @@ class Adv_SELL_ALL(BasePenguin):
         shares_owned = int(portfolio.get_position(symbol))
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
+        current_bar = self._decision_bar.get(symbol, 0) + 1
+        self._decision_bar[symbol] = current_bar
 
         if shares_owned > 0:
             is_profitable = avg_entry is not None and current_price > avg_entry
@@ -135,19 +140,23 @@ class Adv_SELL_ALL(BasePenguin):
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
                 and rsi > 60
-                and trend_score < 0.3
+                and trend_score < self.params.trend_reversal_threshold
             )
             upper_band_take_profit = (
                 current_price >= upper_band
                 and avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
-            adx_exit_trigger = upper_band_take_profit and (
-                (adx_slope < 0 and adx_value < self.params.adx_threshold)
-                or adx_value < self.params.adx_threshold * 0.85
+            trend_exit_trigger = upper_band_take_profit and (
+                (
+                    trend_score < previous_trend_score
+                    and trend_score < self.params.trend_reversal_threshold
+                )
+                or trend_score < self.params.trend_negative_threshold
             )
             overbought_breakdown_trigger = (
-                rsi >= self.params.sell_rsi and trend_score < 0.15
+                rsi >= self.params.sell_rsi
+                and trend_score < self.params.trend_negative_threshold
             )
             relative_strength_exit_trigger = (
                 is_profitable
@@ -166,28 +175,44 @@ class Adv_SELL_ALL(BasePenguin):
             if (
                 loss_trigger
                 or profit_reversal_trigger
-                or adx_exit_trigger
+                or trend_exit_trigger
                 or overbought_breakdown_trigger
                 or relative_strength_exit_trigger
                 or rvol_exit_trigger
             ):
+                self._last_trade_bar[symbol] = current_bar
                 return "SELL", shares_owned
-        else:
-            bb_buy_signal = (
-                current_price <= lower_band
-                and adx_value >= self.params.adx_threshold
-                and (adx_slope >= 0 or current_price <= middle_band)
-            )
-            rsi_buy_signal = rsi <= self.params.buy_rsi and adx_value >= self.params.adx_threshold
 
-            if bb_buy_signal or rsi_buy_signal:
-                strength = min(
-                    1.5,
-                    max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
-                )
-                qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
-                if qty > 0:
-                    return "BUY", qty
+        #### BUY ####
+        last_trade_bar = self._last_trade_bar.get(symbol)
+        if (
+            self.params.cooldown_bars > 0
+            and last_trade_bar is not None
+            and current_bar - last_trade_bar < self.params.cooldown_bars
+        ):
+            return "HOLD", 0
+
+        bb_buy_signal = (
+            current_price <= lower_band
+            and trend_score > self.params.trend_entry_threshold
+        )
+        rsi_buy_signal = (
+            rsi <= self.params.buy_rsi
+            and trend_score >= self.params.trend_entry_threshold
+        )
+
+        if bb_buy_signal or rsi_buy_signal:
+            strength = min(
+                1.5,
+                max(
+                    0.25,
+                    trend_score / max(self.params.trend_entry_threshold, 1e-6),
+                ),
+            )
+            qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
+            if qty > 0:
+                self._last_trade_bar[symbol] = current_bar
+                return "BUY", qty
 
         return "HOLD", 0
 
@@ -227,20 +252,3 @@ class Adv_SELL_ALL(BasePenguin):
         variance = sum((price - middle) ** 2 for price in recent) / period
         std_dev = variance ** 0.5
         return middle + num_std * std_dev, middle, middle - num_std * std_dev
-
-    def _adx_proxy(self, prices: List[float], period: int) -> float:
-        if len(prices) < period + 1:
-            return 0.0
-        directional_up = 0.0
-        directional_down = 0.0
-        true_range = 0.0
-        for index in range(len(prices) - period, len(prices)):
-            change = prices[index] - prices[index - 1]
-            true_range += abs(change)
-            if change > 0:
-                directional_up += change
-            elif change < 0:
-                directional_down -= change
-        if true_range <= 0:
-            return 0.0
-        return 100.0 * abs(directional_up - directional_down) / true_range

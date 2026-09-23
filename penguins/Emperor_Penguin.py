@@ -25,7 +25,7 @@ RVOL_THRESHOLD = 2.0
 
 
 @dataclass
-class Adv_SELL_ALLParams:
+class Emperor_PenguinParams:
     rsi_period: int = RSI_PERIOD
     buy_rsi: float = BUY_RSI
     sell_rsi: float = SELL_RSI
@@ -43,13 +43,13 @@ class Adv_SELL_ALLParams:
     rvol_threshold: float = RVOL_THRESHOLD
 
 
-class Adv_SELL_ALL(BasePenguin):
+class Emperor_Penguin(BasePenguin):
     LOOKBACK_BARS = 120
     TRAINABLE = True
 
     def __init__(
         self,
-        name: str = "Adv_SELL_ALL",
+        name: str = "Emperor_Penguin",
         rsi_period: int = RSI_PERIOD,
         buy_rsi: float = BUY_RSI,
         sell_rsi: float = SELL_RSI,
@@ -67,7 +67,9 @@ class Adv_SELL_ALL(BasePenguin):
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
         super().__init__(name)
-        self.params = Adv_SELL_ALLParams(
+        self._last_trade_bar: dict[str, int] = {}
+        self._decision_bar: dict[str, int] = {}
+        self.params = Emperor_PenguinParams(
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
@@ -124,6 +126,8 @@ class Adv_SELL_ALL(BasePenguin):
         shares_owned = int(portfolio.get_position(symbol))
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
+        current_bar = self._decision_bar.get(symbol, 0) + 1
+        self._decision_bar[symbol] = current_bar
 
         if shares_owned > 0:
             is_profitable = avg_entry is not None and current_price > avg_entry
@@ -171,23 +175,33 @@ class Adv_SELL_ALL(BasePenguin):
                 or relative_strength_exit_trigger
                 or rvol_exit_trigger
             ):
+                self._last_trade_bar[symbol] = current_bar
                 return "SELL", shares_owned
-        else:
-            bb_buy_signal = (
-                current_price <= lower_band
-                and adx_value >= self.params.adx_threshold
-                and (adx_slope >= 0 or current_price <= middle_band)
-            )
-            rsi_buy_signal = rsi <= self.params.buy_rsi and adx_value >= self.params.adx_threshold
 
-            if bb_buy_signal or rsi_buy_signal:
-                strength = min(
-                    1.5,
-                    max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
-                )
-                qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
-                if qty > 0:
-                    return "BUY", qty
+        #### BUY ####
+        last_trade_bar = self._last_trade_bar.get(symbol)
+        if (
+            self.params.cooldown_bars > 0
+            and last_trade_bar is not None
+            and current_bar - last_trade_bar < self.params.cooldown_bars
+        ):
+            return "HOLD", 0
+
+        bb_buy_signal = (
+            current_price <= lower_band
+            and trend_score > 0.5
+        )
+        rsi_buy_signal = rsi <= self.params.buy_rsi and adx_value >= self.params.adx_threshold
+
+        if bb_buy_signal or rsi_buy_signal:
+            strength = min(
+                1.5,
+                max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
+            )
+            qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
+            if qty > 0:
+                self._last_trade_bar[symbol] = current_bar
+                return "BUY", qty
 
         return "HOLD", 0
 

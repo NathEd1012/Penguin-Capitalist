@@ -14,7 +14,9 @@ PROJECT_DIR = Path(__file__).resolve().parents[1]
 if str(PROJECT_DIR) not in sys.path:
 	sys.path.insert(0, str(PROJECT_DIR))
 
-from config.parameter_search_con import strategy_parameter_space
+from config.parameter_search_con import (
+	strategy_parameter_space_by_name as configured_parameter_space_by_name,
+)
 
 
 RUN_LOG_NAME = ""
@@ -125,9 +127,7 @@ def plot_strategy(strategy: str, trials: list[dict[str, object]]) -> plt.Figure:
 
 def strategy_parameter_space_by_name(strategy: str):
 	"""Resolve a configured strategy name without importing strategy modules."""
-	Strategy = type(strategy, (), {})
-
-	return strategy_parameter_space(Strategy)
+	return configured_parameter_space_by_name(strategy)
 
 
 def main() -> None:

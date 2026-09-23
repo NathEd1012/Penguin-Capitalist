@@ -24,6 +24,11 @@ from penguins import (
     Adv_SELL_TP4,
     Adv_SELL_TP4_Manual,
     Adv_SELL_ALL,
+    Emperor_Penguin,
+    Puffin1,
+    Puffin2,
+    Puffin3,
+    Puffin4,
     ManualTuneAdvSELL_TP1,
     ManualTuneAdvSELL_TP1_Manual,
     ManualTuneAdvSELL_TP2,
@@ -61,6 +66,13 @@ ADV_SELL = [
     #Adv_SELL_TP4_Manual,
 ]
 
+PUFFINS = [
+    Puffin1,
+    Puffin2,
+    Puffin3,
+    Puffin4,
+]
+
 MANUAL_TUNE_ADV_SELL = [
     ManualTuneAdvSELL_TP1,
     ManualTuneAdvSELL_TP1_Manual,
@@ -77,6 +89,7 @@ ACTIVE_PENGUINS = [
     #*ADV_SELL,
     #*MANUAL_TUNE_ADV_SELL,
     Adv_SELL_ALL,
+    #*PUFFINS,
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
     #SP500x2,                            # Buy & hold 2x leveraged S&P 500 ETF (SSO)
     #SmartRSIConfluencePenguin,          # RSI + trend + momentum confluence strategy
@@ -88,11 +101,12 @@ _STRATEGY_GROUPS = {
     "OG_TP": OG_TP,
     "ADV_SELL": ADV_SELL,
     "MANUAL_TUNE_ADV_SELL": MANUAL_TUNE_ADV_SELL,
+    "PUFFINS": PUFFINS,
 }
 
 _STRATEGY_CLASSES = {
     strategy.__name__: strategy
-    for strategy in ACTIVE_PENGUINS
+    for strategy in (*ACTIVE_PENGUINS, Emperor_Penguin, *PUFFINS)
 }
 _STRATEGY_NAMES = {
     name.casefold(): name
@@ -138,5 +152,6 @@ __all__ = [
     "OG_TP",
     "ADV_SELL",
     "MANUAL_TUNE_ADV_SELL",
+    "PUFFINS",
     "ACTIVE_PENGUINS",
 ]

@@ -1,4 +1,5 @@
 """Parameter-search methods and ranges for trainable strategies."""
+import inspect
 import os
 
 PARAMETER_SEARCH_METHODx = "bayesian_grid"  # Select: random, grid, bayesian, bayesian_grid, or rand_baysian.
@@ -79,11 +80,25 @@ _RELATIVE_STRENGTH_PARAMETERS = (
     ("rvol_threshold", "float", 0.5, 6.0), #4.0->6.0
 )
 
+Trend_Method_parameters = (
+    ("trend_reversal_threshold", "float", 0.0, 1.0),
+    ("trend_negative_threshold", "float", 0.0, 1.0),
+    ("trend_entry_threshold", "float", 0.0, 1.0),
+)
+
 _STRENGTH_CAP_PARAMETERS = (("strength_cap", "float", 1.0, 2.0),)
 
 _RSI_ADX_PARAMETERS = _RSI_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
 _BOLLINGER_ADX_PARAMETERS = _BOLLINGER_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
 _RSI_RISK_PARAMETERS = _RSI_PARAMETERS + _RISK_PARAMETERS
+_PUFFIN_PARAMETERS = (
+    _RSI_PARAMETERS
+    + _BOLLINGER_PARAMETERS
+    + Trend_Method_parameters
+    + _ADX_PARAMETERS
+    + _RISK_PARAMETERS
+    + _RELATIVE_STRENGTH_PARAMETERS
+)
 _ADV_SELL_ALL_PARAMETERS = (
     _RSI_PARAMETERS
     + _BOLLINGER_PARAMETERS
@@ -93,10 +108,42 @@ _ADV_SELL_ALL_PARAMETERS = (
 )
 
 
+def _supported_parameters(strategy_class, parameter_space):
+    signature = inspect.signature(strategy_class)
+    if any(parameter.kind is inspect.Parameter.VAR_KEYWORD for parameter in signature.parameters.values()):
+        for parent_class in strategy_class.__mro__[1:]:
+            parent_signature = inspect.signature(parent_class)
+            if not any(
+                parameter.kind is inspect.Parameter.VAR_KEYWORD
+                for parameter in parent_signature.parameters.values()
+            ):
+                signature = parent_signature
+                break
+        else:
+            return parameter_space
+
+    accepted_parameters = set(signature.parameters)
+    return tuple(
+        parameter
+        for parameter in parameter_space
+        if parameter[0] in accepted_parameters
+    )
+
+
 def strategy_parameter_space(strategy_class):
     """Return the configured search space for a strategy class."""
     strategy_name = strategy_class.__name__
-    if strategy_name == "Adv_SELL_ALL":
+    parameter_space = strategy_parameter_space_by_name(strategy_name)
+    if parameter_space is _PUFFIN_PARAMETERS:
+        return _supported_parameters(strategy_class, parameter_space)
+    return parameter_space
+
+
+def strategy_parameter_space_by_name(strategy_name: str):
+    """Return the configured search space for a strategy name."""
+    if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
+        return _PUFFIN_PARAMETERS
+    if strategy_name in {"Adv_SELL_ALL", "Emperor_Penguin"}:
         return _ADV_SELL_ALL_PARAMETERS
     if strategy_name.endswith((
         "Adv_SELL_TP1", "Adv_SELL_TP1_Manual",
@@ -133,4 +180,5 @@ __all__ = [
     "PARAMETER_SEARCH_BAYESIAN_ACQUISITION",
     "PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA",
     "strategy_parameter_space",
+    "strategy_parameter_space_by_name",
 ]
