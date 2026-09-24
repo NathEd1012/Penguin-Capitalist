@@ -51,32 +51,32 @@ PARAMETERS_EXECUTED = max(1, int(os.getenv("PARAMETERS_EXECUTED", "1")))
 
 # Each entry is (parameter name, type, minimum, maximum).
 _RSI_PARAMETERS = (
-    ("rsi_period", "int", 7, 30), #28->30
-    ("buy_rsi", "float", 18.0, 42.0),
-    ("sell_rsi", "float", 55.0, 88.0),
+    ("rsi_period", "int", 7, 40), #28->40
+    ("buy_rsi", "float", 5.0, 42.0), #18->5.0
+    ("sell_rsi", "float", 45.0, 88.0), #55->45
 )
 
 _BOLLINGER_PARAMETERS = (
     ("bb_period", "int", 10, 50), #40->50
-    ("bb_stddev", "float", 1.0, 3.5),
+    ("bb_stddev", "float", 1.0, 5), #3.5->5.0
 )
 
 _ADX_PARAMETERS = (
-    ("adx_period", "int", 7, 28),
+    ("adx_period", "int", 7, 35), #28->35
     ("adx_threshold", "float", 10.0, 40.0),
 )
 
 _RISK_PARAMETERS = (
     ("max_cash_fraction", "float", 0.02, 0.25), #0.20->0.25
-    ("stop_loss_pct", "float", 0.01, 0.10),
-    ("take_profit_pct", "float", 0.02, 0.20),
+    ("stop_loss_pct", "float", 0.01, 0.15), #0.10->0.15
+    ("take_profit_pct", "float", 0.005, 0.20), #0.02->0.005
     ("cooldown_bars", "int", 0, 30),
 )
 
 _RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 7, 50), #40->50
-    ("relative_strength_threshold", "float", -1.5, 1.0), # -1.0->-1.5
-    ("rvol_period", "int", 7, 40),
+    ("relative_strength_period", "int", 7, 60), #40->60
+    ("relative_strength_threshold", "float", -3.0, 1.0), # -1.0->-3.0
+    ("rvol_period", "int", 3, 40), #7->3
     ("rvol_threshold", "float", 0.5, 6.0), #4.0->6.0
 )
 

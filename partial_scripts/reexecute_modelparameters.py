@@ -53,6 +53,19 @@ def _select_trials(all_trials: list, limit: int) -> list:
 	return selected
 
 
+def _select_trial(all_trials: list, model: str, parameter_number: int) -> list:
+	selected = [
+		(strategy, trial)
+		for strategy, trial in all_trials
+		if strategy == model and int(trial.get("trial", -1)) == parameter_number
+	]
+	if not selected:
+		raise ValueError(
+			f"No completed parameter trial {parameter_number} found for model {model!r}"
+		)
+	return selected
+
+
 def _strategy_instances(selected_trials: list) -> list:
 	instances = []
 	for strategy_name, trial in selected_trials:
@@ -78,14 +91,33 @@ def _strategy_instances(selected_trials: list) -> list:
 def main() -> None:
 	parser = argparse.ArgumentParser(description=__doc__)
 	parser.add_argument("--source-run", required=True, help="Existing run name or path containing the saved parameter log")
-	parser.add_argument("--output-run", required=True, help="Existing run name or path where ReReport.pdf will be saved")
+	parser.add_argument("--output-run", required=True, help="Existing run name or path where the rerun report will be saved")
+	parser.add_argument("--report-name", default="rerunPDF.pdf", help="PDF filename to add to the output run")
 	parser.add_argument("--start", required=True, help="Execution start datetime")
 	parser.add_argument("--stop", required=True, help="Execution stop datetime")
 	parser.add_argument("--transaction-cost", type=float, required=True)
-	parser.add_argument("--parameters-executed", type=int, required=True)
+	parser.add_argument(
+		"--parameters-executed",
+		type=int,
+		help="Run the top N parameter sets per strategy (legacy mode)",
+	)
+	parser.add_argument("--model", help="Run one exact model from the parameter log")
+	parser.add_argument(
+		"--parameter-number",
+		type=int,
+		help="Run one exact trial number for --model",
+	)
 	args = parser.parse_args()
-	if args.parameters_executed < 1:
+	if args.parameters_executed is not None and args.parameters_executed < 1:
 		raise ValueError("--parameters-executed must be at least 1")
+	if (args.model is None) != (args.parameter_number is None):
+		raise ValueError("--model and --parameter-number must be provided together")
+	if args.parameter_number is not None and args.parameter_number < 1:
+		raise ValueError("--parameter-number must be at least 1")
+	if args.parameters_executed is None and args.model is None:
+		raise ValueError(
+		"Provide --model and --parameter-number, or use --parameters-executed"
+	)
 
 	start = parse_datetime_string(args.start)
 	stop = parse_datetime_string(args.stop)
@@ -94,14 +126,41 @@ def main() -> None:
 
 	source_run = _resolve_run_dir(args.source_run)
 	output_run = _resolve_run_dir(args.output_run)
+	report_name = Path(args.report_name).name
+	if not report_name.lower().endswith(".pdf"):
+		report_name += ".pdf"
 	artifacts_dir = output_run / "artifacts"
 	artifacts_dir.mkdir(parents=True, exist_ok=True)
 	all_trials = _load_trials(source_run)
-	trials = _select_trials(all_trials, args.parameters_executed)
+	if args.model is not None:
+		trials = _select_trial(all_trials, args.model, args.parameter_number)
+	else:
+		trials = _select_trials(all_trials, args.parameters_executed)
 	strategies = _strategy_instances(trials)
 
+	print("\n" + "=" * 80)
+	print("RERUN CONFIGURATION")
+	print("=" * 80)
+	print(f"Source Run:                 {source_run}")
+	print(f"Output Run:                 {output_run}")
+	print(f"Report:                     {output_run / report_name}")
+	print(f"Available Completed Trials: {len(all_trials)}")
+	if args.model is not None:
+		print(f"Model:                      {args.model}")
+		print(f"Parameter Number:           {args.parameter_number}")
+	else:
+		print(f"Parameters Executed:        {args.parameters_executed} per strategy")
+	print(f"Selected Parameter Sets:    {len(trials)}")
+	print(f"Execution Start (UTC):      {start}")
+	print(f"Execution Stop (UTC):       {stop}")
+	print(f"Transaction Cost:            ${args.transaction_cost:.2f}")
+	print("Training Step Enabled:       false")
+	print("=" * 80)
 	print(f"Found {len(all_trials)} completed training iteration(s) in {source_run}")
-	print(f"Re-executing {len(trials)} parameter set(s) ({args.parameters_executed} per strategy)")
+	if args.model is not None:
+		print(f"Re-executing {args.model} parameter trial {args.parameter_number}")
+	else:
+		print(f"Re-executing {len(trials)} parameter set(s) ({args.parameters_executed} per strategy)")
 	print(f"Execution window: {start} to {stop}")
 	print(f"Execution transaction cost: ${args.transaction_cost:.2f}")
 	results, trades_by_bar, timestamps, _, _, quality_report = run_backtest(
@@ -122,6 +181,8 @@ def main() -> None:
 		json.dumps(
 			{
 				"source_run": str(source_run),
+				"model": args.model,
+				"parameter_number": args.parameter_number,
 				"parameters_executed": args.parameters_executed,
 				"available_completed_iterations": len(all_trials),
 				"selected_trials": [trial for _, trial in trials],
@@ -137,10 +198,10 @@ def main() -> None:
 	plot_path = artifacts_dir / "capital_curves.png"
 	Evaluator.plot_capital_curves(results, plot_path, num_bars, BINNING, args.start, args.stop, timestamps, ACTIVE_SYMBOL_LIST)
 	Evaluator.generate_pdf_report(
-		results, output_run / "ReReport.pdf", plot_path, num_bars, BINNING,
+		results, output_run / report_name, plot_path, num_bars, BINNING,
 		args.start, args.stop, timestamps, artifacts_dir, ACTIVE_SYMBOL_LIST,
 	)
-	print(f"Saved rerun report to {output_run / 'ReReport.pdf'}")
+	print(f"Saved rerun report to {output_run / report_name}")
 
 
 if __name__ == "__main__":

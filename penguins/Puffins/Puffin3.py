@@ -4,25 +4,25 @@ from typing import List
 
 from backtest.portfolio import Portfolio
 from indicators.market_context import relative_strength, relative_volume
-from .Puffin1 import (
-    BB_PERIOD,
-    BB_STDDEV,
-    BUY_RSI,
-    COOLDOWN_BARS,
-    MAX_CASH_FRACTION,
-    RELATIVE_STRENGTH_PERIOD,
-    RELATIVE_STRENGTH_THRESHOLD,
-    RSI_PERIOD,
-    SELL_RSI,
-    STOP_LOSS_PCT,
-    TAKE_PROFIT_PCT,
-    RVOL_PERIOD,
-    RVOL_THRESHOLD,
-)
-from .Puffin2 import ADX_PERIOD, ADX_THRESHOLD, Puffin2
+from penguins.base_penguin import BasePenguin
 
 
+RSI_PERIOD = 13
+BUY_RSI = 30.0
+SELL_RSI = 70.0
+BB_PERIOD = 20
+BB_STDDEV = 2.0
+ADX_PERIOD = 14
+ADX_THRESHOLD = 25.0
 TREND_NEGATIVE_THRESHOLD = 0.15
+MAX_CASH_FRACTION = 0.05
+STOP_LOSS_PCT = 0.04
+TAKE_PROFIT_PCT = 0.08
+COOLDOWN_BARS = 10
+RELATIVE_STRENGTH_PERIOD = 20
+RELATIVE_STRENGTH_THRESHOLD = 0.0
+RVOL_PERIOD = 20
+RVOL_THRESHOLD = 2.0
 
 
 @dataclass
@@ -45,7 +45,7 @@ class Puffin3Params:
     rvol_threshold: float = RVOL_THRESHOLD
 
 
-class Puffin3(Puffin2):
+class Puffin3(BasePenguin):
     def __init__(
         self,
         name: str = "Puffin3",
@@ -67,6 +67,7 @@ class Puffin3(Puffin2):
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
         super().__init__(name=name)
+        self._last_trade_bar: dict[str, int] = {}
         self._decision_bar: dict[str, int] = {}
         self.params = Puffin3Params(
             rsi_period=rsi_period,
@@ -196,3 +197,57 @@ class Puffin3(Puffin2):
                 return "BUY", qty
 
         return "HOLD", 0
+
+    def _rsi(self, prices: List[float], period: int) -> float:
+        gain_sum = 0.0
+        loss_sum = 0.0
+        for index in range(len(prices) - period, len(prices)):
+            delta = prices[index] - prices[index - 1]
+            if delta > 0:
+                gain_sum += delta
+            elif delta < 0:
+                loss_sum -= delta
+        if loss_sum == 0:
+            return 100.0
+        return 100 - (100 / (1 + gain_sum / loss_sum))
+
+    def _bollinger_bands(
+        self, prices: List[float], period: int, num_std: float
+    ) -> tuple[float, float, float]:
+        recent = prices[-period:]
+        middle = sum(recent) / period
+        variance = sum((price - middle) ** 2 for price in recent) / period
+        std_dev = variance ** 0.5
+        return middle + num_std * std_dev, middle, middle - num_std * std_dev
+
+    def _trend_quality(self, prices: List[float]) -> float:
+        sma_10 = sum(prices[-10:]) / 10
+        sma_30 = sum(prices[-30:]) / 30
+        sma_60 = sum(prices[-60:]) / 60
+        score = 0.0
+        if sma_10 > sma_30:
+            score += 0.35
+        if sma_30 > sma_60:
+            score += 0.35
+        if prices[-1] > sma_30:
+            score += 0.20
+        if prices[-1] > prices[-5]:
+            score += 0.10
+        return min(score, 1.0)
+
+    def _adx_proxy(self, prices: List[float], period: int) -> float:
+        if len(prices) < period + 1:
+            return 0.0
+        directional_up = 0.0
+        directional_down = 0.0
+        true_range = 0.0
+        for index in range(len(prices) - period, len(prices)):
+            change = prices[index] - prices[index - 1]
+            true_range += abs(change)
+            if change > 0:
+                directional_up += change
+            elif change < 0:
+                directional_down -= change
+        if true_range <= 0:
+            return 0.0
+        return 100.0 * abs(directional_up - directional_down) / true_range
