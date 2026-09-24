@@ -14,6 +14,9 @@ BB_PERIOD = 20
 BB_STDDEV = 2.0
 ADX_PERIOD = 14
 ADX_THRESHOLD = 25.0
+TREND_REVERSAL_THRESHOLD = 0.3
+TREND_NEGATIVE_THRESHOLD = 0.15
+TREND_ENTRY_THRESHOLD = 0.5
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -33,6 +36,9 @@ class Emperor_PenguinParams:
     bb_stddev: float = BB_STDDEV
     adx_period: int = ADX_PERIOD
     adx_threshold: float = ADX_THRESHOLD
+    trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD
+    trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD
+    trend_entry_threshold: float = TREND_ENTRY_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -57,6 +63,9 @@ class Emperor_Penguin(BasePenguin):
         bb_stddev: float = BB_STDDEV,
         adx_period: int = ADX_PERIOD,
         adx_threshold: float = ADX_THRESHOLD,
+        trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD,
+        trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD,
+        trend_entry_threshold: float = TREND_ENTRY_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -77,6 +86,9 @@ class Emperor_Penguin(BasePenguin):
             bb_stddev=bb_stddev,
             adx_period=adx_period,
             adx_threshold=adx_threshold,
+            trend_reversal_threshold=trend_reversal_threshold,
+            trend_negative_threshold=trend_negative_threshold,
+            trend_entry_threshold=trend_entry_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -130,7 +142,6 @@ class Emperor_Penguin(BasePenguin):
         self._decision_bar[symbol] = current_bar
 
         if shares_owned > 0:
-            is_profitable = avg_entry is not None and current_price > avg_entry
             loss_trigger = (
                 avg_entry is not None
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
@@ -139,7 +150,7 @@ class Emperor_Penguin(BasePenguin):
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
                 and rsi > 60
-                and trend_score < 0.3
+                and trend_score < self.params.trend_reversal_threshold
             )
             upper_band_take_profit = (
                 current_price >= upper_band
@@ -151,19 +162,18 @@ class Emperor_Penguin(BasePenguin):
                 or adx_value < self.params.adx_threshold * 0.85
             )
             overbought_breakdown_trigger = (
-                rsi >= self.params.sell_rsi and trend_score < 0.15
+                rsi >= self.params.sell_rsi
+                and trend_score < self.params.trend_negative_threshold
             )
             relative_strength_exit_trigger = (
-                is_profitable
-                and relative_strength_value < self.params.relative_strength_threshold
+                relative_strength_value < self.params.relative_strength_threshold
             )
-            negative_trend = trend_score < 0.15
+            negative_trend = trend_score < self.params.trend_negative_threshold
             falling_trend = (
                 trend_score < previous_trend_score < two_bars_ago_trend_score
             )
             rvol_exit_trigger = (
-                is_profitable
-                and rvol > self.params.rvol_threshold
+                rvol > self.params.rvol_threshold
                 and (negative_trend or falling_trend)
             )
 
@@ -189,14 +199,21 @@ class Emperor_Penguin(BasePenguin):
 
         bb_buy_signal = (
             current_price <= lower_band
-            and trend_score > 0.5
         )
-        rsi_buy_signal = rsi <= self.params.buy_rsi and adx_value >= self.params.adx_threshold
+        trend_strength_signal = (
+            adx_value >= self.params.adx_threshold
+            or trend_score >= self.params.trend_entry_threshold
+        )
+        rsi_buy_signal = rsi <= self.params.buy_rsi
 
-        if bb_buy_signal or rsi_buy_signal:
+        if trend_strength_signal and (bb_buy_signal or rsi_buy_signal):
+            adx_strength = adx_value / max(self.params.adx_threshold, 1e-6)
+            trend_strength = trend_score / max(
+                self.params.trend_entry_threshold, 1e-6
+            )
             strength = min(
                 1.5,
-                max(0.25, adx_value / max(self.params.adx_threshold, 1e-6)),
+                max(0.25, adx_strength, trend_strength),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:
