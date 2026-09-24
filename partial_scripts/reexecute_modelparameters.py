@@ -41,9 +41,11 @@ def _load_trials(source_run: Path) -> list:
 	]
 
 
-def _select_trials(all_trials: list, limit: int) -> list:
+def _select_trials(all_trials: list, limit: int, model: str | None = None) -> list:
 	trials_by_strategy = {}
 	for strategy, trial in all_trials:
+		if model is not None and strategy != model:
+			continue
 		trials_by_strategy.setdefault(strategy, []).append(trial)
 
 	selected = []
@@ -110,11 +112,13 @@ def main() -> None:
 	args = parser.parse_args()
 	if args.parameters_executed is not None and args.parameters_executed < 1:
 		raise ValueError("--parameters-executed must be at least 1")
-	if (args.model is None) != (args.parameter_number is None):
-		raise ValueError("--model and --parameter-number must be provided together")
+	if args.parameter_number is not None and args.model is None:
+		raise ValueError("--model is required when --parameter-number is provided")
 	if args.parameter_number is not None and args.parameter_number < 1:
 		raise ValueError("--parameter-number must be at least 1")
-	if args.parameters_executed is None and args.model is None:
+	if args.parameter_number is not None and args.parameters_executed is not None:
+		raise ValueError("Use either --parameter-number or --parameters-executed, not both")
+	if args.parameters_executed is None and args.parameter_number is None:
 		raise ValueError(
 		"Provide --model and --parameter-number, or use --parameters-executed"
 	)
@@ -133,7 +137,10 @@ def main() -> None:
 	artifacts_dir.mkdir(parents=True, exist_ok=True)
 	all_trials = _load_trials(source_run)
 	if args.model is not None:
-		trials = _select_trial(all_trials, args.model, args.parameter_number)
+		if args.parameter_number is not None:
+			trials = _select_trial(all_trials, args.model, args.parameter_number)
+		else:
+			trials = _select_trials(all_trials, args.parameters_executed, args.model)
 	else:
 		trials = _select_trials(all_trials, args.parameters_executed)
 	strategies = _strategy_instances(trials)
@@ -147,7 +154,10 @@ def main() -> None:
 	print(f"Available Completed Trials: {len(all_trials)}")
 	if args.model is not None:
 		print(f"Model:                      {args.model}")
-		print(f"Parameter Number:           {args.parameter_number}")
+		if args.parameter_number is not None:
+			print(f"Parameter Number:           {args.parameter_number}")
+		else:
+			print(f"Parameters Executed:        {args.parameters_executed}")
 	else:
 		print(f"Parameters Executed:        {args.parameters_executed} per strategy")
 	print(f"Selected Parameter Sets:    {len(trials)}")
