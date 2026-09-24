@@ -1,0 +1,62 @@
+{
+  "Emperor_Penguin": {
+    "total_return": -100000.41,
+    "return_pct": -100.0,
+    "max_drawdown": -100.0,
+    "sharpe_ratio": -0.2,
+    "total_trades": 123763,
+    "buy_trades": 77799,
+    "sell_trades": 45964,
+    "final_value": -0.41
+  },
+  "Adv_SELL_ALL": {
+    "total_return": -99999.83,
+    "return_pct": -100.0,
+    "max_drawdown": -100.0,
+    "sharpe_ratio": -0.27,
+    "total_trades": 113238,
+    "buy_trades": 56619,
+    "sell_trades": 56619,
+    "final_value": 0.17
+  },
+  "Puffin1": {
+    "total_return": 13176671.67,
+    "return_pct": 13176.67,
+    "max_drawdown": -7.26,
+    "sharpe_ratio": 0.62,
+    "total_trades": 64364,
+    "buy_trades": 32332,
+    "sell_trades": 32032,
+    "final_value": 13276671.67
+  },
+  "Puffin2": {
+    "total_return": -99997.79,
+    "return_pct": -100.0,
+    "max_drawdown": -100.0,
+    "sharpe_ratio": -0.45,
+    "total_trades": 105939,
+    "buy_trades": 60887,
+    "sell_trades": 45052,
+    "final_value": 2.21
+  },
+  "Puffin3": {
+    "total_return": -99997.42,
+    "return_pct": -100.0,
+    "max_drawdown": -100.0,
+    "sharpe_ratio": -0.47,
+    "total_trades": 104088,
+    "buy_trades": 62633,
+    "sell_trades": 41455,
+    "final_value": 2.58
+  },
+  "SP500": {
+    "total_return": 27109.24,
+    "return_pct": 27.11,
+    "max_drawdown": -21.23,
+    "sharpe_ratio": 0.03,
+    "total_trades": 2,
+    "buy_trades": 1,
+    "sell_trades": 1,
+    "final_value": 127109.24
+  }
+}
