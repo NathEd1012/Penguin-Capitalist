@@ -63,7 +63,7 @@ _BOLLINGER_PARAMETERS = (
 
 _ADX_PARAMETERS = (
     ("adx_period", "int", 7, 35), #28->35
-    ("adx_threshold", "float", 10.0, 40.0),
+    ("adx_threshold", "float", 10.0, 60.0), #40->60.0
 )
 
 _RISK_PARAMETERS = (
@@ -106,6 +106,10 @@ _ADV_SELL_ALL_PARAMETERS = (
     + _RISK_PARAMETERS
     + _RELATIVE_STRENGTH_PARAMETERS
 )
+_EMPEROR_PARAMETERS = (
+    _ADV_SELL_ALL_PARAMETERS
+    + Trend_Method_parameters
+)
 
 
 def _supported_parameters(strategy_class, parameter_space):
@@ -143,8 +147,10 @@ def strategy_parameter_space_by_name(strategy_name: str):
     """Return the configured search space for a strategy name."""
     if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
         return _PUFFIN_PARAMETERS
-    if strategy_name in {"Adv_SELL_ALL", "Emperor_Penguin"}:
+    if strategy_name == "Adv_SELL_ALL":
         return _ADV_SELL_ALL_PARAMETERS
+    if strategy_name == "Emperor_Penguin":
+        return _EMPEROR_PARAMETERS
     if strategy_name.endswith((
         "Adv_SELL_TP1", "Adv_SELL_TP1_Manual",
         "ManualTuneAdvSELL_TP1", "ManualTuneAdvSELL_TP1_Manual",

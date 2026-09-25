@@ -55,15 +55,17 @@ def _select_trials(all_trials: list, limit: int, model: str | None = None) -> li
 	return selected
 
 
-def _select_trial(all_trials: list, model: str, parameter_number: int) -> list:
+def _select_trial(all_trials: list, model: str | None, parameter_number: int) -> list:
 	selected = [
 		(strategy, trial)
 		for strategy, trial in all_trials
-		if strategy == model and int(trial.get("trial", -1)) == parameter_number
+		if (model is None or strategy == model)
+		and int(trial.get("trial", -1)) == parameter_number
 	]
 	if not selected:
+		model_description = f" for model {model!r}" if model is not None else ""
 		raise ValueError(
-			f"No completed parameter trial {parameter_number} found for model {model!r}"
+			f"No completed parameter trial {parameter_number} found{model_description}"
 		)
 	return selected
 
@@ -112,8 +114,6 @@ def main() -> None:
 	args = parser.parse_args()
 	if args.parameters_executed is not None and args.parameters_executed < 1:
 		raise ValueError("--parameters-executed must be at least 1")
-	if args.parameter_number is not None and args.model is None:
-		raise ValueError("--model is required when --parameter-number is provided")
 	if args.parameter_number is not None and args.parameter_number < 1:
 		raise ValueError("--parameter-number must be at least 1")
 	if args.parameter_number is not None and args.parameters_executed is not None:
@@ -141,6 +141,8 @@ def main() -> None:
 			trials = _select_trial(all_trials, args.model, args.parameter_number)
 		else:
 			trials = _select_trials(all_trials, args.parameters_executed, args.model)
+	elif args.parameter_number is not None:
+		trials = _select_trial(all_trials, None, args.parameter_number)
 	else:
 		trials = _select_trials(all_trials, args.parameters_executed)
 	strategies = _strategy_instances(trials)
@@ -159,7 +161,10 @@ def main() -> None:
 		else:
 			print(f"Parameters Executed:        {args.parameters_executed}")
 	else:
-		print(f"Parameters Executed:        {args.parameters_executed} per strategy")
+		if args.parameter_number is not None:
+			print(f"Parameter Number:           {args.parameter_number} for all models")
+		else:
+			print(f"Parameters Executed:        {args.parameters_executed} per strategy")
 	print(f"Selected Parameter Sets:    {len(trials)}")
 	print(f"Execution Start (UTC):      {start}")
 	print(f"Execution Stop (UTC):       {stop}")
@@ -169,6 +174,8 @@ def main() -> None:
 	print(f"Found {len(all_trials)} completed training iteration(s) in {source_run}")
 	if args.model is not None:
 		print(f"Re-executing {args.model} parameter trial {args.parameter_number}")
+	elif args.parameter_number is not None:
+		print(f"Re-executing parameter trial {args.parameter_number} for all models")
 	else:
 		print(f"Re-executing {len(trials)} parameter set(s) ({args.parameters_executed} per strategy)")
 	print(f"Execution window: {start} to {stop}")
