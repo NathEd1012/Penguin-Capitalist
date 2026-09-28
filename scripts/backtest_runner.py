@@ -280,6 +280,7 @@ def run_backtest(
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
     trade_bar_idx = -1
+    pending_orders = defaultdict(list)
 
     for bar_idx, timestamp in percent_progress(sorted_timestamps, desc="Executing bars"):
         # Get current prices
@@ -337,6 +338,25 @@ def run_backtest(
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
 
+            # Orders are decided on the previous bar and executed at this bar's quote.
+            for order_symbol, action, quantity in pending_orders.pop(penguin_name, []):
+                if order_symbol not in quotes or quantity <= 0:
+                    continue
+
+                bid, ask = quotes[order_symbol]
+                if action == "BUY":
+                    if order_symbol == "SPY" and ask > 0 and portfolio.max_leverage <= 1.0:
+                        quantity = int(max(portfolio.cash - portfolio.transaction_cost, 0) // ask)
+                    if portfolio.buy(order_symbol, quantity, ask, timestamp):
+                        trades_by_bar[trade_bar_idx].append(
+                            f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
+                        )
+                elif action == "SELL":
+                    if portfolio.sell(order_symbol, quantity, bid, timestamp):
+                        trades_by_bar[trade_bar_idx].append(
+                            f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
+                        )
+
             if hasattr(penguin, "set_current_timestamp"):
                 penguin.set_current_timestamp(timestamp)
 
@@ -345,21 +365,7 @@ def run_backtest(
 
             if hasattr(penguin, "decide_batch"):
                 batch_orders = penguin.decide_batch(symbols, quotes, portfolio)
-                for order_symbol, action, quantity in batch_orders:
-                    if order_symbol not in quotes or quantity <= 0:
-                        continue
-
-                    bid, ask = quotes[order_symbol]
-                    if action == "BUY":
-                        if portfolio.buy(order_symbol, quantity, ask, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
-                            )
-                    elif action == "SELL":
-                        if portfolio.sell(order_symbol, quantity, bid, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
-                            )
+                pending_orders[penguin_name].extend(batch_orders)
 
                 value = portfolio.get_total_value(current_prices)
                 portfolio.add_value_snapshot(value)
@@ -409,23 +415,8 @@ def run_backtest(
                         volumes=volumes_window,
                     )
 
-                    # For non-leveraged SPY strategies, cap quantity to cash affordability.
-                    if action == "BUY" and symbol == "SPY" and ask > 0 and portfolio.max_leverage <= 1.0:
-                        max_affordable_qty = int(
-                            max(portfolio.cash - portfolio.transaction_cost, 0) // ask
-                        )
-                        quantity = max_affordable_qty
-
-                    if action == "BUY" and quantity > 0:
-                        if portfolio.buy(symbol, quantity, ask, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: BUY {quantity} {symbol} @ ${ask:.2f}"
-                            )
-                    elif action == "SELL" and quantity > 0:
-                        if portfolio.sell(symbol, quantity, bid, timestamp):
-                            trades_by_bar[trade_bar_idx].append(
-                                f"  {penguin_name}: SELL {quantity} {symbol} @ ${bid:.2f}"
-                            )
+                    if action in {"BUY", "SELL"} and quantity > 0:
+                        pending_orders[penguin_name].append((symbol, action, quantity))
 
                 except Exception:
                     # Silently skip errors to continue backtest

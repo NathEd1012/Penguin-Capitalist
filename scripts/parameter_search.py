@@ -94,6 +94,8 @@ def _optuna_sampler(seed: int):
 
     if PARAMETER_SEARCH_BAYESIAN_SAMPLER == "tpe":
         return optuna.samplers.TPESampler(seed=seed, n_startup_trials=0)
+    if PARAMETER_SEARCH_BAYESIAN_SAMPLER == "cmaes":
+        return optuna.samplers.CmaEsSampler(seed=seed, n_startup_trials=0)
     if PARAMETER_SEARCH_BAYESIAN_ACQUISITION == "ucb":
         return _UCBGPSampler(seed)
     if not hasattr(optuna.samplers, "GPSampler"):

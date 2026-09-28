@@ -18,11 +18,14 @@ _configured_bayesian_sampler = os.getenv(
 PARAMETER_SEARCH_BAYESIAN_SAMPLER = {
     "gaussian": "gp",
     "gaussian_process": "gp",
+    "cma": "cmaes",
+    "cma_es": "cmaes",
+    "cma-es": "cmaes",
 }.get(_configured_bayesian_sampler, _configured_bayesian_sampler)
-if PARAMETER_SEARCH_BAYESIAN_SAMPLER not in {"gp", "tpe"}:
+if PARAMETER_SEARCH_BAYESIAN_SAMPLER not in {"gp", "tpe", "cmaes"}:
     raise ValueError(
         "Unsupported PARAMETER_SEARCH_BAYESIAN_SAMPLER: "
-        f"{PARAMETER_SEARCH_BAYESIAN_SAMPLER}. Select 'gp' or 'tpe'."
+        f"{PARAMETER_SEARCH_BAYESIAN_SAMPLER}. Select 'gp', 'tpe', or 'cmaes'."
     )
 
 PARAMETER_SEARCH_BAYESIAN_ACQUISITIONx = "ei"
@@ -73,6 +76,10 @@ _RISK_PARAMETERS = (
     ("cooldown_bars", "int", 0, 30),
 )
 
+_SIMPLER_RISK_PARAMETERS = tuple(
+    parameter for parameter in _RISK_PARAMETERS if parameter[0] != "cooldown_bars"
+)
+
 _RELATIVE_STRENGTH_PARAMETERS = (
     ("relative_strength_period", "int", 7, 60), #40->60
     ("relative_strength_threshold", "float", -3.0, 1.0), # -1.0->-3.0
@@ -90,6 +97,12 @@ _STRENGTH_CAP_PARAMETERS = (("strength_cap", "float", 1.0, 2.0),)
 
 _RSI_ADX_PARAMETERS = _RSI_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
 _BOLLINGER_ADX_PARAMETERS = _BOLLINGER_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
+_SIMPLER_PARAMETERS = (
+    _BOLLINGER_PARAMETERS
+    + _ADX_PARAMETERS
+    + _SIMPLER_RISK_PARAMETERS
+    + _RELATIVE_STRENGTH_PARAMETERS
+)
 _RSI_RISK_PARAMETERS = _RSI_PARAMETERS + _RISK_PARAMETERS
 _PUFFIN_PARAMETERS = (
     _RSI_PARAMETERS
@@ -138,13 +151,13 @@ def strategy_parameter_space(strategy_class):
     """Return the configured search space for a strategy class."""
     strategy_name = strategy_class.__name__
     parameter_space = strategy_parameter_space_by_name(strategy_name)
-    if parameter_space is _PUFFIN_PARAMETERS:
-        return _supported_parameters(strategy_class, parameter_space)
-    return parameter_space
+    return _supported_parameters(strategy_class, parameter_space)
 
 
 def strategy_parameter_space_by_name(strategy_name: str):
     """Return the configured search space for a strategy name."""
+    if strategy_name == "Simpler_Penguin":
+        return _SIMPLER_PARAMETERS
     if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
         return _PUFFIN_PARAMETERS
     if strategy_name == "Adv_SELL_ALL":

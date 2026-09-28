@@ -171,6 +171,11 @@ INITIAL_CAPITAL = 100000.0
 EXEC_TRANSACTION_COSTx = 1.0
 EXEC_TRANSACTION_COST = _parse_config_float(os.getenv("FIXED_EXEC_TC", EXEC_TRANSACTION_COSTx), "FIXED_EXEC_TC")
 
+# Decision execution offset: 0 = same bar, 1 = next bar, 2 = two bars later.
+T_PLUS_X = int(os.getenv("T_Plus_x", "1"))
+if T_PLUS_X < 0:
+    raise ValueError("T_Plus_x must be a nonnegative integer")
+
 
 __all__ = [
     "START_DATE",
@@ -180,5 +185,6 @@ __all__ = [
     "SAVE_CSV",
     "INITIAL_CAPITAL",
     "EXEC_TRANSACTION_COST",
+    "T_PLUS_X",
     "get_run_output_dir",
 ]

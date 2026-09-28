@@ -25,6 +25,7 @@ from penguins import (
     Adv_SELL_TP4_Manual,
     Adv_SELL_ALL,
     Emperor_Penguin,
+    Simpler_Penguin,
     Puffin1,
     Puffin2,
     Puffin3,
@@ -88,6 +89,7 @@ ACTIVE_PENGUINS = [
     #*OG_TP,
     #*ADV_SELL,
     #*MANUAL_TUNE_ADV_SELL,
+    Simpler_Penguin,
     Adv_SELL_ALL,
     #*PUFFINS,
     SP500,                              # Buy & hold S&P 500 ETF benchmark (SPY)
@@ -113,6 +115,7 @@ _STRATEGY_CLASSES = {
         *MANUAL_TUNE_ADV_SELL,
         *PUFFINS,
         Emperor_Penguin,
+        Simpler_Penguin,
     )
 }
 _STRATEGY_NAMES = {

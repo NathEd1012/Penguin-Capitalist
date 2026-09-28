@@ -40,6 +40,7 @@ from config import (
     START_DATE,
     STOP_DATE,
     BINNING,
+    T_PLUS_X,
     ACTIVE_PENGUINS,
     RUN_LOG_NAME,
     SAVE_CSV,
@@ -141,6 +142,7 @@ def _format_runtime_configuration_banner(
     parameter_search_warmup_trials,
     training_start_datetime_utc,
     training_end_datetime_utc,
+    t_plus_x=T_PLUS_X,
     parameter_search_bayesian_sampler="gp",
     parameter_search_bayesian_acquisition="ei",
     parameter_search_bayesian_ucb_kappa=2.0,
@@ -170,6 +172,7 @@ def _format_runtime_configuration_banner(
         f"Training Steps:        {training_iterations}",
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
+        f"T_plus_x (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
         f"Parameter Search:      {parameter_search_method}",
         f"Bayesian Sampler:      {parameter_search_bayesian_sampler}",
@@ -211,6 +214,7 @@ def run_backtest(
     artifacts_dir: Path | None = None,
     training_step_allowed: bool = True,
     collect_trade_details: bool = True,
+    t_plus_x: int = T_PLUS_X,
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
@@ -234,6 +238,9 @@ def run_backtest(
     Returns:
         Dict[penguin_name] = (portfolio, metrics)
     """
+
+    if t_plus_x < 0:
+        raise ValueError("t_plus_x must be a nonnegative integer")
     
     # Ensure both datetimes are UTC
     if start_datetime.tzinfo is None:
@@ -303,6 +310,7 @@ def run_backtest(
         parameter_search_bayesian_ucb_kappa=PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
         training_start_datetime_utc=TRAINING_START_DATE,
         training_end_datetime_utc=TRAINING_STOP_DATE,
+        t_plus_x=t_plus_x,
     ))
     
     # Load data
@@ -430,6 +438,7 @@ def run_backtest(
                 binning=binning,
                 initial_capital=initial_capital,
                 artifacts_dir=training_artifacts_dir,
+                t_plus_x=t_plus_x,
             )
 
             for penguin_name, penguin in list(penguins.items()):
@@ -440,7 +449,12 @@ def run_backtest(
                         {"params": training_result.get("best_params", {})}
                     ]
                     for rank, candidate in enumerate(top_candidates[:PARAMETERS_EXECUTED], start=1):
-                        variant_name = penguin_name if rank == 1 else f"{penguin_name}_Top{rank:03d}"
+                        training_step = int(candidate.get("trial", rank))
+                        variant_name = (
+                            penguin_name
+                            if rank == 1
+                            else f"{penguin_name}_put_{training_step:03d}"
+                        )
                         variant = _replace_trainable_penguin_params(
                             penguin,
                             candidate.get("params", {}),
@@ -472,6 +486,28 @@ def run_backtest(
     # Track trades by bar for detailed logging
     trades_by_bar = defaultdict(list)
     trade_bar_idx = -1
+    pending_orders = defaultdict(list)
+
+    def execute_orders(penguin_name, orders, quotes, portfolio, timestamp):
+        for order_symbol, action, quantity in orders:
+            if order_symbol not in quotes or quantity <= 0:
+                continue
+
+            bid, ask = quotes[order_symbol]
+            if action == "BUY":
+                if order_symbol == "SPY" and ask > 0 and portfolio.max_leverage <= 1.0:
+                    quantity = int(max(portfolio.cash - portfolio.transaction_cost, 0) // ask)
+                if portfolio.buy(order_symbol, quantity, ask, timestamp):
+                    if collect_trade_details:
+                        trades_by_bar[trade_bar_idx].append(
+                            f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
+                        )
+            elif action == "SELL":
+                if portfolio.sell(order_symbol, quantity, bid, timestamp):
+                    if collect_trade_details:
+                        trades_by_bar[trade_bar_idx].append(
+                            f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
+                        )
     
     for bar_idx, timestamp in percent_progress(sorted_timestamps, desc="Executing bars"):
         # Get current prices
@@ -528,6 +564,15 @@ def run_backtest(
 
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
+
+            # Orders are decided on bar t and executed at the configured later bar.
+            execute_orders(
+                penguin_name,
+                pending_orders.pop((penguin_name, trade_bar_idx), []),
+                quotes,
+                portfolio,
+                timestamp,
+            )
             
             if hasattr(penguin, "set_current_timestamp"):
                 penguin.set_current_timestamp(timestamp)
@@ -551,23 +596,15 @@ def run_backtest(
                 ready_quotes = {symbol: quotes[symbol] for symbol in ready_symbols}
 
                 batch_orders = penguin.decide_batch(ready_symbols, ready_quotes, portfolio)
-                for order_symbol, action, quantity in batch_orders:
-                    if order_symbol not in ready_quotes or quantity <= 0:
-                        continue
-
-                    bid, ask = ready_quotes[order_symbol]
-                    if action == "BUY":
-                        if portfolio.buy(order_symbol, quantity, ask, timestamp):
-                            if collect_trade_details:
-                                trades_by_bar[trade_bar_idx].append(
-                                    f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
-                                )
-                    elif action == "SELL":
-                        if portfolio.sell(order_symbol, quantity, bid, timestamp):
-                            if collect_trade_details:
-                                trades_by_bar[trade_bar_idx].append(
-                                    f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
-                                )
+                pending_orders[(penguin_name, trade_bar_idx + t_plus_x)].extend(batch_orders)
+                if t_plus_x == 0:
+                    execute_orders(
+                        penguin_name,
+                        pending_orders.pop((penguin_name, trade_bar_idx), []),
+                        quotes,
+                        portfolio,
+                        timestamp,
+                    )
 
                 value = portfolio.get_total_value(current_prices)
                 portfolio.add_value_snapshot(value)
@@ -602,18 +639,18 @@ def run_backtest(
                         volumes=volumes_window,
                     )
                     
-                    if action == "BUY" and quantity > 0:
-                        if portfolio.buy(symbol, quantity, ask, timestamp):
-                            if collect_trade_details:
-                                trades_by_bar[trade_bar_idx].append(
-                                    f"  {penguin_name}: BUY {quantity} {symbol} @ ${ask:.2f}"
-                                )
-                    elif action == "SELL" and quantity > 0:
-                        if portfolio.sell(symbol, quantity, bid, timestamp):
-                            if collect_trade_details:
-                                trades_by_bar[trade_bar_idx].append(
-                                    f"  {penguin_name}: SELL {quantity} {symbol} @ ${bid:.2f}"
-                                )
+                    if action in {"BUY", "SELL"} and quantity > 0:
+                        pending_orders[(penguin_name, trade_bar_idx + t_plus_x)].append(
+                            (symbol, action, quantity)
+                        )
+                        if t_plus_x == 0:
+                            execute_orders(
+                                penguin_name,
+                                pending_orders.pop((penguin_name, trade_bar_idx), []),
+                                quotes,
+                                portfolio,
+                                timestamp,
+                            )
                 
                 except Exception as e:
                     # Silently skip errors to continue backtest

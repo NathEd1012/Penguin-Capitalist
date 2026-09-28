@@ -31,6 +31,7 @@ from config import (
     TRAINING_SUBSET_MONTHS,
     TRAINING_SUBSET_STOCKS,
     TRAINING_TRANSACTION_COST,
+    T_PLUS_X,
     TRAINING_RANDOM_SEED,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
@@ -65,6 +66,7 @@ def _print_training_configuration() -> None:
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    print(f"T_plus_x (bars):   {T_PLUS_X}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print("=" * 80)
 
@@ -285,6 +287,7 @@ def _train_trainable_penguins(
     binning,
     initial_capital,
     transaction_cost,
+    t_plus_x,
 ):
     rng = random.Random(TRAINING_RANDOM_SEED)
     np_rng = np.random.default_rng(TRAINING_RANDOM_SEED)
@@ -303,6 +306,7 @@ def _train_trainable_penguins(
     log_lines.append(f"  Training Steps:    {TRAINING_ITERATIONS}")
     log_lines.append(f"  Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     log_lines.append(f"  Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    log_lines.append(f"  T_plus_x (bars):   {T_PLUS_X}")
     log_lines.append(f"  Training Seed:     {TRAINING_RANDOM_SEED}")
     log_lines.append("=" * 80)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
@@ -377,6 +381,7 @@ def _train_trainable_penguins(
                     penguin_classes=[candidate, SP500],
                     training_step_allowed=False,
                     collect_trade_details=False,
+                    t_plus_x=t_plus_x,
                 )
 
             candidate_metrics = results[candidate.name][1]
@@ -503,6 +508,7 @@ def run_training_step(
     binning,
     initial_capital,
     artifacts_dir: Path | None = None,
+    t_plus_x: int = T_PLUS_X,
 ):
     if not trainable_strategy_classes:
         print("No trainable penguins are configured.")
@@ -520,6 +526,7 @@ def run_training_step(
         binning=binning,
         initial_capital=initial_capital,
         transaction_cost=TRAINING_TRANSACTION_COST,
+        t_plus_x=t_plus_x,
     )
     training_end = datetime.now(timezone.utc)
     training_elapsed = training_end - training_start
@@ -547,6 +554,7 @@ def run_training_step(
                 "relative_to": TRAINING_RELATIVE_TO,
                 "benchmark_symbol": benchmark_symbol,
                 "training_transaction_cost": TRAINING_TRANSACTION_COST,
+                "t_plus_x": t_plus_x,
                 "trainable_strategies": trained_parameters,
             },
             handle,

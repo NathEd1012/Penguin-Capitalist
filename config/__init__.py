@@ -30,6 +30,7 @@ from config.backtest import (
     get_run_output_dir,
     INITIAL_CAPITAL,
     EXEC_TRANSACTION_COST,
+    T_PLUS_X,
 )
 
 # ========== STRATEGY CONFIGURATION ==========
@@ -77,6 +78,7 @@ __all__ = [
     "SYMBOL_LISTS",         # Mapping of selectable lists
     "INITIAL_CAPITAL",      # Starting capital (USD)
     "EXEC_TRANSACTION_COST", # Execution cost per trade (USD)
+    "T_PLUS_X",             # Decision execution offset in bars
     "TRAINING_TRANSACTION_COST", # Training penalty cost per buy (USD)
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime

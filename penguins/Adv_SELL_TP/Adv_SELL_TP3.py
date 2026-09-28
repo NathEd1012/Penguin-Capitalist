@@ -16,7 +16,6 @@ ADX_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
-COOLDOWN_BARS = 10
 RELATIVE_STRENGTH_PERIOD = 20
 RELATIVE_STRENGTH_THRESHOLD = 0.0
 RVOL_PERIOD = 20
@@ -32,7 +31,6 @@ class Adv_SELL_TP3Params:
 	max_cash_fraction: float = MAX_CASH_FRACTION
 	stop_loss_pct: float = STOP_LOSS_PCT
 	take_profit_pct: float = TAKE_PROFIT_PCT
-	cooldown_bars: int = COOLDOWN_BARS
 	relative_strength_period: int = RELATIVE_STRENGTH_PERIOD
 	relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
 	rvol_period: int = RVOL_PERIOD
@@ -53,7 +51,6 @@ class Adv_SELL_TP3(BasePenguin):
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
-		cooldown_bars: int = COOLDOWN_BARS,
 		relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
 		relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
 		rvol_period: int = RVOL_PERIOD,
@@ -68,7 +65,6 @@ class Adv_SELL_TP3(BasePenguin):
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
-			cooldown_bars=cooldown_bars,
 			relative_strength_period=relative_strength_period,
 			relative_strength_threshold=relative_strength_threshold,
 			rvol_period=rvol_period,
@@ -189,7 +185,6 @@ class Adv_SELL_TP3_Manual(Adv_SELL_TP3):
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
-		cooldown_bars: int = COOLDOWN_BARS,
 	):
 		super().__init__(
 			name=name,
@@ -200,5 +195,4 @@ class Adv_SELL_TP3_Manual(Adv_SELL_TP3):
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
-			cooldown_bars=cooldown_bars,
 		)
