@@ -505,7 +505,7 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
     - For spans 60-365 days: Show ticks every month, format "Mon" or "Mon YYYY" for January
     - For spans > 365 days: Show ticks every 3 months, format "Mon" or "Mon YYYY" for January
     """
-    if not bar_timestamps:
+    if bar_timestamps is None or len(bar_timestamps) == 0:
         interval = max(1, num_bars // 10)
         x_ticks = list(range(1, num_bars + 1, interval))
         if num_bars > 0 and x_ticks[-1] != num_bars:
@@ -600,10 +600,25 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
 
 def _curve_x_values(bar_timestamps, value_count):
     """Return calendar-spaced x-values when timestamps are available."""
-    if bar_timestamps:
+    if bar_timestamps is not None and len(bar_timestamps) > 0:
         timestamp_count = min(value_count, len(bar_timestamps))
         return mdates.date2num(bar_timestamps[:timestamp_count])
     return range(1, value_count + 1)
+
+
+def _axis_x_limits(bar_timestamps, value_count):
+    """Return x-limits that match the plotted coordinate system."""
+    if bar_timestamps is not None and len(bar_timestamps) > 0 and value_count > 0:
+        x_values = _curve_x_values(bar_timestamps, value_count)
+        if len(x_values) > 0:
+            min_x = min(x_values)
+            max_x = max(x_values)
+            span = max_x - min_x
+            pad = span * 0.05 if span > 0 else 1.0
+            return min_x - pad, max_x + (2 * pad)
+    if value_count > 0:
+        return 0, value_count * 1.15
+    return 0, 1
 
 
 def _build_timespan_text(start_date_str=None, stop_date_str=None, bar_timestamps=None, num_bars=None):
@@ -611,7 +626,7 @@ def _build_timespan_text(start_date_str=None, stop_date_str=None, bar_timestamps
     def _fmt_dt(dt: datetime) -> str:
         return dt.strftime("%y-%m-%d")
 
-    if bar_timestamps:
+    if bar_timestamps is not None and len(bar_timestamps) > 0:
         total_bars = min(num_bars, len(bar_timestamps)) if num_bars else len(bar_timestamps)
         if total_bars > 0:
             start_dt = bar_timestamps[0]
@@ -658,7 +673,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     x_labels = []
     x_label_text = "Time"
     
-    if bar_timestamps:
+    if bar_timestamps is not None and len(bar_timestamps) > 0:
         x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
         x_label_text = "Date / Time"
     elif start_date_str and stop_date_str:
@@ -799,11 +814,13 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     for name in sorted(curves.keys(), key=_strategy_group_key):
         vals = curves[name]
         if vals:
-            final_x = _curve_x_values(bar_timestamps, len(vals))[-1]
+            x_values = _curve_x_values(bar_timestamps, len(vals))
+            x_span = max(x_values) - min(x_values)
+            final_x = x_values[-1] + (x_span * 0.05 if x_span > 0 else 1.0)
             final_y = vals[-1]
             color = line_colors.get(name, "black")
             display_name = _display_strategy_name(name)
-            plt.text(final_x + 50, final_y, f" {display_name}", fontsize=8, va="center", 
+            plt.text(final_x, final_y, f" {display_name}", fontsize=8, va="center", 
                     bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3, edgecolor="none"))
 
     plt.axhline(
@@ -823,8 +840,10 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     plt.title(title)
     plt.legend(loc='best', fontsize=9)
     plt.grid(True, alpha=0.3)
-    # Extend x-axis to accommodate right-side labels
-    plt.xlim(left=0, right=len(next(iter(curves.values()), [])) * 1.15)
+    if curves:
+        max_len = max(len(vals) for vals in curves.values())
+        x_left, x_right = _axis_x_limits(bar_timestamps, max_len)
+        plt.xlim(left=x_left, right=x_right)
     plt.tight_layout()
     plt.savefig(filename, dpi=120, bbox_inches="tight")
     print(f"📈 Saved capital curves plot to {filename}")
@@ -867,7 +886,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
     x_labels = []
     x_label_text = "Time"
     
-    if bar_timestamps:
+    if bar_timestamps is not None and len(bar_timestamps) > 0:
         x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
         x_label_text = "Date / Time"
     elif start_date_str and stop_date_str:
@@ -987,11 +1006,13 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         for name in sorted(curves.keys(), key=_strategy_group_key):
             vals = curves[name]
             if vals:
-                final_x = len(vals)
+                x_values = _curve_x_values(bar_timestamps, len(vals))
+                x_span = max(x_values) - min(x_values)
+                final_x = x_values[-1] + (x_span * 0.05 if x_span > 0 else 1.0)
                 final_y = vals[-1]
                 color = line_colors.get(name, "black")
                 display_name = _display_strategy_name(name)
-                ax.text(final_x + 50, final_y, f" {display_name}", fontsize=8, va="center", 
+                ax.text(final_x, final_y, f" {display_name}", fontsize=8, va="center", 
                        bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.3, edgecolor="none"))
 
         ax.axhline(
@@ -1013,12 +1034,12 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         ax.set_title(page1_title)
         ax.legend(fontsize=9, loc='best')
         ax.grid(True, alpha=0.3)
-        # Extend x-axis to accommodate right-side labels
         if curves:
             max_len = max(len(vals) for vals in curves.values())
-            ax.set_xlim(left=0, right=max_len * 1.15)
+            x_left, x_right = _axis_x_limits(bar_timestamps, max_len)
+            ax.set_xlim(left=x_left, right=x_right)
 
-        plt.tight_layout()
+        fig.subplots_adjust(left=0.09, right=0.91, bottom=0.2, top=0.9)
         pdf.savefig(fig, bbox_inches="tight")
         plt.close()
 
@@ -1125,9 +1146,10 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             for item in page_items:
                 penguin_name = item["name"]
                 vals = curves[penguin_name]
+                x_values = _curve_x_values(bar_timestamps, len(vals))
                 color = line_colors.get(penguin_name, None)
                 line = ax.plot(
-                    range(1, len(vals) + 1),
+                    x_values,
                     vals,
                     label=item["display_name"],
                     linewidth=2,
@@ -1137,11 +1159,12 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 )
 
                 if vals:
-                    final_x = len(vals)
+                    final_x = x_values[-1]
                     final_y = vals[-1]
+                    x_offset = max((x_values[-1] - x_values[0]) * 0.02, 1.0) if len(x_values) > 1 else 1.0
                     actual_color = line[0].get_color()
                     ax.text(
-                        final_x + 50,
+                        final_x + x_offset,
                         final_y,
                         f" {item['display_name']}",
                         fontsize=9,
@@ -1168,7 +1191,8 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             ax.grid(True, alpha=0.3)
 
             max_len = max(len(curves[item["name"]]) for item in page_items)
-            ax.set_xlim(left=0, right=max_len * 1.15)
+            x_left, x_right = _axis_x_limits(bar_timestamps, max_len)
+            ax.set_xlim(left=x_left, right=x_right)
 
             pdf.savefig(fig, bbox_inches="tight")
             plt.close()
