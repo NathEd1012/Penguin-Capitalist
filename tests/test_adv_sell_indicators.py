@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from backtest.portfolio import Portfolio
 from penguins.Adv_SELL_TP.Adv_SELL_TP1 import Adv_SELL_TP1
@@ -22,6 +22,95 @@ def test_portfolio_preserves_value_through_forward_split():
 
     assert portfolio.get_position("LRCX") == 40
     assert after_value == before_value
+
+
+def test_reverse_split_adjusts_position_opened_before_event():
+    portfolio = Portfolio(initial_capital=10000.0)
+    event_time = datetime(2023, 5, 16, tzinfo=timezone.utc)
+    portfolio.buy("GREE", 10, 100.0, datetime(2023, 5, 15))
+
+    before_value = portfolio.get_total_value({"GREE": 100.0})
+    portfolio.apply_price_adjustments(
+        event_time,
+        {"GREE": [(event_time, 10.0, {"type": "reverse_split", "ratio": "1:10"})]},
+    )
+
+    assert portfolio.get_position("GREE") == 1
+    assert portfolio.cost_basis["GREE"] == 1000.0
+    assert portfolio.get_total_value({"GREE": 1000.0}) == before_value
+
+
+def test_position_opened_after_reverse_split_is_not_adjusted():
+    portfolio = Portfolio(initial_capital=10000.0)
+    event_time = datetime(2023, 5, 16, tzinfo=timezone.utc)
+    portfolio.buy("GREE", 10, 100.0, datetime(2026, 5, 1))
+
+    portfolio.apply_price_adjustments(
+        datetime(2026, 5, 2),
+        {"GREE": [(event_time, 10.0, {"type": "reverse_split", "ratio": "1:10"})]},
+    )
+
+    assert portfolio.get_position("GREE") == 10
+    assert portfolio.cost_basis["GREE"] == 100.0
+
+
+def test_forward_split_adjusts_quantity_and_cost_basis():
+    portfolio = Portfolio(initial_capital=10000.0)
+    event_time = datetime(2024, 10, 3, tzinfo=timezone.utc)
+    portfolio.buy("LRCX", 4, 80.0, datetime(2024, 10, 2))
+
+    portfolio.apply_price_adjustments(
+        event_time,
+        {"LRCX": [(event_time, 0.1, {"type": "split", "ratio": "10:1"})]},
+    )
+
+    assert portfolio.get_position("LRCX") == 40
+    assert portfolio.cost_basis["LRCX"] == 8.0
+
+
+def test_position_opened_after_forward_split_is_not_adjusted():
+    portfolio = Portfolio(initial_capital=10000.0)
+    event_time = datetime(2024, 10, 3, tzinfo=timezone.utc)
+    portfolio.buy("LRCX", 4, 80.0, datetime(2024, 10, 4))
+
+    portfolio.apply_price_adjustments(
+        datetime(2024, 10, 5),
+        {"LRCX": [(event_time, 0.1, {"type": "split", "ratio": "10:1"})]},
+    )
+
+    assert portfolio.get_position("LRCX") == 4
+    assert portfolio.cost_basis["LRCX"] == 80.0
+
+
+def test_closed_position_is_not_adjusted_and_trade_history_is_unchanged():
+    portfolio = Portfolio(initial_capital=10000.0)
+    event_time = datetime(2024, 10, 3, tzinfo=timezone.utc)
+    portfolio.buy("LRCX", 4, 80.0, datetime(2024, 10, 2))
+    portfolio.sell("LRCX", 4, 80.0, datetime(2024, 10, 2, 12))
+    trades_before = list(portfolio.trades)
+
+    portfolio.apply_price_adjustments(
+        event_time,
+        {"LRCX": [(event_time, 0.1, {"type": "split", "ratio": "10:1"})]},
+    )
+
+    assert portfolio.get_position("LRCX") == 0
+    assert portfolio.trades == trades_before
+
+
+def test_partially_sold_position_keeps_original_open_time_for_adjustment():
+    portfolio = Portfolio(initial_capital=10000.0)
+    event_time = datetime(2024, 10, 3, tzinfo=timezone.utc)
+    portfolio.buy("LRCX", 10, 80.0, datetime(2024, 10, 2))
+    portfolio.sell("LRCX", 4, 80.0, datetime(2024, 10, 2, 12))
+
+    portfolio.apply_price_adjustments(
+        event_time,
+        {"LRCX": [(event_time, 0.1, {"type": "split", "ratio": "10:1"})]},
+    )
+
+    assert portfolio.get_position("LRCX") == 60
+    assert portfolio.position_opened_at["LRCX"] == datetime(2024, 10, 2, tzinfo=timezone.utc)
 
 
 def test_corporate_action_registry_preserves_overlapping_symbol_events():

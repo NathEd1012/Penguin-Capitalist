@@ -260,7 +260,7 @@ SYMBOL_LIST_5 = [
 "ENPH","SEDG","RUN","PLUG","FCEL","BLDP","BE","NEE","AES","ORA",
 
 # ===== EV / MOBILITY =====
-"RIVN","LCID","NIO","XPEV","LI","TSLA","F","GM",
+"RIVN","LCID","NIO","XPEV","LI",
 
 # ===== MATERIALS / MINING =====
 "LIN","APD","ECL","SHW","FCX","NEM","DOW","DD","PPG","NUE",
@@ -280,7 +280,7 @@ SYMBOL_LIST_5 = [
 "AI","BBAI","SOUN","PATH","VERI",
 
 # ===== CRYPTO / INFRA =====
-"COIN","MSTR","RIOT","MARA","CAN","GREE",
+"MSTR","RIOT","MARA","CAN","GREE",
 
 # ===== HOUSING / REAL ESTATE TECH =====
 "OPEN","RDFN","Z","ZG",
@@ -289,7 +289,7 @@ SYMBOL_LIST_5 = [
 "DKNG","PENN","RSI",
 
 # ===== INTERNATIONAL LARGE CAPS (US LISTED) =====
-"TSM","NVO","ASML","BABA","JD","PDD"
+"TSM","NVO","BABA","JD","PDD"
 ]
 
 SYMBOL_LISTS = {

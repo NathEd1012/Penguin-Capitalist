@@ -18,7 +18,6 @@ RELATIVE_STRENGTH_PERIOD = 20
 RELATIVE_STRENGTH_THRESHOLD = 0.0
 RVOL_PERIOD = 20
 RVOL_THRESHOLD = 2.0
-TREND_SCORE_THRESHOLD = 0.5
 
 
 @dataclass
@@ -34,7 +33,6 @@ class Simpler_PenguinParams:
     relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
     rvol_period: int = RVOL_PERIOD
     rvol_threshold: float = RVOL_THRESHOLD
-    trend_score_threshold: float = TREND_SCORE_THRESHOLD
 
 
 class Simpler_Penguin(BasePenguin):
@@ -55,7 +53,6 @@ class Simpler_Penguin(BasePenguin):
         relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
         rvol_period: int = RVOL_PERIOD,
         rvol_threshold: float = RVOL_THRESHOLD,
-        trend_score_threshold: float = TREND_SCORE_THRESHOLD,
     ):
         super().__init__(name)
         self.params = Simpler_PenguinParams(
@@ -70,7 +67,6 @@ class Simpler_Penguin(BasePenguin):
             relative_strength_threshold=relative_strength_threshold,
             rvol_period=rvol_period,
             rvol_threshold=rvol_threshold,
-            trend_score_threshold=trend_score_threshold,
         )
 
     def decide(
@@ -125,11 +121,9 @@ class Simpler_Penguin(BasePenguin):
                 or adx_value < self.params.adx_threshold * 0.85
             )
             relative_strength_exit_trigger = (
-                avg_entry is not None
-                and current_price > avg_entry
-                and relative_strength_value < self.params.relative_strength_threshold
+                relative_strength_value < self.params.relative_strength_threshold
             )
-            negative_trend = trend_score < self.params.trend_score_threshold
+            negative_trend = trend_score < 0.15
             falling_trend = (
                 trend_score < previous_trend_score < two_bars_ago_trend_score
             )
@@ -147,10 +141,20 @@ class Simpler_Penguin(BasePenguin):
                 return "SELL", shares_owned
 
         #### BUY ####
-        if shares_owned == 0 and current_price <= lower_band and trend_score > self.params.trend_score_threshold:
+        bb_buy_signal = (
+            current_price <= lower_band
+        )
+        trend_strength_signal = (
+            adx_value >= self.params.adx_threshold
+            or trend_score >= 0.5
+        )
+
+        if trend_strength_signal and bb_buy_signal:
+            adx_strength = adx_value / max(self.params.adx_threshold, 1e-6)
+            trend_strength = trend_score / 0.5
             strength = min(
                 1.5,
-                max(0.25, trend_score / max(self.params.trend_score_threshold, 1e-6)),
+                max(0.25, adx_strength, trend_strength),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:

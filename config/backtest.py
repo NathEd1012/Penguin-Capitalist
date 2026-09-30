@@ -172,9 +172,9 @@ EXEC_TRANSACTION_COSTx = 1.0
 EXEC_TRANSACTION_COST = _parse_config_float(os.getenv("FIXED_EXEC_TC", EXEC_TRANSACTION_COSTx), "FIXED_EXEC_TC")
 
 # Decision execution offset: 0 = same bar, 1 = next bar, 2 = two bars later.
-T_PLUS_X = int(os.getenv("T_Plus_x", "1"))
+T_PLUS_X = int(os.getenv("T_PLUS_X", "1"))
 if T_PLUS_X < 0:
-    raise ValueError("T_Plus_x must be a nonnegative integer")
+    raise ValueError("T_PLUS_X must be a nonnegative integer")
 
 
 __all__ = [

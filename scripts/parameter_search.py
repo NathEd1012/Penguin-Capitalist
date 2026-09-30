@@ -150,9 +150,9 @@ def suggest_parameters(strategy_class, completed_trials, rng, np_rng=None):
         return _grid_parameters_from_space(parameter_space, completed_count, max(1, PARAMETER_SEARCH_WARMUP_TRIALS)), "grid"
     if method == "bayesian_grid" and completed_count < PARAMETER_SEARCH_WARMUP_TRIALS:
         return _grid_parameters_from_space(parameter_space, completed_count, PARAMETER_SEARCH_WARMUP_TRIALS), "grid"
-    if method == "rand_baysian" and completed_count < PARAMETER_SEARCH_WARMUP_TRIALS:
+    if method == "bayesian_rand" and completed_count < PARAMETER_SEARCH_WARMUP_TRIALS:
         return _sample_parameters_from_space(parameter_space, rng), "random_warmup"
-    if method not in {"bayesian", "bayesian_grid", "rand_baysian"}:
+    if method not in {"bayesian", "bayesian_grid", "bayesian_rand"}:
         raise ValueError(f"Unsupported PARAMETER_SEARCH_METHOD: {method}")
 
     params = _optuna_suggest(parameter_space, completed_trials, rng.randrange(0, 2**32))

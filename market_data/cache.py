@@ -1,6 +1,7 @@
 """Disk caching system for market data to avoid unnecessary API calls."""
 import os
 import json
+import tempfile
 from pathlib import Path
 from datetime import datetime, timezone
 import pandas as pd
@@ -118,7 +119,11 @@ class DataCache:
         if end_utc < cache_start or start_utc > cache_end:
             return None, bounds
 
-        return self._read_cache_range_from_path(path, start_utc, end_utc), bounds
+        try:
+            return self._read_cache_range_from_path(path, start_utc, end_utc), bounds
+        except Exception:
+            self._quarantine_corrupt_cache(path)
+            return None, None
 
     def get_cached_slice(
         self,
@@ -174,7 +179,23 @@ class DataCache:
                 to_save["timestamp"] = pd.to_datetime(to_save["timestamp"], utc=True)
             to_save = to_save.sort_values("timestamp").reset_index(drop=True)
 
-            to_save.to_parquet(path, index=False)
+            # Replace only after parquet serialization completes so readers never
+            # observe a partially written cache file.
+            temporary_path = None
+            try:
+                with tempfile.NamedTemporaryFile(
+                    dir=self.cache_dir,
+                    prefix=f".{path.name}.",
+                    suffix=".tmp",
+                    delete=False,
+                ) as temporary_file:
+                    temporary_path = Path(temporary_file.name)
+                to_save.to_parquet(temporary_path, index=False)
+                os.replace(temporary_path, path)
+                temporary_path = None
+            finally:
+                if temporary_path is not None:
+                    temporary_path.unlink(missing_ok=True)
 
             # Persist lightweight metadata for fast range checks.
             if "timestamp" in to_save.columns and not to_save.empty:
@@ -187,6 +208,17 @@ class DataCache:
                 )
         except Exception:
             # Silently fail if cache write fails
+            pass
+
+    @staticmethod
+    def _quarantine_corrupt_cache(path: Path) -> None:
+        """Move an unreadable cache aside so the caller can refetch it."""
+        try:
+            quarantine_path = path.with_name(f"{path.name}.corrupt")
+            if quarantine_path.exists():
+                quarantine_path.unlink()
+            os.replace(path, quarantine_path)
+        except OSError:
             pass
 
     def _write_meta(self, symbol: str, timeframe: str, start_ts, end_ts, rows: int) -> None:
@@ -304,7 +336,11 @@ class DataCache:
         if meta is not None:
             if meta["start"] > start_utc or meta["end"] < end_utc:
                 return None
-            return self._read_cache_range_from_path(path, start_utc, end_utc)
+            try:
+                return self._read_cache_range_from_path(path, start_utc, end_utc)
+            except Exception:
+                self._quarantine_corrupt_cache(path)
+                return None
 
         # Backward-compatible fallback for older cache files without metadata.
         cached_df = self.load_cache(symbol, timeframe)

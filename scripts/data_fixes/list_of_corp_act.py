@@ -341,6 +341,15 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
+    "LCID": [
+        {
+            "date": "2025-08-29",
+            "type": "reverse_split",
+            "ratio": "1:10",
+            "comment": "1-for-10 reverse split; split-adjusted trading began after the effective date",
+        }
+    ],
+
     "SPCE": [
         {
             "date": "2024-06-17",

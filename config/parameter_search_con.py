@@ -2,13 +2,9 @@
 import inspect
 import os
 
-PARAMETER_SEARCH_METHODx = "bayesian_grid"  # Select: random, grid, bayesian, bayesian_grid, or rand_baysian.
+PARAMETER_SEARCH_METHODx = "bayesian_rand"  # Select: random, grid, bayesian, bayesian_grid, or bayesian_rand.
 _configured_search_method = os.getenv("PARAMETER_SEARCH_METHOD", PARAMETER_SEARCH_METHODx).strip().lower()
-PARAMETER_SEARCH_METHOD = {
-    "baysian": "bayesian",
-    "baysian_grid": "bayesian_grid",
-    "rand_bayesian": "rand_baysian",
-}.get(_configured_search_method, _configured_search_method)
+PARAMETER_SEARCH_METHOD = _configured_search_method
 
 PARAMETER_SEARCH_BAYESIAN_SAMPLERx = "gp"
 _configured_bayesian_sampler = os.getenv(
@@ -51,7 +47,7 @@ PARAMETER_SEARCH_WARMUP_TRIALSx = 4
 PARAMETER_SEARCH_WARMUP_TRIALS = int(os.getenv("PARAMETER_SEARCH_WARMUP_TRIALS", PARAMETER_SEARCH_WARMUP_TRIALSx))
 
 PARAMETERS_EXECUTED = max(1, int(os.getenv("PARAMETERS_EXECUTED", "1")))
-
+'''
 # Each entry is (parameter name, type, minimum, maximum).
 _RSI_PARAMETERS = (
     ("rsi_period", "int", 7, 40), #28->40
@@ -93,6 +89,48 @@ Trend_Method_parameters = (
     ("trend_entry_threshold", "float", 0.0, 1.0),
 )
 
+
+'''# Each entry is (parameter name, type, minimum, maximum).
+_RSI_PARAMETERS = (
+    ("rsi_period", "int", 0, 50), #28->40
+    ("buy_rsi", "float", 0.0, 50.0), #18->5.0
+    ("sell_rsi", "float", 30.0, 100.0), #55->45
+)
+
+_BOLLINGER_PARAMETERS = (
+    ("bb_period", "int", 0, 80), #40->50
+    ("bb_stddev", "float", 0.0, 10.0), #3.5->5.0
+)
+
+_ADX_PARAMETERS = (
+    ("adx_period", "int", 0, 50), #28->35
+    ("adx_threshold", "float", 0.0, 80.0), #40->60.0
+)
+
+_RISK_PARAMETERS = (
+    ("max_cash_fraction", "float", 0.001, 0.5), #0.20->0.25
+    ("stop_loss_pct", "float", 0.001, 0.5), #0.10->0.15
+    ("take_profit_pct", "float", 0.001, 0.50), #0.02->0.005
+    ("cooldown_bars", "int", 0, 100),
+)
+
+_SIMPLER_RISK_PARAMETERS = tuple(
+    parameter for parameter in _RISK_PARAMETERS if parameter[0] != "cooldown_bars"
+)
+
+_RELATIVE_STRENGTH_PARAMETERS = (
+    ("relative_strength_period", "int", 0, 100), #40->60
+    ("relative_strength_threshold", "float", -5.0, 5.0), # -1.0->-3.0
+    ("rvol_period", "int", 0, 60), #7->3
+    ("rvol_threshold", "float", 0.0, 10.0), #4.0->6.0
+)
+
+Trend_Method_parameters = (
+    ("trend_reversal_threshold", "float", 0.0, 1.0),
+    ("trend_negative_threshold", "float", 0.0, 1.0),
+    ("trend_entry_threshold", "float", 0.0, 1.0),
+)
+
 _STRENGTH_CAP_PARAMETERS = (("strength_cap", "float", 1.0, 2.0),)
 
 _RSI_ADX_PARAMETERS = _RSI_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
@@ -102,6 +140,7 @@ _SIMPLER_PARAMETERS = (
     + _ADX_PARAMETERS
     + _SIMPLER_RISK_PARAMETERS
     + _RELATIVE_STRENGTH_PARAMETERS
+    + (("trend_score_threshold", "float", 0.0, 1.0),)
 )
 _RSI_RISK_PARAMETERS = _RSI_PARAMETERS + _RISK_PARAMETERS
 _PUFFIN_PARAMETERS = (

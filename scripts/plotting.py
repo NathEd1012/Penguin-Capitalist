@@ -17,6 +17,7 @@ except Exception:
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.colors import Normalize
 from datetime import datetime, timedelta
@@ -567,16 +568,24 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
         if closest_idx not in tick_indices:
             tick_indices.append(closest_idx)
     
+    # Always include the final recorded bar so the rightmost label is the
+    # actual final date, even when it is not a month boundary.
+    final_index = total_bars - 1
+    if final_index not in tick_indices:
+        tick_indices.append(final_index)
+
     # Sort indices
     tick_indices.sort()
     
     # Build labels with appropriate format
     # Only show year for January, otherwise just month
-    x_ticks = [idx + 1 for idx in tick_indices]
+    x_ticks = [mdates.date2num(bar_timestamps[idx]) for idx in tick_indices]
     x_labels = []
     for idx in tick_indices:
         dt = bar_timestamps[idx]
-        if span_days <= 60:
+        if idx == final_index:
+            x_labels.append(dt.strftime('%d %b %Y'))
+        elif span_days <= 60:
             # Short span: always show day and month
             x_labels.append(dt.strftime('%d %b'))
         else:
@@ -587,6 +596,14 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
                 x_labels.append(dt.strftime('%b'))
     
     return x_ticks, x_labels
+
+
+def _curve_x_values(bar_timestamps, value_count):
+    """Return calendar-spaced x-values when timestamps are available."""
+    if bar_timestamps:
+        timestamp_count = min(value_count, len(bar_timestamps))
+        return mdates.date2num(bar_timestamps[:timestamp_count])
+    return range(1, value_count + 1)
 
 
 def _build_timespan_text(start_date_str=None, stop_date_str=None, bar_timestamps=None, num_bars=None):
@@ -743,7 +760,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         vals = curves[sp500_name]
         display_name = _display_strategy_name(sp500_name)
         line = plt.plot(
-            range(1, len(vals) + 1),
+            _curve_x_values(bar_timestamps, len(vals)),
             vals,
             label=display_name,
             linewidth=2,
@@ -760,7 +777,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
             group_key = _strategy_base_key(name)
             color = "darkgrey" if _is_sp500_benchmark(name) else _color_for_group(group_key)
             line = plt.plot(
-                range(1, len(vals) + 1),
+                _curve_x_values(bar_timestamps, len(vals)),
                 vals,
                 label=display_name,
                 linewidth=2,
@@ -775,14 +792,14 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     if sma20_name in curves:
         vals = curves[sma20_name]
         display_name = _display_strategy_name(sma20_name)
-        line = plt.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
+        line = plt.plot(_curve_x_values(bar_timestamps, len(vals)), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
         line_colors[sma20_name] = line[0].get_color()
     
     # Add text labels at the end of each curve on the right side
     for name in sorted(curves.keys(), key=_strategy_group_key):
         vals = curves[name]
         if vals:
-            final_x = len(vals)
+            final_x = _curve_x_values(bar_timestamps, len(vals))[-1]
             final_y = vals[-1]
             color = line_colors.get(name, "black")
             display_name = _display_strategy_name(name)
@@ -943,7 +960,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             vals = curves[sp500_name]
             display_name = _display_strategy_name(sp500_name)
             line = ax.plot(
-                range(1, len(vals) + 1),
+                _curve_x_values(bar_timestamps, len(vals)),
                 vals,
                 label=display_name,
                 linewidth=2,
@@ -956,14 +973,14 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         for name, vals in curves.items():
             if name not in (sma20_name, sp500_name):
                 display_name = _display_strategy_name(name)
-                line = ax.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
+                line = ax.plot(_curve_x_values(bar_timestamps, len(vals)), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
                 line_colors[name] = line[0].get_color()
         
         # Plot SMA20 strategy last so it appears in foreground
         if sma20_name in curves:
             vals = curves[sma20_name]
             display_name = _display_strategy_name(sma20_name)
-            line = ax.plot(range(1, len(vals) + 1), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
+            line = ax.plot(_curve_x_values(bar_timestamps, len(vals)), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
             line_colors[sma20_name] = line[0].get_color()
         
         # Add text labels at the end of each curve on the right side

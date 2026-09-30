@@ -66,7 +66,7 @@ def _print_training_configuration() -> None:
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
-    print(f"T_plus_x (bars):   {T_PLUS_X}")
+    print(f"T_PLUS_X (bars):   {T_PLUS_X}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print("=" * 80)
 
@@ -306,7 +306,7 @@ def _train_trainable_penguins(
     log_lines.append(f"  Training Steps:    {TRAINING_ITERATIONS}")
     log_lines.append(f"  Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     log_lines.append(f"  Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
-    log_lines.append(f"  T_plus_x (bars):   {T_PLUS_X}")
+    log_lines.append(f"  T_PLUS_X (bars):   {T_PLUS_X}")
     log_lines.append(f"  Training Seed:     {TRAINING_RANDOM_SEED}")
     log_lines.append("=" * 80)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")

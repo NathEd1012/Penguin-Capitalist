@@ -1,7 +1,7 @@
 """Portfolio management for backtesting."""
 from typing import Dict, List, Set, Tuple
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 @dataclass
@@ -37,7 +37,10 @@ class Portfolio:
         self.record_trades = record_trades
         
         # Positions: symbol -> quantity (last_price_by_symbol equivalent)
-        self.positions: Dict[str, int] = {}
+        self.positions: Dict[str, float] = {}
+
+        # UTC timestamp when the current position was opened.
+        self.position_opened_at: Dict[str, datetime] = {}
         
         # Track the cost basis for each position for P&L calculation
         # symbol -> average entry price (previous_close_by_symbol for cost tracking)
@@ -59,20 +62,37 @@ class Portfolio:
         self.value_history: List[float] = []
         self._applied_price_adjustments: Set[Tuple[str, datetime]] = set()
 
+    @staticmethod
+    def _normalize_timestamp(timestamp: datetime) -> datetime:
+        """Normalize timestamps to timezone-aware UTC values for comparison."""
+        if timestamp.tzinfo is None:
+            return timestamp.replace(tzinfo=timezone.utc)
+        return timestamp.astimezone(timezone.utc)
+
     def apply_price_adjustments(self, timestamp: datetime, events_by_symbol: Dict[str, List[Tuple[datetime, float, Dict]]]) -> None:
         """Apply share-count changes for split-adjusted price data."""
+        normalized_timestamp = self._normalize_timestamp(timestamp)
         for symbol, events in events_by_symbol.items():
             for effective_timestamp, price_factor, _event in events:
+                effective_timestamp = self._normalize_timestamp(effective_timestamp)
                 event_key = (symbol, effective_timestamp)
-                if timestamp < effective_timestamp or event_key in self._applied_price_adjustments:
+                if normalized_timestamp < effective_timestamp or event_key in self._applied_price_adjustments:
                     continue
 
                 quantity = self.positions.get(symbol, 0)
-                if quantity > 0 and price_factor > 0:
+                opened_at = self.position_opened_at.get(symbol)
+                if (
+                    quantity > 0
+                    and price_factor > 0
+                    and opened_at is not None
+                    and opened_at < effective_timestamp
+                ):
                     self.positions[symbol] = quantity / price_factor
-                self._applied_price_adjustments.add(event_key)
+                    if symbol in self.cost_basis:
+                        self.cost_basis[symbol] *= price_factor
+                    self._applied_price_adjustments.add(event_key)
         
-    def get_position(self, symbol: str) -> int:
+    def get_position(self, symbol: str) -> float:
         """Get current quantity of a symbol."""
         return self.positions.get(symbol, 0)
     
@@ -159,14 +179,16 @@ class Portfolio:
                 return False
         
         self.cash -= cost
-        self.positions[symbol] = self.positions.get(symbol, 0) + quantity
+        old_quantity = self.positions.get(symbol, 0)
+        if old_quantity <= 0:
+            self.position_opened_at[symbol] = self._normalize_timestamp(timestamp)
+        self.positions[symbol] = old_quantity + quantity
         
         # Track last known price for fallback valuation
         if price > 0:
             self.last_known_prices[symbol] = price
         
         # Update cost basis (weighted average)
-        old_quantity = self.positions.get(symbol, quantity) - quantity
         old_cost = self.cost_basis.get(symbol, 0)
         
         if old_quantity > 0:
@@ -222,6 +244,7 @@ class Portfolio:
         
         if self.positions[symbol] == 0:
             del self.positions[symbol]
+            self.position_opened_at.pop(symbol, None)
         
         trade = Trade(
             symbol=symbol,

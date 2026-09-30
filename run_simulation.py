@@ -172,7 +172,7 @@ def _format_runtime_configuration_banner(
         f"Training Steps:        {training_iterations}",
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
-        f"T_plus_x (bars):      {t_plus_x}",
+        f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
         f"Parameter Search:      {parameter_search_method}",
         f"Bayesian Sampler:      {parameter_search_bayesian_sampler}",
@@ -453,7 +453,7 @@ def run_backtest(
                         variant_name = (
                             penguin_name
                             if rank == 1
-                            else f"{penguin_name}_put_{training_step:03d}"
+                            else f"{penguin_name}_{training_step:03d}"
                         )
                         variant = _replace_trainable_penguin_params(
                             penguin,
