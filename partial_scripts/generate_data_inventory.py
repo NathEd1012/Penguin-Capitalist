@@ -7,7 +7,8 @@ import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CACHE_DIR = PROJECT_ROOT / "data_cache"
-REPORT_PATH = PROJECT_ROOT / "data_cache_inventory1.md"
+OUTPUT_DIR = Path(__file__).resolve().parent / "output"
+REPORT_PATH = OUTPUT_DIR / "data_cache_inventory1.md"
 EXPECTED_MINUTE_BARS_PER_WEEKDAY = 390
 def parse_timestamp(value: str) -> datetime:
     parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -172,6 +173,7 @@ def generate_report(inventory: list[dict[str, object]], years: list[int]) -> str
 
 def main() -> None:
     inventory, years = load_inventory()
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.write_text(generate_report(inventory, years), encoding="utf-8")
     print(f"Wrote {REPORT_PATH} ({len(inventory)} symbols, years {years[0]}-{years[-1]})")
 

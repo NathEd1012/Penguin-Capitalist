@@ -1,0 +1,58 @@
+symbol,date,type,ratio,comment,status,observed_ratio,before_date,after_date,before_price,after_price
+AAPL,2020-08-31,split,4:1,4-for-1 stock split,NEEDS_ADJUSTMENT,3.91484375,2020-08-28 00:00:00+00:00,2020-08-31 00:00:00+00:00,501.1,128.0
+ADYEY,2021-08-24,split,2:1,2-for-1 ADR split,SYMBOL_NOT_IN_CACHE,,,,,
+AMZN,2022-06-06,split,20:1,20-for-1 stock split,NEEDS_ADJUSTMENT,19.83977677127143,2022-06-03 00:00:00+00:00,2022-06-06 00:00:00+00:00,2452.99,123.64
+AVGO,2024-07-15,split,10:1,10-for-1 stock split; split-adjusted trading began,NEEDS_ADJUSTMENT,9.93875765529309,2024-07-12 00:00:00+00:00,2024-07-15 00:00:00+00:00,1704.0,171.45
+CMG,2024-06-26,split,50:1,50-for-1 stock split,NEEDS_ADJUSTMENT,49.75701357466063,2024-06-25 00:00:00+00:00,2024-06-26 00:00:00+00:00,3298.89,66.3
+CSX,2021-06-29,split,3:1,3-for-1 stock split,NEEDS_ADJUSTMENT,2.841132637853949,2021-06-28 00:00:00+00:00,2021-06-29 00:00:00+00:00,95.32,33.55
+CVNA,2026-05-08,split,5:1,5-for-1 stock split; split-adjusted trading began,NEEDS_ADJUSTMENT,4.766706586826347,2026-05-07 00:00:00+00:00,2026-05-08 00:00:00+00:00,398.02,83.5
+FAST,2025-05-22,split,2:1,2-for-1 stock split; ex/split-adjusted trading began,NEEDS_ADJUSTMENT,2.009575251657255,2025-05-21 00:00:00+00:00,2025-05-22 00:00:00+00:00,81.85,40.73
+GOOGL,2022-07-18,split,20:1,20-for-1 stock split,NEEDS_ADJUSTMENT,19.784070796460178,2022-07-15 00:00:00+00:00,2022-07-18 00:00:00+00:00,2235.6,113.0
+ISRG,2021-10-05,split,3:1,3-for-1 stock split,NEEDS_ADJUSTMENT,2.976993865030675,2021-10-04 00:00:00+00:00,2021-10-05 00:00:00+00:00,970.5,326.0
+KLAC,2026-06-12,split,10:1,10-for-1 stock split; split-adjusted trading began,NEEDS_ADJUSTMENT,10.078838174273859,2026-06-11 00:00:00+00:00,2026-06-12 00:00:00+00:00,2429.0,241.0
+LRCX,2024-10-03,split,10:1,10-for-1 stock split; split-adjusted trading began,NEEDS_ADJUSTMENT,10.008482911236785,2024-10-02 00:00:00+00:00,2024-10-03 00:00:00+00:00,814.09,81.34
+MCHP,2021-10-13,split,2:1,2-for-1 stock split,NEEDS_ADJUSTMENT,1.9835188054655588,2021-10-12 00:00:00+00:00,2021-10-13 00:00:00+00:00,140.81,70.99
+MNST,2023-03-28,split,2:1,2-for-1 stock split,NEEDS_ADJUSTMENT,1.9553521389874837,2023-03-27 00:00:00+00:00,2023-03-28 00:00:00+00:00,104.67,53.53
+MSTR,2024-08-08,split,10:1,10-for-1 stock split,NEEDS_ADJUSTMENT,9.362623951182304,2024-08-07 00:00:00+00:00,2024-08-08 00:00:00+00:00,1227.44,131.1
+NFLX,2025-11-17,split,10:1,10-for-1 stock split,NEEDS_ADJUSTMENT,9.97299107142857,2025-11-15 00:00:00+00:00,2025-11-17 00:00:00+00:00,1116.975,112.0
+NEE,2020-10-27,split,4:1,4-for-1 stock split; ex-distribution / split-adjusted date,NEEDS_ADJUSTMENT,3.982808398950131,2020-10-26 00:00:00+00:00,2020-10-27 00:00:00+00:00,303.49,76.2
+NVDA,2021-07-20,split,4:1,4-for-1 stock split,NEEDS_ADJUSTMENT,3.9583333333333335,2021-07-19 00:00:00+00:00,2021-07-20 00:00:00+00:00,760.0,192.0
+NVDA,2024-06-10,split,10:1,10-for-1 stock split,NEEDS_ADJUSTMENT,9.997930463576159,2024-06-07 00:00:00+00:00,2024-06-10 00:00:00+00:00,1207.75,120.8
+NVO,2023-09-20,split,2:1,2-for-1 ADR split,NEEDS_ADJUSTMENT,1.9985037939510528,2023-09-19 00:00:00+00:00,2023-09-20 00:00:00+00:00,187.0,93.57
+NOW,2025-12-18,split,5:1,5-for-1 stock split,ALREADY_ADJUSTED,1.001262738995676,2025-12-17 00:00:00+00:00,2025-12-18 00:00:00+00:00,785.0,784.01
+ODFL,2020-03-25,split,3:2,3-for-2 stock split; split-adjusted trading date,NEEDS_ADJUSTMENT,1.4021195611612807,2020-03-24 00:00:00+00:00,2020-03-25 00:00:00+00:00,187.87,133.99
+ODFL,2024-03-28,split,2:1,2-for-1 stock split; split-adjusted trading date,NEEDS_ADJUSTMENT,1.9630733944954128,2024-03-27 00:00:00+00:00,2024-03-28 00:00:00+00:00,427.95,218.0
+SHOP,2022-06-29,split,10:1,10-for-1 stock split,NEEDS_ADJUSTMENT,9.901129943502825,2022-06-28 00:00:00+00:00,2022-06-29 00:00:00+00:00,350.5,35.4
+SHW,2021-04-01,split,3:1,3-for-1 stock split; split-adjusted trading began,NEEDS_ADJUSTMENT,3.000040650406504,2021-03-31 00:00:00+00:00,2021-04-01 00:00:00+00:00,738.01,246.0
+SRE,2023-08-22,split,2:1,2-for-1 stock split,NEEDS_ADJUSTMENT,1.9758266185051403,2023-08-21 00:00:00+00:00,2023-08-22 00:00:00+00:00,142.22,71.98
+SSO,2020-08-18,split,2:1,2-for-1 ETF share split,NEEDS_ADJUSTMENT,1.981643998415423,2020-08-17 00:00:00+00:00,2020-08-18 00:00:00+00:00,150.0699,75.73
+SSO,2022-01-13,split,2:1,2-for-1 ETF share split,ALREADY_ADJUSTED,0.9999304589707926,2022-01-12 00:00:00+00:00,2022-01-13 00:00:00+00:00,143.79,143.8
+SSO,2025-11-20,split,2:1,2-for-1 ETF share split,ALREADY_ADJUSTED,1.000178412132025,2025-11-19 00:00:00+00:00,2025-11-20 00:00:00+00:00,112.12,112.1
+TSLA,2020-08-31,split,5:1,5-for-1 stock split,NEEDS_ADJUSTMENT,4.739692373424482,2020-08-28 00:00:00+00:00,2020-08-31 00:00:00+00:00,2218.65,468.1
+TSLA,2022-08-25,split,3:1,3-for-1 stock split,NEEDS_ADJUSTMENT,2.8985224874167885,2022-08-24 00:00:00+00:00,2022-08-25 00:00:00+00:00,892.6,307.95
+WMT,2024-02-26,split,3:1,3-for-1 stock split,NEEDS_ADJUSTMENT,2.9937074829931976,2024-02-24 00:00:00+00:00,2024-02-26 00:00:00+00:00,176.03,58.8
+BLUE,2024-12-13,reverse_split,1:20,1-for-20 reverse split; split-adjusted trading began on Nasdaq,ALREADY_ADJUSTED,0.9871052631578947,2024-12-12 00:00:00+00:00,2024-12-13 00:00:00+00:00,0.3751,0.38
+BLUE,2025-06-02,merger,cash,bluebird bio sale completed; common stock ceased trading and is no longer publicly listed,NON_PRICE_ACTION,,,,,
+DD,2026-06-24,reverse_split,1:3,Planned 1-for-3 reverse stock split; split-adjusted trading expected on NYSE,NEEDS_ADJUSTMENT,0.32331606217616576,2026-06-23 00:00:00+00:00,2026-06-24 00:00:00+00:00,46.8,144.75
+DD,2025-11-03,spin_off,1 Q:2 DD,Qnity spin-off; DD holders received 1 Qnity share for every 2 DuPont shares. Distribution date was 2025-11-01; first regular trading day was 2025-11-03.,NON_PRICE_ACTION,,,,,
+DNA,2024-08-20,reverse_split,1:40,1-for-40 reverse split; split-adjusted trading began on NYSE,NEEDS_ADJUSTMENT,0.024474248927038627,2024-08-19 00:00:00+00:00,2024-08-20 00:00:00+00:00,0.2281,9.32
+FCEL,2024-11-11,reverse_split,1:30,1-for-30 reverse stock split,NEEDS_ADJUSTMENT,0.036676470588235296,2024-11-09 00:00:00+00:00,2024-11-11 00:00:00+00:00,0.2494,6.8
+GE,2021-08-02,reverse_split,1:8,1-for-8 reverse split,NEEDS_ADJUSTMENT,0.12815437902028698,2021-07-30 00:00:00+00:00,2021-08-02 00:00:00+00:00,12.95,101.05
+GE,2023-01-04,spin_off,1 GEHC:3 GE,GE HealthCare spin-off; GE holders received 1 GEHC share for every 3 GE shares,NON_PRICE_ACTION,,,,,
+GE,2024-04-02,spin_off,1 GEV:4 GE,GE Vernova spin-off; GE holders received 1 GEV share for every 4 GE shares,NON_PRICE_ACTION,,,,,
+GREE,2023-05-16,reverse_split,1:10,1-for-10 reverse split; split-adjusted trading began on Nasdaq,NEEDS_ADJUSTMENT,0.10024523160762944,2023-05-15 00:00:00+00:00,2023-05-16 00:00:00+00:00,0.3679,3.67
+LCID,2025-08-29,reverse_split,1:10,1-for-10 reverse split; split-adjusted trading began after the effective date,ALREADY_ADJUSTED,1.0048543689320388,2025-08-28 00:00:00+00:00,2025-08-29 00:00:00+00:00,2.07,2.06
+SPCE,2024-06-17,reverse_split,1:20,1-for-20 reverse split; split-adjusted trading began on NYSE,UNCERTAIN,0.06956,2024-06-14 00:00:00+00:00,2024-06-17 00:00:00+00:00,0.6956,10.0
+META,2022-06-09,ticker_change,1:1,Ticker changed from FB to META,NON_PRICE_ACTION,,,,,
+SQ,2025-01-21,ticker_change,1:1,Block changed ticker from SQ to XYZ on NYSE,NON_PRICE_ACTION,,,,,
+FISV,2023-06-07,ticker_change,1:1,Fiserv changed ticker from FISV to FI,NON_PRICE_ACTION,,,,,
+FISV,2025-11-11,ticker_change,1:1,Fiserv changed ticker from FI back to FISV,NON_PRICE_ACTION,,,,,
+RTX,2020-04-03,ticker_change,1:1,United Technologies renamed Raytheon Technologies and began trading as RTX after Raytheon merger,NON_PRICE_ACTION,,,,,
+RTX,2020-04-03,spin_off,0.5 OTIS + 1 CARR:1 UTX,UTC separated Otis and Carrier immediately before the Raytheon merger / RTX ticker change,NON_PRICE_ACTION,,,,,
+CTRA,2021-10-04,merger,stock,Cabot Oil & Gas and Cimarex merger; Coterra Energy began regular-way trading,NON_PRICE_ACTION,,,,,
+LAC,2023-10-04,spin_off,reorganization,Lithium Americas separated into Lithium Americas (LAC) and Lithium Argentina (LAAC); both began regular-way trading,NON_PRICE_ACTION,,,,,
+MTCH,2020-07-01,spin_off,reorganization,IAC separated Match Group in a complex merger/reorganization; no simple price multiplier applied,NON_PRICE_ACTION,,,,,
+HES,2025-07-18,merger,1.0250 CVX:1 HES,Hess acquired by Chevron; each HES share converted into 1.0250 CVX shares plus cash in lieu of fractional shares,NON_PRICE_ACTION,,,,,
+RDFN,2025-07-01,merger,stock,Redfin acquired by Rocket Companies; RDFN no longer independent,NON_PRICE_ACTION,,,,,
+SGEN,2023-12-14,merger,cash,Seagen acquired by Pfizer for $229 cash per share,NON_PRICE_ACTION,,,,,
+SPLK,2024-03-18,merger,cash,Splunk acquired by Cisco for $157 cash per share; SPLK ceased trading on Nasdaq,NON_PRICE_ACTION,,,,,

@@ -34,6 +34,10 @@ import pandas as pd
 from corporate_actions import CORPORATE_ACTIONS
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_DIR = PROJECT_ROOT / "partial_scripts" / "output"
+
+
 # ============================================================
 # CONFIG
 # ============================================================
@@ -682,8 +686,9 @@ def main():
     print_adjustment_results(results)
 
     # Save complete result
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     results.to_csv(
-        "corporate_action_cache_check.csv",
+        OUTPUT_DIR / "corporate_action_cache_check.csv",
         index=False,
     )
 
@@ -717,7 +722,7 @@ def main():
         )
 
         suspicious.to_csv(
-            "unexplained_price_jumps.csv",
+            OUTPUT_DIR / "unexplained_price_jumps.csv",
             index=False,
         )
 

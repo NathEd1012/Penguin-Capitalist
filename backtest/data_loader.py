@@ -622,6 +622,7 @@ class DataLoader:
         binning: str = "1m",
         prefilter_stale_symbols: bool = True,
         enable_data_quality_checks: bool = True,
+        refresh_cache: bool = False,
     ) -> Tuple[Dict[str, Dict], str]:
         """
         Load historical bars for symbols.
@@ -632,6 +633,7 @@ class DataLoader:
             end_date: End datetime
             binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
             prefilter_stale_symbols: Check a small recent window before loading long ranges
+            refresh_cache: Fetch the entire requested range and merge it with the cache
         
         Returns:
             (data_dict, warning_message)
@@ -749,7 +751,10 @@ class DataLoader:
             symbol_rows = _df_to_symbol_rows(cached_slice_df)
 
             missing_rows: Dict = {}
-            if cache_bounds is None:
+            if refresh_cache:
+                # Fetch the full frame so missing timestamps inside cache bounds are found.
+                missing_rows.update(_safe_fetch_range(symbol, range_start, range_end))
+            elif cache_bounds is None:
                 # No cache available: fetch requested range.
                 missing_rows.update(_safe_fetch_range(symbol, range_start, range_end))
             else:

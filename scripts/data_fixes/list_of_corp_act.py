@@ -2,14 +2,43 @@
 
 This module keeps the maintained action tables in ``scripts`` while exposing the
 same helper API that the rest of the codebase imports from ``corporate_actions``.
+
+Important distinction:
+
+- SPLITS / REVERSE_SPLITS:
+    Events for which a direct price multiplier can be applied.
+
+- TICKER_CHANGES:
+    Symbol continuity events. These do not imply a price multiplier.
+
+- REORGANIZATIONS:
+    Spin-offs, mergers, distributions, and other events that can create a
+    legitimate price discontinuity but should NOT be handled as a simple split.
+
+- MERGERS:
+    Events after which the old security ceases to represent an independent
+    tradable company.
+
+- LISTING_EVENTS:
+    IPO / predecessor / first-trading events. These explain discontinuities
+    at the beginning of a symbol's history but should NOT be treated as
+    corporate-action price adjustments.
+
+Disabled events are intentionally left commented when the cache has already
+incorporated the adjustment.
 """
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Set, Tuple
 
 
-# Forward splits: price scales down after event date
+# ---------------------------------------------------------------------------
+# Forward splits
+# Price scales DOWN after the split-adjusted trading date.
+# ---------------------------------------------------------------------------
+
 SPLITS: Dict[str, List[Dict[str, str]]] = {
     "AAPL": [
         {
@@ -17,15 +46,6 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "type": "split",
             "ratio": "4:1",
             "comment": "4-for-1 stock split",
-        }
-    ],
-
-    "ADYEY": [
-        {
-            "date": "2021-08-24",
-            "type": "split",
-            "ratio": "2:1",
-            "comment": "2-for-1 ADR split",
         }
     ],
 
@@ -44,6 +64,24 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "type": "split",
             "ratio": "10:1",
             "comment": "10-for-1 stock split; split-adjusted trading began",
+        }
+    ],
+
+    "BKNG": [
+        {
+            "date": "2026-04-06",
+            "type": "split",
+            "ratio": "25:1",
+            "comment": "25-for-1 stock split; split-adjusted trading began",
+        }
+    ],
+
+    "BALL": [
+        {
+            "date": "2017-05-17",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 stock split; split-adjusted trading began",
         }
     ],
 
@@ -76,10 +114,25 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
 
     "FAST": [
         {
+            "date": "2019-05-23",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 stock split; split-adjusted trading began",
+        },
+        {
             "date": "2025-05-22",
             "type": "split",
             "ratio": "2:1",
             "comment": "2-for-1 stock split; ex/split-adjusted trading began",
+        },
+    ],
+
+    "FISV": [
+        {
+            "date": "2018-03-20",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 stock split; split-adjusted trading began",
         }
     ],
 
@@ -92,13 +145,28 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
+    "ICE": [
+        {
+            "date": "2016-11-04",
+            "type": "split",
+            "ratio": "5:1",
+            "comment": "5-for-1 stock split; split-adjusted trading began",
+        }
+    ],
+
     "ISRG": [
+        {
+            "date": "2017-10-06",
+            "type": "split",
+            "ratio": "3:1",
+            "comment": "3-for-1 stock split; split-adjusted trading began",
+        },
         {
             "date": "2021-10-05",
             "type": "split",
             "ratio": "3:1",
             "comment": "3-for-1 stock split",
-        }
+        },
     ],
 
     "KLAC": [
@@ -176,7 +244,7 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "type": "split",
             "ratio": "10:1",
             "comment": "10-for-1 stock split",
-        }
+        },
     ],
 
     "NVO": [
@@ -188,14 +256,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
-    "NOW": [
-        {
-            "date": "2025-12-18",
-            "type": "split",
-            "ratio": "5:1",
-            "comment": "5-for-1 stock split",
-        }
-    ],
+    # Disabled: the cache is already adjusted for this event.
+    # "NOW": [
+    #     {
+    #         "date": "2025-12-18",
+    #         "type": "split",
+    #         "ratio": "5:1",
+    #         "comment": "5-for-1 stock split",
+    #     }
+    # ],
 
     "ODFL": [
         {
@@ -246,18 +315,29 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "ratio": "2:1",
             "comment": "2-for-1 ETF share split",
         },
+
+        # Disabled: the cache is already adjusted for this event.
+        # {
+        #     "date": "2022-01-13",
+        #     "type": "split",
+        #     "ratio": "2:1",
+        #     "comment": "2-for-1 ETF share split",
+        # },
+        # {
+        #     "date": "2025-11-20",
+        #     "type": "split",
+        #     "ratio": "2:1",
+        #     "comment": "2-for-1 ETF share split",
+        # },
+    ],
+
+    "TJX": [
         {
-            "date": "2022-01-13",
+            "date": "2018-11-07",
             "type": "split",
             "ratio": "2:1",
-            "comment": "2-for-1 ETF share split",
-        },
-        {
-            "date": "2025-11-20",
-            "type": "split",
-            "ratio": "2:1",
-            "comment": "2-for-1 ETF share split",
-        },
+            "comment": "2-for-1 stock split; split-adjusted trading began",
+        }
     ],
 
     "TSLA": [
@@ -285,24 +365,51 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
     ],
 }
 
-# Reverse splits: price scales up after event date
+
+# ---------------------------------------------------------------------------
+# Reverse splits
+# Price scales UP after the split-adjusted trading date.
+# ---------------------------------------------------------------------------
+
 REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
-    "BLUE": [
+    # Disabled: the cache is already adjusted for this event.
+    # "BLUE": [
+    #     {
+    #         "date": "2024-12-13",
+    #         "type": "reverse_split",
+    #         "ratio": "1:20",
+    #         "comment": "1-for-20 reverse split; split-adjusted trading began on Nasdaq",
+    #     }
+    # ],
+
+    "ARCT": [
         {
-            "date": "2024-12-13",
+            "date": "2017-11-16",
             "type": "reverse_split",
-            "ratio": "1:20",
-            "comment": "1-for-20 reverse split; split-adjusted trading began on Nasdaq",
+            "ratio": "1:7",
+            "comment": (
+                "1-for-7 reverse split; Alcobra/ADHD business combination "
+                "became effective with ARCT trading"
+            ),
         }
     ],
 
     "DD": [
         {
+            "date": "2019-06-03",
+            "type": "reverse_split",
+            "ratio": "1:3",
+            "comment": (
+                "1-for-3 reverse split associated with the DowDuPont "
+                "reorganization; split-adjusted DD trading began"
+            ),
+        },
+        {
             "date": "2026-06-24",
             "type": "reverse_split",
             "ratio": "1:3",
-            "comment": "Planned 1-for-3 reverse stock split; split-adjusted trading expected on NYSE",
-        }
+            "comment": "1-for-3 reverse stock split; split-adjusted trading began",
+        },
     ],
 
     "DNA": [
@@ -316,11 +423,17 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
 
     "FCEL": [
         {
+            "date": "2019-05-09",
+            "type": "reverse_split",
+            "ratio": "1:12",
+            "comment": "1-for-12 reverse stock split; post-split trading began",
+        },
+        {
             "date": "2024-11-11",
             "type": "reverse_split",
             "ratio": "1:30",
             "comment": "1-for-30 reverse stock split",
-        }
+        },
     ],
 
     "GE": [
@@ -341,14 +454,57 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
-    "LCID": [
+    "HLT": [
         {
-            "date": "2025-08-29",
+            "date": "2017-01-04",
             "type": "reverse_split",
-            "ratio": "1:10",
-            "comment": "1-for-10 reverse split; split-adjusted trading began after the effective date",
+            "ratio": "1:3",
+            "comment": (
+                "1-for-3 reverse stock split; split-adjusted trading began "
+                "after Hilton spin-offs"
+            ),
         }
     ],
+
+    "MARA": [
+        {
+            "date": "2017-10-30",
+            "type": "reverse_split",
+            "ratio": "1:4",
+            "comment": "1-for-4 reverse stock split; post-split trading began",
+        },
+        {
+            "date": "2019-04-08",
+            "type": "reverse_split",
+            "ratio": "1:4",
+            "comment": "1-for-4 reverse stock split; post-split trading began",
+        },
+    ],
+
+    "RIOT": [
+        {
+            "date": "2016-03-31",
+            "type": "reverse_split",
+            "ratio": "1:8",
+            "comment": (
+                "1-for-8 reverse split by predecessor Venaxis; "
+                "effective March 31, 2016"
+            ),
+        }
+    ],
+
+    # Disabled: the cache is already adjusted for this event.
+    # "LCID": [
+    #     {
+    #         "date": "2025-08-29",
+    #         "type": "reverse_split",
+    #         "ratio": "1:10",
+    #         "comment": (
+    #             "1-for-10 reverse split; split-adjusted trading began "
+    #             "on the next trading day"
+    #         ),
+    #     }
+    # ],
 
     "SPCE": [
         {
@@ -360,8 +516,41 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
     ],
 }
 
-# Ticker symbol changes: no direct price scaling by default
+
+# ---------------------------------------------------------------------------
+# Ticker symbol changes
+# No direct price scaling by default.
+# ---------------------------------------------------------------------------
+
 TICKER_CHANGES: Dict[str, List[Dict[str, str]]] = {
+    "ADHD": [
+        {
+            "date": "2017-11-16",
+            "type": "ticker_change",
+            "ratio": "1:1",
+            "from_symbol": "ADHD",
+            "to_symbol": "ARCT",
+            "comment": (
+                "Alcobra changed name and ticker to Arcturus Therapeutics "
+                "following the business combination"
+            ),
+        }
+    ],
+
+    "DD": [
+        {
+            "date": "2019-06-03",
+            "type": "ticker_change",
+            "ratio": "1:1",
+            "from_symbol": "DWDP",
+            "to_symbol": "DD",
+            "comment": (
+                "DowDuPont changed name to DuPont de Nemours and began "
+                "regular-way trading under DD after the Corteva separation"
+            ),
+        }
+    ],
+
     "META": [
         {
             "date": "2022-06-09",
@@ -412,21 +601,54 @@ TICKER_CHANGES: Dict[str, List[Dict[str, str]]] = {
             "ratio": "1:1",
             "from_symbol": "UTX",
             "to_symbol": "RTX",
-            "comment": "United Technologies renamed Raytheon Technologies and began trading as RTX after Raytheon merger",
+            "comment": (
+                "United Technologies renamed Raytheon Technologies and "
+                "began trading as RTX after Raytheon merger"
+            ),
         }
     ],
 }
 
-# Reorganizations / spin-offs: usually do NOT apply a simple price multiplier.
-# Use these to avoid/filter windows around discontinuities.
+
+# ---------------------------------------------------------------------------
+# Reorganizations / spin-offs / distributions
+#
+# These can cause large legitimate price discontinuities but should NOT
+# receive a simple price multiplier.
+# ---------------------------------------------------------------------------
+
 REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
     "DD": [
+        {
+            "date": "2019-04-02",
+            "type": "spin_off",
+            "ratio": "1 DOW:3 DWDP",
+            "comment": (
+                "Dow separation from DowDuPont; shareholders received "
+                "1 Dow share for every 3 DowDuPont shares. "
+                "Dow began regular-way trading on April 2, 2019."
+            ),
+        },
+        {
+            "date": "2019-06-03",
+            "type": "spin_off",
+            "ratio": "1 CTVA:3 DWDP",
+            "comment": (
+                "Corteva separation from DowDuPont; shareholders received "
+                "1 Corteva share for every 3 DowDuPont shares. "
+                "DuPont began regular-way trading under DD."
+            ),
+        },
         {
             "date": "2025-11-03",
             "type": "spin_off",
             "ratio": "1 Q:2 DD",
-            "comment": "Qnity spin-off; DD holders received 1 Qnity share for every 2 DuPont shares. Distribution date was 2025-11-01; first regular trading day was 2025-11-03.",
-        }
+            "comment": (
+                "Qnity spin-off; DD holders received 1 Qnity share "
+                "for every 2 DuPont shares. Distribution date was "
+                "2025-11-01; first regular trading day was 2025-11-03."
+            ),
+        },
     ],
 
     "GE": [
@@ -434,14 +656,33 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2023-01-04",
             "type": "spin_off",
             "ratio": "1 GEHC:3 GE",
-            "comment": "GE HealthCare spin-off; GE holders received 1 GEHC share for every 3 GE shares",
+            "comment": (
+                "GE HealthCare spin-off; GE holders received "
+                "1 GEHC share for every 3 GE shares"
+            ),
         },
         {
             "date": "2024-04-02",
             "type": "spin_off",
             "ratio": "1 GEV:4 GE",
-            "comment": "GE Vernova spin-off; GE holders received 1 GEV share for every 4 GE shares",
+            "comment": (
+                "GE Vernova spin-off; GE holders received "
+                "1 GEV share for every 4 GE shares"
+            ),
         },
+    ],
+
+    "HLT": [
+        {
+            "date": "2017-01-04",
+            "type": "spin_off",
+            "ratio": "2 PK + 1 HGV:10 HLT",
+            "comment": (
+                "Hilton completed Park Hotels & Resorts and Hilton Grand "
+                "Vacations spin-offs; regular-way trading began January 4, "
+                "2017 alongside the HLT 1-for-3 reverse split."
+            ),
+        }
     ],
 
     "CTRA": [
@@ -449,7 +690,10 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2021-10-04",
             "type": "merger",
             "ratio": "stock",
-            "comment": "Cabot Oil & Gas and Cimarex merger; Coterra Energy began regular-way trading",
+            "comment": (
+                "Cabot Oil & Gas and Cimarex merger; "
+                "Coterra Energy began regular-way trading"
+            ),
         }
     ],
 
@@ -458,7 +702,10 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2023-10-04",
             "type": "spin_off",
             "ratio": "reorganization",
-            "comment": "Lithium Americas separated into Lithium Americas (LAC) and Lithium Argentina (LAAC); both began regular-way trading",
+            "comment": (
+                "Lithium Americas separated into Lithium Americas (LAC) "
+                "and Lithium Argentina (LAAC); both began regular-way trading"
+            ),
         }
     ],
 
@@ -467,7 +714,10 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2020-07-01",
             "type": "spin_off",
             "ratio": "reorganization",
-            "comment": "IAC separated Match Group in a complex merger/reorganization; no simple price multiplier applied",
+            "comment": (
+                "IAC separated Match Group in a complex "
+                "merger/reorganization; no simple price multiplier applied"
+            ),
         }
     ],
 
@@ -476,20 +726,44 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2020-04-03",
             "type": "spin_off",
             "ratio": "0.5 OTIS + 1 CARR:1 UTX",
-            "comment": "UTC separated Otis and Carrier immediately before the Raytheon merger / RTX ticker change",
+            "comment": (
+                "UTC separated Otis and Carrier immediately before "
+                "the Raytheon merger / RTX ticker change"
+            ),
         }
     ],
 }
 
-# Mergers / delistings: no direct price scaling by default.
+
+# ---------------------------------------------------------------------------
+# Mergers / delistings
+#
+# No direct price scaling by default.
 # These symbols should usually be removed from live universes after the event.
+# ---------------------------------------------------------------------------
+
 MERGERS: Dict[str, List[Dict[str, str]]] = {
+    "ARCT": [
+        {
+            "date": "2017-11-16",
+            "type": "merger",
+            "ratio": "ADHD -> ARCT",
+            "comment": (
+                "Alcobra / Arcturus business combination; new ARCT security "
+                "and ticker became effective for Nasdaq trading"
+            ),
+        }
+    ],
+
     "BLUE": [
         {
             "date": "2025-06-02",
             "type": "merger",
             "ratio": "cash",
-            "comment": "bluebird bio sale completed; common stock ceased trading and is no longer publicly listed",
+            "comment": (
+                "bluebird bio sale completed; common stock ceased trading "
+                "and is no longer publicly listed"
+            ),
         }
     ],
 
@@ -498,7 +772,10 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {
             "date": "2025-07-18",
             "type": "merger",
             "ratio": "1.0250 CVX:1 HES",
-            "comment": "Hess acquired by Chevron; each HES share converted into 1.0250 CVX shares plus cash in lieu of fractional shares",
+            "comment": (
+                "Hess acquired by Chevron; each HES share converted into "
+                "1.0250 CVX shares plus cash in lieu of fractional shares"
+            ),
         }
     ],
 
@@ -507,7 +784,10 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {
             "date": "2025-07-01",
             "type": "merger",
             "ratio": "stock",
-            "comment": "Redfin acquired by Rocket Companies; RDFN no longer independent",
+            "comment": (
+                "Redfin acquired by Rocket Companies; "
+                "RDFN no longer independent"
+            ),
         }
     ],
 
@@ -516,7 +796,9 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {
             "date": "2023-12-14",
             "type": "merger",
             "ratio": "cash",
-            "comment": "Seagen acquired by Pfizer for $229 cash per share",
+            "comment": (
+                "Seagen acquired by Pfizer for $229 cash per share"
+            ),
         }
     ],
 
@@ -525,22 +807,89 @@ MERGERS: Dict[str, List[Dict[str, str]]] = {
             "date": "2024-03-18",
             "type": "merger",
             "ratio": "cash",
-            "comment": "Splunk acquired by Cisco for $157 cash per share; SPLK ceased trading on Nasdaq",
+            "comment": (
+                "Splunk acquired by Cisco for $157 cash per share; "
+                "SPLK ceased trading on Nasdaq"
+            ),
         }
     ],
 }
 
+
+# ---------------------------------------------------------------------------
+# Listing / IPO / predecessor events
+#
+# These explain discontinuities but must NOT be treated as splits.
+# ---------------------------------------------------------------------------
+
+LISTING_EVENTS: Dict[str, List[Dict[str, str]]] = {
+    "NIO": [
+        {
+            "date": "2018-09-12",
+            "type": "ipo",
+            "ratio": "1:1",
+            "comment": (
+                "NIO began NYSE trading following its initial public offering; "
+                "historical discontinuity is a listing boundary, not a split"
+            ),
+        }
+    ],
+
+    "SNOW": [
+        {
+            "date": "2020-09-16",
+            "type": "ipo",
+            "ratio": "1:1",
+            "comment": (
+                "Snowflake began NYSE trading following its IPO; "
+                "historical discontinuity is a listing boundary, not a split"
+            ),
+        }
+    ],
+}
+
+
+# ---------------------------------------------------------------------------
 # Combined lookup used by the helper module.
+# ---------------------------------------------------------------------------
+
 CORPORATE_ACTIONS: Dict[str, List[Dict[str, str]]] = {}
-for action_table in (SPLITS, REVERSE_SPLITS, TICKER_CHANGES, REORGANIZATIONS, MERGERS):
+
+for action_table in (
+    SPLITS,
+    REVERSE_SPLITS,
+    TICKER_CHANGES,
+    REORGANIZATIONS,
+    MERGERS,
+    LISTING_EVENTS,
+):
     for symbol, events in action_table.items():
         CORPORATE_ACTIONS.setdefault(symbol, []).extend(events)
 
-PRICE_ADJUSTMENT_ACTION_TYPES = {"split", "reverse_split"}
+
+# Events for which a direct price multiplier is appropriate.
+PRICE_ADJUSTMENT_ACTION_TYPES = {
+    "split",
+    "reverse_split",
+}
+
+
+# Events which can legitimately explain a price discontinuity.
 DISLOCATION_ACTION_TYPES = {
     "split",
     "reverse_split",
     "ticker_change",
     "spin_off",
     "merger",
+    "ipo",
+}
+
+
+# Events which explain why the historical price series may not be continuous,
+# but which should NOT be passed to the price-adjustment multiplier.
+NON_PRICE_ADJUSTMENT_ACTION_TYPES = {
+    "ticker_change",
+    "spin_off",
+    "merger",
+    "ipo",
 }
