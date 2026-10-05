@@ -38,6 +38,7 @@ from config import (
     TRAINING_PARAMETER_LOG_FILENAME,
     TRAINING_PARAMETER_DELTA_FILENAME,
     TRAINING_PARETO_FILENAME,
+    VALIDATION_PARETO_FILENAME,
     PLOT_PARETO,
 )
 from config.parameter_search_con import (
@@ -499,6 +500,16 @@ def _training_pareto_output_path(artifacts_dir: Path | None = None) -> Path:
     )
     output_dir.mkdir(parents=True, exist_ok=True)
     return output_dir / TRAINING_PARETO_FILENAME
+
+
+def _validation_pareto_output_path(artifacts_dir: Path | None = None) -> Path:
+    output_dir = (
+        Path(artifacts_dir).parent
+        if artifacts_dir is not None
+        else Path(__file__).resolve().parent.parent / "run_test"
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir / VALIDATION_PARETO_FILENAME
 
 
 def run_training_step(

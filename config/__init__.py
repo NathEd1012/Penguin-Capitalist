@@ -22,6 +22,14 @@ from config.symbols import (
 
 # ========== BACKTEST CONFIGURATION ==========
 from config.backtest import (
+    START_TIME,
+    TRAINING_PERIOD,
+    VALIDATION_PERIOD,
+    TEST_PERIOD,
+    TRAINING_START_DATE,
+    TRAINING_STOP_DATE,
+    VALIDATION_START_DATE,
+    VALIDATION_STOP_DATE,
     START_DATE,
     STOP_DATE,
     BINNING,
@@ -46,8 +54,6 @@ from config.training_step import (
     TRAINING_SUBSET_STOCKS,
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
-    TRAINING_START_DATE,
-    TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
@@ -55,6 +61,7 @@ from config.training_step import (
     TRAINING_PARAMETER_DELTA_FILENAME,
     PLOT_PARETO,
     TRAINING_PARETO_FILENAME,
+    VALIDATION_PARETO_FILENAME,
 )
 
 # ========== PARAMETER SEARCH CONFIGURATION ==========
@@ -65,6 +72,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
     PARAMETER_SEARCH_WARMUP_TRIALS,
     PARAMETER_SEARCH_RANGE_SET,
+    VALIDATION_CANDIDATES,
 )
 
 # ========== EXPORTS ==========
@@ -80,9 +88,17 @@ __all__ = [
     "INITIAL_CAPITAL",      # Starting capital (USD)
     "EXEC_TRANSACTION_COST", # Execution cost per trade (USD)
     "T_PLUS_X",             # Decision execution offset in bars
+    "START_TIME",
+    "TRAINING_PERIOD",
+    "VALIDATION_PERIOD",
+    "TEST_PERIOD",
     "TRAINING_TRANSACTION_COST", # Training penalty cost per buy (USD)
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime
+    "TRAINING_START_DATE",
+    "TRAINING_STOP_DATE",
+    "VALIDATION_START_DATE",
+    "VALIDATION_STOP_DATE",
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
     "RUN_LOG_NAME",         # "0" disables archiving; otherwise archive folder name
     "SAVE_CSV",             # 0 disables per-strategy CSV summaries
@@ -102,11 +118,13 @@ __all__ = [
     "TRAINING_PARAMETER_DELTA_FILENAME",
     "PLOT_PARETO",
     "TRAINING_PARETO_FILENAME",
+    "VALIDATION_PARETO_FILENAME",
     "PARAMETER_SEARCH_METHOD",
     "PARAMETER_SEARCH_BAYESIAN_SAMPLER",
     "PARAMETER_SEARCH_BAYESIAN_ACQUISITION",
     "PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA",
     "PARAMETER_SEARCH_WARMUP_TRIALS",
     "PARAMETER_SEARCH_RANGE_SET",
+    "VALIDATION_CANDIDATES",
     
 ]

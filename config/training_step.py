@@ -1,6 +1,11 @@
 """Configuration for the in-simulation training step."""
 import os
-from .backtest import START_DATE as EXECUTION_START_DATE, STOP_DATE as EXECUTION_STOP_DATE
+from .backtest import (
+	TRAINING_START_DATE as DEFAULT_TRAINING_START_DATE,
+	TRAINING_STOP_DATE as DEFAULT_TRAINING_STOP_DATE,
+	START_DATE as EXECUTION_START_DATE,
+	STOP_DATE as EXECUTION_STOP_DATE,
+)
 
 # Toggle the training pass that runs after strategy initialization.
 TRAINING_STEP_ENABLED = True
@@ -21,8 +26,8 @@ TRAINING_TRANSACTION_COSTx = 2.0
 TRAINING_TRANSACTION_COST = float(os.getenv("FIXED_TRAIN_TC", TRAINING_TRANSACTION_COSTx))
 
 # Train on a different date window from the live execution window when requested.
-TRAINING_START_DATE = os.getenv("FIXED_TRAIN_START", EXECUTION_START_DATE)
-TRAINING_STOP_DATE = os.getenv("FIXED_TRAIN_STOP", EXECUTION_STOP_DATE)
+TRAINING_START_DATE = os.getenv("FIXED_TRAIN_START", DEFAULT_TRAINING_START_DATE)
+TRAINING_STOP_DATE = os.getenv("FIXED_TRAIN_STOP", DEFAULT_TRAINING_STOP_DATE)
 
 def _parse_training_relative_to(raw_value):
     value = str(raw_value).strip().upper()
@@ -48,6 +53,7 @@ TRAINING_PARAMETER_DELTA_FILENAME = "trainable_penguin_parameter_delta.txt"
 # When enabled, save a Pareto-front PDF for the trainable strategies.
 PLOT_PARETO = True
 TRAINING_PARETO_FILENAME = "trainable_penguin_pareto_front.pdf"
+VALIDATION_PARETO_FILENAME = "trainable_penguin_validation_pareto_front.pdf"
 
 __all__ = [
 	"TRAINING_STEP_ENABLED",
@@ -64,4 +70,5 @@ __all__ = [
 	"TRAINING_PARAMETER_LOG_FILENAME",
 	"PLOT_PARETO",
 	"TRAINING_PARETO_FILENAME",
+	"VALIDATION_PARETO_FILENAME",
 ]

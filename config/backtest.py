@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime, timezone, timedelta
+import calendar
 from pathlib import Path
 
 # ========== BACKTEST TIMING SETTINGS ==========
@@ -59,6 +60,17 @@ def _parse_config_float(value, setting_name: str) -> float:
         return float(value)
     except (TypeError, ValueError) as exc:
         raise ValueError(f"Cannot parse float for {setting_name}: {value!r}") from exc
+
+
+def _add_months(value: datetime, months: int) -> datetime:
+    """Add calendar months while preserving a valid day-of-month."""
+    if months < 0:
+        raise ValueError("Month periods must be nonnegative")
+    month_index = value.year * 12 + value.month - 1 + months
+    year, month_index = divmod(month_index, 12)
+    month = month_index + 1
+    day = min(value.day, calendar.monthrange(year, month)[1])
+    return value.replace(year=year, month=month, day=day)
 
 
 def _normalize_run_directory_name(name: str) -> str:
@@ -124,20 +136,26 @@ def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 
-START_DATEx = "2024-01-01 00:00:00"
-START_DATE = _parse_config_date(os.getenv("FIXED_START", START_DATEx))
+# Define the experiment from one anchor and calendar-month periods.
+START_TIME = _parse_config_date(os.getenv("START_TIME", "2024-01-01 00:00:00"))
+TRAINING_PERIOD = int(os.getenv("TRAINING_PERIOD", "9"))
+VALIDATION_PERIOD = int(os.getenv("VALIDATION_PERIOD", "3"))
+TEST_PERIOD = int(os.getenv("TEST_PERIOD", "18"))
+if min(TRAINING_PERIOD, VALIDATION_PERIOD, TEST_PERIOD) <= 0:
+    raise ValueError("TRAINING_PERIOD, VALIDATION_PERIOD, and TEST_PERIOD must be positive")
 
+TRAINING_START_DATE = START_TIME
+TRAINING_STOP_DATE = _add_months(TRAINING_START_DATE, TRAINING_PERIOD)
+VALIDATION_START_DATE = TRAINING_STOP_DATE
+VALIDATION_STOP_DATE = _add_months(VALIDATION_START_DATE, VALIDATION_PERIOD)
+START_DATE = VALIDATION_STOP_DATE
+STOP_DATE = _add_months(START_DATE, TEST_PERIOD)
 
-
-
-# Stop date for backtest
-# Special keyword "TODAY" resolves to yesterday at 23:50 UTC 
-# (to avoid Alpaca recent SIP data restrictions)
-# Examples:
-#   "TODAY"                - Use yesterday's end-of-day
-#   "2026-02-03 21:30:00"  - Specific end datetime
-STOP_DATEx = "2026-07-01 00:00:00" #"TODAY"
-STOP_DATE = _parse_config_date(os.getenv("FIXED_STOP", STOP_DATEx))
+# Keep fixed dates available for legacy one-off runs.
+if os.getenv("FIXED_START"):
+    START_DATE = _parse_config_date(os.environ["FIXED_START"])
+if os.getenv("FIXED_STOP"):
+    STOP_DATE = _parse_config_date(os.environ["FIXED_STOP"])
 
 # ========== TIMEFRAME / BINNING ==========
 # Candle interval for bars
@@ -178,6 +196,14 @@ if T_PLUS_X < 0:
 
 
 __all__ = [
+    "START_TIME",
+    "TRAINING_PERIOD",
+    "VALIDATION_PERIOD",
+    "TEST_PERIOD",
+    "TRAINING_START_DATE",
+    "TRAINING_STOP_DATE",
+    "VALIDATION_START_DATE",
+    "VALIDATION_STOP_DATE",
     "START_DATE",
     "STOP_DATE",
     "BINNING",

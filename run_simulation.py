@@ -54,6 +54,11 @@ from config import (
     TRAINING_START_DATE,
     TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
+    VALIDATION_START_DATE,
+    VALIDATION_STOP_DATE,
+    VALIDATION_CANDIDATES,
+    VALIDATION_PARETO_FILENAME,
+    PLOT_PARETO,
 )
 from config.parameter_search_con import (
     PARAMETERS_EXECUTED,
@@ -63,7 +68,8 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_METHOD,
     PARAMETER_SEARCH_RANGE_SET,
     PARAMETER_SEARCH_WARMUP_TRIALS,
-)
+    )
+from penguins import SP500
 
 
 def percent_progress(iterable, desc: str):
@@ -148,6 +154,10 @@ def _format_runtime_configuration_banner(
     parameter_search_bayesian_sampler="gp",
     parameter_search_bayesian_acquisition="ei",
     parameter_search_bayesian_ucb_kappa=2.0,
+    validation_start_datetime_utc=None,
+    validation_end_datetime_utc=None,
+    validation_candidates=VALIDATION_CANDIDATES,
+    parameters_executed=PARAMETERS_EXECUTED,
 ) -> str:
     """Return the runtime banner text for backtest and training configuration."""
 
@@ -184,6 +194,10 @@ def _format_runtime_configuration_banner(
         f"Search Warmup Trials:  {parameter_search_warmup_trials}",
         f"Training Start (UTC):  {training_start_datetime_utc}",
         f"Training End (UTC):    {training_end_datetime_utc}",
+        f"Validation Start (UTC): {validation_start_datetime_utc}",
+        f"Validation End (UTC):   {validation_end_datetime_utc}",
+        f"Validation Candidates:   {validation_candidates}",
+        f"Parameters Executed:     {parameters_executed}",
         f"{'=' * 80}",
     ]
     return "\n".join(lines)
@@ -314,6 +328,10 @@ def run_backtest(
         parameter_search_bayesian_ucb_kappa=PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
         training_start_datetime_utc=TRAINING_START_DATE,
         training_end_datetime_utc=TRAINING_STOP_DATE,
+        validation_start_datetime_utc=VALIDATION_START_DATE,
+        validation_end_datetime_utc=VALIDATION_STOP_DATE,
+        validation_candidates=VALIDATION_CANDIDATES,
+        parameters_executed=PARAMETERS_EXECUTED,
         t_plus_x=t_plus_x,
     ))
     
@@ -421,7 +439,7 @@ def run_backtest(
                 end_datetime=training_end_dt,
                 binning=binning,
                 penguin_classes=active_trainables,
-                loaded_data=data if training_end_dt <= end_datetime_utc else None,
+                loaded_data=data if training_start_dt >= start_datetime_utc else None,
                 loaded_quality_report_text=quality_report_text,
             )
 
@@ -445,31 +463,160 @@ def run_backtest(
                 t_plus_x=t_plus_x,
             )
 
+            validation_specs = []
             for penguin_name, penguin in list(penguins.items()):
                 strategy_name = penguin.__class__.__name__
-                if strategy_name in trained_parameters:
-                    training_result = trained_parameters[strategy_name]
-                    top_candidates = training_result.get("top_params") or [
-                        {"params": training_result.get("best_params", {})}
-                    ]
-                    for rank, candidate in enumerate(top_candidates[:PARAMETERS_EXECUTED], start=1):
-                        training_step = int(candidate.get("trial", rank))
+                if strategy_name not in trained_parameters:
+                    continue
+
+                training_result = trained_parameters[strategy_name]
+                top_candidates = training_result.get("top_params") or [
+                    {"params": training_result.get("best_params", {})}
+                ]
+                for rank, candidate in enumerate(top_candidates[:VALIDATION_CANDIDATES], start=1):
+                    training_step = int(candidate.get("trial", rank))
+                    validation_name = f"{strategy_name}__validation_{training_step:03d}"
+                    validation_penguin = _replace_trainable_penguin_params(
+                        penguin,
+                        candidate.get("params", {}),
+                        name=validation_name,
+                    )
+                    validation_specs.append(
+                        (strategy_name, penguin_name, candidate, validation_penguin)
+                    )
+
+            if validation_specs:
+                from scripts.train_trainable_penguins import _score_training_candidate
+                from scripts.train_trainable_penguins import _training_profit_amount
+                from scripts.plotting import create_training_pareto_pdf
+
+                print(
+                    f"\nValidation: evaluating {len(validation_specs)} candidate(s) "
+                    f"from {VALIDATION_START_DATE} to {VALIDATION_STOP_DATE}..."
+                )
+                validation_results, _, _, _, _, _ = run_backtest(
+                    symbols=symbols,
+                    start_datetime=parse_datetime_string(VALIDATION_START_DATE),
+                    end_datetime=parse_datetime_string(VALIDATION_STOP_DATE),
+                    binning=binning,
+                    initial_capital=initial_capital,
+                    transaction_cost=transaction_cost,
+                    penguin_classes=[spec[3] for spec in validation_specs] + [SP500],
+                    training_step_allowed=False,
+                    collect_trade_details=False,
+                    t_plus_x=t_plus_x,
+                )
+                benchmark_metrics = validation_results[SP500().name][1]
+                ranked_by_strategy = defaultdict(list)
+                validation_pareto_history = defaultdict(list)
+                validation_parameter_history = []
+                for strategy_name, penguin_name, candidate, validation_penguin in validation_specs:
+                    metrics = validation_results[validation_penguin.name][1]
+                    score = _score_training_candidate(
+                        metrics,
+                        benchmark_metrics,
+                        transaction_cost,
+                        TRAINING_RELATIVE_TO,
+                    )
+                    ranked_by_strategy[strategy_name].append(
+                        {
+                            "params": dict(candidate.get("params", {})),
+                            "trial": int(candidate.get("trial", 0)),
+                            "training_score": candidate.get("score"),
+                            "validation_score": list(score),
+                            "validation_metrics": metrics,
+                            "penguin_name": penguin_name,
+                        }
+                    )
+                    validation_pareto_history[strategy_name].append(
+                        {
+                            "trial": int(candidate.get("trial", 0)),
+                            "status": "completed",
+                            "buy_trades": int(metrics.get("buy_trades", metrics.get("total_trades", 0))),
+                            "total_trades": int(metrics.get("total_trades", 0)),
+                            "profit_amount": float(metrics.get("total_return", 0.0)),
+                            "relative_profit_amount": _training_profit_amount(
+                                metrics,
+                                benchmark_metrics,
+                                TRAINING_RELATIVE_TO,
+                            ),
+                            "score": list(score),
+                        }
+                    )
+                    validation_parameter_history.append(
+                        {
+                            "strategy": strategy_name,
+                            "trial": int(candidate.get("trial", 0)),
+                            "params": dict(candidate.get("params", {})),
+                        }
+                    )
+
+                validation_selection = {}
+                validation_trained_parameters = {}
+                for strategy_name, ranked_candidates in ranked_by_strategy.items():
+                    ranked_candidates.sort(
+                        key=lambda candidate: tuple(candidate["validation_score"]),
+                        reverse=True,
+                    )
+                    selected_candidates = ranked_candidates[:PARAMETERS_EXECUTED]
+                    validation_selection[strategy_name] = selected_candidates
+                    validation_trained_parameters[strategy_name] = {
+                        "best_params": dict(ranked_candidates[0]["params"]) if ranked_candidates else {}
+                    }
+                    original_name = selected_candidates[0]["penguin_name"] if selected_candidates else None
+                    original_penguin = penguins.pop(original_name, None) if original_name else None
+                    portfolios.pop(original_name, None) if original_name else None
+                    if original_penguin is None:
+                        continue
+                    for rank, selected in enumerate(selected_candidates, start=1):
                         variant_name = (
-                            penguin_name
+                            original_name
                             if rank == 1
-                            else f"{penguin_name}_{training_step:03d}"
+                            else f"{original_name}_{int(selected['trial']):03d}"
                         )
                         variant = _replace_trainable_penguin_params(
-                            penguin,
-                            candidate.get("params", {}),
+                            original_penguin,
+                            selected["params"],
                             name=variant_name,
                         )
                         penguins[variant_name] = variant
-                        if variant_name != penguin_name:
-                            portfolios[variant_name] = Portfolio(initial_capital, transaction_cost)
-                            portfolios[variant_name].max_leverage = float(
-                                getattr(variant, "MAX_LEVERAGE", 1.0)
-                            )
+                        portfolios[variant_name] = Portfolio(initial_capital, transaction_cost)
+                        portfolios[variant_name].max_leverage = float(
+                            getattr(variant, "MAX_LEVERAGE", 1.0)
+                        )
+
+                if PLOT_PARETO and artifacts_dir is not None:
+                    validation_pareto_path = Path(artifacts_dir).parent / VALIDATION_PARETO_FILENAME
+                    create_training_pareto_pdf(
+                        dict(validation_pareto_history),
+                        validation_parameter_history,
+                        validation_trained_parameters,
+                        validation_pareto_path,
+                        title="Validation Pareto Front",
+                        relative_to=TRAINING_RELATIVE_TO,
+                        transaction_cost=transaction_cost,
+                    )
+
+                if artifacts_dir is not None:
+                    validation_path = Path(artifacts_dir) / "json" / "validation_selection.json"
+                    validation_path.parent.mkdir(parents=True, exist_ok=True)
+                    with open(validation_path, "w", encoding="utf-8") as handle:
+                        import json
+                        json.dump(
+                            {
+                                "validation_start": VALIDATION_START_DATE,
+                                "validation_stop": VALIDATION_STOP_DATE,
+                                "validation_candidates": VALIDATION_CANDIDATES,
+                                "parameters_executed": PARAMETERS_EXECUTED,
+                                "selection": validation_selection,
+                            },
+                            handle,
+                            indent=2,
+                            default=str,
+                        )
+                del validation_results
+            else:
+                print("No training candidates are available for validation; using base strategies.")
         else:
             print("No trainable penguins are active; skipping Step 3b training.")
 
