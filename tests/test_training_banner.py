@@ -23,6 +23,7 @@ def test_runtime_banner_includes_training_configuration() -> None:
         training_transaction_cost=5.0,
         training_random_seed=42,
         parameter_search_method="bayesian_rand",
+        parameter_search_range_set="narrow",
         parameter_search_warmup_trials=4,
         training_start_datetime_utc="2024-01-01 00:00:00+00:00",
         training_end_datetime_utc="2025-01-01 00:00:00+00:00",
@@ -35,6 +36,7 @@ def test_runtime_banner_includes_training_configuration() -> None:
     assert "Training Transaction Cost:" in banner
     assert "T_PLUS_X (bars):      3" in banner
     assert "Parameter Search:      bayesian_rand" in banner
+    assert "Parameter Range Set:   narrow" in banner
     assert "Search Warmup Trials:  4" in banner
     assert "Training Start (UTC):" in banner
     assert "Training End (UTC):" in banner

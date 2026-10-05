@@ -61,6 +61,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
     PARAMETER_SEARCH_METHOD,
+    PARAMETER_SEARCH_RANGE_SET,
     PARAMETER_SEARCH_WARMUP_TRIALS,
 )
 
@@ -139,6 +140,7 @@ def _format_runtime_configuration_banner(
     training_transaction_cost,
     training_random_seed,
     parameter_search_method,
+    parameter_search_range_set="broad",
     parameter_search_warmup_trials,
     training_start_datetime_utc,
     training_end_datetime_utc,
@@ -175,6 +177,7 @@ def _format_runtime_configuration_banner(
         f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
         f"Parameter Search:      {parameter_search_method}",
+        f"Parameter Range Set:   {parameter_search_range_set}",
         f"Bayesian Sampler:      {parameter_search_bayesian_sampler}",
         f"Acquisition Function:  {parameter_search_bayesian_acquisition}",
         f"UCB Kappa:             {parameter_search_bayesian_ucb_kappa}",
@@ -304,6 +307,7 @@ def run_backtest(
         training_transaction_cost=TRAINING_TRANSACTION_COST,
         training_random_seed=TRAINING_RANDOM_SEED,
         parameter_search_method=PARAMETER_SEARCH_METHOD,
+        parameter_search_range_set=PARAMETER_SEARCH_RANGE_SET,
         parameter_search_warmup_trials=PARAMETER_SEARCH_WARMUP_TRIALS,
         parameter_search_bayesian_sampler=PARAMETER_SEARCH_BAYESIAN_SAMPLER,
         parameter_search_bayesian_acquisition=PARAMETER_SEARCH_BAYESIAN_ACQUISITION,

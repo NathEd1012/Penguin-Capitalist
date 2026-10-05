@@ -47,89 +47,111 @@ PARAMETER_SEARCH_WARMUP_TRIALSx = 4
 PARAMETER_SEARCH_WARMUP_TRIALS = int(os.getenv("PARAMETER_SEARCH_WARMUP_TRIALS", PARAMETER_SEARCH_WARMUP_TRIALSx))
 
 PARAMETERS_EXECUTED = max(1, int(os.getenv("PARAMETERS_EXECUTED", "1")))
-'''
+
+PARAMETER_SEARCH_RANGE_SETx = "broad"
+PARAMETER_SEARCH_RANGE_SET = os.getenv(
+    "PARAMETER_SEARCH_RANGE_SET",
+    PARAMETER_SEARCH_RANGE_SETx,
+).strip().lower()
+if PARAMETER_SEARCH_RANGE_SET not in {"narrow", "broad"}:
+    raise ValueError(
+        "Unsupported PARAMETER_SEARCH_RANGE_SET: "
+        f"{PARAMETER_SEARCH_RANGE_SET}. Select 'narrow' or 'broad'."
+    )
+
 # Each entry is (parameter name, type, minimum, maximum).
-_RSI_PARAMETERS = (
+_NARROW_RSI_PARAMETERS = (
     ("rsi_period", "int", 7, 40), #28->40
     ("buy_rsi", "float", 5.0, 42.0), #18->5.0
     ("sell_rsi", "float", 45.0, 88.0), #55->45
 )
 
-_BOLLINGER_PARAMETERS = (
+_NARROW_BOLLINGER_PARAMETERS = (
     ("bb_period", "int", 10, 50), #40->50
     ("bb_stddev", "float", 1.0, 5), #3.5->5.0
 )
 
-_ADX_PARAMETERS = (
+_NARROW_ADX_PARAMETERS = (
     ("adx_period", "int", 7, 35), #28->35
     ("adx_threshold", "float", 10.0, 60.0), #40->60.0
 )
 
-_RISK_PARAMETERS = (
+_NARROW_RISK_PARAMETERS = (
     ("max_cash_fraction", "float", 0.02, 0.25), #0.20->0.25
     ("stop_loss_pct", "float", 0.01, 0.15), #0.10->0.15
     ("take_profit_pct", "float", 0.005, 0.20), #0.02->0.005
     ("cooldown_bars", "int", 0, 30),
 )
 
-_SIMPLER_RISK_PARAMETERS = tuple(
-    parameter for parameter in _RISK_PARAMETERS if parameter[0] != "cooldown_bars"
+_NARROW_SIMPLER_RISK_PARAMETERS = tuple(
+    parameter for parameter in _NARROW_RISK_PARAMETERS if parameter[0] != "cooldown_bars"
 )
 
-_RELATIVE_STRENGTH_PARAMETERS = (
+_NARROW_RELATIVE_STRENGTH_PARAMETERS = (
     ("relative_strength_period", "int", 7, 60), #40->60
     ("relative_strength_threshold", "float", -3.0, 1.0), # -1.0->-3.0
     ("rvol_period", "int", 3, 40), #7->3
     ("rvol_threshold", "float", 0.5, 6.0), #4.0->6.0
 )
 
-Trend_Method_parameters = (
+_TREND_METHOD_PARAMETERS = (
     ("trend_reversal_threshold", "float", 0.0, 1.0),
     ("trend_negative_threshold", "float", 0.0, 1.0),
     ("trend_entry_threshold", "float", 0.0, 1.0),
 )
 
 
-'''# Each entry is (parameter name, type, minimum, maximum).
-_RSI_PARAMETERS = (
+# Each entry is (parameter name, type, minimum, maximum).
+_BROAD_RSI_PARAMETERS = (
     ("rsi_period", "int", 0, 50), #28->40
     ("buy_rsi", "float", 0.0, 50.0), #18->5.0
     ("sell_rsi", "float", 30.0, 100.0), #55->45
 )
 
-_BOLLINGER_PARAMETERS = (
+_BROAD_BOLLINGER_PARAMETERS = (
     ("bb_period", "int", 0, 80), #40->50
     ("bb_stddev", "float", 0.0, 10.0), #3.5->5.0
 )
 
-_ADX_PARAMETERS = (
+_BROAD_ADX_PARAMETERS = (
     ("adx_period", "int", 0, 50), #28->35
     ("adx_threshold", "float", 0.0, 80.0), #40->60.0
 )
 
-_RISK_PARAMETERS = (
+_BROAD_RISK_PARAMETERS = (
     ("max_cash_fraction", "float", 0.001, 0.5), #0.20->0.25
     ("stop_loss_pct", "float", 0.001, 0.5), #0.10->0.15
     ("take_profit_pct", "float", 0.001, 0.50), #0.02->0.005
     ("cooldown_bars", "int", 0, 100),
 )
 
-_SIMPLER_RISK_PARAMETERS = tuple(
-    parameter for parameter in _RISK_PARAMETERS if parameter[0] != "cooldown_bars"
+_BROAD_SIMPLER_RISK_PARAMETERS = tuple(
+    parameter for parameter in _BROAD_RISK_PARAMETERS if parameter[0] != "cooldown_bars"
 )
 
-_RELATIVE_STRENGTH_PARAMETERS = (
+_BROAD_RELATIVE_STRENGTH_PARAMETERS = (
     ("relative_strength_period", "int", 0, 100), #40->60
     ("relative_strength_threshold", "float", -5.0, 5.0), # -1.0->-3.0
     ("rvol_period", "int", 0, 60), #7->3
     ("rvol_threshold", "float", 0.0, 10.0), #4.0->6.0
 )
 
-Trend_Method_parameters = (
-    ("trend_reversal_threshold", "float", 0.0, 1.0),
-    ("trend_negative_threshold", "float", 0.0, 1.0),
-    ("trend_entry_threshold", "float", 0.0, 1.0),
-)
+if PARAMETER_SEARCH_RANGE_SET == "narrow":
+    _RSI_PARAMETERS = _NARROW_RSI_PARAMETERS
+    _BOLLINGER_PARAMETERS = _NARROW_BOLLINGER_PARAMETERS
+    _ADX_PARAMETERS = _NARROW_ADX_PARAMETERS
+    _RISK_PARAMETERS = _NARROW_RISK_PARAMETERS
+    _SIMPLER_RISK_PARAMETERS = _NARROW_SIMPLER_RISK_PARAMETERS
+    _RELATIVE_STRENGTH_PARAMETERS = _NARROW_RELATIVE_STRENGTH_PARAMETERS
+else:
+    _RSI_PARAMETERS = _BROAD_RSI_PARAMETERS
+    _BOLLINGER_PARAMETERS = _BROAD_BOLLINGER_PARAMETERS
+    _ADX_PARAMETERS = _BROAD_ADX_PARAMETERS
+    _RISK_PARAMETERS = _BROAD_RISK_PARAMETERS
+    _SIMPLER_RISK_PARAMETERS = _BROAD_SIMPLER_RISK_PARAMETERS
+    _RELATIVE_STRENGTH_PARAMETERS = _BROAD_RELATIVE_STRENGTH_PARAMETERS
+
+Trend_Method_parameters = _TREND_METHOD_PARAMETERS
 
 _STRENGTH_CAP_PARAMETERS = (("strength_cap", "float", 1.0, 2.0),)
 
