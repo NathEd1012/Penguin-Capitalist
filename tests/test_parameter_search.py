@@ -19,6 +19,19 @@ def test_emperor_optuna_search_accepts_baseline_parameters() -> None:
     assert set(suggested_params) == set(baseline_params)
 
 
+def test_optuna_search_ignores_completed_trials_outside_active_range() -> None:
+    parameter_space = [("relative_strength_period", "int", 60, 252)]
+    completed_trials = [{
+        "status": "completed",
+        "params": {"relative_strength_period": 20},
+        "objective_value": 1.0,
+    }]
+
+    suggested_params = _optuna_suggest(parameter_space, completed_trials, seed=42)
+
+    assert 60 <= suggested_params["relative_strength_period"] <= 252
+
+
 def test_simpler_parameter_space_is_defined() -> None:
     parameter_space = strategy_parameter_space(Simpler_Penguin)
 

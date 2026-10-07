@@ -62,26 +62,26 @@ if PARAMETER_SEARCH_RANGE_SET not in {"narrow", "broad"}:
 
 # Each entry is (parameter name, type, minimum, maximum).
 _NARROW_RSI_PARAMETERS = (
-    ("rsi_period", "int", 7, 40), #28->40
-    ("buy_rsi", "float", 5.0, 42.0), #18->5.0
-    ("sell_rsi", "float", 45.0, 88.0), #55->45
+    ("rsi_period", "int", 5, 25),
+    ("buy_rsi", "float", 10.0, 40.0),
+    ("sell_rsi", "float", 60.0, 90.0),
 )
 
 _NARROW_BOLLINGER_PARAMETERS = (
-    ("bb_period", "int", 10, 50), #40->50
-    ("bb_stddev", "float", 1.0, 5), #3.5->5.0
+    ("bb_period", "int", 10, 50),
+    ("bb_stddev", "float", 1.0, 4.0),
 )
 
 _NARROW_ADX_PARAMETERS = (
-    ("adx_period", "int", 7, 35), #28->35
-    ("adx_threshold", "float", 10.0, 60.0), #40->60.0
+    ("adx_period", "int", 7, 30),
+    ("adx_threshold", "float", 20.0, 40.0),
 )
 
 _NARROW_RISK_PARAMETERS = (
-    ("max_cash_fraction", "float", 0.02, 0.25), #0.20->0.25
-    ("stop_loss_pct", "float", 0.01, 0.15), #0.10->0.15
-    ("take_profit_pct", "float", 0.005, 0.20), #0.02->0.005
-    ("cooldown_bars", "int", 0, 30),
+    ("max_cash_fraction", "float", 0.05, 0.20),
+    ("stop_loss_pct", "float", 0.02, 0.10),
+    ("take_profit_pct", "float", 0.03, 0.10),
+    ("cooldown_bars", "int", 0, 100),
 )
 
 _NARROW_SIMPLER_RISK_PARAMETERS = tuple(
@@ -89,10 +89,10 @@ _NARROW_SIMPLER_RISK_PARAMETERS = tuple(
 )
 
 _NARROW_RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 7, 60), #40->60
-    ("relative_strength_threshold", "float", -3.0, 1.0), # -1.0->-3.0
-    ("rvol_period", "int", 3, 40), #7->3
-    ("rvol_threshold", "float", 0.5, 6.0), #4.0->6.0
+    ("relative_strength_period", "int", 60, 252),
+    ("relative_strength_threshold", "float", -1.0, 1.0),
+    ("rvol_period", "int", 20, 50),
+    ("rvol_threshold", "float", 1.5, 2.0),
 )
 
 _TREND_METHOD_PARAMETERS = (
@@ -104,25 +104,25 @@ _TREND_METHOD_PARAMETERS = (
 
 # Each entry is (parameter name, type, minimum, maximum).
 _BROAD_RSI_PARAMETERS = (
-    ("rsi_period", "int", 0, 50), #28->40
-    ("buy_rsi", "float", 0.0, 50.0), #18->5.0
-    ("sell_rsi", "float", 30.0, 100.0), #55->45
+    ("rsi_period", "int", 2, 50),
+    ("buy_rsi", "float", 5.0, 50.0),
+    ("sell_rsi", "float", 50.0, 100.0),
 )
 
 _BROAD_BOLLINGER_PARAMETERS = (
-    ("bb_period", "int", 0, 80), #40->50
-    ("bb_stddev", "float", 0.0, 10.0), #3.5->5.0
+    ("bb_period", "int", 2, 100),
+    ("bb_stddev", "float", 0.5, 8.0),
 )
 
 _BROAD_ADX_PARAMETERS = (
-    ("adx_period", "int", 0, 50), #28->35
-    ("adx_threshold", "float", 0.0, 80.0), #40->60.0
+    ("adx_period", "int", 2, 50),
+    ("adx_threshold", "float", 10.0, 70.0),
 )
 
 _BROAD_RISK_PARAMETERS = (
-    ("max_cash_fraction", "float", 0.001, 0.5), #0.20->0.25
-    ("stop_loss_pct", "float", 0.001, 0.5), #0.10->0.15
-    ("take_profit_pct", "float", 0.001, 0.50), #0.02->0.005
+    ("max_cash_fraction", "float", 0.01, 0.50),
+    ("stop_loss_pct", "float", 0.01, 0.20),
+    ("take_profit_pct", "float", 0.005, 0.30),
     ("cooldown_bars", "int", 0, 100),
 )
 
@@ -131,10 +131,10 @@ _BROAD_SIMPLER_RISK_PARAMETERS = tuple(
 )
 
 _BROAD_RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 0, 100), #40->60
-    ("relative_strength_threshold", "float", -5.0, 5.0), # -1.0->-3.0
-    ("rvol_period", "int", 0, 60), #7->3
-    ("rvol_threshold", "float", 0.0, 10.0), #4.0->6.0
+    ("relative_strength_period", "int", 20, 300),
+    ("relative_strength_threshold", "float", -5.0, 5.0),
+    ("rvol_period", "int", 5, 100),
+    ("rvol_threshold", "float", 0.5, 5.0),
 )
 
 if PARAMETER_SEARCH_RANGE_SET == "narrow":

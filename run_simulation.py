@@ -232,6 +232,10 @@ def run_backtest(
     training_step_allowed: bool = True,
     collect_trade_details: bool = True,
     t_plus_x: int = T_PLUS_X,
+    backtest_label: str = "test",
+    loaded_data: Dict[str, Dict[datetime, Dict]] | None = None,
+    loaded_valid_symbols: List[str] | None = None,
+    loaded_price_basis_adjusted: Dict[str, bool] | None = None,
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
@@ -305,70 +309,108 @@ def run_backtest(
         if requested_symbols:
             symbols = requested_symbols
 
-    print("\n" + _format_runtime_configuration_banner(
-        start_datetime_utc=start_datetime_utc,
-        end_datetime_utc=end_datetime_utc,
-        binning=binning,
-        initial_capital=initial_capital,
-        transaction_cost=transaction_cost,
-        symbols=symbols,
-        active_symbol_list=ACTIVE_SYMBOL_LIST,
-        training_step_enabled=TRAINING_STEP_ENABLED,
-        training_relative_to=TRAINING_RELATIVE_TO,
-        training_iterations=TRAINING_ITERATIONS,
-        training_subset_stocks=TRAINING_SUBSET_STOCKS,
-        training_subset_months=TRAINING_SUBSET_MONTHS,
-        training_transaction_cost=TRAINING_TRANSACTION_COST,
-        training_random_seed=TRAINING_RANDOM_SEED,
-        parameter_search_method=PARAMETER_SEARCH_METHOD,
-        parameter_search_range_set=PARAMETER_SEARCH_RANGE_SET,
-        parameter_search_warmup_trials=PARAMETER_SEARCH_WARMUP_TRIALS,
-        parameter_search_bayesian_sampler=PARAMETER_SEARCH_BAYESIAN_SAMPLER,
-        parameter_search_bayesian_acquisition=PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
-        parameter_search_bayesian_ucb_kappa=PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
-        training_start_datetime_utc=TRAINING_START_DATE,
-        training_end_datetime_utc=TRAINING_STOP_DATE,
-        validation_start_datetime_utc=VALIDATION_START_DATE,
-        validation_end_datetime_utc=VALIDATION_STOP_DATE,
-        validation_candidates=VALIDATION_CANDIDATES,
-        parameters_executed=PARAMETERS_EXECUTED,
-        t_plus_x=t_plus_x,
-    ))
+    reuse_requested = loaded_data is not None and loaded_valid_symbols is not None
+    if not reuse_requested:
+        print("\n" + _format_runtime_configuration_banner(
+            start_datetime_utc=start_datetime_utc,
+            end_datetime_utc=end_datetime_utc,
+            binning=binning,
+            initial_capital=initial_capital,
+            transaction_cost=transaction_cost,
+            symbols=symbols,
+            active_symbol_list=ACTIVE_SYMBOL_LIST,
+            training_step_enabled=TRAINING_STEP_ENABLED,
+            training_relative_to=TRAINING_RELATIVE_TO,
+            training_iterations=TRAINING_ITERATIONS,
+            training_subset_stocks=TRAINING_SUBSET_STOCKS,
+            training_subset_months=TRAINING_SUBSET_MONTHS,
+            training_transaction_cost=TRAINING_TRANSACTION_COST,
+            training_random_seed=TRAINING_RANDOM_SEED,
+            parameter_search_method=PARAMETER_SEARCH_METHOD,
+            parameter_search_range_set=PARAMETER_SEARCH_RANGE_SET,
+            parameter_search_warmup_trials=PARAMETER_SEARCH_WARMUP_TRIALS,
+            parameter_search_bayesian_sampler=PARAMETER_SEARCH_BAYESIAN_SAMPLER,
+            parameter_search_bayesian_acquisition=PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
+            parameter_search_bayesian_ucb_kappa=PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
+            training_start_datetime_utc=TRAINING_START_DATE,
+            training_end_datetime_utc=TRAINING_STOP_DATE,
+            validation_start_datetime_utc=VALIDATION_START_DATE,
+            validation_end_datetime_utc=VALIDATION_STOP_DATE,
+            validation_candidates=VALIDATION_CANDIDATES,
+            parameters_executed=PARAMETERS_EXECUTED,
+            t_plus_x=t_plus_x,
+        ))
     
-    # Load data
-    print("Step 1: Loading historical data from Alpaca...")
-    loader = DataLoader()
-    try:
-        data, sparse_warning = loader.load_bars(
-            symbols,
-            warmup_start_datetime_utc,
-            end_datetime_utc,
-            binning,
-            enable_data_quality_checks=True,
-        )
-        if sparse_warning:
-            print(sparse_warning)
-        quality_report_text = loader.get_quality_report_text()
-        if quality_report_text:
-            if artifacts_dir is not None:
-                warnings_path = artifacts_dir / "consistency_warnings.txt"
-                with open(warnings_path, "w") as f:
-                    f.write(quality_report_text)
-                    f.write("\n")
-    except Exception as e:
-        print(f"Error loading data: {e}")
-        print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
-        sys.exit(1)
+    quality_report_text = ""
+    price_basis_adjusted = dict(loaded_price_basis_adjusted or {})
+    reuse_loaded_data = loaded_data is not None and loaded_valid_symbols is not None
+    if reuse_loaded_data:
+        source_timestamps = [
+            timestamp
+            for symbol_data in loaded_data.values()
+            for timestamp in symbol_data
+        ]
+        reuse_loaded_data = bool(source_timestamps) and min(source_timestamps) <= warmup_start_datetime_utc
+        if reuse_loaded_data:
+            data = {
+                symbol: {
+                    timestamp: bar
+                    for timestamp, bar in loaded_data[symbol].items()
+                    if timestamp < end_datetime_utc
+                }
+                for symbol in loaded_valid_symbols
+                if symbol in loaded_data
+            }
+            data_timestamps = [
+                timestamp
+                for symbol_data in data.values()
+                for timestamp in symbol_data
+            ]
+            reuse_loaded_data = bool(data_timestamps) and max(data_timestamps) >= start_datetime_utc
+
+    if not reuse_loaded_data:
+        # Load data
+        print("Step 1: Loading historical data from Alpaca...")
+        loader = DataLoader()
+        try:
+            data, sparse_warning = loader.load_bars(
+                symbols,
+                warmup_start_datetime_utc,
+                end_datetime_utc,
+                binning,
+                enable_data_quality_checks=True,
+            )
+            price_basis_adjusted = dict(loader.last_price_basis_adjusted)
+            if sparse_warning:
+                print(sparse_warning)
+            quality_report_text = loader.get_quality_report_text()
+            if quality_report_text:
+                if artifacts_dir is not None:
+                    warnings_path = Path(artifacts_dir) / "consistency_warnings.txt"
+                    warnings_path.parent.mkdir(parents=True, exist_ok=True)
+                    with open(warnings_path, "w") as f:
+                        f.write(quality_report_text)
+                        f.write("\n")
+        except Exception as e:
+            print(f"Error loading data: {e}")
+            print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
+            sys.exit(1)
     
     ################################ STEP 2 ################################
 
     # Detect stale data
-    print("\nStep 2: Detecting stale data...")
-    valid_symbols, stale_symbols = loader.detect_stale_data(data)
+    if not reuse_loaded_data:
+        print("\nStep 2: Detecting stale data...")
+    if reuse_loaded_data:
+        valid_symbols = [symbol for symbol in loaded_valid_symbols if symbol in data]
+        stale_symbols = []
+    else:
+        valid_symbols, stale_symbols = loader.detect_stale_data(data)
     
-    print(f"  Valid symbols: {len(valid_symbols)}")
-    if stale_symbols:
-        print(f"  Stale symbols ({len(stale_symbols)}): {', '.join(stale_symbols)}")
+    if not reuse_loaded_data:
+        print(f"  Valid symbols: {len(valid_symbols)}")
+        if stale_symbols:
+            print(f"  Stale symbols ({len(stale_symbols)}): {', '.join(stale_symbols)}")
     
     symbols = valid_symbols
     if not symbols:
@@ -505,6 +547,10 @@ def run_backtest(
                     training_step_allowed=False,
                     collect_trade_details=False,
                     t_plus_x=t_plus_x,
+                    backtest_label="validation",
+                    loaded_data=data,
+                    loaded_valid_symbols=symbols,
+                    loaded_price_basis_adjusted=price_basis_adjusted,
                 )
                 benchmark_metrics = validation_results[SP500().name][1]
                 ranked_by_strategy = defaultdict(list)
@@ -624,7 +670,10 @@ def run_backtest(
 
 
     # Run simulation
-    print(f"\nStep 4: Running backtest ({len(sorted_timestamps)} bars)...\n")
+    print(
+        f"\nStep 4: Running {backtest_label} backtest "
+        f"({len(sorted_timestamps)} bars)...\n"
+    )
     
     # Prepare price history for each symbol
     price_history = defaultdict(list)
@@ -632,6 +681,7 @@ def run_backtest(
     price_adjustment_events = {
         symbol: get_price_adjustment_events(symbol)
         for symbol in symbols
+        if not price_basis_adjusted.get(symbol, False)
     }
     
     # Track trades by bar for detailed logging

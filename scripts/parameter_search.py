@@ -121,8 +121,14 @@ def _optuna_suggest(
     for trial in completed_trials:
         if trial.get("status") != "completed":
             continue
+        params = dict(trial.get("params", {}))
+        if any(
+            name not in params or not distributions[name]._contains(params[name])
+            for name in distributions
+        ):
+            continue
         study.add_trial(optuna.trial.create_trial(
-            params=dict(trial["params"]),
+            params=params,
             distributions=distributions,
             value=float(trial["objective_value"]),
         ))
