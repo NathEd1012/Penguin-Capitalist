@@ -70,6 +70,7 @@ _NARROW_RSI_PARAMETERS = (
 _NARROW_BOLLINGER_PARAMETERS = (
     ("bb_period", "int", 10, 50),
     ("bb_stddev", "float", 1.0, 4.0),
+    ("upper_band_buffer", "float", 0.0, 0.25),
 )
 
 _NARROW_ADX_PARAMETERS = (
@@ -98,7 +99,7 @@ _NARROW_RELATIVE_STRENGTH_PARAMETERS = (
 _TREND_METHOD_PARAMETERS = (
     ("trend_reversal_threshold", "float", 0.0, 1.0),
     ("trend_negative_threshold", "float", 0.0, 1.0),
-    ("trend_entry_threshold", "float", 0.0, 1.0),
+    ("trend_entry_threshold", "float", 1e-6, 1.0),
 )
 
 
@@ -112,11 +113,19 @@ _BROAD_RSI_PARAMETERS = (
 _BROAD_BOLLINGER_PARAMETERS = (
     ("bb_period", "int", 2, 100),
     ("bb_stddev", "float", 0.5, 8.0),
+    ("upper_band_buffer", "float", 0.0, 1.0),
 )
 
 _BROAD_ADX_PARAMETERS = (
     ("adx_period", "int", 2, 50),
     ("adx_threshold", "float", 10.0, 70.0),
+)
+
+_BROAD_SIMPLER_ADX_PARAMETERS = (
+    ("adx_period", "int", 2, 50),
+    ("adx_threshold", "float", 10.0, 70.0),
+    ("adx_entry_threshold", "float", 10.0, 70.0),
+    ("adx_negative_threshold", "float", 10.0, 70.0),
 )
 
 _BROAD_RISK_PARAMETERS = (
@@ -141,6 +150,12 @@ if PARAMETER_SEARCH_RANGE_SET == "narrow":
     _RSI_PARAMETERS = _NARROW_RSI_PARAMETERS
     _BOLLINGER_PARAMETERS = _NARROW_BOLLINGER_PARAMETERS
     _ADX_PARAMETERS = _NARROW_ADX_PARAMETERS
+    _SIMPLER_ADX_PARAMETERS = (
+        ("adx_period", "int", 7, 30),
+        ("adx_threshold", "float", 20.0, 40.0),
+        ("adx_entry_threshold", "float", 20.0, 40.0),
+        ("adx_negative_threshold", "float", 10.0, 40.0),
+    )
     _RISK_PARAMETERS = _NARROW_RISK_PARAMETERS
     _SIMPLER_RISK_PARAMETERS = _NARROW_SIMPLER_RISK_PARAMETERS
     _RELATIVE_STRENGTH_PARAMETERS = _NARROW_RELATIVE_STRENGTH_PARAMETERS
@@ -148,6 +163,7 @@ else:
     _RSI_PARAMETERS = _BROAD_RSI_PARAMETERS
     _BOLLINGER_PARAMETERS = _BROAD_BOLLINGER_PARAMETERS
     _ADX_PARAMETERS = _BROAD_ADX_PARAMETERS
+    _SIMPLER_ADX_PARAMETERS = _BROAD_SIMPLER_ADX_PARAMETERS
     _RISK_PARAMETERS = _BROAD_RISK_PARAMETERS
     _SIMPLER_RISK_PARAMETERS = _BROAD_SIMPLER_RISK_PARAMETERS
     _RELATIVE_STRENGTH_PARAMETERS = _BROAD_RELATIVE_STRENGTH_PARAMETERS
@@ -159,11 +175,16 @@ _STRENGTH_CAP_PARAMETERS = (("strength_cap", "float", 1.0, 2.0),)
 _RSI_ADX_PARAMETERS = _RSI_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
 _BOLLINGER_ADX_PARAMETERS = _BOLLINGER_PARAMETERS + _ADX_PARAMETERS + _RISK_PARAMETERS
 _SIMPLER_PARAMETERS = (
-    _BOLLINGER_PARAMETERS
-    + _ADX_PARAMETERS
+    _RSI_PARAMETERS
+    + _SIMPLER_ADX_PARAMETERS
     + _SIMPLER_RISK_PARAMETERS
     + _RELATIVE_STRENGTH_PARAMETERS
-    + (("trend_score_threshold", "float", 0.0, 1.0),)
+)
+_SIMPLER2_PARAMETERS = (
+    _BOLLINGER_PARAMETERS
+    + _SIMPLER_RISK_PARAMETERS
+    + _RELATIVE_STRENGTH_PARAMETERS
+    + Trend_Method_parameters
 )
 _RSI_RISK_PARAMETERS = _RSI_PARAMETERS + _RISK_PARAMETERS
 _PUFFIN_PARAMETERS = (
@@ -190,16 +211,7 @@ _EMPEROR_PARAMETERS = (
 def _supported_parameters(strategy_class, parameter_space):
     signature = inspect.signature(strategy_class)
     if any(parameter.kind is inspect.Parameter.VAR_KEYWORD for parameter in signature.parameters.values()):
-        for parent_class in strategy_class.__mro__[1:]:
-            parent_signature = inspect.signature(parent_class)
-            if not any(
-                parameter.kind is inspect.Parameter.VAR_KEYWORD
-                for parameter in parent_signature.parameters.values()
-            ):
-                signature = parent_signature
-                break
-        else:
-            return parameter_space
+        return parameter_space
 
     accepted_parameters = set(signature.parameters)
     return tuple(
@@ -216,10 +228,19 @@ def strategy_parameter_space(strategy_class):
     return _supported_parameters(strategy_class, parameter_space)
 
 
+def has_parameter_search_space(strategy_class) -> bool:
+    try:
+        return bool(strategy_parameter_space(strategy_class))
+    except ValueError:
+        return False
+
+
 def strategy_parameter_space_by_name(strategy_name: str):
     """Return the configured search space for a strategy name."""
     if strategy_name == "Simpler_Penguin":
         return _SIMPLER_PARAMETERS
+    if strategy_name == "Simpler_Penguin2":
+        return _SIMPLER2_PARAMETERS
     if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
         return _PUFFIN_PARAMETERS
     if strategy_name == "Adv_SELL_ALL":
@@ -263,4 +284,5 @@ __all__ = [
     "PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA",
     "strategy_parameter_space",
     "strategy_parameter_space_by_name",
+    "has_parameter_search_space",
 ]

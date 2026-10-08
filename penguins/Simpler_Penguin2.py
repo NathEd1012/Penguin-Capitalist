@@ -5,18 +5,18 @@ from typing import List
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
-    adx_proxy,
-    rsi,
+    bollinger_bands,
     relative_strength,
     relative_volume,
+    trend_quality,
 )
 
 
 @dataclass
-class Simpler_PenguinParams:
-    rsi_period: int
-    buy_rsi: float
-    sell_rsi: float
+class Simpler_Penguin2Params:
+    bb_period: int
+    bb_stddev: float
+    upper_band_buffer: float
     max_cash_fraction: float
     stop_loss_pct: float
     take_profit_pct: float
@@ -24,13 +24,12 @@ class Simpler_PenguinParams:
     relative_strength_threshold: float
     rvol_period: int
     rvol_threshold: float
-    adx_period: int
-    adx_threshold: float
-    adx_entry_threshold: float
-    adx_negative_threshold: float
+    trend_reversal_threshold: float
+    trend_negative_threshold: float
+    trend_entry_threshold: float
 
 
-class Simpler_Penguin(BasePenguin):
+class Simpler_Penguin2(BasePenguin):
     LOOKBACK_BARS = 120
 
     def __init__(
@@ -39,7 +38,7 @@ class Simpler_Penguin(BasePenguin):
         **parameters: int | float,
     ):
         super().__init__(name)
-        self.params = Simpler_PenguinParams(**parameters)
+        self.params = Simpler_Penguin2Params(**parameters)
 
     def decide(
         self,
@@ -53,18 +52,19 @@ class Simpler_Penguin(BasePenguin):
     ) -> tuple[str, int]:
         min_required = max(
             60,
-            self.params.rsi_period,
+            self.params.bb_period,
             self.params.relative_strength_period,
             self.params.rvol_period,
-            self.params.adx_period,
         ) + 2
         if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
-        rsi_value = rsi(mid_prices, self.params.rsi_period)
-        adx_value = adx_proxy(mid_prices, self.params.adx_period)
-        previous_adx_value = adx_proxy(mid_prices[:-1], self.params.adx_period)
-        two_bars_ago_adx_value = adx_proxy(mid_prices[:-2], self.params.adx_period)
+        upper_band, middle_band, lower_band = bollinger_bands(
+            mid_prices, self.params.bb_period, self.params.bb_stddev
+        )
+        trend_score = trend_quality(mid_prices)
+        previous_trend_score = trend_quality(mid_prices[:-1])
+        two_bars_ago_trend_score = trend_quality(mid_prices[:-2])
         relative_strength_value = relative_strength(
             mid_prices, spy_prices, self.params.relative_strength_period
         )
@@ -87,32 +87,34 @@ class Simpler_Penguin(BasePenguin):
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
+            band_width = upper_band - lower_band
 
-            rsi_overbought = rsi_value >= self.params.sell_rsi
-
-            weak_adx = adx_value < self.params.adx_threshold
+            upper_band_reached = (
+                current_price >= upper_band
+                + self.params.upper_band_buffer * band_width
+            )
+            
+            weak_trend = trend_score < self.params.trend_reversal_threshold
 
             take_profit_trigger = (
-                (profit_threshold_reached or rsi_overbought)
+                (profit_threshold_reached or upper_band_reached)
                 and
-                (weak_adx)
+                (weak_trend)
             )
-
             #rel Strength
             relative_strength_exit_trigger = (
                 avg_entry is not None
                 and relative_strength_value < self.params.relative_strength_threshold
             )
-
-            #Rel Volume            
-            negative_adx = adx_value < self.params.adx_negative_threshold
-            falling_adx = (
-                adx_value < previous_adx_value
-                and adx_value < two_bars_ago_adx_value
+            #Rel Volume
+            negative_trend = trend_score < self.params.trend_negative_threshold
+            falling_trend = (
+                trend_score < previous_trend_score
+                and trend_score < two_bars_ago_trend_score
            )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_adx and falling_adx)
+                and (negative_trend and falling_trend)
             )
 
             if (
@@ -124,15 +126,14 @@ class Simpler_Penguin(BasePenguin):
                 return "SELL", shares_owned
 
         # ============================== BUY AMOUNT =============================
-        rsi_buy_signal = rsi_value <= self.params.buy_rsi
         if (
             shares_owned == 0
-            and rsi_buy_signal
-            and adx_value >= self.params.adx_entry_threshold
+            and current_price <= lower_band
+            and trend_score > self.params.trend_entry_threshold
         ):
             strength = min(
                 1.5,
-                max(0.25, adx_value / self.params.adx_entry_threshold),
+                max(0.25, trend_score /self.params.trend_entry_threshold),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:

@@ -40,6 +40,10 @@ def find_parameter_log(artifacts_dir: Path) -> Path:
 
 
 def resolve_artifacts_dir(run_log_name: str) -> Path:
+	supplied_path = Path(run_log_name).expanduser()
+	if supplied_path.is_absolute() or len(supplied_path.parts) > 1:
+		return supplied_path.resolve() / "artifacts"
+
 	direct_path = RUN_LOG_DIR / run_log_name / "artifacts"
 	if direct_path.is_dir():
 		return direct_path
@@ -145,7 +149,7 @@ def main() -> None:
 
 	artifacts_dir = resolve_artifacts_dir(args.run_log_name)
 	parameter_log = find_parameter_log(artifacts_dir)
-	output_path = args.output or RUN_LOG_DIR / args.run_log_name / OUTPUT_NAME
+	output_path = args.output or artifacts_dir.parent / OUTPUT_NAME
 	output_path.parent.mkdir(parents=True, exist_ok=True)
 
 	histories = load_histories(parameter_log)

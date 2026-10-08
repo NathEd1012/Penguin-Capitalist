@@ -4,6 +4,7 @@ import sys
 import time
 import gc
 import ctypes
+import random
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -68,7 +69,9 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_METHOD,
     PARAMETER_SEARCH_RANGE_SET,
     PARAMETER_SEARCH_WARMUP_TRIALS,
-    )
+    has_parameter_search_space,
+)
+from scripts.parameter_search import suggest_parameters
 from penguins import SP500
 
 
@@ -220,6 +223,21 @@ def _replace_trainable_penguin_params(penguin, params: Dict[str, int | float], n
         return penguin
 
 
+def _instantiate_penguin(penguin_spec):
+    if not isinstance(penguin_spec, type):
+        return penguin_spec if hasattr(penguin_spec, "decide") else penguin_spec()
+
+    if has_parameter_search_space(penguin_spec):
+        parameters, _ = suggest_parameters(
+            strategy_class=penguin_spec,
+            completed_trials=[],
+            rng=random.Random(TRAINING_RANDOM_SEED),
+        )
+        return penguin_spec(**parameters)
+
+    return penguin_spec()
+
+
 def run_backtest(
     symbols: List[str],
     start_datetime: datetime,
@@ -281,7 +299,7 @@ def run_backtest(
         trainable_classes = [
             penguin_class
             for penguin_class in penguin_classes
-            if getattr(penguin_class, "TRAINABLE", False)
+            if has_parameter_search_space(penguin_class)
         ]
         if trainable_classes:
             training_start_datetime_utc = parse_datetime_string(TRAINING_START_DATE).astimezone(timezone.utc)
@@ -441,12 +459,7 @@ def run_backtest(
     print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
     for penguin_spec in tqdm(penguin_classes, desc="Initializing strategies"):
         try:
-            if isinstance(penguin_spec, type):
-                penguin = penguin_spec()
-            elif hasattr(penguin_spec, "decide"):
-                penguin = penguin_spec
-            else:
-                penguin = penguin_spec()
+            penguin = _instantiate_penguin(penguin_spec)
             pen_name = penguin.name
             portfolios[pen_name] = Portfolio(
                 initial_capital,
@@ -466,7 +479,7 @@ def run_backtest(
         seen_trainable_classes = set()
         for penguin in penguins.values():
             penguin_class = penguin.__class__
-            if getattr(penguin_class, "TRAINABLE", False) and penguin_class not in seen_trainable_classes:
+            if has_parameter_search_space(penguin_class) and penguin_class not in seen_trainable_classes:
                 active_trainables.append(penguin_class)
                 seen_trainable_classes.add(penguin_class)
 
@@ -666,12 +679,12 @@ def run_backtest(
         else:
             print("No trainable penguins are active; skipping Step 3b training.")
 
-    ################################ STEP 4 ################################
+    backtest_step = 5 if backtest_label.casefold() == "test" else 4
 
 
     # Run simulation
     print(
-        f"\nStep 4: Running {backtest_label} backtest "
+        f"\nStep {backtest_step}: Running {backtest_label} backtest "
         f"({len(sorted_timestamps)} bars)...\n"
     )
     
