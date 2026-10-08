@@ -555,8 +555,10 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
                 new_year += 1
             current_date = current_date.replace(year=new_year, month=new_month)
     
-    # Find the bar indices closest to each tick date
-    tick_indices = []
+    # Find the bar indices closest to each tick date. Keep the intended
+    # calendar date so a boundary tick can still be labeled when no bar
+    # exists exactly on that date.
+    tick_points = []
     for tick_date in tick_dates:
         closest_idx = 0
         min_diff = abs((bar_timestamps[0] - tick_date).total_seconds())
@@ -565,24 +567,24 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
             if diff < min_diff:
                 min_diff = diff
                 closest_idx = i
-        if closest_idx not in tick_indices:
-            tick_indices.append(closest_idx)
+        if not any(idx == closest_idx for idx, _ in tick_points):
+            tick_points.append((closest_idx, tick_date))
     
     # Always include the final recorded bar so the rightmost label is the
     # actual final date, even when it is not a month boundary.
     final_index = total_bars - 1
-    if final_index not in tick_indices:
-        tick_indices.append(final_index)
+    if not any(idx == final_index for idx, _ in tick_points):
+        tick_points.append((final_index, None))
 
     # Sort indices
-    tick_indices.sort()
+    tick_points.sort(key=lambda point: point[0])
     
     # Build labels with appropriate format
     # Only show year for January, otherwise just month
-    x_ticks = [mdates.date2num(bar_timestamps[idx]) for idx in tick_indices]
+    x_ticks = [mdates.date2num(bar_timestamps[idx]) for idx, _ in tick_points]
     x_labels = []
-    for idx in tick_indices:
-        dt = bar_timestamps[idx]
+    for idx, tick_date in tick_points:
+        dt = tick_date or bar_timestamps[idx]
         if idx == final_index:
             x_labels.append(dt.strftime('%d %b %Y'))
         elif span_days <= 60:

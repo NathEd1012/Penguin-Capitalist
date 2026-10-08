@@ -7,7 +7,6 @@ import random
 import sys
 import gc
 import ctypes
-from dataclasses import asdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List
@@ -46,6 +45,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
+    has_parameter_search_space,
 )
 from run_simulation import parse_datetime_string, run_backtest
 from penguins import SP500
@@ -330,13 +330,13 @@ def _train_trainable_penguins(
         qualifying_candidates = []
         pareto_history[strategy_class.__name__] = []
 
-        baseline_instance = strategy_class()
-        if hasattr(baseline_instance, "params"):
-            try:
-                best_params = asdict(baseline_instance.params)
-            except Exception:
-                best_params = dict(getattr(baseline_instance.params, "__dict__", {}))
-        initial_params = dict(best_params)
+        initial_params, initial_source = suggest_parameters(
+            strategy_class=strategy_class,
+            completed_trials=[],
+            rng=rng,
+            np_rng=np_rng,
+        )
+        best_params = dict(initial_params)
 
         strategy_header = f"  Optimizing {strategy_class.__name__}"
         log_lines.append("")
@@ -355,7 +355,7 @@ def _train_trainable_penguins(
 
             if trial_number == 1:
                 params = dict(initial_params)
-                proposal_source = "initial_params"
+                proposal_source = initial_source
             else:
                 params, proposal_source = suggest_parameters(
                     strategy_class=strategy_class,
@@ -663,7 +663,7 @@ def main() -> None:
     print("Step 1: Preparing training data...")
     active_trainables = [
         strategy for strategy in ACTIVE_PENGUINS
-        if getattr(strategy, "TRAINABLE", False)
+        if has_parameter_search_space(strategy)
     ]
     if not active_trainables:
         print("No active trainable penguins are configured.")
