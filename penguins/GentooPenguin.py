@@ -13,7 +13,7 @@ from penguins.decision_utils import (
 
 
 @dataclass
-class Simpler_PenguinParams:
+class GentooPenguinParams:
     rsi_period: int
     buy_rsi: float
     sell_rsi: float
@@ -30,16 +30,16 @@ class Simpler_PenguinParams:
     adx_negative_threshold: float
 
 
-class Simpler_Penguin(BasePenguin):
+class GentooPenguin(BasePenguin):
     LOOKBACK_BARS = 120
 
     def __init__(
         self,
-        name: str = "Simpler_Penguin",
+        name: str = "GentooPenguin",
         **parameters: int | float,
     ):
         super().__init__(name)
-        self.params = Simpler_PenguinParams(**parameters)
+        self.params = GentooPenguinParams(**parameters)
 
     def decide(
         self,

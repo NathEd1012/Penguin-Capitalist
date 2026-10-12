@@ -104,8 +104,15 @@ def _training_window_subset(sorted_timestamps: List[datetime], months: int, rng:
     return [timestamp for timestamp in sorted_timestamps if start_timestamp <= timestamp <= end_timestamp]
 
 
-def _training_profit_amount(candidate_metrics: Dict, benchmark_metrics: Dict, relative_to: int | str) -> float:
+def _training_profit_amount(
+    candidate_metrics: Dict,
+    benchmark_metrics: Dict,
+    relative_to: int | str,
+    initial_capital: float,
+) -> float:
     candidate_profit = float(candidate_metrics.get("total_return", 0.0))
+    if int(candidate_metrics.get("total_trades", 0)) == 0:
+        return -float(initial_capital) + float(benchmark_metrics.get("total_return", 0.0))
     if relative_to not in (0, "0", None, False):
         return candidate_profit - float(benchmark_metrics.get("total_return", 0.0))
     return candidate_profit
@@ -116,9 +123,15 @@ def _score_training_candidate(
     benchmark_metrics: Dict,
     transaction_cost: float,
     relative_to: int | str,
+    initial_capital: float,
 ) -> tuple[float, int, int]:
     buy_trades = int(candidate_metrics.get("buy_trades", candidate_metrics.get("total_trades", 0)))
-    relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, relative_to)
+    relative_profit_amount = _training_profit_amount(
+        candidate_metrics,
+        benchmark_metrics,
+        relative_to,
+        initial_capital,
+    )
     return (
         relative_profit_amount - (buy_trades * transaction_cost),
         -buy_trades,
@@ -328,6 +341,7 @@ def _train_trainable_penguins(
         previous_trial_params = None
         completed_trials = []
         qualifying_candidates = []
+        validation_candidate_pool = []
         pareto_history[strategy_class.__name__] = []
 
         initial_params, initial_source = suggest_parameters(
@@ -389,8 +403,19 @@ def _train_trainable_penguins(
             benchmark_metrics = results[SP500().name][1]
             profit_amount = float(candidate_metrics.get("total_return", 0.0))
             benchmark_profit_amount = float(benchmark_metrics.get("total_return", 0.0))
-            relative_profit_amount = _training_profit_amount(candidate_metrics, benchmark_metrics, TRAINING_RELATIVE_TO)
-            score = _score_training_candidate(candidate_metrics, benchmark_metrics, TRAINING_TRANSACTION_COST, TRAINING_RELATIVE_TO)
+            relative_profit_amount = _training_profit_amount(
+                candidate_metrics,
+                benchmark_metrics,
+                TRAINING_RELATIVE_TO,
+                initial_capital,
+            )
+            score = _score_training_candidate(
+                candidate_metrics,
+                benchmark_metrics,
+                TRAINING_TRANSACTION_COST,
+                TRAINING_RELATIVE_TO,
+                initial_capital,
+            )
             objective_value = _objective_from_score(score)
             final_value = float(candidate_metrics.get("final_value", 0.0))
             buy_trades = int(candidate_metrics.get("buy_trades", 0))
@@ -404,15 +429,15 @@ def _train_trainable_penguins(
                 best_metrics = candidate_metrics
                 best_params = params
 
+            candidate_record = {
+                "trial": trial_number,
+                "params": dict(params),
+                "metrics": candidate_metrics,
+                "score": list(score),
+            }
+            validation_candidate_pool.append(candidate_record)
             if buy_trades > 0:
-                qualifying_candidates.append(
-                    {
-                        "trial": trial_number,
-                        "params": dict(params),
-                        "metrics": candidate_metrics,
-                        "score": list(score),
-                    }
-                )
+                qualifying_candidates.append(candidate_record)
 
             log_lines.append(
                 f"    Trial {trial_number:03d}: window={_format_training_timestamp(trial_window_start)}"
@@ -472,12 +497,19 @@ def _train_trainable_penguins(
             key=lambda candidate: tuple(candidate["score"]),
             reverse=True,
         )
+        ranked_validation_candidates = sorted(
+            validation_candidate_pool,
+            key=lambda candidate: tuple(candidate["score"]),
+            reverse=True,
+        )
+        validation_candidates = ranked_validation_candidates[:VALIDATION_CANDIDATES]
         top_candidates = ranked_candidates[:PARAMETERS_EXECUTED]
         trained_parameters[str(strategy_class.__name__)] = {
             "initial_params": initial_params,
             "best_params": best_params,
             "best_metrics": best_metrics,
             "best_score": list(best_score) if best_score is not None else None,
+            "validation_params": validation_candidates,
             "top_params": top_candidates,
         }
         if best_score is None:

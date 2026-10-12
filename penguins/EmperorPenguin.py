@@ -15,7 +15,7 @@ from penguins.decision_utils import (
 
 
 @dataclass
-class Emperor_PenguinParams:
+class EmperorPenguinParams:
     rsi_period: int
     buy_rsi: float
     sell_rsi: float
@@ -37,18 +37,18 @@ class Emperor_PenguinParams:
     rvol_threshold: float
 
 
-class Emperor_Penguin(BasePenguin):
+class EmperorPenguin(BasePenguin):
     LOOKBACK_BARS = 120
 
     def __init__(
         self,
-        name: str = "Emperor_Penguin",
+        name: str = "EmperorPenguin",
         **parameters: int | float,
     ):
         super().__init__(name)
         self._last_trade_bar: dict[str, int] = {}
         self._decision_bar: dict[str, int] = {}
-        self.params = Emperor_PenguinParams(**parameters)
+        self.params = EmperorPenguinParams(**parameters)
 
     def decide(
         self,

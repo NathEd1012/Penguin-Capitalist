@@ -1,17 +1,17 @@
 """Active trading strategy (penguin) configuration."""
 import os
 from penguins import (
-    Emperor_Penguin,
-    Simpler_Penguin,
-    Simpler_Penguin2,
+    EmperorPenguin,
+    GentooPenguin,
+    RockhopperPenguin,
     SP500,
     SP500x2,
 )
 
 ACTIVE_PENGUINS = [
-    Emperor_Penguin,
-    Simpler_Penguin,
-    Simpler_Penguin2,
+    EmperorPenguin,
+    GentooPenguin,
+    RockhopperPenguin,
     SP500,
     SP500x2,
 ]

@@ -13,7 +13,7 @@ from penguins.decision_utils import (
 
 
 @dataclass
-class Simpler_Penguin2Params:
+class RockhopperPenguinParams:
     bb_period: int
     bb_stddev: float
     upper_band_buffer: float
@@ -29,16 +29,16 @@ class Simpler_Penguin2Params:
     trend_entry_threshold: float
 
 
-class Simpler_Penguin2(BasePenguin):
+class RockhopperPenguin(BasePenguin):
     LOOKBACK_BARS = 120
 
     def __init__(
         self,
-        name: str = "Simpler_Penguin",
+        name: str = "RockhopperPenguin",
         **parameters: int | float,
     ):
         super().__init__(name)
-        self.params = Simpler_Penguin2Params(**parameters)
+        self.params = RockhopperPenguinParams(**parameters)
 
     def decide(
         self,

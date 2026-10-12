@@ -23,6 +23,26 @@ def _resolve_run_dir(value: str) -> Path:
 
 
 def _load_trials(source_run: Path) -> list:
+	validation_selection = source_run / "artifacts" / "json" / "validation_selection.json"
+	if validation_selection.is_file():
+		data = json.loads(validation_selection.read_text(encoding="utf-8"))
+		trials = []
+		for strategy, selected in data.get("selection", {}).items():
+			for trial in selected:
+				if not trial.get("params"):
+					continue
+				trials.append(
+					(
+						str(strategy),
+						{
+							**trial,
+							"objective_value": (trial.get("validation_score") or [float("-inf")])[0],
+						},
+					)
+				)
+		if trials:
+			return trials
+
 	parameter_log = source_run / "artifacts" / "json" / "trainable_penguin_parameter_log.json"
 	if not parameter_log.is_file():
 		raise FileNotFoundError(f"Parameter log not found: {parameter_log}")

@@ -28,7 +28,7 @@ RVOL_THRESHOLD = 2.0
 
 
 @dataclass
-class Emperor_PenguinParams:
+class EmperorPenguinParams:
     rsi_period: int = RSI_PERIOD
     buy_rsi: float = BUY_RSI
     sell_rsi: float = SELL_RSI
@@ -49,13 +49,13 @@ class Emperor_PenguinParams:
     rvol_threshold: float = RVOL_THRESHOLD
 
 
-class Emperor_Penguin(BasePenguin):
+class EmperorPenguin(BasePenguin):
     LOOKBACK_BARS = 120
     TRAINABLE = True
 
     def __init__(
         self,
-        name: str = "Emperor_Penguin",
+        name: str = "EmperorPenguin",
         rsi_period: int = RSI_PERIOD,
         buy_rsi: float = BUY_RSI,
         sell_rsi: float = SELL_RSI,
@@ -78,7 +78,7 @@ class Emperor_Penguin(BasePenguin):
         super().__init__(name)
         self._last_trade_bar: dict[str, int] = {}
         self._decision_bar: dict[str, int] = {}
-        self.params = Emperor_PenguinParams(
+        self.params = EmperorPenguinParams(
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,

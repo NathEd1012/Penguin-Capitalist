@@ -525,10 +525,10 @@ def run_backtest(
                     continue
 
                 training_result = trained_parameters[strategy_name]
-                top_candidates = training_result.get("top_params") or [
+                validation_candidates = training_result.get("validation_params") or training_result.get("top_params") or [
                     {"params": training_result.get("best_params", {})}
                 ]
-                for rank, candidate in enumerate(top_candidates[:VALIDATION_CANDIDATES], start=1):
+                for rank, candidate in enumerate(validation_candidates[:VALIDATION_CANDIDATES], start=1):
                     training_step = int(candidate.get("trial", rank))
                     validation_name = f"{strategy_name}__validation_{training_step:03d}"
                     validation_penguin = _replace_trainable_penguin_params(
@@ -576,6 +576,7 @@ def run_backtest(
                         benchmark_metrics,
                         transaction_cost,
                         TRAINING_RELATIVE_TO,
+                        initial_capital,
                     )
                     ranked_by_strategy[strategy_name].append(
                         {
@@ -598,6 +599,7 @@ def run_backtest(
                                 metrics,
                                 benchmark_metrics,
                                 TRAINING_RELATIVE_TO,
+                                initial_capital,
                             ),
                             "score": list(score),
                         }

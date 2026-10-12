@@ -1,13 +1,13 @@
 from dataclasses import asdict
 
 from config.parameter_search_con import strategy_parameter_space
-from penguins import Emperor_Penguin, Simpler_Penguin
+from penguins import EmperorPenguin, GentooPenguin
 from scripts.parameter_search import _optuna_suggest
 
 
 def test_emperor_optuna_search_accepts_baseline_parameters() -> None:
-    parameter_space = strategy_parameter_space(Emperor_Penguin)
-    baseline_params = asdict(Emperor_Penguin().params)
+    parameter_space = strategy_parameter_space(EmperorPenguin)
+    baseline_params = asdict(EmperorPenguin().params)
     completed_trials = [{
         "status": "completed",
         "params": baseline_params,
@@ -32,8 +32,8 @@ def test_optuna_search_ignores_completed_trials_outside_active_range() -> None:
     assert 60 <= suggested_params["relative_strength_period"] <= 252
 
 
-def test_simpler_parameter_space_is_defined() -> None:
-    parameter_space = strategy_parameter_space(Simpler_Penguin)
+def test_gentoo_parameter_space_is_defined() -> None:
+    parameter_space = strategy_parameter_space(GentooPenguin)
 
     assert {parameter[0] for parameter in parameter_space} == {
         "bb_period",

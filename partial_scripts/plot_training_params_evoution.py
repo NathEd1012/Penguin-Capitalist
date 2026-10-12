@@ -41,14 +41,22 @@ def find_parameter_log(artifacts_dir: Path) -> Path:
 
 def resolve_artifacts_dir(run_log_name: str) -> Path:
 	supplied_path = Path(run_log_name).expanduser()
-	if supplied_path.is_absolute() or len(supplied_path.parts) > 1:
+	if supplied_path.is_absolute():
 		return supplied_path.resolve() / "artifacts"
+
+	relative_path = RUN_LOG_DIR / supplied_path / "artifacts"
+	if relative_path.is_dir():
+		return relative_path
 
 	direct_path = RUN_LOG_DIR / run_log_name / "artifacts"
 	if direct_path.is_dir():
 		return direct_path
 
-	matches = sorted(RUN_LOG_DIR.glob(f"*/{run_log_name}/artifacts"))
+	matches = sorted(
+		candidate
+		for candidate in RUN_LOG_DIR.rglob("artifacts")
+		if candidate.parent.name == supplied_path.name
+	)
 	if len(matches) == 1:
 		return matches[0]
 	if len(matches) > 1:
@@ -84,9 +92,24 @@ def best_training_step(trials: list[dict[str, object]]) -> int:
 
 
 def plot_strategy(strategy: str, trials: list[dict[str, object]]) -> plt.Figure:
+	try:
+		parameter_space = strategy_parameter_space_by_name(strategy)
+		display_strategy = strategy
+	except ValueError:
+		parameter_keys = {
+			name for trial in trials for name in trial["params"]
+		}
+		inferred_strategy = (
+			"RockhopperPenguin"
+			if "bb_period" in parameter_keys
+			else "GentooPenguin"
+		)
+		parameter_space = strategy_parameter_space_by_name(inferred_strategy)
+		display_strategy = inferred_strategy
+
 	bounds = {
 		name: (float(minimum), float(maximum))
-		for name, _kind, minimum, maximum in strategy_parameter_space_by_name(strategy)
+		for name, _kind, minimum, maximum in parameter_space
 	}
 	parameter_names = sorted(
 		{name for trial in trials for name in trial["params"] if name in bounds}
@@ -105,8 +128,15 @@ def plot_strategy(strategy: str, trials: list[dict[str, object]]) -> plt.Figure:
 	)
 	axes = axes[:, 0]
 	for axis, parameter_name in zip(axes, parameter_names):
-		minimum, maximum = bounds[parameter_name]
 		y_values = [float(trial["params"][parameter_name]) for trial in trials]
+		configured_minimum, configured_maximum = bounds[parameter_name]
+		minimum = min(configured_minimum, min(y_values))
+		maximum = max(configured_maximum, max(y_values))
+		margin = (maximum - minimum) * 0.03
+		if margin == 0:
+			margin = max(abs(maximum), 1.0) * 0.03
+		minimum -= margin
+		maximum += margin
 		axis.plot(x_values, y_values, marker="o", linewidth=1.4, markersize=3.5)
 		axis.set_title(parameter_name, loc="left", fontsize=10)
 		axis.set_ylabel("Value")
@@ -124,7 +154,7 @@ def plot_strategy(strategy: str, trials: list[dict[str, object]]) -> plt.Figure:
 
 	axes[-1].set_xlabel("Training step")
 	axes[0].legend(loc="upper right", fontsize=8)
-	figure.suptitle(f"{strategy} training parameter evolution")
+	figure.suptitle(f"{display_strategy} training parameter evolution")
 	figure.tight_layout()
 	return figure
 
