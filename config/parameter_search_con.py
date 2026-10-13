@@ -207,6 +207,14 @@ _EMPEROR_PARAMETERS = (
     _ADV_SELL_ALL_PARAMETERS
     + Trend_Method_parameters
 )
+_KING_PARAMETERS = (
+    _EMPEROR_PARAMETERS
+    + (
+        ("sr_low_threshhold", "float", 0.0, 0.10),
+        ("sr_high_threshhold", "float", 0.0, 0.10),
+        ("sr_period", "int", 5, 200),
+    )
+)
 
 
 def _supported_parameters(strategy_class, parameter_space):
@@ -257,6 +265,8 @@ def strategy_parameter_space_by_name(strategy_name: str):
         return _apply_time_period_upper_limit(_ADV_SELL_ALL_PARAMETERS)
     if strategy_name == "EmperorPenguin":
         return _apply_time_period_upper_limit(_EMPEROR_PARAMETERS)
+    if strategy_name == "KingPenguin":
+        return _apply_time_period_upper_limit(_KING_PARAMETERS)
     if strategy_name.endswith((
         "Adv_SELL_TP1", "Adv_SELL_TP1_Manual",
         "ManualTuneAdvSELL_TP1", "ManualTuneAdvSELL_TP1_Manual",
