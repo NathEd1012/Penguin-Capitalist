@@ -87,6 +87,7 @@ class DataLoader:
         self.last_removed_bars: Dict[str, List[Dict[str, object]]] = {}
         self.last_resolved_bars: Dict[str, List[Dict[str, object]]] = {}
         self.last_quality_summary: Dict[str, Dict[str, int]] = {}
+        self.last_price_basis_adjusted: Dict[str, bool] = {}
     
     def _binning_to_timeframe(self, binning: str) -> Tuple[TimeFrame, int]:
         """
@@ -644,6 +645,7 @@ class DataLoader:
         self.last_removed_bars = {}
         self.last_resolved_bars = {}
         self.last_quality_summary = {}
+        self.last_price_basis_adjusted = {}
         fetch_errors = []
 
         def _df_to_symbol_rows(df: Optional[pd.DataFrame]) -> Dict:
@@ -857,8 +859,10 @@ class DataLoader:
                     # Keep symbol empty if API call failed; stale-data filter will handle it.
                     symbol_rows = {}
 
+                selected_rows = self._select_price_basis(symbol, symbol_rows)
+                self.last_price_basis_adjusted[symbol] = selected_rows is not symbol_rows
+
                 if enable_data_quality_checks:
-                    selected_rows = self._select_price_basis(symbol, symbol_rows)
                     annotated_rows = self._annotate_data_quality(symbol, selected_rows)
 
                     summary = defaultdict(int)
@@ -866,7 +870,7 @@ class DataLoader:
                         summary[str(row.get("data_quality", QUALITY_OK))] += 1
                     self.last_quality_summary[symbol] = dict(summary)
                 else:
-                    annotated_rows = symbol_rows
+                    annotated_rows = selected_rows
                     self.last_quality_summary[symbol] = {}
 
                 data[symbol] = annotated_rows

@@ -95,7 +95,7 @@ def _next_available_run_name(run_log_dir: Path, directory_name: str) -> str:
         return f"run_{counter}"
 
     candidate = base_name
-    suffix = 1
+    suffix = 2
     while (run_log_dir / candidate).exists():
         candidate = f"{base_name}_{suffix}"
         suffix += 1
@@ -116,10 +116,11 @@ def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
                 )
         else:
             run_log_dir = (base_dir / "run_log").resolve()
-            if reserved_dir.parent != run_log_dir:
+            try:
+                reserved_dir.relative_to(run_log_dir)
+            except ValueError:
                 raise ValueError(
-                    "PENGUIN_RUN_OUTPUT_DIR must point to a direct child of "
-                    "the run_log directory."
+                    "PENGUIN_RUN_OUTPUT_DIR must be inside the run_log directory."
                 )
 
         reserved_dir.mkdir(parents=True, exist_ok=True)
@@ -132,7 +133,7 @@ def get_run_output_dir(base_dir: Path, run_log_name: str) -> Path:
 
     run_log_dir = base_dir / "run_log"
     run_log_dir.mkdir(parents=True, exist_ok=True)
-    run_dir = run_log_dir / _normalize_run_directory_name(run_log_name)
+    run_dir = run_log_dir / _next_available_run_name(run_log_dir, run_log_name)
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 

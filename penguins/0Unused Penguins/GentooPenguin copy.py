@@ -21,7 +21,7 @@ RVOL_THRESHOLD = 2.0
 
 
 @dataclass
-class Simpler_PenguinParams:
+class GentooPenguinParams:
     bb_period: int = BB_PERIOD
     bb_stddev: float = BB_STDDEV
     adx_period: int = ADX_PERIOD
@@ -35,13 +35,13 @@ class Simpler_PenguinParams:
     rvol_threshold: float = RVOL_THRESHOLD
 
 
-class Simpler_Penguin(BasePenguin):
+class GentooPenguin(BasePenguin):
     LOOKBACK_BARS = 120
     TRAINABLE = True
 
     def __init__(
         self,
-        name: str = "Simpler_Penguin",
+        name: str = "GentooPenguin",
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
         adx_period: int = ADX_PERIOD,
@@ -55,7 +55,7 @@ class Simpler_Penguin(BasePenguin):
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
         super().__init__(name)
-        self.params = Simpler_PenguinParams(
+        self.params = GentooPenguinParams(
             bb_period=bb_period,
             bb_stddev=bb_stddev,
             adx_period=adx_period,

@@ -53,7 +53,8 @@ TRAINING_PARAMETER_DELTA_FILENAME = "trainable_penguin_parameter_delta.txt"
 # When enabled, save a Pareto-front PDF for the trainable strategies.
 PLOT_PARETO = True
 TRAINING_PARETO_FILENAME = "trainable_penguin_pareto_front.pdf"
-VALIDATION_PARETO_FILENAME = "trainable_penguin_validation_pareto_front.pdf"
+FILTERED_PARETO_FILENAME = "ParetPlot.pdf"
+VALIDATION_PARETO_FILENAME = "ValidationPareto.pdf"
 
 __all__ = [
 	"TRAINING_STEP_ENABLED",
@@ -70,5 +71,6 @@ __all__ = [
 	"TRAINING_PARAMETER_LOG_FILENAME",
 	"PLOT_PARETO",
 	"TRAINING_PARETO_FILENAME",
+	"FILTERED_PARETO_FILENAME",
 	"VALIDATION_PARETO_FILENAME",
 ]

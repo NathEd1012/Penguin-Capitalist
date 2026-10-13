@@ -333,6 +333,7 @@ def create_training_pareto_pdf(
     title: str = "Pareto Front",
     relative_to: int | str = 0,
     transaction_cost: float = 0.0,
+    exclude_zero_buy_trials: bool = False,
 ):
     """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
     output_path = Path(output_pdf)
@@ -358,6 +359,19 @@ def create_training_pareto_pdf(
         for strategy_name in sorted(training_history):
             trial_history = training_history.get(strategy_name, [])
             completed_trials = [trial for trial in trial_history if trial.get("status") == "completed"]
+            zero_buy_runs = sum(
+                int(trial.get("buy_trades", trial.get("total_trades", 0))) == 0
+                for trial in completed_trials
+            )
+            plotted_trials = (
+                [
+                    trial
+                    for trial in completed_trials
+                    if int(trial.get("buy_trades", trial.get("total_trades", 0))) > 0
+                ]
+                if exclude_zero_buy_trials
+                else completed_trials
+            )
             optimal_params = dict((trained_parameters.get(strategy_name) or {}).get("best_params") or {})
             trial_parameter_map = parameter_history_by_strategy.get(strategy_name, {})
             normalization_scales = _parameter_normalization_scales([optimal_params, *trial_parameter_map.values()])
@@ -366,10 +380,10 @@ def create_training_pareto_pdf(
             fig.suptitle(f"{title}: {strategy_name}", fontsize=16, fontweight="bold", x=0.5, y=0.975, ha="center")
             fig.subplots_adjust(top=0.82)
 
-            if completed_trials:
-                x_values = [int(trial.get("buy_trades", trial.get("total_trades", 0))) for trial in completed_trials]
-                y_values = [float(trial.get("relative_profit_amount", trial.get("profit_amount", 0.0))) for trial in completed_trials]
-                trial_numbers = [int(trial.get("trial", 0)) for trial in completed_trials]
+            if plotted_trials:
+                x_values = [int(trial.get("buy_trades", trial.get("total_trades", 0))) for trial in plotted_trials]
+                y_values = [float(trial.get("relative_profit_amount", trial.get("profit_amount", 0.0))) for trial in plotted_trials]
+                trial_numbers = [int(trial.get("trial", 0)) for trial in plotted_trials]
                 distance_values = [
                     _parameter_l2_distance(
                         trial_parameter_map.get(trial_number, {}),
@@ -415,7 +429,7 @@ def create_training_pareto_pdf(
                 cbar.set_label("Normalized L2 distance to optimal parameters")
 
                 best_trial = max(
-                    completed_trials,
+                    plotted_trials,
                     key=lambda trial: float((trial.get("score") or [float("-inf")])[0]),
                 )
                 best_trial_number = int(best_trial.get("trial", 0))
@@ -450,14 +464,15 @@ def create_training_pareto_pdf(
                     bbox={"boxstyle": "round,pad=0.22", "fc": "white", "ec": "black", "alpha": 0.96},
                 )
             else:
-                ax.text(0.5, 0.5, "No completed trials available", ha="center", va="center", transform=ax.transAxes)
+                message = "No non-zero-buy trials available" if exclude_zero_buy_trials else "No completed trials available"
+                ax.text(0.5, 0.5, message, ha="center", va="center", transform=ax.transAxes)
 
             ax.set_xlabel("Number of buys")
             ax.set_ylabel(profit_axis_label)
             ax.grid(True, alpha=0.25)
 
             # Net score is zero when relative profit equals transaction_cost * number_of_buys.
-            if completed_trials:
+            if plotted_trials:
                 max_trades = max(x_values) if x_values else 0
             else:
                 max_trades = 0
@@ -472,10 +487,16 @@ def create_training_pareto_pdf(
                 label="net score = 0",
                 zorder=1,
             )
+            ax.plot(
+                [],
+                [],
+                linestyle="None",
+                label=f"0-buy runs: {zero_buy_runs} / {len(completed_trials)}",
+            )
 
             ax.axvline(0.0, color="gray", linestyle=":", linewidth=1, alpha=0.4)
             ax.set_title(f"{strategy_name} buy-count vs profit{plot_title_suffix}")
-            if completed_trials:
+            if completed_trials or zero_buy_runs:
                 ax.legend(loc="best", fontsize=9)
 
             pdf.savefig(fig, bbox_inches="tight")
@@ -555,8 +576,10 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
                 new_year += 1
             current_date = current_date.replace(year=new_year, month=new_month)
     
-    # Find the bar indices closest to each tick date
-    tick_indices = []
+    # Find the bar indices closest to each tick date. Keep the intended
+    # calendar date so a boundary tick can still be labeled when no bar
+    # exists exactly on that date.
+    tick_points = []
     for tick_date in tick_dates:
         closest_idx = 0
         min_diff = abs((bar_timestamps[0] - tick_date).total_seconds())
@@ -565,24 +588,24 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
             if diff < min_diff:
                 min_diff = diff
                 closest_idx = i
-        if closest_idx not in tick_indices:
-            tick_indices.append(closest_idx)
+        if not any(idx == closest_idx for idx, _ in tick_points):
+            tick_points.append((closest_idx, tick_date))
     
     # Always include the final recorded bar so the rightmost label is the
     # actual final date, even when it is not a month boundary.
     final_index = total_bars - 1
-    if final_index not in tick_indices:
-        tick_indices.append(final_index)
+    if not any(idx == final_index for idx, _ in tick_points):
+        tick_points.append((final_index, None))
 
     # Sort indices
-    tick_indices.sort()
+    tick_points.sort(key=lambda point: point[0])
     
     # Build labels with appropriate format
     # Only show year for January, otherwise just month
-    x_ticks = [mdates.date2num(bar_timestamps[idx]) for idx in tick_indices]
+    x_ticks = [mdates.date2num(bar_timestamps[idx]) for idx, _ in tick_points]
     x_labels = []
-    for idx in tick_indices:
-        dt = bar_timestamps[idx]
+    for idx, tick_date in tick_points:
+        dt = tick_date or bar_timestamps[idx]
         if idx == final_index:
             x_labels.append(dt.strftime('%d %b %Y'))
         elif span_days <= 60:
