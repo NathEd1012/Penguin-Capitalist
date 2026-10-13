@@ -69,6 +69,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_METHOD,
     PARAMETER_SEARCH_RANGE_SET,
     PARAMETER_SEARCH_WARMUP_TRIALS,
+    UPPERLIMIT_TIME_PERIOD,
     has_parameter_search_space,
 )
 from scripts.parameter_search import suggest_parameters
@@ -147,6 +148,7 @@ def _format_runtime_configuration_banner(
     training_subset_stocks,
     training_subset_months,
     training_transaction_cost,
+    upper_limit_time_period=UPPERLIMIT_TIME_PERIOD,
     training_random_seed,
     parameter_search_method,
     parameter_search_range_set="broad",
@@ -187,6 +189,7 @@ def _format_runtime_configuration_banner(
         f"Training Steps:        {training_iterations}",
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
+        f"Upper Time Limit:      {upper_limit_time_period}",
         f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
         f"Parameter Search:      {parameter_search_method}",

@@ -37,6 +37,7 @@ from config import (
     TRAINING_PARAMETER_LOG_FILENAME,
     TRAINING_PARAMETER_DELTA_FILENAME,
     TRAINING_PARETO_FILENAME,
+    FILTERED_PARETO_FILENAME,
     VALIDATION_PARETO_FILENAME,
     PLOT_PARETO,
 )
@@ -45,6 +46,8 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
+    UPPERLIMIT_TIME_PERIOD,
+    VALIDATION_CANDIDATES,
     has_parameter_search_space,
 )
 from run_simulation import parse_datetime_string, run_backtest
@@ -67,6 +70,7 @@ def _print_training_configuration() -> None:
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    print(f"Upper Limit:       {UPPERLIMIT_TIME_PERIOD}")
     print(f"T_PLUS_X (bars):   {T_PLUS_X}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print("=" * 80)
@@ -653,6 +657,17 @@ def run_training_step(
             relative_to=TRAINING_RELATIVE_TO,
             transaction_cost=TRAINING_TRANSACTION_COST,
         )
+        filtered_pareto_path = training_pareto_path.parent / FILTERED_PARETO_FILENAME
+        create_training_pareto_pdf(
+            training_pareto_history,
+            training_parameter_history,
+            trained_parameters,
+            filtered_pareto_path,
+            title="Pareto Front (Non-Zero Buys)",
+            relative_to=TRAINING_RELATIVE_TO,
+            transaction_cost=TRAINING_TRANSACTION_COST,
+            exclude_zero_buy_trials=True,
+        )
 
     print(f"\nSaved training parameters to {training_output_path}")
     print(f"Saved trainable parameter log to {training_parameter_log_path}")
@@ -660,6 +675,7 @@ def run_training_step(
     print(f"Saved training log to {training_log_path}")
     if PLOT_PARETO:
         print(f"Saved training Pareto PDF to {training_pareto_path}")
+        print(f"Saved filtered Pareto PDF to {filtered_pareto_path}")
     print(f"Total training time: {training_duration_str} (H:MM:SS)")
     print("\nTrainable values selected at the end:")
     for strategy_name, training_result in trained_parameters.items():
