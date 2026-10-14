@@ -216,6 +216,24 @@ _KING_PARAMETERS = (
     )
 )
 
+_ALL_PARAMETER_SPACES = (
+    _GENTOO_PARAMETERS,
+    _ROCKHOPPER_PARAMETERS,
+    _PUFFIN_PARAMETERS,
+    _ADV_SELL_ALL_PARAMETERS,
+    _EMPEROR_PARAMETERS,
+    _KING_PARAMETERS,
+)
+MAX_PERIOD = max(
+    UPPERLIMIT_TIME_PERIOD,
+    max(
+        maximum
+        for parameter_space in _ALL_PARAMETER_SPACES
+        for name, _parameter_type, _minimum, maximum in parameter_space
+        if name.endswith("_period")
+    ),
+)
+
 
 def _supported_parameters(strategy_class, parameter_space):
     signature = inspect.signature(strategy_class)
@@ -299,6 +317,7 @@ __all__ = [
     "PARAMETERS_EXECUTED",
     "VALIDATION_CANDIDATES",
     "UPPERLIMIT_TIME_PERIOD",
+    "MAX_PERIOD",
     "PARAMETER_SEARCH_METHOD",
     "PARAMETER_SEARCH_BAYESIAN_SAMPLER",
     "PARAMETER_SEARCH_BAYESIAN_ACQUISITION",

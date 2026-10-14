@@ -16,7 +16,18 @@ def penguin_history_requirements(penguin) -> tuple[int, int]:
 
     lookback_bars = max(1, lookback_bars)
     min_history_required = max(0, min_history_required)
-    return lookback_bars, max(lookback_bars, min_history_required)
+
+    parameters = getattr(penguin, "params", None)
+    if parameters is not None:
+        period_values = [
+            int(value)
+            for name, value in vars(parameters).items()
+            if name.endswith("_period") and isinstance(value, (int, float))
+        ]
+        if period_values:
+            min_history_required = max(min_history_required, max(period_values) + 2)
+
+    return max(lookback_bars, min_history_required), max(lookback_bars, min_history_required)
 
 
 def binning_to_minutes(binning: str) -> int:
@@ -33,8 +44,17 @@ def binning_to_minutes(binning: str) -> int:
         raise ValueError(f"Unsupported binning: {binning}") from exc
 
 
-def history_warmup_bars(penguin_classes: List) -> int:
+def history_warmup_bars(penguin_classes: List, max_period: int = 0) -> int:
+    max_period = max(0, int(max_period))
     return max(
-        (penguin_history_requirements(penguin_class)[1] for penguin_class in penguin_classes),
+        (
+            max(
+                penguin_history_requirements(penguin_class)[1],
+                max_period + 2
+                if max_period and not hasattr(penguin_class, "params")
+                else 0,
+            )
+            for penguin_class in penguin_classes
+        ),
         default=0,
     )

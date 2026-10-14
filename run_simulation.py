@@ -69,7 +69,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_METHOD,
     PARAMETER_SEARCH_RANGE_SET,
     PARAMETER_SEARCH_WARMUP_TRIALS,
-    UPPERLIMIT_TIME_PERIOD,
+    MAX_PERIOD,
     has_parameter_search_space,
 )
 from scripts.parameter_search import suggest_parameters
@@ -148,7 +148,7 @@ def _format_runtime_configuration_banner(
     training_subset_stocks,
     training_subset_months,
     training_transaction_cost,
-    upper_limit_time_period=UPPERLIMIT_TIME_PERIOD,
+    max_period=MAX_PERIOD,
     training_random_seed,
     parameter_search_method,
     parameter_search_range_set="broad",
@@ -189,7 +189,7 @@ def _format_runtime_configuration_banner(
         f"Training Steps:        {training_iterations}",
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
-        f"Upper Time Limit:      {upper_limit_time_period}",
+        f"Maximum Period:       {max_period}",
         f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
         f"Parameter Search:      {parameter_search_method}",
@@ -294,7 +294,10 @@ def run_backtest(
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
-    warmup_bars = history_warmup_bars(penguin_classes)
+    warmup_bars = history_warmup_bars(
+        penguin_classes,
+        max_period=MAX_PERIOD,
+    )
     warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
 
@@ -306,7 +309,10 @@ def run_backtest(
         ]
         if trainable_classes:
             training_start_datetime_utc = parse_datetime_string(TRAINING_START_DATE).astimezone(timezone.utc)
-            training_warmup = history_warmup_bars(trainable_classes)
+            training_warmup = history_warmup_bars(
+                trainable_classes,
+                max_period=MAX_PERIOD,
+            )
             training_warmup_start = training_start_datetime_utc - timedelta(
                 minutes=training_warmup * warmup_minutes
             )

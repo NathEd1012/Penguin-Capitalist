@@ -46,7 +46,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
-    UPPERLIMIT_TIME_PERIOD,
+    MAX_PERIOD,
     VALIDATION_CANDIDATES,
     has_parameter_search_space,
 )
@@ -70,7 +70,7 @@ def _print_training_configuration() -> None:
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
-    print(f"Upper Limit:       {UPPERLIMIT_TIME_PERIOD}")
+    print(f"Maximum Period:    {MAX_PERIOD}")
     print(f"T_PLUS_X (bars):   {T_PLUS_X}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print("=" * 80)
@@ -228,7 +228,10 @@ def prepare_training_context(
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
-    warmup_bars = history_warmup_bars(penguin_classes)
+    warmup_bars = history_warmup_bars(
+        penguin_classes,
+        max_period=MAX_PERIOD,
+    )
     warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
 
@@ -657,13 +660,13 @@ def run_training_step(
             relative_to=TRAINING_RELATIVE_TO,
             transaction_cost=TRAINING_TRANSACTION_COST,
         )
-        filtered_pareto_path = training_pareto_path.parent / FILTERED_PARETO_FILENAME
+        filtered_pareto_path = Path(artifacts_dir).parent / FILTERED_PARETO_FILENAME
         create_training_pareto_pdf(
             training_pareto_history,
             training_parameter_history,
             trained_parameters,
             filtered_pareto_path,
-            title="Pareto Front (Non-Zero Buys)",
+            title="Training Pareto Front",
             relative_to=TRAINING_RELATIVE_TO,
             transaction_cost=TRAINING_TRANSACTION_COST,
             exclude_zero_buy_trials=True,
