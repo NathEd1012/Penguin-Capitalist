@@ -1,6 +1,7 @@
 """Realistic synthetic bid/ask spread model for backtesting."""
 
 from datetime import datetime, time
+from collections import OrderedDict, deque
 from typing import Dict, Tuple, Optional, Union, List
 import pytz
 
@@ -80,10 +81,10 @@ class SyntheticSpreadModel:
         self.timezone = pytz.timezone(timezone) if timezone != "UTC" else pytz.UTC
         self.market_open_time = time(self.market_open_hour, self.market_open_minute)
         self.market_close_time = time(self.market_close_hour, self.market_close_minute)
-        self._period_cache: Dict[Union[datetime, str], Tuple[bool, bool]] = {}
+        self._period_cache: OrderedDict[Union[datetime, str], Tuple[bool, bool]] = OrderedDict()
         
         # Volume tracking per symbol
-        self.volume_history: Dict[str, List[float]] = {}
+        self.volume_history: Dict[str, deque[float]] = {}
         self.volume_window_sums: Dict[str, float] = {}
         self.volume_window = volume_window
     
@@ -129,12 +130,14 @@ class SyntheticSpreadModel:
     
     def _track_volume(self, symbol: str, volume: float) -> None:
         """Track volume history for a symbol."""
-        history = self.volume_history.setdefault(symbol, [])
+        history = self.volume_history.setdefault(
+            symbol, deque(maxlen=self.volume_window)
+        )
         history.append(volume)
 
         window_sum = self.volume_window_sums.get(symbol, 0.0) + volume
-        if len(history) > self.volume_window:
-            window_sum -= history[-self.volume_window - 1]
+        if len(history) == self.volume_window:
+            window_sum = sum(history)
         self.volume_window_sums[symbol] = window_sum
     
     def _parse_timestamp(self, timestamp: Union[datetime, str]) -> datetime:
@@ -160,6 +163,7 @@ class SyntheticSpreadModel:
         """Return cached opening/closing period flags for a timestamp."""
         cached = self._period_cache.get(timestamp)
         if cached is not None:
+            self._period_cache.move_to_end(timestamp)
             return cached
 
         dt = self._parse_timestamp(timestamp)
@@ -185,6 +189,9 @@ class SyntheticSpreadModel:
             )
 
         self._period_cache[timestamp] = flags
+        self._period_cache.move_to_end(timestamp)
+        while len(self._period_cache) > self.volume_window:
+            self._period_cache.popitem(last=False)
         return flags
     
     def _is_opening_period(self, timestamp: Union[datetime, str]) -> bool:

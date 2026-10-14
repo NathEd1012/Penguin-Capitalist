@@ -8,7 +8,7 @@ import random
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
-from collections import defaultdict
+from collections import defaultdict, deque
 import numpy as np
 
 # Add project root to path
@@ -699,9 +699,17 @@ def run_backtest(
         f"({len(sorted_timestamps)} bars)...\n"
     )
     
-    # Prepare price history for each symbol
-    price_history = defaultdict(list)
-    volume_history = defaultdict(list)
+    # Keep enough history for MAX_PERIOD and each strategy's declared lookback,
+    # but do not retain the entire backtest in memory.
+    history_capacity = max(
+        [MAX_PERIOD + 2]
+        + [
+            penguin_history_requirements(penguin, MAX_PERIOD)[1]
+            for penguin in penguins.values()
+        ]
+    )
+    price_history = defaultdict(lambda: deque(maxlen=history_capacity))
+    volume_history = defaultdict(lambda: deque(maxlen=history_capacity))
     price_adjustment_events = {
         symbol: get_price_adjustment_events(symbol)
         for symbol in symbols
@@ -848,11 +856,19 @@ def run_backtest(
                 if len(full_history) < required_history_bars:
                     continue
                 
-                mid_prices = full_history[-lookback_bars:]
+                mid_prices = list(full_history)[-lookback_bars:]
                 spy_prices = price_history.get("SPY", [])
-                spy_window = spy_prices[-lookback_bars:] if len(spy_prices) > lookback_bars else spy_prices
+                spy_window = (
+                    list(spy_prices)[-lookback_bars:]
+                    if len(spy_prices) > lookback_bars
+                    else list(spy_prices)
+                )
                 volumes = volume_history[symbol]
-                volumes_window = volumes[-lookback_bars:] if len(volumes) > lookback_bars else volumes
+                volumes_window = (
+                    list(volumes)[-lookback_bars:]
+                    if len(volumes) > lookback_bars
+                    else list(volumes)
+                )
                 bid, ask = quotes[symbol]
                 
                 try:
@@ -908,7 +924,11 @@ def run_backtest(
         for symbol, quantity in list(portfolio.positions.items()):
             if quantity > 0:
                 # Get price history for this SPECIFIC symbol (last_price_by_symbol)
-                symbol_prices = price_history[symbol][-10:] if symbol in price_history else []
+                symbol_prices = (
+                    list(price_history[symbol])[-10:]
+                    if symbol in price_history
+                    else []
+                )
                 
                 if symbol_prices:
                     # Use average of last 10 bars for smooth liquidation
@@ -927,7 +947,7 @@ def run_backtest(
         for symbol in symbols:
             if symbol in price_history and price_history[symbol]:
                 # Average last 10 bars for each symbol independently
-                final_prices[symbol] = np.mean(price_history[symbol][-10:])
+                final_prices[symbol] = np.mean(list(price_history[symbol])[-10:])
         
         final_value = portfolio.get_total_value(final_prices)
         portfolio.add_value_snapshot(final_value)
