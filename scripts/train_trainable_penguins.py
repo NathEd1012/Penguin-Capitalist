@@ -7,6 +7,7 @@ import random
 import sys
 import gc
 import ctypes
+import multiprocessing as mp
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List
@@ -54,6 +55,43 @@ from run_simulation import parse_datetime_string, run_backtest
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
 from scripts.parameter_search import suggest_parameters
+
+
+_PARALLEL_TRAINING_CONTEXT = None
+
+
+def _training_worker_count(strategy_count: int) -> int:
+    configured = os.environ.get("PENGUIN_WORKERS")
+    requested = int(configured) if configured else int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
+    if requested < 1:
+        raise ValueError("PENGUIN_WORKERS must be a positive integer")
+    return max(1, min(strategy_count, requested))
+
+
+def _train_strategy_worker(strategy_class):
+    context = _PARALLEL_TRAINING_CONTEXT
+    if context is None:
+        raise RuntimeError("Parallel training worker context was not initialized")
+    previous_parallel_setting = os.environ.get("PENGUIN_PARALLEL")
+    os.environ["PENGUIN_PARALLEL"] = "0"
+    try:
+        return _train_trainable_penguins(
+            trainable_strategy_classes=[strategy_class],
+            symbols=context["symbols"],
+            tradeable_timestamps=context["tradeable_timestamps"],
+            binning=context["binning"],
+            initial_capital=context["initial_capital"],
+            transaction_cost=context["transaction_cost"],
+            t_plus_x=context["t_plus_x"],
+            loaded_data=context["loaded_data"],
+            loaded_valid_symbols=context["loaded_valid_symbols"],
+            loaded_price_basis_adjusted=context["loaded_price_basis_adjusted"],
+        )
+    finally:
+        if previous_parallel_setting is None:
+            os.environ.pop("PENGUIN_PARALLEL", None)
+        else:
+            os.environ["PENGUIN_PARALLEL"] = previous_parallel_setting
 
 
 def _release_training_trial_memory() -> None:
@@ -309,6 +347,9 @@ def _train_trainable_penguins(
     initial_capital,
     transaction_cost,
     t_plus_x,
+    loaded_data=None,
+    loaded_valid_symbols=None,
+    loaded_price_basis_adjusted=None,
 ):
     rng = random.Random(TRAINING_RANDOM_SEED)
     np_rng = np.random.default_rng(TRAINING_RANDOM_SEED)
@@ -404,6 +445,9 @@ def _train_trainable_penguins(
                     training_step_allowed=False,
                     collect_trade_details=False,
                     t_plus_x=t_plus_x,
+                    loaded_data=loaded_data,
+                    loaded_valid_symbols=loaded_valid_symbols,
+                    loaded_price_basis_adjusted=loaded_price_basis_adjusted,
                 )
 
             candidate_metrics = results[candidate.name][1]
@@ -559,6 +603,9 @@ def run_training_step(
     initial_capital,
     artifacts_dir: Path | None = None,
     t_plus_x: int = T_PLUS_X,
+    loaded_data=None,
+    loaded_valid_symbols=None,
+    loaded_price_basis_adjusted=None,
 ):
     if not trainable_strategy_classes:
         print("No trainable penguins are configured.")
@@ -569,15 +616,68 @@ def run_training_step(
 
     _print_training_configuration()
     training_start = datetime.now(timezone.utc)
-    trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
-        trainable_strategy_classes=trainable_strategy_classes,
-        symbols=symbols,
-        tradeable_timestamps=tradeable_timestamps,
-        binning=binning,
-        initial_capital=initial_capital,
-        transaction_cost=TRAINING_TRANSACTION_COST,
-        t_plus_x=t_plus_x,
+    worker_count = _training_worker_count(len(trainable_strategy_classes))
+    parallel_enabled = (
+        worker_count > 1
+        and os.environ.get("PENGUIN_PARALLEL", "1").lower()
+        not in {"0", "false", "no"}
+        and "fork" in mp.get_all_start_methods()
     )
+    if parallel_enabled:
+        global _PARALLEL_TRAINING_CONTEXT
+        _PARALLEL_TRAINING_CONTEXT = {
+            "symbols": symbols,
+            "tradeable_timestamps": tradeable_timestamps,
+            "binning": binning,
+            "initial_capital": initial_capital,
+            "transaction_cost": TRAINING_TRANSACTION_COST,
+            "t_plus_x": t_plus_x,
+            "loaded_data": loaded_data,
+            "loaded_valid_symbols": loaded_valid_symbols,
+            "loaded_price_basis_adjusted": loaded_price_basis_adjusted,
+        }
+        print(
+            f"Running {len(trainable_strategy_classes)} training strategies "
+            f"in {worker_count} processes..."
+        )
+        try:
+            context = mp.get_context("fork")
+            with context.Pool(processes=worker_count) as pool:
+                worker_results = pool.map(
+                    _train_strategy_worker,
+                    trainable_strategy_classes,
+                )
+        finally:
+            _PARALLEL_TRAINING_CONTEXT = None
+
+        trained_parameters = {}
+        training_log_lines = []
+        training_parameter_history = []
+        training_pareto_history = {}
+        for worker_result in worker_results:
+            (
+                worker_parameters,
+                worker_logs,
+                worker_history,
+                worker_pareto,
+            ) = worker_result
+            trained_parameters.update(worker_parameters)
+            training_log_lines.extend(worker_logs)
+            training_parameter_history.extend(worker_history)
+            training_pareto_history.update(worker_pareto)
+    else:
+        trained_parameters, training_log_lines, training_parameter_history, training_pareto_history = _train_trainable_penguins(
+            trainable_strategy_classes=trainable_strategy_classes,
+            symbols=symbols,
+            tradeable_timestamps=tradeable_timestamps,
+            binning=binning,
+            initial_capital=initial_capital,
+            transaction_cost=TRAINING_TRANSACTION_COST,
+            t_plus_x=t_plus_x,
+            loaded_data=loaded_data,
+            loaded_valid_symbols=loaded_valid_symbols,
+            loaded_price_basis_adjusted=loaded_price_basis_adjusted,
+        )
     training_end = datetime.now(timezone.utc)
     training_elapsed = training_end - training_start
     total_seconds = int(training_elapsed.total_seconds())

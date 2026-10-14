@@ -5,6 +5,7 @@ import time
 import gc
 import ctypes
 import random
+import multiprocessing as mp
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -74,6 +75,54 @@ from config.parameter_search_con import (
 )
 from scripts.parameter_search import suggest_parameters
 from penguins import SP500
+
+
+_PARALLEL_BACKTEST_CONTEXT = None
+
+
+def _parallel_worker_count(strategy_count: int) -> int:
+    configured = os.environ.get("PENGUIN_WORKERS")
+    if configured:
+        try:
+            requested = int(configured)
+        except ValueError as exc:
+            raise ValueError("PENGUIN_WORKERS must be a positive integer") from exc
+        if requested < 1:
+            raise ValueError("PENGUIN_WORKERS must be a positive integer")
+    else:
+        requested = int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
+    return max(1, min(strategy_count, requested))
+
+
+def _run_parallel_strategy_worker(strategy_name: str):
+    context = _PARALLEL_BACKTEST_CONTEXT
+    if context is None:
+        raise RuntimeError("Parallel backtest worker context was not initialized")
+
+    penguin = context["penguins"][strategy_name]
+    traded_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
+    worker_symbols = (
+        sorted(set(context["symbols"]).intersection(traded_symbols))
+        if traded_symbols is not None
+        else context["symbols"]
+    )
+    return strategy_name, run_backtest(
+        symbols=worker_symbols,
+        start_datetime=context["start_datetime"],
+        end_datetime=context["end_datetime"],
+        binning=context["binning"],
+        initial_capital=context["initial_capital"],
+        transaction_cost=context["transaction_cost"],
+        penguin_classes=[penguin],
+        artifacts_dir=None,
+        training_step_allowed=False,
+        collect_trade_details=context["collect_trade_details"],
+        t_plus_x=context["t_plus_x"],
+        backtest_label=context["backtest_label"],
+        loaded_data=context["data"],
+        loaded_valid_symbols=worker_symbols,
+        loaded_price_basis_adjusted=context["price_basis_adjusted"],
+    )
 
 
 def percent_progress(iterable, desc: str):
@@ -525,6 +574,9 @@ def run_backtest(
                 initial_capital=initial_capital,
                 artifacts_dir=training_artifacts_dir,
                 t_plus_x=t_plus_x,
+                loaded_data=data if training_start_dt >= start_datetime_utc else None,
+                loaded_valid_symbols=symbols if training_start_dt >= start_datetime_utc else None,
+                loaded_price_basis_adjusted=price_basis_adjusted,
             )
 
             validation_specs = []
@@ -689,6 +741,76 @@ def run_backtest(
                 print("No training candidates are available for validation; using base strategies.")
         else:
             print("No trainable penguins are active; skipping Step 3b training.")
+
+    worker_count = _parallel_worker_count(len(penguins))
+    parallel_enabled = (
+        worker_count > 1
+        and os.environ.get("PENGUIN_PARALLEL", "1").lower()
+        not in {"0", "false", "no"}
+    )
+    if parallel_enabled:
+        if "fork" not in mp.get_all_start_methods():
+            raise RuntimeError(
+                "Parallel strategy backtests require the fork multiprocessing start method"
+            )
+
+        global _PARALLEL_BACKTEST_CONTEXT
+        _PARALLEL_BACKTEST_CONTEXT = {
+            "symbols": symbols,
+            "start_datetime": start_datetime,
+            "end_datetime": end_datetime,
+            "binning": binning,
+            "initial_capital": initial_capital,
+            "transaction_cost": transaction_cost,
+            "t_plus_x": t_plus_x,
+            "backtest_label": backtest_label,
+            "collect_trade_details": collect_trade_details,
+            "data": data,
+            "valid_symbols": valid_symbols,
+            "price_basis_adjusted": price_basis_adjusted,
+            "penguins": penguins,
+        }
+        print(
+            f"\nRunning {len(penguins)} strategies in {worker_count} processes..."
+        )
+        strategy_results = {}
+        trades_by_bar = {}
+        tradeable_timestamps = []
+        quality_report_text = ""
+        context = mp.get_context("fork")
+        try:
+            with context.Pool(processes=worker_count) as pool:
+                worker_outputs = pool.map(
+                    _run_parallel_strategy_worker,
+                    sorted(penguins),
+                )
+        finally:
+            _PARALLEL_BACKTEST_CONTEXT = None
+
+        for strategy_name, worker_result in worker_outputs:
+            (
+                worker_strategy_results,
+                worker_trades_by_bar,
+                worker_tradeable_timestamps,
+                _worker_unused,
+                _worker_close_series,
+                worker_quality_report,
+            ) = worker_result
+            strategy_results.update(worker_strategy_results)
+            for bar_idx, trades in worker_trades_by_bar.items():
+                trades_by_bar.setdefault(bar_idx, []).extend(trades)
+            if not tradeable_timestamps:
+                tradeable_timestamps = worker_tradeable_timestamps
+            quality_report_text = quality_report_text or worker_quality_report
+
+        return (
+            strategy_results,
+            trades_by_bar,
+            tradeable_timestamps,
+            {},
+            {},
+            quality_report_text,
+        )
 
     backtest_step = 5 if backtest_label.casefold() == "test" else 4
 
