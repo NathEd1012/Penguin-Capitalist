@@ -38,8 +38,6 @@ class EmperorPenguinParams:
 
 
 class EmperorPenguin(BasePenguin):
-    LOOKBACK_BARS = 120
-
     def __init__(
         self,
         name: str = "EmperorPenguin",

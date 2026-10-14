@@ -2,8 +2,9 @@
 from typing import List
 
 
-def penguin_history_requirements(penguin) -> tuple[int, int]:
+def penguin_history_requirements(penguin, max_period: int = 0) -> tuple[int, int]:
     """Return (visible history window, minimum history before trading)."""
+    max_period = max(0, int(max_period))
     try:
         lookback_bars = int(getattr(penguin, "LOOKBACK_BARS", 1000))
     except (TypeError, ValueError):
@@ -17,17 +18,12 @@ def penguin_history_requirements(penguin) -> tuple[int, int]:
     lookback_bars = max(1, lookback_bars)
     min_history_required = max(0, min_history_required)
 
-    parameters = getattr(penguin, "params", None)
-    if parameters is not None:
-        period_values = [
-            int(value)
-            for name, value in vars(parameters).items()
-            if name.endswith("_period") and isinstance(value, (int, float))
-        ]
-        if period_values:
-            min_history_required = max(min_history_required, max(period_values) + 2)
+    if hasattr(penguin, "params") and max_period:
+        required_history = max(min_history_required, max_period + 2)
+        return required_history, required_history
 
-    return max(lookback_bars, min_history_required), max(lookback_bars, min_history_required)
+    required_history = max(lookback_bars, min_history_required)
+    return required_history, required_history
 
 
 def binning_to_minutes(binning: str) -> int:
@@ -49,7 +45,7 @@ def history_warmup_bars(penguin_classes: List, max_period: int = 0) -> int:
     return max(
         (
             max(
-                penguin_history_requirements(penguin_class)[1],
+                penguin_history_requirements(penguin_class, max_period=max_period)[1],
                 max_period + 2
                 if max_period and not hasattr(penguin_class, "params")
                 else 0,

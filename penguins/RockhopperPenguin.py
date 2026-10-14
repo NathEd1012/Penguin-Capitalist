@@ -30,8 +30,6 @@ class RockhopperPenguinParams:
 
 
 class RockhopperPenguin(BasePenguin):
-    LOOKBACK_BARS = 120
-
     def __init__(
         self,
         name: str = "RockhopperPenguin",

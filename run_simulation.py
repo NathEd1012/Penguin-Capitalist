@@ -805,7 +805,10 @@ def run_backtest(
             if bar_idx == len(sorted_timestamps) - 1:
                 continue
 
-            lookback_bars, required_history_bars = penguin_history_requirements(penguin)
+            lookback_bars, required_history_bars = penguin_history_requirements(
+                penguin,
+                MAX_PERIOD,
+            )
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:
                 symbols_for_penguin = [s for s in symbols if s in penguin_symbols]

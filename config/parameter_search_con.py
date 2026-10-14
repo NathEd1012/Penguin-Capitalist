@@ -91,9 +91,9 @@ _NARROW_GENTOO_RISK_PARAMETERS = tuple(
 )
 
 _NARROW_RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 60, 252),
+    ("relative_strength_period", "int", 30, 390),
     ("relative_strength_threshold", "float", -1.0, 1.0),
-    ("rvol_period", "int", 20, 50),
+    ("rvol_period", "int", 10, 60),
     ("rvol_threshold", "float", 1.5, 2.0),
 )
 
@@ -141,9 +141,9 @@ _BROAD_GENTOO_RISK_PARAMETERS = tuple(
 )
 
 _BROAD_RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 20, 300),
+    ("relative_strength_period", "int", 10, 400),
     ("relative_strength_threshold", "float", -5.0, 5.0),
-    ("rvol_period", "int", 5, 100),
+    ("rvol_period", "int", 10, 120),
     ("rvol_threshold", "float", 0.5, 5.0),
 )
 

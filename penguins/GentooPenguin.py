@@ -31,8 +31,6 @@ class GentooPenguinParams:
 
 
 class GentooPenguin(BasePenguin):
-    LOOKBACK_BARS = 120
-
     def __init__(
         self,
         name: str = "GentooPenguin",
