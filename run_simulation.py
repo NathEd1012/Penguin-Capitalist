@@ -6,6 +6,11 @@ import gc
 import ctypes
 import random
 import multiprocessing as mp
+import contextlib
+import io
+import queue
+import resource
+import traceback
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -94,11 +99,27 @@ def _parallel_worker_count(strategy_count: int) -> int:
     return max(1, min(strategy_count, requested))
 
 
+def _process_memory_mb() -> float:
+    try:
+        with open("/proc/self/statm", encoding="ascii") as handle:
+            resident_pages = int(handle.read().split()[1])
+        return resident_pages * os.sysconf("SC_PAGE_SIZE") / (1024 * 1024)
+    except (OSError, IndexError, ValueError):
+        return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
+
+
+def _parallel_worker_log(message: str) -> None:
+    context = _PARALLEL_BACKTEST_CONTEXT
+    if context is not None:
+        context["log_queue"].put((os.getpid(), _process_memory_mb(), message))
+
+
 def _run_parallel_strategy_worker(strategy_name: str):
     context = _PARALLEL_BACKTEST_CONTEXT
     if context is None:
         raise RuntimeError("Parallel backtest worker context was not initialized")
 
+    _parallel_worker_log(f"started strategy={strategy_name}")
     penguin = context["penguins"][strategy_name]
     traded_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
     worker_symbols = (
@@ -106,32 +127,51 @@ def _run_parallel_strategy_worker(strategy_name: str):
         if traded_symbols is not None
         else context["symbols"]
     )
-    return strategy_name, run_backtest(
-        symbols=worker_symbols,
-        start_datetime=context["start_datetime"],
-        end_datetime=context["end_datetime"],
-        binning=context["binning"],
-        initial_capital=context["initial_capital"],
-        transaction_cost=context["transaction_cost"],
-        penguin_classes=[penguin],
-        artifacts_dir=None,
-        training_step_allowed=False,
-        collect_trade_details=context["collect_trade_details"],
-        t_plus_x=context["t_plus_x"],
-        backtest_label=context["backtest_label"],
-        loaded_data=context["data"],
-        loaded_valid_symbols=worker_symbols,
-        loaded_price_basis_adjusted=context["price_basis_adjusted"],
-    )
+    # The parent process owns progress rendering. Capturing both streams keeps
+    # worker-local bars from interleaving and making the log unreadable.
+    def report_progress(percent: int, elapsed: float, remaining: float | None, rate: float | None):
+        context["progress_queue"].put((strategy_name, percent, elapsed, remaining, rate))
+
+    try:
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            result = run_backtest(
+                symbols=worker_symbols,
+                start_datetime=context["start_datetime"],
+                end_datetime=context["end_datetime"],
+                binning=context["binning"],
+                initial_capital=context["initial_capital"],
+                transaction_cost=context["transaction_cost"],
+                penguin_classes=[penguin],
+                artifacts_dir=None,
+                training_step_allowed=False,
+                collect_trade_details=context["collect_trade_details"],
+                t_plus_x=context["t_plus_x"],
+                backtest_label=context["backtest_label"],
+                loaded_data=context["data"],
+                loaded_valid_symbols=context["symbols"],
+                loaded_price_basis_adjusted=context["price_basis_adjusted"],
+                progress_callback=report_progress,
+            )
+        _parallel_worker_log(f"completed strategy={strategy_name}")
+        return strategy_name, result
+    except Exception:
+        _parallel_worker_log(
+            f"failed strategy={strategy_name}\n{traceback.format_exc()}"
+        )
+        raise
 
 
-def percent_progress(iterable, desc: str):
+def percent_progress(iterable, desc: str, progress_callback=None):
     total = len(iterable)
     if total == 0:
         return
 
     progress = tqdm(total=total, desc=desc)
     last_percent = -1
+    next_report = 0
+    progress_start = time.perf_counter()
+    if progress_callback is not None:
+        progress_callback(0, 0.0, None, None)
 
     try:
         for index, item in enumerate(iterable, start=1):
@@ -139,12 +179,36 @@ def percent_progress(iterable, desc: str):
             if percent != last_percent:
                 progress.update(index - progress.n)
                 last_percent = percent
+            if progress_callback is not None and percent >= next_report:
+                while next_report <= percent:
+                    elapsed = time.perf_counter() - progress_start
+                    rate = index / elapsed if elapsed > 0 else None
+                    remaining = (
+                        (total - index) / rate
+                        if rate and rate > 0
+                        else None
+                    )
+                    progress_callback(next_report, elapsed, remaining, rate)
+                    next_report += 10
             yield index - 1, item
 
         if progress.n < total:
             progress.update(total - progress.n)
+        if progress_callback is not None and next_report <= 100:
+            elapsed = time.perf_counter() - progress_start
+            rate = total / elapsed if elapsed > 0 else None
+            progress_callback(100, elapsed, 0.0, rate)
     finally:
         progress.close()
+
+
+def _format_progress_duration(seconds: float | None) -> str:
+    if seconds is None:
+        return "?"
+    total_seconds = max(0, int(seconds))
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return f"{hours}:{minutes:02d}:{seconds:02d}" if hours else f"{minutes}:{seconds:02d}"
 
 
 def parse_datetime_string(dt_str: str) -> datetime:
@@ -306,6 +370,7 @@ def run_backtest(
     loaded_data: Dict[str, Dict[datetime, Dict]] | None = None,
     loaded_valid_symbols: List[str] | None = None,
     loaded_price_basis_adjusted: Dict[str, bool] | None = None,
+    progress_callback=None,
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
@@ -514,8 +579,8 @@ def run_backtest(
     ################################ STEP 3 ################################
 
 
-    print(f"\nStep 3: Initializing {len(penguin_classes)} strategies...")
-    for penguin_spec in tqdm(penguin_classes, desc="Initializing strategies"):
+    print(f"\nStep 3: Initializing {len(penguin_classes)} strategies")
+    for penguin_spec in penguin_classes:
         try:
             penguin = _instantiate_penguin(penguin_spec)
             pen_name = penguin.name
@@ -526,6 +591,7 @@ def run_backtest(
             )
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
             penguins[pen_name] = penguin
+            print(f"  ✓ {pen_name}")
         except Exception as e:
             penguin_name = getattr(penguin_spec, "__name__", getattr(penguin_spec, "name", str(penguin_spec)))
             print(f"  ✗ {penguin_name}: {e}")
@@ -755,6 +821,7 @@ def run_backtest(
             )
 
         global _PARALLEL_BACKTEST_CONTEXT
+        parallel_context = mp.get_context("fork")
         _PARALLEL_BACKTEST_CONTEXT = {
             "symbols": symbols,
             "start_datetime": start_datetime,
@@ -769,39 +836,176 @@ def run_backtest(
             "valid_symbols": valid_symbols,
             "price_basis_adjusted": price_basis_adjusted,
             "penguins": penguins,
+            "progress_queue": parallel_context.Queue(),
+            "log_queue": parallel_context.Queue(),
         }
         print(
-            f"\nRunning {len(penguins)} strategies in {worker_count} processes..."
+            f"\nStep {5 if backtest_label.casefold() == 'test' else 4}: "
+            f"Running {len(penguins)} strategies "
+            f"({worker_count} parallel workers)"
         )
         strategy_results = {}
         trades_by_bar = {}
         tradeable_timestamps = []
         quality_report_text = ""
-        context = mp.get_context("fork")
+        strategy_names = sorted(
+            penguins,
+            key=lambda name: (0 if name == "SP500" else 1, name),
+        )
+        completed_strategies = set()
+        last_progress = {}
+        progress_details = {}
+        display_index = 0
+        displayed_progress = {}
+        # Pool.maxtasksperchild is the multiprocessing.Pool equivalent of
+        # ProcessPoolExecutor(max_tasks_per_child=1) and remains compatible
+        # with fork, allowing workers to inherit the already-loaded dataset.
+        pool = parallel_context.Pool(processes=worker_count, maxtasksperchild=1)
         try:
-            with context.Pool(processes=worker_count) as pool:
-                worker_outputs = pool.map(
-                    _run_parallel_strategy_worker,
-                    sorted(penguins),
+            pending_results = {}
+            next_strategy_index = 0
+            last_completion = time.monotonic()
+            worker_timeout = float(os.environ.get("PENGUIN_WORKER_TIMEOUT", "3600"))
+            print("  Strategy progress (10% steps):", flush=True)
+            while len(completed_strategies) < len(strategy_names):
+                while (
+                    next_strategy_index < len(strategy_names)
+                    and len(pending_results) < worker_count
+                ):
+                    strategy_name = strategy_names[next_strategy_index]
+                    pending_results[strategy_name] = pool.apply_async(
+                        _run_parallel_strategy_worker, (strategy_name,)
+                    )
+                    next_strategy_index += 1
+                _parallel_worker_log(
+                    f"parent pending={len(pending_results)} "
+                    f"completed={len(completed_strategies)}/{len(strategy_names)}"
                 )
-        finally:
-            _PARALLEL_BACKTEST_CONTEXT = None
+                while True:
+                    completed_now = False
+                    try:
+                        (
+                            strategy_name,
+                            percent,
+                            elapsed,
+                            remaining,
+                            rate,
+                        ) = _PARALLEL_BACKTEST_CONTEXT["progress_queue"].get(
+                            timeout=0.5
+                        )
+                        last_progress[strategy_name] = max(
+                            percent,
+                            last_progress.get(strategy_name, -1),
+                        )
+                        progress_details[strategy_name] = (elapsed, remaining, rate)
+                    except queue.Empty:
+                        pass
 
-        for strategy_name, worker_result in worker_outputs:
-            (
-                worker_strategy_results,
-                worker_trades_by_bar,
-                worker_tradeable_timestamps,
-                _worker_unused,
-                _worker_close_series,
-                worker_quality_report,
-            ) = worker_result
-            strategy_results.update(worker_strategy_results)
-            for bar_idx, trades in worker_trades_by_bar.items():
-                trades_by_bar.setdefault(bar_idx, []).extend(trades)
-            if not tradeable_timestamps:
-                tradeable_timestamps = worker_tradeable_timestamps
-            quality_report_text = quality_report_text or worker_quality_report
+                    for strategy_name, async_result in list(pending_results.items()):
+                        if not async_result.ready():
+                            continue
+                        worker_result = async_result.get()
+                        (
+                            worker_strategy_results,
+                            worker_trades_by_bar,
+                            worker_tradeable_timestamps,
+                            _worker_unused,
+                            _worker_close_series,
+                            worker_quality_report,
+                        ) = worker_result
+                        strategy_results.update(worker_strategy_results)
+                        for bar_idx, trades in worker_trades_by_bar.items():
+                            trades_by_bar.setdefault(bar_idx, []).extend(trades)
+                        if not tradeable_timestamps:
+                            tradeable_timestamps = worker_tradeable_timestamps
+                        quality_report_text = quality_report_text or worker_quality_report
+                        del worker_result, worker_strategy_results, worker_trades_by_bar
+                        del worker_tradeable_timestamps, worker_quality_report
+                        del pending_results[strategy_name]
+                        gc.collect()
+                        last_progress[strategy_name] = 100
+                        completed_strategies.add(strategy_name)
+                        last_completion = time.monotonic()
+                        completed_now = True
+
+                    while display_index < len(strategy_names):
+                        active_strategy = strategy_names[display_index]
+                        active_percent = last_progress.get(active_strategy, 0)
+                        if active_percent > displayed_progress.get(active_strategy, 0):
+                            for percent in range(
+                                max(10, displayed_progress.get(active_strategy, 0) + 10),
+                                active_percent + 1,
+                                10,
+                            ):
+                                elapsed, remaining, rate = progress_details.get(
+                                    active_strategy,
+                                    (None, None, None),
+                                )
+                                rate_text = f"{rate:.2f}it/s" if rate is not None else "?it/s"
+                                print(
+                                    f"    {active_strategy}: {percent:3d}% "
+                                    f"[{_format_progress_duration(elapsed)}"
+                                    f"<{_format_progress_duration(remaining)}, "
+                                    f"{rate_text}]",
+                                    flush=True,
+                                )
+                            displayed_progress[active_strategy] = active_percent
+
+                        if active_strategy not in completed_strategies:
+                            break
+
+                        if displayed_progress.get(active_strategy, 0) < 100:
+                            print(f"    {active_strategy}: 100%", flush=True)
+                            displayed_progress[active_strategy] = 100
+                        print(
+                            f"    {len(completed_strategies)}/{len(strategy_names)} complete",
+                            flush=True,
+                        )
+                        display_index += 1
+                    try:
+                        pid, memory_mb, message = _PARALLEL_BACKTEST_CONTEXT["log_queue"].get_nowait()
+                        print(f"    worker pid={pid} rss={memory_mb:.1f}MiB {message}", flush=True)
+                    except queue.Empty:
+                        pass
+                    if len(completed_strategies) == len(strategy_names):
+                        break
+                    if time.monotonic() - last_completion > worker_timeout:
+                        raise RuntimeError(
+                            f"Parallel strategy execution stalled for {worker_timeout:.0f}s; "
+                            f"pending={sorted(pending_results)}"
+                        )
+                    if not pending_results:
+                        raise RuntimeError(
+                            "Parallel strategy execution lost all pending workers "
+                            f"with {len(completed_strategies)}/{len(strategy_names)} complete"
+                        )
+                    failed_workers = [
+                        process.pid
+                        for process in pool._pool
+                        if process.exitcode not in (None, 0)
+                    ]
+                    if failed_workers:
+                        raise RuntimeError(
+                            "Parallel strategy worker process(es) exited unexpectedly: "
+                            f"{failed_workers}; pending={sorted(pending_results)}"
+                        )
+                    if completed_now:
+                        break
+                    time.sleep(0.2)
+        except Exception:
+            for strategy_name, async_result in pending_results.items():
+                if async_result.ready():
+                    try:
+                        async_result.get()
+                    except Exception:
+                        pass
+            pool.terminate()
+            _PARALLEL_BACKTEST_CONTEXT = None
+            raise
+        finally:
+            pool.close()
+            pool.join()
+        _PARALLEL_BACKTEST_CONTEXT = None
 
         return (
             strategy_results,
@@ -864,7 +1068,11 @@ def run_backtest(
                             f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
                         )
     
-    for bar_idx, timestamp in percent_progress(sorted_timestamps, desc="Executing bars"):
+    for bar_idx, timestamp in percent_progress(
+        sorted_timestamps,
+        desc="Executing bars",
+        progress_callback=progress_callback,
+    ):
         # Get current prices
         current_prices = {}
         for symbol in symbols:

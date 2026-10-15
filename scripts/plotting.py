@@ -629,6 +629,13 @@ def _curve_x_values(bar_timestamps, value_count):
     return range(1, value_count + 1)
 
 
+def _aligned_curve(bar_timestamps, values):
+    """Return x/y data trimmed to the shared axis length."""
+    x_values = _curve_x_values(bar_timestamps, len(values))
+    point_count = len(x_values)
+    return x_values, values[:point_count]
+
+
 def _axis_x_limits(bar_timestamps, value_count):
     """Return x-limits that match the plotted coordinate system."""
     if bar_timestamps is not None and len(bar_timestamps) > 0 and value_count > 0:
@@ -797,9 +804,10 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     if sp500_name in curves:
         vals = curves[sp500_name]
         display_name = _display_strategy_name(sp500_name)
+        x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
         line = plt.plot(
-            _curve_x_values(bar_timestamps, len(vals)),
-            vals,
+            x_values,
+            plot_vals,
             label=display_name,
             linewidth=2,
             color="black",
@@ -814,9 +822,10 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
             display_name = _display_strategy_name(name)
             group_key = _strategy_base_key(name)
             color = "darkgrey" if _is_sp500_benchmark(name) else _color_for_group(group_key)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
             line = plt.plot(
-                _curve_x_values(bar_timestamps, len(vals)),
-                vals,
+                x_values,
+                plot_vals,
                 label=display_name,
                 linewidth=2,
                 alpha=0.9 if name.endswith("_Manual") else 0.8,
@@ -830,17 +839,20 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     if sma20_name in curves:
         vals = curves[sma20_name]
         display_name = _display_strategy_name(sma20_name)
-        line = plt.plot(_curve_x_values(bar_timestamps, len(vals)), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
+        x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+        line = plt.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
         line_colors[sma20_name] = line[0].get_color()
     
     # Add text labels at the end of each curve on the right side
     for name in sorted(curves.keys(), key=_strategy_group_key):
         vals = curves[name]
         if vals:
-            x_values = _curve_x_values(bar_timestamps, len(vals))
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+            if len(plot_vals) == 0:
+                continue
             x_span = max(x_values) - min(x_values)
             final_x = x_values[-1] + (x_span * 0.05 if x_span > 0 else 1.0)
-            final_y = vals[-1]
+            final_y = plot_vals[-1]
             color = line_colors.get(name, "black")
             display_name = _display_strategy_name(name)
             plt.text(final_x, final_y, f" {display_name}", fontsize=8, va="center", 
@@ -1001,9 +1013,10 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         if sp500_name in curves:
             vals = curves[sp500_name]
             display_name = _display_strategy_name(sp500_name)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
             line = ax.plot(
-                _curve_x_values(bar_timestamps, len(vals)),
-                vals,
+                x_values,
+                plot_vals,
                 label=display_name,
                 linewidth=2,
                 color="black",
@@ -1015,24 +1028,28 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         for name, vals in curves.items():
             if name not in (sma20_name, sp500_name):
                 display_name = _display_strategy_name(name)
-                line = ax.plot(_curve_x_values(bar_timestamps, len(vals)), vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
+                x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+                line = ax.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
                 line_colors[name] = line[0].get_color()
         
         # Plot SMA20 strategy last so it appears in foreground
         if sma20_name in curves:
             vals = curves[sma20_name]
             display_name = _display_strategy_name(sma20_name)
-            line = ax.plot(_curve_x_values(bar_timestamps, len(vals)), vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+            line = ax.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
             line_colors[sma20_name] = line[0].get_color()
         
         # Add text labels at the end of each curve on the right side
         for name in sorted(curves.keys(), key=_strategy_group_key):
             vals = curves[name]
             if vals:
-                x_values = _curve_x_values(bar_timestamps, len(vals))
+                x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+                if len(plot_vals) == 0:
+                    continue
                 x_span = max(x_values) - min(x_values)
                 final_x = x_values[-1] + (x_span * 0.05 if x_span > 0 else 1.0)
-                final_y = vals[-1]
+                final_y = plot_vals[-1]
                 color = line_colors.get(name, "black")
                 display_name = _display_strategy_name(name)
                 ax.text(final_x, final_y, f" {display_name}", fontsize=8, va="center", 
@@ -1169,11 +1186,11 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             for item in page_items:
                 penguin_name = item["name"]
                 vals = curves[penguin_name]
-                x_values = _curve_x_values(bar_timestamps, len(vals))
+                x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
                 color = line_colors.get(penguin_name, None)
                 line = ax.plot(
                     x_values,
-                    vals,
+                    plot_vals,
                     label=item["display_name"],
                     linewidth=2,
                     alpha=0.8,
@@ -1181,9 +1198,9 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     linestyle=_strategy_line_style(penguin_name),
                 )
 
-                if vals:
+                if plot_vals:
                     final_x = x_values[-1]
-                    final_y = vals[-1]
+                    final_y = plot_vals[-1]
                     x_offset = max((x_values[-1] - x_values[0]) * 0.02, 1.0) if len(x_values) > 1 else 1.0
                     actual_color = line[0].get_color()
                     ax.text(

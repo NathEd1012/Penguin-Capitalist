@@ -8,6 +8,8 @@ import sys
 import gc
 import ctypes
 import multiprocessing as mp
+import resource
+import traceback
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List
@@ -72,10 +74,15 @@ def _train_strategy_worker(strategy_class):
     context = _PARALLEL_TRAINING_CONTEXT
     if context is None:
         raise RuntimeError("Parallel training worker context was not initialized")
+    print(
+        f"  Training worker started {strategy_class.__name__} "
+        f"(pid={os.getpid()}, rss={resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024:.1f}MiB)",
+        flush=True,
+    )
     previous_parallel_setting = os.environ.get("PENGUIN_PARALLEL")
     os.environ["PENGUIN_PARALLEL"] = "0"
     try:
-        return _train_trainable_penguins(
+        result = _train_trainable_penguins(
             trainable_strategy_classes=[strategy_class],
             symbols=context["symbols"],
             tradeable_timestamps=context["tradeable_timestamps"],
@@ -87,6 +94,14 @@ def _train_strategy_worker(strategy_class):
             loaded_valid_symbols=context["loaded_valid_symbols"],
             loaded_price_basis_adjusted=context["loaded_price_basis_adjusted"],
         )
+        print(f"  Training worker completed {strategy_class.__name__}", flush=True)
+        return result
+    except Exception:
+        print(
+            f"  Training worker failed {strategy_class.__name__}\n{traceback.format_exc()}",
+            flush=True,
+        )
+        raise
     finally:
         if previous_parallel_setting is None:
             os.environ.pop("PENGUIN_PARALLEL", None)
@@ -640,13 +655,42 @@ def run_training_step(
             f"Running {len(trainable_strategy_classes)} training strategies "
             f"in {worker_count} processes..."
         )
+        worker_results = []
         try:
             context = mp.get_context("fork")
-            with context.Pool(processes=worker_count) as pool:
-                worker_results = pool.map(
-                    _train_strategy_worker,
-                    trainable_strategy_classes,
-                )
+            # Recycle after each strategy without reloading the inherited
+            # shared dataset in a new process.
+            with context.Pool(processes=worker_count, maxtasksperchild=1) as pool:
+                pending_results = {}
+                next_strategy_index = 0
+                while next_strategy_index < len(trainable_strategy_classes) or pending_results:
+                    while (
+                        next_strategy_index < len(trainable_strategy_classes)
+                        and len(pending_results) < worker_count
+                    ):
+                        strategy_class = trainable_strategy_classes[next_strategy_index]
+                        pending_results[strategy_class.__name__] = (
+                            strategy_class,
+                            pool.apply_async(_train_strategy_worker, (strategy_class,)),
+                        )
+                        next_strategy_index += 1
+
+                    for strategy_name, (strategy_class, async_result) in list(
+                        pending_results.items()
+                    ):
+                        if not async_result.ready():
+                            continue
+                        worker_results.append(async_result.get())
+                        del pending_results[strategy_name]
+                        gc.collect()
+                        print(
+                            f"  Training worker completed {strategy_name}; "
+                            f"pending={len(pending_results)}",
+                            flush=True,
+                        )
+                    if pending_results:
+                        import time
+                        time.sleep(0.2)
         finally:
             _PARALLEL_TRAINING_CONTEXT = None
 

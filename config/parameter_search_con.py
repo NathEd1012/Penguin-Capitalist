@@ -141,7 +141,7 @@ _BROAD_GENTOO_RISK_PARAMETERS = tuple(
 )
 
 _BROAD_RELATIVE_STRENGTH_PARAMETERS = (
-    ("relative_strength_period", "int", 10, 400),
+    ("relative_strength_period", "int", 10, 360),
     ("relative_strength_threshold", "float", -5.0, 5.0),
     ("rvol_period", "int", 10, 120),
     ("rvol_threshold", "float", 0.5, 5.0),
