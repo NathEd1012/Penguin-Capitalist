@@ -96,7 +96,58 @@ def _parallel_worker_count(strategy_count: int) -> int:
             raise ValueError("PENGUIN_WORKERS must be a positive integer")
     else:
         requested = int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
-    return max(1, min(strategy_count, requested))
+    return _memory_aware_worker_count(strategy_count, requested, "backtest")
+
+
+def _memory_limit_gb() -> float | None:
+    """Return the job/container memory limit in GiB when it is discoverable."""
+    for variable in ("SLURM_MEM_PER_NODE", "SLURM_MEM_PER_CPU"):
+        value = os.environ.get(variable)
+        if value:
+            try:
+                memory_mb = float(value)
+                if variable == "SLURM_MEM_PER_CPU":
+                    memory_mb *= int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
+                return memory_mb / 1024
+            except ValueError:
+                pass
+
+    for path in ("/sys/fs/cgroup/memory.max", "/sys/fs/cgroup/memory/memory.limit_in_bytes"):
+        try:
+            raw_value = Path(path).read_text(encoding="ascii").strip()
+            if raw_value != "max":
+                value = int(raw_value)
+                if value > 0:
+                    return value / (1024**3)
+        except (OSError, ValueError):
+            pass
+    return None
+
+
+def _memory_aware_worker_count(strategy_count: int, requested: int, workload: str) -> int:
+    """Limit parallel workers so estimated peak memory stays below the job limit."""
+    worker_memory_gb = float(os.environ.get("PENGUIN_MEMORY_PER_WORKER_GB", "80"))
+    reserve_fraction = float(os.environ.get("PENGUIN_MEMORY_RESERVE_FRACTION", "0.2"))
+    if worker_memory_gb <= 0 or not 0 <= reserve_fraction < 1:
+        raise ValueError(
+            "PENGUIN_MEMORY_PER_WORKER_GB must be positive and "
+            "PENGUIN_MEMORY_RESERVE_FRACTION must be between 0 and 1"
+        )
+
+    memory_limit_gb = _memory_limit_gb()
+    memory_cap = requested
+    if memory_limit_gb is not None:
+        usable_memory_gb = memory_limit_gb * (1 - reserve_fraction)
+        memory_cap = max(1, int(usable_memory_gb // worker_memory_gb))
+        if memory_cap < requested:
+            print(
+                f"Memory-aware {workload} parallelism: limiting workers to {memory_cap} "
+                f"(limit={memory_limit_gb:.1f} GiB, "
+                f"estimated={worker_memory_gb:.1f} GiB/worker, "
+                f"reserve={reserve_fraction:.0%})",
+                flush=True,
+            )
+    return max(1, min(strategy_count, requested, memory_cap))
 
 
 def _process_memory_mb() -> float:
@@ -904,7 +955,12 @@ def run_backtest(
                     for strategy_name, async_result in list(pending_results.items()):
                         if not async_result.ready():
                             continue
-                        worker_result = async_result.get()
+                        worker_strategy_name, worker_result = async_result.get()
+                        if worker_strategy_name != strategy_name:
+                            raise RuntimeError(
+                                "Parallel strategy worker returned an unexpected strategy: "
+                                f"expected {strategy_name}, got {worker_strategy_name}"
+                            )
                         (
                             worker_strategy_results,
                             worker_trades_by_bar,

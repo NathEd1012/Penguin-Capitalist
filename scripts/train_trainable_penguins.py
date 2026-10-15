@@ -53,7 +53,7 @@ from config.parameter_search_con import (
     VALIDATION_CANDIDATES,
     has_parameter_search_space,
 )
-from run_simulation import parse_datetime_string, run_backtest
+from run_simulation import _memory_aware_worker_count, parse_datetime_string, run_backtest
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
 from scripts.parameter_search import suggest_parameters
@@ -67,7 +67,7 @@ def _training_worker_count(strategy_count: int) -> int:
     requested = int(configured) if configured else int(os.environ.get("SLURM_CPUS_PER_TASK", "1"))
     if requested < 1:
         raise ValueError("PENGUIN_WORKERS must be a positive integer")
-    return max(1, min(strategy_count, requested))
+    return _memory_aware_worker_count(strategy_count, requested, "training")
 
 
 def _train_strategy_worker(strategy_class):

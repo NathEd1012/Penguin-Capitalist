@@ -110,6 +110,7 @@ def _optuna_suggest(
 ) -> ParameterValues:
     import optuna
 
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
     study = optuna.create_study(direction="maximize", sampler=_optuna_sampler(seed))
     distributions = {}
     for name, kind, low, high in parameter_space:
