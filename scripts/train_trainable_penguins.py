@@ -327,7 +327,7 @@ def prepare_training_context(
             symbol: {
                 timestamp: row
                 for timestamp, row in symbol_data.items()
-                if timestamp <= end_datetime_utc
+                if warmup_start_datetime_utc <= timestamp < end_datetime_utc
             }
             for symbol, symbol_data in loaded_data.items()
         }
@@ -418,7 +418,13 @@ def _train_trainable_penguins(
         strategy_header = f"  Optimizing {strategy_class.__name__}"
         log_lines.append("")
         log_lines.append(strategy_header)
-        trial_iterator = tqdm(range(1, TRAINING_ITERATIONS + 1), desc=strategy_class.__name__, leave=False)
+        trial_iterator = tqdm(
+            range(1, TRAINING_ITERATIONS + 1),
+            desc=strategy_class.__name__,
+            leave=False,
+            miniters=max(1, math.ceil(TRAINING_ITERATIONS / 10)),
+            mininterval=0,
+        )
         for trial_number in trial_iterator:
             benchmark_symbol = _training_benchmark_symbol(TRAINING_RELATIVE_TO)
             trial_symbols = _training_symbol_subset(symbols, TRAINING_SUBSET_STOCKS, benchmark_symbol, rng)
@@ -426,7 +432,7 @@ def _train_trainable_penguins(
 
             if not trial_symbols or not trial_timestamps:
                 log_lines.append(f"    Trial {trial_number:03d}: skipped (no subset available)")
-                trial_iterator.set_postfix_str("skipped empty subset")
+                trial_iterator.set_postfix_str("skipped empty subset", refresh=False)
                 parameter_history.append({"strategy": strategy_class.__name__, "trial": trial_number, "status": "skipped"})
                 continue
 
@@ -515,7 +521,10 @@ def _train_trainable_penguins(
             log_lines.append(
                 f"      relative_profit=${relative_profit_amount:,.2f}, absolute_profit=${profit_amount:,.2f}, buys={buy_trades}, score={score}, objective={objective_value:,.2f}"
             )
-            trial_iterator.set_postfix_str(f"profit={relative_profit_amount:.2f}, buys={buy_trades}")
+            trial_iterator.set_postfix_str(
+                f"profit={relative_profit_amount:.2f}, buys={buy_trades}",
+                refresh=False,
+            )
             pareto_history[strategy_class.__name__].append(
                 {
                     "trial": trial_number,

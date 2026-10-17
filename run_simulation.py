@@ -101,6 +101,16 @@ def _parallel_worker_count(strategy_count: int) -> int:
 
 def _memory_limit_gb() -> float | None:
     """Return the job/container memory limit in GiB when it is discoverable."""
+    configured = os.environ.get("PENGUIN_MEMORY_LIMIT_GB")
+    if configured:
+        try:
+            memory_limit_gb = float(configured)
+        except ValueError as exc:
+            raise ValueError("PENGUIN_MEMORY_LIMIT_GB must be positive") from exc
+        if memory_limit_gb <= 0:
+            raise ValueError("PENGUIN_MEMORY_LIMIT_GB must be positive")
+        return memory_limit_gb
+
     for variable in ("SLURM_MEM_PER_NODE", "SLURM_MEM_PER_CPU"):
         value = os.environ.get(variable)
         if value:
@@ -126,8 +136,8 @@ def _memory_limit_gb() -> float | None:
 
 def _memory_aware_worker_count(strategy_count: int, requested: int, workload: str) -> int:
     """Limit parallel workers so estimated peak memory stays below the job limit."""
-    worker_memory_gb = float(os.environ.get("PENGUIN_MEMORY_PER_WORKER_GB", "80"))
-    reserve_fraction = float(os.environ.get("PENGUIN_MEMORY_RESERVE_FRACTION", "0.2"))
+    worker_memory_gb = float(os.environ.get("PENGUIN_MEMORY_PER_WORKER_GB", "50"))
+    reserve_fraction = float(os.environ.get("PENGUIN_MEMORY_RESERVE_FRACTION", "0"))
     if worker_memory_gb <= 0 or not 0 <= reserve_fraction < 1:
         raise ValueError(
             "PENGUIN_MEMORY_PER_WORKER_GB must be positive and "
@@ -159,10 +169,11 @@ def _process_memory_mb() -> float:
         return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
 
 
-def _parallel_worker_log(message: str) -> None:
+def _parallel_worker_log(message: str, include_memory: bool = False) -> None:
     context = _PARALLEL_BACKTEST_CONTEXT
     if context is not None:
-        context["log_queue"].put((os.getpid(), _process_memory_mb(), message))
+        memory_mb = _process_memory_mb() if include_memory else None
+        context["log_queue"].put((memory_mb, message))
 
 
 def _run_parallel_strategy_worker(strategy_name: str):
@@ -170,7 +181,7 @@ def _run_parallel_strategy_worker(strategy_name: str):
     if context is None:
         raise RuntimeError("Parallel backtest worker context was not initialized")
 
-    _parallel_worker_log(f"started strategy={strategy_name}")
+    _parallel_worker_log(f"strategy={strategy_name}")
     penguin = context["penguins"][strategy_name]
     traded_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
     worker_symbols = (
@@ -203,11 +214,15 @@ def _run_parallel_strategy_worker(strategy_name: str):
                 loaded_price_basis_adjusted=context["price_basis_adjusted"],
                 progress_callback=report_progress,
             )
-        _parallel_worker_log(f"completed strategy={strategy_name}")
+        _parallel_worker_log(
+            f"completed strategy={strategy_name}",
+            include_memory=True,
+        )
         return strategy_name, result
     except Exception:
         _parallel_worker_log(
-            f"failed strategy={strategy_name}\n{traceback.format_exc()}"
+            f"failed strategy={strategy_name}\n{traceback.format_exc()}",
+            include_memory=True,
         )
         raise
 
@@ -548,7 +563,7 @@ def run_backtest(
                 symbol: {
                     timestamp: bar
                     for timestamp, bar in loaded_data[symbol].items()
-                    if timestamp < end_datetime_utc
+                    if warmup_start_datetime_utc <= timestamp < end_datetime_utc
                 }
                 for symbol in loaded_valid_symbols
                 if symbol in loaded_data
@@ -642,10 +657,10 @@ def run_backtest(
             )
             portfolios[pen_name].max_leverage = float(getattr(penguin, "MAX_LEVERAGE", 1.0))
             penguins[pen_name] = penguin
-            print(f"  ✓ {pen_name}")
         except Exception as e:
             penguin_name = getattr(penguin_spec, "__name__", getattr(penguin_spec, "name", str(penguin_spec)))
             print(f"  ✗ {penguin_name}: {e}")
+    print("  Done")
 
     ################################ STEP 3b ################################
 
@@ -929,7 +944,7 @@ def run_backtest(
                     )
                     next_strategy_index += 1
                 _parallel_worker_log(
-                    f"parent pending={len(pending_results)} "
+                    f"pending={len(pending_results)} "
                     f"completed={len(completed_strategies)}/{len(strategy_names)}"
                 )
                 while True:
@@ -1019,8 +1034,14 @@ def run_backtest(
                         )
                         display_index += 1
                     try:
-                        pid, memory_mb, message = _PARALLEL_BACKTEST_CONTEXT["log_queue"].get_nowait()
-                        print(f"    worker pid={pid} rss={memory_mb:.1f}MiB {message}", flush=True)
+                        memory_mb, message = _PARALLEL_BACKTEST_CONTEXT["log_queue"].get_nowait()
+                        if memory_mb is None:
+                            print(f"    {message}", flush=True)
+                        else:
+                            print(
+                                f"    {message} rss={memory_mb / 1024:.1f}GiB",
+                                flush=True,
+                            )
                     except queue.Empty:
                         pass
                     if len(completed_strategies) == len(strategy_names):
