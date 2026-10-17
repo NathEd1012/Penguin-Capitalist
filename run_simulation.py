@@ -136,7 +136,7 @@ def _memory_limit_gb() -> float | None:
 
 def _memory_aware_worker_count(strategy_count: int, requested: int, workload: str) -> int:
     """Limit parallel workers so estimated peak memory stays below the job limit."""
-    worker_memory_gb = float(os.environ.get("PENGUIN_MEMORY_PER_WORKER_GB", "50"))
+    worker_memory_gb = float(os.environ.get("PENGUIN_MEMORY_PER_WORKER_GB", "40"))
     reserve_fraction = float(os.environ.get("PENGUIN_MEMORY_RESERVE_FRACTION", "0"))
     if worker_memory_gb <= 0 or not 0 <= reserve_fraction < 1:
         raise ValueError(
@@ -174,6 +174,54 @@ def _parallel_worker_log(message: str, include_memory: bool = False) -> None:
     if context is not None:
         memory_mb = _process_memory_mb() if include_memory else None
         context["log_queue"].put((memory_mb, message))
+
+
+def _shutdown_parallel_pool(pool, graceful: bool) -> None:
+    """Stop workers without allowing queue flushing to block forever."""
+    context = _PARALLEL_BACKTEST_CONTEXT
+    queues = (
+        (context["progress_queue"], context["log_queue"])
+        if context is not None
+        else ()
+    )
+    timeout = float(os.environ.get("PENGUIN_POOL_SHUTDOWN_TIMEOUT", "30"))
+    if timeout <= 0:
+        raise ValueError("PENGUIN_POOL_SHUTDOWN_TIMEOUT must be positive")
+
+    if graceful:
+        pool.close()
+    else:
+        pool.terminate()
+
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        for message_queue in queues:
+            while True:
+                try:
+                    message_queue.get_nowait()
+                except queue.Empty:
+                    break
+        alive = [process for process in pool._pool if process.is_alive()]
+        if not alive:
+            break
+        for process in alive:
+            process.join(timeout=min(0.2, max(0.0, deadline - time.monotonic())))
+
+    alive = [process for process in pool._pool if process.is_alive()]
+    if alive:
+        print(
+            f"  Parallel pool shutdown exceeded {timeout:.0f}s; "
+            f"terminating {len(alive)} worker(s).",
+            flush=True,
+        )
+        pool.terminate()
+        for process in alive:
+            process.join(timeout=1)
+
+    for message_queue in queues:
+        message_queue.cancel_join_thread()
+        message_queue.close()
+    pool.join()
 
 
 def _run_parallel_strategy_worker(strategy_name: str):
@@ -932,6 +980,7 @@ def run_backtest(
             next_strategy_index = 0
             last_completion = time.monotonic()
             worker_timeout = float(os.environ.get("PENGUIN_WORKER_TIMEOUT", "3600"))
+            shutdown_gracefully = True
             print("  Strategy progress (10% steps):", flush=True)
             while len(completed_strategies) < len(strategy_names):
                 while (
@@ -1076,12 +1125,11 @@ def run_backtest(
                         async_result.get()
                     except Exception:
                         pass
-            pool.terminate()
+            shutdown_gracefully = False
             _PARALLEL_BACKTEST_CONTEXT = None
             raise
         finally:
-            pool.close()
-            pool.join()
+            _shutdown_parallel_pool(pool, graceful=shutdown_gracefully)
         _PARALLEL_BACKTEST_CONTEXT = None
 
         return (
