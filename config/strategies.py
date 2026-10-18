@@ -60,7 +60,10 @@ def _resolve_active_penguins(raw_value):
                 selected.append(strategy)
                 seen.add(strategy)
 
-    return selected or ACTIVE_PENGUINS
+    resolved = selected or ACTIVE_PENGUINS
+    if SP500 not in resolved:
+        resolved.append(SP500)
+    return resolved
 
 
 ACTIVE_PENGUINS = _resolve_active_penguins(os.getenv("ACTIVE_PENGUINS"))

@@ -1009,8 +1009,10 @@ def run_backtest(
         try:
             pending_results = {}
             next_strategy_index = 0
-            last_completion = time.monotonic()
+            last_worker_activity = time.monotonic()
             worker_timeout = float(os.environ.get("PENGUIN_WORKER_TIMEOUT", "3600"))
+            if worker_timeout <= 0:
+                raise ValueError("PENGUIN_WORKER_TIMEOUT must be positive")
             shutdown_gracefully = True
             print("  Strategy progress (10% steps):", flush=True)
             while len(completed_strategies) < len(strategy_names):
@@ -1044,6 +1046,7 @@ def run_backtest(
                             last_progress.get(strategy_name, -1),
                         )
                         progress_details[strategy_name] = (elapsed, remaining, rate)
+                        last_worker_activity = time.monotonic()
                     except queue.Empty:
                         pass
 
@@ -1076,7 +1079,7 @@ def run_backtest(
                         gc.collect()
                         last_progress[strategy_name] = 100
                         completed_strategies.add(strategy_name)
-                        last_completion = time.monotonic()
+                        last_worker_activity = time.monotonic()
                         completed_now = True
 
                     while display_index < len(strategy_names):
@@ -1126,10 +1129,11 @@ def run_backtest(
                         pass
                     if len(completed_strategies) == len(strategy_names):
                         break
-                    if time.monotonic() - last_completion > worker_timeout:
+                    if time.monotonic() - last_worker_activity > worker_timeout:
                         raise RuntimeError(
-                            f"Parallel strategy execution stalled for {worker_timeout:.0f}s; "
-                            f"pending={sorted(pending_results)}"
+                            f"Parallel strategy execution stalled for {worker_timeout:.0f}s "
+                            f"without worker progress; pending={sorted(pending_results)}; "
+                            f"progress={{{', '.join(f'{name}={last_progress.get(name, 0)}%' for name in sorted(pending_results))}}}"
                         )
                     if not pending_results:
                         raise RuntimeError(
