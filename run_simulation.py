@@ -34,6 +34,8 @@ except Exception:
 from tqdm import tqdm
 from backtest.portfolio import Portfolio
 from backtest.data_loader import DataLoader
+from backtest.finalized_data_cache import load as load_finalized_data
+from backtest.finalized_data_cache import save as save_finalized_data
 from backtest.evaluator import Evaluator
 from backtest.history import binning_to_minutes, history_warmup_bars, penguin_history_requirements
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
@@ -625,31 +627,60 @@ def run_backtest(
 
     if not reuse_loaded_data:
         # Load data
-        print("Step 1: Loading historical data from Alpaca...")
-        loader = DataLoader()
-        try:
-            data, sparse_warning = loader.load_bars(
-                symbols,
-                warmup_start_datetime_utc,
-                end_datetime_utc,
-                binning,
-                enable_data_quality_checks=True,
-            )
-            price_basis_adjusted = dict(loader.last_price_basis_adjusted)
+        finalized_cache_dir = Path(__file__).parent / "data_cache" / "finalized_step1"
+        cached_step1 = load_finalized_data(
+            finalized_cache_dir,
+            symbols,
+            warmup_start_datetime_utc,
+            end_datetime_utc,
+            binning,
+        )
+        if cached_step1 is not None:
+            print("Step 1: Loaded finalized historical data from local cache.")
+            data = cached_step1["data"]
+            sparse_warning = cached_step1["sparse_warning"]
+            price_basis_adjusted = cached_step1["price_basis_adjusted"]
+            quality_report_text = cached_step1["quality_report_text"]
+            loader = None
+        else:
+            print("Step 1: Loading historical data from Alpaca...")
+            loader = DataLoader()
+            try:
+                data, sparse_warning = loader.load_bars(
+                    symbols,
+                    warmup_start_datetime_utc,
+                    end_datetime_utc,
+                    binning,
+                    enable_data_quality_checks=True,
+                )
+                price_basis_adjusted = dict(loader.last_price_basis_adjusted)
+                quality_report_text = loader.get_quality_report_text()
+                save_finalized_data(
+                    finalized_cache_dir,
+                    symbols,
+                    warmup_start_datetime_utc,
+                    end_datetime_utc,
+                    binning,
+                    {
+                        "data": data,
+                        "sparse_warning": sparse_warning,
+                        "price_basis_adjusted": price_basis_adjusted,
+                        "quality_report_text": quality_report_text,
+                    },
+                )
+                print("  Saved finalized Step 1 data to local cache.")
+            except Exception as e:
+                print(f"Error loading data: {e}")
+                print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
+                sys.exit(1)
             if sparse_warning:
                 print(sparse_warning)
-            quality_report_text = loader.get_quality_report_text()
-            if quality_report_text:
-                if artifacts_dir is not None:
-                    warnings_path = Path(artifacts_dir) / "consistency_warnings.txt"
-                    warnings_path.parent.mkdir(parents=True, exist_ok=True)
-                    with open(warnings_path, "w") as f:
-                        f.write(quality_report_text)
-                        f.write("\n")
-        except Exception as e:
-            print(f"Error loading data: {e}")
-            print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
-            sys.exit(1)
+        if quality_report_text and artifacts_dir is not None:
+            warnings_path = Path(artifacts_dir) / "consistency_warnings.txt"
+            warnings_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(warnings_path, "w") as f:
+                f.write(quality_report_text)
+                f.write("\n")
     
     ################################ STEP 2 ################################
 
@@ -660,7 +691,7 @@ def run_backtest(
         valid_symbols = [symbol for symbol in loaded_valid_symbols if symbol in data]
         stale_symbols = []
     else:
-        valid_symbols, stale_symbols = loader.detect_stale_data(data)
+        valid_symbols, stale_symbols = DataLoader.detect_stale_data(data)
     
     if not reuse_loaded_data:
         print(f"  Valid symbols: {len(valid_symbols)}")

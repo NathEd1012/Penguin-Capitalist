@@ -901,8 +901,8 @@ class DataLoader:
         
         return data, warning_msg
     
+    @staticmethod
     def detect_stale_data(
-        self,
         data: Dict[str, Dict],
         lookback_bars: int = 10,
         min_volume_threshold: float = 100,
@@ -922,7 +922,9 @@ class DataLoader:
         stale_symbols = []
         
         for symbol, bars_dict in data.items():
-            if self._stale_reason_for_rows(bars_dict, lookback_bars, min_volume_threshold):
+            if DataLoader._stale_reason_for_rows(
+                bars_dict, lookback_bars, min_volume_threshold
+            ):
                 stale_symbols.append(symbol)
                 continue
             
