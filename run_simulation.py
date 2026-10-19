@@ -633,16 +633,47 @@ def run_backtest(
                 Path(__file__).parent / "data_cache" / "finalized_step1",
             )
         ).expanduser()
+        training_start_for_cache = parse_datetime_string(
+            TRAINING_START_DATE
+        ).astimezone(timezone.utc)
+        training_end_for_cache = parse_datetime_string(
+            TRAINING_STOP_DATE
+        ).astimezone(timezone.utc)
+        validation_start_for_cache = parse_datetime_string(
+            VALIDATION_START_DATE
+        ).astimezone(timezone.utc)
+        validation_end_for_cache = parse_datetime_string(
+            VALIDATION_STOP_DATE
+        ).astimezone(timezone.utc)
+        cache_warmup_bars = 1000
+        cache_anchor = min(start_datetime_utc, training_start_for_cache)
+        canonical_cache_start = cache_anchor - timedelta(
+            minutes=cache_warmup_bars * warmup_minutes
+        )
+        load_start = min(warmup_start_datetime_utc, canonical_cache_start)
         cached_step1 = load_finalized_data(
             finalized_cache_dir,
             symbols,
-            warmup_start_datetime_utc,
+            load_start,
             end_datetime_utc,
             binning,
+            cache_start_date=canonical_cache_start,
+            training_start_date=training_start_for_cache,
+            training_end_date=training_end_for_cache,
+            validation_start_date=validation_start_for_cache,
+            validation_end_date=validation_end_for_cache,
+            warmup_bars=cache_warmup_bars,
         )
         if cached_step1 is not None:
             print("Step 1: Loaded finalized historical data from local cache.")
-            data = cached_step1["data"]
+            data = {
+                symbol: {
+                    timestamp: bar
+                    for timestamp, bar in symbol_data.items()
+                    if warmup_start_datetime_utc <= timestamp < end_datetime_utc
+                }
+                for symbol, symbol_data in cached_step1["data"].items()
+            }
             sparse_warning = cached_step1["sparse_warning"]
             price_basis_adjusted = cached_step1["price_basis_adjusted"]
             quality_report_text = cached_step1["quality_report_text"]
@@ -653,7 +684,7 @@ def run_backtest(
             try:
                 data, sparse_warning = loader.load_bars(
                     symbols,
-                    warmup_start_datetime_utc,
+                    load_start,
                     end_datetime_utc,
                     binning,
                     enable_data_quality_checks=True,
@@ -669,7 +700,7 @@ def run_backtest(
                 save_finalized_data(
                     finalized_cache_dir,
                     symbols,
-                    warmup_start_datetime_utc,
+                    load_start,
                     end_datetime_utc,
                     binning,
                     {
@@ -678,12 +709,26 @@ def run_backtest(
                         "price_basis_adjusted": price_basis_adjusted,
                         "quality_report_text": quality_report_text,
                     },
+                    cache_start_date=canonical_cache_start,
+                    training_start_date=training_start_for_cache,
+                    training_end_date=training_end_for_cache,
+                    validation_start_date=validation_start_for_cache,
+                    validation_end_date=validation_end_for_cache,
+                    warmup_bars=cache_warmup_bars,
                 )
                 print("  Saved finalized Step 1 data to local cache.")
             except OSError as e:
                 print(f"  Warning: could not save finalized Step 1 cache: {e}")
             if sparse_warning:
                 print(sparse_warning)
+        data = {
+            symbol: {
+                timestamp: bar
+                for timestamp, bar in symbol_data.items()
+                if warmup_start_datetime_utc <= timestamp < end_datetime_utc
+            }
+            for symbol, symbol_data in data.items()
+        }
         if quality_report_text and artifacts_dir is not None:
             warnings_path = Path(artifacts_dir) / "consistency_warnings.txt"
             warnings_path.parent.mkdir(parents=True, exist_ok=True)
