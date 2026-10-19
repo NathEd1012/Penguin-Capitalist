@@ -78,6 +78,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_RANGE_SET,
     PARAMETER_SEARCH_WARMUP_TRIALS,
     MAX_PERIOD,
+    max_period_for_strategies,
     has_parameter_search_space,
 )
 from scripts.parameter_search import suggest_parameters
@@ -524,10 +525,8 @@ def run_backtest(
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
-    warmup_bars = history_warmup_bars(
-        penguin_classes,
-        max_period=MAX_PERIOD,
-    )
+    max_period = max_period_for_strategies(penguin_classes)
+    warmup_bars = history_warmup_bars(penguin_classes, max_period=max_period)
     warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
 
@@ -541,7 +540,7 @@ def run_backtest(
             training_start_datetime_utc = parse_datetime_string(TRAINING_START_DATE).astimezone(timezone.utc)
             training_warmup = history_warmup_bars(
                 trainable_classes,
-                max_period=MAX_PERIOD,
+                max_period=max_period_for_strategies(trainable_classes),
             )
             training_warmup_start = training_start_datetime_utc - timedelta(
                 minutes=training_warmup * warmup_minutes
@@ -582,6 +581,7 @@ def run_backtest(
             training_subset_stocks=TRAINING_SUBSET_STOCKS,
             training_subset_months=TRAINING_SUBSET_MONTHS,
             training_transaction_cost=TRAINING_TRANSACTION_COST,
+            max_period=max_period,
             training_random_seed=TRAINING_RANDOM_SEED,
             parameter_search_method=PARAMETER_SEARCH_METHOD,
             parameter_search_range_set=PARAMETER_SEARCH_RANGE_SET,
@@ -627,7 +627,12 @@ def run_backtest(
 
     if not reuse_loaded_data:
         # Load data
-        finalized_cache_dir = Path(__file__).parent / "data_cache" / "finalized_step1"
+        finalized_cache_dir = Path(
+            os.environ.get(
+                "PENGUIN_FINALIZED_CACHE_DIR",
+                Path(__file__).parent / "data_cache" / "finalized_step1",
+            )
+        ).expanduser()
         cached_step1 = load_finalized_data(
             finalized_cache_dir,
             symbols,
@@ -655,6 +660,12 @@ def run_backtest(
                 )
                 price_basis_adjusted = dict(loader.last_price_basis_adjusted)
                 quality_report_text = loader.get_quality_report_text()
+            except Exception as e:
+                raise RuntimeError(
+                    f"Error loading data: {e}. "
+                    "Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set."
+                ) from e
+            try:
                 save_finalized_data(
                     finalized_cache_dir,
                     symbols,
@@ -669,10 +680,8 @@ def run_backtest(
                     },
                 )
                 print("  Saved finalized Step 1 data to local cache.")
-            except Exception as e:
-                print(f"Error loading data: {e}")
-                print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
-                sys.exit(1)
+            except OSError as e:
+                print(f"  Warning: could not save finalized Step 1 cache: {e}")
             if sparse_warning:
                 print(sparse_warning)
         if quality_report_text and artifacts_dir is not None:
@@ -700,8 +709,7 @@ def run_backtest(
     
     symbols = valid_symbols
     if not symbols:
-        print("No valid symbols to trade!")
-        sys.exit(1)
+        raise RuntimeError("No valid symbols to trade!")
     
     # Get sorted timestamps for all symbols
     all_timestamps = set()
@@ -1185,12 +1193,12 @@ def run_backtest(
         f"({len(sorted_timestamps)} bars)...\n"
     )
     
-    # Keep enough history for MAX_PERIOD and each strategy's declared lookback,
+    # Keep enough history for the active parameter ranges and each strategy's lookback,
     # but do not retain the entire backtest in memory.
     history_capacity = max(
-        [MAX_PERIOD + 2]
+        [max_period + 2]
         + [
-            penguin_history_requirements(penguin, MAX_PERIOD)[1]
+            penguin_history_requirements(penguin, max_period)[1]
             for penguin in penguins.values()
         ]
     )
@@ -1305,7 +1313,7 @@ def run_backtest(
 
             lookback_bars, required_history_bars = penguin_history_requirements(
                 penguin,
-                MAX_PERIOD,
+                max_period,
             )
             penguin_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
             if penguin_symbols is not None:

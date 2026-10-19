@@ -1,5 +1,6 @@
 """Standalone training entry point for the trainable penguin strategies."""
 from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 import json
 import math
 import os
@@ -49,7 +50,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
-    MAX_PERIOD,
+    max_period_for_strategies,
     VALIDATION_CANDIDATES,
     has_parameter_search_space,
 )
@@ -117,13 +118,16 @@ def _release_training_trial_memory() -> None:
         pass
 
 
-def _print_training_configuration() -> None:
+def _print_training_configuration(trainable_strategy_classes) -> None:
     print("\nTRAINING CONFIGURATION")
     print(f"Relative To:       {TRAINING_RELATIVE_TO}")
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
-    print(f"Maximum Period:    {MAX_PERIOD}")
+    print(
+        f"Maximum Period:    "
+        f"{max_period_for_strategies(trainable_strategy_classes)}"
+    )
     print(f"T_PLUS_X (bars):   {T_PLUS_X}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
     print("=" * 80)
@@ -283,7 +287,7 @@ def prepare_training_context(
 
     warmup_bars = history_warmup_bars(
         penguin_classes,
-        max_period=MAX_PERIOD,
+        max_period=max_period_for_strategies(penguin_classes),
     )
     warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
@@ -317,9 +321,10 @@ def prepare_training_context(
                 print(sparse_warning)
             quality_report_text = loader.get_quality_report_text()
         except Exception as e:
-            print(f"Error loading data: {e}")
-            print("Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set.")
-            sys.exit(1)
+            raise RuntimeError(
+                f"Error loading data: {e}. "
+                "Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set."
+            ) from e
 
         valid_symbols, stale_symbols = loader.detect_stale_data(data)
     else:
@@ -339,8 +344,7 @@ def prepare_training_context(
         print(f"  Stale symbols ({len(stale_symbols)}): {', '.join(stale_symbols)}")
 
     if not valid_symbols:
-        print("No valid symbols to trade!")
-        sys.exit(1)
+        raise RuntimeError("No valid symbols to trade!")
 
     all_timestamps = set()
     for symbol_data in data.values():
@@ -447,29 +451,45 @@ def _train_trainable_penguins(
                     np_rng=np_rng,
                 )
             candidate = strategy_class(**params)
+            trial_max_period = max_period_for_strategies([candidate])
             trial_window_start = trial_timestamps[0]
             trial_window_end = trial_timestamps[-1]
             selected_month_list = sorted({timestamp.astimezone(timezone.utc).strftime("%Y-%m") for timestamp in trial_timestamps})
             selected_months = ", ".join(selected_month_list)
             selected_symbols = _format_training_symbols(trial_symbols)
             param_changes = _format_param_changes(params, previous_trial_params)
+            log_lines.append(
+                f"    Trial {trial_number:03d} max period/lookback: {trial_max_period}"
+            )
 
-            with open(os.devnull, "w", encoding="utf-8") as devnull, redirect_stdout(devnull), redirect_stderr(devnull):
-                results, _, _, _, _, _ = run_backtest(
-                    symbols=trial_symbols,
-                    start_datetime=trial_window_start,
-                    end_datetime=trial_window_end,
-                    binning=binning,
-                    initial_capital=initial_capital,
-                    transaction_cost=TRAINING_TRANSACTION_COST,
-                    penguin_classes=[candidate, SP500],
-                    training_step_allowed=False,
-                    collect_trade_details=False,
-                    t_plus_x=t_plus_x,
-                    loaded_data=loaded_data,
-                    loaded_valid_symbols=loaded_valid_symbols,
-                    loaded_price_basis_adjusted=loaded_price_basis_adjusted,
-                )
+            trial_output = StringIO()
+            try:
+                with redirect_stdout(trial_output), redirect_stderr(trial_output):
+                    results, _, _, _, _, _ = run_backtest(
+                        symbols=trial_symbols,
+                        start_datetime=trial_window_start,
+                        end_datetime=trial_window_end,
+                        binning=binning,
+                        initial_capital=initial_capital,
+                        transaction_cost=TRAINING_TRANSACTION_COST,
+                        penguin_classes=[candidate, SP500],
+                        training_step_allowed=False,
+                        collect_trade_details=False,
+                        t_plus_x=t_plus_x,
+                        loaded_data=loaded_data,
+                        loaded_valid_symbols=loaded_valid_symbols,
+                        loaded_price_basis_adjusted=loaded_price_basis_adjusted,
+                    )
+            except Exception as exc:
+                trial_details = trial_output.getvalue().strip()
+                if trial_details:
+                    print(
+                        f"  Trial {trial_number:03d} failed output:\n{trial_details}",
+                        flush=True,
+                    )
+                raise RuntimeError(
+                    f"{strategy_class.__name__} trial {trial_number} failed"
+                ) from exc
 
             candidate_metrics = results[candidate.name][1]
             benchmark_metrics = results[SP500().name][1]
@@ -638,7 +658,7 @@ def run_training_step(
     if artifacts_dir is None:
         artifacts_dir = Path(__file__).resolve().parent.parent / "run_test" / "artifacts"
 
-    _print_training_configuration()
+    _print_training_configuration(trainable_strategy_classes)
     training_start = datetime.now(timezone.utc)
     worker_count = _training_worker_count(len(trainable_strategy_classes))
     parallel_enabled = (
@@ -672,7 +692,9 @@ def run_training_step(
             with context.Pool(processes=worker_count, maxtasksperchild=1) as pool:
                 pending_results = {}
                 next_strategy_index = 0
+                known_workers = set()
                 while next_strategy_index < len(trainable_strategy_classes) or pending_results:
+                    known_workers.update(pool._pool)
                     while (
                         next_strategy_index < len(trainable_strategy_classes)
                         and len(pending_results) < worker_count
@@ -696,6 +718,21 @@ def run_training_step(
                             f"  Training worker completed {strategy_name}; "
                             f"pending={len(pending_results)}",
                             flush=True,
+                        )
+                    failed_workers = [
+                        worker
+                        for worker in known_workers
+                        if not worker.is_alive() and worker.exitcode not in (None, 0)
+                    ]
+                    if failed_workers and pending_results:
+                        failed_pids = ", ".join(
+                            f"{worker.pid} (exitcode={worker.exitcode})"
+                            for worker in failed_workers
+                        )
+                        pending_names = ", ".join(pending_results)
+                        raise RuntimeError(
+                            "Training worker(s) exited unexpectedly while "
+                            f"processing: {pending_names}; workers: {failed_pids}"
                         )
                     if pending_results:
                         import time

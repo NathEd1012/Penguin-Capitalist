@@ -80,9 +80,11 @@ class DataLoader:
         
         self.client = StockHistoricalDataClient(api_key, secret_key)
         # Repeated runs with identical ranges should be served from disk cache.
-        # Resolve cache path relative to project root (Penguin-Capitalist folder)
+        # Use scratch when configured so large caches do not consume home quota.
         project_root = Path(__file__).parent.parent
-        cache_dir = project_root / "data_cache"
+        cache_dir = Path(
+            os.environ.get("PENGUIN_DATA_CACHE_DIR", project_root / "data_cache")
+        ).expanduser()
         self.cache = DataCache(str(cache_dir))
         self.last_removed_bars: Dict[str, List[Dict[str, object]]] = {}
         self.last_resolved_bars: Dict[str, List[Dict[str, object]]] = {}

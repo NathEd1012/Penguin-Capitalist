@@ -9,67 +9,67 @@ import os
 #   tpe    - Tree-structured Parzen Estimator
 #   cmaes  - Covariance Matrix Adaptation Evolution Strategy
 SEARCH_STRATEGIES = {
-    "gp_ei": {"sampler": "gp", "acquisition": "ei"},
-    "gp_ucb": {"sampler": "gp", "acquisition": "ucb"},
-    "tpe": {"sampler": "tpe", "acquisition": "ei"},
-    "cmaes": {"sampler": "cmaes", "acquisition": "ei"},
+   "gp_ei": {"sampler": "gp", "acquisition": "ei"},
+   "gp_ucb": {"sampler": "gp", "acquisition": "ucb"},
+   "tpe": {"sampler": "tpe", "acquisition": "ei"},
+   "cmaes": {"sampler": "cmaes", "acquisition": "ei"},
 }
 
 PARAMETER_SEARCH_METHOD = os.getenv(
-    "PARAMETER_SEARCH_METHOD", "bayesian_rand"
+   "PARAMETER_SEARCH_METHOD", "bayesian_rand"
 ).strip().lower()
 PARAMETER_SEARCH_BAYESIAN_SAMPLER = os.getenv(
-    "PARAMETER_SEARCH_BAYESIAN_SAMPLER", "gp"
+   "PARAMETER_SEARCH_BAYESIAN_SAMPLER", "gp"
 ).strip().lower()
 PARAMETER_SEARCH_BAYESIAN_SAMPLER = {
-    "gaussian": "gp",
-    "gaussian_process": "gp",
-    "cma": "cmaes",
-    "cma_es": "cmaes",
-    "cma-es": "cmaes",
+   "gaussian": "gp",
+   "gaussian_process": "gp",
+   "cma": "cmaes",
+   "cma_es": "cmaes",
+   "cma-es": "cmaes",
 }.get(PARAMETER_SEARCH_BAYESIAN_SAMPLER, PARAMETER_SEARCH_BAYESIAN_SAMPLER)
 PARAMETER_SEARCH_BAYESIAN_ACQUISITION = os.getenv(
-    "PARAMETER_SEARCH_BAYESIAN_ACQUISITION", "ei"
+   "PARAMETER_SEARCH_BAYESIAN_ACQUISITION", "ei"
 ).strip().lower()
 
 if PARAMETER_SEARCH_BAYESIAN_SAMPLER not in {"gp", "tpe", "cmaes"}:
     raise ValueError(
-        f"Unsupported Bayesian sampler: {PARAMETER_SEARCH_BAYESIAN_SAMPLER}. "
-        "Choose gp, tpe, or cmaes."
+       f"Unsupported Bayesian sampler: {PARAMETER_SEARCH_BAYESIAN_SAMPLER}. "
+       "Choose gp, tpe, or cmaes."
     )
 if PARAMETER_SEARCH_BAYESIAN_ACQUISITION not in {"ei", "ucb"}:
-    raise ValueError(
-        f"Unsupported Bayesian acquisition: {PARAMETER_SEARCH_BAYESIAN_ACQUISITION}. "
-        "Choose ei or ucb."
-    )
+   raise ValueError(
+       f"Unsupported Bayesian acquisition: {PARAMETER_SEARCH_BAYESIAN_ACQUISITION}. "
+       "Choose ei or ucb."
+   )
 if PARAMETER_SEARCH_BAYESIAN_ACQUISITION == "ucb" and PARAMETER_SEARCH_BAYESIAN_SAMPLER != "gp":
    raise ValueError("UCB acquisition requires the gp sampler.")
 
 PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA = float(
-    os.getenv("PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA", "2.0")
+   os.getenv("PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA", "2.0")
 )
 if PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA <= 0:
-    raise ValueError("PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA must be positive.")
+   raise ValueError("PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA must be positive.")
 
 PARAMETER_SEARCH_WARMUP_TRIALS = int(os.getenv("PARAMETER_SEARCH_WARMUP_TRIALS", "4"))
 PARAMETERS_EXECUTED = max(1, int(os.getenv("PARAMETERS_EXECUTED", "1")))
 VALIDATION_CANDIDATES = max(1, int(os.getenv("VALIDATION_CANDIDATES", "10")))
 
 PARAMETER_SEARCH_RANGE_SET = os.getenv(
-    "PARAMETER_SEARCH_RANGE_SET", "broad"
+   "PARAMETER_SEARCH_RANGE_SET", "broad"
 ).strip().lower()
 if PARAMETER_SEARCH_RANGE_SET not in {"narrow", "broad"}:
     raise ValueError(
-        f"Unsupported parameter range set: {PARAMETER_SEARCH_RANGE_SET}. "
-        "Choose narrow or broad."
+       f"Unsupported parameter range set: {PARAMETER_SEARCH_RANGE_SET}. "
+       "Choose narrow or broad."
     )
 
 PARAMETER_SEARCH_STRATEGY = next(
     (
-        name
-        for name, settings in SEARCH_STRATEGIES.items()
-        if settings["sampler"] == PARAMETER_SEARCH_BAYESIAN_SAMPLER
-        and settings["acquisition"] == PARAMETER_SEARCH_BAYESIAN_ACQUISITION
+       name
+       for name, settings in SEARCH_STRATEGIES.items()
+       if settings["sampler"] == PARAMETER_SEARCH_BAYESIAN_SAMPLER
+       and settings["acquisition"] == PARAMETER_SEARCH_BAYESIAN_ACQUISITION
     ),
     "custom",
 )
@@ -100,7 +100,7 @@ NARROW_PARAMETER_RANGES = (
     ("trend_entry_threshold", "float", 1e-6, 1.0),
     ("sr_low_threshhold", "float", 0.0, 0.10),
     ("sr_high_threshhold", "float", 0.0, 0.10),
-    ("sr_period", "int", 5, 200),
+    ("sr_period", "int", 5, 100),
     ("strength_cap", "float", 1.0, 2.0),
 )
 
@@ -241,6 +241,35 @@ def has_parameter_search_space(strategy_class) -> bool:
         return False
 
 
+def max_period_for_strategies(strategy_classes) -> int:
+    """Return the largest period required by the supplied strategies.
+
+    Instances use their sampled parameter values. Classes use the configured
+    search-range maxima because their runtime parameters are not known yet.
+    """
+    max_period = 0
+    for strategy in strategy_classes:
+        strategy_class = strategy if inspect.isclass(strategy) else strategy.__class__
+        try:
+            period_parameters = strategy_parameter_space(strategy_class)
+            if inspect.isclass(strategy) or not hasattr(strategy, "params"):
+                period_maxima = (
+                    maximum
+                    for name, _parameter_type, _minimum, maximum in period_parameters
+                    if name.endswith("_period")
+                )
+            else:
+                period_maxima = (
+                    int(getattr(strategy.params, name))
+                    for name, _parameter_type, _minimum, _maximum in period_parameters
+                    if name.endswith("_period") and hasattr(strategy.params, name)
+                )
+            max_period = max(max_period, *period_maxima)
+        except ValueError:
+            continue
+    return max_period
+
+
 def strategy_parameter_space_by_name(strategy_name: str):
     """Return the active configured search space for a strategy name."""
     if strategy_name in STRATEGY_PARAMETER_NAMES:
@@ -309,8 +338,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
 
 MAX_PERIOD = max(
     maximum
-    for parameter_space in (_NARROW_RANGES, _BROAD_RANGES)
-    for name, _parameter_type, _minimum, maximum in parameter_space.values()
+    for name, _parameter_type, _minimum, maximum in _ACTIVE_RANGES.values()
     if name.endswith("_period")
 )
 
@@ -329,6 +357,7 @@ __all__ = [
     "PARAMETERS_EXECUTED",
     "VALIDATION_CANDIDATES",
     "MAX_PERIOD",
+    "max_period_for_strategies",
     "PARAMETER_SEARCH_METHOD",
     "SEARCH_STRATEGIES",
     "PARAMETER_SEARCH_STRATEGY",
