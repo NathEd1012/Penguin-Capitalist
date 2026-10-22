@@ -7,10 +7,10 @@ import pickle
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 
-CACHE_VERSION = 2
+CACHE_VERSION = 3
 
 
 def _datetime_text(value: datetime) -> str:
@@ -30,6 +30,7 @@ def _configuration(
     warmup_bars: int,
     prefilter_stale_symbols: bool,
     enable_data_quality_checks: bool,
+    symbol_list_name: Optional[str],
 ) -> dict:
     return {
         "cache_version": CACHE_VERSION,
@@ -44,6 +45,7 @@ def _configuration(
         "warmup_bars": warmup_bars,
         "prefilter_stale_symbols": prefilter_stale_symbols,
         "enable_data_quality_checks": enable_data_quality_checks,
+        "symbol_list_name": symbol_list_name or "custom",
         "ignore_corporate_actions": os.environ.get(
             "IGNORE_CORPORATE_ACTIONS", ""
         ).lower()
@@ -51,19 +53,26 @@ def _configuration(
     }
 
 
-def _paths(
+def _path(
     cache_dir: Path,
     configuration: dict,
-) -> Tuple[Path, Path]:
+) -> Path:
     encoded = json.dumps(configuration, sort_keys=True, separators=(",", ":"))
     digest = hashlib.sha256(encoded.encode("utf-8")).hexdigest()
-    symbols_digest = hashlib.sha256(
-        ",".join(configuration["symbols"]).encode("utf-8")
-    ).hexdigest()[:10]
-    start = configuration["start_date"][:10].replace("-", "")
-    end = configuration["end_date"][:10].replace("-", "")
-    prefix = cache_dir / f"step1_{start}_{end}_{symbols_digest}_{configuration['binning']}_{digest[:10]}"
-    return prefix.with_suffix(".json"), prefix.with_suffix(".pkl.gz")
+    start = configuration["start_date"][2:4]
+    end = configuration["end_date"][2:4]
+    list_name = "".join(
+        character
+        for character in configuration["symbol_list_name"]
+        if character.isalnum() or character in "-_"
+    )
+    if list_name.upper().startswith("LIST_"):
+        list_name = f"List{list_name[5:]}"
+    filename = (
+        f"From{start}_{configuration['binning']}_{list_name}_To{end}_"
+        f"{digest[:10]}.pkl.gz"
+    )
+    return cache_dir / filename
 
 
 def load(
@@ -81,6 +90,7 @@ def load(
     prefilter_stale_symbols: bool = True,
     enable_data_quality_checks: bool = True,
     refresh_cache: bool = False,
+    symbol_list_name: Optional[str] = None,
 ) -> Optional[dict]:
     """Load a finalized Step 1 result when its configuration matches exactly."""
     configuration = _configuration(
@@ -96,14 +106,19 @@ def load(
         warmup_bars,
         prefilter_stale_symbols,
         enable_data_quality_checks,
+        symbol_list_name,
     )
-    metadata_path, data_path = _paths(cache_dir, configuration)
+    cache_path = _path(cache_dir, configuration)
     try:
-        if json.loads(metadata_path.read_text(encoding="utf-8")) != configuration:
+        with gzip.open(cache_path, "rb") as handle:
+            cache = pickle.load(handle)
+        if (
+            not isinstance(cache, dict)
+            or cache.get("configuration") != configuration
+            or not isinstance(cache.get("result"), dict)
+        ):
             return None
-        with gzip.open(data_path, "rb") as handle:
-            result = pickle.load(handle)
-        return result if isinstance(result, dict) else None
+        return cache["result"]
     except (OSError, ValueError, pickle.PickleError, EOFError, AttributeError):
         return None
 
@@ -124,6 +139,7 @@ def save(
     prefilter_stale_symbols: bool = True,
     enable_data_quality_checks: bool = True,
     refresh_cache: bool = False,
+    symbol_list_name: Optional[str] = None,
 ) -> None:
     """Atomically save a finalized Step 1 result and its configuration."""
     configuration = _configuration(
@@ -139,34 +155,28 @@ def save(
         warmup_bars,
         prefilter_stale_symbols,
         enable_data_quality_checks,
+        symbol_list_name,
     )
     cache_dir.mkdir(parents=True, exist_ok=True)
-    metadata_path, data_path = _paths(cache_dir, configuration)
-    temporary_paths = []
+    cache_path = _path(cache_dir, configuration)
+    temporary_path: Optional[Path] = None
     try:
-        with tempfile.NamedTemporaryFile(
-            mode="w",
-            dir=cache_dir,
-            prefix=f".{metadata_path.name}.",
-            suffix=".tmp",
-            delete=False,
-            encoding="utf-8",
-        ) as metadata_file:
-            json.dump(configuration, metadata_file, sort_keys=True, indent=2)
-            temporary_paths.append(Path(metadata_file.name))
         with tempfile.NamedTemporaryFile(
             mode="wb",
             dir=cache_dir,
-            prefix=f".{data_path.name}.",
+            prefix=f".{cache_path.name}.",
             suffix=".tmp",
             delete=False,
         ) as data_file:
             with gzip.GzipFile(fileobj=data_file, mode="wb", compresslevel=6) as compressed:
-                pickle.dump(result, compressed, protocol=pickle.HIGHEST_PROTOCOL)
-            temporary_paths.append(Path(data_file.name))
-        os.replace(temporary_paths[0], metadata_path)
-        os.replace(temporary_paths[1], data_path)
-        temporary_paths.clear()
+                pickle.dump(
+                    {"configuration": configuration, "result": result},
+                    compressed,
+                    protocol=pickle.HIGHEST_PROTOCOL,
+                )
+            temporary_path = Path(data_file.name)
+        os.replace(temporary_path, cache_path)
+        temporary_path = None
     finally:
-        for temporary_path in temporary_paths:
+        if temporary_path is not None:
             temporary_path.unlink(missing_ok=True)

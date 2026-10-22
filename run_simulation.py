@@ -11,6 +11,7 @@ import io
 import queue
 import resource
 import traceback
+import argparse
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, List
@@ -49,10 +50,12 @@ from config import (
     START_DATE,
     STOP_DATE,
     BINNING,
+    SUPPORTED_BINNINGS,
     T_PLUS_X,
     ACTIVE_PENGUINS,
     RUN_LOG_NAME,
     SAVE_CSV,
+    SAVE_FIRST_STEP,
     get_run_output_dir,
     TRAINING_STEP_ENABLED,
     TRAINING_ITERATIONS,
@@ -663,6 +666,7 @@ def run_backtest(
             validation_start_date=validation_start_for_cache,
             validation_end_date=validation_end_for_cache,
             warmup_bars=cache_warmup_bars,
+            symbol_list_name=ACTIVE_SYMBOL_LIST,
         )
         if cached_step1 is not None:
             print("Step 1: Loaded finalized historical data from local cache.")
@@ -696,29 +700,31 @@ def run_backtest(
                     f"Error loading data: {e}. "
                     "Make sure APCA_API_KEY_ID and APCA_API_SECRET_KEY are set."
                 ) from e
-            try:
-                save_finalized_data(
-                    finalized_cache_dir,
-                    symbols,
-                    load_start,
-                    end_datetime_utc,
-                    binning,
-                    {
-                        "data": data,
-                        "sparse_warning": sparse_warning,
-                        "price_basis_adjusted": price_basis_adjusted,
-                        "quality_report_text": quality_report_text,
-                    },
-                    cache_start_date=canonical_cache_start,
-                    training_start_date=training_start_for_cache,
-                    training_end_date=training_end_for_cache,
-                    validation_start_date=validation_start_for_cache,
-                    validation_end_date=validation_end_for_cache,
-                    warmup_bars=cache_warmup_bars,
-                )
-                print("  Saved finalized Step 1 data to local cache.")
-            except OSError as e:
-                print(f"  Warning: could not save finalized Step 1 cache: {e}")
+            if SAVE_FIRST_STEP:
+                try:
+                    save_finalized_data(
+                        finalized_cache_dir,
+                        symbols,
+                        load_start,
+                        end_datetime_utc,
+                        binning,
+                        {
+                            "data": data,
+                            "sparse_warning": sparse_warning,
+                            "price_basis_adjusted": price_basis_adjusted,
+                            "quality_report_text": quality_report_text,
+                        },
+                        cache_start_date=canonical_cache_start,
+                        training_start_date=training_start_for_cache,
+                        training_end_date=training_end_for_cache,
+                        validation_start_date=validation_start_for_cache,
+                        validation_end_date=validation_end_for_cache,
+                        warmup_bars=cache_warmup_bars,
+                        symbol_list_name=ACTIVE_SYMBOL_LIST,
+                    )
+                    print("  Saved finalized Step 1 data to local cache.")
+                except OSError as e:
+                    print(f"  Warning: could not save finalized Step 1 cache: {e}")
             if sparse_warning:
                 print(sparse_warning)
         data = {
@@ -1523,8 +1529,24 @@ def run_backtest(
     return results, trades_by_bar, tradeable_timestamps, {}, symbol_close_series, quality_report_text
 
 
+def _parse_command_line_args():
+    parser = argparse.ArgumentParser(description="Run the Penguin Capitalist historical backtest.")
+    parser.add_argument(
+        "--binning",
+        "--timeframe",
+        dest="binning",
+        choices=SUPPORTED_BINNINGS,
+        default=BINNING,
+        help="Candle interval for the run (default: %(default)s).",
+    )
+    return parser.parse_args()
+
+
 def main():
     """Main entry point."""
+    run_started_at = time.perf_counter()
+    args = _parse_command_line_args()
+    binning = args.binning
     try:
         sys.stdout.reconfigure(line_buffering=True)
     except Exception:
@@ -1542,6 +1564,10 @@ def main():
     
     print("\n" + "="*80)
     print("PENGUIN CAPITALIST - HISTORICAL BACKTEST")
+    print(
+        "CURRENT DATE AND TIME: "
+        f"{datetime.now(timezone(timedelta(hours=1), 'CET')).strftime('%Y-%m-%d %H:%M:%S CET')}"
+    )
     print("="*80)
 
     base_dir = Path(__file__).parent
@@ -1556,7 +1582,7 @@ def main():
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
-        binning=BINNING,
+        binning=binning,
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=EXEC_TRANSACTION_COST,
         penguin_classes=ACTIVE_PENGUINS,
@@ -1571,6 +1597,13 @@ def main():
     print("="*80)
     
     Evaluator.print_summary(results)
+    elapsed_seconds = int(time.perf_counter() - run_started_at)
+    elapsed_hours, elapsed_remainder = divmod(elapsed_seconds, 3600)
+    elapsed_minutes, elapsed_seconds = divmod(elapsed_remainder, 60)
+    print(
+        f"\nTotal run time: "
+        f"{elapsed_hours:02d}:{elapsed_minutes:02d}:{elapsed_seconds:02d}"
+    )
 
     Evaluator.save_results(
         results,
@@ -1598,7 +1631,7 @@ def main():
         results,
         run_plot,
         num_bars,
-        BINNING,
+        binning,
         START_DATE,
         STOP_DATE,
         bar_timestamps,
@@ -1624,7 +1657,7 @@ def main():
             run_pdf,
             run_plot,
             num_bars,
-            BINNING,
+            binning,
             START_DATE,
             STOP_DATE,
             bar_timestamps,

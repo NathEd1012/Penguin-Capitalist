@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
-from alpaca.data.timeframe import TimeFrame
+from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 import pytz
 from dotenv import load_dotenv
 from tqdm import tqdm
@@ -106,9 +106,9 @@ class DataLoader:
         if binning == "1m":
             return TimeFrame.Minute, 1
         elif binning == "5m":
-            return TimeFrame.FiveMin, 5
+            return TimeFrame(5, TimeFrameUnit.Minute), 5
         elif binning == "15m":
-            return TimeFrame.FifteenMin, 15
+            return TimeFrame(15, TimeFrameUnit.Minute), 15
         elif binning == "1h":
             return TimeFrame.Hour, 60
         elif binning == "1d":

@@ -7,6 +7,17 @@ from pathlib import Path
 
 # ========== BACKTEST TIMING SETTINGS ==========
 
+SUPPORTED_BINNINGS = ("1m", "5m", "15m", "1h", "1d")
+
+
+def _parse_binning(value: str) -> str:
+    """Normalize and validate the candle interval used by a run."""
+    binning = str(value).strip().lower()
+    if binning not in SUPPORTED_BINNINGS:
+        supported = ", ".join(SUPPORTED_BINNINGS)
+        raise ValueError(f"Unsupported BINNING: {value!r}. Use one of: {supported}")
+    return binning
+
 # Start date for backtest (ISO format: YYYY-MM-DD HH:MM:SS in UTC)
 # Examples:
 #   "2026-01-03 10:30:00"  - Specific datetime
@@ -166,7 +177,7 @@ if os.getenv("FIXED_STOP"):
 #   "15m" - 15-minute bars
 #   "1h"  - 1-hour bars
 #   "1d"  - Daily bars (lowest granularity, less data)
-BINNING = "1m"
+BINNING = _parse_binning(os.getenv("BINNING", "1m"))
 
 # ========== RUN ARCHIVING SETTINGS ==========
 # Run output folder name.
@@ -180,6 +191,11 @@ RUN_LOG_NAME = os.getenv("RUN_LOG_NAME", RUN_LOG_NAMEx)
 # 1 - Save per-strategy CSV summaries in artifacts/csv
 SAVE_CSVx = 0
 SAVE_CSV = int(os.getenv("SAVE_CSV", SAVE_CSVx))
+
+# 0 - Do not save finalized Step 1 data when running the full backtest
+# 1 - Save finalized Step 1 data to the local cache after loading it
+SAVE_FIRST_STEPx = 0
+SAVE_FIRST_STEP = int(os.getenv("SAVE_FIRST_STEP", SAVE_FIRST_STEPx))
 
 
 # ========== PORTFOLIO SETTINGS ==========
@@ -208,8 +224,10 @@ __all__ = [
     "START_DATE",
     "STOP_DATE",
     "BINNING",
+    "SUPPORTED_BINNINGS",
     "RUN_LOG_NAME",
     "SAVE_CSV",
+    "SAVE_FIRST_STEP",
     "INITIAL_CAPITAL",
     "EXEC_TRANSACTION_COST",
     "T_PLUS_X",

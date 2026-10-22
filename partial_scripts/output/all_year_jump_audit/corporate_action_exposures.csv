@@ -1,0 +1,22 @@
+run,strategy,symbol,event,bar,quantity_before,corrected_quantity,post_event_value_overstatement,missing_child_quantity
+run_log/ALL_Year1_gpucb/MR_2021_broad_gpucb_500,KingPenguin_147,GE,2023-01-04 GEHC spin-off,235797,86.0,86.0,,28.666666666666668
+run_log/ALL_Year1_gpucb/MR_2021_broad_gpucb_500,EmperorPenguin,GE,2023-01-04 GEHC spin-off,235797,13.0,13.0,,4.333333333333333
+run_log/ALL_Year1_gpucb/MR_2021_broad_gpucb_500,KingPenguin,GE,2023-01-04 GEHC spin-off,235797,28.0,28.0,,9.333333333333334
+run_log/ALL_Year1_gpucb/MR_2024_broad_gpucb_500,KingPenguin,LCID,2025-09-02 reverse split,158588,8.0,0.8,134.5,
+run_log/ALL_Year1_gpucb/MR_2024_broad_gpucb_500,KingPenguin_040,LCID,2025-09-02 reverse split,158588,895.0,89.5,15046.74,
+run_log/ALL_Year_cmaes/MR_2021_broad_cmaes_500,GentooPenguin_028,GE,2023-01-04 GEHC spin-off,235797,3.0,3.0,,1.0
+run_log/ALL_Year_cmaes/MR_2021_broad_cmaes_500,KingPenguin,GE,2023-01-04 GEHC spin-off,235797,55.0,55.0,,18.333333333333332
+run_log/ALL_Year_gpei/MR_2021_broad_gpei_500,KingPenguin,GE,2023-01-04 GEHC spin-off,235797,21.0,21.0,,7.0
+run_log/ALL_Year_gpei/MR_2021_broad_gpei_500,KingPenguin_097,GE,2023-01-04 GEHC spin-off,235797,8.0,8.0,,2.6666666666666665
+run_log/ALL_Year_gpei/MR_2021_broad_gpei_500,EmperorPenguin_145,GE,2023-01-04 GEHC spin-off,235797,6.0,6.0,,2.0
+run_log/ALL_Year_gpei/MR_2024_broad_gpei_500,KingPenguin,LCID,2025-09-02 reverse split,158588,42.0,4.2,706.1,
+run_log/ALL_Year_gpei/MR_2024_broad_gpei_500,KingPenguin_074,LCID,2025-09-02 reverse split,158588,93.0,9.3,1563.52,
+run_log/ALL_Year_random/MR_2021_broad_random_500,GentooPenguin_488,GE,2023-01-04 GEHC spin-off,235797,1.0,1.0,,0.3333333333333333
+run_log/ALL_Year_random/MR_2021_broad_random_500,EmperorPenguin_336,GE,2023-01-04 GEHC spin-off,235797,5.0,5.0,,1.6666666666666667
+run_log/ALL_Year_random/MR_2021_broad_random_500,EmperorPenguin,GE,2023-01-04 GEHC spin-off,235797,4.0,4.0,,1.3333333333333333
+run_log/ALL_Year_random/MR_2021_broad_random_500,KingPenguin,GE,2023-01-04 GEHC spin-off,235797,4.0,4.0,,1.3333333333333333
+run_log/ALL_Year_tpe/MR_2021_broad_tpe_500,GentooPenguin,GE,2023-01-04 GEHC spin-off,235797,5.0,5.0,,1.6666666666666667
+run_log/ALL_Year_tpe/MR_2021_broad_tpe_500,GentooPenguin_454,GE,2023-01-04 GEHC spin-off,235797,5.0,5.0,,1.6666666666666667
+run_log/ALL_Year_tpe/MR_2021_broad_tpe_500,KingPenguin_314,GE,2023-01-04 GEHC spin-off,235797,82.0,82.0,,27.333333333333332
+run_log/ALL_Year_tpe/MR_2021_broad_tpe_500,KingPenguin,GE,2023-01-04 GEHC spin-off,235797,101.0,101.0,,33.666666666666664
+run_log/ALL_Year_tpe/MR_2021_broad_tpe_500,EmperorPenguin_358,GE,2023-01-04 GEHC spin-off,235797,1.0,1.0,,0.3333333333333333

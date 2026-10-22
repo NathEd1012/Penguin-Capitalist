@@ -33,8 +33,10 @@ from config.backtest import (
     START_DATE,
     STOP_DATE,
     BINNING,
+    SUPPORTED_BINNINGS,
     RUN_LOG_NAME,
     SAVE_CSV,
+    SAVE_FIRST_STEP,
     get_run_output_dir,
     INITIAL_CAPITAL,
     EXEC_TRANSACTION_COST,
@@ -103,8 +105,10 @@ __all__ = [
     "VALIDATION_START_DATE",
     "VALIDATION_STOP_DATE",
     "BINNING",              # Timeframe ("1m", "5m", "15m", "1h", "1d")
+    "SUPPORTED_BINNINGS",
     "RUN_LOG_NAME",         # "0" disables archiving; otherwise archive folder name
     "SAVE_CSV",             # 0 disables per-strategy CSV summaries
+    "SAVE_FIRST_STEP",      # 0 disables finalized Step 1 cache writes in full runs
     "get_run_output_dir",    # Resolve active run output directory
     "ACTIVE_PENGUINS",      # List of active strategy classes
     "TRAINING_STEP_ENABLED",
