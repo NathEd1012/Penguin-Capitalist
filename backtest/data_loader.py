@@ -1,60 +1,46 @@
 """Data loader for historical market data from Alpaca."""
 import os
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Tuple, Optional
 from pathlib import Path
 import pandas as pd
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
+from alpaca.data.enums import Adjustment
 from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 import pytz
 from dotenv import load_dotenv
 from tqdm import tqdm
 from market_data.cache import DataCache
+from backtest.data_cleaning import (
+    CleaningPolicy, SymbolBars, annotate_quality, normalize_splits,
+    prepare_market_data, pricing_symbols,
+)
 
-# Conditionally import corporate-action helper. If IGNORE_CORPORATE_ACTIONS is set,
-# provide a no-op fallback to avoid import-time errors or unnecessary processing.
-if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
-    def get_price_adjustment_events(symbol: str):
-        return []
-    def has_corporate_action_near(symbol, timestamp, window_days=2, action_types=None):
-        return False
-    def describe_corporate_action_near(symbol, timestamp, window_days=2, action_types=None):
-        return None
-else:
-    # Import the corporate-action helpers from the scripts package.
-    try:
-        from scripts.data_fixes.corporate_actions import get_price_adjustment_events  # type: ignore
-    except Exception:
-        from scripts.data_fixes.corporate_actions import get_price_adjustment_events  # type: ignore
-
-    try:
-        from scripts.data_fixes.corporate_actions import has_corporate_action_near  # type: ignore
-    except Exception:
-        from scripts.data_fixes.corporate_actions import has_corporate_action_near  # type: ignore
-
-    try:
-        from scripts.data_fixes.corporate_actions import describe_corporate_action_near  # type: ignore
-    except Exception:
-        from scripts.data_fixes.corporate_actions import describe_corporate_action_near  # type: ignore
+from scripts.data_fixes.corporate_actions import get_price_adjustment_events
 
 # Load environment variables from .env file
 load_dotenv()
 
-QUALITY_OK = "OK"
-QUALITY_MISSING_PREV = "MISSING_PREV"
-QUALITY_SYNTHETIC_JUMP = "SYNTHETIC_JUMP"
-QUALITY_CORPORATE_ACTION = "CORPORATE_ACTION"
-QUALITY_SPLIT_SUSPECT = QUALITY_CORPORATE_ACTION
-QUALITY_OUTLIER = "OUTLIER"
+def _bounded_load(executor, symbols, load, max_workers):
+    """Keep at most max_workers raw symbol dictionaries awaiting cleaning."""
+    iterator = iter(symbols)
+    pending = {}
+    for _ in range(max_workers):
+        symbol = next(iterator, None)
+        if symbol is not None:
+            pending[executor.submit(load, symbol)] = symbol
+    while pending:
+        done, _ = wait(pending, return_when=FIRST_COMPLETED)
+        for future in done:
+            symbol = pending.pop(future)
+            yield symbol, future.result()
+            next_symbol = next(iterator, None)
+            if next_symbol is not None:
+                pending[executor.submit(load, next_symbol)] = next_symbol
 
-EVENT_CORPORATE_ACTION = "CORPORATE_ACTION"
-EVENT_ONE_BAR_OUTLIER = "ONE_BAR_OUTLIER"
-EVENT_UNRESOLVED_INCONSISTENCY = "UNRESOLVED_INCONSISTENCY"
-
-DEFAULT_MAX_UNEXPLAINED_JUMP_PCT = 0.08
 
 class DataLoader:
     """Load historical OHLCV data from Alpaca."""
@@ -71,14 +57,8 @@ class DataLoader:
         if not secret_key:
             secret_key = os.environ.get("ALPACA_SECRET_KEY")
         
-        if not api_key or not secret_key:
-            raise ValueError(
-                "Missing Alpaca API credentials.\n"
-                "Please set APCA_API_KEY_ID and APCA_API_SECRET_KEY environment variables,\n"
-                "or ensure .env file has ALPACA_API_KEY and ALPACA_SECRET_KEY."
-            )
-        
-        self.client = StockHistoricalDataClient(api_key, secret_key)
+        # Cache inspection and offline replay do not require credentials.
+        self.client = StockHistoricalDataClient(api_key, secret_key) if api_key and secret_key else None
         # Repeated runs with identical ranges should be served from disk cache.
         # Use scratch when configured so large caches do not consume home quota.
         project_root = Path(__file__).parent.parent
@@ -86,8 +66,6 @@ class DataLoader:
             os.environ.get("PENGUIN_DATA_CACHE_DIR", project_root / "data_cache")
         ).expanduser()
         self.cache = DataCache(str(cache_dir))
-        self.last_removed_bars: Dict[str, List[Dict[str, object]]] = {}
-        self.last_resolved_bars: Dict[str, List[Dict[str, object]]] = {}
         self.last_quality_summary: Dict[str, Dict[str, int]] = {}
         self.last_price_basis_adjusted: Dict[str, bool] = {}
     
@@ -133,11 +111,17 @@ class DataLoader:
 
         adjusted_rows: Dict = {}
         for timestamp, row in rows.items():
+            if timestamp.tzinfo is None or timestamp.utcoffset() is None:
+                raise ValueError(
+                    f"Naive bar timestamp cannot be used for split processing: "
+                    f"{symbol} {timestamp!s}"
+                )
+            timestamp_utc = timestamp.astimezone(timezone.utc)
             adjusted_row = dict(row)
 
             cumulative_factor = 1.0
-            for effective_ts, factor, _event in adjustments:
-                if timestamp < effective_ts:
+            for effective_ts, factor, event in adjustments:
+                if timestamp_utc < effective_ts:
                     cumulative_factor *= factor
 
             if cumulative_factor != 1.0:
@@ -145,418 +129,24 @@ class DataLoader:
                 adjusted_row["high"] *= cumulative_factor
                 adjusted_row["low"] *= cumulative_factor
                 adjusted_row["close"] *= cumulative_factor
+                if "volume" in adjusted_row:
+                    adjusted_row["volume"] /= cumulative_factor
 
             adjusted_rows[timestamp] = adjusted_row
 
         return adjusted_rows
 
-    def _corporate_action_boundary_score(self, symbol: str, rows: Dict) -> float:
-        """Score discontinuities around known split boundaries."""
-        if not rows:
-            return 0.0
-
-        adjustments = get_price_adjustment_events(symbol)
-        if not adjustments:
-            return 0.0
-
-        timestamps = sorted(rows.keys())
-        score = 0.0
-        for effective_ts, _factor, _event in adjustments:
-            before_candidates = [ts for ts in timestamps if ts < effective_ts]
-            after_candidates = [ts for ts in timestamps if ts >= effective_ts]
-            if not before_candidates or not after_candidates:
-                continue
-
-            before_ts = before_candidates[-1]
-            after_ts = after_candidates[0]
-            before_close = float(rows[before_ts]["close"])
-            after_close = float(rows[after_ts]["close"])
-            if before_close > 0 and after_close > 0:
-                score += abs(after_close / before_close - 1.0)
-
-        return score
-
     def _select_price_basis(self, symbol: str, rows: Dict) -> Dict:
-        """Choose the smoother of raw vs split-adjusted prices for a symbol."""
-        if os.environ.get("IGNORE_CORPORATE_ACTIONS", "").lower() in ("1", "true", "yes"):
-            return rows
-
-        adjusted_rows = self._apply_price_adjustments(symbol, rows)
-        if adjusted_rows is rows or not adjusted_rows:
-            return rows
-
-        raw_score = self._corporate_action_boundary_score(symbol, rows)
-        adjusted_score = self._corporate_action_boundary_score(symbol, adjusted_rows)
-
-        if adjusted_score + 1e-9 < raw_score:
-            return adjusted_rows
-        return rows
-
-    @staticmethod
-    def _anomaly_threshold() -> float:
-        """Return the global unexplained one-bar jump threshold."""
-        try:
-            return float(
-                os.environ.get(
-                    "DATA_CONSISTENCY_MAX_JUMP_PCT",
-                    str(DEFAULT_MAX_UNEXPLAINED_JUMP_PCT),
-                )
-            )
-        except ValueError:
-            return DEFAULT_MAX_UNEXPLAINED_JUMP_PCT
+        return normalize_splits(symbol, rows)
 
     def _annotate_data_quality(self, symbol: str, rows: Dict) -> Dict:
-        """Attach a per-bar quality flag and record any quarantined bars."""
-        annotated_rows: Dict = {}
-        removed_bars: List[Dict[str, object]] = []
-        resolved_bars: List[Dict[str, object]] = []
-
-        if not rows:
-            self.last_removed_bars[symbol] = []
-            self.last_resolved_bars[symbol] = []
-            return annotated_rows
-
-        timestamps = sorted(rows.keys())
-        threshold = self._anomaly_threshold()
-        previous_timestamp = None
-        previous_quality = None
-        quarantine_after_unexplained_jump = os.environ.get(
-            "DATA_CONSISTENCY_QUARANTINE_AFTER_JUMP",
-            "0",
-        ).lower() in ("1", "true", "yes")
-        quarantined_series_detail = ""
-        reported_outlier_events = set()
-        reported_corporate_actions = set()
-        active_unresolved_event: Optional[Dict[str, object]] = None
-
-        def _format_action_detail(event: Dict[str, str]) -> str:
-            event_type = str(event.get("type", "corporate_action")).replace("_", " ")
-            ratio = event.get("ratio", "")
-            ratio_text = f" {ratio}" if ratio else ""
-            comment = event.get("comment", "").strip()
-            suffix = f" ({comment})" if comment else ""
-            return f"{event_type}{ratio_text} on {event.get('date', 'unknown date')}{suffix}"
-
-        for effective_ts, _factor, event in get_price_adjustment_events(symbol):
-            if timestamps[0] <= effective_ts <= timestamps[-1]:
-                detail = (
-                    describe_corporate_action_near(
-                        symbol,
-                        effective_ts,
-                        window_days=2,
-                        action_types={"split", "reverse_split"},
-                    )
-                    or _format_action_detail(event)
-                )
-                resolved_bars.append(
-                    {
-                        "timestamp": effective_ts,
-                        "symbol": symbol,
-                        "reason": QUALITY_CORPORATE_ACTION,
-                        "category": EVENT_CORPORATE_ACTION,
-                        "detail": detail,
-                    }
-                )
-                reported_corporate_actions.add(detail)
-
-        def _jump_detail(jump_pct: float) -> str:
-            if jump_pct > 0.50:
-                return f"one-bar jump {jump_pct:.2%} exceeded 50% hard cap"
-            return f"jump {jump_pct:.2%} above {threshold:.2%} threshold"
-
-        def _is_one_bar_outlier(index: int, prev_close: float, curr_close: float) -> Tuple[bool, float]:
-            if index + 1 >= len(timestamps) or prev_close <= 0 or curr_close <= 0:
-                return False, 0.0
-
-            next_row = rows[timestamps[index + 1]]
-            next_close = float(next_row.get("close", 0.0))
-            if next_close <= 0:
-                return False, 0.0
-
-            next_vs_prev = abs(next_close / prev_close - 1.0)
-            next_vs_curr = abs(next_close / curr_close - 1.0)
-            return next_vs_prev <= threshold and next_vs_curr > threshold, next_vs_prev
-
-        def _finish_unresolved_event() -> None:
-            nonlocal active_unresolved_event
-            if active_unresolved_event is None:
-                return
-
-            affected_bars = int(active_unresolved_event.get("affected_bars", 0))
-            if affected_bars > 1:
-                event_key = (
-                    active_unresolved_event.get("category"),
-                    active_unresolved_event.get("timestamp"),
-                    active_unresolved_event.get("detail"),
-                )
-                if event_key not in reported_outlier_events:
-                    removed_bars.append(dict(active_unresolved_event))
-                    reported_outlier_events.add(event_key)
-
-            active_unresolved_event = None
-
-        def _start_unresolved_event(
-            timestamp,
-            row: Dict[str, object],
-            reason_detail: str,
-            jump_pct: float,
-            prev_close: float,
-            curr_close: float,
-        ) -> None:
-            nonlocal active_unresolved_event
-            _finish_unresolved_event()
-            active_unresolved_event = {
-                "timestamp": timestamp,
-                "end_timestamp": timestamp,
-                "symbol": symbol,
-                "reason": QUALITY_OUTLIER,
-                "category": EVENT_UNRESOLVED_INCONSISTENCY,
-                "affected_bars": 1,
-                "close": float(row.get("close", 0.0)),
-                "end_close": float(row.get("close", 0.0)),
-                "previous_close": prev_close,
-                "current_close": curr_close,
-                "jump_pct": jump_pct,
-                "detail": reason_detail,
-            }
-
-        for index, timestamp in enumerate(timestamps):
-            row = dict(rows[timestamp])
-            quality = QUALITY_OK
-            reason_detail = ""
-            event_category = ""
-
-            if quarantined_series_detail:
-                quality = QUALITY_OUTLIER
-                reason_detail = quarantined_series_detail
-                if active_unresolved_event is not None:
-                    active_unresolved_event["affected_bars"] = (
-                        int(active_unresolved_event.get("affected_bars", 0)) + 1
-                    )
-                    active_unresolved_event["end_timestamp"] = timestamp
-                    active_unresolved_event["end_close"] = float(row.get("close", 0.0))
-            elif index == 0:
-                quality = QUALITY_MISSING_PREV
-                reason_detail = "first bar has no prior history"
-            else:
-                prev_row = rows[previous_timestamp]
-                prev_close = float(prev_row.get("close", 0.0))
-                curr_close = float(row.get("close", 0.0))
-
-                if prev_close <= 0 or curr_close <= 0:
-                    quality = QUALITY_OUTLIER
-                    reason_detail = "non-positive price in one-bar comparison"
-                    event_category = EVENT_UNRESOLVED_INCONSISTENCY
-                    _start_unresolved_event(timestamp, row, reason_detail, 0.0, prev_close, curr_close)
-                else:
-                    jump_pct = abs(curr_close / prev_close - 1.0)
-                    if jump_pct > threshold:
-                        if has_corporate_action_near(
-                            symbol=symbol,
-                            timestamp=timestamp,
-                            window_days=2,
-                            action_types={"split", "reverse_split"},
-                        ):
-                            quality = QUALITY_CORPORATE_ACTION
-                            reason_detail = (
-                                f"jump {jump_pct:.2%} near known split/reverse-split event"
-                            )
-                            action_detail = describe_corporate_action_near(
-                                symbol,
-                                timestamp,
-                                window_days=2,
-                                action_types={"split", "reverse_split"},
-                            )
-                            if action_detail and action_detail not in reported_corporate_actions:
-                                resolved_bars.append(
-                                    {
-                                        "timestamp": timestamp,
-                                        "symbol": symbol,
-                                        "reason": QUALITY_CORPORATE_ACTION,
-                                        "category": EVENT_CORPORATE_ACTION,
-                                        "detail": action_detail,
-                                    }
-                                )
-                                reported_corporate_actions.add(action_detail)
-                        elif previous_quality == QUALITY_MISSING_PREV:
-                            quality = QUALITY_SYNTHETIC_JUMP
-                            reason_detail = (
-                                f"jump {jump_pct:.2%} immediately after missing history"
-                            )
-                        else:
-                            is_single_bar, revert_pct = _is_one_bar_outlier(
-                                index,
-                                prev_close,
-                                curr_close,
-                            )
-                            quality = QUALITY_OUTLIER
-                            if is_single_bar:
-                                event_category = EVENT_ONE_BAR_OUTLIER
-                                reason_detail = (
-                                    f"one-bar outlier {jump_pct:.2%}; next bar reverted "
-                                    f"to within {revert_pct:.2%} of previous close"
-                                )
-                            else:
-                                event_category = EVENT_UNRESOLVED_INCONSISTENCY
-                                reason_detail = _jump_detail(jump_pct)
-                                _start_unresolved_event(
-                                    timestamp,
-                                    row,
-                                    reason_detail,
-                                    jump_pct,
-                                    prev_close,
-                                    curr_close,
-                                )
-                                if quarantine_after_unexplained_jump:
-                                    quarantined_series_detail = (
-                                        f"after unresolved jump {jump_pct:.2%} at {timestamp.isoformat()}"
-                                    )
-
-            row["data_quality"] = quality
-            if reason_detail:
-                row["quality_reason"] = reason_detail
-            if quality == QUALITY_CORPORATE_ACTION:
-                _finish_unresolved_event()
-                action_detail = (
-                    describe_corporate_action_near(
-                        symbol,
-                        timestamp,
-                        window_days=2,
-                        action_types={"split", "reverse_split"},
-                    )
-                    or reason_detail
-                )
-                if action_detail not in reported_corporate_actions:
-                    resolved_bars.append(
-                        {
-                            "timestamp": timestamp,
-                            "symbol": symbol,
-                            "reason": quality,
-                            "category": EVENT_CORPORATE_ACTION,
-                            "close": float(row.get("close", 0.0)),
-                            "detail": action_detail,
-                        }
-                    )
-                    reported_corporate_actions.add(action_detail)
-                annotated_rows[timestamp] = row
-                previous_timestamp = timestamp
-                previous_quality = quality
-                continue
-
-            if quality == QUALITY_OUTLIER:
-                if event_category == EVENT_ONE_BAR_OUTLIER:
-                    event_key = (quality, reason_detail)
-                    if event_key not in reported_outlier_events:
-                        removed_bars.append(
-                            {
-                                "timestamp": timestamp,
-                                "symbol": symbol,
-                                "reason": quality,
-                                "category": EVENT_ONE_BAR_OUTLIER,
-                                "close": float(row.get("close", 0.0)),
-                                "detail": reason_detail,
-                            }
-                        )
-                        reported_outlier_events.add(event_key)
-                previous_timestamp = timestamp
-                previous_quality = quality
-                continue
-
-            _finish_unresolved_event()
-            annotated_rows[timestamp] = row
-            previous_timestamp = timestamp
-            previous_quality = quality
-
-        _finish_unresolved_event()
-        self.last_removed_bars[symbol] = removed_bars
-        self.last_resolved_bars[symbol] = resolved_bars
-        return annotated_rows
+        return annotate_quality(symbol, rows, CleaningPolicy.from_environment())
 
     def get_quality_report_text(self) -> str:
-        """Return residual price-jump inconsistencies detected during data fetching."""
-        if not self.last_removed_bars and not self.last_resolved_bars:
-            return ""
-
-        corporate_actions: List[Dict[str, object]] = []
-        one_bar_outliers: List[Dict[str, object]] = []
-        unresolved_inconsistencies: List[Dict[str, object]] = []
-
-        def _ts_text(value: object) -> str:
-            return value.isoformat() if hasattr(value, "isoformat") else str(value)
-
-        def _short_float(value: object) -> str:
-            try:
-                return f"{float(value):.4g}"
-            except (TypeError, ValueError):
-                return "n/a"
-
-        all_symbols = sorted(set(self.last_removed_bars) | set(self.last_resolved_bars))
-        for symbol in all_symbols:
-            resolved = self.last_resolved_bars.get(symbol, [])
-            unresolved = self.last_removed_bars.get(symbol, [])
-
-            for item in resolved:
-                if item.get("category") == EVENT_CORPORATE_ACTION:
-                    corporate_actions.append(item)
-
-            for item in unresolved:
-                category = item.get("category")
-                if category == EVENT_ONE_BAR_OUTLIER:
-                    one_bar_outliers.append(item)
-                elif category == EVENT_UNRESOLVED_INCONSISTENCY:
-                    if int(item.get("affected_bars", 1)) > 1:
-                        unresolved_inconsistencies.append(item)
-
-        if not corporate_actions and not one_bar_outliers and not unresolved_inconsistencies:
-            return ""
-
-        lines = [
-            "Data consistency events",
-            "=" * 72,
-            "Known corporate actions and one-bar outliers are summarized below.",
-            "Unresolved inconsistencies are shown only when they persist for more than one bar.",
-            "",
-        ]
-
-        if corporate_actions:
-            lines.append("Corporate actions:")
-            for item in corporate_actions:
-                lines.append(
-                    f"  - {item.get('symbol')} | {_ts_text(item.get('timestamp'))} | "
-                    f"{item.get('detail', 'known corporate action')}"
-                )
-            lines.append("")
-
-        if one_bar_outliers:
-            lines.append("One-bar outliers:")
-            for item in one_bar_outliers:
-                lines.append(
-                    f"  - {item.get('symbol')} | {_ts_text(item.get('timestamp'))} | "
-                    f"{item.get('detail', 'one-bar outlier')} | close={_short_float(item.get('close'))}"
-                )
-            lines.append("")
-
-        if unresolved_inconsistencies:
-            lines.append("Unresolved inconsistencies (>1 bar):")
-            for item in unresolved_inconsistencies:
-                affected_bars = int(item.get("affected_bars", 0))
-                lines.append(
-                    f"  - {item.get('symbol')} | {_ts_text(item.get('timestamp'))}"
-                    f" -> {_ts_text(item.get('end_timestamp'))} | {affected_bars} bars | "
-                    f"{item.get('detail', 'unresolved price jump')} | "
-                    f"first_close={_short_float(item.get('close'))}, "
-                    f"last_close={_short_float(item.get('end_close'))}"
-                )
-            lines.append("")
-
-        unresolved_bars = sum(int(item.get("affected_bars", 0)) for item in unresolved_inconsistencies)
-        lines.append(
-            "Totals: "
-            f"corporate_actions={len(corporate_actions)}, "
-            f"one_bar_outliers={len(one_bar_outliers)}, "
-            f"unresolved_inconsistencies={len(unresolved_inconsistencies)}, "
-            f"unresolved_affected_bars={unresolved_bars}"
-        )
+        """Bounded per-symbol summary, rather than millions of event strings."""
+        lines = ["Prepared data quality (causal checks; raw cache unchanged)"]
+        for symbol, counts in sorted(self.last_quality_summary.items()):
+            lines.append(f"  {symbol}: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
         return "\n".join(lines)
 
     @staticmethod
@@ -579,44 +169,6 @@ class DataLoader:
             ]
         ).sort_values("timestamp").reset_index(drop=True)
 
-    @staticmethod
-    def _freshness_probe_start(
-        start_date: datetime,
-        end_date: datetime,
-        minutes_per_bar: int,
-    ) -> datetime:
-        """Return a recent range start that is cheap but wide enough for market closures."""
-        if minutes_per_bar >= 1440:
-            probe_window = timedelta(days=90)
-        elif minutes_per_bar >= 60:
-            probe_window = timedelta(days=30)
-        else:
-            probe_window = timedelta(days=14)
-
-        probe_start = end_date - probe_window
-        return max(start_date, probe_start)
-
-    @staticmethod
-    def _stale_reason_for_rows(
-        bars_dict: Dict,
-        lookback_bars: int = 10,
-        min_volume_threshold: float = 100,
-    ) -> Optional[str]:
-        """Return None for tradable recent rows, otherwise a compact stale reason."""
-        if not bars_dict:
-            return "no data"
-
-        timestamps = sorted(bars_dict.keys())
-        if len(timestamps) < max(3, lookback_bars // 2):
-            return "insufficient bars"
-
-        recent_bars = [bars_dict[ts] for ts in timestamps[-lookback_bars:]]
-        avg_volume = sum(bar["volume"] for bar in recent_bars) / len(recent_bars)
-        if avg_volume < min_volume_threshold:
-            return "low recent volume"
-
-        return None
-    
     def load_bars(
         self,
         symbols: List[str],
@@ -626,6 +178,8 @@ class DataLoader:
         prefilter_stale_symbols: bool = True,
         enable_data_quality_checks: bool = True,
         refresh_cache: bool = False,
+        cache_only: bool = False,
+        include_dependencies: bool = True,
     ) -> Tuple[Dict[str, Dict], str]:
         """
         Load historical bars for symbols.
@@ -635,7 +189,7 @@ class DataLoader:
             start_date: Start datetime
             end_date: End datetime
             binning: Timeframe string ("1m", "5m", "15m", "1h", "1d")
-            prefilter_stale_symbols: Check a small recent window before loading long ranges
+            prefilter_stale_symbols: Apply causal session-coverage eligibility
             refresh_cache: Fetch the entire requested range and merge it with the cache
         
         Returns:
@@ -643,9 +197,10 @@ class DataLoader:
             - data_dict: Dict[symbol][timestamp] = bar data (o, h, l, c, v)
             - warning_message: String with info about actual data range if sparse
         """
+        requested_symbols = list(dict.fromkeys(symbols))
+        symbols = pricing_symbols(requested_symbols) if include_dependencies else requested_symbols
+        policy = CleaningPolicy.from_environment()
         tf, minutes_per_bar = self._binning_to_timeframe(binning)
-        self.last_removed_bars = {}
-        self.last_resolved_bars = {}
         self.last_quality_summary = {}
         self.last_price_basis_adjusted = {}
         fetch_errors = []
@@ -658,13 +213,16 @@ class DataLoader:
                 ts = row.timestamp
                 if ts.tzinfo is None:
                     ts = ts.replace(tzinfo=pytz.UTC)
-                out[ts] = {
+                values = {
                     "open": float(row.open),
                     "high": float(row.high),
                     "low": float(row.low),
                     "close": float(row.close),
-                    "volume": int(row.volume),
+                    "volume": float(row.volume),
                 }
+                if ts in out and (out[ts] != values or out[ts].get("source_conflict")):
+                    values["source_conflict"] = True
+                out[ts] = values
             return out
 
         def _fetch_range(symbol: str, range_start: datetime, range_end: datetime) -> Dict:
@@ -687,6 +245,7 @@ class DataLoader:
                     start=window_start,
                     end=window_end,
                     limit=100000,
+                    adjustment=Adjustment.RAW,
                 )
 
                 bars = self.client.get_stock_bars(request)
@@ -706,13 +265,16 @@ class DataLoader:
                         timestamp = row.Index
                         if timestamp.tzinfo is None:
                             timestamp = timestamp.replace(tzinfo=pytz.UTC)
-                        fetched_rows[timestamp] = {
+                        values = {
                             "open": float(row.open),
                             "high": float(row.high),
                             "low": float(row.low),
                             "close": float(row.close),
-                            "volume": int(row.volume),
+                            "volume": float(row.volume),
                         }
+                        if timestamp in fetched_rows and fetched_rows[timestamp] != values:
+                            raise ValueError(f"Conflicting provider bars: {symbol} {timestamp}")
+                        fetched_rows[timestamp] = values
 
                 # Advance by one bar to avoid infinite loops on inclusive boundaries.
                 window_start = window_end + timedelta(minutes=minutes_per_bar)
@@ -720,6 +282,10 @@ class DataLoader:
             return fetched_rows
 
         def _safe_fetch_range(symbol: str, range_start: datetime, range_end: datetime) -> Dict:
+            if cache_only:
+                return {}
+            if self.client is None:
+                raise ValueError("Missing Alpaca credentials for uncached data; use cache_only=True for inspection")
             try:
                 return _fetch_range(symbol, range_start, range_end)
             except Exception as exc:
@@ -796,7 +362,6 @@ class DataLoader:
 
         data = {symbol: {} for symbol in symbols}
         all_timestamps = set()
-        stale_reasons = defaultdict(int)
 
         # Native client / dataframe handling has been unstable under higher thread fan-out on large symbol sets.
         # Keep the default conservative, but allow an override for controlled experiments.
@@ -806,77 +371,33 @@ class DataLoader:
             max_workers = 1
         max_workers = max(1, min(max_workers, len(symbols)))
 
-        probe_start = self._freshness_probe_start(start_date, end_date, minutes_per_bar)
         full_symbols = list(symbols)
-        use_prefilter = prefilter_stale_symbols and probe_start > start_date
-
-        if use_prefilter:
-            print(f"Prechecking recent data from {probe_start} to {end_date}...")
-            fresh_symbols = []
-            with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                futures = {
-                    executor.submit(_load_symbol_range, symbol, probe_start, end_date, False): symbol
-                    for symbol in symbols
-                }
-                for future in tqdm(
-                    as_completed(futures),
-                    total=len(futures),
-                    desc="Checking recent data",
-                    mininterval=30,
-                    miniters=1,
-                ):
-                    symbol = futures[future]
-                    try:
-                        probe_rows = future.result()
-                    except Exception:
-                        probe_rows = {}
-
-                    stale_reason = self._stale_reason_for_rows(probe_rows)
-                    if stale_reason is None:
-                        fresh_symbols.append(symbol)
-                    else:
-                        stale_reasons[stale_reason] += 1
-                        self.last_removed_bars[symbol] = []
-                        self.last_quality_summary[symbol] = {}
-
-            skipped = len(symbols) - len(fresh_symbols)
-            print(f"  Recent-data precheck kept {len(fresh_symbols)} symbol(s), skipped {skipped}.")
-            if stale_reasons:
-                reason_text = ", ".join(
-                    f"{reason}: {count}" for reason, count in sorted(stale_reasons.items())
-                )
-                print(f"  Precheck stale reasons: {reason_text}")
-            full_symbols = fresh_symbols
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = {
-                executor.submit(_load_symbol_range, symbol, start_date, end_date): symbol
-                for symbol in full_symbols
-            }
-            for future in tqdm(as_completed(futures), total=len(futures), desc="Fetching/organizing data", mininterval=60, miniters=5000):
-                symbol = futures[future]
-                try:
-                    symbol_rows = future.result()
-                except Exception:
-                    # Keep symbol empty if API call failed; stale-data filter will handle it.
-                    symbol_rows = {}
-
+            results = _bounded_load(executor, full_symbols,
+                                    lambda symbol: _load_symbol_range(symbol, start_date, end_date), max_workers)
+            for symbol, symbol_rows in tqdm(results, total=len(full_symbols),
+                                            desc="Loading/cleaning data", mininterval=30):
                 selected_rows = self._select_price_basis(symbol, symbol_rows)
-                self.last_price_basis_adjusted[symbol] = selected_rows is not symbol_rows
+                self.last_price_basis_adjusted[symbol] = True  # canonical units; never split again at runtime
 
                 if enable_data_quality_checks:
                     annotated_rows = self._annotate_data_quality(symbol, selected_rows)
 
                     summary = defaultdict(int)
                     for row in annotated_rows.values():
-                        summary[str(row.get("data_quality", QUALITY_OK))] += 1
+                        summary[str(row.get("data_quality", "OK"))] += 1
                     self.last_quality_summary[symbol] = dict(summary)
                 else:
-                    annotated_rows = selected_rows
+                    annotated_rows = SymbolBars(selected_rows, basis_events=selected_rows.basis_events)
                     self.last_quality_summary[symbol] = {}
 
                 data[symbol] = annotated_rows
                 all_timestamps.update(annotated_rows.keys())
+
+        prepare_market_data(data, end_date, minutes_per_bar, policy,
+                            coverage=enable_data_quality_checks and prefilter_stale_symbols)
+        self.last_quality_summary = {symbol: rows.summary for symbol, rows in data.items()}
 
         if fetch_errors:
             print(
@@ -904,32 +425,10 @@ class DataLoader:
         return data, warning_msg
     
     @staticmethod
-    def detect_stale_data(
-        data: Dict[str, Dict],
-        lookback_bars: int = 10,
-        min_volume_threshold: float = 100,
-    ) -> Tuple[List[str], List[str]]:
-        """
-        Detect symbols with stale or insufficient data for historical backtesting.
-        
-        Args:
-            data: Data dictionary from load_bars
-            lookback_bars: Number of of recent bars to check (default 10 for 1-minute bars)
-            min_volume_threshold: Minimum average volume threshold
-        
-        Returns:
-            (valid_symbols, stale_symbols)
-        """
-        valid_symbols = []
-        stale_symbols = []
-        
-        for symbol, bars_dict in data.items():
-            if DataLoader._stale_reason_for_rows(
-                bars_dict, lookback_bars, min_volume_threshold
-            ):
-                stale_symbols.append(symbol)
-                continue
-            
-            valid_symbols.append(symbol)
-        
-        return valid_symbols, stale_symbols
+    def detect_stale_data(data: Dict[str, Dict]) -> Tuple[List[str], List[str]]:
+        """Return symbols with usable observations; eligibility is per timestamp."""
+        # Eligibility is prepared per timestamp, never inferred from the end of
+        # a training/test slice. Keep valuation-only and historically active data.
+        valid_symbols = [s for s, rows in data.items() if any(
+            row.get("data_quality", "OK") == "OK" for row in rows.values())]
+        return valid_symbols, [s for s in data if s not in valid_symbols]

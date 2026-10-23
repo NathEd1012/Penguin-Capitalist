@@ -30,7 +30,8 @@ incorporated the adjustment.
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+import calendar
+from datetime import datetime, time, timedelta, timezone
 from typing import Dict, List, Optional, Set, Tuple
 
 
@@ -256,15 +257,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
-    # Disabled: the cache is already adjusted for this event.
-    # "NOW": [
-    #     {
-    #         "date": "2025-12-18",
-    #         "type": "split",
-    #         "ratio": "5:1",
-    #         "comment": "5-for-1 stock split",
-    #     }
-    # ],
+    "NOW": [
+        {
+            "date": "2025-12-18",
+            "price_effective_at": "2025-12-18T09:00:00Z",
+            "type": "split",
+            "ratio": "5:1",
+            "comment": "5-for-1 stock split",
+        }
+    ],
 
     "ODFL": [
         {
@@ -316,19 +317,20 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
             "comment": "2-for-1 ETF share split",
         },
 
-        # Disabled: the cache is already adjusted for this event.
-        # {
-        #     "date": "2022-01-13",
-        #     "type": "split",
-        #     "ratio": "2:1",
-        #     "comment": "2-for-1 ETF share split",
-        # },
-        # {
-        #     "date": "2025-11-20",
-        #     "type": "split",
-        #     "ratio": "2:1",
-        #     "comment": "2-for-1 ETF share split",
-        # },
+        {
+            "date": "2022-01-13",
+            "price_effective_at": "2022-01-13T09:00:00Z",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 ETF share split",
+        },
+        {
+            "date": "2025-11-20",
+            "price_effective_at": "2025-11-20T09:00:00Z",
+            "type": "split",
+            "ratio": "2:1",
+            "comment": "2-for-1 ETF share split",
+        },
     ],
 
     "TJX": [
@@ -372,15 +374,15 @@ SPLITS: Dict[str, List[Dict[str, str]]] = {
 # ---------------------------------------------------------------------------
 
 REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
-    # Disabled: the cache is already adjusted for this event.
-    # "BLUE": [
-    #     {
-    #         "date": "2024-12-13",
-    #         "type": "reverse_split",
-    #         "ratio": "1:20",
-    #         "comment": "1-for-20 reverse split; split-adjusted trading began on Nasdaq",
-    #     }
-    # ],
+    "BLUE": [
+        {
+            "date": "2024-12-13",
+            "price_effective_at": "2024-12-13T09:00:00Z",
+            "type": "reverse_split",
+            "ratio": "1:20",
+            "comment": "1-for-20 reverse split; split-adjusted trading began on Nasdaq",
+        }
+    ],
 
     "ARCT": [
         {
@@ -493,18 +495,15 @@ REVERSE_SPLITS: Dict[str, List[Dict[str, str]]] = {
         }
     ],
 
-    # Disabled: the cache is already adjusted for this event.
-    # "LCID": [
-    #     {
-    #         "date": "2025-08-29",
-    #         "type": "reverse_split",
-    #         "ratio": "1:10",
-    #         "comment": (
-    #             "1-for-10 reverse split; split-adjusted trading began "
-    #             "on the next trading day"
-    #         ),
-    #     }
-    # ],
+    "LCID": [
+        {
+            "date": "2025-09-02",
+            "price_effective_at": "2025-09-02T08:00:00Z",
+            "type": "reverse_split",
+            "ratio": "1:10",
+            "comment": "1-for-10 reverse split; split-adjusted trading began",
+        }
+    ],
 
     "SPCE": [
         {
@@ -643,6 +642,8 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2025-11-03",
             "type": "spin_off",
             "ratio": "1 Q:2 DD",
+            "distribution": "Q:1/2",
+            "distribution_date": "2025-11-01",
             "comment": (
                 "Qnity spin-off; DD holders received 1 Qnity share "
                 "for every 2 DuPont shares. Distribution date was "
@@ -656,6 +657,7 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2023-01-04",
             "type": "spin_off",
             "ratio": "1 GEHC:3 GE",
+            "distribution": "GEHC:1/3",
             "comment": (
                 "GE HealthCare spin-off; GE holders received "
                 "1 GEHC share for every 3 GE shares"
@@ -665,6 +667,7 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2024-04-02",
             "type": "spin_off",
             "ratio": "1 GEV:4 GE",
+            "distribution": "GEV:1/4",
             "comment": (
                 "GE Vernova spin-off; GE holders received "
                 "1 GEV share for every 4 GE shares"
@@ -702,6 +705,7 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2023-10-04",
             "type": "spin_off",
             "ratio": "reorganization",
+            "distribution": "LAAC:1",
             "comment": (
                 "Lithium Americas separated into Lithium Americas (LAC) "
                 "and Lithium Argentina (LAAC); both began regular-way trading"
@@ -726,9 +730,26 @@ REORGANIZATIONS: Dict[str, List[Dict[str, str]]] = {
             "date": "2020-04-03",
             "type": "spin_off",
             "ratio": "0.5 OTIS + 1 CARR:1 UTX",
+            "source_symbol": "UTX",
+            "target_symbol": "RTX",
+            "distribution": "CARR:1;OTIS:1/2",
             "comment": (
                 "UTC separated Otis and Carrier immediately before "
                 "the Raytheon merger / RTX ticker change"
+            ),
+        }
+    ],
+
+    "BLUE": [
+        {
+            "date": "2021-11-05",
+            "type": "spin_off",
+            "ratio": "1 TSVT:3 BLUE",
+            "distribution": "TSVT:1/3",
+            "distribution_date": "2021-11-04",
+            "comment": (
+                "Distribution date was 2021-11-04; TSVT began regular-way "
+                "trading on 2021-11-05."
             ),
         }
     ],
@@ -854,6 +875,29 @@ LISTING_EVENTS: Dict[str, List[Dict[str, str]]] = {
 # ---------------------------------------------------------------------------
 
 CORPORATE_ACTIONS: Dict[str, List[Dict[str, str]]] = {}
+UNRESOLVED_PRICE_BOUNDARIES: List[str] = []
+
+
+def _default_price_effective_at(date_text: str) -> str:
+    """Return the 04:00 New York session boundary as an aware UTC ISO value."""
+    date_value = datetime.strptime(date_text, "%Y-%m-%d").date()
+    march_sundays = [
+        day for day in range(1, 15)
+        if calendar.weekday(date_value.year, 3, day) == calendar.SUNDAY
+    ]
+    november_sundays = [
+        day for day in range(1, 8)
+        if calendar.weekday(date_value.year, 11, day) == calendar.SUNDAY
+    ]
+    daylight_start = date_value.replace(month=3, day=march_sundays[1])
+    daylight_end = date_value.replace(month=11, day=november_sundays[0])
+    offset = timedelta(hours=-4 if daylight_start <= date_value < daylight_end else -5)
+    local = datetime.combine(
+        date_value,
+        time(4),
+        tzinfo=timezone(offset),
+    )
+    return local.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 for action_table in (
     SPLITS,
@@ -864,6 +908,15 @@ for action_table in (
     LISTING_EVENTS,
 ):
     for symbol, events in action_table.items():
+        for event in events:
+            if event.get("type") in {"split", "reverse_split"}:
+                if not event.get("price_effective_at"):
+                    try:
+                        event["price_effective_at"] = _default_price_effective_at(event["date"])
+                    except (KeyError, ValueError):
+                        UNRESOLVED_PRICE_BOUNDARIES.append(
+                            f"{symbol} {event.get('date', '<missing date>')}"
+                        )
         CORPORATE_ACTIONS.setdefault(symbol, []).extend(events)
 
 

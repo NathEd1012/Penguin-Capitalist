@@ -9,8 +9,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
+from backtest.data_cleaning import CleaningPolicy, pricing_symbols
 
-CACHE_VERSION = 3
+from scripts.data_fixes.corporate_actions import (
+    PRICE_ADJUSTMENT_POLICY_VERSION,
+    corporate_action_registry_fingerprint,
+)
+
+CACHE_VERSION = 5
 
 
 def _datetime_text(value: datetime) -> str:
@@ -32,7 +38,19 @@ def _configuration(
     enable_data_quality_checks: bool,
     symbol_list_name: Optional[str],
 ) -> dict:
+    raw_dir = Path(os.environ.get("PENGUIN_DATA_CACHE_DIR", Path(__file__).resolve().parents[1] / "data_cache")).expanduser().resolve()
+    raw_files = {}
+    for symbol in pricing_symbols(symbols):
+        path = raw_dir / f"{symbol}_{binning}.parquet"
+        try:
+            stat = path.stat()
+            raw_files[symbol] = (stat.st_size, stat.st_mtime_ns)
+        except FileNotFoundError:
+            raw_files[symbol] = None
     return {
+        "raw_directory": str(raw_dir),
+        "raw_files": raw_files,
+        "cleaning_policy": CleaningPolicy.from_environment().configuration(),
         "cache_version": CACHE_VERSION,
         "symbols": sorted(symbols),
         "start_date": _datetime_text(cache_start_date or start_date),
@@ -50,6 +68,8 @@ def _configuration(
             "IGNORE_CORPORATE_ACTIONS", ""
         ).lower()
         in ("1", "true", "yes"),
+        "corporate_action_registry_fingerprint": corporate_action_registry_fingerprint(),
+        "price_adjustment_policy": PRICE_ADJUSTMENT_POLICY_VERSION,
     }
 
 
@@ -108,6 +128,8 @@ def load(
         enable_data_quality_checks,
         symbol_list_name,
     )
+    if refresh_cache:
+        return None
     cache_path = _path(cache_dir, configuration)
     try:
         with gzip.open(cache_path, "rb") as handle:

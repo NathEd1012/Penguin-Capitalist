@@ -1,7 +1,8 @@
 """Portfolio management for backtesting."""
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+import math
 
 
 @dataclass
@@ -9,12 +10,14 @@ class Trade:
     """Represents a single trade."""
     symbol: str
     action: str  # BUY or SELL
-    quantity: int
+    quantity: float
     price: float
     timestamp: datetime
+    reason: str = ""
     
     def __str__(self):
-        return f"{self.action} {self.quantity} {self.symbol} @ ${self.price:.2f} at {self.timestamp}"
+        reason = f" [{self.reason}]" if self.reason else ""
+        return f"{self.action} {self.quantity} {self.symbol} @ ${self.price:.2f} at {self.timestamp}{reason}"
 
 
 class Portfolio:
@@ -61,6 +64,7 @@ class Portfolio:
         # Value snapshots for curve tracking
         self.value_history: List[float] = []
         self._applied_price_adjustments: Set[Tuple[str, datetime]] = set()
+        self._applied_distributions: Set[Tuple[str, datetime]] = set()
 
     @staticmethod
     def _normalize_timestamp(timestamp: datetime) -> datetime:
@@ -69,9 +73,16 @@ class Portfolio:
             return timestamp.replace(tzinfo=timezone.utc)
         return timestamp.astimezone(timezone.utc)
 
-    def apply_price_adjustments(self, timestamp: datetime, events_by_symbol: Dict[str, List[Tuple[datetime, float, Dict]]]) -> None:
-        """Apply share-count changes for split-adjusted price data."""
+    def apply_price_adjustments(
+        self,
+        timestamp: datetime,
+        events_by_symbol: Dict[str, List[Tuple[datetime, float, Dict]]],
+        price_history: Optional[Dict[str, object]] = None,
+        volume_history: Optional[Dict[str, object]] = None,
+    ) -> Set[str]:
+        """Apply raw-price split state changes once at each canonical boundary."""
         normalized_timestamp = self._normalize_timestamp(timestamp)
+        applied_symbols: Set[str] = set()
         for symbol, events in events_by_symbol.items():
             for effective_timestamp, price_factor, _event in events:
                 effective_timestamp = self._normalize_timestamp(effective_timestamp)
@@ -90,7 +101,65 @@ class Portfolio:
                     self.positions[symbol] = quantity / price_factor
                     if symbol in self.cost_basis:
                         self.cost_basis[symbol] *= price_factor
-                    self._applied_price_adjustments.add(event_key)
+                if symbol in self.last_known_prices and (opened_at is None or opened_at < effective_timestamp):
+                    self.last_known_prices[symbol] *= price_factor
+                if price_history is not None and symbol in price_history:
+                    for index in range(len(price_history[symbol])):
+                        price_history[symbol][index] *= price_factor
+                if volume_history is not None and symbol in volume_history:
+                    for index in range(len(volume_history[symbol])):
+                        volume_history[symbol][index] /= price_factor
+                self._applied_price_adjustments.add(event_key)
+                applied_symbols.add(symbol)
+        return applied_symbols
+
+    def apply_distributions(
+        self,
+        timestamp: datetime,
+        events_by_symbol: Dict[str, List[Tuple[datetime, Dict, str, str, float]]],
+    ) -> None:
+        """Apply registered spin-offs and security reorganizations once."""
+        normalized_timestamp = self._normalize_timestamp(timestamp)
+        for events in events_by_symbol.values():
+            for effective_timestamp, event, source, child, shares_per_source in events:
+                effective_timestamp = self._normalize_timestamp(effective_timestamp)
+                event_key = (f"{source}:{event['date']}:{child}", effective_timestamp)
+                if normalized_timestamp < effective_timestamp or event_key in self._applied_distributions:
+                    continue
+
+                source_quantity = self.positions.get(source, 0.0)
+                opened_at = self.position_opened_at.get(source)
+                target = event.get("target_symbol")
+                if source_quantity <= 0 and target:
+                    source_quantity = self.positions.get(target, 0.0)
+                    opened_at = self.position_opened_at.get(target)
+                if source_quantity <= 0 or opened_at is None or opened_at >= effective_timestamp:
+                    continue
+
+                if target and target != source and source in self.positions:
+                    target_quantity = self.positions.get(target, 0.0)
+                    source_basis = self.cost_basis.get(source, 0.0)
+                    target_basis = self.cost_basis.get(target, 0.0)
+                    total_quantity = target_quantity + source_quantity
+                    self.cost_basis[target] = (
+                        target_basis * target_quantity + source_basis * source_quantity
+                    ) / total_quantity
+                    self.positions[target] = total_quantity
+                    self.position_opened_at[target] = min(
+                        self.position_opened_at.get(target, effective_timestamp),
+                        opened_at,
+                    )
+                    self.positions.pop(source, None)
+                    self.cost_basis.pop(source, None)
+                    self.position_opened_at.pop(source, None)
+                    source_quantity = total_quantity
+
+                self.positions[child] = self.positions.get(child, 0.0) + (
+                    source_quantity * shares_per_source
+                )
+                self.position_opened_at.setdefault(child, effective_timestamp)
+                self.cost_basis.setdefault(child, 0.0)
+                self._applied_distributions.add(event_key)
         
     def get_position(self, symbol: str) -> float:
         """Get current quantity of a symbol."""
@@ -124,8 +193,7 @@ class Portfolio:
                     # Use previous price for this symbol (carry forward)
                     price = self.last_known_prices[symbol]
                 else:
-                    # No price available at all, skip this position
-                    continue
+                    raise ValueError(f"Unpriced holding: {symbol}; cannot calculate portfolio equity")
                 
                 total += quantity * price
         
@@ -148,7 +216,7 @@ class Portfolio:
         Returns:
             True if successful, False if insufficient cash.
         """
-        if quantity <= 0 or price <= 0:
+        if not math.isfinite(quantity) or not math.isfinite(price) or quantity <= 0 or price <= 0:
             return False
 
         cost = quantity * price + self.transaction_cost
@@ -212,7 +280,7 @@ class Portfolio:
         
         return True
     
-    def sell(self, symbol: str, quantity: int, price: float, timestamp: datetime) -> bool:
+    def sell(self, symbol: str, quantity: float, price: float, timestamp: datetime, reason: str = "") -> bool:
         """
         Execute a sell order.
         
@@ -231,7 +299,7 @@ class Portfolio:
         """
         current_qty = self.get_position(symbol)
         
-        if quantity > current_qty:
+        if not math.isfinite(quantity) or not math.isfinite(price) or quantity <= 0 or price <= 0 or quantity > current_qty:
             return False
         
         # Track last known price for fallback valuation
@@ -251,7 +319,8 @@ class Portfolio:
             action="SELL",
             quantity=quantity,
             price=price,
-            timestamp=timestamp
+            timestamp=timestamp,
+            reason=reason
         )
         if self.record_trades:
             self.trades.append(trade)
@@ -361,4 +430,3 @@ class Portfolio:
             summary[symbol]["market_price"] = market_price
         
         return summary
-

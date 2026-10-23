@@ -82,7 +82,7 @@ def relative_strength(
         return stock_return
     spy_current = spy_prices[-1]
     spy_past = spy_prices[-period - 1]
-    if spy_current <= 0 or spy_past <= 0:
+    if spy_current is None or spy_past is None or spy_current <= 0 or spy_past <= 0:
         return stock_return
     return stock_return - (spy_current / spy_past - 1.0)
 

@@ -21,6 +21,7 @@ from tqdm import tqdm
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from backtest.data_loader import DataLoader
+from backtest.data_cleaning import slice_data
 from backtest.history import binning_to_minutes, history_warmup_bars
 from config import (
     INITIAL_CAPITAL,
@@ -275,7 +276,7 @@ def prepare_training_context(
     penguin_classes: List,
     loaded_data: Dict | None = None,
     loaded_quality_report_text: str = "",
-) -> tuple[List[str], List[datetime], List[datetime], str]:
+) -> tuple[List[str], List[datetime], List[datetime], str, Dict]:
     """Load the data context needed by the standalone training script."""
     if start_datetime.tzinfo is None:
         start_datetime = start_datetime.replace(tzinfo=timezone.utc)
@@ -327,15 +328,9 @@ def prepare_training_context(
             ) from e
 
         valid_symbols, stale_symbols = loader.detect_stale_data(data)
+        valid_symbols = [s for s in valid_symbols if s in symbols]
     else:
-        data = {
-            symbol: {
-                timestamp: row
-                for timestamp, row in symbol_data.items()
-                if warmup_start_datetime_utc <= timestamp < end_datetime_utc
-            }
-            for symbol, symbol_data in loaded_data.items()
-        }
+        data = slice_data(loaded_data, warmup_start_datetime_utc, end_datetime_utc)
         quality_report_text = loaded_quality_report_text
         valid_symbols = sorted(set(symbols).intersection(data))
         stale_symbols = []
@@ -355,7 +350,7 @@ def prepare_training_context(
     tradeable_timestamps = [timestamp for timestamp in sorted_timestamps if timestamp >= start_datetime_utc]
     print(f"  Tradeable bars from configured start: {len(tradeable_timestamps)}")
 
-    return valid_symbols, sorted_timestamps, tradeable_timestamps, quality_report_text
+    return valid_symbols, sorted_timestamps, tradeable_timestamps, quality_report_text, data
 
 
 def _train_trainable_penguins(
@@ -910,7 +905,7 @@ def main() -> None:
         print("No active trainable penguins are configured.")
         sys.exit(1)
 
-    valid_symbols, _sorted_timestamps, tradeable_timestamps, quality_report_text = prepare_training_context(
+    valid_symbols, _sorted_timestamps, tradeable_timestamps, quality_report_text, training_data = prepare_training_context(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -936,6 +931,8 @@ def main() -> None:
         initial_capital=INITIAL_CAPITAL,
         transaction_cost=TRAINING_TRANSACTION_COST,
         artifacts_dir=run_artifacts_dir,
+        loaded_data=training_data,
+        loaded_valid_symbols=valid_symbols,
     )
 
 

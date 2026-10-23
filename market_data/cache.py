@@ -384,9 +384,11 @@ class DataCache:
         if new_df is None or new_df.empty:
             return cached_df
         
-        # Concatenate and drop duplicates by timestamp
-        merged = pd.concat([cached_df, new_df], ignore_index=True)
-        merged = merged.drop_duplicates(subset=["timestamp"], keep="last")
+        # Provider revisions replace old timestamps explicitly. Preserve legacy
+        # conflicts at other timestamps so cleaning can quarantine them instead
+        # of silently choosing one of two different historical prices.
+        retained = cached_df[~cached_df["timestamp"].isin(new_df["timestamp"])]
+        merged = pd.concat([retained, new_df], ignore_index=True)
         merged = merged.sort_values("timestamp").reset_index(drop=True)
         
         # Save merged data back to cache
