@@ -5,6 +5,7 @@ from penguins.base_penguin import BasePenguin
 class SP500(BasePenguin):
     """Buy and hold SPY - invest all capital once and hold."""
     TRADED_SYMBOLS = {"SPY"}
+    COVERAGE_WINDOWS = ()  # No indicator signals; execution still needs a fresh quote.
     LOOKBACK_BARS = 10  # Doesn't need history
     
     def __init__(self):

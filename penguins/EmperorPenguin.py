@@ -38,6 +38,8 @@ class EmperorPenguinParams:
 
 
 class EmperorPenguin(BasePenguin):
+    COVERAGE_FIXED_WINDOWS = (10, 30, 60)
+
     def __init__(
         self,
         name: str = "EmperorPenguin",

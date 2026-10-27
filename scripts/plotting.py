@@ -621,26 +621,54 @@ def _build_ticks_from_timestamps(bar_timestamps, num_bars):
     return x_ticks, x_labels
 
 
-def _curve_x_values(bar_timestamps, value_count):
-    """Return calendar-spaced x-values when timestamps are available."""
-    if bar_timestamps is not None and len(bar_timestamps) > 0:
-        timestamp_count = min(value_count, len(bar_timestamps))
-        return mdates.date2num(bar_timestamps[:timestamp_count])
+def _timestamp_series(bar_timestamps, strategy_name=None):
+    """Select a strategy timeline, or the longest timeline for shared axis ticks."""
+    if isinstance(bar_timestamps, dict):
+        if strategy_name is not None:
+            if strategy_name not in bar_timestamps:
+                raise ValueError(f"Missing timestamps for curve {strategy_name}")
+            return bar_timestamps[strategy_name]
+        candidates = [timestamps for timestamps in bar_timestamps.values() if timestamps]
+        return max(candidates, key=len) if candidates else []
+    return bar_timestamps or []
+
+
+def _curve_x_values(bar_timestamps, value_count, strategy_name=None):
+    """Return calendar-spaced x-values and reject a mismatched supplied timeline."""
+    timestamps = _timestamp_series(bar_timestamps, strategy_name)
+    if bar_timestamps is not None:
+        if value_count != len(timestamps):
+            label = strategy_name or 'curve'
+            raise ValueError(
+                f"{label}: {value_count} curve values but {len(timestamps)} timestamps"
+            )
+        return mdates.date2num(timestamps)
     return range(1, value_count + 1)
 
 
-def _aligned_curve(bar_timestamps, values):
-    """Return x/y data trimmed to the shared axis length."""
-    x_values = _curve_x_values(bar_timestamps, len(values))
-    point_count = len(x_values)
-    return x_values, values[:point_count]
+def _aligned_curve(bar_timestamps, values, strategy_name=None):
+    """Return x/y data on the curve's own validated timeline."""
+    x_values = _curve_x_values(bar_timestamps, len(values), strategy_name)
+    return x_values, values
 
 
 def _axis_x_limits(bar_timestamps, value_count):
     """Return x-limits that match the plotted coordinate system."""
-    if bar_timestamps is not None and len(bar_timestamps) > 0 and value_count > 0:
-        x_values = _curve_x_values(bar_timestamps, value_count)
-        if len(x_values) > 0:
+    if isinstance(bar_timestamps, dict):
+        endpoints = [
+            mdates.date2num(timestamp)
+            for timestamps in bar_timestamps.values() if timestamps
+            for timestamp in (timestamps[0], timestamps[-1])
+        ]
+        if endpoints:
+            min_x, max_x = min(endpoints), max(endpoints)
+            span = max_x - min_x
+            pad = span * 0.05 if span > 0 else 1.0
+            return min_x - pad, max_x + (2 * pad)
+    else:
+        timestamps = _timestamp_series(bar_timestamps)
+        if timestamps and value_count > 0:
+            x_values = _curve_x_values(timestamps, value_count)
             min_x = min(x_values)
             max_x = max(x_values)
             span = max_x - min_x
@@ -703,8 +731,9 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     x_labels = []
     x_label_text = "Time"
     
-    if bar_timestamps is not None and len(bar_timestamps) > 0:
-        x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
+    axis_timestamps = _timestamp_series(bar_timestamps)
+    if axis_timestamps:
+        x_ticks, x_labels = _build_ticks_from_timestamps(axis_timestamps, len(axis_timestamps))
         x_label_text = "Date / Time"
     elif start_date_str and stop_date_str:
         try:
@@ -804,7 +833,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     if sp500_name in curves:
         vals = curves[sp500_name]
         display_name = _display_strategy_name(sp500_name)
-        x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+        x_values, plot_vals = _aligned_curve(bar_timestamps, vals, sp500_name)
         line = plt.plot(
             x_values,
             plot_vals,
@@ -822,7 +851,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
             display_name = _display_strategy_name(name)
             group_key = _strategy_base_key(name)
             color = "darkgrey" if _is_sp500_benchmark(name) else _color_for_group(group_key)
-            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
             line = plt.plot(
                 x_values,
                 plot_vals,
@@ -839,7 +868,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     if sma20_name in curves:
         vals = curves[sma20_name]
         display_name = _display_strategy_name(sma20_name)
-        x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+        x_values, plot_vals = _aligned_curve(bar_timestamps, vals, sma20_name)
         line = plt.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
         line_colors[sma20_name] = line[0].get_color()
     
@@ -847,7 +876,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     for name in sorted(curves.keys(), key=_strategy_group_key):
         vals = curves[name]
         if vals:
-            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
             if len(plot_vals) == 0:
                 continue
             x_span = max(x_values) - min(x_values)
@@ -903,11 +932,6 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
     if latest_prices is None:
         latest_prices = {}
 
-    # Determine final liquidation timestamp (last bar) to exclude forced closes
-    final_liquidation_timestamp = None
-    if bar_timestamps and len(bar_timestamps) > 0:
-        final_liquidation_timestamp = bar_timestamps[-1]
-    
     # Calculate x-axis scaling if num_bars not provided
     if num_bars is None:
         num_bars = len(list(curves.values())[0]) if curves else 0
@@ -921,8 +945,9 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
     x_labels = []
     x_label_text = "Time"
     
-    if bar_timestamps is not None and len(bar_timestamps) > 0:
-        x_ticks, x_labels = _build_ticks_from_timestamps(bar_timestamps, num_bars)
+    axis_timestamps = _timestamp_series(bar_timestamps)
+    if axis_timestamps:
+        x_ticks, x_labels = _build_ticks_from_timestamps(axis_timestamps, len(axis_timestamps))
         x_label_text = "Date / Time"
     elif start_date_str and stop_date_str:
         try:
@@ -999,7 +1024,9 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         x_ticks = list(range(0, num_bars + 1, interval))
         x_labels = [f"Bar {i}" for i in x_ticks]
     
-    timespan_text = _build_timespan_text(start_date_str, stop_date_str, bar_timestamps, num_bars)
+    timespan_text = _build_timespan_text(
+        start_date_str, stop_date_str, axis_timestamps, len(axis_timestamps)
+    )
 
     with PdfPages(filename) as pdf:
         # Page 1: Capital Curves
@@ -1013,7 +1040,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         if sp500_name in curves:
             vals = curves[sp500_name]
             display_name = _display_strategy_name(sp500_name)
-            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals, sp500_name)
             line = ax.plot(
                 x_values,
                 plot_vals,
@@ -1028,7 +1055,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         for name, vals in curves.items():
             if name not in (sma20_name, sp500_name):
                 display_name = _display_strategy_name(name)
-                x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+                x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
                 line = ax.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
                 line_colors[name] = line[0].get_color()
         
@@ -1036,7 +1063,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         if sma20_name in curves:
             vals = curves[sma20_name]
             display_name = _display_strategy_name(sma20_name)
-            x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+            x_values, plot_vals = _aligned_curve(bar_timestamps, vals, sma20_name)
             line = ax.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
             line_colors[sma20_name] = line[0].get_color()
         
@@ -1044,7 +1071,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         for name in sorted(curves.keys(), key=_strategy_group_key):
             vals = curves[name]
             if vals:
-                x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+                x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
                 if len(plot_vals) == 0:
                     continue
                 x_span = max(x_values) - min(x_values)
@@ -1093,13 +1120,13 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 portfolio = portfolios[penguin_name]
                 display_penguin_name = _display_strategy_name(penguin_name)
                 parameter_text = _strategy_parameter_text(penguin_name)
-                summary = portfolio.get_symbol_summary(latest_prices)
+                # Each strategy may end with different held symbols and quote
+                # times. Use its recorded marks, including carried valuations.
+                strategy_prices = {**latest_prices, **portfolio.last_known_prices}
+                summary = portfolio.get_symbol_summary(strategy_prices)
 
                 cash = portfolio.cash
-                market_value = 0.0
-                for symbol, pos_qty in portfolio.positions.items():
-                    if symbol in latest_prices and pos_qty > 0:
-                        market_value += pos_qty * latest_prices[symbol]
+                market_value = sum(item['market_value'] for item in summary.values())
                 total_value = cash + market_value
 
                 totals = _aggregate_strategy_summary(summary)
@@ -1108,7 +1135,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 preliq_qty_sold = 0
                 for t in portfolio.trades:
                     if t.action == "SELL":
-                        if final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp:
+                        if t.reason == 'final liquidation':
                             continue
                         preliq_sell_count += 1
                         preliq_qty_sold += t.quantity
@@ -1128,6 +1155,9 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                         "total_pnl": totals["total_pnl"],
                         "buy_count": totals["buy_count"],
                         "sell_count": totals["sell_count"],
+                        "stale_positions": sum(
+                            mark['mark_is_stale'] for mark in portfolio.valuation_marks.values()
+                        ),
                     }
                 )
 
@@ -1157,6 +1187,8 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 ]
                 if item["parameter_text"]:
                     lines.append(item["parameter_text"])
+                if item['stale_positions']:
+                    lines.append(f"Holdings with stale valuations: {item['stale_positions']}")
                 return lines
 
             summary_text_blocks = [_build_summary_lines(item) for item in page_items]
@@ -1186,7 +1218,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             for item in page_items:
                 penguin_name = item["name"]
                 vals = curves[penguin_name]
-                x_values, plot_vals = _aligned_curve(bar_timestamps, vals)
+                x_values, plot_vals = _aligned_curve(bar_timestamps, vals, penguin_name)
                 color = line_colors.get(penguin_name, None)
                 line = ax.plot(
                     x_values,

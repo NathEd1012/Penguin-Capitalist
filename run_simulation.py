@@ -41,6 +41,7 @@ from backtest.finalized_data_cache import load as load_finalized_data
 from backtest.finalized_data_cache import save as save_finalized_data
 from backtest.evaluator import Evaluator
 from backtest.history import binning_to_minutes, history_warmup_bars, penguin_history_requirements
+from backtest.signal_coverage import indicator_windows, market_bar_clock, SignalCoverage, MINIMUM_COVERAGE
 from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
 from scripts.data_fixes.corporate_actions import (
     get_distribution_events,
@@ -411,6 +412,8 @@ def _format_runtime_configuration_banner(
         f"Start Time (UTC):  {start_datetime_utc}",
         f"End Time (UTC):    {end_datetime_utc}",
         f"Binning:           {binning}",
+        f"Trading Session:   {os.getenv('DATA_TRADING_SESSION', 'extended')}",
+        f"Minimum Signal Coverage: {MINIMUM_COVERAGE:.0%} in every indicator window",
         "",
         "PORTFOLIO CONFIGURATION",
         f"Initial Capital:   ${initial_capital:,.2f}",
@@ -499,7 +502,7 @@ def run_backtest(
 ) -> Tuple[
     Dict[str, Tuple[Portfolio, Dict]],
     Dict,
-    List[datetime],
+    Dict[str, List[datetime]],
     Dict[str, Dict],
     Dict[str, List[Tuple[datetime, float]]],
     str,
@@ -1034,7 +1037,7 @@ def run_backtest(
         )
         strategy_results = {}
         trades_by_bar = {}
-        tradeable_timestamps = []
+        strategy_timestamps = {}
         quality_report_text = ""
         strategy_names = sorted(
             penguins,
@@ -1111,10 +1114,9 @@ def run_backtest(
                             worker_quality_report,
                         ) = worker_result
                         strategy_results.update(worker_strategy_results)
-                        for bar_idx, trades in worker_trades_by_bar.items():
-                            trades_by_bar.setdefault(bar_idx, []).extend(trades)
-                        if not tradeable_timestamps:
-                            tradeable_timestamps = worker_tradeable_timestamps
+                        for trade_time, trades in worker_trades_by_bar.items():
+                            trades_by_bar.setdefault(trade_time, []).extend(trades)
+                        strategy_timestamps.update(worker_tradeable_timestamps)
                         quality_report_text = quality_report_text or worker_quality_report
                         del worker_result, worker_strategy_results, worker_trades_by_bar
                         del worker_tradeable_timestamps, worker_quality_report
@@ -1213,7 +1215,7 @@ def run_backtest(
         return (
             strategy_results,
             trades_by_bar,
-            tradeable_timestamps,
+            strategy_timestamps,
             {},
             {},
             quality_report_text,
@@ -1241,6 +1243,32 @@ def run_backtest(
     volume_history = defaultdict(lambda: deque(maxlen=history_capacity))
     benchmark_history = defaultdict(lambda: deque(maxlen=history_capacity))
     market_symbols = list(data)
+    coverage_windows = {name: indicator_windows(penguin) for name, penguin in penguins.items()}
+    benchmark_coverage_windows = {
+        name: (int(penguin.params.relative_strength_period),)
+        if hasattr(getattr(penguin, 'params', None), 'relative_strength_period') else ()
+        for name, penguin in penguins.items()
+    }
+    maximum_coverage_window = max(
+        (window for windows in (*coverage_windows.values(), *benchmark_coverage_windows.values())
+         for window in windows), default=1
+    )
+    coverage_clock = market_bar_clock(
+        sorted_timestamps[0].date()-timedelta(days=maximum_coverage_window*3+14),
+        sorted_timestamps[-1].date()+timedelta(days=2),
+        binning,
+        os.getenv('DATA_TRADING_SESSION', 'extended').strip().lower(),
+    )
+    coverage = SignalCoverage(maximum_coverage_window)
+    coverage_slot = None
+
+    def signal_ready(penguin_name, symbol):
+        return (
+            coverage_slot is not None
+            and coverage.sufficient(symbol, coverage_windows[penguin_name], coverage_slot)
+            and coverage.sufficient('SPY', benchmark_coverage_windows[penguin_name], coverage_slot)
+        )
+
     price_adjustment_events = {
         symbol: get_price_adjustment_events(symbol)
         for symbol in market_symbols
@@ -1252,10 +1280,10 @@ def run_backtest(
         if not isinstance(data[symbol], SymbolBars)
     }
     
-    # Track trades by bar for detailed logging
+    # Track executions by their actual UTC time. Strategy-local bar indices are
+    # not comparable when workers use different symbol calendars.
     trades_by_bar = defaultdict(list)
     trade_bar_idx = -1
-    value_bar_idx = -1
     pending_orders = defaultdict(list)
 
     trading_symbols = set(symbols)
@@ -1263,6 +1291,9 @@ def run_backtest(
     def execute_orders(penguin_name, orders, quotes, portfolio, timestamp):
         for order_symbol, action, quantity in orders:
             if order_symbol not in trading_symbols or order_symbol not in quotes or quantity <= 0:
+                continue
+            if not signal_ready(penguin_name, order_symbol):
+                portfolio.coverage_blocked_orders += 1
                 continue
 
             bid, ask = quotes[order_symbol]
@@ -1273,13 +1304,13 @@ def run_backtest(
                     continue
                 if portfolio.buy(order_symbol, quantity, ask, timestamp):
                     if collect_trade_details:
-                        trades_by_bar[value_bar_idx].append(
+                        trades_by_bar[timestamp].append(
                             f"  {penguin_name}: BUY {quantity} {order_symbol} @ ${ask:.2f}"
                         )
             elif action == "SELL":
                 if portfolio.sell(order_symbol, quantity, bid, timestamp):
                     if collect_trade_details:
-                        trades_by_bar[value_bar_idx].append(
+                        trades_by_bar[timestamp].append(
                             f"  {penguin_name}: SELL {quantity} {order_symbol} @ ${bid:.2f}"
                         )
     
@@ -1288,15 +1319,34 @@ def run_backtest(
         desc="Executing bars",
         progress_callback=progress_callback,
     ):
-        if timestamp >= start_datetime_utc:
-            value_bar_idx += 1
-
+        coverage_slot = coverage_clock.position(timestamp)
         # Get current prices
         current_prices = {}
+        current_price_metadata = {}
         for symbol in market_symbols:
             bar = data[symbol].get(timestamp)
-            if bar and bar.get("data_quality", "OK") == "OK":
-                current_prices[symbol] = bar['close']
+            if bar:
+                data_quality = bar.get('data_quality', 'OK')
+                has_observation = (
+                    data_quality == 'OK' and bar.get('volume', 0) > 0
+                    and coverage_slot is not None
+                )
+                quality_state = bar.get('quality_state', data_quality)
+                if data_quality == 'OK':
+                    if coverage_slot is None:
+                        quality_state = 'OUTSIDE_SESSION'
+                    elif bar.get('volume', 0) <= 0:
+                        quality_state = 'ZERO_VOLUME'
+                    else:
+                        quality_state = bar.get('quality_state', 'FRESH')
+                current_price_metadata[symbol] = {
+                    'data_quality': data_quality,
+                    'quality_state': quality_state,
+                    'quality_reason': bar.get('quality_reason'),
+                    'observed_price': bar.get('close'),
+                }
+                if has_observation:
+                    current_prices[symbol] = bar['close']
         
         split_symbols_applied = apply_events(
             scheduled_events.get(timestamp, ()), portfolios, price_history, volume_history, timestamp, benchmark_history
@@ -1336,7 +1386,10 @@ def run_backtest(
             # with returned timestamps. They do not advance deferred-order bars.
             if timestamp >= start_datetime_utc:
                 for portfolio in portfolios.values():
-                    portfolio.add_value_snapshot(portfolio.get_total_value({}))
+                    value = portfolio.get_total_value(
+                        {}, timestamp=timestamp, price_metadata=current_price_metadata
+                    )
+                    portfolio.add_value_snapshot(value, timestamp)
             continue
 
         # Update price history for each symbol
@@ -1344,13 +1397,11 @@ def run_backtest(
             bar = data[symbol].get(timestamp)
             if bar is None:
                 continue  # missing observations are never invented prices or volume
-            elif bar.get("data_quality", "OK") == "OK":
+            elif symbol in current_prices:
+                coverage.observe(symbol, coverage_slot)
                 price_history[symbol].append(bar['close'])
                 volume_history[symbol].append(bar.get('volume', 0))
-                spy_bar = data.get('SPY', {}).get(timestamp)
-                benchmark_history[symbol].append(
-                    spy_bar['close'] if spy_bar and spy_bar.get('data_quality', 'OK') == 'OK' else None
-                )
+                benchmark_history[symbol].append(current_prices.get('SPY'))
             else:
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
@@ -1391,7 +1442,12 @@ def run_backtest(
                 penguin.set_current_timestamp(timestamp)
 
             if bar_idx == len(sorted_timestamps) - 1:
-                portfolio.add_value_snapshot(portfolio.get_total_value(current_prices))
+                value = portfolio.get_total_value(
+                    current_prices,
+                    timestamp=timestamp,
+                    price_metadata=current_price_metadata,
+                )
+                portfolio.add_value_snapshot(value, timestamp)
                 continue
 
             lookback_bars, required_history_bars = penguin_history_requirements(
@@ -1405,11 +1461,14 @@ def run_backtest(
                 symbols_for_penguin = symbols
 
             if hasattr(penguin, "decide_batch"):
-                ready_symbols = [
-                    symbol
-                    for symbol in symbols_for_penguin
-                    if symbol in quotes and len(price_history[symbol]) >= required_history_bars
-                ]
+                ready_symbols = []
+                for symbol in symbols_for_penguin:
+                    if symbol not in quotes or len(price_history[symbol]) < required_history_bars:
+                        continue
+                    if signal_ready(penguin_name, symbol):
+                        ready_symbols.append(symbol)
+                    else:
+                        portfolio.coverage_blocked_decisions += 1
                 ready_quotes = {symbol: quotes[symbol] for symbol in ready_symbols}
 
                 batch_orders = penguin.decide_batch(ready_symbols, ready_quotes, portfolio)
@@ -1423,8 +1482,12 @@ def run_backtest(
                         timestamp,
                     )
 
-                value = portfolio.get_total_value(current_prices)
-                portfolio.add_value_snapshot(value)
+                value = portfolio.get_total_value(
+                    current_prices,
+                    timestamp=timestamp,
+                    price_metadata=current_price_metadata,
+                )
+                portfolio.add_value_snapshot(value, timestamp)
                 continue
             
             for symbol in symbols_for_penguin:
@@ -1435,6 +1498,9 @@ def run_backtest(
                 # until its configured lookback/minimum history is available.
                 full_history = price_history[symbol]
                 if len(full_history) < required_history_bars:
+                    continue
+                if not signal_ready(penguin_name, symbol):
+                    portfolio.coverage_blocked_decisions += 1
                     continue
                 
                 mid_prices = list(full_history)[-lookback_bars:]
@@ -1482,28 +1548,39 @@ def run_backtest(
                     pass
             
             # Record portfolio value
-            value = portfolio.get_total_value(current_prices)
-            portfolio.add_value_snapshot(value)
+            value = portfolio.get_total_value(
+                current_prices,
+                timestamp=timestamp,
+                price_metadata=current_price_metadata,
+            )
+            portfolio.add_value_snapshot(value, timestamp)
         
     # ======================== FINAL LIQUIDATION ========================
     # CRITICAL CONSTRAINTS for end-of-backtest liquidation:
     # 1. DO NOT call penguin.decide() or any signal evaluation methods
     # 2. DO NOT rerank penguins
     # 3. DO NOT recompute indicators during liquidation
-    # 4. ONLY close existing open positions at fair prices
+    # 4. ONLY close positions with a current tradable quote, at its bid
     #
     # This ensures final positions are closed cleanly without artificially
     # triggering new trades or changing strategy rankings based on final-bar behavior.
     # ===================================================================
     
-    print("\nClosing all positions...")
+    print("\nClosing positions with current tradable quotes...")
     
     for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
         for symbol, quantity in list(portfolio.positions.items()):
-            close_price = portfolio.last_known_prices.get(symbol)
+            close_price = quotes[symbol][0] if symbol in current_prices and symbol in quotes else None
             if quantity > 0 and close_price is not None and close_price > 0:
+                if not signal_ready(penguin_name, symbol):
+                    portfolio.coverage_blocked_orders += 1
+                    continue
                 portfolio.sell(symbol, quantity, close_price, sorted_timestamps[-1], reason="final liquidation")
-        portfolio.add_value_snapshot(portfolio.get_total_value({}))
+        final_timestamp = sorted_timestamps[-1]
+        final_value = portfolio.get_total_value(
+            current_prices, timestamp=final_timestamp, price_metadata=current_price_metadata
+        )
+        portfolio.add_value_snapshot(final_value, final_timestamp)
 
     # Calculate metrics
     print("\nCalculating performance metrics...")
@@ -1533,7 +1610,11 @@ def run_backtest(
     symbol_prices = None
     bar = None
     print(f"Released large backtest buffers in {time.perf_counter() - cleanup_start:.2f}s", flush=True)
-    return results, trades_by_bar, tradeable_timestamps, {}, symbol_close_series, quality_report_text
+    strategy_timestamps = {
+        name: list(portfolio.value_timestamps)
+        for name, (portfolio, _metrics) in results.items()
+    }
+    return results, trades_by_bar, strategy_timestamps, {}, symbol_close_series, quality_report_text
 
 
 def _parse_command_line_args():
@@ -1585,7 +1666,7 @@ def main():
     # Training is executed inside `run_backtest` as Step 3b when enabled.
     
     ################ Run backtest ################
-    results, trades_by_bar, bar_timestamps, _, _, _ = run_backtest(
+    results, trades_by_bar, strategy_timestamps, _, _, _ = run_backtest(
         symbols=SYMBOLS,
         start_datetime=start_dt,
         end_datetime=end_dt,
@@ -1617,7 +1698,7 @@ def main():
         None,
         run_output_dir,
         trades_by_bar,
-        bar_timestamps,
+        strategy_timestamps,
         artifacts_dir=run_artifacts_dir,
     )
 
@@ -1641,7 +1722,7 @@ def main():
         binning,
         START_DATE,
         STOP_DATE,
-        bar_timestamps,
+        strategy_timestamps,
         ACTIVE_SYMBOL_LIST,
     )
     
@@ -1667,7 +1748,7 @@ def main():
             binning,
             START_DATE,
             STOP_DATE,
-            bar_timestamps,
+            strategy_timestamps,
             run_artifacts_dir,
             ACTIVE_SYMBOL_LIST,
         )
@@ -1684,6 +1765,9 @@ def main():
     print(f"  - report.pdf")
     print(f"  - artifacts/capital_curves.png")
     print(f"  - artifacts/json/curves_data.json")
+    print(f"  - artifacts/json/curve_timestamps.json")
+    print(f"  - artifacts/json/equity_jump_attribution.json")
+    print(f"  - artifacts/json/valuation_marks.json")
     print(f"  - artifacts/json/metrics_summary.json")
     print(f"  - artifacts/trades_log.txt")
     print(f"  - artifacts/consistency_warnings.txt (if residual jumps)")

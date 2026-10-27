@@ -9,20 +9,29 @@ from dataclasses import asdict, dataclass
 from datetime import timedelta
 import math
 import os
+from statistics import median
 import pytz
 
 from scripts.data_fixes.corporate_actions import get_price_adjustment_events, get_distribution_events
 
-CLEANING_VERSION = 'prepared-bars-v1'
+CLEANING_VERSION = 'prepared-bars-v3'
 NY = pytz.timezone('America/New_York')
-STALE_AFTER = timedelta(hours=72, microseconds=1)
+# Old observations stop anchoring outlier/distribution-price comparisons after
+# this age. This is a data-quality limit, never a reason to liquidate holdings.
+REFERENCE_MAX_AGE = timedelta(hours=72, microseconds=1)
 
 
 @dataclass(frozen=True)
 class CleaningPolicy:
     max_jump: float = 0.08
-    thin_jump: float = 0.03
+    confirmation_jump: float = 0.02
+    confirmation_tolerance: float = 0.05
+    confirmation_bars: int = 2
+    confirmation_dollar_volume: float = 100_000
+    thin_jump: float = 0.01
     thin_dollar_volume: float = 100_000
+    thin_relative_volume: float = 0.10
+    volume_window: int = 20
     coverage: float = 0.80
     coverage_sessions: int = 20
     minimum_sessions: int = 5
@@ -32,14 +41,27 @@ class CleaningPolicy:
     def from_environment(cls):
         policy = cls(
             max_jump=float(os.getenv('DATA_CONSISTENCY_MAX_JUMP_PCT', '0.08')),
-            thin_jump=float(os.getenv('DATA_THIN_MAX_JUMP_PCT', '0.03')),
+            confirmation_jump=float(os.getenv('DATA_CONFIRMATION_JUMP_PCT', '0.02')),
+            confirmation_tolerance=float(os.getenv('DATA_CONFIRMATION_TOLERANCE_PCT', '0.05')),
+            confirmation_bars=int(os.getenv('DATA_CONFIRMATION_BARS', '2')),
+            confirmation_dollar_volume=float(os.getenv('DATA_CONFIRMATION_DOLLAR_VOLUME', '100000')),
+            thin_jump=float(os.getenv('DATA_THIN_MAX_JUMP_PCT', '0.01')),
             thin_dollar_volume=float(os.getenv('DATA_THIN_DOLLAR_VOLUME', '100000')),
+            thin_relative_volume=float(os.getenv('DATA_THIN_RELATIVE_VOLUME', '0.10')),
+            volume_window=int(os.getenv('DATA_VOLUME_WINDOW', '20')),
             coverage=float(os.getenv('DATA_MIN_SESSION_COVERAGE', '0.80')),
             coverage_sessions=int(os.getenv('DATA_COVERAGE_SESSIONS', '20')),
             minimum_sessions=int(os.getenv('DATA_MIN_SESSIONS', '5')),
             quarantine=os.getenv('DATA_CONSISTENCY_QUARANTINE_AFTER_JUMP', '0').lower() in ('1', 'true', 'yes'),
         )
-        if not (0 < policy.thin_jump <= policy.max_jump < 1 and 0 < policy.coverage <= 1
+        if not (0 < policy.confirmation_jump <= policy.max_jump < 1
+                and 0 < policy.confirmation_tolerance < 1
+                and policy.confirmation_bars >= 2
+                and policy.confirmation_dollar_volume >= 0
+                and 0 < policy.thin_jump <= policy.max_jump
+                and 0 <= policy.thin_relative_volume <= 1
+                and policy.volume_window >= 1
+                and 0 < policy.coverage <= 1
                 and 1 <= policy.minimum_sessions <= policy.coverage_sessions
                 and policy.thin_dollar_volume >= 0):
             raise ValueError('Invalid data-cleaning policy settings')
@@ -95,6 +117,12 @@ def invalid_reason(row):
     return None
 
 
+def _exceeds_threshold(value, reference, threshold):
+    """Compare returns without classifying a rounded boundary value as over-limit."""
+    move = abs(value / reference - 1)
+    return move > threshold and not math.isclose(move, threshold, rel_tol=1e-12, abs_tol=1e-12)
+
+
 def normalize_splits(symbol, rows):
     """Detect adjustment state per boundary, then normalize each segment once.
 
@@ -146,7 +174,11 @@ def normalize_splits(symbol, rows):
 def annotate_quality(symbol, rows, policy):
     """Causal outlier checks: no next-bar lookup and no invented prices."""
     output, counts = {}, Counter()
-    last = candidate = previous_time = None
+    last = previous_time = None
+    candidate = None
+    candidate_count = 0
+    candidate_dollar_volume = 0.0
+    recent_volumes = deque(maxlen=policy.volume_window)
     permanent_quarantine = False
     distribution_times = sorted({t for t, *_ in get_distribution_events(symbol)})
     for t in sorted(rows):
@@ -156,29 +188,70 @@ def annotate_quality(symbol, rows, policy):
         quality = 'INVALID' if reason else 'OK'
         if not reason:
             close = row['close']
-            threshold = policy.max_jump
-            if close * row['volume'] < policy.thin_dollar_volume:
+            volume = row['volume']
+            volume_median = median(recent_volumes) if recent_volumes else 0
+            relative_thin = (
+                volume_median > 0
+                and volume < volume_median * policy.thin_relative_volume
+            )
+            threshold = min(policy.max_jump, policy.confirmation_jump)
+            if close * volume < policy.thin_dollar_volume or relative_thin:
                 threshold = min(threshold, policy.thin_jump)
             event_crossing = (previous_time is not None and
                               bisect_right(distribution_times, previous_time) < bisect_right(distribution_times, t))
-            gap_reset = previous_time is not None and t - previous_time >= STALE_AFTER
+            gap_reset = previous_time is not None and t - previous_time >= REFERENCE_MAX_AGE
             if permanent_quarantine:
                 quality, reason = 'OUTLIER', 'quarantined after unexplained jump'
-            elif last is not None and not gap_reset and not event_crossing and abs(close / last - 1) > threshold:
-                # A stable new level can reenter after one rejected observation;
-                # a return to the last accepted level can reenter immediately.
-                confirmed = candidate is not None and abs(close / candidate - 1) <= threshold / 4
-                if not confirmed:
-                    quality, reason = 'OUTLIER', f'unconfirmed price jump above {threshold:.1%}'
-                    permanent_quarantine = policy.quarantine
-            candidate = close if quality == 'OUTLIER' else None
-            if quality == 'OK':
+            elif last is not None and not gap_reset and not event_crossing and _exceeds_threshold(close, last, threshold):
+                coherent = (
+                    candidate is not None
+                    and abs(close / candidate - 1) <= policy.confirmation_tolerance
+                )
+                if coherent:
+                    candidate_count += int(volume > 0)
+                    candidate_dollar_volume += close * volume
+                else:
+                    candidate = close
+                    candidate_count = int(volume > 0)
+                    candidate_dollar_volume = close * volume
+                confirmed = (
+                    candidate_count >= policy.confirmation_bars
+                    and candidate_dollar_volume >= policy.confirmation_dollar_volume
+                )
+                if confirmed:
+                    row['quality_state'] = 'CONFIRMED_REGIME'
+                    candidate = None
+                    candidate_count = 0
+                    candidate_dollar_volume = 0.0
+                else:
+                    quality = 'OUTLIER'
+                    row['quality_state'] = 'PENDING_REGIME'
+                    reason = (
+                        f'unconfirmed price move above {threshold:.1%}; '
+                        f'{candidate_count}/{policy.confirmation_bars} coherent bars, '
+                        f'${candidate_dollar_volume:,.0f} confirmation volume'
+                    )
+                    if policy.quarantine and abs(close / last - 1) > policy.max_jump:
+                        permanent_quarantine = True
+            elif candidate is not None:
+                row['quality_state'] = 'REVERSION'
+                candidate = None
+                candidate_count = 0
+                candidate_dollar_volume = 0.0
+            if gap_reset or event_crossing:
+                candidate = None
+                candidate_count = 0
+                candidate_dollar_volume = 0.0
+            if quality == 'OK' and volume > 0:
                 last = close
                 previous_time = t
+                recent_volumes.append(volume)
         row['data_quality'] = quality
         if reason:
             row['quality_reason'] = reason
         counts[quality] += 1
+        if row.get('quality_state'):
+            counts[row['quality_state']] += 1
         output[t] = row
     return SymbolBars(output, basis_events=getattr(rows, 'basis_events', ()), summary=dict(counts))
 
@@ -226,21 +299,13 @@ def prepare_market_data(data, end, minutes, policy, coverage=True, reference=Non
                              sum(x[0] for x in window) / expected >= policy.coverage)
             window.append((min(own.get(day, 0), reference[day]), reference[day]))
         blocked = 0
-        accepted = []
         for t, row in rows.items():
             if row.get('volume', 0) <= 0 or (coverage and not eligible.get(t.astimezone(NY).date(), False)):
                 row['trade_eligible'] = False
                 blocked += 1
-            if row.get('data_quality', 'OK') == 'OK' and row.get('volume', 0) > 0:
-                accepted.append(t)
-        accepted.sort()
-        events = []
-        for i, t in enumerate(accepted):
-            deadline = t + STALE_AFTER
-            next_t = accepted[i+1] if i+1 < len(accepted) else end
-            if deadline < next_t and deadline < end:
-                events.append((deadline, 'stale', symbol, rows[t]['close']))
-        rows.events = tuple(events)
+        # Missing observations cannot supply a fill. Keep holdings and indicator
+        # history intact; the portfolio records the age of carried valuations.
+        rows.events = ()
         rows.summary['ineligible_bars'] = blocked
         rows.summary['regular_bars'] = sum(own.values())
         rows.summary['reference_sessions'] = len(eligible)
@@ -276,7 +341,7 @@ def prepare_market_data(data, end, minutes, policy, coverage=True, reference=Non
                 while j >= 0 and child_rows[child_times[j]].get('data_quality', 'OK') != 'OK':
                     j -= 1
                 mark_at = child_times[j] if j >= 0 else None
-                mark = child_rows[mark_at]['close'] if mark_at is not None and execution_time-mark_at < STALE_AFTER else None
+                mark = child_rows[mark_at]['close'] if mark_at is not None and execution_time-mark_at < REFERENCE_MAX_AGE else None
                 adjusted_ratio = ratio * factor(symbol, at) / factor(child, at)
                 child_info.append((child, adjusted_ratio, mark, event))
             if any(mark is None for _, _, mark, _ in child_info):

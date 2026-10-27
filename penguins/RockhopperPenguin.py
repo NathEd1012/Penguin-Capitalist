@@ -30,6 +30,8 @@ class RockhopperPenguinParams:
 
 
 class RockhopperPenguin(BasePenguin):
+    COVERAGE_FIXED_WINDOWS = (10, 30, 60)  # trend_quality's fixed moving averages.
+
     def __init__(
         self,
         name: str = "RockhopperPenguin",

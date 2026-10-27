@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import math
+import os
 
 
 @dataclass
@@ -52,6 +53,9 @@ class Portfolio:
         # Track last known good price for each symbol (fallback if price data missing)
         # symbol -> price (previous_close_by_symbol: price_history[symbol])
         self.last_known_prices: Dict[str, float] = {}
+        self.last_price_timestamps: Dict[str, datetime] = {}
+        # Latest per-holding valuation provenance, also exported in reports.
+        self.valuation_marks: Dict[str, Dict] = {}
         
         # Trade history
         self.trades: List[Trade] = []
@@ -60,9 +64,18 @@ class Portfolio:
         self.buy_trade_count = 0
         self.sell_trade_count = 0
         self.total_trade_count = 0
+        self.coverage_blocked_decisions = 0
+        self.coverage_blocked_orders = 0
         
         # Value snapshots for curve tracking
         self.value_history: List[float] = []
+        self.value_timestamps: List[datetime] = []
+        self.value_jump_attributions: List[Dict] = []
+        self._last_valuation_components: Optional[Dict] = None
+        self._pending_valuation_components: Optional[Dict] = None
+        self.attribution_threshold = float(os.getenv('EQUITY_ATTRIBUTION_MIN_MOVE_PCT', '0.01'))
+        if not math.isfinite(self.attribution_threshold) or not 0 <= self.attribution_threshold < 1:
+            raise ValueError('EQUITY_ATTRIBUTION_MIN_MOVE_PCT must be between 0 and 1')
         self._applied_price_adjustments: Set[Tuple[str, datetime]] = set()
         self._applied_distributions: Set[Tuple[str, datetime]] = set()
 
@@ -165,7 +178,12 @@ class Portfolio:
         """Get current quantity of a symbol."""
         return self.positions.get(symbol, 0)
     
-    def get_total_value(self, current_prices: Dict[str, float]) -> float:
+    def get_total_value(
+        self,
+        current_prices: Dict[str, float],
+        timestamp: Optional[datetime] = None,
+        price_metadata: Optional[Dict[str, Dict]] = None,
+    ) -> float:
         """
         Calculate total portfolio value (cash + positions at current prices).
         Uses last-known-good price if current price is not available to prevent
@@ -183,20 +201,52 @@ class Portfolio:
             Total portfolio value
         """
         total = self.cash
+        normalized_timestamp = self._normalize_timestamp(timestamp) if timestamp is not None else None
+        components = {'cash': float(self.cash), 'positions': {}}
         for symbol, quantity in self.positions.items():
             if quantity > 0:
                 # Use current price if available, otherwise fall back to last known price for THIS symbol
-                if symbol in current_prices and current_prices[symbol] > 0:
+                has_current_price = symbol in current_prices and current_prices[symbol] > 0
+                if has_current_price:
                     price = current_prices[symbol]
                     self.last_known_prices[symbol] = price  # Update last known price
+                    if normalized_timestamp is not None:
+                        self.last_price_timestamps[symbol] = normalized_timestamp
+                    status = (price_metadata or {}).get(symbol, {}).get('quality_state', 'FRESH')
                 elif symbol in self.last_known_prices and self.last_known_prices[symbol] > 0:
                     # Use previous price for this symbol (carry forward)
                     price = self.last_known_prices[symbol]
+                    observed = (price_metadata or {}).get(symbol, {})
+                    status = 'CARRIED_' + observed.get(
+                        'quality_state', observed.get('data_quality', 'MISSING')
+                    )
                 else:
                     raise ValueError(f"Unpriced holding: {symbol}; cannot calculate portfolio equity")
-                
+
+                mark_time = self.last_price_timestamps.get(symbol)
+                mark_age_seconds = None
+                if normalized_timestamp is not None and mark_time is not None:
+                    mark_age_seconds = max(0.0, (normalized_timestamp - mark_time).total_seconds())
+                metadata = (price_metadata or {}).get(symbol, {})
+                observed_price = metadata.get('observed_price')
+                components['positions'][symbol] = {
+                    'quantity': float(quantity),
+                    'mark': float(price),
+                    'value': float(quantity * price),
+                    'mark_status': status,
+                    'mark_timestamp': mark_time,
+                    'mark_is_stale': not has_current_price,
+                    'mark_age_seconds': mark_age_seconds,
+                    'observed_price': float(observed_price) if observed_price is not None else None,
+                    'quality_reason': metadata.get('quality_reason'),
+                }
                 total += quantity * price
-        
+
+        self.valuation_marks = components['positions']
+        if normalized_timestamp is not None:
+            components['timestamp'] = normalized_timestamp
+            components['total'] = total
+            self._pending_valuation_components = components
         return total
     
     def buy(self, symbol: str, quantity: int, price: float, timestamp: datetime) -> bool:
@@ -255,6 +305,7 @@ class Portfolio:
         # Track last known price for fallback valuation
         if price > 0:
             self.last_known_prices[symbol] = price
+            self.last_price_timestamps[symbol] = self._normalize_timestamp(timestamp)
         
         # Update cost basis (weighted average)
         old_cost = self.cost_basis.get(symbol, 0)
@@ -305,6 +356,7 @@ class Portfolio:
         # Track last known price for fallback valuation
         if price > 0:
             self.last_known_prices[symbol] = price
+            self.last_price_timestamps[symbol] = self._normalize_timestamp(timestamp)
         
         proceeds = quantity * price - self.transaction_cost
         self.cash += proceeds
@@ -338,9 +390,56 @@ class Portfolio:
             if quantity > 0 and symbol in current_prices:
                 self.sell(symbol, quantity, current_prices[symbol], timestamp)
     
-    def add_value_snapshot(self, value: float):
-        """Record a portfolio value snapshot."""
+    def add_value_snapshot(self, value: float, timestamp: Optional[datetime] = None):
+        """Record a portfolio value and its timestamp, including large-move attribution."""
+        if timestamp is None:
+            if self._pending_valuation_components is None:
+                raise ValueError("A timestamp is required for a portfolio value snapshot")
+            timestamp = self._pending_valuation_components['timestamp']
+        timestamp = self._normalize_timestamp(timestamp)
+        if self._pending_valuation_components is None:
+            self._pending_valuation_components = {
+                'timestamp': timestamp,
+                'cash': float(self.cash),
+                'positions': {},
+                'total': value,
+            }
+        current = self._pending_valuation_components
+        current['timestamp'] = timestamp
+        current['total'] = value
+        previous = self._last_valuation_components
+        if previous is not None and previous['total'] > 0:
+            change = value - previous['total']
+            change_pct = change / previous['total']
+            if abs(change_pct) >= self.attribution_threshold:
+                symbols = sorted(set(previous['positions']) | set(current['positions']))
+                position_changes = []
+                for symbol in symbols:
+                    before = previous['positions'].get(symbol, {})
+                    after = current['positions'].get(symbol, {})
+                    contribution = after.get('value', 0.0) - before.get('value', 0.0)
+                    if contribution or str(after.get('mark_status', '')).startswith('CARRIED_'):
+                        position_changes.append({
+                            'symbol': symbol,
+                            'contribution': float(contribution),
+                            'previous_value': float(before.get('value', 0.0)),
+                            'current_value': float(after.get('value', 0.0)),
+                            **after,
+                        })
+                position_changes.sort(key=lambda item: abs(item['contribution']), reverse=True)
+                self.value_jump_attributions.append({
+                    'timestamp': timestamp,
+                    'previous_value': float(previous['total']),
+                    'current_value': float(value),
+                    'change': float(change),
+                    'change_pct': float(change_pct),
+                    'cash_change': float(current['cash'] - previous['cash']),
+                    'positions': position_changes,
+                })
         self.value_history.append(value)
+        self.value_timestamps.append(timestamp)
+        self._last_valuation_components = current
+        self._pending_valuation_components = None
     
     def get_pnl(self, current_prices: Dict[str, float]) -> Tuple[float, float]:
         """
@@ -410,15 +509,15 @@ class Portfolio:
         for symbol in summary:
             cost = summary[symbol]["total_cost"]
             revenue = summary[symbol]["total_revenue"]
-            realized_pnl = revenue - cost
             
             position_qty = self.positions.get(symbol, 0)
             cost_basis_price = self.cost_basis.get(symbol, 0.0)
-            market_price = prices.get(symbol) if symbol in prices else None
+            market_price = prices.get(symbol, self.last_known_prices.get(symbol))
             market_value = position_qty * market_price if market_price is not None else 0.0
             unrealized_pnl = (market_price - cost_basis_price) * position_qty if market_price is not None and cost_basis_price > 0 else 0.0
             
-            total_pnl = realized_pnl + unrealized_pnl
+            total_pnl = revenue - cost + market_value
+            realized_pnl = total_pnl - unrealized_pnl
             total_pnl_pct = (total_pnl / cost * 100) if cost > 0 else 0
             
             summary[symbol]["realized_pnl"] = realized_pnl

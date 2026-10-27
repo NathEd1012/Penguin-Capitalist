@@ -5,6 +5,7 @@ class SP500x2(BasePenguin):
     """Buy and hold SPY at 2x portfolio leverage."""
 
     TRADED_SYMBOLS = {"SPY"}
+    COVERAGE_WINDOWS = ()
     LOOKBACK_BARS = 10  # Doesn't need history
     MAX_LEVERAGE = 2.0
 

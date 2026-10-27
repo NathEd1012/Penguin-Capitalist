@@ -5,7 +5,8 @@ def event_schedule(data):
     schedule = {}
     for rows in data.values():
         for event in getattr(rows, 'events', ()):
-            schedule.setdefault(event[0], []).append(event)
+            if event[1] != 'stale':  # Ignore legacy synthetic gap exits.
+                schedule.setdefault(event[0], []).append(event)
     return schedule
 
 
@@ -13,17 +14,11 @@ def apply_events(events, portfolios, price_history, volume_history, timestamp, b
     """Return symbols whose pre-event pending orders must be cancelled."""
     affected = set()
     for _, kind, symbol, payload in events:
-        affected.add(symbol)
         if kind == 'stale':
-            price_history[symbol].clear()
-            volume_history[symbol].clear()
-            if benchmark_history is not None:
-                benchmark_history[symbol].clear()
-            for portfolio in portfolios.values():
-                quantity = portfolio.get_position(symbol)
-                if quantity > 0:
-                    portfolio.sell(symbol, quantity, payload, timestamp, reason="data gap >72h")
+            # Old prepared inputs may still contain these events. They must not
+            # create trades, reset indicators, or cancel deferred orders.
             continue
+        affected.add(symbol)
         effective_at, children, parent_mark = payload
         for portfolio in portfolios.values():
             quantity = portfolio.get_position(symbol)

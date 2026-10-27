@@ -15,6 +15,12 @@ except Exception:
 from scripts.plotting import plot_capital_curves, create_final_report_pdf, _strategy_parameter_text
 
 
+def _json_default(value):
+    if isinstance(value, datetime):
+        return value.isoformat()
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
 class Evaluator:
     """Calculate performance metrics and generate reports."""
     
@@ -98,6 +104,11 @@ class Evaluator:
             'buy_trades': buy_trades,
             'sell_trades': sell_trades,
             'final_value': round(final_value, 2),
+            'stale_position_count': sum(
+                mark['mark_is_stale'] for mark in portfolio.valuation_marks.values()
+            ),
+            'coverage_blocked_decisions': portfolio.coverage_blocked_decisions,
+            'coverage_blocked_orders': portfolio.coverage_blocked_orders,
         }
     
     @staticmethod
@@ -108,7 +119,7 @@ class Evaluator:
         binning: str = "1m",
         start_date: str = None,
         stop_date: str = None,
-        bar_timestamps: List[datetime] = None,
+        bar_timestamps: Dict[str, List[datetime]] | List[datetime] = None,
         symbol_list_name: str = None,
     ):
         """
@@ -149,7 +160,7 @@ class Evaluator:
         archive_dir: Path | None,
         current_dir: Path,
         trades_by_bar: Dict = None,
-        bar_timestamps: List = None,
+        bar_timestamps: Dict[str, List[datetime]] | List[datetime] = None,
         artifacts_dir: Path | None = None,
     ):
         """
@@ -159,8 +170,8 @@ class Evaluator:
             results: Dict[penguin_name] = (portfolio, metrics)
             archive_dir: Archive directory path (timestamped) or None
             current_dir: Current run directory path (always latest)
-            trades_by_bar: Dict[bar_idx] = [trade_strings] for detailed logging
-            bar_timestamps: List of datetime objects for each bar (optional)
+            trades_by_bar: Dict[timestamp] = [trade_strings] for detailed logging
+            bar_timestamps: Per-strategy datetime arrays aligned with each curve
             artifacts_dir: Optional artifacts directory to save JSON/log outputs once
         """
         archive_dir = Path(archive_dir) if archive_dir is not None else None
@@ -177,8 +188,27 @@ class Evaluator:
         
         # Prepare data to save
         curves_data = {}
+        timestamps_data = {}
+        attribution_data = {}
+        valuation_data = {}
         for penguin_name, (portfolio, _) in results.items():
+            timestamps = (
+                bar_timestamps.get(penguin_name, [])
+                if isinstance(bar_timestamps, dict)
+                else list(bar_timestamps or portfolio.value_timestamps)
+            )
+            if len(portfolio.value_history) != len(timestamps):
+                raise ValueError(
+                    f"{penguin_name}: {len(portfolio.value_history)} curve values but "
+                    f"{len(timestamps)} timestamps"
+                )
             curves_data[penguin_name] = [round(v, 2) for v in portfolio.value_history]
+            timestamps_data[penguin_name] = [timestamp.isoformat() for timestamp in timestamps]
+            attribution_data[penguin_name] = portfolio.value_jump_attributions
+            valuation_data[penguin_name] = {
+                'timestamp': portfolio.value_timestamps[-1] if portfolio.value_timestamps else None,
+                'positions': portfolio.valuation_marks,
+            }
         
         metrics_data = {}
         for penguin_name, (_, metrics) in results.items():
@@ -193,29 +223,25 @@ class Evaluator:
             trades_content += "EXECUTION DETAILS\n"
             trades_content += "-" * 80 + "\n\n"
             
-            for bar_idx, trades in sorted(trades_by_bar.items()):
+            for trade_time, trades in sorted(trades_by_bar.items()):
                 if trades:
-                    date_str = ""
-                    if bar_timestamps and bar_idx < len(bar_timestamps):
-                        date_str = f" @ {bar_timestamps[bar_idx].strftime('%Y-%m-%d %H:%M:%S')}"
-                    trades_content += f"Bar {bar_idx}{date_str}:\n"
+                    if isinstance(trade_time, datetime):
+                        heading = f"At {trade_time.isoformat()}"
+                    else:
+                        heading = f"Legacy bar {trade_time}"
+                    trades_content += f"{heading}:\n"
                     for trade in trades:
                         trades_content += f"{trade}\n"
                     trades_content += "\n"
             
             trades_content += "\n" + "=" * 80 + "\n\n"
         
-        # Identify final liquidation timestamp (last bar)
-        final_liquidation_timestamp = None
-        if bar_timestamps and len(bar_timestamps) > 0:
-            final_liquidation_timestamp = bar_timestamps[-1]
-        
-        trades_content += "LIQUIDATION TRADES (End of Backtest Forced Closes)\n"
+        trades_content += "LIQUIDATION TRADES (End of Backtest, Current Tradable Quotes Only)\n"
         trades_content += "-" * 80 + "\n\n"
         
         liquidation_found = False
         for penguin_name, (portfolio, _) in results.items():
-            liquidation_trades = [t for t in portfolio.trades if final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp]
+            liquidation_trades = [t for t in portfolio.trades if t.reason == 'final liquidation']
             if liquidation_trades:
                 liquidation_found = True
                 trades_content += f"\n{penguin_name}:\n"
@@ -241,10 +267,22 @@ class Evaluator:
             trades_content += f"  Total Trades:   {metrics['total_trades']}\n"
             trades_content += f"  Buy Trades:     {metrics['buy_trades']}\n"
             trades_content += f"  Sell Trades:    {metrics['sell_trades']}\n"
+            trades_content += f"  Coverage-blocked decisions: {portfolio.coverage_blocked_decisions}\n"
+            trades_content += f"  Coverage-blocked orders:    {portfolio.coverage_blocked_orders}\n"
+            if portfolio.valuation_marks:
+                trades_content += "\n  Open Positions (marked value included in Final Value):\n"
+                for symbol, mark in sorted(portfolio.valuation_marks.items()):
+                    state = 'STALE' if mark['mark_is_stale'] else 'FRESH'
+                    age = mark['mark_age_seconds']
+                    age_text = f'{age:.0f}s' if age is not None else 'unknown'
+                    trades_content += (
+                        f"    {symbol}: {mark['quantity']:g} @ ${mark['mark']:.2f}; "
+                        f"{state}; mark time {mark['mark_timestamp']}; age {age_text}\n"
+                    )
             trades_content += "\n  Recent Trades (excluding liquidation):\n"
             
             # Exclude liquidation trades from recent trades display
-            non_liquidation_trades = [t for t in portfolio.trades if not (final_liquidation_timestamp and t.timestamp == final_liquidation_timestamp)]
+            non_liquidation_trades = [t for t in portfolio.trades if t.reason != 'final liquidation']
             for trade in non_liquidation_trades[-20:]:
                 trades_content += f"    {trade}\n"
             
@@ -254,6 +292,22 @@ class Evaluator:
         curves_file = json_dir / "curves_data.json"
         with open(curves_file, 'w') as f:
             json.dump(curves_data, f, indent=2)
+
+        timestamps_file = json_dir / "curve_timestamps.json"
+        with open(timestamps_file, 'w') as f:
+            json.dump(timestamps_data, f, indent=2)
+
+        attributions_file = json_dir / "equity_jump_attribution.json"
+        with open(attributions_file, 'w') as f:
+            json.dump(
+                attribution_data,
+                f,
+                indent=2,
+                default=_json_default,
+            )
+
+        with open(json_dir / "valuation_marks.json", 'w') as f:
+            json.dump(valuation_data, f, indent=2, default=_json_default)
 
         metrics_file = json_dir / "metrics_summary.json"
         with open(metrics_file, 'w') as f:
@@ -318,7 +372,7 @@ class Evaluator:
         binning: str = "1m",
         start_date: str = None,
         stop_date: str = None,
-        bar_timestamps: List[datetime] = None,
+        bar_timestamps: Dict[str, List[datetime]] | List[datetime] = None,
         artifacts_dir: Path = None,
         symbol_list_name: str = None,
     ):

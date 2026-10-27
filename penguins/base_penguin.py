@@ -7,6 +7,9 @@ class BasePenguin(ABC):
     """Base class for all trading strategies."""
     # Default lookback window: can be overridden by subclasses
     LOOKBACK_BARS = 1000
+    # None infers parameter periods or LOOKBACK_BARS; () declares no indicators.
+    COVERAGE_WINDOWS = None
+    COVERAGE_FIXED_WINDOWS = ()
     def __init__(self, name: str):
         self.name = self.__class__.__name__
 
