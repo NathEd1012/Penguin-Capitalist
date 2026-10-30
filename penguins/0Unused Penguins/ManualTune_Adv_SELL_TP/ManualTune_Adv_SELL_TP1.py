@@ -12,8 +12,8 @@ from indicators.market_context import relative_strength, relative_volume
 RSI_PERIOD = 27 #13
 BUY_RSI = 34.8318 #30.0
 SELL_RSI = 68.8442 #70.0
-ADX_PERIOD = 21 #14
-ADX_THRESHOLD = 27.678 #25.0
+KAUFMAN_EFFICIENCY_RATIO_PERIOD = 21 #14
+KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 27.678 #25.0
 MAX_CASH_FRACTION = 0.1657 #0.05
 STOP_LOSS_PCT = 0.0106 #0.04
 TAKE_PROFIT_PCT = 0.165 #0.08
@@ -24,7 +24,7 @@ RVOL_PERIOD = 16 #20
 RVOL_THRESHOLD = 1.2536 #2.0
 
 
-# Trainable Penguin, with Buy condition based on RSI and ADX strength,
+# Trainable Penguin, with Buy condition based on RSI and KAUFMAN_EFFICIENCY_RATIO strength,
 # and Sell condition based on RSI breakdown, trend reversal, and profit taking.
 
 
@@ -33,8 +33,8 @@ class ManualTuneAdvSELL_TP1Params:
     rsi_period: int = RSI_PERIOD
     buy_rsi: float = BUY_RSI
     sell_rsi: float = SELL_RSI
-    adx_period: int = ADX_PERIOD
-    adx_threshold: float = ADX_THRESHOLD
+    kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
+    kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -55,8 +55,8 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
         rsi_period: int = RSI_PERIOD,
         buy_rsi: float = BUY_RSI,
         sell_rsi: float = SELL_RSI,
-        adx_period: int = ADX_PERIOD,
-        adx_threshold: float = ADX_THRESHOLD,
+        kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
+        kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -71,8 +71,8 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
-            adx_period=adx_period,
-            adx_threshold=adx_threshold,
+            kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
+            kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -96,7 +96,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
         min_required = max(
             60,
             self.params.rsi_period,
-            self.params.adx_period,
+            self.params.kaufman_efficiency_ratio_period,
             self.params.relative_strength_period,
             self.params.rvol_period,
         ) + 2
@@ -104,7 +104,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
             return "HOLD", 0
 
         rsi = self._rsi(mid_prices, self.params.rsi_period)
-        adx_value = self._adx_proxy(mid_prices, self.params.adx_period)
+        kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
         trend_score = self._trend_quality(mid_prices)
         relative_strength_value = relative_strength(
             mid_prices,
@@ -159,7 +159,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
             # BUY part
             buy_signal = (
                 rsi <= self.params.buy_rsi
-                and adx_value >= self.params.adx_threshold
+                and kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
             )
             if buy_signal:
                 # AMOUNT part
@@ -167,7 +167,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
                     1.5,
                     max(
                         0.25,
-                        adx_value / max(self.params.adx_threshold, 1e-6),
+                        kaufman_efficiency_ratio_value / max(self.params.kaufman_efficiency_ratio_threshold, 1e-6),
                     ),
                 )
                 max_trade_value = cash * self.params.max_cash_fraction
@@ -216,27 +216,27 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
 
         return min(score, 1.0)
 
-    def _adx_proxy(self, prices: List[float], period: int) -> float:
+    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
 
-        directional_up = 0.0
-        directional_down = 0.0
-        true_range = 0.0
+        total_upward_change = 0.0
+        total_downward_change = 0.0
+        total_price_movement = 0.0
 
         start = len(prices) - period
         for index in range(start, len(prices)):
             change = prices[index] - prices[index - 1]
-            true_range += abs(change)
+            total_price_movement += abs(change)
             if change > 0:
-                directional_up += change
+                total_upward_change += change
             elif change < 0:
-                directional_down -= change
+                total_downward_change -= change
 
-        if true_range <= 0:
+        if total_price_movement <= 0:
             return 0.0
 
-        directional_strength = abs(directional_up - directional_down) / true_range
+        directional_strength = abs(total_upward_change - total_downward_change) / total_price_movement
         return 100.0 * directional_strength
 
     def _get_cash(self, portfolio: Portfolio) -> float:
@@ -258,8 +258,8 @@ class ManualTuneAdvSELL_TP1_Manual(ManualTuneAdvSELL_TP1):
         rsi_period: int = RSI_PERIOD,
         buy_rsi: float = BUY_RSI,
         sell_rsi: float = SELL_RSI,
-        adx_period: int = ADX_PERIOD,
-        adx_threshold: float = ADX_THRESHOLD,
+        kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
+        kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -274,8 +274,8 @@ class ManualTuneAdvSELL_TP1_Manual(ManualTuneAdvSELL_TP1):
             rsi_period=rsi_period,
             buy_rsi=buy_rsi,
             sell_rsi=sell_rsi,
-            adx_period=adx_period,
-            adx_threshold=adx_threshold,
+            kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
+            kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,

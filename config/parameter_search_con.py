@@ -83,10 +83,10 @@ NARROW_PARAMETER_RANGES = (
     ("bb_period", "int", 10, 50),
     ("bb_stddev", "float", 1.0, 4.0),
     ("upper_band_buffer", "float", 0.0, 0.25),
-    ("adx_period", "int", 7, 30),
-    ("adx_threshold", "float", 20.0, 40.0),
-    ("adx_entry_threshold", "float", 20.0, 40.0),
-    ("adx_negative_threshold", "float", 10.0, 40.0),
+    ("kaufman_efficiency_ratio_period", "int", 7, 30),
+    ("kaufman_efficiency_ratio_threshold", "float", 20.0, 40.0),
+    ("kaufman_efficiency_ratio_entry_threshold", "float", 20.0, 40.0),
+    ("kaufman_efficiency_ratio_negative_threshold", "float", 10.0, 40.0),
     ("max_cash_fraction", "float", 0.05, 0.20),
     ("stop_loss_pct", "float", 0.02, 0.10),
     ("take_profit_pct", "float", 0.03, 0.10),
@@ -111,10 +111,10 @@ BROAD_PARAMETER_RANGES = (
     ("bb_period", "int", 2, 100),
     ("bb_stddev", "float", 0.5, 8.0),
     ("upper_band_buffer", "float", 0.0, 1.0),
-    ("adx_period", "int", 2, 50),
-    ("adx_threshold", "float", 10.0, 70.0),
-    ("adx_entry_threshold", "float", 10.0, 70.0),
-    ("adx_negative_threshold", "float", 10.0, 70.0),
+    ("kaufman_efficiency_ratio_period", "int", 2, 50),
+    ("kaufman_efficiency_ratio_threshold", "float", 10.0, 70.0),
+    ("kaufman_efficiency_ratio_entry_threshold", "float", 10.0, 70.0),
+    ("kaufman_efficiency_ratio_negative_threshold", "float", 10.0, 70.0),
     ("max_cash_fraction", "float", 0.01, 0.50),
     ("stop_loss_pct", "float", 0.01, 0.20),
     ("take_profit_pct", "float", 0.005, 0.30),
@@ -151,8 +151,8 @@ _ACTIVE_RANGES = (
 STRATEGY_PARAMETER_NAMES = {
     "GentooPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi",
-        "adx_period", "adx_threshold", "adx_entry_threshold",
-        "adx_negative_threshold", "max_cash_fraction", "stop_loss_pct",
+        "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold", "kaufman_efficiency_ratio_entry_threshold",
+        "kaufman_efficiency_ratio_negative_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "relative_strength_period",
         "relative_strength_threshold", "rvol_period", "rvol_threshold",
     ),
@@ -165,7 +165,7 @@ STRATEGY_PARAMETER_NAMES = {
     ),
     "EmperorPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "adx_period", "adx_threshold",
+        "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "trend_reversal_threshold", "trend_negative_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_strength_period",
@@ -173,7 +173,7 @@ STRATEGY_PARAMETER_NAMES = {
     ),
     "KingPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "adx_period", "adx_threshold",
+        "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "trend_reversal_threshold", "trend_negative_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_strength_period",
@@ -183,13 +183,13 @@ STRATEGY_PARAMETER_NAMES = {
 }
 
 _LEGACY_PARAMETER_NAMES = {
-    "rsi_adx": (
-        "rsi_period", "buy_rsi", "sell_rsi", "adx_period", "adx_threshold",
+    "rsi_kaufman_efficiency_ratio": (
+        "rsi_period", "buy_rsi", "sell_rsi", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "max_cash_fraction", "stop_loss_pct", "take_profit_pct", "cooldown_bars",
     ),
-    "bollinger_adx": (
-        "bb_period", "bb_stddev", "upper_band_buffer", "adx_period",
-        "adx_threshold", "max_cash_fraction", "stop_loss_pct",
+    "bollinger_kaufman_efficiency_ratio": (
+        "bb_period", "bb_stddev", "upper_band_buffer", "kaufman_efficiency_ratio_period",
+        "kaufman_efficiency_ratio_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars",
     ),
     "rsi_risk": (
@@ -198,7 +198,7 @@ _LEGACY_PARAMETER_NAMES = {
     ),
     "advanced_sell_all": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "adx_period", "adx_threshold",
+        "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "max_cash_fraction", "stop_loss_pct", "take_profit_pct",
         "cooldown_bars", "relative_strength_period",
         "relative_strength_threshold", "rvol_period", "rvol_threshold",
@@ -293,7 +293,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
         "ManualTuneAdvSELL_TP1", "ManualTuneAdvSELL_TP1_Manual",
     )):
         return _parameters(
-            _LEGACY_PARAMETER_NAMES["rsi_adx"]
+            _LEGACY_PARAMETER_NAMES["rsi_kaufman_efficiency_ratio"]
             + ("relative_strength_period", "relative_strength_threshold",
                "rvol_period", "rvol_threshold")
         )
@@ -304,7 +304,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
         "ManualTuneAdvSELL_TP3", "ManualTuneAdvSELL_TP3_Manual",
     )):
         return _parameters(
-            _LEGACY_PARAMETER_NAMES["bollinger_adx"]
+            _LEGACY_PARAMETER_NAMES["bollinger_kaufman_efficiency_ratio"]
             + ("relative_strength_period", "relative_strength_threshold",
                "rvol_period", "rvol_threshold")
         )
@@ -325,13 +325,13 @@ def strategy_parameter_space_by_name(strategy_name: str):
     if strategy_name.endswith((
         "OG_TP1", "OG_TP1_Manual", "TrainablePenguin1", "TrainablePenguin1_Manual",
     )):
-        return _parameters(_LEGACY_PARAMETER_NAMES["rsi_adx"] + ("strength_cap",))
+        return _parameters(_LEGACY_PARAMETER_NAMES["rsi_kaufman_efficiency_ratio"] + ("strength_cap",))
 
     if strategy_name.endswith((
         "OG_TP2", "OG_TP2_Manual", "TrainablePenguin2", "TrainablePenguin2_Manual",
         "OG_TP3", "OG_TP3_Manual", "TrainablePenguin3", "TrainablePenguin3_Manual",
     )):
-        return _parameters(_LEGACY_PARAMETER_NAMES["bollinger_adx"] + ("strength_cap",))
+        return _parameters(_LEGACY_PARAMETER_NAMES["bollinger_kaufman_efficiency_ratio"] + ("strength_cap",))
 
     raise ValueError(f"No parameter space is defined for {strategy_name}")
 

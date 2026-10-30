@@ -11,8 +11,8 @@ from indicators.market_context import relative_strength, relative_volume
 # Adjust these values here first so the strategy is easy to finetune by hand.
 BB_PERIOD = 20
 BB_STDDEV = 2.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
+KAUFMAN_EFFICIENCY_RATIO_PERIOD = 14
+KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -26,8 +26,8 @@ RVOL_THRESHOLD = 2.0
 class Adv_SELL_TP3Params:
 	bb_period: int = BB_PERIOD
 	bb_stddev: float = BB_STDDEV
-	adx_period: int = ADX_PERIOD
-	adx_threshold: float = ADX_THRESHOLD
+	kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
+	kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
 	max_cash_fraction: float = MAX_CASH_FRACTION
 	stop_loss_pct: float = STOP_LOSS_PCT
 	take_profit_pct: float = TAKE_PROFIT_PCT
@@ -46,8 +46,8 @@ class Adv_SELL_TP3(BasePenguin):
 		name: str = "TrainablePenguin3",
 		bb_period: int = BB_PERIOD,
 		bb_stddev: float = BB_STDDEV,
-		adx_period: int = ADX_PERIOD,
-		adx_threshold: float = ADX_THRESHOLD,
+		kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
+		kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -60,8 +60,8 @@ class Adv_SELL_TP3(BasePenguin):
 		self.params = Adv_SELL_TP3Params(
 			bb_period=bb_period,
 			bb_stddev=bb_stddev,
-			adx_period=adx_period,
-			adx_threshold=adx_threshold,
+			kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
+			kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
@@ -72,14 +72,14 @@ class Adv_SELL_TP3(BasePenguin):
 		)
 
 	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio, spy_prices: List[float] | None = None, volumes: List[float] | None = None) -> tuple[str, int]:
-		min_required = max(60, self.params.bb_period, self.params.adx_period, self.params.relative_strength_period, self.params.rvol_period) + 2
+		min_required = max(60, self.params.bb_period, self.params.kaufman_efficiency_ratio_period, self.params.relative_strength_period, self.params.rvol_period) + 2
 		if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
 			return "HOLD", 0
 
 		upper_band, middle_band, lower_band = self._bollinger_bands(mid_prices, self.params.bb_period, self.params.bb_stddev)
-		adx_value = self._adx_proxy(mid_prices, self.params.adx_period)
-		adx_previous = self._adx_proxy(mid_prices[:-1], self.params.adx_period)
-		adx_slope = adx_value - adx_previous
+		kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
+		kaufman_efficiency_ratio_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
+		kaufman_efficiency_ratio_slope = kaufman_efficiency_ratio_value - kaufman_efficiency_ratio_previous
 		trend_score = self._trend_quality(mid_prices)
 		relative_strength_value = relative_strength(mid_prices, spy_prices, self.params.relative_strength_period)
 		rvol = relative_volume(volumes, self.params.rvol_period)
@@ -92,12 +92,12 @@ class Adv_SELL_TP3(BasePenguin):
 			# SELL part
 			loss_trigger = avg_entry is not None and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
 			upper_band_take_profit = current_price >= upper_band and avg_entry is not None and current_price >= avg_entry * (1 + self.params.take_profit_pct)
-			adx_trend_reversal = adx_slope < 0 and adx_value < self.params.adx_threshold
+			kaufman_efficiency_ratio_trend_reversal = kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
 			is_profitable = avg_entry is not None and current_price > avg_entry
 			relative_strength_exit_trigger = is_profitable and relative_strength_value < self.params.relative_strength_threshold
 			rvol_exit_trigger = is_profitable and rvol > self.params.rvol_threshold
-			if loss_trigger or (upper_band_take_profit and adx_trend_reversal) or (
-				upper_band_take_profit and adx_value < self.params.adx_threshold * 0.85
+			if loss_trigger or (upper_band_take_profit and kaufman_efficiency_ratio_trend_reversal) or (
+				upper_band_take_profit and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
 			) or relative_strength_exit_trigger or rvol_exit_trigger:
 				return "SELL", shares_owned
 		else:
@@ -138,27 +138,27 @@ class Adv_SELL_TP3(BasePenguin):
 		lower = middle - num_std * std_dev
 		return upper, middle, lower
 
-	def _adx_proxy(self, prices: List[float], period: int) -> float:
+	def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
 		if len(prices) < period + 1:
 			return 0.0
 
-		directional_up = 0.0
-		directional_down = 0.0
-		true_range = 0.0
+		total_upward_change = 0.0
+		total_downward_change = 0.0
+		total_price_movement = 0.0
 
 		start = len(prices) - period
 		for index in range(start, len(prices)):
 			change = prices[index] - prices[index - 1]
-			true_range += abs(change)
+			total_price_movement += abs(change)
 			if change > 0:
-				directional_up += change
+				total_upward_change += change
 			elif change < 0:
-				directional_down -= change
+				total_downward_change -= change
 
-		if true_range <= 0:
+		if total_price_movement <= 0:
 			return 0.0
 
-		directional_strength = abs(directional_up - directional_down) / true_range
+		directional_strength = abs(total_upward_change - total_downward_change) / total_price_movement
 		return 100.0 * directional_strength
 
 	def _get_cash(self, portfolio: Portfolio) -> float:
@@ -180,8 +180,8 @@ class Adv_SELL_TP3_Manual(Adv_SELL_TP3):
 		name: str = "TrainablePenguin3_Manual",
 		bb_period: int = BB_PERIOD,
 		bb_stddev: float = BB_STDDEV,
-		adx_period: int = ADX_PERIOD,
-		adx_threshold: float = ADX_THRESHOLD,
+		kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
+		kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -190,8 +190,8 @@ class Adv_SELL_TP3_Manual(Adv_SELL_TP3):
 			name=name,
 			bb_period=bb_period,
 			bb_stddev=bb_stddev,
-			adx_period=adx_period,
-			adx_threshold=adx_threshold,
+			kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
+			kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,

@@ -5,7 +5,7 @@ from typing import List
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
-    adx_proxy,
+    kaufman_efficiency_ratio,
     bollinger_bands,
     relative_strength,
     relative_volume,
@@ -22,8 +22,8 @@ class EmperorPenguinParams:
     bb_period: int
     bb_stddev: float
     upper_band_buffer: float
-    adx_period: int
-    adx_threshold: float
+    kaufman_efficiency_ratio_period: int
+    kaufman_efficiency_ratio_threshold: float
     trend_reversal_threshold: float
     trend_negative_threshold: float
     trend_entry_threshold: float
@@ -64,7 +64,7 @@ class EmperorPenguin(BasePenguin):
             60,
             self.params.rsi_period,
             self.params.bb_period,
-            self.params.adx_period,
+            self.params.kaufman_efficiency_ratio_period,
             self.params.relative_strength_period,
             self.params.rvol_period,
         ) + 2
@@ -75,7 +75,7 @@ class EmperorPenguin(BasePenguin):
         upper_band, middle_band, lower_band = bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        adx_value = adx_proxy(mid_prices, self.params.adx_period)
+        kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
         trend_score = trend_quality(mid_prices)
         previous_trend_score = trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = trend_quality(mid_prices[:-2])
@@ -114,12 +114,12 @@ class EmperorPenguin(BasePenguin):
             )
             weak_trend = trend_score < self.params.trend_reversal_threshold
 
-            weak_adx = adx_value < self.params.adx_threshold
+            weak_kaufman_efficiency_ratio = kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
 
             take_profit_trigger = (
                 (profit_threshold_reached or rsi_overbought or upper_band_reached)
                 and
-                (weak_trend or weak_adx)
+                (weak_trend or weak_kaufman_efficiency_ratio)
             )
             #rel Strength
             relative_strength_exit_trigger = (
@@ -160,17 +160,17 @@ class EmperorPenguin(BasePenguin):
             current_price <= lower_band
         )
         trend_strength_signal = (
-            adx_value >= self.params.adx_threshold
+            kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
             or trend_score >= self.params.trend_entry_threshold
         )
         rsi_buy_signal = rsi_value <= self.params.buy_rsi
 
         if trend_strength_signal and (bb_buy_signal or rsi_buy_signal):
-            adx_strength = adx_value / self.params.adx_threshold
+            kaufman_efficiency_ratio_strength = kaufman_efficiency_ratio_value / self.params.kaufman_efficiency_ratio_threshold
             trend_strength = trend_score / self.params.trend_entry_threshold
             strength = min(
                 1.5,
-                max(0.25, adx_strength, trend_strength),
+                max(0.25, kaufman_efficiency_ratio_strength, trend_strength),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:

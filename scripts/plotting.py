@@ -1,6 +1,7 @@
 """Enhanced plotting and PDF report generation using matplotlib and PdfPages."""
 import os
 import math
+import re
 from pathlib import Path
 
 mpl_config_dir = Path(os.environ.get("MPLCONFIGDIR", "/private/tmp/penguin_mplconfig"))
@@ -37,7 +38,7 @@ def _is_sp500_benchmark(name: str) -> bool:
     return name.startswith("SP500")
 
 
-def _strategy_group_key(name: str) -> tuple[int, str]:
+def _strategy_group_key(name: str) -> tuple[int, int, str]:
     """Sort trainable/manual strategies into adjacent pairs."""
     order_map = {
         "SP500": 0,
@@ -60,14 +61,39 @@ def _strategy_group_key(name: str) -> tuple[int, str]:
         "SP500x2": 40,
         "SMA20Penguin": 50,
     }
-    return order_map.get(name, 100), name
+    base_name = _strategy_base_key(name)
+    return order_map.get(base_name, 100), _strategy_run_number(name), name
 
 
 def _strategy_base_key(name: str) -> str:
-    """Return the shared base key for a trainable/manual pair."""
-    if name.endswith("_Manual"):
-        return name[:-7]
-    return name
+    """Return the shared base key for a strategy and its repeated runs."""
+    base_name = re.sub(r"_\d+$", "", name)
+    return base_name[:-7] if base_name.endswith("_Manual") else base_name
+
+
+def _strategy_run_number(name: str) -> int:
+    """Return zero for the primary run and its numeric suffix otherwise."""
+    match = re.search(r"_(\d+)$", name)
+    return int(match.group(1)) if match else 0
+
+
+def _ordered_strategy_names(strategy_names: list[str]) -> list[str]:
+    """Keep each model beside its secondary, tertiary, and later runs."""
+    names = list(strategy_names)
+    base_order: list[str] = []
+    for name in names:
+        base_name = _strategy_base_key(name)
+        if base_name not in base_order:
+            base_order.append(base_name)
+
+    return [
+        name
+        for base_name in base_order
+        for name in sorted(
+            (item for item in names if _strategy_base_key(item) == base_name),
+            key=lambda item: (_strategy_run_number(item), item),
+        )
+    ]
 
 
 def _strategy_line_style(name: str) -> str:
@@ -240,8 +266,8 @@ def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str
         return "<no parameters>"
 
     display_name_map = {
-        "adx_period": "adx_period",
-        "adx_threshold": "adx_thr",
+        "kaufman_efficiency_ratio_period": "kaufman_efficiency_ratio_period",
+        "kaufman_efficiency_ratio_threshold": "kaufman_efficiency_ratio_thr",
         "bb_period": "bb_period",
         "bb_stddev": "bb_std",
         "buy_rsi": "buy_rsi",
@@ -814,19 +840,19 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     sp500_name = next((name for name in curves if _is_sp500_benchmark(name)), None)
     sma20_name = "SMA20Penguin"
     line_colors = {}
-    pair_colors = {}
     color_cycle = plt.rcParams.get("axes.prop_cycle", None)
     color_list = color_cycle.by_key().get("color", []) if color_cycle is not None else []
-    color_index = 0
+    family_names = sorted(
+        {_strategy_base_key(name) for name in curves}
+        - {_strategy_base_key(sp500_name)} if sp500_name else
+        {_strategy_base_key(name) for name in curves}
+    )
+    pair_colors = {
+        family_name: color_list[index % len(color_list)] if color_list else "C0"
+        for index, family_name in enumerate(family_names)
+    }
 
     def _color_for_group(group_key: str) -> str:
-        nonlocal color_index
-        if group_key not in pair_colors:
-            if color_list:
-                pair_colors[group_key] = color_list[color_index % len(color_list)]
-                color_index += 1
-            else:
-                pair_colors[group_key] = "C0"
         return pair_colors[group_key]
 
     # Draw SP500 first so it stays in the background.
@@ -845,7 +871,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         )
         line_colors[sp500_name] = line[0].get_color()
 
-    for name in sorted(curves.keys(), key=_strategy_group_key):
+    for name in _ordered_strategy_names(list(curves)):
         vals = curves[name]
         if name not in (sma20_name, sp500_name):
             display_name = _display_strategy_name(name)
@@ -869,7 +895,15 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         vals = curves[sma20_name]
         display_name = _display_strategy_name(sma20_name)
         x_values, plot_vals = _aligned_curve(bar_timestamps, vals, sma20_name)
-        line = plt.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
+        line = plt.plot(
+            x_values,
+            plot_vals,
+            label=display_name,
+            linewidth=2,
+            alpha=0.7,
+            zorder=3,
+            color=_color_for_group(_strategy_base_key(sma20_name)),
+        )
         line_colors[sma20_name] = line[0].get_color()
     
     # Add text labels at the end of each curve on the right side
@@ -1035,6 +1069,16 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         sp500_name = next((name for name in curves if _is_sp500_benchmark(name)), None)
         sma20_name = "SMA20Penguin"
         line_colors = {}
+        color_list = plt.rcParams["axes.prop_cycle"].by_key().get("color", [])
+        family_names = sorted(
+            {_strategy_base_key(name) for name in curves}
+            - {_strategy_base_key(sp500_name)} if sp500_name else
+            {_strategy_base_key(name) for name in curves}
+        )
+        family_colors = {
+            family_name: color_list[index % len(color_list)] if color_list else "C0"
+            for index, family_name in enumerate(family_names)
+        }
 
         # Draw SP500 first so it stays in the background.
         if sp500_name in curves:
@@ -1052,11 +1096,22 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             )
             line_colors[sp500_name] = line[0].get_color()
 
-        for name, vals in curves.items():
+        for name in _ordered_strategy_names(list(curves)):
+            vals = curves[name]
             if name not in (sma20_name, sp500_name):
                 display_name = _display_strategy_name(name)
+                base_name = _strategy_base_key(name)
                 x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
-                line = ax.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=2)
+                line = ax.plot(
+                    x_values,
+                    plot_vals,
+                    label=display_name,
+                    linewidth=2,
+                    alpha=0.7,
+                    zorder=2,
+                    color=family_colors[base_name],
+                    linestyle=_strategy_line_style(name),
+                )
                 line_colors[name] = line[0].get_color()
         
         # Plot SMA20 strategy last so it appears in foreground
@@ -1064,11 +1119,19 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             vals = curves[sma20_name]
             display_name = _display_strategy_name(sma20_name)
             x_values, plot_vals = _aligned_curve(bar_timestamps, vals, sma20_name)
-            line = ax.plot(x_values, plot_vals, label=display_name, linewidth=2, alpha=0.7, zorder=3)
+            line = ax.plot(
+                x_values,
+                plot_vals,
+                label=display_name,
+                linewidth=2,
+                alpha=0.7,
+                zorder=3,
+                color=family_colors[_strategy_base_key(sma20_name)],
+            )
             line_colors[sma20_name] = line[0].get_color()
         
         # Add text labels at the end of each curve on the right side
-        for name in sorted(curves.keys(), key=_strategy_group_key):
+        for name in _ordered_strategy_names(list(curves)):
             vals = curves[name]
             if vals:
                 x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)

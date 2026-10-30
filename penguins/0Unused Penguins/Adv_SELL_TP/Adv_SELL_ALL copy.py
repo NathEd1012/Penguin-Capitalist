@@ -12,8 +12,8 @@ BUY_RSI = 30.0
 SELL_RSI = 70.0
 BB_PERIOD = 20
 BB_STDDEV = 2.0
-ADX_PERIOD = 14
-ADX_THRESHOLD = 25.0
+KAUFMAN_EFFICIENCY_RATIO_PERIOD = 14
+KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -31,8 +31,8 @@ class Adv_SELL_ALLParams:
     sell_rsi: float = SELL_RSI
     bb_period: int = BB_PERIOD
     bb_stddev: float = BB_STDDEV
-    adx_period: int = ADX_PERIOD
-    adx_threshold: float = ADX_THRESHOLD
+    kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
+    kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -55,8 +55,8 @@ class Adv_SELL_ALL(BasePenguin):
         sell_rsi: float = SELL_RSI,
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
-        adx_period: int = ADX_PERIOD,
-        adx_threshold: float = ADX_THRESHOLD,
+        kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
+        kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -73,8 +73,8 @@ class Adv_SELL_ALL(BasePenguin):
             sell_rsi=sell_rsi,
             bb_period=bb_period,
             bb_stddev=bb_stddev,
-            adx_period=adx_period,
-            adx_threshold=adx_threshold,
+            kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
+            kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -99,7 +99,7 @@ class Adv_SELL_ALL(BasePenguin):
             60,
             self.params.rsi_period,
             self.params.bb_period,
-            self.params.adx_period,
+            self.params.kaufman_efficiency_ratio_period,
             self.params.relative_strength_period,
             self.params.rvol_period,
         ) + 2
@@ -110,8 +110,8 @@ class Adv_SELL_ALL(BasePenguin):
         upper_band, middle_band, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        adx_value = self._adx_proxy(mid_prices, self.params.adx_period)
-        adx_slope = adx_value - self._adx_proxy(mid_prices[:-1], self.params.adx_period)
+        kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
+        kaufman_efficiency_ratio_slope = kaufman_efficiency_ratio_value - self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         relative_strength_value = relative_strength(
@@ -141,9 +141,9 @@ class Adv_SELL_ALL(BasePenguin):
                 and avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
-            adx_exit_trigger = upper_band_take_profit and (
-                (adx_slope < 0 and adx_value < self.params.adx_threshold)
-                or adx_value < self.params.adx_threshold * 0.85
+            kaufman_efficiency_ratio_exit_trigger = upper_band_take_profit and (
+                (kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold)
+                or kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
             )
             overbought_breakdown_trigger = (
                 rsi >= self.params.sell_rsi and trend_score < 0.15
@@ -162,7 +162,7 @@ class Adv_SELL_ALL(BasePenguin):
             if (
                 loss_trigger
                 or profit_reversal_trigger
-                or adx_exit_trigger
+                or kaufman_efficiency_ratio_exit_trigger
                 or overbought_breakdown_trigger
                 or relative_strength_exit_trigger
                 or rvol_exit_trigger
@@ -171,10 +171,10 @@ class Adv_SELL_ALL(BasePenguin):
         else:
             bb_buy_signal = (
                 current_price <= lower_band
-                and adx_value >= self.params.adx_threshold
-                and (adx_slope >= 0 or current_price <= middle_band)
+                and kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
+                and (kaufman_efficiency_ratio_slope >= 0 or current_price <= middle_band)
             )
-            rsi_buy_signal = rsi <= self.params.buy_rsi and adx_value >= self.params.adx_threshold
+            rsi_buy_signal = rsi <= self.params.buy_rsi and kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
             trend_buy_signal = trend_score > 0.5
 
             if bb_buy_signal or rsi_buy_signal or (
@@ -182,7 +182,7 @@ class Adv_SELL_ALL(BasePenguin):
             ) or (rsi <= self.params.buy_rsi and trend_buy_signal):
                 strength = min(
                     1.5,
-                    max(0.25, max(adx_value / max(self.params.adx_threshold, 1e-6), trend_score / 0.5)),
+                    max(0.25, max(kaufman_efficiency_ratio_value / max(self.params.kaufman_efficiency_ratio_threshold, 1e-6), trend_score / 0.5)),
                 )
                 qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
                 if qty > 0:
@@ -227,19 +227,19 @@ class Adv_SELL_ALL(BasePenguin):
         std_dev = variance ** 0.5
         return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
-    def _adx_proxy(self, prices: List[float], period: int) -> float:
+    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
-        directional_up = 0.0
-        directional_down = 0.0
-        true_range = 0.0
+        total_upward_change = 0.0
+        total_downward_change = 0.0
+        total_price_movement = 0.0
         for index in range(len(prices) - period, len(prices)):
             change = prices[index] - prices[index - 1]
-            true_range += abs(change)
+            total_price_movement += abs(change)
             if change > 0:
-                directional_up += change
+                total_upward_change += change
             elif change < 0:
-                directional_down -= change
-        if true_range <= 0:
+                total_downward_change -= change
+        if total_price_movement <= 0:
             return 0.0
-        return 100.0 * abs(directional_up - directional_down) / true_range
+        return 100.0 * abs(total_upward_change - total_downward_change) / total_price_movement

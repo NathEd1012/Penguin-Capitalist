@@ -11,6 +11,7 @@ run_present/
 run_**/
 assistive_scripts/
 data_cache/
+partial_scripts/output/
 a_docs/
 run_present/**/artifacts/trades_log.txt
 run_present/**/artifacts/json/

@@ -48,22 +48,22 @@ def bollinger_bands(
     return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
 
-def adx_proxy(prices: List[float], period: int) -> float:
+def kaufman_efficiency_ratio(prices: List[float], period: int) -> float:
     if len(prices) < period + 1:
         return 0.0
-    directional_up = 0.0
-    directional_down = 0.0
-    true_range = 0.0
+    total_upward_change = 0.0
+    total_downward_change = 0.0
+    total_price_movement = 0.0
     for index in range(len(prices) - period, len(prices)):
         change = prices[index] - prices[index - 1]
-        true_range += abs(change)
+        total_price_movement += abs(change)
         if change > 0:
-            directional_up += change
+            total_upward_change += change
         elif change < 0:
-            directional_down -= change
-    if true_range <= 0:
+            total_downward_change -= change
+    if total_price_movement <= 0:
         return 0.0
-    return 100.0 * abs(directional_up - directional_down) / true_range
+    return 100.0 * abs(total_upward_change - total_downward_change) / total_price_movement
 
 
 def relative_strength(
