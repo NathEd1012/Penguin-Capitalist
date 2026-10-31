@@ -842,18 +842,16 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
     line_colors = {}
     color_cycle = plt.rcParams.get("axes.prop_cycle", None)
     color_list = color_cycle.by_key().get("color", []) if color_cycle is not None else []
-    family_names = sorted(
-        {_strategy_base_key(name) for name in curves}
-        - {_strategy_base_key(sp500_name)} if sp500_name else
-        {_strategy_base_key(name) for name in curves}
+    curve_names = sorted(
+        set(curves) - ({sp500_name} if sp500_name else set())
     )
     pair_colors = {
-        family_name: color_list[index % len(color_list)] if color_list else "C0"
-        for index, family_name in enumerate(family_names)
+        curve_name: color_list[index % len(color_list)] if color_list else "C0"
+        for index, curve_name in enumerate(curve_names)
     }
 
-    def _color_for_group(group_key: str) -> str:
-        return pair_colors[group_key]
+    def _color_for_curve(curve_name: str) -> str:
+        return pair_colors[curve_name]
 
     # Draw SP500 first so it stays in the background.
     if sp500_name in curves:
@@ -875,8 +873,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
         vals = curves[name]
         if name not in (sma20_name, sp500_name):
             display_name = _display_strategy_name(name)
-            group_key = _strategy_base_key(name)
-            color = "darkgrey" if _is_sp500_benchmark(name) else _color_for_group(group_key)
+            color = "darkgrey" if _is_sp500_benchmark(name) else _color_for_curve(name)
             x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
             line = plt.plot(
                 x_values,
@@ -902,7 +899,7 @@ def plot_capital_curves(curves, filename, num_bars=None, binning="1m", start_dat
             linewidth=2,
             alpha=0.7,
             zorder=3,
-            color=_color_for_group(_strategy_base_key(sma20_name)),
+            color=_color_for_curve(sma20_name),
         )
         line_colors[sma20_name] = line[0].get_color()
     
@@ -1070,14 +1067,12 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
         sma20_name = "SMA20Penguin"
         line_colors = {}
         color_list = plt.rcParams["axes.prop_cycle"].by_key().get("color", [])
-        family_names = sorted(
-            {_strategy_base_key(name) for name in curves}
-            - {_strategy_base_key(sp500_name)} if sp500_name else
-            {_strategy_base_key(name) for name in curves}
+        curve_names = sorted(
+            set(curves) - ({sp500_name} if sp500_name else set())
         )
         family_colors = {
-            family_name: color_list[index % len(color_list)] if color_list else "C0"
-            for index, family_name in enumerate(family_names)
+            curve_name: color_list[index % len(color_list)] if color_list else "C0"
+            for index, curve_name in enumerate(curve_names)
         }
 
         # Draw SP500 first so it stays in the background.
@@ -1100,7 +1095,6 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
             vals = curves[name]
             if name not in (sma20_name, sp500_name):
                 display_name = _display_strategy_name(name)
-                base_name = _strategy_base_key(name)
                 x_values, plot_vals = _aligned_curve(bar_timestamps, vals, name)
                 line = ax.plot(
                     x_values,
@@ -1109,7 +1103,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                     linewidth=2,
                     alpha=0.7,
                     zorder=2,
-                    color=family_colors[base_name],
+                    color=family_colors[name],
                     linestyle=_strategy_line_style(name),
                 )
                 line_colors[name] = line[0].get_color()
@@ -1126,7 +1120,7 @@ def create_final_report_pdf(curves, portfolios, filename, latest_prices=None, nu
                 linewidth=2,
                 alpha=0.7,
                 zorder=3,
-                color=family_colors[_strategy_base_key(sma20_name)],
+                color=family_colors[sma20_name],
             )
             line_colors[sma20_name] = line[0].get_color()
         
