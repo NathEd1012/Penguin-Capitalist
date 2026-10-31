@@ -4,7 +4,7 @@ from typing import List
 
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
-from indicators.market_context import relative_strength, relative_volume
+from indicators.market_context import relative_performance, relative_volume
 
 
 # Manual tuning block:
@@ -17,8 +17,8 @@ MAX_CASH_FRACTION = 0.1406
 STOP_LOSS_PCT = 0.0732
 TAKE_PROFIT_PCT = 0.143
 COOLDOWN_BARS = 2
-RELATIVE_STRENGTH_PERIOD = 17
-RELATIVE_STRENGTH_THRESHOLD = 0.0683
+RELATIVE_PERFORMANCE_PERIOD = 17
+RELATIVE_PERFORMANCE_THRESHOLD = 0.0683
 RVOL_PERIOD = 22
 RVOL_THRESHOLD = 1.0719
 
@@ -33,8 +33,8 @@ class ManualTuneAdvSELL_TP3Params:
 	stop_loss_pct: float = STOP_LOSS_PCT
 	take_profit_pct: float = TAKE_PROFIT_PCT
 	cooldown_bars: int = COOLDOWN_BARS
-	relative_strength_period: int = RELATIVE_STRENGTH_PERIOD
-	relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
+	relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD
+	relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD
 	rvol_period: int = RVOL_PERIOD
 	rvol_threshold: float = RVOL_THRESHOLD
 
@@ -54,8 +54,8 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
 		cooldown_bars: int = COOLDOWN_BARS,
-		relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
-		relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+		relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD,
+		relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD,
 		rvol_period: int = RVOL_PERIOD,
 		rvol_threshold: float = RVOL_THRESHOLD,
 	):
@@ -69,14 +69,14 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
 			cooldown_bars=cooldown_bars,
-			relative_strength_period=relative_strength_period,
-			relative_strength_threshold=relative_strength_threshold,
+			relative_performance_period=relative_performance_period,
+			relative_performance_threshold=relative_performance_threshold,
 			rvol_period=rvol_period,
 			rvol_threshold=rvol_threshold,
 		)
 
 	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio, spy_prices: List[float] | None = None, volumes: List[float] | None = None) -> tuple[str, int]:
-		min_required = max(60, self.params.bb_period, self.params.kaufman_efficiency_ratio_period, self.params.relative_strength_period, self.params.rvol_period) + 2
+		min_required = max(60, self.params.bb_period, self.params.kaufman_efficiency_ratio_period, self.params.relative_performance_period, self.params.rvol_period) + 2
 		if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
 			return "HOLD", 0
 
@@ -85,7 +85,7 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 		kaufman_efficiency_ratio_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
 		kaufman_efficiency_ratio_slope = kaufman_efficiency_ratio_value - kaufman_efficiency_ratio_previous
 		trend_score = self._trend_quality(mid_prices)
-		relative_strength_value = relative_strength(mid_prices, spy_prices, self.params.relative_strength_period)
+		relative_performance_value = relative_performance(mid_prices, spy_prices, self.params.relative_performance_period)
 		rvol = relative_volume(volumes, self.params.rvol_period)
 		cash = self._get_cash(portfolio)
 		shares_owned = self._get_position(portfolio, symbol)
@@ -98,11 +98,11 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 			upper_band_take_profit = current_price >= upper_band and avg_entry is not None and current_price >= avg_entry * (1 + self.params.take_profit_pct)
 			kaufman_efficiency_ratio_trend_reversal = kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
 			is_profitable = avg_entry is not None and current_price > avg_entry
-			relative_strength_exit_trigger = is_profitable and relative_strength_value < self.params.relative_strength_threshold
+			relative_performance_exit_trigger = is_profitable and relative_performance_value < self.params.relative_performance_threshold
 			rvol_exit_trigger = is_profitable and rvol > self.params.rvol_threshold
 			if loss_trigger or (upper_band_take_profit and kaufman_efficiency_ratio_trend_reversal) or (
 				upper_band_take_profit and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
-			) or relative_strength_exit_trigger or rvol_exit_trigger:
+			) or relative_performance_exit_trigger or rvol_exit_trigger:
 				return "SELL", shares_owned
 		else:
 			# BUY part

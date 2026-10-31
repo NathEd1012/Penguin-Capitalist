@@ -1,6 +1,6 @@
 """Indicators module for technical analysis."""
 
-from .market_context import relative_strength, relative_volume
+from .market_context import relative_performance, relative_volume
 from .multitimeframe_sr import (
 	DEFAULT_TIMEFRAMES,
 	compute_range_sr_lines,
@@ -23,6 +23,6 @@ __all__ = [
 	"record_reaction_snapshot",
 	"update_range_sr_cache",
 	"update_reaction_level_cache",
-	"relative_strength",
+	"relative_performance",
 	"relative_volume",
 ]

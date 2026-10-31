@@ -418,7 +418,7 @@ def test_batch_decisions_block_and_resume_at_exactly_half_coverage():
     assert p.coverage_blocked_decisions == 1
 
 
-def test_relative_strength_requires_benchmark_window_coverage_too():
+def test_relative_performance_requires_benchmark_window_coverage_too():
     from types import SimpleNamespace
     from penguins.base_penguin import BasePenguin
     calls = []
@@ -426,7 +426,7 @@ def test_relative_strength_requires_benchmark_window_coverage_too():
         LOOKBACK_BARS = 4
         def __init__(self):
             super().__init__('Relative')
-            self.params = SimpleNamespace(relative_strength_period=4)
+            self.params = SimpleNamespace(relative_performance_period=4)
         def decide(self, symbol, mid_prices, bid, ask, portfolio):
             calls.append(len(mid_prices))
             return 'HOLD', 0
@@ -569,9 +569,9 @@ def test_benchmark_history_is_aligned_with_actual_stock_observations():
     assert captures[0][1] == [200, 202, 203]
 
 
-def test_relative_strength_handles_missing_aligned_benchmark():
-    from penguins.decision_utils import relative_strength
-    assert relative_strength([100, 101, 102], [None, 200, 202], 2) == pytest.approx(.02)
+def test_relative_performance_handles_missing_aligned_benchmark():
+    from penguins.decision_utils import relative_performance
+    assert relative_performance([100, 101, 102], [None, 200, 202], 2) == pytest.approx(.02)
 
 
 def test_new_provider_requests_explicitly_use_raw_prices(tmp_path):

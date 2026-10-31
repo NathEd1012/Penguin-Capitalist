@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 
-def relative_strength(
+def relative_performance(
     prices: List[float],
     spy_prices: Optional[List[float]] = None,
     period: int = 20,

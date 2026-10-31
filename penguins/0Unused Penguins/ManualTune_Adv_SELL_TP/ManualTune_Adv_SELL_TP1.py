@@ -4,7 +4,7 @@ from typing import List
 
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
-from indicators.market_context import relative_strength, relative_volume
+from indicators.market_context import relative_performance, relative_volume
 
 
 # Manual tuning block:
@@ -18,8 +18,8 @@ MAX_CASH_FRACTION = 0.1657 #0.05
 STOP_LOSS_PCT = 0.0106 #0.04
 TAKE_PROFIT_PCT = 0.165 #0.08
 COOLDOWN_BARS = 22 #10
-RELATIVE_STRENGTH_PERIOD = 34 #20
-RELATIVE_STRENGTH_THRESHOLD = -0.3195 #0.0
+RELATIVE_PERFORMANCE_PERIOD = 34 #20
+RELATIVE_PERFORMANCE_THRESHOLD = -0.3195 #0.0
 RVOL_PERIOD = 16 #20
 RVOL_THRESHOLD = 1.2536 #2.0
 
@@ -39,8 +39,8 @@ class ManualTuneAdvSELL_TP1Params:
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
     cooldown_bars: int = COOLDOWN_BARS
-    relative_strength_period: int = RELATIVE_STRENGTH_PERIOD
-    relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
+    relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD
+    relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD
     rvol_period: int = RVOL_PERIOD
     rvol_threshold: float = RVOL_THRESHOLD
 
@@ -61,8 +61,8 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
         cooldown_bars: int = COOLDOWN_BARS,
-        relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
-        relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+        relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD,
+        relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD,
         rvol_period: int = RVOL_PERIOD,
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
@@ -77,8 +77,8 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,
-            relative_strength_period=relative_strength_period,
-            relative_strength_threshold=relative_strength_threshold,
+            relative_performance_period=relative_performance_period,
+            relative_performance_threshold=relative_performance_threshold,
             rvol_period=rvol_period,
             rvol_threshold=rvol_threshold,
         )
@@ -97,7 +97,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
             60,
             self.params.rsi_period,
             self.params.kaufman_efficiency_ratio_period,
-            self.params.relative_strength_period,
+            self.params.relative_performance_period,
             self.params.rvol_period,
         ) + 2
         if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
@@ -106,10 +106,10 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
         rsi = self._rsi(mid_prices, self.params.rsi_period)
         kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
         trend_score = self._trend_quality(mid_prices)
-        relative_strength_value = relative_strength(
+        relative_performance_value = relative_performance(
             mid_prices,
             spy_prices,
-            self.params.relative_strength_period,
+            self.params.relative_performance_period,
         )
         rvol = relative_volume(volumes, self.params.rvol_period)
 
@@ -133,9 +133,9 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
                 and trend_score < 0.3
             )
             is_profitable = avg_entry is not None and current_price > avg_entry
-            relative_strength_exit_trigger = (
+            relative_performance_exit_trigger = (
                 is_profitable
-                and relative_strength_value < self.params.relative_strength_threshold
+                and relative_performance_value < self.params.relative_performance_threshold
             )
             rvol_exit_trigger = (
                 is_profitable
@@ -151,7 +151,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
                 loss_trigger
                 or profit_reversal_trigger
                 or overbought_breakdown_trigger
-                or relative_strength_exit_trigger
+                or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
                 return "SELL", shares_owned
@@ -264,8 +264,8 @@ class ManualTuneAdvSELL_TP1_Manual(ManualTuneAdvSELL_TP1):
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
         cooldown_bars: int = COOLDOWN_BARS,
-        relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
-        relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+        relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD,
+        relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD,
         rvol_period: int = RVOL_PERIOD,
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
@@ -280,8 +280,8 @@ class ManualTuneAdvSELL_TP1_Manual(ManualTuneAdvSELL_TP1):
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
             cooldown_bars=cooldown_bars,
-            relative_strength_period=relative_strength_period,
-            relative_strength_threshold=relative_strength_threshold,
+            relative_performance_period=relative_performance_period,
+            relative_performance_threshold=relative_performance_threshold,
             rvol_period=rvol_period,
             rvol_threshold=rvol_threshold,
         )

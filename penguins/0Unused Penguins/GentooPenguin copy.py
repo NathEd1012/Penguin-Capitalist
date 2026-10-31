@@ -3,7 +3,7 @@ import math
 from typing import List
 
 from backtest.portfolio import Portfolio
-from indicators.market_context import relative_strength, relative_volume
+from indicators.market_context import relative_performance, relative_volume
 from penguins.base_penguin import BasePenguin
 
 
@@ -14,8 +14,8 @@ KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
-RELATIVE_STRENGTH_PERIOD = 20
-RELATIVE_STRENGTH_THRESHOLD = 0.0
+RELATIVE_PERFORMANCE_PERIOD = 20
+RELATIVE_PERFORMANCE_THRESHOLD = 0.0
 RVOL_PERIOD = 20
 RVOL_THRESHOLD = 2.0
 
@@ -29,8 +29,8 @@ class GentooPenguinParams:
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
-    relative_strength_period: int = RELATIVE_STRENGTH_PERIOD
-    relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD
+    relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD
+    relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD
     rvol_period: int = RVOL_PERIOD
     rvol_threshold: float = RVOL_THRESHOLD
 
@@ -49,8 +49,8 @@ class GentooPenguin(BasePenguin):
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
-        relative_strength_period: int = RELATIVE_STRENGTH_PERIOD,
-        relative_strength_threshold: float = RELATIVE_STRENGTH_THRESHOLD,
+        relative_performance_period: int = RELATIVE_PERFORMANCE_PERIOD,
+        relative_performance_threshold: float = RELATIVE_PERFORMANCE_THRESHOLD,
         rvol_period: int = RVOL_PERIOD,
         rvol_threshold: float = RVOL_THRESHOLD,
     ):
@@ -63,8 +63,8 @@ class GentooPenguin(BasePenguin):
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
-            relative_strength_period=relative_strength_period,
-            relative_strength_threshold=relative_strength_threshold,
+            relative_performance_period=relative_performance_period,
+            relative_performance_threshold=relative_performance_threshold,
             rvol_period=rvol_period,
             rvol_threshold=rvol_threshold,
         )
@@ -83,7 +83,7 @@ class GentooPenguin(BasePenguin):
             60,
             self.params.bb_period,
             self.params.kaufman_efficiency_ratio_period,
-            self.params.relative_strength_period,
+            self.params.relative_performance_period,
             self.params.rvol_period,
         ) + 2
         if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
@@ -97,8 +97,8 @@ class GentooPenguin(BasePenguin):
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = self._trend_quality(mid_prices[:-2])
-        relative_strength_value = relative_strength(
-            mid_prices, spy_prices, self.params.relative_strength_period
+        relative_performance_value = relative_performance(
+            mid_prices, spy_prices, self.params.relative_performance_period
         )
         rvol = relative_volume(volumes, self.params.rvol_period)
 
@@ -120,8 +120,8 @@ class GentooPenguin(BasePenguin):
                 (kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold)
                 or kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
             )
-            relative_strength_exit_trigger = (
-                relative_strength_value < self.params.relative_strength_threshold
+            relative_performance_exit_trigger = (
+                relative_performance_value < self.params.relative_performance_threshold
             )
             negative_trend = trend_score < 0.15
             falling_trend = (
@@ -135,7 +135,7 @@ class GentooPenguin(BasePenguin):
             if (
                 loss_trigger
                 or kaufman_efficiency_ratio_exit_trigger
-                or relative_strength_exit_trigger
+                or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
                 return "SELL", shares_owned

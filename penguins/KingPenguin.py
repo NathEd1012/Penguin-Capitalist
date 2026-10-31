@@ -7,7 +7,7 @@ from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
     kaufman_efficiency_ratio,
     bollinger_bands,
-    relative_strength,
+    relative_performance,
     relative_volume,
     rsi,
     trend_quality,
@@ -31,8 +31,8 @@ class KingPenguinParams:
     stop_loss_pct: float
     take_profit_pct: float
     cooldown_bars: int
-    relative_strength_period: int
-    relative_strength_threshold: float
+    relative_performance_period: int
+    relative_performance_threshold: float
     rvol_period: int
     rvol_threshold: float
     sr_low_threshhold: float
@@ -68,7 +68,7 @@ class KingPenguin(BasePenguin):
             self.params.rsi_period,
             self.params.bb_period,
             self.params.kaufman_efficiency_ratio_period,
-            self.params.relative_strength_period,
+            self.params.relative_performance_period,
             self.params.rvol_period,
             self.params.sr_period,
         ) + 2
@@ -83,8 +83,8 @@ class KingPenguin(BasePenguin):
         trend_score = trend_quality(mid_prices)
         previous_trend_score = trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = trend_quality(mid_prices[:-2])
-        relative_strength_value = relative_strength(
-            mid_prices, spy_prices, self.params.relative_strength_period
+        relative_performance_value = relative_performance(
+            mid_prices, spy_prices, self.params.relative_performance_period
         )
         rvol = relative_volume(volumes, self.params.rvol_period)
 
@@ -122,9 +122,9 @@ class KingPenguin(BasePenguin):
                 (profit_threshold_reached or rsi_overbought or upper_band_reached)
                 and (weak_trend or weak_kaufman_efficiency_ratio)
             )
-            relative_strength_exit_trigger = (
+            relative_performance_exit_trigger = (
                 avg_entry is not None
-                and relative_strength_value < self.params.relative_strength_threshold
+                and relative_performance_value < self.params.relative_performance_threshold
             )
             negative_trend = trend_score < self.params.trend_negative_threshold
             falling_trend = (
@@ -139,7 +139,7 @@ class KingPenguin(BasePenguin):
             if (
                 loss_trigger
                 or take_profit_trigger
-                or relative_strength_exit_trigger
+                or relative_performance_exit_trigger
                 or rvol_exit_trigger
                 or sr_sell_signal
             ):

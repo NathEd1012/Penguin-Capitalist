@@ -18,6 +18,8 @@ def rsi(prices: List[float], period: int) -> float:
         elif delta < 0:
             loss_sum -= delta
     if loss_sum == 0:
+        if gain_sum == 0:
+            return 50.0
         return 100.0
     return 100.0 - (100.0 / (1.0 + gain_sum / loss_sum))
 
@@ -41,6 +43,10 @@ def trend_quality(prices: List[float]) -> float:
 def bollinger_bands(
     prices: List[float], period: int, num_std: float
 ) -> tuple[float, float, float]:
+    if period <= 0:
+        raise ValueError("Period must be positive")
+    if len(prices) < period:
+        raise ValueError("Not enough prices for Bollinger Bands")
     recent = prices[-period:]
     middle = sum(recent) / period
     variance = sum((price - middle) ** 2 for price in recent) / period
@@ -66,7 +72,7 @@ def kaufman_efficiency_ratio(prices: List[float], period: int) -> float:
     return 100.0 * abs(total_upward_change - total_downward_change) / total_price_movement
 
 
-def relative_strength(
+def relative_performance(
     prices: List[float],
     spy_prices: Optional[List[float]] = None,
     period: int = 20,
@@ -87,17 +93,23 @@ def relative_strength(
     return stock_return - (spy_current / spy_past - 1.0)
 
 
-def relative_volume(volumes: Optional[List[float]] = None, period: int = 20) -> float:
+def relative_volume(volumes: Optional[List[float]] = None,
+                    period: int = 20) -> float:
     if not volumes or period <= 0 or len(volumes) <= period:
         return 0.0
+
     current_volume = volumes[-1]
     if current_volume <= 0:
         return 0.0
-    recent_volumes = volumes[-period - 1 :]
-    average_volume = sum(recent_volumes) / len(recent_volumes)
+
+    previous_volumes = volumes[-period - 1:-1]
+    average_volume = sum(previous_volumes) / period
+
     if average_volume <= 0:
         return 0.0
+
     return current_volume / average_volume
+
 
 
 def call_penguin_decide(

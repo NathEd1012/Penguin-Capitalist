@@ -139,11 +139,11 @@ def test_mtch_reorganization_is_detected_without_price_multiplier():
     assert get_price_adjustment_events("MTCH") == []
 
 
-def test_adv_sell_tp1_uses_relative_strength_and_rvol_exit_signals():
+def test_adv_sell_tp1_uses_relative_performance_and_rvol_exit_signals():
     penguin = Adv_SELL_TP1(
         name="test",
-        relative_strength_period=2,
-        relative_strength_threshold=0.0,
+        relative_performance_period=2,
+        relative_performance_threshold=0.0,
         rvol_period=2,
         rvol_threshold=1.5,
     )

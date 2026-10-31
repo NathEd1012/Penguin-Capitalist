@@ -7,7 +7,7 @@ from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
     kaufman_efficiency_ratio,
     rsi,
-    relative_strength,
+    relative_performance,
     relative_volume,
 )
 
@@ -20,8 +20,8 @@ class GentooPenguinParams:
     max_cash_fraction: float
     stop_loss_pct: float
     take_profit_pct: float
-    relative_strength_period: int
-    relative_strength_threshold: float
+    relative_performance_period: int
+    relative_performance_threshold: float
     rvol_period: int
     rvol_threshold: float
     kaufman_efficiency_ratio_period: int
@@ -52,7 +52,7 @@ class GentooPenguin(BasePenguin):
         min_required = max(
             60,
             self.params.rsi_period,
-            self.params.relative_strength_period,
+            self.params.relative_performance_period,
             self.params.rvol_period,
             self.params.kaufman_efficiency_ratio_period,
         ) + 2
@@ -63,8 +63,8 @@ class GentooPenguin(BasePenguin):
         kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
         previous_kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
         two_bars_ago_kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices[:-2], self.params.kaufman_efficiency_ratio_period)
-        relative_strength_value = relative_strength(
-            mid_prices, spy_prices, self.params.relative_strength_period
+        relative_performance_value = relative_performance(
+            mid_prices, spy_prices, self.params.relative_performance_period
         )
         rvol = relative_volume(volumes, self.params.rvol_period)
 
@@ -96,10 +96,10 @@ class GentooPenguin(BasePenguin):
                 (weak_kaufman_efficiency_ratio)
             )
 
-            #rel Strength
-            relative_strength_exit_trigger = (
+            # Relative performance
+            relative_performance_exit_trigger = (
                 avg_entry is not None
-                and relative_strength_value < self.params.relative_strength_threshold
+                and relative_performance_value < self.params.relative_performance_threshold
             )
 
             #Rel Volume            
@@ -116,7 +116,7 @@ class GentooPenguin(BasePenguin):
             if (
                 loss_trigger
                 or take_profit_trigger
-                or relative_strength_exit_trigger
+                or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
                 return "SELL", shares_owned

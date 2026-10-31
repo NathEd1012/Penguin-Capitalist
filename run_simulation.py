@@ -1245,8 +1245,8 @@ def run_backtest(
     market_symbols = list(data)
     coverage_windows = {name: indicator_windows(penguin) for name, penguin in penguins.items()}
     benchmark_coverage_windows = {
-        name: (int(penguin.params.relative_strength_period),)
-        if hasattr(getattr(penguin, 'params', None), 'relative_strength_period') else ()
+        name: (int(penguin.params.relative_performance_period),)
+        if hasattr(getattr(penguin, 'params', None), 'relative_performance_period') else ()
         for name, penguin in penguins.items()
     }
     maximum_coverage_window = max(

@@ -91,8 +91,8 @@ NARROW_PARAMETER_RANGES = (
     ("stop_loss_pct", "float", 0.02, 0.10),
     ("take_profit_pct", "float", 0.03, 0.10),
     ("cooldown_bars", "int", 0, 100),
-    ("relative_strength_period", "int", 30, 100),
-    ("relative_strength_threshold", "float", -1.0, 1.0),
+    ("relative_performance_period", "int", 30, 100),
+    ("relative_performance_threshold", "float", -1.0, 1.0),
     ("rvol_period", "int", 10, 60),
     ("rvol_threshold", "float", 1.5, 2.0),
     ("trend_reversal_threshold", "float", 0.0, 1.0),
@@ -119,8 +119,8 @@ BROAD_PARAMETER_RANGES = (
     ("stop_loss_pct", "float", 0.01, 0.20),
     ("take_profit_pct", "float", 0.005, 0.30),
     ("cooldown_bars", "int", 0, 100),
-    ("relative_strength_period", "int", 10, 360),
-    ("relative_strength_threshold", "float", -5.0, 5.0),
+    ("relative_performance_period", "int", 10, 360),
+    ("relative_performance_threshold", "float", -5.0, 5.0),
     ("rvol_period", "int", 10, 120),
     ("rvol_threshold", "float", 0.5, 5.0),
     ("trend_reversal_threshold", "float", 0.0, 1.0),
@@ -153,13 +153,13 @@ STRATEGY_PARAMETER_NAMES = {
         "rsi_period", "buy_rsi", "sell_rsi",
         "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold", "kaufman_efficiency_ratio_entry_threshold",
         "kaufman_efficiency_ratio_negative_threshold", "max_cash_fraction", "stop_loss_pct",
-        "take_profit_pct", "relative_strength_period",
-        "relative_strength_threshold", "rvol_period", "rvol_threshold",
+        "take_profit_pct", "relative_performance_period",
+        "relative_performance_threshold", "rvol_period", "rvol_threshold",
     ),
     "RockhopperPenguin": (
         "bb_period", "bb_stddev", "upper_band_buffer",
         "max_cash_fraction", "stop_loss_pct", "take_profit_pct",
-        "relative_strength_period", "relative_strength_threshold",
+        "relative_performance_period", "relative_performance_threshold",
         "rvol_period", "rvol_threshold", "trend_reversal_threshold",
         "trend_negative_threshold", "trend_entry_threshold",
     ),
@@ -168,16 +168,16 @@ STRATEGY_PARAMETER_NAMES = {
         "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "trend_reversal_threshold", "trend_negative_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
-        "take_profit_pct", "cooldown_bars", "relative_strength_period",
-        "relative_strength_threshold", "rvol_period", "rvol_threshold",
+        "take_profit_pct", "cooldown_bars", "relative_performance_period",
+        "relative_performance_threshold", "rvol_period", "rvol_threshold",
     ),
     "KingPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
         "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "trend_reversal_threshold", "trend_negative_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
-        "take_profit_pct", "cooldown_bars", "relative_strength_period",
-        "relative_strength_threshold", "rvol_period", "rvol_threshold",
+        "take_profit_pct", "cooldown_bars", "relative_performance_period",
+        "relative_performance_threshold", "rvol_period", "rvol_threshold",
         "sr_low_threshhold", "sr_high_threshhold", "sr_period",
     ),
 }
@@ -200,8 +200,8 @@ _LEGACY_PARAMETER_NAMES = {
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
         "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
         "max_cash_fraction", "stop_loss_pct", "take_profit_pct",
-        "cooldown_bars", "relative_strength_period",
-        "relative_strength_threshold", "rvol_period", "rvol_threshold",
+        "cooldown_bars", "relative_performance_period",
+        "relative_performance_threshold", "rvol_period", "rvol_threshold",
     ),
 }
 
@@ -278,7 +278,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
     if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
         names = (
             STRATEGY_PARAMETER_NAMES["EmperorPenguin"]
-            + ("relative_strength_period", "relative_strength_threshold",
+            + ("relative_performance_period", "relative_performance_threshold",
                "rvol_period", "rvol_threshold")
         )
         return _parameters(names)
@@ -294,7 +294,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
     )):
         return _parameters(
             _LEGACY_PARAMETER_NAMES["rsi_kaufman_efficiency_ratio"]
-            + ("relative_strength_period", "relative_strength_threshold",
+            + ("relative_performance_period", "relative_performance_threshold",
                "rvol_period", "rvol_threshold")
         )
 
@@ -305,7 +305,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
     )):
         return _parameters(
             _LEGACY_PARAMETER_NAMES["bollinger_kaufman_efficiency_ratio"]
-            + ("relative_strength_period", "relative_strength_threshold",
+            + ("relative_performance_period", "relative_performance_threshold",
                "rvol_period", "rvol_threshold")
         )
 
@@ -318,7 +318,7 @@ def strategy_parameter_space_by_name(strategy_name: str):
     )):
         return _parameters(
             _LEGACY_PARAMETER_NAMES["rsi_risk"]
-            + ("relative_strength_period", "relative_strength_threshold",
+            + ("relative_performance_period", "relative_performance_threshold",
                "rvol_period", "rvol_threshold")
         )
 
