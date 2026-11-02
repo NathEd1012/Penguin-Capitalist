@@ -72,6 +72,7 @@ from config import (
     TRAINING_START_DATE,
     TRAINING_STOP_DATE,
     TRAINING_TRANSACTION_COST,
+    TRAINING_MIN_BUY_TRADES,
     VALIDATION_START_DATE,
     VALIDATION_STOP_DATE,
     VALIDATION_CANDIDATES,
@@ -430,6 +431,7 @@ def _format_runtime_configuration_banner(
         f"Training Steps:        {training_iterations}",
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
+        f"Minimum Buy Trades:   {TRAINING_MIN_BUY_TRADES} (linear penalty up to 1.5x capital below this)",
         f"Maximum Period:       {max_period}",
         f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
@@ -854,8 +856,11 @@ def run_backtest(
                     )
 
             if validation_specs:
-                from scripts.train_trainable_penguins import _score_training_candidate
-                from scripts.train_trainable_penguins import _training_profit_amount
+                from scripts.training_objective import (
+                    activity_penalty,
+                    score_training_candidate as _score_training_candidate,
+                    training_profit_amount as _training_profit_amount,
+                )
                 from scripts.plotting import create_training_pareto_pdf
 
                 print(
@@ -890,6 +895,12 @@ def run_backtest(
                         transaction_cost,
                         TRAINING_RELATIVE_TO,
                         initial_capital,
+                        minimum_buys=TRAINING_MIN_BUY_TRADES,
+                    )
+                    low_activity_penalty = activity_penalty(
+                        int(metrics.get("buy_trades", metrics.get("total_trades", 0))),
+                        initial_capital,
+                        TRAINING_MIN_BUY_TRADES,
                     )
                     ranked_by_strategy[strategy_name].append(
                         {
@@ -897,6 +908,7 @@ def run_backtest(
                             "trial": int(candidate.get("trial", 0)),
                             "training_score": candidate.get("score"),
                             "validation_score": list(score),
+                            "activity_penalty": low_activity_penalty,
                             "validation_metrics": metrics,
                             "penguin_name": penguin_name,
                         }
@@ -912,8 +924,8 @@ def run_backtest(
                                 metrics,
                                 benchmark_metrics,
                                 TRAINING_RELATIVE_TO,
-                                initial_capital,
                             ),
+                            "activity_penalty": low_activity_penalty,
                             "score": list(score),
                         }
                     )
@@ -969,6 +981,8 @@ def run_backtest(
                         title="Validation Pareto Front",
                         relative_to=TRAINING_RELATIVE_TO,
                         transaction_cost=transaction_cost,
+                        minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
+                        activity_penalty_capital=initial_capital,
                     )
 
                 if artifacts_dir is not None:
@@ -982,6 +996,8 @@ def run_backtest(
                                 "validation_stop": VALIDATION_STOP_DATE,
                                 "validation_candidates": VALIDATION_CANDIDATES,
                                 "parameters_executed": PARAMETERS_EXECUTED,
+                                "minimum_buy_trades": TRAINING_MIN_BUY_TRADES,
+                                "activity_penalty_max": activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES),
                                 "selection": validation_selection,
                             },
                             handle,

@@ -35,6 +35,7 @@ from config import (
     TRAINING_SUBSET_MONTHS,
     TRAINING_SUBSET_STOCKS,
     TRAINING_TRANSACTION_COST,
+    TRAINING_MIN_BUY_TRADES,
     T_PLUS_X,
     TRAINING_RANDOM_SEED,
     TRAINING_RESULTS_FILENAME,
@@ -59,6 +60,11 @@ from run_simulation import _memory_aware_worker_count, parse_datetime_string, ru
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
 from scripts.parameter_search import suggest_parameters
+from scripts.training_objective import (
+    activity_penalty,
+    score_training_candidate as _score_training_candidate,
+    training_profit_amount as _training_profit_amount,
+)
 
 
 _PARALLEL_TRAINING_CONTEXT = None
@@ -125,6 +131,7 @@ def _print_training_configuration(trainable_strategy_classes) -> None:
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    print(f"Minimum Buys:      {TRAINING_MIN_BUY_TRADES} (linear penalty up to 1.5x capital below this)")
     print(
         f"Maximum Period:    "
         f"{max_period_for_strategies(trainable_strategy_classes)}"
@@ -164,41 +171,6 @@ def _training_window_subset(sorted_timestamps: List[datetime], months: int, rng:
     start_timestamp = rng.choice(eligible_starts) if eligible_starts else sorted_timestamps[0]
     end_timestamp = start_timestamp + window_length
     return [timestamp for timestamp in sorted_timestamps if start_timestamp <= timestamp <= end_timestamp]
-
-
-def _training_profit_amount(
-    candidate_metrics: Dict,
-    benchmark_metrics: Dict,
-    relative_to: int | str,
-    initial_capital: float,
-) -> float:
-    candidate_profit = float(candidate_metrics.get("total_return", 0.0))
-    if int(candidate_metrics.get("total_trades", 0)) == 0:
-        return -float(initial_capital) + float(benchmark_metrics.get("total_return", 0.0))
-    if relative_to not in (0, "0", None, False):
-        return candidate_profit - float(benchmark_metrics.get("total_return", 0.0))
-    return candidate_profit
-
-
-def _score_training_candidate(
-    candidate_metrics: Dict,
-    benchmark_metrics: Dict,
-    transaction_cost: float,
-    relative_to: int | str,
-    initial_capital: float,
-) -> tuple[float, int, int]:
-    buy_trades = int(candidate_metrics.get("buy_trades", candidate_metrics.get("total_trades", 0)))
-    relative_profit_amount = _training_profit_amount(
-        candidate_metrics,
-        benchmark_metrics,
-        relative_to,
-        initial_capital,
-    )
-    return (
-        relative_profit_amount - (buy_trades * transaction_cost),
-        -buy_trades,
-        -int(candidate_metrics.get("total_trades", 0)),
-    )
 
 
 def _format_trainable_params(params: Dict[str, int | float]) -> str:
@@ -382,6 +354,10 @@ def _train_trainable_penguins(
     log_lines.append(f"  Training Steps:    {TRAINING_ITERATIONS}")
     log_lines.append(f"  Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     log_lines.append(f"  Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
+    log_lines.append(f"  Minimum Buys:      {TRAINING_MIN_BUY_TRADES}")
+    log_lines.append(
+        f"  Activity penalty:  ${activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES):,.2f} times the missing-buy fraction"
+    )
     log_lines.append(f"  T_PLUS_X (bars):   {T_PLUS_X}")
     log_lines.append(f"  Training Seed:     {TRAINING_RANDOM_SEED}")
     log_lines.append("=" * 80)
@@ -402,8 +378,7 @@ def _train_trainable_penguins(
         initial_params = {}
         previous_trial_params = None
         completed_trials = []
-        qualifying_candidates = []
-        validation_candidate_pool = []
+        candidate_pool = []
         pareto_history[strategy_class.__name__] = []
 
         initial_params, initial_source = suggest_parameters(
@@ -494,7 +469,6 @@ def _train_trainable_penguins(
                 candidate_metrics,
                 benchmark_metrics,
                 TRAINING_RELATIVE_TO,
-                initial_capital,
             )
             score = _score_training_candidate(
                 candidate_metrics,
@@ -502,16 +476,18 @@ def _train_trainable_penguins(
                 TRAINING_TRANSACTION_COST,
                 TRAINING_RELATIVE_TO,
                 initial_capital,
+                minimum_buys=TRAINING_MIN_BUY_TRADES,
             )
             objective_value = _objective_from_score(score)
             final_value = float(candidate_metrics.get("final_value", 0.0))
             buy_trades = int(candidate_metrics.get("buy_trades", 0))
+            low_activity_penalty = activity_penalty(buy_trades, initial_capital, TRAINING_MIN_BUY_TRADES)
 
             del results
             del candidate
             _release_training_trial_memory()
 
-            if buy_trades > 0 and (best_score is None or score > best_score):
+            if best_score is None or score > best_score:
                 best_score = score
                 best_metrics = candidate_metrics
                 best_params = params
@@ -521,10 +497,9 @@ def _train_trainable_penguins(
                 "params": dict(params),
                 "metrics": candidate_metrics,
                 "score": list(score),
+                "activity_penalty": low_activity_penalty,
             }
-            validation_candidate_pool.append(candidate_record)
-            if buy_trades > 0:
-                qualifying_candidates.append(candidate_record)
+            candidate_pool.append(candidate_record)
 
             log_lines.append(
                 f"    Trial {trial_number:03d}: window={_format_training_timestamp(trial_window_start)}"
@@ -534,7 +509,7 @@ def _train_trainable_penguins(
             log_lines.append(f"      params={_format_trainable_params(params)}")
             log_lines.append(f"      change_vs_previous={param_changes}")
             log_lines.append(
-                f"      relative_profit=${relative_profit_amount:,.2f}, absolute_profit=${profit_amount:,.2f}, buys={buy_trades}, score={score}, objective={objective_value:,.2f}"
+                f"      relative_profit=${relative_profit_amount:,.2f}, absolute_profit=${profit_amount:,.2f}, buys={buy_trades}, activity_penalty=${low_activity_penalty:,.2f}, score={score}, objective={objective_value:,.2f}"
             )
             trial_iterator.set_postfix_str(
                 f"profit={relative_profit_amount:.2f}, buys={buy_trades}",
@@ -548,6 +523,7 @@ def _train_trainable_penguins(
                     "profit_amount": profit_amount,
                     "benchmark_profit_amount": benchmark_profit_amount,
                     "relative_profit_amount": relative_profit_amount,
+                    "activity_penalty": low_activity_penalty,
                     "relative_to": TRAINING_RELATIVE_TO,
                     "final_value": final_value,
                     "score": list(score),
@@ -569,6 +545,7 @@ def _train_trainable_penguins(
                     "profit_amount": profit_amount,
                     "benchmark_profit_amount": benchmark_profit_amount,
                     "relative_profit_amount": relative_profit_amount,
+                    "activity_penalty": low_activity_penalty,
                     "relative_to": TRAINING_RELATIVE_TO,
                     "final_value": final_value,
                     "objective_value": objective_value,
@@ -583,16 +560,11 @@ def _train_trainable_penguins(
             previous_trial_params = params
 
         ranked_candidates = sorted(
-            qualifying_candidates,
+            candidate_pool,
             key=lambda candidate: tuple(candidate["score"]),
             reverse=True,
         )
-        ranked_validation_candidates = sorted(
-            validation_candidate_pool,
-            key=lambda candidate: tuple(candidate["score"]),
-            reverse=True,
-        )
-        validation_candidates = ranked_validation_candidates[:VALIDATION_CANDIDATES]
+        validation_candidates = ranked_candidates[:VALIDATION_CANDIDATES]
         top_candidates = ranked_candidates[:PARAMETERS_EXECUTED]
         trained_parameters[str(strategy_class.__name__)] = {
             "initial_params": initial_params,
@@ -604,7 +576,7 @@ def _train_trainable_penguins(
         }
         if best_score is None:
             log_lines.append(
-                f"  Best {strategy_class.__name__}: no qualifying trial with buys, params={_format_trainable_params(best_params)}"
+                f"  Best {strategy_class.__name__}: no completed trial, params={_format_trainable_params(best_params)}"
             )
         else:
             log_lines.append(
@@ -789,6 +761,8 @@ def run_training_step(
                 "relative_to": TRAINING_RELATIVE_TO,
                 "benchmark_symbol": benchmark_symbol,
                 "training_transaction_cost": TRAINING_TRANSACTION_COST,
+                "minimum_buy_trades": TRAINING_MIN_BUY_TRADES,
+                "activity_penalty_max": activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES),
                 "t_plus_x": t_plus_x,
                 "trainable_strategies": trained_parameters,
             },
@@ -807,6 +781,8 @@ def run_training_step(
                 "relative_to": TRAINING_RELATIVE_TO,
                 "benchmark_symbol": benchmark_symbol,
                 "training_transaction_cost": TRAINING_TRANSACTION_COST,
+                "minimum_buy_trades": TRAINING_MIN_BUY_TRADES,
+                "activity_penalty_max": activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES),
                 "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
                 "trial_history": training_parameter_history,
             },
@@ -827,6 +803,7 @@ def run_training_step(
                     f"Relative to: {TRAINING_RELATIVE_TO}",
                     f"Benchmark symbol: {benchmark_symbol}",
                     f"Training transaction cost: {TRAINING_TRANSACTION_COST}",
+                    f"Minimum buy trades: {TRAINING_MIN_BUY_TRADES}",
                     f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
                     f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
                     "",
@@ -844,6 +821,8 @@ def run_training_step(
             training_pareto_path,
             relative_to=TRAINING_RELATIVE_TO,
             transaction_cost=TRAINING_TRANSACTION_COST,
+            minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
+            activity_penalty_capital=initial_capital,
         )
         filtered_pareto_path = Path(artifacts_dir).parent / FILTERED_PARETO_FILENAME
         create_training_pareto_pdf(
@@ -854,6 +833,8 @@ def run_training_step(
             title="Training Pareto Front",
             relative_to=TRAINING_RELATIVE_TO,
             transaction_cost=TRAINING_TRANSACTION_COST,
+            minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
+            activity_penalty_capital=initial_capital,
             exclude_zero_buy_trials=True,
         )
 

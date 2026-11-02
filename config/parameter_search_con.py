@@ -145,6 +145,15 @@ _ACTIVE_RANGES = (
     else _BROAD_RANGES
 )
 
+# Keep Rockhopper's broad Bollinger search flexible while trimming the widest bands.
+_STRATEGY_RANGE_OVERRIDES = {
+    "broad": {
+        "RockhopperPenguin": {
+            "bb_stddev": ("bb_stddev", "float", 0.5, 6.0),
+        },
+    },
+}
+
 
 # Parameter assignment by strategy. Names are resolved against the active
 # narrow or broad range list above.
@@ -206,8 +215,9 @@ _LEGACY_PARAMETER_NAMES = {
 }
 
 
-def _parameters(names):
-    return tuple(_ACTIVE_RANGES[name] for name in names)
+def _parameters(names, overrides=None):
+    ranges = {**_ACTIVE_RANGES, **(overrides or {})}
+    return tuple(ranges[name] for name in names)
 
 
 def _supported_parameters(strategy_class, parameter_space):
@@ -273,7 +283,8 @@ def max_period_for_strategies(strategy_classes) -> int:
 def strategy_parameter_space_by_name(strategy_name: str):
     """Return the active configured search space for a strategy name."""
     if strategy_name in STRATEGY_PARAMETER_NAMES:
-        return _parameters(STRATEGY_PARAMETER_NAMES[strategy_name])
+        overrides = _STRATEGY_RANGE_OVERRIDES.get(PARAMETER_SEARCH_RANGE_SET, {}).get(strategy_name)
+        return _parameters(STRATEGY_PARAMETER_NAMES[strategy_name], overrides)
 
     if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
         names = (

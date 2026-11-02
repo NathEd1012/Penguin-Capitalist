@@ -25,6 +25,11 @@ TRAINING_SUBSET_STOCKS = int(os.getenv("FIXED_SYMB", TRAINING_SUBSET_STOCKSx))
 TRAINING_TRANSACTION_COSTx = 2.0
 TRAINING_TRANSACTION_COST = float(os.getenv("FIXED_TRAIN_TC", TRAINING_TRANSACTION_COSTx))
 
+# Below this buy count, subtract 1.5 times starting capital times the missing-buy fraction.
+TRAINING_MIN_BUY_TRADES = int(os.getenv("TRAINING_MIN_BUY_TRADES", "20"))
+if TRAINING_MIN_BUY_TRADES < 1:
+    raise ValueError("TRAINING_MIN_BUY_TRADES must be positive")
+
 # Train on a different date window from the live execution window when requested.
 TRAINING_START_DATE = os.getenv("FIXED_TRAIN_START", DEFAULT_TRAINING_START_DATE)
 TRAINING_STOP_DATE = os.getenv("FIXED_TRAIN_STOP", DEFAULT_TRAINING_STOP_DATE)
@@ -61,6 +66,7 @@ __all__ = [
 	"TRAINING_ITERATIONS",
 	"TRAINING_SUBSET_MONTHS",
 	"TRAINING_SUBSET_STOCKS",
+	"TRAINING_MIN_BUY_TRADES",
 	"TRAINING_RELATIVE_TO",
 	"TRAINING_RANDOM_SEED",
     "TRAINING_START_DATE",

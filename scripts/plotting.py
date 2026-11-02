@@ -24,7 +24,8 @@ from matplotlib.colors import Normalize
 from datetime import datetime, timedelta
 import pytz
 import csv
-from config import INITIAL_CAPITAL, SAVE_CSV
+from config import INITIAL_CAPITAL, SAVE_CSV, TRAINING_MIN_BUY_TRADES
+from scripts.training_objective import activity_penalty
 
 
 def _display_strategy_name(name: str) -> str:
@@ -360,8 +361,10 @@ def create_training_pareto_pdf(
     relative_to: int | str = 0,
     transaction_cost: float = 0.0,
     exclude_zero_buy_trials: bool = False,
+    minimum_buy_trades: int = TRAINING_MIN_BUY_TRADES,
+    activity_penalty_capital: float = 0.0,
 ):
-    """Create a multi-page PDF with one buy-vs-profit scatter plot per strategy."""
+    """Plot trials meeting the buy minimum, retaining SP500 and full legend counts."""
     output_path = Path(output_pdf)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     use_relative_benchmark = relative_to not in (0, "0", None, False)
@@ -389,15 +392,18 @@ def create_training_pareto_pdf(
                 int(trial.get("buy_trades", trial.get("total_trades", 0))) == 0
                 for trial in completed_trials
             )
-            plotted_trials = (
-                [
-                    trial
-                    for trial in completed_trials
-                    if int(trial.get("buy_trades", trial.get("total_trades", 0))) > 0
-                ]
-                if exclude_zero_buy_trials
-                else completed_trials
+            low_buy_runs = sum(
+                0 <= int(trial.get("buy_trades", trial.get("total_trades", 0))) < minimum_buy_trades
+                for trial in completed_trials
             )
+            minimum_plotted_buys = (
+                0 if _is_sp500_benchmark(strategy_name)
+                else max(minimum_buy_trades, int(exclude_zero_buy_trials))
+            )
+            plotted_trials = [
+                trial for trial in completed_trials
+                if int(trial.get("buy_trades", trial.get("total_trades", 0))) >= minimum_plotted_buys
+            ]
             optimal_params = dict((trained_parameters.get(strategy_name) or {}).get("best_params") or {})
             trial_parameter_map = parameter_history_by_strategy.get(strategy_name, {})
             normalization_scales = _parameter_normalization_scales([optimal_params, *trial_parameter_map.values()])
@@ -490,22 +496,32 @@ def create_training_pareto_pdf(
                     bbox={"boxstyle": "round,pad=0.22", "fc": "white", "ec": "black", "alpha": 0.96},
                 )
             else:
-                message = "No non-zero-buy trials available" if exclude_zero_buy_trials else "No completed trials available"
+                message = (
+                    f"No trials with at least {minimum_plotted_buys} buys available"
+                    if minimum_plotted_buys > 0 else "No completed trials available"
+                )
                 ax.text(0.5, 0.5, message, ha="center", va="center", transform=ax.transAxes)
 
             ax.set_xlabel("Number of buys")
             ax.set_ylabel(profit_axis_label)
             ax.grid(True, alpha=0.25)
 
-            # Net score is zero when relative profit equals transaction_cost * number_of_buys.
+            # Draw the zero-score line only over the displayed buy-count range.
             if plotted_trials:
                 max_trades = max(x_values) if x_values else 0
             else:
                 max_trades = 0
-            x_line_max = max(max_trades, 1)
+            x_line_max = max(max_trades, minimum_buy_trades, minimum_plotted_buys, 1)
+            x_line = sorted({minimum_plotted_buys, max(minimum_plotted_buys, minimum_buy_trades), x_line_max})
+            y_line = [
+                float(transaction_cost) * buys
+                + (activity_penalty(buys, activity_penalty_capital, minimum_buy_trades)
+                   if minimum_buy_trades > 0 else 0.0)
+                for buys in x_line
+            ]
             ax.plot(
-                [0, x_line_max],
-                [0, float(transaction_cost) * x_line_max],
+                x_line,
+                y_line,
                 color="gray",
                 linestyle="--",
                 linewidth=0.8,
@@ -519,6 +535,13 @@ def create_training_pareto_pdf(
                 linestyle="None",
                 label=f"0-buy runs: {zero_buy_runs} / {len(completed_trials)}",
             )
+            if minimum_buy_trades > 0:
+                ax.plot(
+                    [],
+                    [],
+                    linestyle="None",
+                    label=f"<{minimum_buy_trades}-buy runs (incl. 0): {low_buy_runs} / {len(completed_trials)}",
+                )
 
             ax.axvline(0.0, color="gray", linestyle=":", linewidth=1, alpha=0.4)
             ax.set_title(f"{strategy_name} buy-count vs profit{plot_title_suffix}")

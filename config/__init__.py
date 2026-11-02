@@ -57,6 +57,7 @@ from config.training_step import (
     TRAINING_RELATIVE_TO,
     TRAINING_RANDOM_SEED,
     TRAINING_TRANSACTION_COST,
+    TRAINING_MIN_BUY_TRADES,
     TRAINING_RESULTS_FILENAME,
     TRAINING_LOG_FILENAME,
     TRAINING_PARAMETER_LOG_FILENAME,
@@ -98,6 +99,7 @@ __all__ = [
     "VALIDATION_PERIOD",
     "TEST_PERIOD",
     "TRAINING_TRANSACTION_COST", # Training penalty cost per buy (USD)
+    "TRAINING_MIN_BUY_TRADES", # Buy count required to avoid the activity penalty
     "START_DATE",           # Backtest start datetime
     "STOP_DATE",            # Backtest end datetime
     "TRAINING_START_DATE",
