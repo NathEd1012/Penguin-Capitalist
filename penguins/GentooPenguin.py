@@ -12,6 +12,10 @@ from penguins.decision_utils import (
 )
 
 
+
+
+
+
 @dataclass
 class GentooPenguinParams:
     rsi_period: int
@@ -28,7 +32,6 @@ class GentooPenguinParams:
     kaufman_efficiency_ratio_threshold: float
     kaufman_efficiency_ratio_entry_threshold: float
     kaufman_efficiency_ratio_negative_threshold: float
-    cooldown_bars: int = 0
 
 
 class GentooPenguin(BasePenguin):
@@ -38,8 +41,6 @@ class GentooPenguin(BasePenguin):
         **parameters: int | float,
     ):
         super().__init__(name)
-        self._last_trade_bar: dict[str, int] = {}
-        self._decision_bar: dict[str, int] = {}
         self.params = GentooPenguinParams(**parameters)
 
     def decide(
@@ -75,8 +76,6 @@ class GentooPenguin(BasePenguin):
         shares_owned = int(portfolio.get_position(symbol))
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
-        current_bar = self._decision_bar.get(symbol, 0) + 1
-        self._decision_bar[symbol] = current_bar
 
         # ================================ SELL ================================
         if shares_owned > 0:
@@ -124,18 +123,9 @@ class GentooPenguin(BasePenguin):
                 or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
-                self._last_trade_bar[symbol] = current_bar
                 return "SELL", shares_owned
 
         # ============================== BUY AMOUNT =============================
-        last_trade_bar = self._last_trade_bar.get(symbol)
-        if (
-            self.params.cooldown_bars > 0
-            and last_trade_bar is not None
-            and current_bar - last_trade_bar < self.params.cooldown_bars
-        ):
-            return "HOLD", 0
-
         rsi_buy_signal = rsi_value <= self.params.buy_rsi
         if (
             shares_owned == 0
@@ -148,7 +138,6 @@ class GentooPenguin(BasePenguin):
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:
-                self._last_trade_bar[symbol] = current_bar
                 return "BUY", qty
 
         return "HOLD", 0

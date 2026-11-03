@@ -105,13 +105,13 @@ NARROW_PARAMETER_RANGES = (
 )
 
 BROAD_PARAMETER_RANGES = (
-    ("rsi_period", "int", 2, 50),
+    ("rsi_period", "int", 5, 50),
     ("buy_rsi", "float", 5.0, 50.0),
     ("sell_rsi", "float", 50.0, 100.0),
-    ("bb_period", "int", 2, 100),
+    ("bb_period", "int", 10, 100),
     ("bb_stddev", "float", 0.5, 8.0),
     ("upper_band_buffer", "float", 0.0, 1.0),
-    ("kaufman_efficiency_ratio_period", "int", 2, 50),
+    ("kaufman_efficiency_ratio_period", "int", 5, 50),
     ("kaufman_efficiency_ratio_threshold", "float", 10.0, 70.0),
     ("kaufman_efficiency_ratio_entry_threshold", "float", 10.0, 70.0),
     ("kaufman_efficiency_ratio_negative_threshold", "float", 10.0, 70.0),
@@ -162,12 +162,12 @@ STRATEGY_PARAMETER_NAMES = {
         "rsi_period", "buy_rsi", "sell_rsi",
         "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold", "kaufman_efficiency_ratio_entry_threshold",
         "kaufman_efficiency_ratio_negative_threshold", "max_cash_fraction", "stop_loss_pct",
-        "take_profit_pct", "cooldown_bars", "relative_performance_period",
+        "take_profit_pct", "relative_performance_period",
         "relative_performance_threshold", "rvol_period", "rvol_threshold",
     ),
     "RockhopperPenguin": (
         "bb_period", "bb_stddev", "upper_band_buffer",
-        "max_cash_fraction", "stop_loss_pct", "take_profit_pct", "cooldown_bars",
+        "max_cash_fraction", "stop_loss_pct", "take_profit_pct",
         "relative_performance_period", "relative_performance_threshold",
         "rvol_period", "rvol_threshold", "trend_reversal_threshold",
         "trend_negative_threshold", "trend_entry_threshold",
