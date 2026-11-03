@@ -12,10 +12,6 @@ from penguins.decision_utils import (
 )
 
 
-
-
-
-
 @dataclass
 class RockhopperPenguinParams:
     bb_period: int
@@ -31,6 +27,7 @@ class RockhopperPenguinParams:
     trend_reversal_threshold: float
     trend_negative_threshold: float
     trend_entry_threshold: float
+    cooldown_bars: int = 0
 
 
 class RockhopperPenguin(BasePenguin):
@@ -42,6 +39,8 @@ class RockhopperPenguin(BasePenguin):
         **parameters: int | float,
     ):
         super().__init__(name)
+        self._last_trade_bar: dict[str, int] = {}
+        self._decision_bar: dict[str, int] = {}
         self.params = RockhopperPenguinParams(**parameters)
 
     def decide(
@@ -78,6 +77,8 @@ class RockhopperPenguin(BasePenguin):
         shares_owned = int(portfolio.get_position(symbol))
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
+        current_bar = self._decision_bar.get(symbol, 0) + 1
+        self._decision_bar[symbol] = current_bar
 
         # ================================ SELL ================================
         if shares_owned > 0:
@@ -127,9 +128,18 @@ class RockhopperPenguin(BasePenguin):
                 or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
+                self._last_trade_bar[symbol] = current_bar
                 return "SELL", shares_owned
 
         # ============================== BUY AMOUNT =============================
+        last_trade_bar = self._last_trade_bar.get(symbol)
+        if (
+            self.params.cooldown_bars > 0
+            and last_trade_bar is not None
+            and current_bar - last_trade_bar < self.params.cooldown_bars
+        ):
+            return "HOLD", 0
+
         if (
             shares_owned == 0
             and current_price <= lower_band
@@ -141,6 +151,7 @@ class RockhopperPenguin(BasePenguin):
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:
+                self._last_trade_bar[symbol] = current_bar
                 return "BUY", qty
 
         return "HOLD", 0
