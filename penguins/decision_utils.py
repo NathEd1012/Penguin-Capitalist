@@ -54,7 +54,7 @@ def bollinger_bands(
     return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
 
-def kaufman_efficiency_ratio(prices: List[float], period: int) -> float:
+def ker(prices: List[float], period: int) -> float:
     if len(prices) < period + 1:
         return 0.0
     total_upward_change = 0.0

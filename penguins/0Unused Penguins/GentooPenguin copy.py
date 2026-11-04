@@ -92,8 +92,8 @@ class GentooPenguin(BasePenguin):
         upper_band, middle_band, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        ker_slope = ker_value - self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
+        ker_slope = ker_value - self._ker(mid_prices[:-1], self.params.ker_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = self._trend_quality(mid_prices[:-2])
@@ -123,13 +123,13 @@ class GentooPenguin(BasePenguin):
             relative_performance_exit_trigger = (
                 relative_performance_value < self.params.relative_performance_threshold
             )
-            negative_trend = trend_score < 0.15
+            weak_trend = trend_score < 0.15
             falling_trend = (
                 trend_score < previous_trend_score < two_bars_ago_trend_score
             )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_trend or falling_trend)
+                and (weak_trend or falling_trend)
             )
 
             if (
@@ -186,7 +186,7 @@ class GentooPenguin(BasePenguin):
         std_dev = variance ** 0.5
         return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
         total_upward_change = 0.0

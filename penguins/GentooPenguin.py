@@ -5,7 +5,7 @@ from typing import List
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
-    kaufman_efficiency_ratio,
+    ker,
     rsi,
     relative_performance,
     relative_volume,
@@ -27,7 +27,6 @@ class GentooPenguinParams:
     ker_period: int
     ker_threshold: float
     ker_entry_threshold: float
-    ker_negative_threshold: float
     cooldown_bars: int = 0
 
 
@@ -63,9 +62,9 @@ class GentooPenguin(BasePenguin):
             return "HOLD", 0
 
         rsi_value = rsi(mid_prices, self.params.rsi_period)
-        ker_value = kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        previous_ker_value = kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
-        two_bars_ago_ker_value = kaufman_efficiency_ratio(mid_prices[:-2], self.params.ker_period)
+        ker_value = ker(mid_prices, self.params.ker_period)
+        previous_ker_value = ker(mid_prices[:-1], self.params.ker_period)
+        two_bars_ago_ker_value = ker(mid_prices[:-2], self.params.ker_period)
         relative_performance_value = relative_performance(
             mid_prices, spy_prices, self.params.relative_performance_period
         )
@@ -93,12 +92,12 @@ class GentooPenguin(BasePenguin):
 
             rsi_overbought = rsi_value >= self.params.sell_rsi
 
-            weak_kaufman_efficiency_ratio = ker_value < self.params.ker_threshold
+            weak_ker = ker_value < self.params.ker_threshold
 
             take_profit_trigger = (
                 (profit_threshold_reached or rsi_overbought)
                 and
-                (weak_kaufman_efficiency_ratio)
+                (weak_ker)
             )
 
             # Relative performance
@@ -108,14 +107,13 @@ class GentooPenguin(BasePenguin):
             )
 
             #Rel Volume            
-            negative_kaufman_efficiency_ratio = ker_value < self.params.ker_negative_threshold
-            falling_kaufman_efficiency_ratio = (
+            falling_ker = (
                 ker_value < previous_ker_value
                 and ker_value < two_bars_ago_ker_value
            )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_kaufman_efficiency_ratio and falling_kaufman_efficiency_ratio)
+                and (weak_ker and falling_ker)
             )
 
             if (

@@ -14,7 +14,7 @@ BB_PERIOD = 20
 BB_STDDEV = 2.0
 KER_PERIOD = 14
 KER_THRESHOLD = 25.0
-TREND_NEGATIVE_THRESHOLD = 0.15
+TREND_REVERSAL_THRESHOLD = 0.15
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -34,7 +34,7 @@ class Puffin3Params:
     bb_stddev: float = BB_STDDEV
     ker_period: int = KER_PERIOD
     ker_threshold: float = KER_THRESHOLD
-    trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD
+    trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -56,7 +56,7 @@ class Puffin3(BasePenguin):
         bb_stddev: float = BB_STDDEV,
         ker_period: int = KER_PERIOD,
         ker_threshold: float = KER_THRESHOLD,
-        trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD,
+        trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -77,7 +77,7 @@ class Puffin3(BasePenguin):
             bb_stddev=bb_stddev,
             ker_period=ker_period,
             ker_threshold=ker_threshold,
-            trend_negative_threshold=trend_negative_threshold,
+            trend_reversal_threshold=trend_reversal_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -113,8 +113,8 @@ class Puffin3(BasePenguin):
         upper_band, _, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        previous_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
+        previous_ker = self._ker(mid_prices[:-1], self.params.ker_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         relative_performance_value = relative_performance(
@@ -130,6 +130,7 @@ class Puffin3(BasePenguin):
         self._decision_bar[symbol] = current_bar
 
         if shares_owned > 0:
+            weak_trend = trend_score < self.params.trend_reversal_threshold
             is_profitable = avg_entry is not None and current_price > avg_entry
             loss_trigger = (
                 avg_entry is not None
@@ -141,18 +142,18 @@ class Puffin3(BasePenguin):
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
             ker_trend_reversal = (
-                ker_value < previous_kaufman_efficiency_ratio
+                ker_value < previous_ker
                 and ker_value < self.params.ker_threshold
             )
             relative_performance_exit_trigger = (
                 is_profitable
                 and relative_performance_value < self.params.relative_performance_threshold
             )
-            volume_negative_trend_exit = (
+            volume_weak_trend_exit = (
                 is_profitable
                 and rvol > self.params.rvol_threshold
                 and (
-                    trend_score < self.params.trend_negative_threshold
+                    weak_trend
                     or trend_score < previous_trend_score
                 )
             )
@@ -165,7 +166,7 @@ class Puffin3(BasePenguin):
                     and ker_value < self.params.ker_threshold * 0.85
                 )
                 or relative_performance_exit_trigger
-                or volume_negative_trend_exit
+                or volume_weak_trend_exit
             ):
                 self._last_trade_bar[symbol] = current_bar
                 return "SELL", shares_owned
@@ -235,7 +236,7 @@ class Puffin3(BasePenguin):
             score += 0.10
         return min(score, 1.0)
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
         total_upward_change = 0.0

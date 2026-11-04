@@ -24,8 +24,8 @@ RVOL_THRESHOLD = 0.7758
 
 
 # Trainable Penguin, with Buy condition based on Bollinger Bands
-# and the Amount by KAUFMAN_EFFICIENCY_RATIO compared between different Stocks,
-# and Sell condition based on KAUFMAN_EFFICIENCY_RATIO trend reversal and taking profit at the upper Bollinger Band.
+# and the Amount by KER compared between different Stocks,
+# and Sell condition based on KER trend reversal and taking profit at the upper Bollinger Band.
 
 
 @dataclass
@@ -104,8 +104,8 @@ class ManualTuneAdvSELL_TP2(BasePenguin):
             self.params.bb_period,
             self.params.bb_stddev,
         )
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        ker_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
+        ker_previous = self._ker(mid_prices[:-1], self.params.ker_period)
         ker_slope = ker_value - ker_previous
         relative_performance_value = relative_performance(
             mid_prices,
@@ -176,7 +176,7 @@ class ManualTuneAdvSELL_TP2(BasePenguin):
         lower = middle - num_std * std_dev
         return upper, middle, lower
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
 

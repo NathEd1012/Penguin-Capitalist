@@ -13,7 +13,6 @@ SELL_RSI = 70.0
 BB_PERIOD = 20
 BB_STDDEV = 2.0
 TREND_REVERSAL_THRESHOLD = 0.3
-TREND_NEGATIVE_THRESHOLD = 0.15
 TREND_ENTRY_THRESHOLD = 0.5
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
@@ -33,7 +32,6 @@ class Puffin1Params:
     bb_period: int = BB_PERIOD
     bb_stddev: float = BB_STDDEV
     trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD
-    trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD
     trend_entry_threshold: float = TREND_ENTRY_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
@@ -58,7 +56,6 @@ class Puffin1(BasePenguin):
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
         trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD,
-        trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD,
         trend_entry_threshold: float = TREND_ENTRY_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
@@ -79,7 +76,6 @@ class Puffin1(BasePenguin):
             bb_period=bb_period,
             bb_stddev=bb_stddev,
             trend_reversal_threshold=trend_reversal_threshold,
-            trend_negative_threshold=trend_negative_threshold,
             trend_entry_threshold=trend_entry_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
@@ -131,6 +127,7 @@ class Puffin1(BasePenguin):
         self._decision_bar[symbol] = current_bar
 
         if shares_owned > 0:
+            weak_trend = trend_score < self.params.trend_reversal_threshold
             is_profitable = avg_entry is not None and current_price > avg_entry
             loss_trigger = (
                 avg_entry is not None
@@ -140,36 +137,29 @@ class Puffin1(BasePenguin):
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
                 and rsi > 60
-                and trend_score < self.params.trend_reversal_threshold
+                and weak_trend
             )
             upper_band_take_profit = (
                 current_price >= upper_band
                 and avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
-            trend_exit_trigger = upper_band_take_profit and (
-                (
-                    trend_score < previous_trend_score
-                    and trend_score < self.params.trend_reversal_threshold
-                )
-                or trend_score < self.params.trend_negative_threshold
-            )
+            trend_exit_trigger = upper_band_take_profit and weak_trend
             overbought_breakdown_trigger = (
                 rsi >= self.params.sell_rsi
-                and trend_score < self.params.trend_negative_threshold
+                and weak_trend
             )
             relative_performance_exit_trigger = (
                 is_profitable
                 and relative_performance_value < self.params.relative_performance_threshold
             )
-            negative_trend = trend_score < 0.15
             falling_trend = (
                 trend_score < previous_trend_score < two_bars_ago_trend_score
             )
             rvol_exit_trigger = (
                 is_profitable
                 and rvol > self.params.rvol_threshold
-                and (negative_trend or falling_trend)
+                and (weak_trend or falling_trend)
             )
 
             if (

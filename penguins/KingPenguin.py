@@ -5,7 +5,7 @@ from typing import List
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
-    kaufman_efficiency_ratio,
+    ker,
     bollinger_bands,
     relative_performance,
     relative_volume,
@@ -25,7 +25,6 @@ class KingPenguinParams:
     ker_period: int
     ker_threshold: float
     trend_reversal_threshold: float
-    trend_negative_threshold: float
     trend_entry_threshold: float
     max_cash_fraction: float
     stop_loss_pct: float
@@ -79,7 +78,7 @@ class KingPenguin(BasePenguin):
         upper_band, middle_band, lower_band = bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+        ker_value = ker(mid_prices, self.params.ker_period)
         trend_score = trend_quality(mid_prices)
         previous_trend_score = trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = trend_quality(mid_prices[:-2])
@@ -117,23 +116,22 @@ class KingPenguin(BasePenguin):
                 + self.params.upper_band_buffer * band_width
             )
             weak_trend = trend_score < self.params.trend_reversal_threshold
-            weak_kaufman_efficiency_ratio = ker_value < self.params.ker_threshold
+            weak_ker = ker_value < self.params.ker_threshold
             take_profit_trigger = (
                 (profit_threshold_reached or rsi_overbought or upper_band_reached)
-                and (weak_trend or weak_kaufman_efficiency_ratio)
+                and (weak_trend or weak_ker)
             )
             relative_performance_exit_trigger = (
                 avg_entry is not None
                 and relative_performance_value < self.params.relative_performance_threshold
             )
-            negative_trend = trend_score < self.params.trend_negative_threshold
             falling_trend = (
                 trend_score < previous_trend_score
                 and trend_score < two_bars_ago_trend_score
             )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_trend and falling_trend)
+                and (weak_trend and falling_trend)
             )
 
             if (

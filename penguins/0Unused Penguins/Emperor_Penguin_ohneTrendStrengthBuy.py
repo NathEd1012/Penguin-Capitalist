@@ -15,7 +15,6 @@ BB_STDDEV = 2.0
 KER_PERIOD = 14
 KER_THRESHOLD = 25.0
 TREND_REVERSAL_THRESHOLD = 0.3
-TREND_NEGATIVE_THRESHOLD = 0.15
 TREND_ENTRY_THRESHOLD = 0.5
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
@@ -37,7 +36,6 @@ class EmperorPenguinParams:
     ker_period: int = KER_PERIOD
     ker_threshold: float = KER_THRESHOLD
     trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD
-    trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD
     trend_entry_threshold: float = TREND_ENTRY_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
@@ -64,7 +62,6 @@ class EmperorPenguin(BasePenguin):
         ker_period: int = KER_PERIOD,
         ker_threshold: float = KER_THRESHOLD,
         trend_reversal_threshold: float = TREND_REVERSAL_THRESHOLD,
-        trend_negative_threshold: float = TREND_NEGATIVE_THRESHOLD,
         trend_entry_threshold: float = TREND_ENTRY_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
@@ -87,7 +84,6 @@ class EmperorPenguin(BasePenguin):
             ker_period=ker_period,
             ker_threshold=ker_threshold,
             trend_reversal_threshold=trend_reversal_threshold,
-            trend_negative_threshold=trend_negative_threshold,
             trend_entry_threshold=trend_entry_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
@@ -124,8 +120,8 @@ class EmperorPenguin(BasePenguin):
         upper_band, middle_band, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        ker_slope = ker_value - self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
+        ker_slope = ker_value - self._ker(mid_prices[:-1], self.params.ker_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = self._trend_quality(mid_prices[:-2])
@@ -142,6 +138,7 @@ class EmperorPenguin(BasePenguin):
         self._decision_bar[symbol] = current_bar
 
         if shares_owned > 0:
+            weak_trend = trend_score < self.params.trend_reversal_threshold
             loss_trigger = (
                 avg_entry is not None
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
@@ -150,7 +147,7 @@ class EmperorPenguin(BasePenguin):
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
                 and rsi > 60
-                and trend_score < self.params.trend_reversal_threshold
+                and weak_trend
             )
             upper_band_take_profit = (
                 current_price >= upper_band
@@ -163,18 +160,17 @@ class EmperorPenguin(BasePenguin):
             )
             overbought_breakdown_trigger = (
                 rsi >= self.params.sell_rsi
-                and trend_score < self.params.trend_negative_threshold
+                and weak_trend
             )
             relative_performance_exit_trigger = (
                 relative_performance_value < self.params.relative_performance_threshold
             )
-            negative_trend = trend_score < self.params.trend_negative_threshold
             falling_trend = (
                 trend_score < previous_trend_score < two_bars_ago_trend_score
             )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_trend or falling_trend)
+                and (weak_trend or falling_trend)
             )
 
             if (
@@ -259,7 +255,7 @@ class EmperorPenguin(BasePenguin):
         std_dev = variance ** 0.5
         return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
         total_upward_change = 0.0

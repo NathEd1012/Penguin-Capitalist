@@ -109,9 +109,9 @@ class Puffin2(BasePenguin):
         upper_band, _, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        previous_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
-        two_bars_ago_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-2], self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
+        previous_ker = self._ker(mid_prices[:-1], self.params.ker_period)
+        two_bars_ago_ker = self._ker(mid_prices[:-2], self.params.ker_period)
         weak_ker_threshold = self.params.ker_threshold * 0.85
         relative_performance_value = relative_performance(
             mid_prices, spy_prices, self.params.relative_performance_period
@@ -144,7 +144,7 @@ class Puffin2(BasePenguin):
             )
             ker_exit_trigger = upper_band_take_profit and (
                 (
-                    ker_value < previous_kaufman_efficiency_ratio
+                    ker_value < previous_ker
                     and ker_value < self.params.ker_threshold
                 )
                 or ker_value < weak_ker_threshold
@@ -156,11 +156,11 @@ class Puffin2(BasePenguin):
                 is_profitable
                 and relative_performance_value < self.params.relative_performance_threshold
             )
-            falling_kaufman_efficiency_ratio = ker_value < previous_kaufman_efficiency_ratio < two_bars_ago_kaufman_efficiency_ratio
+            falling_ker = ker_value < previous_ker < two_bars_ago_ker
             rvol_exit_trigger = (
                 is_profitable
                 and rvol > self.params.rvol_threshold
-                and (ker_value < weak_ker_threshold or falling_kaufman_efficiency_ratio)
+                and (ker_value < weak_ker_threshold or falling_ker)
             )
 
             if (
@@ -228,7 +228,7 @@ class Puffin2(BasePenguin):
         std_dev = variance ** 0.5
         return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
         total_upward_change = 0.0

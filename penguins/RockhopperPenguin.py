@@ -25,7 +25,6 @@ class RockhopperPenguinParams:
     rvol_period: int
     rvol_threshold: float
     trend_reversal_threshold: float
-    trend_negative_threshold: float
     trend_entry_threshold: float
     cooldown_bars: int = 0
 
@@ -112,14 +111,13 @@ class RockhopperPenguin(BasePenguin):
                 and relative_performance_value < self.params.relative_performance_threshold
             )
             #Rel Volume
-            negative_trend = trend_score < self.params.trend_negative_threshold
             falling_trend = (
                 trend_score < previous_trend_score
                 and trend_score < two_bars_ago_trend_score
            )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_trend and falling_trend)
+                and (weak_trend and falling_trend)
             )
 
             if (

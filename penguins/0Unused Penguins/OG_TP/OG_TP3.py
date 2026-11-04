@@ -68,8 +68,8 @@ class OG_TP3(BasePenguin):
 			return "HOLD", 0
 
 		upper_band, middle_band, lower_band = self._bollinger_bands(mid_prices, self.params.bb_period, self.params.bb_stddev)
-		ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-		ker_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+		ker_value = self._ker(mid_prices, self.params.ker_period)
+		ker_previous = self._ker(mid_prices[:-1], self.params.ker_period)
 		ker_slope = ker_value - ker_previous
 		trend_score = self._trend_quality(mid_prices)
 		cash = self._get_cash(portfolio)
@@ -124,7 +124,7 @@ class OG_TP3(BasePenguin):
 		lower = middle - num_std * std_dev
 		return upper, middle, lower
 
-	def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+	def _ker(self, prices: List[float], period: int) -> float:
 		if len(prices) < period + 1:
 			return 0.0
 

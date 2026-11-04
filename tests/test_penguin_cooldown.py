@@ -22,19 +22,18 @@ def strategy_factory(request, monkeypatch):
     )
     if request.param == "GentooPenguin":
         monkeypatch.setattr(module, "rsi", lambda *args: 10.0)
-        monkeypatch.setattr(module, "kaufman_efficiency_ratio", lambda *args: 60.0)
+        monkeypatch.setattr(module, "ker", lambda *args: 60.0)
         parameters.update(
             rsi_period=10, buy_rsi=30, sell_rsi=70,
             ker_period=10, ker_threshold=20,
             ker_entry_threshold=20,
-            ker_negative_threshold=10,
         )
     else:
         monkeypatch.setattr(module, "bollinger_bands", lambda *args: (105.0, 103.0, 101.0))
         monkeypatch.setattr(module, "trend_quality", lambda *args: 0.8)
         parameters.update(
             bb_period=10, bb_stddev=2.0, upper_band_buffer=0.1,
-            trend_reversal_threshold=0.3, trend_negative_threshold=0.2,
+            trend_reversal_threshold=0.3,
             trend_entry_threshold=0.5,
         )
 

@@ -5,7 +5,7 @@ from typing import List
 from backtest.portfolio import Portfolio
 from penguins.base_penguin import BasePenguin
 from penguins.decision_utils import (
-    kaufman_efficiency_ratio,
+    ker,
     bollinger_bands,
     relative_performance,
     relative_volume,
@@ -26,9 +26,7 @@ class EmperorPenguinParams:
     upper_band_buffer: float
     ker_period: int
     ker_threshold: float
-    ker_negative_threshold: float
     trend_reversal_threshold: float
-    trend_negative_threshold: float
     trend_entry_threshold: float
     max_cash_fraction: float
     stop_loss_pct: float
@@ -78,11 +76,11 @@ class EmperorPenguin(BasePenguin):
         upper_band, middle_band, lower_band = bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        previous_ker_value = kaufman_efficiency_ratio(
+        ker_value = ker(mid_prices, self.params.ker_period)
+        previous_ker_value = ker(
             mid_prices[:-1], self.params.ker_period
         )
-        two_bars_ago_ker_value = kaufman_efficiency_ratio(
+        two_bars_ago_ker_value = ker(
             mid_prices[:-2], self.params.ker_period
         )
         trend_score = trend_quality(mid_prices)
@@ -108,10 +106,12 @@ class EmperorPenguin(BasePenguin):
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
             )
             #Take profit
-            profit_threshold_reached = (
+            take_profit_trigger = (
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
+
+            # BB and RSI dependent on trend and KER
 
             rsi_overbought = rsi_value >= self.params.sell_rsi
 
@@ -123,12 +123,12 @@ class EmperorPenguin(BasePenguin):
             )
             weak_trend = trend_score < self.params.trend_reversal_threshold
 
-            weak_kaufman_efficiency_ratio = ker_value < self.params.ker_threshold
+            weak_ker = ker_value < self.params.ker_threshold
 
-            take_profit_trigger = (
-                (profit_threshold_reached or rsi_overbought or upper_band_reached)
+            sell_profit_trigger = (
+                (rsi_overbought or upper_band_reached)
                 and
-                (weak_trend or weak_kaufman_efficiency_ratio)
+                (weak_trend or weak_ker)
             )
             # Relative performance
             relative_performance_exit_trigger = (
@@ -136,16 +136,11 @@ class EmperorPenguin(BasePenguin):
                 and relative_performance_value < self.params.relative_performance_threshold
             )
             #Rel Volume
-            negative_trend = trend_score < self.params.trend_negative_threshold
             falling_trend = (
                 trend_score < previous_trend_score
                 and trend_score < two_bars_ago_trend_score
             )
-            negative_kaufman_efficiency_ratio = (
-                ker_value
-                < self.params.ker_negative_threshold
-            )
-            falling_kaufman_efficiency_ratio = (
+            falling_ker = (
                 ker_value < previous_ker_value
                 and ker_value < two_bars_ago_ker_value
             )
@@ -153,14 +148,15 @@ class EmperorPenguin(BasePenguin):
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
                 and (
-                    (negative_kaufman_efficiency_ratio and falling_kaufman_efficiency_ratio)
-                    or (negative_trend and falling_trend)
+                    (weak_ker and falling_ker)
+                    or (weak_trend and falling_trend)
                 )
             )
 
 
             if (
                 loss_trigger
+                or sell_profit_trigger
                 or take_profit_trigger
                 or relative_performance_exit_trigger
                 or rvol_exit_trigger

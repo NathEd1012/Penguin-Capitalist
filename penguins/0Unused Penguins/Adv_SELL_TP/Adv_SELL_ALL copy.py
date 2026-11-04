@@ -110,8 +110,8 @@ class Adv_SELL_ALL(BasePenguin):
         upper_band, middle_band, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
-        ker_slope = ker_value - self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
+        ker_slope = ker_value - self._ker(mid_prices[:-1], self.params.ker_period)
         trend_score = self._trend_quality(mid_prices)
         previous_trend_score = self._trend_quality(mid_prices[:-1])
         relative_performance_value = relative_performance(
@@ -227,7 +227,7 @@ class Adv_SELL_ALL(BasePenguin):
         std_dev = variance ** 0.5
         return middle + num_std * std_dev, middle, middle - num_std * std_dev
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
         total_upward_change = 0.0

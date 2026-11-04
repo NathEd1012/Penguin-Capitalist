@@ -21,9 +21,8 @@ def strategy(monkeypatch):
     return emperor_module.EmperorPenguin(
         rsi_period=10, buy_rsi=30.0, sell_rsi=70.0,
         bb_period=10, bb_stddev=2.0, upper_band_buffer=0.1,
-        ker_period=10, ker_threshold=20.0,
-        ker_negative_threshold=30.0,
-        trend_reversal_threshold=0.3, trend_negative_threshold=0.2,
+        ker_period=10, ker_threshold=30.0,
+        trend_reversal_threshold=0.2,
         trend_entry_threshold=0.5,
         max_cash_fraction=0.1, stop_loss_pct=0.05, take_profit_pct=0.1,
         cooldown_bars=3,
@@ -52,7 +51,7 @@ def test_rvol_exit_accepts_either_complete_indicator_signal(
 ):
     # Scores are current, one bar ago, and two bars ago.
     monkeypatch.setattr(
-        emperor_module, "kaufman_efficiency_ratio",
+        emperor_module, "ker",
         lambda prices, period: er_scores[62 - len(prices)],
     )
     monkeypatch.setattr(
@@ -69,8 +68,8 @@ def test_rvol_exit_accepts_either_complete_indicator_signal(
     assert strategy._last_trade_bar["AAPL"] == (1 if action == "SELL" else 0)
 
 
-@pytest.mark.parametrize("range_set,low,high", [("narrow", 10.0, 40.0), ("broad", 10.0, 70.0)])
-def test_parameter_search_samples_emperor_er_exit_threshold(monkeypatch, range_set, low, high):
+@pytest.mark.parametrize("range_set,low,high", [("narrow", 20.0, 40.0), ("broad", 0.0, 55.0)])
+def test_parameter_search_samples_emperor_weakness_thresholds(monkeypatch, range_set, low, high):
     import config.parameter_search_con as config
 
     monkeypatch.setattr(config, "PARAMETER_SEARCH_RANGE_SET", range_set)
@@ -78,9 +77,9 @@ def test_parameter_search_samples_emperor_er_exit_threshold(monkeypatch, range_s
         (parameter[0], parameter) for parameter in config.PARAMETER_RANGE_OVERVIEW[range_set]
     ))
     space = strategy_parameter_space(emperor_module.EmperorPenguin)
-    assert ("ker_negative_threshold", "float", low, high) in space
+    assert ("ker_threshold", "float", low, high) in space
+    assert ("trend_reversal_threshold", "float", 0.0, 1.0) in space
     parameters = _sample_parameters_from_space(space, random.Random(42))
     strategy = emperor_module.EmperorPenguin(**parameters)
-    assert strategy.params.ker_negative_threshold == parameters[
-        "ker_negative_threshold"
-    ]
+    assert strategy.params.ker_threshold == parameters["ker_threshold"]
+    assert strategy.params.trend_reversal_threshold == parameters["trend_reversal_threshold"]

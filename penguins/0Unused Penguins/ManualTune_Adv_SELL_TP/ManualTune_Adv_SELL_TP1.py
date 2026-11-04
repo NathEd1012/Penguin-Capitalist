@@ -24,7 +24,7 @@ RVOL_PERIOD = 16 #20
 RVOL_THRESHOLD = 1.2536 #2.0
 
 
-# Trainable Penguin, with Buy condition based on RSI and KAUFMAN_EFFICIENCY_RATIO strength,
+# Trainable Penguin, with Buy condition based on RSI and KER strength,
 # and Sell condition based on RSI breakdown, trend reversal, and profit taking.
 
 
@@ -104,7 +104,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
             return "HOLD", 0
 
         rsi = self._rsi(mid_prices, self.params.rsi_period)
-        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+        ker_value = self._ker(mid_prices, self.params.ker_period)
         trend_score = self._trend_quality(mid_prices)
         relative_performance_value = relative_performance(
             mid_prices,
@@ -216,7 +216,7 @@ class ManualTuneAdvSELL_TP1(BasePenguin):
 
         return min(score, 1.0)
 
-    def _kaufman_efficiency_ratio(self, prices: List[float], period: int) -> float:
+    def _ker(self, prices: List[float], period: int) -> float:
         if len(prices) < period + 1:
             return 0.0
 
