@@ -38,8 +38,8 @@ def test_gentoo_parameter_space_is_defined() -> None:
     assert {parameter[0] for parameter in parameter_space} == {
         "bb_period",
         "bb_stddev",
-        "kaufman_efficiency_ratio_period",
-        "kaufman_efficiency_ratio_threshold",
+        "ker_period",
+        "ker_threshold",
         "max_cash_fraction",
         "stop_loss_pct",
         "take_profit_pct",

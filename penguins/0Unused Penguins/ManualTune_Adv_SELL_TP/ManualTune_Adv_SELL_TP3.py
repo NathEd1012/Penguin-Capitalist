@@ -11,8 +11,8 @@ from indicators.market_context import relative_performance, relative_volume
 # Adjust these values here first so the strategy is easy to finetune by hand.
 BB_PERIOD = 36
 BB_STDDEV = 1.9121
-KAUFMAN_EFFICIENCY_RATIO_PERIOD = 18
-KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 20.6581
+KER_PERIOD = 18
+KER_THRESHOLD = 20.6581
 MAX_CASH_FRACTION = 0.1406
 STOP_LOSS_PCT = 0.0732
 TAKE_PROFIT_PCT = 0.143
@@ -27,8 +27,8 @@ RVOL_THRESHOLD = 1.0719
 class ManualTuneAdvSELL_TP3Params:
 	bb_period: int = BB_PERIOD
 	bb_stddev: float = BB_STDDEV
-	kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
-	kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
+	ker_period: int = KER_PERIOD
+	ker_threshold: float = KER_THRESHOLD
 	max_cash_fraction: float = MAX_CASH_FRACTION
 	stop_loss_pct: float = STOP_LOSS_PCT
 	take_profit_pct: float = TAKE_PROFIT_PCT
@@ -48,8 +48,8 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 		name: str = "TrainablePenguin3",
 		bb_period: int = BB_PERIOD,
 		bb_stddev: float = BB_STDDEV,
-		kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-		kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+		ker_period: int = KER_PERIOD,
+		ker_threshold: float = KER_THRESHOLD,
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -63,8 +63,8 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 		self.params = Adv_SELL_TP3Params(
 			bb_period=bb_period,
 			bb_stddev=bb_stddev,
-			kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-			kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+			ker_period=ker_period,
+			ker_threshold=ker_threshold,
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
@@ -76,14 +76,14 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 		)
 
 	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio, spy_prices: List[float] | None = None, volumes: List[float] | None = None) -> tuple[str, int]:
-		min_required = max(60, self.params.bb_period, self.params.kaufman_efficiency_ratio_period, self.params.relative_performance_period, self.params.rvol_period) + 2
+		min_required = max(60, self.params.bb_period, self.params.ker_period, self.params.relative_performance_period, self.params.rvol_period) + 2
 		if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
 			return "HOLD", 0
 
 		upper_band, middle_band, lower_band = self._bollinger_bands(mid_prices, self.params.bb_period, self.params.bb_stddev)
-		kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
-		kaufman_efficiency_ratio_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
-		kaufman_efficiency_ratio_slope = kaufman_efficiency_ratio_value - kaufman_efficiency_ratio_previous
+		ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+		ker_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+		ker_slope = ker_value - ker_previous
 		trend_score = self._trend_quality(mid_prices)
 		relative_performance_value = relative_performance(mid_prices, spy_prices, self.params.relative_performance_period)
 		rvol = relative_volume(volumes, self.params.rvol_period)
@@ -96,12 +96,12 @@ class ManualTuneAdvSELL_TP3(BasePenguin):
 			# SELL part
 			loss_trigger = avg_entry is not None and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
 			upper_band_take_profit = current_price >= upper_band and avg_entry is not None and current_price >= avg_entry * (1 + self.params.take_profit_pct)
-			kaufman_efficiency_ratio_trend_reversal = kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
+			ker_trend_reversal = ker_slope < 0 and ker_value < self.params.ker_threshold
 			is_profitable = avg_entry is not None and current_price > avg_entry
 			relative_performance_exit_trigger = is_profitable and relative_performance_value < self.params.relative_performance_threshold
 			rvol_exit_trigger = is_profitable and rvol > self.params.rvol_threshold
-			if loss_trigger or (upper_band_take_profit and kaufman_efficiency_ratio_trend_reversal) or (
-				upper_band_take_profit and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
+			if loss_trigger or (upper_band_take_profit and ker_trend_reversal) or (
+				upper_band_take_profit and ker_value < self.params.ker_threshold * 0.85
 			) or relative_performance_exit_trigger or rvol_exit_trigger:
 				return "SELL", shares_owned
 		else:
@@ -184,8 +184,8 @@ class ManualTuneAdvSELL_TP3_Manual(ManualTuneAdvSELL_TP3):
 		name: str = "TrainablePenguin3_Manual",
 		bb_period: int = BB_PERIOD,
 		bb_stddev: float = BB_STDDEV,
-		kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-		kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+		ker_period: int = KER_PERIOD,
+		ker_threshold: float = KER_THRESHOLD,
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -195,8 +195,8 @@ class ManualTuneAdvSELL_TP3_Manual(ManualTuneAdvSELL_TP3):
 			name=name,
 			bb_period=bb_period,
 			bb_stddev=bb_stddev,
-			kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-			kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+			ker_period=ker_period,
+			ker_threshold=ker_threshold,
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,

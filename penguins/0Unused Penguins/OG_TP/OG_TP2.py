@@ -10,8 +10,8 @@ from penguins.base_penguin import BasePenguin
 # Adjust these values here first so the strategy is easy to finetune by hand.
 BB_PERIOD = 20 #20
 BB_STDDEV = 2.0
-KAUFMAN_EFFICIENCY_RATIO_PERIOD = 14
-KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 25.0
+KER_PERIOD = 14
+KER_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -28,8 +28,8 @@ STRENGTH_CAP = 1.5
 class OG_TP2Params:
     bb_period: int = BB_PERIOD
     bb_stddev: float = BB_STDDEV
-    kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
-    kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
+    ker_period: int = KER_PERIOD
+    ker_threshold: float = KER_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -46,8 +46,8 @@ class OG_TP2(BasePenguin):
         name: str = "TrainablePenguin2",
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
-        kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-        kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+        ker_period: int = KER_PERIOD,
+        ker_threshold: float = KER_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -58,8 +58,8 @@ class OG_TP2(BasePenguin):
         self.params = OG_TP2Params(
             bb_period=bb_period,
             bb_stddev=bb_stddev,
-            kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-            kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+            ker_period=ker_period,
+            ker_threshold=ker_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -75,7 +75,7 @@ class OG_TP2(BasePenguin):
         ask: float,
         portfolio: Portfolio,
     ) -> tuple[str, int]:
-        min_required = max(self.params.bb_period, self.params.kaufman_efficiency_ratio_period) + 2
+        min_required = max(self.params.bb_period, self.params.ker_period) + 2
         if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
@@ -84,9 +84,9 @@ class OG_TP2(BasePenguin):
             self.params.bb_period,
             self.params.bb_stddev,
         )
-        kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
-        kaufman_efficiency_ratio_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
-        kaufman_efficiency_ratio_slope = kaufman_efficiency_ratio_value - kaufman_efficiency_ratio_previous
+        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+        ker_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        ker_slope = ker_value - ker_previous
 
         cash = self._get_cash(portfolio)
         shares_owned = self._get_position(portfolio, symbol)
@@ -104,22 +104,22 @@ class OG_TP2(BasePenguin):
                 and avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
-            kaufman_efficiency_ratio_trend_reversal = kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
+            ker_trend_reversal = ker_slope < 0 and ker_value < self.params.ker_threshold
 
-            if loss_trigger or (upper_band_take_profit and kaufman_efficiency_ratio_trend_reversal) or (
-                upper_band_take_profit and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
+            if loss_trigger or (upper_band_take_profit and ker_trend_reversal) or (
+                upper_band_take_profit and ker_value < self.params.ker_threshold * 0.85
             ):
                 return "SELL", shares_owned
         else:
             # BUY part
-            buy_signal = current_price <= lower_band and kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
-            trend_confirmation = kaufman_efficiency_ratio_slope >= 0 or current_price <= middle_band
+            buy_signal = current_price <= lower_band and ker_value >= self.params.ker_threshold
+            trend_confirmation = ker_slope >= 0 or current_price <= middle_band
 
             if buy_signal and trend_confirmation:
                 # AMOUNT part
                 strength = min(
                     self.params.strength_cap,
-                    max(0.25, kaufman_efficiency_ratio_value / max(self.params.kaufman_efficiency_ratio_threshold, 1e-6)),
+                    max(0.25, ker_value / max(self.params.ker_threshold, 1e-6)),
                 )
                 max_trade_value = cash * self.params.max_cash_fraction
                 qty = math.floor((max_trade_value * strength) / ask)
@@ -178,8 +178,8 @@ class OG_TP2_Manual(OG_TP2):
         name: str = "TrainablePenguin2_Manual",
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
-        kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-        kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+        ker_period: int = KER_PERIOD,
+        ker_threshold: float = KER_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -190,8 +190,8 @@ class OG_TP2_Manual(OG_TP2):
             name=name,
             bb_period=bb_period,
             bb_stddev=bb_stddev,
-            kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-            kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+            ker_period=ker_period,
+            ker_threshold=ker_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,

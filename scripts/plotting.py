@@ -267,8 +267,8 @@ def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str
         return "<no parameters>"
 
     display_name_map = {
-        "kaufman_efficiency_ratio_period": "kaufman_efficiency_ratio_period",
-        "kaufman_efficiency_ratio_threshold": "kaufman_efficiency_ratio_thr",
+        "ker_period": "ker_period",
+        "ker_threshold": "ker_thr",
         "bb_period": "bb_period",
         "bb_stddev": "bb_std",
         "buy_rsi": "buy_rsi",

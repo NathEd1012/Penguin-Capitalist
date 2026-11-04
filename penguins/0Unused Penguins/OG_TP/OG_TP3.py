@@ -10,8 +10,8 @@ from penguins.base_penguin import BasePenguin
 # Adjust these values here first so the strategy is easy to finetune by hand.
 BB_PERIOD = 20
 BB_STDDEV = 2.0
-KAUFMAN_EFFICIENCY_RATIO_PERIOD = 14
-KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 25.0
+KER_PERIOD = 14
+KER_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -23,8 +23,8 @@ STRENGTH_CAP = 1.5
 class OG_TP3Params:
 	bb_period: int = BB_PERIOD
 	bb_stddev: float = BB_STDDEV
-	kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
-	kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
+	ker_period: int = KER_PERIOD
+	ker_threshold: float = KER_THRESHOLD
 	max_cash_fraction: float = MAX_CASH_FRACTION
 	stop_loss_pct: float = STOP_LOSS_PCT
 	take_profit_pct: float = TAKE_PROFIT_PCT
@@ -41,8 +41,8 @@ class OG_TP3(BasePenguin):
 		name: str = "TrainablePenguin3",
 		bb_period: int = BB_PERIOD,
 		bb_stddev: float = BB_STDDEV,
-		kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-		kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+		ker_period: int = KER_PERIOD,
+		ker_threshold: float = KER_THRESHOLD,
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -53,8 +53,8 @@ class OG_TP3(BasePenguin):
 		self.params = OG_TP3Params(
 			bb_period=bb_period,
 			bb_stddev=bb_stddev,
-			kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-			kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+			ker_period=ker_period,
+			ker_threshold=ker_threshold,
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,
@@ -63,14 +63,14 @@ class OG_TP3(BasePenguin):
 		)
 
 	def decide(self, symbol: str, mid_prices: List[float], bid: float, ask: float, portfolio: Portfolio) -> tuple[str, int]:
-		min_required = max(60, self.params.bb_period, self.params.kaufman_efficiency_ratio_period) + 2
+		min_required = max(60, self.params.bb_period, self.params.ker_period) + 2
 		if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
 			return "HOLD", 0
 
 		upper_band, middle_band, lower_band = self._bollinger_bands(mid_prices, self.params.bb_period, self.params.bb_stddev)
-		kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
-		kaufman_efficiency_ratio_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
-		kaufman_efficiency_ratio_slope = kaufman_efficiency_ratio_value - kaufman_efficiency_ratio_previous
+		ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+		ker_previous = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+		ker_slope = ker_value - ker_previous
 		trend_score = self._trend_quality(mid_prices)
 		cash = self._get_cash(portfolio)
 		shares_owned = self._get_position(portfolio, symbol)
@@ -81,9 +81,9 @@ class OG_TP3(BasePenguin):
 			# SELL part
 			loss_trigger = avg_entry is not None and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
 			upper_band_take_profit = current_price >= upper_band and avg_entry is not None and current_price >= avg_entry * (1 + self.params.take_profit_pct)
-			kaufman_efficiency_ratio_trend_reversal = kaufman_efficiency_ratio_slope < 0 and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
-			if loss_trigger or (upper_band_take_profit and kaufman_efficiency_ratio_trend_reversal) or (
-				upper_band_take_profit and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold * 0.85
+			ker_trend_reversal = ker_slope < 0 and ker_value < self.params.ker_threshold
+			if loss_trigger or (upper_band_take_profit and ker_trend_reversal) or (
+				upper_band_take_profit and ker_value < self.params.ker_threshold * 0.85
 			):
 				return "SELL", shares_owned
 		else:
@@ -166,8 +166,8 @@ class OG_TP3_Manual(OG_TP3):
 		name: str = "TrainablePenguin3_Manual",
 		bb_period: int = BB_PERIOD,
 		bb_stddev: float = BB_STDDEV,
-		kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-		kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+		ker_period: int = KER_PERIOD,
+		ker_threshold: float = KER_THRESHOLD,
 		max_cash_fraction: float = MAX_CASH_FRACTION,
 		stop_loss_pct: float = STOP_LOSS_PCT,
 		take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -178,8 +178,8 @@ class OG_TP3_Manual(OG_TP3):
 			name=name,
 			bb_period=bb_period,
 			bb_stddev=bb_stddev,
-			kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-			kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+			ker_period=ker_period,
+			ker_threshold=ker_threshold,
 			max_cash_fraction=max_cash_fraction,
 			stop_loss_pct=stop_loss_pct,
 			take_profit_pct=take_profit_pct,

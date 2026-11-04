@@ -24,8 +24,9 @@ class EmperorPenguinParams:
     bb_period: int
     bb_stddev: float
     upper_band_buffer: float
-    kaufman_efficiency_ratio_period: int
-    kaufman_efficiency_ratio_threshold: float
+    ker_period: int
+    ker_threshold: float
+    ker_negative_threshold: float
     trend_reversal_threshold: float
     trend_negative_threshold: float
     trend_entry_threshold: float
@@ -66,7 +67,7 @@ class EmperorPenguin(BasePenguin):
             60,
             self.params.rsi_period,
             self.params.bb_period,
-            self.params.kaufman_efficiency_ratio_period,
+            self.params.ker_period,
             self.params.relative_performance_period,
             self.params.rvol_period,
         ) + 2
@@ -77,7 +78,13 @@ class EmperorPenguin(BasePenguin):
         upper_band, middle_band, lower_band = bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
+        ker_value = kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+        previous_ker_value = kaufman_efficiency_ratio(
+            mid_prices[:-1], self.params.ker_period
+        )
+        two_bars_ago_ker_value = kaufman_efficiency_ratio(
+            mid_prices[:-2], self.params.ker_period
+        )
         trend_score = trend_quality(mid_prices)
         previous_trend_score = trend_quality(mid_prices[:-1])
         two_bars_ago_trend_score = trend_quality(mid_prices[:-2])
@@ -116,7 +123,7 @@ class EmperorPenguin(BasePenguin):
             )
             weak_trend = trend_score < self.params.trend_reversal_threshold
 
-            weak_kaufman_efficiency_ratio = kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
+            weak_kaufman_efficiency_ratio = ker_value < self.params.ker_threshold
 
             take_profit_trigger = (
                 (profit_threshold_reached or rsi_overbought or upper_band_reached)
@@ -133,10 +140,22 @@ class EmperorPenguin(BasePenguin):
             falling_trend = (
                 trend_score < previous_trend_score
                 and trend_score < two_bars_ago_trend_score
-           )
+            )
+            negative_kaufman_efficiency_ratio = (
+                ker_value
+                < self.params.ker_negative_threshold
+            )
+            falling_kaufman_efficiency_ratio = (
+                ker_value < previous_ker_value
+                and ker_value < two_bars_ago_ker_value
+            )
+            # Accept either Gentoo's ER signal or Rockhopper's TrendQuality signal.
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
-                and (negative_trend and falling_trend)
+                and (
+                    (negative_kaufman_efficiency_ratio and falling_kaufman_efficiency_ratio)
+                    or (negative_trend and falling_trend)
+                )
             )
 
 
@@ -162,17 +181,17 @@ class EmperorPenguin(BasePenguin):
             current_price <= lower_band
         )
         trend_strength_signal = (
-            kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
+            ker_value >= self.params.ker_threshold
             or trend_score >= self.params.trend_entry_threshold
         )
         rsi_buy_signal = rsi_value <= self.params.buy_rsi
 
         if trend_strength_signal and (bb_buy_signal or rsi_buy_signal):
-            kaufman_efficiency_ratio_strength = kaufman_efficiency_ratio_value / self.params.kaufman_efficiency_ratio_threshold
+            ker_strength = ker_value / self.params.ker_threshold
             trend_strength = trend_score / self.params.trend_entry_threshold
             strength = min(
                 1.5,
-                max(0.25, kaufman_efficiency_ratio_strength, trend_strength),
+                max(0.25, ker_strength, trend_strength),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:

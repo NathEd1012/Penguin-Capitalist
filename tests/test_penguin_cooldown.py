@@ -25,9 +25,9 @@ def strategy_factory(request, monkeypatch):
         monkeypatch.setattr(module, "kaufman_efficiency_ratio", lambda *args: 60.0)
         parameters.update(
             rsi_period=10, buy_rsi=30, sell_rsi=70,
-            kaufman_efficiency_ratio_period=10, kaufman_efficiency_ratio_threshold=20,
-            kaufman_efficiency_ratio_entry_threshold=20,
-            kaufman_efficiency_ratio_negative_threshold=10,
+            ker_period=10, ker_threshold=20,
+            ker_entry_threshold=20,
+            ker_negative_threshold=10,
         )
     else:
         monkeypatch.setattr(module, "bollinger_bands", lambda *args: (105.0, 103.0, 101.0))

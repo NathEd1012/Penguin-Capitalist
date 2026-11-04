@@ -82,11 +82,11 @@ NARROW_PARAMETER_RANGES = (
     ("sell_rsi", "float", 60.0, 90.0),
     ("bb_period", "int", 10, 50),
     ("bb_stddev", "float", 1.0, 4.0),
-    ("upper_band_buffer", "float", 0.0, 0.25),
-    ("kaufman_efficiency_ratio_period", "int", 7, 30),
-    ("kaufman_efficiency_ratio_threshold", "float", 20.0, 40.0),
-    ("kaufman_efficiency_ratio_entry_threshold", "float", 20.0, 40.0),
-    ("kaufman_efficiency_ratio_negative_threshold", "float", 10.0, 40.0),
+    ("upper_band_buffer", "float", -0.25, 0.25),
+    ("ker_period", "int", 7, 30),
+    ("ker_threshold", "float", 20.0, 40.0),
+    ("ker_entry_threshold", "float", 20.0, 40.0),
+    ("ker_negative_threshold", "float", 10.0, 40.0),
     ("max_cash_fraction", "float", 0.05, 0.20),
     ("stop_loss_pct", "float", 0.02, 0.10),
     ("take_profit_pct", "float", 0.03, 0.10),
@@ -109,23 +109,23 @@ BROAD_PARAMETER_RANGES = (
     ("buy_rsi", "float", 5.0, 50.0),
     ("sell_rsi", "float", 50.0, 100.0),
     ("bb_period", "int", 10, 100),
-    ("bb_stddev", "float", 0.5, 8.0),
-    ("upper_band_buffer", "float", 0.0, 1.0),
-    ("kaufman_efficiency_ratio_period", "int", 5, 50),
-    ("kaufman_efficiency_ratio_threshold", "float", 10.0, 70.0),
-    ("kaufman_efficiency_ratio_entry_threshold", "float", 10.0, 70.0),
-    ("kaufman_efficiency_ratio_negative_threshold", "float", 10.0, 70.0),
+    ("bb_stddev", "float", 0.5, 4.0),
+    ("upper_band_buffer", "float", -0.25, 1.0),
+    ("ker_period", "int", 0, 50),
+    ("ker_threshold", "float", 0.0, 55.0),
+    ("ker_entry_threshold", "float", 0.0, 75.0),
+    ("ker_negative_threshold", "float", 0.0, 45.0),
     ("max_cash_fraction", "float", 0.01, 0.50),
     ("stop_loss_pct", "float", 0.01, 0.20),
     ("take_profit_pct", "float", 0.005, 0.30),
     ("cooldown_bars", "int", 0, 100),
     ("relative_performance_period", "int", 10, 360),
-    ("relative_performance_threshold", "float", -5.0, 5.0),
+    ("relative_performance_threshold", "float", -0.1, 0.05),
     ("rvol_period", "int", 10, 120),
     ("rvol_threshold", "float", 0.5, 5.0),
     ("trend_reversal_threshold", "float", 0.0, 1.0),
-    ("trend_negative_threshold", "float", 0.0, 1.0),
-    ("trend_entry_threshold", "float", 1e-6, 1.0),
+    ("trend_negative_threshold", "float", 0.0, 0.5),
+    ("trend_entry_threshold", "float", 0.1, 1.1),
     ("sr_low_threshhold", "float", 0.0, 0.10),
     ("sr_high_threshhold", "float", 0.0, 0.10),
     ("sr_period", "int", 5, 200),
@@ -145,14 +145,6 @@ _ACTIVE_RANGES = (
     else _BROAD_RANGES
 )
 
-# Keep Rockhopper's broad Bollinger search flexible while trimming the widest bands.
-_STRATEGY_RANGE_OVERRIDES = {
-    "broad": {
-        "RockhopperPenguin": {
-            "bb_stddev": ("bb_stddev", "float", 0.5, 6.0),
-        },
-    },
-}
 
 
 # Parameter assignment by strategy. Names are resolved against the active
@@ -160,8 +152,8 @@ _STRATEGY_RANGE_OVERRIDES = {
 STRATEGY_PARAMETER_NAMES = {
     "GentooPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi",
-        "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold", "kaufman_efficiency_ratio_entry_threshold",
-        "kaufman_efficiency_ratio_negative_threshold", "max_cash_fraction", "stop_loss_pct",
+        "ker_period", "ker_threshold", "ker_entry_threshold",
+        "ker_negative_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_performance_period",
         "relative_performance_threshold", "rvol_period", "rvol_threshold",
     ),
@@ -174,7 +166,8 @@ STRATEGY_PARAMETER_NAMES = {
     ),
     "EmperorPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
+        "upper_band_buffer", "ker_period", "ker_threshold",
+        "ker_negative_threshold",
         "trend_reversal_threshold", "trend_negative_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_performance_period",
@@ -182,7 +175,7 @@ STRATEGY_PARAMETER_NAMES = {
     ),
     "KingPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
+        "upper_band_buffer", "ker_period", "ker_threshold",
         "trend_reversal_threshold", "trend_negative_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_performance_period",
@@ -193,12 +186,12 @@ STRATEGY_PARAMETER_NAMES = {
 
 _LEGACY_PARAMETER_NAMES = {
     "rsi_kaufman_efficiency_ratio": (
-        "rsi_period", "buy_rsi", "sell_rsi", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
+        "rsi_period", "buy_rsi", "sell_rsi", "ker_period", "ker_threshold",
         "max_cash_fraction", "stop_loss_pct", "take_profit_pct", "cooldown_bars",
     ),
     "bollinger_kaufman_efficiency_ratio": (
-        "bb_period", "bb_stddev", "upper_band_buffer", "kaufman_efficiency_ratio_period",
-        "kaufman_efficiency_ratio_threshold", "max_cash_fraction", "stop_loss_pct",
+        "bb_period", "bb_stddev", "upper_band_buffer", "ker_period",
+        "ker_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars",
     ),
     "rsi_risk": (
@@ -207,7 +200,7 @@ _LEGACY_PARAMETER_NAMES = {
     ),
     "advanced_sell_all": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "kaufman_efficiency_ratio_period", "kaufman_efficiency_ratio_threshold",
+        "upper_band_buffer", "ker_period", "ker_threshold",
         "max_cash_fraction", "stop_loss_pct", "take_profit_pct",
         "cooldown_bars", "relative_performance_period",
         "relative_performance_threshold", "rvol_period", "rvol_threshold",
@@ -283,8 +276,7 @@ def max_period_for_strategies(strategy_classes) -> int:
 def strategy_parameter_space_by_name(strategy_name: str):
     """Return the active configured search space for a strategy name."""
     if strategy_name in STRATEGY_PARAMETER_NAMES:
-        overrides = _STRATEGY_RANGE_OVERRIDES.get(PARAMETER_SEARCH_RANGE_SET, {}).get(strategy_name)
-        return _parameters(STRATEGY_PARAMETER_NAMES[strategy_name], overrides)
+        return _parameters(STRATEGY_PARAMETER_NAMES[strategy_name])
 
     if strategy_name in {"Puffin1", "Puffin2", "Puffin3", "Puffin4"}:
         names = (

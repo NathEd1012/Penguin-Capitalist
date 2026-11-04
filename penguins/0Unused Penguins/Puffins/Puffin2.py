@@ -12,8 +12,8 @@ BUY_RSI = 30.0
 SELL_RSI = 70.0
 BB_PERIOD = 20
 BB_STDDEV = 2.0
-KAUFMAN_EFFICIENCY_RATIO_PERIOD = 14
-KAUFMAN_EFFICIENCY_RATIO_THRESHOLD = 25.0
+KER_PERIOD = 14
+KER_THRESHOLD = 25.0
 MAX_CASH_FRACTION = 0.05
 STOP_LOSS_PCT = 0.04
 TAKE_PROFIT_PCT = 0.08
@@ -31,8 +31,8 @@ class Puffin2Params:
     sell_rsi: float = SELL_RSI
     bb_period: int = BB_PERIOD
     bb_stddev: float = BB_STDDEV
-    kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD
-    kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD
+    ker_period: int = KER_PERIOD
+    ker_threshold: float = KER_THRESHOLD
     max_cash_fraction: float = MAX_CASH_FRACTION
     stop_loss_pct: float = STOP_LOSS_PCT
     take_profit_pct: float = TAKE_PROFIT_PCT
@@ -52,8 +52,8 @@ class Puffin2(BasePenguin):
         sell_rsi: float = SELL_RSI,
         bb_period: int = BB_PERIOD,
         bb_stddev: float = BB_STDDEV,
-        kaufman_efficiency_ratio_period: int = KAUFMAN_EFFICIENCY_RATIO_PERIOD,
-        kaufman_efficiency_ratio_threshold: float = KAUFMAN_EFFICIENCY_RATIO_THRESHOLD,
+        ker_period: int = KER_PERIOD,
+        ker_threshold: float = KER_THRESHOLD,
         max_cash_fraction: float = MAX_CASH_FRACTION,
         stop_loss_pct: float = STOP_LOSS_PCT,
         take_profit_pct: float = TAKE_PROFIT_PCT,
@@ -72,8 +72,8 @@ class Puffin2(BasePenguin):
             sell_rsi=sell_rsi,
             bb_period=bb_period,
             bb_stddev=bb_stddev,
-            kaufman_efficiency_ratio_period=kaufman_efficiency_ratio_period,
-            kaufman_efficiency_ratio_threshold=kaufman_efficiency_ratio_threshold,
+            ker_period=ker_period,
+            ker_threshold=ker_threshold,
             max_cash_fraction=max_cash_fraction,
             stop_loss_pct=stop_loss_pct,
             take_profit_pct=take_profit_pct,
@@ -98,7 +98,7 @@ class Puffin2(BasePenguin):
             60,
             self.params.rsi_period,
             self.params.bb_period,
-            self.params.kaufman_efficiency_ratio_period,
+            self.params.ker_period,
             self.params.relative_performance_period,
             self.params.rvol_period,
         ) + 2
@@ -109,10 +109,10 @@ class Puffin2(BasePenguin):
         upper_band, _, lower_band = self._bollinger_bands(
             mid_prices, self.params.bb_period, self.params.bb_stddev
         )
-        kaufman_efficiency_ratio_value = self._kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
-        previous_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
-        two_bars_ago_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-2], self.params.kaufman_efficiency_ratio_period)
-        weak_kaufman_efficiency_ratio_threshold = self.params.kaufman_efficiency_ratio_threshold * 0.85
+        ker_value = self._kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+        previous_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        two_bars_ago_kaufman_efficiency_ratio = self._kaufman_efficiency_ratio(mid_prices[:-2], self.params.ker_period)
+        weak_ker_threshold = self.params.ker_threshold * 0.85
         relative_performance_value = relative_performance(
             mid_prices, spy_prices, self.params.relative_performance_period
         )
@@ -135,38 +135,38 @@ class Puffin2(BasePenguin):
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
                 and rsi > 60
-                and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
+                and ker_value < self.params.ker_threshold
             )
             upper_band_take_profit = (
                 current_price >= upper_band
                 and avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
-            kaufman_efficiency_ratio_exit_trigger = upper_band_take_profit and (
+            ker_exit_trigger = upper_band_take_profit and (
                 (
-                    kaufman_efficiency_ratio_value < previous_kaufman_efficiency_ratio
-                    and kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
+                    ker_value < previous_kaufman_efficiency_ratio
+                    and ker_value < self.params.ker_threshold
                 )
-                or kaufman_efficiency_ratio_value < weak_kaufman_efficiency_ratio_threshold
+                or ker_value < weak_ker_threshold
             )
             overbought_breakdown_trigger = (
-                rsi >= self.params.sell_rsi and kaufman_efficiency_ratio_value < weak_kaufman_efficiency_ratio_threshold
+                rsi >= self.params.sell_rsi and ker_value < weak_ker_threshold
             )
             relative_performance_exit_trigger = (
                 is_profitable
                 and relative_performance_value < self.params.relative_performance_threshold
             )
-            falling_kaufman_efficiency_ratio = kaufman_efficiency_ratio_value < previous_kaufman_efficiency_ratio < two_bars_ago_kaufman_efficiency_ratio
+            falling_kaufman_efficiency_ratio = ker_value < previous_kaufman_efficiency_ratio < two_bars_ago_kaufman_efficiency_ratio
             rvol_exit_trigger = (
                 is_profitable
                 and rvol > self.params.rvol_threshold
-                and (kaufman_efficiency_ratio_value < weak_kaufman_efficiency_ratio_threshold or falling_kaufman_efficiency_ratio)
+                and (ker_value < weak_ker_threshold or falling_kaufman_efficiency_ratio)
             )
 
             if (
                 loss_trigger
                 or profit_reversal_trigger
-                or kaufman_efficiency_ratio_exit_trigger
+                or ker_exit_trigger
                 or overbought_breakdown_trigger
                 or relative_performance_exit_trigger
                 or rvol_exit_trigger
@@ -184,11 +184,11 @@ class Puffin2(BasePenguin):
 
         bb_buy_signal = (
             current_price <= lower_band
-            and kaufman_efficiency_ratio_value > self.params.kaufman_efficiency_ratio_threshold
+            and ker_value > self.params.ker_threshold
         )
         rsi_buy_signal = (
             rsi <= self.params.buy_rsi
-            and kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_threshold
+            and ker_value >= self.params.ker_threshold
         )
 
         if bb_buy_signal or rsi_buy_signal:
@@ -196,7 +196,7 @@ class Puffin2(BasePenguin):
                 1.5,
                 max(
                     0.25,
-                    kaufman_efficiency_ratio_value / max(self.params.kaufman_efficiency_ratio_threshold, 1e-6),
+                    ker_value / max(self.params.ker_threshold, 1e-6),
                 ),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)

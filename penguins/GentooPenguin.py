@@ -24,10 +24,10 @@ class GentooPenguinParams:
     relative_performance_threshold: float
     rvol_period: int
     rvol_threshold: float
-    kaufman_efficiency_ratio_period: int
-    kaufman_efficiency_ratio_threshold: float
-    kaufman_efficiency_ratio_entry_threshold: float
-    kaufman_efficiency_ratio_negative_threshold: float
+    ker_period: int
+    ker_threshold: float
+    ker_entry_threshold: float
+    ker_negative_threshold: float
     cooldown_bars: int = 0
 
 
@@ -57,15 +57,15 @@ class GentooPenguin(BasePenguin):
             self.params.rsi_period,
             self.params.relative_performance_period,
             self.params.rvol_period,
-            self.params.kaufman_efficiency_ratio_period,
+            self.params.ker_period,
         ) + 2
         if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
         rsi_value = rsi(mid_prices, self.params.rsi_period)
-        kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices, self.params.kaufman_efficiency_ratio_period)
-        previous_kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices[:-1], self.params.kaufman_efficiency_ratio_period)
-        two_bars_ago_kaufman_efficiency_ratio_value = kaufman_efficiency_ratio(mid_prices[:-2], self.params.kaufman_efficiency_ratio_period)
+        ker_value = kaufman_efficiency_ratio(mid_prices, self.params.ker_period)
+        previous_ker_value = kaufman_efficiency_ratio(mid_prices[:-1], self.params.ker_period)
+        two_bars_ago_ker_value = kaufman_efficiency_ratio(mid_prices[:-2], self.params.ker_period)
         relative_performance_value = relative_performance(
             mid_prices, spy_prices, self.params.relative_performance_period
         )
@@ -93,7 +93,7 @@ class GentooPenguin(BasePenguin):
 
             rsi_overbought = rsi_value >= self.params.sell_rsi
 
-            weak_kaufman_efficiency_ratio = kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_threshold
+            weak_kaufman_efficiency_ratio = ker_value < self.params.ker_threshold
 
             take_profit_trigger = (
                 (profit_threshold_reached or rsi_overbought)
@@ -108,10 +108,10 @@ class GentooPenguin(BasePenguin):
             )
 
             #Rel Volume            
-            negative_kaufman_efficiency_ratio = kaufman_efficiency_ratio_value < self.params.kaufman_efficiency_ratio_negative_threshold
+            negative_kaufman_efficiency_ratio = ker_value < self.params.ker_negative_threshold
             falling_kaufman_efficiency_ratio = (
-                kaufman_efficiency_ratio_value < previous_kaufman_efficiency_ratio_value
-                and kaufman_efficiency_ratio_value < two_bars_ago_kaufman_efficiency_ratio_value
+                ker_value < previous_ker_value
+                and ker_value < two_bars_ago_ker_value
            )
             rvol_exit_trigger = (
                 rvol > self.params.rvol_threshold
@@ -140,11 +140,11 @@ class GentooPenguin(BasePenguin):
         if (
             shares_owned == 0
             and rsi_buy_signal
-            and kaufman_efficiency_ratio_value >= self.params.kaufman_efficiency_ratio_entry_threshold
+            and ker_value >= self.params.ker_entry_threshold
         ):
             strength = min(
                 1.5,
-                max(0.25, kaufman_efficiency_ratio_value / self.params.kaufman_efficiency_ratio_entry_threshold),
+                max(0.25, ker_value / self.params.ker_entry_threshold),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
             if qty > 0:
