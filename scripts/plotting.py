@@ -269,6 +269,8 @@ def _format_param_summary(params: dict[str, int | float], limit: int = 6) -> str
     display_name_map = {
         "ker_period": "ker_period",
         "ker_threshold": "ker_thr",
+        "ker_entry_threshold": "ker_entry_thr",
+        "ker_reversal_threshold": "ker_reversal_thr",
         "bb_period": "bb_period",
         "bb_stddev": "bb_std",
         "buy_rsi": "buy_rsi",

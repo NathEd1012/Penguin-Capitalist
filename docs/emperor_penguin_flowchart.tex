@@ -1,0 +1,209 @@
+% EmperorPenguin decision structure
+% Required in the preamble:
+%   \usepackage{tikz,graphicx}
+%   \usetikzlibrary{arrows.meta,calc}
+% Load this file in your preamble or before the figure with \input{emperor_penguin_flowchart.tex}
+% Then place \EmperorPenguinFlowchart in your figure environment.
+%
+% Diagram logic:
+% BUY: (RSI BUY OR BB BUY) AND (HIGH KER OR HIGH TREND QUALITY)
+% Position sizing uses a TRAINABLE cash fraction and a threshold-dependent strength multiplier.
+% The final share quantity is calculated, not a separate searched parameter.
+% qty = floor(cash * max_cash_fraction * strength / ask)
+% strength = min(2.0, max(0.25, KER / ker_entry_threshold, trend_score / trend_entry_threshold))
+% max_cash_fraction, ker_entry_threshold, and trend_entry_threshold are searched; the 2.0 cap is fixed.
+% The left column shows conceptual BUY gates; the code evaluates SELL first,
+% then checks cooldown before evaluating BUY conditions and sizing.
+% A BUY or SELL signal resets the per-symbol cooldown; SELL is never blocked by cooldown.
+% Both conditional SELL paths reuse the same weakness thresholds:
+% HIGH KER = KER >= ker_entry_threshold; WEAK KER = KER < ker_reversal_threshold.
+% WEAK TREND QUALITY = trend_score < trend_reversal_threshold.
+% Purple frames indicate KER and Trend Quality indicator conditions.
+% SELL: Independent or Conditional.
+% Independent = STOP LOSS OR TAKE PROFIT OR REL PERFORMANCE.
+% Conditional is a SINGLE section with TWO distinct paths:
+%   (1) ((RSI SELL OR BB SELL) AND (WEAK KER OR WEAK TREND QUALITY))
+%   (2) (RVOL SELL AND ((WEAK KER AND FALLING KER)
+%                   OR (WEAK TREND QUALITY AND FALLING TREND QUALITY)))
+% The two paths are linked only by the final SELL OR gate.
+
+\definecolor{epgreen}{HTML}{008D39}
+\definecolor{epgreenlight}{HTML}{ECFAEF}
+\definecolor{epblue}{HTML}{175BD8}
+\definecolor{epbluelight}{HTML}{ECF2FF}
+\definecolor{eppurple}{HTML}{7040A8}
+\definecolor{eppurplelight}{HTML}{F4ECFB}
+\definecolor{epred}{HTML}{BD111A}
+\definecolor{epredlight}{HTML}{FFF0F0}
+\definecolor{epink}{HTML}{FBE4E5}
+\definecolor{epwire}{HTML}{526174}
+
+\newcommand{\EmperorPenguinFlowchart}{%
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[x=1cm,y=1cm,
+  line cap=round,line join=round,
+  >=Stealth,
+  wire/.style={draw=epwire,line width=.9pt,-{Stealth[length=2mm]}},
+  joinwire/.style={draw=epwire,line width=.9pt},
+  signal/.style={draw=epgreen!85!black,fill=white,rounded corners=2.5pt,
+    line width=.75pt,minimum height=.62cm,align=center,
+    font=\bfseries\sffamily\footnotesize,inner xsep=3pt},
+  sellrule/.style={draw=epred!80!black,fill=white,rounded corners=2.5pt,
+    line width=.75pt,minimum height=.58cm,align=center,
+    font=\bfseries\sffamily\footnotesize,inner xsep=3pt},
+  trendnode/.style={draw=eppurple,fill=white,rounded corners=2.5pt,
+    line width=1.0pt,minimum height=.62cm,align=center,
+    font=\bfseries\sffamily\footnotesize,inner xsep=3pt},
+  sizing/.style={draw=epblue,fill=white,rounded corners=3pt,
+    line width=.85pt,minimum height=.68cm,align=center,
+    font=\bfseries\sffamily\footnotesize},
+  cool/.style={draw=eppurple,fill=white,rounded corners=3pt,
+    line width=.85pt,minimum height=.65cm,align=center,
+    font=\bfseries\sffamily\footnotesize},
+  gateG/.style={circle,draw=epgreen,fill=white,line width=1.1pt,
+    minimum size=.65cm,inner sep=0pt,font=\bfseries\sffamily\scriptsize,text=epgreen!75!black},
+  gateR/.style={circle,draw=epred,fill=white,line width=1.1pt,
+    minimum size=.65cm,inner sep=0pt,font=\bfseries\sffamily\scriptsize,text=epred!85!black},
+  resultG/.style={draw=epgreen,fill=epgreenlight,rounded corners=4pt,
+    line width=1.1pt,minimum height=.66cm,align=center,
+    font=\bfseries\sffamily\small},
+  resultR/.style={draw=epred,fill=epredlight,rounded corners=4pt,
+    line width=1.1pt,minimum height=.66cm,align=center,
+    font=\bfseries\sffamily\small}
+]
+% ====== BIG FRAME AND COLOR PANELS ======
+\draw[black,line width=1.2pt,rounded corners=8pt] (0,0) rectangle (20,-17.0);
+\fill[black,rounded corners=7pt] (0,0) rectangle (20,-.8);
+\fill[black] (0,-.45) rectangle (20,-.8);
+\node[anchor=west,font=\bfseries\sffamily\Large,text=white] at (.45,-.40) {EmperorPenguin};
+\draw[epwire!65,dashed,line width=.8pt] (9.28,-1.03)--(9.28,-16.75);
+
+% BUY (green)
+\fill[epgreenlight,rounded corners=5pt] (.3,-1.04) rectangle (9.06,-6.13);
+\draw[epgreen,line width=1.2pt,rounded corners=5pt] (.3,-1.04) rectangle (9.06,-6.13);
+\fill[epgreen] (.32,-1.06) rectangle (9.04,-1.68);
+\node[anchor=west,font=\bfseries\sffamily\large,text=white] at (.55,-1.36) {BUY};
+
+% AMOUNT (blue)
+\fill[epbluelight,rounded corners=5pt] (.3,-6.36) rectangle (9.06,-10.50);
+\draw[epblue,line width=1.2pt,rounded corners=5pt] (.3,-6.36) rectangle (9.06,-10.50);
+\fill[epblue] (.32,-6.38) rectangle (9.04,-7.01);
+\node[anchor=west,font=\bfseries\sffamily\large,text=white] at (.55,-6.69) {AMOUNT};
+
+% COOLDOWN (purple)
+\fill[eppurplelight,rounded corners=5pt] (.3,-10.74) rectangle (9.06,-13.45);
+\draw[eppurple,line width=1.2pt,rounded corners=5pt] (.3,-10.74) rectangle (9.06,-13.45);
+\fill[eppurple] (.32,-10.76) rectangle (9.04,-11.38);
+\node[anchor=west,font=\bfseries\sffamily\large,text=white] at (.55,-11.07) {COOLDOWN};
+
+% SELL (red)
+\fill[epredlight,rounded corners=5pt] (9.51,-1.04) rectangle (19.72,-16.78);
+\draw[epred,line width=1.2pt,rounded corners=5pt] (9.51,-1.04) rectangle (19.72,-16.78);
+\fill[epred] (9.53,-1.06) rectangle (19.70,-1.68);
+\node[anchor=west,font=\bfseries\sffamily\large,text=white] at (9.82,-1.36) {SELL};
+
+\fill[epink,rounded corners=4pt] (9.78,-1.84) rectangle (19.40,-4.52);
+\draw[epred!70,line width=.7pt,rounded corners=4pt] (9.78,-1.84) rectangle (19.40,-4.52);
+\node[anchor=west,font=\bfseries\sffamily\normalsize,text=epred!85!black] at (10.03,-2.11) {INDEPENDENT SELL};
+
+% One conditional SELL container; a fine divider preserves the distinction
+% between its independent RSI/BB and RVOL decision paths.
+\fill[epink,rounded corners=4pt] (9.78,-4.77) rectangle (19.40,-14.93);
+\draw[epred!70,line width=.7pt,rounded corners=4pt] (9.78,-4.77) rectangle (19.40,-14.93);
+\node[anchor=west,font=\bfseries\sffamily\normalsize,text=epred!85!black] at (10.03,-5.06) {CONDITIONAL SELL};
+\draw[epred!40,line width=.6pt,dashed] (10.00,-9.35) -- (19.19,-9.35);
+
+% ====== LEFT: BUY [OR + OR] -> AND ======
+\node[signal,minimum width=1.81cm] (buyrsi) at (1.47,-2.34) {RSI BUY};
+\node[signal,minimum width=1.81cm] (buybb) at (3.42,-2.34) {BB BUY};
+\node[trendnode,minimum width=1.81cm] (hiKER) at (5.58,-2.34) {HIGH KER};
+\node[trendnode,minimum width=2.10cm] (hiTQ) at (7.76,-2.34) {HIGH TREND\\QUALITY};
+\node[gateG] (buyOR) at (2.43,-3.55) {OR};
+\node[gateG] (strengthOR) at (6.68,-3.55) {OR};
+\node[gateG] (buyAND) at (4.55,-4.69) {AND};
+\node[resultG,minimum width=2.70cm] (entry) at (4.55,-5.62) {BUY SIGNAL};
+\draw[wire] (buyrsi.south) -- (buyOR.north west);
+\draw[wire] (buybb.south) -- (buyOR.north east);
+\draw[wire] (hiKER.south) -- (strengthOR.north west);
+\draw[wire] (hiTQ.south) -- (strengthOR.north east);
+\draw[wire] (buyOR.south) -- (buyAND.west);
+\draw[wire] (strengthOR.south) -- (buyAND.east);
+\draw[wire] (buyAND.south) -- (entry.north);
+
+% ====== AMOUNT: CASH FRACTION + STRENGTH -> POSITION SIZE ======
+\node[sizing,minimum width=3.0cm] (cash) at (2.55,-8.07) {CASH FRACTION\\{\scriptsize TRAINABLE}};
+\node[sizing,minimum width=3.35cm] (mult) at (6.63,-8.07) {STRENGTH MULTIPLIER\\{\scriptsize TRAINABLE THRESHOLDS}\\{\scriptsize FIXED CAP: 2.0}};
+\node[sizing,minimum width=3.20cm] (positionsize) at (4.55,-9.63) {POSITION SIZE\\{\scriptsize CALCULATED SHARE QUANTITY}};
+\draw[wire] (entry.south) -- (4.55,-7.30) -- (positionsize.north);
+\draw[wire] (cash.south) -- (positionsize.north west);
+\draw[wire] (mult.south) -- (positionsize.north east);
+
+% ====== COOLDOWN: only affects new BUYs ======
+\node[cool,minimum width=5.3cm] (cooldown) at (4.55,-12.05) {BUY COOLDOWN\\{\scriptsize BUY OR SELL RESETS TIMER}\\{\scriptsize SELLS BYPASS THIS CHECK}};
+\draw[wire] (positionsize.south) -- (cooldown.north);
+\node[resultG,minimum width=3.15cm] (buyout) at (4.55,-14.75) {BUY QTY};
+\draw[wire] (cooldown.south) -- (buyout.north);
+\node[align=center,font=\sffamily\scriptsize,text=epwire] at (4.55,-15.85)
+  {SELL rules are checked first.\\Weakness thresholds are shared by both conditional SELL paths.};
+
+% ====== RIGHT: INDEPENDENT EXITS -> OR ======
+\node[sellrule,minimum width=6.50cm] (stop) at (13.50,-2.67) {STOP LOSS SELL};
+\node[sellrule,minimum width=6.50cm] (take) at (13.50,-3.37) {TAKE PROFIT SELL};
+\node[sellrule,minimum width=6.50cm] (rel)  at (13.50,-4.07) {REL PERFORMANCE SELL};
+\node[gateR] (indOR) at (18.30,-3.37) {OR};
+\draw[joinwire] (stop.east) -- (17.20,-2.67) -- (17.20,-3.37);
+\draw[joinwire] (take.east) -- (17.20,-3.37);
+\draw[joinwire] (rel.east)  -- (17.20,-4.07) -- (17.20,-3.37);
+\draw[wire] (17.20,-3.37) -- (indOR.west);
+
+% ====== CONDITIONAL PATH 1: RSI/BB, EXACT MIRROR OF BUY ======
+\node[sellrule,minimum width=2.03cm] (sellRSI) at (10.98,-5.79) {RSI SELL};
+\node[sellrule,minimum width=2.03cm] (sellBB) at (13.15,-5.79) {BB SELL};
+\node[trendnode,minimum width=1.90cm] (weakKER1) at (15.53,-5.79) {WEAK KER};
+\node[trendnode,minimum width=2.00cm] (weakTQ1) at (17.76,-5.79) {WEAK TREND\\QUALITY};
+\node[gateR] (rsiBBOR) at (12.09,-7.07) {OR};
+\node[gateR] (lowOR) at (16.65,-7.07) {OR};
+\node[gateR] (confirmedAND) at (14.37,-8.34) {AND};
+\draw[wire] (sellRSI.south) -- (rsiBBOR.north west);
+\draw[wire] (sellBB.south) -- (rsiBBOR.north east);
+\draw[wire] (weakKER1.south) -- (lowOR.north west);
+\draw[wire] (weakTQ1.south) -- (lowOR.north east);
+\draw[wire] (rsiBBOR.south) -- (confirmedAND.west);
+\draw[wire] (lowOR.south) -- (confirmedAND.east);
+
+% ====== CONDITIONAL PATH 2: RVOL requires deteriorating KER or trend ======
+% Left RVOL trigger, with its own final AND gate.
+\node[sellrule,minimum width=2.25cm] (RVOL) at (11.35,-10.70) {RVOL SELL};
+\node[trendnode,minimum width=1.85cm] (rvweakKER) at (14.05,-10.56) {WEAK KER};
+\node[trendnode,minimum width=2.20cm] (rvfallKER) at (17.05,-10.56) {FALLING KER};
+\node[gateR] (rvKERand) at (15.55,-11.54) {AND};
+\draw[wire] (rvweakKER.south) -- (rvKERand.north west);
+\draw[wire] (rvfallKER.south) -- (rvKERand.north east);
+
+\node[trendnode,minimum width=2.15cm] (rvweakTQ) at (14.05,-12.30) {WEAK TREND\\QUALITY};
+\node[trendnode,minimum width=2.45cm] (rvfallTQ) at (17.05,-12.30) {FALLING TREND\\QUALITY};
+\node[gateR] (rvTQand) at (15.55,-13.30) {AND};
+\draw[wire] (rvweakTQ.south) -- (rvTQand.north west);
+\draw[wire] (rvfallTQ.south) -- (rvTQand.north east);
+\node[gateR] (rvBranchOR) at (15.55,-14.18) {OR};
+\node[gateR] (rvFinalAND) at (11.35,-14.18) {AND};
+% KER and TQ alternatives feed OR; their routes avoid other rule boxes.
+\draw[wire] (rvKERand.east) -- (18.75,-11.54) -- (18.75,-14.18) -- (rvBranchOR.east);
+\draw[wire] (rvTQand.south) -- (rvBranchOR.north);
+\draw[wire] (rvBranchOR.west) -- (rvFinalAND.east);
+\draw[wire] (RVOL.south) -- (rvFinalAND.north);
+
+% ====== FINAL SELL: ANY COMPLETE EXIT PATH => SELL ALL SHARES ======
+\node[gateR] (allSellOR) at (14.45,-15.92) {OR};
+\node[resultR,minimum width=3.65cm] (sellout) at (17.55,-15.92) {SELL ALL SHARES};
+\draw[wire] (allSellOR.east) -- (sellout.west);
+% Independent exit: right-hand rail to final OR
+\draw[wire] (indOR.east) -- (19.53,-3.37) -- (19.53,-15.13) -- (14.45,-15.13) -- (allSellOR.north);
+% Conditional RSI/BB path: left-hand rail to final OR
+\draw[joinwire] (confirmedAND.south) -- (14.37,-8.99) -- (9.66,-8.99)
+  -- (9.66,-15.92) -- (allSellOR.west);
+% Conditional RVOL path: separately to final OR
+\draw[wire] (rvFinalAND.south) -- (11.35,-15.39) -- (allSellOR.north west);
+\end{tikzpicture}%
+}%
+}

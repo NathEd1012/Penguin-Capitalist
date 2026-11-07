@@ -21,7 +21,7 @@ def strategy(monkeypatch):
     return emperor_module.EmperorPenguin(
         rsi_period=10, buy_rsi=30.0, sell_rsi=70.0,
         bb_period=10, bb_stddev=2.0, upper_band_buffer=0.1,
-        ker_period=10, ker_threshold=30.0,
+        ker_period=10, ker_reversal_threshold=30.0, ker_entry_threshold=50.0,
         trend_reversal_threshold=0.2,
         trend_entry_threshold=0.5,
         max_cash_fraction=0.1, stop_loss_pct=0.05, take_profit_pct=0.1,
@@ -68,8 +68,13 @@ def test_rvol_exit_accepts_either_complete_indicator_signal(
     assert strategy._last_trade_bar["AAPL"] == (1 if action == "SELL" else 0)
 
 
-@pytest.mark.parametrize("range_set,low,high", [("narrow", 20.0, 40.0), ("broad", 0.0, 55.0)])
-def test_parameter_search_samples_emperor_weakness_thresholds(monkeypatch, range_set, low, high):
+@pytest.mark.parametrize("range_set,reversal_bounds,entry_bounds", [
+    ("narrow", (20.0, 40.0), (20.0, 40.0)),
+    ("broad", (0.01, 55.0), (0.01, 75.0)),
+])
+def test_parameter_search_samples_emperor_thresholds_independently(
+    monkeypatch, range_set, reversal_bounds, entry_bounds,
+):
     import config.parameter_search_con as config
 
     monkeypatch.setattr(config, "PARAMETER_SEARCH_RANGE_SET", range_set)
@@ -77,9 +82,11 @@ def test_parameter_search_samples_emperor_weakness_thresholds(monkeypatch, range
         (parameter[0], parameter) for parameter in config.PARAMETER_RANGE_OVERVIEW[range_set]
     ))
     space = strategy_parameter_space(emperor_module.EmperorPenguin)
-    assert ("ker_threshold", "float", low, high) in space
+    assert ("ker_reversal_threshold", "float", *reversal_bounds) in space
+    assert ("ker_entry_threshold", "float", *entry_bounds) in space
     assert ("trend_reversal_threshold", "float", 0.0, 1.0) in space
     parameters = _sample_parameters_from_space(space, random.Random(42))
     strategy = emperor_module.EmperorPenguin(**parameters)
-    assert strategy.params.ker_threshold == parameters["ker_threshold"]
+    assert strategy.params.ker_reversal_threshold == parameters["ker_reversal_threshold"]
+    assert strategy.params.ker_entry_threshold == parameters["ker_entry_threshold"]
     assert strategy.params.trend_reversal_threshold == parameters["trend_reversal_threshold"]

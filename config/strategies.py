@@ -3,7 +3,6 @@ import os
 from penguins import (
     EmperorPenguin,
     GentooPenguin,
-    KingPenguin,
     RockhopperPenguin,
     SP500,
     SP500x2,
@@ -12,7 +11,6 @@ from penguins import (
 ACTIVE_PENGUINS = [
     EmperorPenguin,
     GentooPenguin,
-    KingPenguin,
     RockhopperPenguin,
     SP500,
     SP500x2,

@@ -12,6 +12,10 @@ from penguins.decision_utils import (
 )
 
 
+
+
+
+
 @dataclass
 class RockhopperPenguinParams:
     bb_period: int
@@ -144,7 +148,7 @@ class RockhopperPenguin(BasePenguin):
             and trend_score > self.params.trend_entry_threshold
         ):
             strength = min(
-                1.5,
+                2.0,
                 max(0.25, trend_score /self.params.trend_entry_threshold),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)

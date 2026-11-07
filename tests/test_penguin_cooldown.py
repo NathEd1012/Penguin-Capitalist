@@ -25,7 +25,7 @@ def strategy_factory(request, monkeypatch):
         monkeypatch.setattr(module, "ker", lambda *args: 60.0)
         parameters.update(
             rsi_period=10, buy_rsi=30, sell_rsi=70,
-            ker_period=10, ker_threshold=20,
+            ker_period=10, ker_reversal_threshold=20,
             ker_entry_threshold=20,
         )
     else:

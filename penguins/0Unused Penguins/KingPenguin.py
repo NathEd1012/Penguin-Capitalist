@@ -163,7 +163,7 @@ class KingPenguin(BasePenguin):
             ker_strength = ker_value / self.params.ker_threshold
             trend_strength = trend_score / self.params.trend_entry_threshold
             strength = min(
-                1.5,
+                2.0,
                 max(0.25, ker_strength, trend_strength),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)

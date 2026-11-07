@@ -25,7 +25,8 @@ class EmperorPenguinParams:
     bb_stddev: float
     upper_band_buffer: float
     ker_period: int
-    ker_threshold: float
+    ker_reversal_threshold: float
+    ker_entry_threshold: float
     trend_reversal_threshold: float
     trend_entry_threshold: float
     max_cash_fraction: float
@@ -123,7 +124,7 @@ class EmperorPenguin(BasePenguin):
             )
             weak_trend = trend_score < self.params.trend_reversal_threshold
 
-            weak_ker = ker_value < self.params.ker_threshold
+            weak_ker = ker_value < self.params.ker_reversal_threshold
 
             sell_profit_trigger = (
                 (rsi_overbought or upper_band_reached)
@@ -177,16 +178,16 @@ class EmperorPenguin(BasePenguin):
             current_price <= lower_band
         )
         trend_strength_signal = (
-            ker_value >= self.params.ker_threshold
+            ker_value >= self.params.ker_entry_threshold
             or trend_score >= self.params.trend_entry_threshold
         )
         rsi_buy_signal = rsi_value <= self.params.buy_rsi
 
         if trend_strength_signal and (bb_buy_signal or rsi_buy_signal):
-            ker_strength = ker_value / self.params.ker_threshold
+            ker_strength = ker_value / self.params.ker_entry_threshold
             trend_strength = trend_score / self.params.trend_entry_threshold
             strength = min(
-                1.5,
+                2.0,
                 max(0.25, ker_strength, trend_strength),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)

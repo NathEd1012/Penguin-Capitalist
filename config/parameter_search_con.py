@@ -76,7 +76,8 @@ PARAMETER_SEARCH_STRATEGY = next(
 
 # Every supported parameter is defined once in each range set.
 # Each entry is (parameter name, type, minimum, maximum).
-# Profit and relative-volume exits share ker_threshold and trend_reversal_threshold.
+# Profit and relative-volume exits share the reversal thresholds.
+# Entry thresholds are sampled independently for buying and position sizing.
 NARROW_PARAMETER_RANGES = (
     ("rsi_period", "int", 5, 25),
     ("buy_rsi", "float", 10.0, 40.0),
@@ -85,7 +86,7 @@ NARROW_PARAMETER_RANGES = (
     ("bb_stddev", "float", 1.0, 4.0),
     ("upper_band_buffer", "float", -0.25, 0.25),
     ("ker_period", "int", 7, 30),
-    ("ker_threshold", "float", 20.0, 40.0),
+    ("ker_reversal_threshold", "float", 20.0, 40.0),
     ("ker_entry_threshold", "float", 20.0, 40.0),
     ("max_cash_fraction", "float", 0.05, 0.20),
     ("stop_loss_pct", "float", 0.02, 0.10),
@@ -97,10 +98,6 @@ NARROW_PARAMETER_RANGES = (
     ("rvol_threshold", "float", 1.5, 2.0),
     ("trend_reversal_threshold", "float", 0.0, 1.0),
     ("trend_entry_threshold", "float", 1e-6, 1.0),
-    ("sr_low_threshhold", "float", 0.0, 0.10),
-    ("sr_high_threshhold", "float", 0.0, 0.10),
-    ("sr_period", "int", 5, 100),
-    ("strength_cap", "float", 1.0, 2.0),
 )
 
 BROAD_PARAMETER_RANGES = (
@@ -110,9 +107,9 @@ BROAD_PARAMETER_RANGES = (
     ("bb_period", "int", 10, 100),
     ("bb_stddev", "float", 0.5, 4.0),
     ("upper_band_buffer", "float", -0.25, 1.0),
-    ("ker_period", "int", 0, 50),
-    ("ker_threshold", "float", 0.0, 55.0),
-    ("ker_entry_threshold", "float", 0.0, 75.0),
+    ("ker_period", "int", 5, 50),
+    ("ker_reversal_threshold", "float", 0.01, 55.0),
+    ("ker_entry_threshold", "float", 0.01, 75.0),
     ("max_cash_fraction", "float", 0.01, 0.50),
     ("stop_loss_pct", "float", 0.01, 0.20),
     ("take_profit_pct", "float", 0.005, 0.50),
@@ -120,13 +117,9 @@ BROAD_PARAMETER_RANGES = (
     ("relative_performance_period", "int", 10, 360),
     ("relative_performance_threshold", "float", -0.1, 0.05),
     ("rvol_period", "int", 10, 120),
-    ("rvol_threshold", "float", 0.5, 5.0),
+    ("rvol_threshold", "float", 1.0, 5.0),
     ("trend_reversal_threshold", "float", 0.0, 1.0),
     ("trend_entry_threshold", "float", 0.1, 1.1),
-    ("sr_low_threshhold", "float", 0.0, 0.10),
-    ("sr_high_threshhold", "float", 0.0, 0.10),
-    ("sr_period", "int", 5, 200),
-    ("strength_cap", "float", 1.0, 2.0),
 )
 
 
@@ -149,7 +142,7 @@ _ACTIVE_RANGES = (
 STRATEGY_PARAMETER_NAMES = {
     "GentooPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi",
-        "ker_period", "ker_threshold", "ker_entry_threshold",
+        "ker_period", "ker_reversal_threshold", "ker_entry_threshold",
         "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_performance_period",
         "relative_performance_threshold", "rvol_period", "rvol_threshold",
@@ -163,7 +156,8 @@ STRATEGY_PARAMETER_NAMES = {
     ),
     "EmperorPenguin": (
         "rsi_period", "buy_rsi", "sell_rsi", "bb_period", "bb_stddev",
-        "upper_band_buffer", "ker_period", "ker_threshold",
+        "upper_band_buffer", "ker_period", "ker_reversal_threshold",
+        "ker_entry_threshold",
         "trend_reversal_threshold",
         "trend_entry_threshold", "max_cash_fraction", "stop_loss_pct",
         "take_profit_pct", "cooldown_bars", "relative_performance_period",
@@ -206,6 +200,11 @@ _LEGACY_PARAMETER_NAMES = {
 
 def _parameters(names, overrides=None):
     ranges = {**_ACTIVE_RANGES, **(overrides or {})}
+    # Archived strategies still use their original shared KER parameter.
+    if "ker_threshold" in names:
+        ranges.setdefault(
+            "ker_threshold", ("ker_threshold", *ranges["ker_reversal_threshold"][1:])
+        )
     return tuple(ranges[name] for name in names)
 
 

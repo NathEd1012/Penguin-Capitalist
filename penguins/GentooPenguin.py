@@ -12,6 +12,10 @@ from penguins.decision_utils import (
 )
 
 
+
+
+
+
 @dataclass
 class GentooPenguinParams:
     rsi_period: int
@@ -25,7 +29,7 @@ class GentooPenguinParams:
     rvol_period: int
     rvol_threshold: float
     ker_period: int
-    ker_threshold: float
+    ker_reversal_threshold: float
     ker_entry_threshold: float
     cooldown_bars: int = 0
 
@@ -92,7 +96,7 @@ class GentooPenguin(BasePenguin):
 
             rsi_overbought = rsi_value >= self.params.sell_rsi
 
-            weak_ker = ker_value < self.params.ker_threshold
+            weak_ker = ker_value < self.params.ker_reversal_threshold
 
             take_profit_trigger = (
                 (profit_threshold_reached or rsi_overbought)
@@ -141,7 +145,7 @@ class GentooPenguin(BasePenguin):
             and ker_value >= self.params.ker_entry_threshold
         ):
             strength = min(
-                1.5,
+                2.0,
                 max(0.25, ker_value / self.params.ker_entry_threshold),
             )
             qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)

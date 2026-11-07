@@ -9,36 +9,41 @@ from backtest.portfolio import Portfolio
 from scripts.parameter_search import _sample_parameters_from_space
 
 
-STRATEGIES = ("EmperorPenguin", "GentooPenguin", "KingPenguin", "RockhopperPenguin")
+STRATEGIES = ("EmperorPenguin", "GentooPenguin", "RockhopperPenguin")
 
 
-@pytest.mark.parametrize("strategy_name,indicator,threshold_name,thresholds,scores", [
-    ("GentooPenguin", "ker", "ker_threshold", (20.0, 30.0), (25.0, 35.0, 45.0)),
-    ("EmperorPenguin", "ker", "ker_threshold", (20.0, 30.0), (25.0, 35.0, 45.0)),
-    ("EmperorPenguin", "trend", "trend_reversal_threshold", (0.3, 0.45), (0.4, 0.5, 0.6)),
-    ("KingPenguin", "trend", "trend_reversal_threshold", (0.3, 0.45), (0.4, 0.5, 0.6)),
-    ("RockhopperPenguin", "trend", "trend_reversal_threshold", (0.3, 0.45), (0.4, 0.5, 0.6)),
-])
-@pytest.mark.parametrize("exit_kind", ["profit", "volume"])
-@pytest.mark.parametrize("threshold_index,expected_action", [(0, "HOLD"), (1, "SELL")])
-def test_profit_and_volume_exits_share_the_weakness_threshold(
-    monkeypatch, strategy_name, indicator, threshold_name, thresholds, scores,
-    exit_kind, threshold_index, expected_action,
-):
-    module = importlib.import_module(f"penguins.{strategy_name}")
+def _strategy_parameters(module, strategy_name):
     parameters = dict(
         rsi_period=10, buy_rsi=30.0, sell_rsi=70.0,
         bb_period=10, bb_stddev=2.0, upper_band_buffer=0.0,
-        ker_period=10, ker_threshold=20.0, ker_entry_threshold=20.0,
+        ker_period=10, ker_reversal_threshold=20.0, ker_entry_threshold=20.0,
         trend_reversal_threshold=0.3, trend_entry_threshold=0.5,
         max_cash_fraction=0.1, stop_loss_pct=0.05, take_profit_pct=0.1,
         cooldown_bars=0,
         relative_performance_period=10, relative_performance_threshold=-1.0,
         rvol_period=10, rvol_threshold=2.0,
-        sr_period=10, sr_low_threshhold=0.01, sr_high_threshhold=0.01,
     )
     parameter_names = {field.name for field in fields(getattr(module, f"{strategy_name}Params"))}
-    parameters = {name: value for name, value in parameters.items() if name in parameter_names}
+    return {name: value for name, value in parameters.items() if name in parameter_names}
+
+
+@pytest.mark.parametrize("strategy_name,indicator,threshold_name,thresholds,scores", [
+    ("GentooPenguin", "ker", "ker_reversal_threshold", (20.0, 30.0), (25.0, 35.0, 45.0)),
+    ("EmperorPenguin", "ker", "ker_reversal_threshold", (20.0, 30.0), (25.0, 35.0, 45.0)),
+    ("EmperorPenguin", "trend", "trend_reversal_threshold", (0.3, 0.45), (0.4, 0.5, 0.6)),
+    ("RockhopperPenguin", "trend", "trend_reversal_threshold", (0.3, 0.45), (0.4, 0.5, 0.6)),
+])
+@pytest.mark.parametrize("exit_kind", ["profit", "volume"])
+@pytest.mark.parametrize("ker_entry_threshold", [10.0, 60.0])
+@pytest.mark.parametrize("threshold_index,expected_action", [(0, "HOLD"), (1, "SELL")])
+def test_profit_and_volume_exits_share_the_weakness_threshold(
+    monkeypatch, strategy_name, indicator, threshold_name, thresholds, scores,
+    exit_kind, ker_entry_threshold, threshold_index, expected_action,
+):
+    module = importlib.import_module(f"penguins.{strategy_name}")
+    parameters = _strategy_parameters(module, strategy_name)
+    if "ker_entry_threshold" in parameters:
+        parameters["ker_entry_threshold"] = ker_entry_threshold
     parameters[threshold_name] = thresholds[threshold_index]
     strategy = getattr(module, strategy_name)(**parameters)
 
@@ -61,6 +66,36 @@ def test_profit_and_volume_exits_share_the_weakness_threshold(
     assert strategy.decide("AAPL", [100.0] * 62, 100.0, 100.0, portfolio) == (
         expected_action, 10 if expected_action == "SELL" else 0,
     )
+
+
+@pytest.mark.parametrize("strategy_name", ["EmperorPenguin", "GentooPenguin"])
+@pytest.mark.parametrize("ker_reversal_threshold", [10.0, 50.0])
+@pytest.mark.parametrize("ker_entry_threshold,expected_decision", [
+    (20.0, ("BUY", 15)),
+    (30.0, ("BUY", 10)),
+    (40.0, ("HOLD", 0)),
+])
+def test_ker_entry_signal_and_sizing_are_independent_of_reversal_threshold(
+    monkeypatch, strategy_name, ker_reversal_threshold, ker_entry_threshold,
+    expected_decision,
+):
+    module = importlib.import_module(f"penguins.{strategy_name}")
+    parameters = _strategy_parameters(module, strategy_name)
+    parameters.update(
+        ker_reversal_threshold=ker_reversal_threshold,
+        ker_entry_threshold=ker_entry_threshold,
+    )
+    strategy = getattr(module, strategy_name)(**parameters)
+    monkeypatch.setattr(module, "ker", lambda *args: 30.0)
+    monkeypatch.setattr(module, "rsi", lambda *args: 10.0)
+    monkeypatch.setattr(module, "relative_performance", lambda *args: 0.0)
+    monkeypatch.setattr(module, "relative_volume", lambda *args: 1.0)
+    if hasattr(module, "bollinger_bands"):
+        monkeypatch.setattr(module, "bollinger_bands", lambda *args: (110.0, 100.0, 90.0))
+    if hasattr(module, "trend_quality"):
+        monkeypatch.setattr(module, "trend_quality", lambda *args: 0.1)
+
+    assert strategy.decide("AAPL", [100.0] * 62, 100.0, 100.0, Portfolio(10_000)) == expected_decision
 
 
 @pytest.mark.parametrize("strategy_name", STRATEGIES)
