@@ -98,6 +98,28 @@ def test_ker_entry_signal_and_sizing_are_independent_of_reversal_threshold(
     assert strategy.decide("AAPL", [100.0] * 62, 100.0, 100.0, Portfolio(10_000)) == expected_decision
 
 
+@pytest.mark.parametrize('strategy_name,expected_quantity', [
+    ('EmperorPenguin', 8), ('GentooPenguin', 7), ('RockhopperPenguin', 8),
+])
+def test_buy_sizing_uses_candle_high_instead_of_close(monkeypatch, strategy_name, expected_quantity):
+    module = importlib.import_module(f'penguins.{strategy_name}')
+    strategy = getattr(module, strategy_name)(**_strategy_parameters(module, strategy_name))
+    if hasattr(module, 'ker'):
+        monkeypatch.setattr(module, 'ker', lambda *args: 30.0)
+    if hasattr(module, 'rsi'):
+        monkeypatch.setattr(module, 'rsi', lambda *args: 10.0)
+    if hasattr(module, 'bollinger_bands'):
+        monkeypatch.setattr(module, 'bollinger_bands', lambda *args: (110.0, 105.0, 101.0))
+    if hasattr(module, 'trend_quality'):
+        monkeypatch.setattr(module, 'trend_quality', lambda *args: 0.8)
+    monkeypatch.setattr(module, 'relative_performance', lambda *args: 0.0)
+    monkeypatch.setattr(module, 'relative_volume', lambda *args: 1.0)
+
+    assert strategy.decide('AAPL', [100.0] * 62, 90.0, 200.0, Portfolio(10_000)) == (
+        'BUY', expected_quantity,
+    )
+
+
 @pytest.mark.parametrize("strategy_name", STRATEGIES)
 @pytest.mark.parametrize("range_set", ["narrow", "broad"])
 def test_search_parameters_match_the_consolidated_strategy_fields(monkeypatch, strategy_name, range_set):

@@ -56,8 +56,8 @@ class EmperorPenguin(BasePenguin):
         self,
         symbol: str,
         mid_prices: List[float],
-        bid: float,
-        ask: float,
+        low_price: float,
+        high_price: float,
         portfolio: Portfolio,
         spy_prices: List[float] | None = None, 
         volumes: List[float] | None = None,
@@ -70,7 +70,7 @@ class EmperorPenguin(BasePenguin):
             self.params.relative_performance_period,
             self.params.rvol_period,
         ) + 2
-        if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
+        if low_price <= 0 or high_price <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
         rsi_value = rsi(mid_prices, self.params.rsi_period)
@@ -190,7 +190,7 @@ class EmperorPenguin(BasePenguin):
                 2.0,
                 max(0.25, ker_strength, trend_strength),
             )
-            qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
+            qty = math.floor((cash * self.params.max_cash_fraction * strength) / high_price)
             if qty > 0:
                 self._last_trade_bar[symbol] = current_bar
                 return "BUY", qty

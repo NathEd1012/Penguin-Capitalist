@@ -50,8 +50,8 @@ class RockhopperPenguin(BasePenguin):
         self,
         symbol: str,
         mid_prices: List[float],
-        bid: float,
-        ask: float,
+        low_price: float,
+        high_price: float,
         portfolio: Portfolio,
         spy_prices: List[float] | None = None,
         volumes: List[float] | None = None,
@@ -62,7 +62,7 @@ class RockhopperPenguin(BasePenguin):
             self.params.relative_performance_period,
             self.params.rvol_period,
         ) + 2
-        if bid <= 0 or ask <= 0 or len(mid_prices) < min_required:
+        if low_price <= 0 or high_price <= 0 or len(mid_prices) < min_required:
             return "HOLD", 0
 
         upper_band, middle_band, lower_band = bollinger_bands(
@@ -151,7 +151,7 @@ class RockhopperPenguin(BasePenguin):
                 2.0,
                 max(0.25, trend_score /self.params.trend_entry_threshold),
             )
-            qty = math.floor((cash * self.params.max_cash_fraction * strength) / ask)
+            qty = math.floor((cash * self.params.max_cash_fraction * strength) / high_price)
             if qty > 0:
                 self._last_trade_bar[symbol] = current_bar
                 return "BUY", qty

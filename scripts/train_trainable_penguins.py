@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from backtest.data_loader import DataLoader
 from backtest.data_cleaning import slice_data
 from backtest.history import binning_to_minutes, history_warmup_bars
+from scripts.data_fixes.synthetic_spread_model import DEFAULT_SPREAD_WINDOW
 from config import (
     INITIAL_CAPITAL,
     BINNING,
@@ -258,9 +259,12 @@ def prepare_training_context(
     start_datetime_utc = start_datetime.astimezone(timezone.utc)
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
-    warmup_bars = history_warmup_bars(
-        penguin_classes,
-        max_period=max_period_for_strategies(penguin_classes),
+    warmup_bars = max(
+        history_warmup_bars(
+            penguin_classes,
+            max_period=max_period_for_strategies(penguin_classes),
+        ),
+        DEFAULT_SPREAD_WINDOW - 1,
     )
     warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)

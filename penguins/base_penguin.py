@@ -18,20 +18,23 @@ class BasePenguin(ABC):
         self,
         symbol: str,
         mid_prices: List[float],
-        bid: float,
-        ask: float,
+        low_price: float,
+        high_price: float,
         portfolio: Portfolio,
         spy_prices: Optional[List[float]] = None,
         volumes: Optional[List[float]] = None,
     ) -> tuple[str, int]:
         """
-        Make trading decision based on mid-price history and current bid/ask.
+        Make a trading decision and size buys using the completed candle's high.
+
+        Execution uses a separate synthetic bid/ask quote on the execution bar.
+        Batch strategies receive the same (low, high) decision-price pairs.
 
         Args:
             symbol: Stock symbol
             mid_prices: Historical mid-prices for analysis
-            bid: Current bid price (sell at this)
-            ask: Current ask price (buy at this)
+            low_price: Current completed candle's low price
+            high_price: Current completed candle's high, used for buy sizing
             portfolio: Current portfolio
 
         Returns:

@@ -246,6 +246,10 @@ def run_replay(points, *, symbols=('AAPL',), eligibility=None, delay=0, auxiliar
                 return 'BUY', 1
             return 'HOLD', 0
     class NoSpread:
+        def reset_symbol(self, symbol):
+            pass
+        def observe_candle(self, **kwargs):
+            pass
         def get_bid_ask(self, mid_price, **kwargs):
             return mid_price, mid_price, 0
     strategy_class = strategy or BuyOnce

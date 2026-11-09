@@ -2,6 +2,20 @@
 
 Data is now cleaned once during loading. Training, validation and testing reuse slices of the same prepared dataset.
 
+Missing-bar policy (including `1m` data): **no OHLCV field is forward-filled, and no replacement bar is generated**.
+
+| Field | Treatment when a symbol has no bar at a timestamp |
+|---|---|
+| `open`, `high`, `low` | Remain absent; previous candle values are not copied. |
+| `close` | Remains absent from market data and indicator history. Only portfolio valuation carries the last accepted close, retaining its original mark timestamp. |
+| `volume` | Remains absent; it is neither forward-filled nor replaced with zero. An explicit provider row with `volume=0` retains that value but supplies no new mark, indicator observation or execution quote. |
+
+A carried valuation is not a generated OHLCV bar and supplies neither a strategy signal nor an execution quote. Strategy buys/sells, deferred orders and final liquidation require a current accepted, positive-volume, in-session bar for the traded symbol, plus the applicable eligibility and coverage checks. A bar for another symbol at the same timestamp does not make the missing symbol tradable. The separate unpriced-distribution protection described below can sell a parent at its last accepted pre-event mark as a corporate-action fallback; missing minutes alone never trigger that fallback.
+
+For example, if a symbol has observations at 09:30 and 09:32 ET but none at 09:31, no 09:31 candle or volume is inserted. At a 09:31 portfolio snapshot supplied by another symbol's timestamp, the holding keeps its 09:30 mark and is identified as stale. Its indicators next advance on the accepted 09:32 observation.
+
+A missing one-minute bar may mean no trades occurred, or it may reflect unavailable data; the backtest does not infer the cause or label it a confirmed feed outage. Within the configured trading session it still counts as an absent observation for coverage checks, so legitimate inactivity can restrict trading. Scheduled closures are excluded from expected-bar counts. Cache-viewer `fill` mode downloads available provider observations; it does not manufacture bars for absent minutes.
+
 - Invalid prices, impossible OHLC ranges, negative/nonfinite volume and conflicting duplicates are rejected.
 - Split corrections handle each event independently and keep prices, volumes and distribution share units consistent.
 - Sparse symbols are blocked using prior trading-session coverage. GREE fails the examined coverage window.

@@ -42,7 +42,7 @@ from backtest.finalized_data_cache import save as save_finalized_data
 from backtest.evaluator import Evaluator
 from backtest.history import binning_to_minutes, history_warmup_bars, penguin_history_requirements
 from backtest.signal_coverage import indicator_windows, market_bar_clock, SignalCoverage, MINIMUM_COVERAGE
-from scripts.data_fixes.synthetic_spread_model import SyntheticSpreadModel
+from scripts.data_fixes.synthetic_spread_model import DEFAULT_SPREAD_WINDOW, SyntheticSpreadModel
 from scripts.data_fixes.corporate_actions import (
     get_distribution_events,
     get_price_adjustment_events,
@@ -539,7 +539,10 @@ def run_backtest(
     end_datetime_utc = end_datetime.astimezone(timezone.utc)
 
     max_period = max_period_for_strategies(penguin_classes)
-    warmup_bars = history_warmup_bars(penguin_classes, max_period=max_period)
+    warmup_bars = max(
+        history_warmup_bars(penguin_classes, max_period=max_period),
+        DEFAULT_SPREAD_WINDOW - 1,
+    )
     warmup_minutes = binning_to_minutes(binning)
     warmup_start_datetime_utc = start_datetime_utc - timedelta(minutes=warmup_bars * warmup_minutes)
 
@@ -551,9 +554,12 @@ def run_backtest(
         ]
         if trainable_classes:
             training_start_datetime_utc = parse_datetime_string(TRAINING_START_DATE).astimezone(timezone.utc)
-            training_warmup = history_warmup_bars(
-                trainable_classes,
-                max_period=max_period_for_strategies(trainable_classes),
+            training_warmup = max(
+                history_warmup_bars(
+                    trainable_classes,
+                    max_period=max_period_for_strategies(trainable_classes),
+                ),
+                DEFAULT_SPREAD_WINDOW - 1,
             )
             training_warmup_start = training_start_datetime_utc - timedelta(
                 minutes=training_warmup * warmup_minutes
@@ -1304,20 +1310,35 @@ def run_backtest(
 
     trading_symbols = set(symbols)
 
+    def execution_quote(symbol, timestamp, quotes):
+        """Compute at most one execution quote per symbol and candle."""
+        if symbol not in quotes:
+            bar = data[symbol][timestamp]
+            bid, ask, _ = spread_model.get_bid_ask(
+                mid_price=bar["close"],
+                high=bar["high"],
+                low=bar["low"],
+                timestamp=timestamp,
+                volume=bar.get("volume", 0),
+                symbol=symbol,
+                open_price=bar["open"],
+            )
+            quotes[symbol] = (bid, ask)
+        return quotes[symbol]
+
     def execute_orders(penguin_name, orders, quotes, portfolio, timestamp):
         for order_symbol, action, quantity in orders:
-            if order_symbol not in trading_symbols or order_symbol not in quotes or quantity <= 0:
+            if (
+                order_symbol not in trading_symbols or order_symbol not in decision_prices
+                or action not in {"BUY", "SELL"} or quantity <= 0
+            ):
                 continue
             if not signal_ready(penguin_name, order_symbol):
                 portfolio.coverage_blocked_orders += 1
                 continue
 
-            bid, ask = quotes[order_symbol]
+            bid, ask = execution_quote(order_symbol, timestamp, quotes)
             if action == "BUY":
-                if order_symbol == "SPY" and ask > 0 and portfolio.max_leverage <= 1.0:
-                    quantity = int(max(portfolio.cash - portfolio.transaction_cost, 0) // ask)
-                if not data[order_symbol].get(timestamp, {}).get("trade_eligible", True):
-                    continue
                 if portfolio.buy(order_symbol, quantity, ask, timestamp):
                     if collect_trade_details:
                         trades_by_bar[timestamp].append(
@@ -1336,6 +1357,8 @@ def run_backtest(
         progress_callback=progress_callback,
     ):
         coverage_slot = coverage_clock.position(timestamp)
+        decision_prices = {}
+        quotes = {}
         # Get current prices
         current_prices = {}
         current_price_metadata = {}
@@ -1381,6 +1404,8 @@ def run_backtest(
             portfolio.apply_distributions(timestamp, distribution_events)
 
         if split_symbols_applied:
+            for symbol in split_symbols_applied:
+                spread_model.reset_symbol(symbol)
             for order_key, orders in list(pending_orders.items()):
                 retained_orders = [
                     order for order in orders if order[0] not in split_symbols_applied
@@ -1422,26 +1447,28 @@ def run_backtest(
                 # Quarantined bars are removed from the strategy-visible history.
                 continue
 
-        if timestamp < start_datetime_utc:
-            continue
-
-        trade_bar_idx += 1
-        
-        # Let each penguin make decisions
-        quotes = {}
+        # Maintain EDGE history on every accepted candle, including warmup.
+        # Decisions use candle low/high; estimate spreads only for executions.
         for symbol in current_prices:
             bar = data[symbol][timestamp]
-            bid, ask, _ = spread_model.get_bid_ask(
+            spread_model.observe_candle(
                 mid_price=bar["close"],
                 high=bar["high"],
                 low=bar["low"],
                 timestamp=timestamp,
                 volume=bar.get("volume", 0),
                 symbol=symbol,
+                open_price=bar["open"],
             )
             if bar.get("trade_eligible", True):
-                quotes[symbol] = (bid, ask)
+                decision_prices[symbol] = (bar["low"], bar["high"])
 
+        if timestamp < start_datetime_utc:
+            continue
+
+        trade_bar_idx += 1
+
+        # Let each penguin make decisions
         for penguin_name, penguin in penguins.items():
             portfolio = portfolios[penguin_name]
 
@@ -1479,15 +1506,15 @@ def run_backtest(
             if hasattr(penguin, "decide_batch"):
                 ready_symbols = []
                 for symbol in symbols_for_penguin:
-                    if symbol not in quotes or len(price_history[symbol]) < required_history_bars:
+                    if symbol not in decision_prices or len(price_history[symbol]) < required_history_bars:
                         continue
                     if signal_ready(penguin_name, symbol):
                         ready_symbols.append(symbol)
                     else:
                         portfolio.coverage_blocked_decisions += 1
-                ready_quotes = {symbol: quotes[symbol] for symbol in ready_symbols}
+                ready_prices = {symbol: decision_prices[symbol] for symbol in ready_symbols}
 
-                batch_orders = penguin.decide_batch(ready_symbols, ready_quotes, portfolio)
+                batch_orders = penguin.decide_batch(ready_symbols, ready_prices, portfolio)
                 pending_orders[(penguin_name, trade_bar_idx + t_plus_x)].extend(batch_orders)
                 if t_plus_x == 0:
                     execute_orders(
@@ -1507,7 +1534,7 @@ def run_backtest(
                 continue
             
             for symbol in symbols_for_penguin:
-                if symbol not in quotes:
+                if symbol not in decision_prices:
                     continue
                 
                 # Pass only data-backed windows to strategies. No penguin may trade
@@ -1532,15 +1559,15 @@ def run_backtest(
                     if len(volumes) > lookback_bars
                     else list(volumes)
                 )
-                bid, ask = quotes[symbol]
+                low_price, high_price = decision_prices[symbol]
                 
                 try:
                     action, quantity = call_penguin_decide(
                         penguin,
                         symbol,
                         mid_prices,
-                        bid,
-                        ask,
+                        low_price,
+                        high_price,
                         portfolio,
                         spy_prices=spy_window,
                         volumes=volumes_window,
@@ -1586,11 +1613,13 @@ def run_backtest(
     
     for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
         for symbol, quantity in list(portfolio.positions.items()):
-            close_price = quotes[symbol][0] if symbol in current_prices and symbol in quotes else None
-            if quantity > 0 and close_price is not None and close_price > 0:
-                if not signal_ready(penguin_name, symbol):
-                    portfolio.coverage_blocked_orders += 1
-                    continue
+            if quantity <= 0 or symbol not in current_prices or symbol not in decision_prices:
+                continue
+            if not signal_ready(penguin_name, symbol):
+                portfolio.coverage_blocked_orders += 1
+                continue
+            close_price, _ = execution_quote(symbol, sorted_timestamps[-1], quotes)
+            if close_price > 0:
                 portfolio.sell(symbol, quantity, close_price, sorted_timestamps[-1], reason="final liquidation")
         final_timestamp = sorted_timestamps[-1]
         final_value = portfolio.get_total_value(
@@ -1621,6 +1650,7 @@ def run_backtest(
     full_history = None
     mid_prices = None
     current_prices = None
+    decision_prices = None
     quotes = None
     final_prices = None
     symbol_prices = None

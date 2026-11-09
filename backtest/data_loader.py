@@ -183,6 +183,13 @@ class DataLoader:
     ) -> Tuple[Dict[str, Dict], str]:
         """
         Load historical bars for symbols.
+
+        Missing timestamps stay absent: open/high/low/close/volume are never
+        forward-filled, and missing volume is not replaced with zero. Explicit
+        zero-volume provider rows remain inspectable but cannot advance marks
+        or indicators or supply execution quotes. The backtest carries the last
+        accepted close only for portfolio valuation, never as a replacement bar.
+        An absent 1-minute bar does not distinguish no trades from a data outage.
         
         Args:
             symbols: List of stock symbols

@@ -116,13 +116,17 @@ def call_penguin_decide(
     penguin: Any,
     symbol: str,
     mid_prices: List[float],
-    bid: float,
-    ask: float,
+    low_price: float,
+    high_price: float,
     portfolio: Portfolio,
     spy_prices: Optional[List[float]] = None,
     volumes: Optional[List[float]] = None,
 ) -> tuple[str, int]:
-    """Call a penguin's decide method while remaining compatible with both legacy and context-aware signatures."""
+    """Pass candle low/high to legacy or context-aware decision signatures.
+
+    Prices are passed positionally so legacy bid/ask parameter names still work.
+    Synthetic execution quotes are calculated separately from decision sizing.
+    """
     try:
         signature = inspect.signature(penguin.decide)
     except (TypeError, ValueError):
@@ -137,11 +141,11 @@ def call_penguin_decide(
             return penguin.decide(
                 symbol,
                 mid_prices,
-                bid,
-                ask,
+                low_price,
+                high_price,
                 portfolio,
                 spy_prices=spy_prices,
                 volumes=volumes,
             )
 
-    return penguin.decide(symbol, mid_prices, bid, ask, portfolio)
+    return penguin.decide(symbol, mid_prices, low_price, high_price, portfolio)

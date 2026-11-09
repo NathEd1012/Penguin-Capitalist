@@ -1,22 +1,29 @@
-"""Realistic synthetic bid/ask spread model for backtesting."""
+"""Synthetic bid/ask quotes using the bidask EDGE spread estimator."""
 
 from datetime import datetime, time
 from collections import OrderedDict, deque
-from typing import Dict, Tuple, Optional, Union, List
+from math import isfinite
+from typing import Dict, Tuple, Optional, Union
+
+from bidask import edge
 import pytz
+
+
+DEFAULT_SPREAD_WINDOW = 50
 
 
 class SyntheticSpreadModel:
     """
-    Generates realistic bid/ask spreads for backtesting using minute-level OHLCV data.
-    
-    Spread is based on:
-    - Price level (0.02% of mid price by default)
-    - Candle volatility (5% of candle range by default)
-    - Volume factor (tighter spreads on high volume, wider on low volume)
-    - Market hours (wider during opening and closing periods)
-    
-    This model efficiently handles large datasets of minute candles.
+    Estimate the relative spread from trailing OHLC bars with bidask.edge,
+    then multiply by the current close to obtain the full spread in price units.
+    Each symbol has its own window, including the current completed candle.
+    Feed candles in timestamp order; no future candles enter the estimate.
+    Use observe_candle on every candle and get_bid_ask only when executing an
+    order to maintain the full history without estimating a spread on HOLD bars.
+
+    The legacy price/range formula is used during warmup (fewer than three
+    bars), when EDGE returns a non-finite estimate, or when open_price is
+    omitted. Market-hour and volume adjustments apply to either base spread.
     
     Example:
         model = SyntheticSpreadModel(
@@ -29,7 +36,9 @@ class SyntheticSpreadModel:
             high=151.25,
             low=150.10,
             timestamp="2026-01-20T14:30:00Z",
-            volume=1000000
+            volume=1000000,
+            symbol="AAPL",
+            open_price=150.40,
         )
     """
     
@@ -45,13 +54,14 @@ class SyntheticSpreadModel:
         closing_spread_multiplier: float = 1.2,
         timezone: str = "UTC",
         volume_window: int = 50,
+        spread_window: int = DEFAULT_SPREAD_WINDOW,
     ):
         """
         Initialize the synthetic spread model.
         
         Args:
-            base_price_factor: Spread as fraction of price (default 0.0002 = 0.02%)
-            volatility_factor: Multiplier for (high - low) range (default 0.05 = 5%)
+            base_price_factor: Fallback spread fraction (default 0.0002 = 0.02%)
+            volatility_factor: Fallback multiplier for (high - low) (default 0.05)
             market_open_time: Market open time in "HH:MM" format (default "14:30" UTC = 9:30 AM ET)
             market_close_time: Market close time in "HH:MM" format (default "20:00" UTC = 4:00 PM ET)
             opening_period_minutes: Minutes after open to apply opening multiplier (default 15)
@@ -60,9 +70,15 @@ class SyntheticSpreadModel:
             closing_spread_multiplier: Spread multiplier during last N minutes (default 1.2x)
             timezone: Timezone for timestamp interpretation (default "UTC")
             volume_window: Number of bars to use for average volume calculation (default 50)
+            spread_window: Trailing OHLC bars for EDGE (at least 3; default 50)
         """
+        if isinstance(spread_window, bool) or not isinstance(spread_window, int) or spread_window < 3:
+            raise ValueError("spread_window must be an integer of at least 3")
         self.base_price_factor = base_price_factor
         self.volatility_factor = volatility_factor
+        self.spread_window = spread_window
+        self._ohlc_history: Dict[Optional[str], deque] = {}
+        self._last_timestamp: Dict[Optional[str], datetime] = {}
         
         # Parse market times
         open_parts = market_open_time.split(":")
@@ -87,6 +103,75 @@ class SyntheticSpreadModel:
         self.volume_history: Dict[str, deque[float]] = {}
         self.volume_window_sums: Dict[str, float] = {}
         self.volume_window = volume_window
+
+    def reset_symbol(self, symbol: Optional[str]) -> None:
+        """Discard history at a price-basis change such as an unadjusted split."""
+        self._ohlc_history.pop(symbol, None)
+        self._last_timestamp.pop(symbol, None)
+        self.volume_history.pop(symbol, None)
+        self.volume_window_sums.pop(symbol, None)
+
+    def observe_candle(
+        self,
+        mid_price: float,
+        high: float,
+        low: float,
+        timestamp: Union[datetime, str],
+        volume: Optional[float] = None,
+        symbol: Optional[str] = None,
+        open_price: Optional[float] = None,
+    ) -> None:
+        """Record a completed OHLCV candle without computing its spread.
+
+        Re-observing the same completed OHLC candle does not append it again,
+        so get_bid_ask may safely follow observation at an execution timestamp.
+        """
+        is_new_candle = True
+        if open_price is not None:
+            if not all(isfinite(price) and price > 0 for price in (open_price, high, low, mid_price)):
+                raise ValueError("OHLC prices must be finite and positive")
+            if not (low <= open_price <= high and low <= mid_price <= high):
+                raise ValueError("Open and close must lie within the candle's low/high range")
+
+            dt = self._parse_timestamp(timestamp)
+            previous_timestamp = self._last_timestamp.get(symbol)
+            if previous_timestamp is not None and dt < previous_timestamp:
+                raise ValueError("Candles must be supplied in timestamp order for each symbol")
+            history = self._ohlc_history.setdefault(symbol, deque(maxlen=self.spread_window))
+            candle = (open_price, high, low, mid_price)
+            is_new_candle = dt != previous_timestamp
+            if is_new_candle:
+                history.append(candle)
+                self._last_timestamp[symbol] = dt
+            elif history[-1] != candle:
+                raise ValueError("A completed candle cannot change at the same timestamp")
+
+        if is_new_candle and volume is not None and symbol is not None:
+            self._track_volume(symbol, volume)
+
+    def _estimate_base_spread(
+        self,
+        mid_price: float,
+        high: float,
+        low: float,
+        symbol: Optional[str],
+        open_price: Optional[float],
+    ) -> float:
+        """Estimate the spread from the already observed trailing window."""
+        fallback = max(
+            mid_price * self.base_price_factor,
+            (high - low) * self.volatility_factor,
+        )
+        if open_price is None:
+            return fallback
+        history = self._ohlc_history[symbol]
+        if len(history) < 3:
+            return fallback
+        opens, highs, lows, closes = zip(*history)
+        relative_spread = edge(opens, highs, lows, closes, sign=False)
+        if not isfinite(relative_spread):
+            return fallback
+        return mid_price * relative_spread
     
     @staticmethod
     def _clamp(value: float, min_val: float, max_val: float) -> float:
@@ -210,9 +295,10 @@ class SyntheticSpreadModel:
         timestamp: Union[datetime, str],
         volume: Optional[float] = None,
         symbol: Optional[str] = None,
+        open_price: Optional[float] = None,
     ) -> Tuple[float, float, float]:
         """
-        Calculate realistic bid/ask prices and spread for a candle.
+        Calculate bid/ask prices around the close of a completed candle.
         
         Args:
             mid_price: Candle close price (used as mid price)
@@ -220,20 +306,24 @@ class SyntheticSpreadModel:
             low: Candle low price
             timestamp: Candle timestamp (datetime or ISO string)
             volume: Volume in units (optional, used for volume factor calculation)
-            symbol: Symbol identifier (required if volume is provided)
+            symbol: Symbol identifier for independent spread and volume history.
+                If omitted, calls share a single unnamed stream.
+            open_price: Actual candle open, required for EDGE estimation.
+                If omitted, use the legacy price/range fallback.
         
         Returns:
             Tuple of (bid, ask, spread) where:
             - bid = mid_price - spread/2
             - ask = mid_price + spread/2
-            - spread = base spread adjusted for market hours and volume
+            - spread = EDGE estimate in price units, adjusted for hours and volume
         """
-        # Calculate base spread components
-        price_component = mid_price * self.base_price_factor
-        volatility_component = (high - low) * self.volatility_factor
-        
-        # Spread is the maximum of price-based and volatility-based components
-        spread = max(price_component, volatility_component)
+        self.observe_candle(
+            mid_price, high, low, timestamp,
+            volume=volume, symbol=symbol, open_price=open_price,
+        )
+        spread = self._estimate_base_spread(
+            mid_price, high, low, symbol, open_price
+        )
         
         # Adjust spread for market hours
         is_opening_period, is_closing_period = self._get_period_flags(timestamp)
@@ -244,10 +334,6 @@ class SyntheticSpreadModel:
         
         # Apply volume factor if volume data provided
         if volume is not None and symbol is not None:
-            # Track volume
-            self._track_volume(symbol, volume)
-            
-            # Apply volume factor
             volume_factor = self._get_volume_factor(symbol, volume)
             spread *= volume_factor
         
@@ -262,7 +348,10 @@ class SyntheticSpreadModel:
         mid_price: float,
         high: float,
         low: float,
-        timestamp: Union[datetime, str]
+        timestamp: Union[datetime, str],
+        volume: Optional[float] = None,
+        symbol: Optional[str] = None,
+        open_price: Optional[float] = None,
     ) -> float:
         """
         Get only the spread value (convenience method).
@@ -272,9 +361,15 @@ class SyntheticSpreadModel:
             high: Candle high price
             low: Candle low price
             timestamp: Candle timestamp
+            volume: Optional candle volume
+            symbol: Symbol identifier; use the same value as get_bid_ask
+            open_price: Actual candle open for EDGE estimation
         
         Returns:
             Spread value
         """
-        _, _, spread = self.get_bid_ask(mid_price, high, low, timestamp)
+        _, _, spread = self.get_bid_ask(
+            mid_price, high, low, timestamp,
+            volume=volume, symbol=symbol, open_price=open_price,
+        )
         return spread

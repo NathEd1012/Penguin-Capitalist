@@ -47,7 +47,9 @@ def _parse_training_relative_to(raw_value):
 TRAINING_RELATIVE_TO = _parse_training_relative_to(os.getenv("FIXED_REL", "SPY"))
 
 # Keep the search reproducible unless the user changes the seed.
-TRAINING_RANDOM_SEED = 42
+TRAINING_RANDOM_SEED = int(os.getenv("TRAINING_RANDOM_SEED", "42"))
+if TRAINING_RANDOM_SEED < 0:
+    raise ValueError("TRAINING_RANDOM_SEED must be nonnegative")
 
 # Saved alongside the run artifacts.
 TRAINING_RESULTS_FILENAME = "trainable_penguin_training.json"
