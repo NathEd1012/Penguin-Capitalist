@@ -70,7 +70,7 @@ def test_rvol_exit_accepts_either_complete_indicator_signal(
 
 @pytest.mark.parametrize("range_set,reversal_bounds,entry_bounds", [
     ("narrow", (20.0, 40.0), (20.0, 40.0)),
-    ("broad", (0.01, 55.0), (0.01, 75.0)),
+    ("broad", (0.0, 55.0), (0.01, 75.0)),
 ])
 def test_parameter_search_samples_emperor_thresholds_independently(
     monkeypatch, range_set, reversal_bounds, entry_bounds,

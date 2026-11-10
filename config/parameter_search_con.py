@@ -76,7 +76,7 @@ PARAMETER_SEARCH_STRATEGY = next(
 
 # Every supported parameter is defined once in each range set.
 # Each entry is (parameter name, type, minimum, maximum).
-# Profit and relative-volume exits share the reversal thresholds.
+# Indicator-based and relative-volume exits share the reversal thresholds.
 # Entry thresholds are sampled independently for buying and position sizing.
 NARROW_PARAMETER_RANGES = (
     ("rsi_period", "int", 5, 25),
@@ -108,7 +108,7 @@ BROAD_PARAMETER_RANGES = (
     ("bb_stddev", "float", 0.5, 4.0),
     ("upper_band_buffer", "float", -0.25, 1.0),
     ("ker_period", "int", 5, 50),
-    ("ker_reversal_threshold", "float", 0.01, 55.0),
+    ("ker_reversal_threshold", "float", 0.0, 55.0),
     ("ker_entry_threshold", "float", 0.01, 75.0),
     ("max_cash_fraction", "float", 0.01, 0.50),
     ("stop_loss_pct", "float", 0.01, 0.20),

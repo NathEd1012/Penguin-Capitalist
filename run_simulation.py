@@ -898,7 +898,6 @@ def run_backtest(
                     score = _score_training_candidate(
                         metrics,
                         benchmark_metrics,
-                        transaction_cost,
                         TRAINING_RELATIVE_TO,
                         initial_capital,
                         minimum_buys=TRAINING_MIN_BUY_TRADES,
@@ -986,9 +985,7 @@ def run_backtest(
                         validation_pareto_path,
                         title="Validation Pareto Front",
                         relative_to=TRAINING_RELATIVE_TO,
-                        transaction_cost=transaction_cost,
                         minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
-                        activity_penalty_capital=initial_capital,
                     )
 
                 if artifacts_dir is not None:
@@ -1603,25 +1600,27 @@ def run_backtest(
     # 1. DO NOT call penguin.decide() or any signal evaluation methods
     # 2. DO NOT rerank penguins
     # 3. DO NOT recompute indicators during liquidation
-    # 4. ONLY close positions with a current tradable quote, at its bid
+    # 4. Close every holding, including fractions, without trading-eligibility gates.
+    #    Use the current accepted candle's bid, or its last accepted mark if absent.
     #
-    # This ensures final positions are closed cleanly without artificially
-    # triggering new trades or changing strategy rankings based on final-bar behavior.
+    # These accounting exits are tagged separately from strategy-generated sells.
     # ===================================================================
     
-    print("\nClosing positions with current tradable quotes...")
+    print("\nClosing all positions at current bids or last accepted prices...")
     
     for penguin_name, portfolio in tqdm(portfolios.items(), desc="Closing positions"):
-        for symbol, quantity in list(portfolio.positions.items()):
-            if quantity <= 0 or symbol not in current_prices or symbol not in decision_prices:
-                continue
-            if not signal_ready(penguin_name, symbol):
-                portfolio.coverage_blocked_orders += 1
-                continue
-            close_price, _ = execution_quote(symbol, sorted_timestamps[-1], quotes)
-            if close_price > 0:
-                portfolio.sell(symbol, quantity, close_price, sorted_timestamps[-1], reason="final liquidation")
         final_timestamp = sorted_timestamps[-1]
+        for symbol, quantity in list(portfolio.positions.items()):
+            if quantity <= 0:
+                continue
+            if symbol in current_prices:
+                close_price, _ = execution_quote(symbol, final_timestamp, quotes)
+            else:
+                close_price = portfolio.last_known_prices.get(symbol)
+            if close_price is None or not portfolio.sell(
+                symbol, quantity, close_price, final_timestamp, reason="final liquidation"
+            ):
+                raise ValueError(f"Cannot liquidate {penguin_name}'s position in {symbol}")
         final_value = portfolio.get_total_value(
             current_prices, timestamp=final_timestamp, price_metadata=current_price_metadata
         )

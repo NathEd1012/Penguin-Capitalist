@@ -23,7 +23,7 @@ class BasePenguin(ABC):
         portfolio: Portfolio,
         spy_prices: Optional[List[float]] = None,
         volumes: Optional[List[float]] = None,
-    ) -> tuple[str, int]:
+    ) -> tuple[str, float]:
         """
         Make a trading decision and size buys using the completed candle's high.
 

@@ -61,7 +61,7 @@ class EmperorPenguin(BasePenguin):
         portfolio: Portfolio,
         spy_prices: List[float] | None = None, 
         volumes: List[float] | None = None,
-    ) -> tuple[str, int]:
+    ) -> tuple[str, float]:
         min_required = max(
             60,
             self.params.rsi_period,
@@ -93,7 +93,7 @@ class EmperorPenguin(BasePenguin):
         rvol = relative_volume(volumes, self.params.rvol_period)
 
         cash = float(portfolio.cash)
-        shares_owned = int(portfolio.get_position(symbol))
+        shares_owned = portfolio.get_position(symbol)
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
         current_bar = self._decision_bar.get(symbol, 0) + 1

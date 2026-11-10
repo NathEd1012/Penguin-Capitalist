@@ -55,7 +55,7 @@ class RockhopperPenguin(BasePenguin):
         portfolio: Portfolio,
         spy_prices: List[float] | None = None,
         volumes: List[float] | None = None,
-    ) -> tuple[str, int]:
+    ) -> tuple[str, float]:
         min_required = max(
             60,
             self.params.bb_period,
@@ -77,7 +77,7 @@ class RockhopperPenguin(BasePenguin):
         rvol = relative_volume(volumes, self.params.rvol_period)
 
         cash = float(portfolio.cash)
-        shares_owned = int(portfolio.get_position(symbol))
+        shares_owned = portfolio.get_position(symbol)
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
         current_bar = self._decision_bar.get(symbol, 0) + 1
@@ -91,7 +91,7 @@ class RockhopperPenguin(BasePenguin):
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
             )
             #Take profit
-            profit_threshold_reached = (
+            take_profit_trigger = (
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
@@ -104,11 +104,7 @@ class RockhopperPenguin(BasePenguin):
             
             weak_trend = trend_score < self.params.trend_reversal_threshold
 
-            take_profit_trigger = (
-                (profit_threshold_reached or upper_band_reached)
-                and
-                (weak_trend)
-            )
+            sell_profit_trigger = upper_band_reached and weak_trend
             # Relative performance
             relative_performance_exit_trigger = (
                 avg_entry is not None
@@ -127,6 +123,7 @@ class RockhopperPenguin(BasePenguin):
             if (
                 loss_trigger
                 or take_profit_trigger
+                or sell_profit_trigger
                 or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
@@ -143,8 +140,7 @@ class RockhopperPenguin(BasePenguin):
             return "HOLD", 0
 
         if (
-            shares_owned == 0
-            and current_price <= lower_band
+            current_price <= lower_band
             and trend_score > self.params.trend_entry_threshold
         ):
             strength = min(

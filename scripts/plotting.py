@@ -25,7 +25,6 @@ from datetime import datetime, timedelta
 import pytz
 import csv
 from config import INITIAL_CAPITAL, SAVE_CSV, TRAINING_MIN_BUY_TRADES
-from scripts.training_objective import activity_penalty
 
 
 def _display_strategy_name(name: str) -> str:
@@ -361,10 +360,8 @@ def create_training_pareto_pdf(
     output_pdf,
     title: str = "Pareto Front",
     relative_to: int | str = 0,
-    transaction_cost: float = 0.0,
     exclude_zero_buy_trials: bool = False,
     minimum_buy_trades: int = TRAINING_MIN_BUY_TRADES,
-    activity_penalty_capital: float = 0.0,
 ):
     """Plot trials meeting the buy minimum, retaining SP500 and full legend counts."""
     output_path = Path(output_pdf)
@@ -508,29 +505,6 @@ def create_training_pareto_pdf(
             ax.set_ylabel(profit_axis_label)
             ax.grid(True, alpha=0.25)
 
-            # Draw the zero-score line only over the displayed buy-count range.
-            if plotted_trials:
-                max_trades = max(x_values) if x_values else 0
-            else:
-                max_trades = 0
-            x_line_max = max(max_trades, minimum_buy_trades, minimum_plotted_buys, 1)
-            x_line = sorted({minimum_plotted_buys, max(minimum_plotted_buys, minimum_buy_trades), x_line_max})
-            y_line = [
-                float(transaction_cost) * buys
-                + (activity_penalty(buys, activity_penalty_capital, minimum_buy_trades)
-                   if minimum_buy_trades > 0 else 0.0)
-                for buys in x_line
-            ]
-            ax.plot(
-                x_line,
-                y_line,
-                color="gray",
-                linestyle="--",
-                linewidth=0.8,
-                alpha=0.9,
-                label="net score = 0",
-                zorder=1,
-            )
             ax.plot(
                 [],
                 [],

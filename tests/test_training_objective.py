@@ -1,4 +1,8 @@
+from datetime import datetime, timezone
+
 import pytest
+
+from backtest.portfolio import Portfolio
 
 from scripts.training_objective import (
     activity_penalty,
@@ -15,7 +19,6 @@ def score(buys, profit=0, benchmark_profit=0, relative_to="SPY", capital=100_000
     return score_training_candidate(
         metrics(buys, profit),
         {"total_return": benchmark_profit},
-        2.0,
         relative_to,
         capital,
         minimum_buys=20,
@@ -32,15 +35,15 @@ def test_activity_penalty_has_the_agreed_magnitude(buys, penalty):
 
 def test_a_single_buy_does_not_escape_the_inactivity_penalty():
     assert score(0)[0] == -150_000
-    assert score(1)[0] == -142_502
-    assert score(5)[0] == -112_510
-    assert score(10)[0] == -75_020
+    assert score(1)[0] == -142_500
+    assert score(5)[0] == -112_500
+    assert score(10)[0] == -75_000
 
 
-def test_twenty_buys_removes_only_the_activity_penalty():
-    assert score(19, profit=5_000, benchmark_profit=1_000) == (-3_538, -19, -38)
-    assert score(20, profit=5_000, benchmark_profit=1_000) == (3_960, -20, -40)
-    assert score(21, profit=5_000, benchmark_profit=1_000) == (3_958, -21, -42)
+def test_active_candidates_keep_net_profit_and_use_trade_counts_only_for_ties():
+    assert score(19, profit=5_000, benchmark_profit=1_000) == (-3_500, -19, -38)
+    assert score(20, profit=5_000, benchmark_profit=1_000) == (4_000, -20, -40)
+    assert score(21, profit=5_000, benchmark_profit=1_000) == (4_000, -21, -42)
 
 
 def test_profitable_but_inactive_candidate_is_ranked_below_an_active_candidate():
@@ -57,7 +60,7 @@ def test_zero_buys_has_full_penalty_and_correct_benchmark_direction(benchmark_pr
 
 @pytest.mark.parametrize("relative_to", [0, "0", None, False])
 def test_absolute_mode_does_not_include_benchmark_profit(relative_to):
-    assert score(5, profit=2_000, benchmark_profit=10_000, relative_to=relative_to)[0] == -110_510
+    assert score(5, profit=2_000, benchmark_profit=10_000, relative_to=relative_to)[0] == -110_500
 
 
 def test_activity_penalty_scales_with_capital():
@@ -83,7 +86,27 @@ def test_reported_profit_is_separate_from_the_activity_penalty():
 
 def test_legacy_metrics_without_buy_count_still_receive_a_penalty():
     result = score_training_candidate(
-        {"total_trades": 5, "total_return": 0}, {}, 2.0, 0, 100_000,
+        {"total_trades": 5, "total_return": 0}, {}, 0, 100_000,
         minimum_buys=20,
     )
-    assert result == (-112_510, -5, -5)
+    assert result == (-112_500, -5, -5)
+
+
+@pytest.mark.parametrize("execution_fee", [1.0, 2.0])
+def test_execution_fees_in_portfolio_profit_are_not_charged_again(execution_fee):
+    capital = 1_000
+    portfolio = Portfolio(capital, transaction_cost=execution_fee)
+    timestamp = datetime(2024, 1, 2, tzinfo=timezone.utc)
+    assert portfolio.buy("SPY", 1, 100, timestamp)
+    assert portfolio.sell("SPY", 1, 100, timestamp)
+
+    candidate_metrics = {
+        "total_return": portfolio.get_total_value({}) - capital,
+        "buy_trades": portfolio.buy_trade_count,
+        "total_trades": portfolio.total_trade_count,
+    }
+    result = score_training_candidate(
+        candidate_metrics, {}, 0, capital, minimum_buys=1,
+    )
+
+    assert result == (-2 * execution_fee, -1, -2)

@@ -236,7 +236,7 @@ class Evaluator:
             
             trades_content += "\n" + "=" * 80 + "\n\n"
         
-        trades_content += "LIQUIDATION TRADES (End of Backtest, Current Tradable Quotes Only)\n"
+        trades_content += "LIQUIDATION TRADES (End of Backtest, Current Bid or Last Accepted Price)\n"
         trades_content += "-" * 80 + "\n\n"
         
         liquidation_found = False

@@ -54,7 +54,7 @@ class GentooPenguin(BasePenguin):
         portfolio: Portfolio,
         spy_prices: List[float] | None = None,
         volumes: List[float] | None = None,
-    ) -> tuple[str, int]:
+    ) -> tuple[str, float]:
         min_required = max(
             60,
             self.params.rsi_period,
@@ -75,7 +75,7 @@ class GentooPenguin(BasePenguin):
         rvol = relative_volume(volumes, self.params.rvol_period)
 
         cash = float(portfolio.cash)
-        shares_owned = int(portfolio.get_position(symbol))
+        shares_owned = portfolio.get_position(symbol)
         avg_entry = portfolio.cost_basis.get(symbol)
         current_price = mid_prices[-1]
         current_bar = self._decision_bar.get(symbol, 0) + 1
@@ -89,7 +89,7 @@ class GentooPenguin(BasePenguin):
                 and current_price <= avg_entry * (1 - self.params.stop_loss_pct)
             )
             #Take profit
-            profit_threshold_reached = (
+            take_profit_trigger = (
                 avg_entry is not None
                 and current_price >= avg_entry * (1 + self.params.take_profit_pct)
             )
@@ -98,11 +98,7 @@ class GentooPenguin(BasePenguin):
 
             weak_ker = ker_value < self.params.ker_reversal_threshold
 
-            take_profit_trigger = (
-                (profit_threshold_reached or rsi_overbought)
-                and
-                (weak_ker)
-            )
+            sell_profit_trigger = rsi_overbought and weak_ker
 
             # Relative performance
             relative_performance_exit_trigger = (
@@ -123,6 +119,7 @@ class GentooPenguin(BasePenguin):
             if (
                 loss_trigger
                 or take_profit_trigger
+                or sell_profit_trigger
                 or relative_performance_exit_trigger
                 or rvol_exit_trigger
             ):
@@ -140,8 +137,7 @@ class GentooPenguin(BasePenguin):
 
         rsi_buy_signal = rsi_value <= self.params.buy_rsi
         if (
-            shares_owned == 0
-            and rsi_buy_signal
+            rsi_buy_signal
             and ker_value >= self.params.ker_entry_threshold
         ):
             strength = min(

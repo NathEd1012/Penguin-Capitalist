@@ -477,7 +477,6 @@ def _train_trainable_penguins(
             score = _score_training_candidate(
                 candidate_metrics,
                 benchmark_metrics,
-                TRAINING_TRANSACTION_COST,
                 TRAINING_RELATIVE_TO,
                 initial_capital,
                 minimum_buys=TRAINING_MIN_BUY_TRADES,
@@ -824,9 +823,7 @@ def run_training_step(
             trained_parameters,
             training_pareto_path,
             relative_to=TRAINING_RELATIVE_TO,
-            transaction_cost=TRAINING_TRANSACTION_COST,
             minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
-            activity_penalty_capital=initial_capital,
         )
         filtered_pareto_path = Path(artifacts_dir).parent / FILTERED_PARETO_FILENAME
         create_training_pareto_pdf(
@@ -836,9 +833,7 @@ def run_training_step(
             filtered_pareto_path,
             title="Training Pareto Front",
             relative_to=TRAINING_RELATIVE_TO,
-            transaction_cost=TRAINING_TRANSACTION_COST,
             minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
-            activity_penalty_capital=initial_capital,
             exclude_zero_buy_trials=True,
         )
 

@@ -121,7 +121,7 @@ def call_penguin_decide(
     portfolio: Portfolio,
     spy_prices: Optional[List[float]] = None,
     volumes: Optional[List[float]] = None,
-) -> tuple[str, int]:
+) -> tuple[str, float]:
     """Pass candle low/high to legacy or context-aware decision signatures.
 
     Prices are passed positionally so legacy bid/ask parameter names still work.

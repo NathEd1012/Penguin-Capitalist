@@ -4,7 +4,7 @@ ACTIVITY_PENALTY_CAPITAL_MULTIPLIER = 1.5
 
 
 def training_profit_amount(candidate_metrics, benchmark_metrics, relative_to) -> float:
-    """Return profit before activity and transaction-cost penalties."""
+    """Return net profit, optionally relative to the benchmark."""
     profit = float(candidate_metrics.get("total_return", 0.0))
     if relative_to not in (0, "0", None, False):
         profit -= float(benchmark_metrics.get("total_return", 0.0))
@@ -22,7 +22,6 @@ def activity_penalty(buy_trades: int, initial_capital: float, minimum_buys: int)
 def score_training_candidate(
     candidate_metrics,
     benchmark_metrics,
-    transaction_cost: float,
     relative_to,
     initial_capital: float,
     *,
@@ -31,8 +30,9 @@ def score_training_candidate(
     buy_trades = int(candidate_metrics.get("buy_trades", candidate_metrics.get("total_trades", 0)))
     profit = training_profit_amount(candidate_metrics, benchmark_metrics, relative_to)
     penalty = activity_penalty(buy_trades, initial_capital, minimum_buys)
+    # Execution fees are already included in the portfolios' net profits.
     return (
-        profit - buy_trades * transaction_cost - penalty,
+        profit - penalty,
         -buy_trades,
         -int(candidate_metrics.get("total_trades", 0)),
     )

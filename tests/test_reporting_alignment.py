@@ -133,3 +133,33 @@ def test_pdf_summary_uses_portfolios_own_marks_for_open_positions(tmp_path):
     assert saved.call_args.args[3:6] == (5000, 6000, 11000)
     assert saved.call_args.args[8] == 1000
     assert (tmp_path/'report.pdf').exists()
+
+
+def test_pdf_sell_count_excludes_final_liquidation_but_keeps_its_proceeds(tmp_path):
+    import scripts.plotting as plotting
+    portfolio = Portfolio(1000, transaction_cost=1)
+    assert portfolio.buy('AAPL', 5, 100, BASE)
+    portfolio.add_value_snapshot(portfolio.get_total_value({'AAPL': 100}, timestamp=BASE), BASE)
+    assert portfolio.sell('AAPL', 1, 110, BASE+timedelta(minutes=1))
+    final = BASE+timedelta(minutes=2)
+    assert portfolio.sell('AAPL', 4, 120, final, reason='final liquidation')
+    portfolio.add_value_snapshot(portfolio.get_total_value({}, timestamp=final), final)
+
+    rendered_text = []
+    savefig = plotting.PdfPages.savefig
+
+    def capture_page(pdf, figure, *args, **kwargs):
+        rendered_text.extend(text.get_text() for axes in figure.axes for text in axes.texts)
+        return savefig(pdf, figure, *args, **kwargs)
+
+    with patch.object(plotting.PdfPages, 'savefig', autospec=True, side_effect=capture_page), \
+         patch.object(plotting, '_save_strategy_summary_to_artifacts') as saved:
+        plotting.create_final_report_pdf(
+            {'Strategy': portfolio.value_history}, {'Strategy': portfolio},
+            str(tmp_path/'report.pdf'),
+            bar_timestamps={'Strategy': portfolio.value_timestamps}, artifacts_dir=tmp_path,
+        )
+    assert any('Buys: 1  |  Sells: 1' in text for text in rendered_text)
+    assert saved.call_args.args[3:8] == (1087, 0, 1087, 1, 1)
+    assert not portfolio.positions
+    assert portfolio.sell_trade_count == 2  # Both sales still count for accounting.

@@ -21,7 +21,7 @@ TRAINING_SUBSET_MONTHS = int(os.getenv("FIXED_MONTH", TRAINING_SUBSET_MONTHSx))
 TRAINING_SUBSET_STOCKSx = 30
 TRAINING_SUBSET_STOCKS = int(os.getenv("FIXED_SYMB", TRAINING_SUBSET_STOCKSx))
 
-# Match the training objective's per-buy cost penalty.
+# Fixed execution fee per successful training buy or sell.
 TRAINING_TRANSACTION_COSTx = 2.0
 TRAINING_TRANSACTION_COST = float(os.getenv("FIXED_TRAIN_TC", TRAINING_TRANSACTION_COSTx))
 

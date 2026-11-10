@@ -93,6 +93,23 @@ def test_zero_quantity_does_not_start_cooldown(strategy_factory):
     assert decide(strategy, portfolio)[0] == "BUY"
 
 
+@pytest.mark.parametrize('cooldown', [0, 3])
+def test_existing_position_can_be_increased_after_cooldown(strategy_factory, cooldown):
+    strategy = strategy_factory(cooldown=cooldown)
+    portfolio = Portfolio(10_000)
+    at = datetime(2026, 1, 5, tzinfo=timezone.utc)
+    action, first_quantity = decide(strategy, portfolio)
+    assert action == 'BUY'
+    assert portfolio.buy('AAPL', first_quantity, 100.0, at)
+    for _ in range(max(0, cooldown - 1)):
+        assert decide(strategy, portfolio) == ('HOLD', 0)
+    action, next_quantity = decide(strategy, portfolio)
+    assert action == 'BUY'
+    assert next_quantity > 0
+    assert portfolio.buy('AAPL', next_quantity, 100.0, at)
+    assert portfolio.get_position('AAPL') == first_quantity + next_quantity
+
+
 def test_parameter_search_includes_and_instantiates_cooldown(strategy_factory):
     strategy_class = type(strategy_factory())
     space = strategy_parameter_space(strategy_class)

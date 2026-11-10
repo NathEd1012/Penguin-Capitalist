@@ -36,7 +36,7 @@ def _strategy_parameters(module, strategy_name):
 @pytest.mark.parametrize("exit_kind", ["profit", "volume"])
 @pytest.mark.parametrize("ker_entry_threshold", [10.0, 60.0])
 @pytest.mark.parametrize("threshold_index,expected_action", [(0, "HOLD"), (1, "SELL")])
-def test_profit_and_volume_exits_share_the_weakness_threshold(
+def test_indicator_and_volume_exits_share_the_weakness_threshold(
     monkeypatch, strategy_name, indicator, threshold_name, thresholds, scores,
     exit_kind, ker_entry_threshold, threshold_index, expected_action,
 ):
@@ -118,6 +118,37 @@ def test_buy_sizing_uses_candle_high_instead_of_close(monkeypatch, strategy_name
     assert strategy.decide('AAPL', [100.0] * 62, 90.0, 200.0, Portfolio(10_000)) == (
         'BUY', expected_quantity,
     )
+
+
+@pytest.mark.parametrize('strategy_name', STRATEGIES)
+@pytest.mark.parametrize('quantity', [0.5, 10.5])
+@pytest.mark.parametrize('price', [90.0, 120.0], ids=['stop-loss', 'take-profit'])
+def test_price_exits_close_fractional_positions_without_weakness_confirmation(
+    monkeypatch, strategy_name, quantity, price,
+):
+    module = importlib.import_module(f'penguins.{strategy_name}')
+    strategy = getattr(module, strategy_name)(**_strategy_parameters(module, strategy_name))
+    if hasattr(module, 'ker'):
+        monkeypatch.setattr(module, 'ker', lambda *args: 80.0)
+    if hasattr(module, 'trend_quality'):
+        monkeypatch.setattr(module, 'trend_quality', lambda *args: 0.8)
+    if hasattr(module, 'rsi'):
+        monkeypatch.setattr(module, 'rsi', lambda *args: 50.0)
+    if hasattr(module, 'bollinger_bands'):
+        monkeypatch.setattr(module, 'bollinger_bands', lambda *args: (110.0, 100.0, 90.0))
+    monkeypatch.setattr(module, 'relative_performance', lambda *args: 0.0)
+    monkeypatch.setattr(module, 'relative_volume', lambda *args: 1.0)
+
+    portfolio = Portfolio(10_000)
+    at = datetime(2026, 1, 5, tzinfo=timezone.utc)
+    assert portfolio.buy('AAPL', 10, 100.0, at)
+    portfolio.positions['AAPL'] = quantity  # A distribution can leave fractional shares.
+    action, sold_quantity = strategy.decide(
+        'AAPL', [price] * 62, price, price, portfolio,
+    )
+    assert (action, sold_quantity) == ('SELL', quantity)
+    assert portfolio.sell('AAPL', sold_quantity, price, at)
+    assert portfolio.get_position('AAPL') == 0
 
 
 @pytest.mark.parametrize("strategy_name", STRATEGIES)

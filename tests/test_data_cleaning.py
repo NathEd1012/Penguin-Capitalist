@@ -324,33 +324,47 @@ def test_zero_volume_does_not_advance_indicator_history_or_mark_age():
     assert len(captures) == 2
     assert [t.action for t in p.trades] == ['BUY', 'SELL']
     p = run_replay([(BASE, bar()), (t, bar(volume=0))])
-    assert [trade.action for trade in p.trades] == ['BUY']
-    assert p.valuation_marks['AAPL']['mark_timestamp'] == BASE
-    assert p.valuation_marks['AAPL']['mark_age_seconds'] == 60
-    assert p.valuation_marks['AAPL']['mark_is_stale']
+    assert [trade.action for trade in p.trades] == ['BUY', 'SELL']
+    assert p.trades[-1].reason == 'final liquidation'
+    assert p.trades[-1].price == 100
+    assert p.trades[-1].timestamp == t
+    assert not p.positions
+    assert p.cash == 100
 
 
-def test_final_liquidation_never_fills_a_stale_quote():
+def test_final_liquidation_uses_last_accepted_price_when_symbol_data_lags():
     later = BASE+timedelta(days=4)
     auxiliary = {'SPY': prepared('SPY', [(later, bar(200))])}
-    p = run_replay([(BASE, bar()), (BASE+timedelta(minutes=1), bar())], auxiliary=auxiliary)
-    assert [t.action for t in p.trades] == ['BUY']
-    assert p.get_position('AAPL') == 1
-    assert p.cash == 0
-    assert p.value_history[-1] == 100
-    mark = p.valuation_marks['AAPL']
-    assert mark['mark_is_stale']
-    assert mark['mark_timestamp'] == BASE+timedelta(minutes=1)
-    assert mark['mark_age_seconds'] == (later-BASE).total_seconds()-60
+    p = run_replay([(BASE, bar()), (BASE+timedelta(minutes=1), bar(101))], auxiliary=auxiliary)
+    assert [t.action for t in p.trades] == ['BUY', 'SELL']
+    assert not p.positions
+    assert p.cash == p.value_history[-1] == 101
+    assert p.trades[-1].reason == 'final liquidation'
+    assert p.trades[-1].price == 101
+    assert p.trades[-1].timestamp == later
 
 
-def test_final_liquidation_requires_trade_eligible_quote():
+def test_final_liquidation_bypasses_session_eligibility():
     final = BASE+timedelta(minutes=2)
     p = run_replay([(BASE, bar()), (BASE+timedelta(minutes=1), bar()),
                     (final, bar(101))], eligibility={final: False})
-    assert [t.action for t in p.trades] == ['BUY']
-    assert p.get_position('AAPL') == 1
-    assert not p.valuation_marks['AAPL']['mark_is_stale']
+    assert [t.action for t in p.trades] == ['BUY', 'SELL']
+    assert not p.positions
+    assert p.trades[-1].reason == 'final liquidation'
+    assert p.trades[-1].price == 101
+    assert p.cash == 101
+
+
+@pytest.mark.parametrize('rejected_bar', [bar(150), bar(150, volume=0), bar(150, volume=-1)])
+def test_final_liquidation_ignores_rejected_last_prices(rejected_bar):
+    final = BASE+timedelta(minutes=2)
+    p = run_replay([(BASE, bar()), (BASE+timedelta(minutes=1), bar(101)),
+                    (final, rejected_bar)])
+    assert not p.positions
+    assert p.trades[-1].reason == 'final liquidation'
+    assert p.trades[-1].price == 101
+    assert p.trades[-1].timestamp == final
+    assert p.cash == 101
 
 
 def test_real_loop_final_close_uses_latest_price():
@@ -379,17 +393,18 @@ def test_indicator_coverage_survives_normal_market_closures():
     assert p.coverage_blocked_orders == 0
 
 
-def test_quotes_outside_configured_session_do_not_refresh_marks_or_fill():
+def test_final_liquidation_does_not_use_prices_outside_configured_session():
     outside = datetime(2026, 1, 6, 2, tzinfo=UTC)  # 21:00 ET, after the late close.
     p = run_replay([(BASE, bar()), (BASE+timedelta(minutes=1), bar()), (outside, bar(101))])
-    assert [t.action for t in p.trades] == ['BUY']
+    assert [t.action for t in p.trades] == ['BUY', 'SELL']
     assert p.value_history[-1] == 100
-    assert p.valuation_marks['AAPL']['mark_is_stale']
-    assert p.valuation_marks['AAPL']['mark_timestamp'] == BASE+timedelta(minutes=1)
-    assert p.valuation_marks['AAPL']['mark_status'] == 'CARRIED_OUTSIDE_SESSION'
+    assert not p.positions
+    assert p.trades[-1].reason == 'final liquidation'
+    assert p.trades[-1].price == 100
+    assert p.trades[-1].timestamp == outside
 
 
-def test_deferred_sell_and_final_liquidation_cannot_bypass_coverage():
+def test_coverage_blocks_deferred_sell_but_not_final_liquidation():
     from penguins.base_penguin import BasePenguin
     class BuyThenSell(BasePenguin):
         LOOKBACK_BARS = 4
@@ -399,9 +414,10 @@ def test_deferred_sell_and_final_liquidation_cannot_bypass_coverage():
             return ('SELL', 1) if portfolio.get_position(symbol) else ('BUY', 1)
     points = [(BASE+timedelta(minutes=i), bar()) for i in (0, 1, 2, 3, 4, 20)]
     p = run_replay(points, strategy=BuyThenSell, delay=1)
-    assert [t.action for t in p.trades] == ['BUY']
-    assert p.get_position('AAPL') == 1
-    assert p.coverage_blocked_orders == 2
+    assert [t.action for t in p.trades] == ['BUY', 'SELL']
+    assert not p.positions
+    assert p.trades[-1].reason == 'final liquidation'
+    assert p.coverage_blocked_orders == 1
 
 
 def test_batch_decisions_block_and_resume_at_exactly_half_coverage():
