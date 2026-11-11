@@ -103,11 +103,11 @@ def _optuna_sampler(seed: int):
     return optuna.samplers.GPSampler(seed=seed, n_startup_trials=0)
 
 
-def _optuna_suggest(
+def _create_optuna_study(
     parameter_space: ParameterSpace,
     completed_trials: list[dict[str, object]],
     seed: int,
-) -> ParameterValues:
+):
     import optuna
 
     optuna.logging.set_verbosity(optuna.logging.WARNING)
@@ -134,17 +134,65 @@ def _optuna_suggest(
             value=float(trial["objective_value"]),
         ))
 
-    trial = study.ask()
+    return study
+
+
+def _suggest_optuna_trial(trial, parameter_space: ParameterSpace, *, round_floats: bool) -> ParameterValues:
     params: ParameterValues = {}
     for name, kind, low, high in parameter_space:
         if kind == "int":
             params[name] = trial.suggest_int(name, int(low), int(high))
         else:
-            params[name] = round(trial.suggest_float(name, float(low), float(high)), 4)
+            value = trial.suggest_float(name, float(low), float(high))
+            params[name] = round(value, 4) if round_floats else value
     return params
 
 
-def suggest_parameters(strategy_class, completed_trials, rng, np_rng=None):
+class OptunaSearch:
+    """Keep a strategy's sampler state and complete the trials returned by ask()."""
+
+    def __init__(self):
+        self.study = None
+        self._pending_trial = None
+
+    def suggest(self, parameter_space, completed_trials, seed):
+        if self._pending_trial is not None:
+            raise RuntimeError("Complete or fail the previous Optuna trial before asking again.")
+        if self.study is None:
+            # Import the application's warm-up observations once. Later results
+            # must go through tell() to retain CMA generation and optimizer attrs.
+            self.study = _create_optuna_study(parameter_space, completed_trials, seed)
+        self._pending_trial = self.study.ask()
+        try:
+            # Evaluate exactly the values stored by Optuna, including float precision.
+            return _suggest_optuna_trial(self._pending_trial, parameter_space, round_floats=False)
+        except Exception:
+            self.fail()
+            raise
+
+    def tell(self, objective_value):
+        if self._pending_trial is not None:
+            self.study.tell(self._pending_trial, float(objective_value))
+            self._pending_trial = None
+
+    def fail(self):
+        if self._pending_trial is not None:
+            import optuna
+
+            self.study.tell(self._pending_trial, state=optuna.trial.TrialState.FAIL)
+            self._pending_trial = None
+
+
+def _optuna_suggest(parameter_space, completed_trials, seed) -> ParameterValues:
+    if PARAMETER_SEARCH_BAYESIAN_SAMPLER == "cmaes" and any(
+        trial.get("status") == "completed" for trial in completed_trials
+    ):
+        raise RuntimeError("CMA-ES optimization requires a persistent OptunaSearch instance.")
+    study = _create_optuna_study(parameter_space, completed_trials, seed)
+    return _suggest_optuna_trial(study.ask(), parameter_space, round_floats=True)
+
+
+def suggest_parameters(strategy_class, completed_trials, rng, np_rng=None, optuna_search=None):
     """Suggest the next parameters using random/grid or an Optuna sampler."""
     del np_rng
     parameter_space = strategy_parameter_space(strategy_class)
@@ -162,7 +210,13 @@ def suggest_parameters(strategy_class, completed_trials, rng, np_rng=None):
     if method not in {"bayesian", "bayesian_grid", "bayesian_rand"}:
         raise ValueError(f"Unsupported PARAMETER_SEARCH_METHOD: {method}")
 
-    params = _optuna_suggest(parameter_space, completed_trials, rng.randrange(0, 2**32))
+    # Preserve the parameter/data RNG draw cadence. A persistent sampler uses
+    # only the first seed; subsequent draws still keep data sampling aligned.
+    seed = rng.randrange(0, 2**32)
+    if optuna_search is not None:
+        params = optuna_search.suggest(parameter_space, completed_trials, seed)
+    else:
+        params = _optuna_suggest(parameter_space, completed_trials, seed)
     return params, f"optuna_{PARAMETER_SEARCH_BAYESIAN_SAMPLER}"
 
 

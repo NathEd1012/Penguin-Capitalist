@@ -60,7 +60,7 @@ from config.parameter_search_con import (
 from run_simulation import _memory_aware_worker_count, parse_datetime_string, run_backtest
 from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
-from scripts.parameter_search import suggest_parameters
+from scripts.parameter_search import OptunaSearch, suggest_parameters
 from scripts.training_objective import (
     activity_penalty,
     score_training_candidate as _score_training_candidate,
@@ -139,6 +139,8 @@ def _print_training_configuration(trainable_strategy_classes) -> None:
     )
     print(f"T_PLUS_X (bars):   {T_PLUS_X}")
     print(f"Training Seed:     {TRAINING_RANDOM_SEED}")
+    if PARAMETER_SEARCH_BAYESIAN_SAMPLER == "cmaes":
+        print("CMA-ES State:      persistent per-strategy Optuna study (ask/tell)")
     print("=" * 80)
 
 
@@ -364,6 +366,8 @@ def _train_trainable_penguins(
     )
     log_lines.append(f"  T_PLUS_X (bars):   {T_PLUS_X}")
     log_lines.append(f"  Training Seed:     {TRAINING_RANDOM_SEED}")
+    if PARAMETER_SEARCH_BAYESIAN_SAMPLER == "cmaes":
+        log_lines.append("  CMA-ES State:      persistent per-strategy Optuna study (ask/tell)")
     log_lines.append("=" * 80)
     log_lines.append("  Resampling cadence: one fresh stock subset and one fresh time window per trial")
     log_lines.append(
@@ -382,6 +386,7 @@ def _train_trainable_penguins(
         initial_params = {}
         previous_trial_params = None
         completed_trials = []
+        optuna_search = OptunaSearch() if PARAMETER_SEARCH_BAYESIAN_SAMPLER == "cmaes" else None
         candidate_pool = []
         pareto_history[strategy_class.__name__] = []
 
@@ -390,6 +395,7 @@ def _train_trainable_penguins(
             completed_trials=[],
             rng=rng,
             np_rng=np_rng,
+            optuna_search=optuna_search,
         )
         best_params = dict(initial_params)
 
@@ -409,6 +415,8 @@ def _train_trainable_penguins(
             trial_timestamps = _training_window_subset(tradeable_timestamps, TRAINING_SUBSET_MONTHS, rng)
 
             if not trial_symbols or not trial_timestamps:
+                if optuna_search is not None:
+                    optuna_search.fail()
                 log_lines.append(f"    Trial {trial_number:03d}: skipped (no subset available)")
                 trial_iterator.set_postfix_str("skipped empty subset", refresh=False)
                 parameter_history.append({"strategy": strategy_class.__name__, "trial": trial_number, "status": "skipped"})
@@ -423,6 +431,7 @@ def _train_trainable_penguins(
                     completed_trials=completed_trials,
                     rng=rng,
                     np_rng=np_rng,
+                    optuna_search=optuna_search,
                 )
             candidate = strategy_class(**params)
             trial_max_period = max_period_for_strategies([candidate])
@@ -455,6 +464,8 @@ def _train_trainable_penguins(
                         loaded_price_basis_adjusted=loaded_price_basis_adjusted,
                     )
             except Exception as exc:
+                if optuna_search is not None:
+                    optuna_search.fail()
                 trial_details = trial_output.getvalue().strip()
                 if trial_details:
                     print(
@@ -482,6 +493,8 @@ def _train_trainable_penguins(
                 minimum_buys=TRAINING_MIN_BUY_TRADES,
             )
             objective_value = _objective_from_score(score)
+            if optuna_search is not None:
+                optuna_search.tell(objective_value)
             final_value = float(candidate_metrics.get("final_value", 0.0))
             buy_trades = int(candidate_metrics.get("buy_trades", 0))
             low_activity_penalty = activity_penalty(buy_trades, initial_capital, TRAINING_MIN_BUY_TRADES)

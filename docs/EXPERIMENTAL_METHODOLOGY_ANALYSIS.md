@@ -104,7 +104,7 @@ The same test dates recur across five methods, two selected variants per strateg
 | Mechanism | Actual behavior |
 |---|---|
 | Chronological separation within an anchor | Adjacent half-open training, validation, and test intervals. |
-| Optimizer isolation | Only completed training objectives enter reconstructed Optuna studies. |
+| Optimizer isolation | Only completed training objectives guide Optuna proposals. |
 | No recursive training in evaluation | Nested validation and candidate calls use `training_step_allowed=False`. |
 | Causal strategy inputs | The ordered loop appends accepted observations through the current candle and passes trailing windows to `decide()`. |
 | Execution delay | Default `T_PLUS_X=1` queues signals for a later simulation bar. |
@@ -269,7 +269,7 @@ Failure handling is not a finite bad-score policy:
 - An empty stock/time subset consumes the outer loop iteration, appends a `status='skipped'` record, and supplies no objective.
 - A candidate-construction error can propagate directly. A candidate backtest exception is wrapped in `RuntimeError` and aborts that training path.
 - Ordinary rejected orders are not failed trials. Individual per-symbol decision exceptions are silently swallowed in the simulation, potentially leaving a completed candidate with fewer/no trades.
-- Failed backtests are not registered as Optuna `FAIL` trials and are not retried to achieve a fixed number of successful observations. No explicit non-finite-objective penalty is implemented.
+- Failed CMA-ES backtests mark the pending Optuna trial `FAIL`; GP/TPE do not retain failed trial records. Failed evaluations are not retried to achieve a fixed number of successful observations. No explicit non-finite-objective penalty is implemented.
 
 ## 5. Optuna implementation
 
@@ -277,7 +277,11 @@ Failure handling is not a finite bad-score policy:
 
 `requirements.txt` requests **`optuna>=5.0.0`**. The exact installed/executed Optuna version is **Not found in code or inspected result artifacts**. No lockfile, per-run package freeze, or Optuna version field was found. The partially retained `venvPeng` directory lacks the activation script referenced by the launcher and usable Optuna distribution-version metadata; its directory name does not establish an experiment's Optuna version. An older error message mentioning `optuna>=4.0.0` in `_optuna_sampler()` is not a version record. [S8] [S23]
 
-The repository does **not** maintain one live Optuna study for an entire run. On every post-warm-up proposal, `_optuna_suggest()`:
+CMA-ES training maintains **one live in-memory Optuna study per strategy** through `OptunaSearch`. At the first adaptive proposal, it imports completed application warm-up observations once. Each later candidate comes from `study.ask()` and its evaluated objective is returned through `study.tell()`. This preserves the trial generation attributes and serialized CMA optimizer state needed for population updates. The sampler is seeded once when this study is created. Failed backtests mark the pending trial `FAIL` before aborting; skipped subsets also clear any pending initial trial. This is process-lifetime persistence, not a database checkpoint or restart/resume mechanism.
+
+The earlier implementation rebuilt the study before every CMA proposal and copied only parameters, distributions, and objective values. In Optuna 5.0.0, those imported trials lack the generation metadata required for CMA updates, so the distribution never adapts. Existing runs made with that implementation must be rerun to obtain adaptive CMA-ES results; changing source files does not update already-running Python processes.
+
+GP and TPE retain their original transient-study path. On every post-warm-up proposal, `_optuna_suggest()`:
 
 1. Creates a fresh study with `optuna.create_study(direction="maximize", sampler=_optuna_sampler(seed))`, without a storage URI or explicit study name.
 2. Constructs `IntDistribution` / `FloatDistribution` objects from the configured space.
@@ -285,7 +289,7 @@ The repository does **not** maintain one live Optuna study for an entire run. On
 4. Calls `study.ask()`, then `trial.suggest_int()` or `trial.suggest_float()`.
 5. Returns parameters to the custom training loop; that loop performs the backtest and adds its result to the Python `completed_trials` list.
 
-There is no `study.optimize()` or `study.tell()` in this path. The newly asked trial is not completed in that transient study. History is passed to the next newly constructed study as parameters/distributions/objective values; sampler-specific system attributes and optimizer state are not preserved. This distinction is particularly relevant for describing CMA-ES: the constructor is real, but a normal long-lived CMA-ES study/state lifecycle is not implemented. The exact effect of state reconstruction on a particular installed sampler version is **Not found in code**. [S8] (lines 106–165)
+There is no `study.optimize()` or `study.tell()` in the GP/TPE path. The newly asked trial is not completed in that transient study. History is passed to the next newly constructed study as parameters/distributions/objective values; sampler-specific system attributes and optimizer state are not preserved. Stateful CMA-ES training uses the separate ask/tell path described above; stateless CMA history reconstruction is rejected. [S8]
 
 ### 5.2 Methods and exact constructors
 
@@ -326,7 +330,7 @@ Additional configurable search modes are `grid`, `bayesian_grid`, and `bayesian`
 
 ### 5.3 Parameter distributions and dependencies
 
-All integer parameters use inclusive integer bounds and unit step. Continuous proposals use linear bounds and are rounded to **four decimal places**, both for random/grid suggestions and after `trial.suggest_float()`. No `log=True`, categorical distributions, project-level feature normalization, or reparameterization is used in the search path. Normalized L2 distances in plots are post-processing only.
+All integer parameters use inclusive integer bounds and unit step. Continuous proposals use linear bounds. Random/grid and transient GP/TPE suggestions are rounded to **four decimal places**. Stateful CMA-ES suggestions retain Optuna's exact float values so the evaluated vector matches the vector stored in its trial; its application warm-up still uses the rounded random/grid suggestions. No `log=True`, categorical distributions, project-level feature normalization, or reparameterization is used in the search path. Normalized L2 distances in plots are post-processing only.
 
 The active broad bounds are below. G = Gentoo, R = Rockhopper, E = Emperor. [S5] (lines 103–165)
 
@@ -362,7 +366,7 @@ No cross-parameter constraint, conditional search branch, feasibility callback, 
 
 Application warm-up is **10 completed random trials**, within the total 500 iterations, for the four adaptive methods. Python's default warm-up is 4 if scripts are bypassed. Samplers themselves receive `n_startup_trials=0`; library fallback behavior is distinct from the application's warm-up.
 
-The training generator is `random.Random(TRAINING_RANDOM_SEED)`, default **42**. Every Optuna proposal receives a new seed drawn via `rng.randrange(0, 2**32)`. A NumPy generator is also created, but `suggest_parameters()` deletes/ignores its `np_rng` argument. No explicit global PyTorch seed/deterministic-algorithm configuration appears in this path.
+The training generator is `random.Random(TRAINING_RANDOM_SEED)`, default **42**. Every Optuna proposal consumes a seed draw via `rng.randrange(0, 2**32)`. GP/TPE use each new seed; persistent CMA-ES uses only the first draw to initialize its sampler, while later draws preserve the application's stock/time sampling cadence. A NumPy generator is also created, but `suggest_parameters()` deletes/ignores its `np_rng` argument. No explicit global PyTorch seed/deterministic-algorithm configuration appears in this path.
 
 Trials within one strategy are sequential. Parallelism is across strategy training workers and across evaluation portfolios, rather than Optuna `n_jobs`. There is no persistent Optuna database, journal storage, study resumption, pruner call, `trial.report()`, `trial.should_prune()`, or objective-based early stopping. JSON archives persist application results after training, not resumable studies. [S7] [S8] [S10]
 
@@ -374,7 +378,7 @@ The active launcher fixes **`FIXED_TS=500`** for every method and all three stra
 
 The launcher accepts one optional seed argument, with precedence `argument → TRAINING_RANDOM_SEED environment → 42`. It does not loop over seeds. Therefore the defined matrix has **one seed per invocation**, not a specified set of independent repeated-seed runs. The five annual anchors are different data periods, not five independent seed repetitions. Inspected named 500/1,000-trial batch directories use seed marker `RS_42`. An experiment-wide required number/list of independent seeds is **Not found in code**.
 
-Startup trials consume the total budget. A skipped empty-subset iteration also consumes an iteration without adding a completed observation. A backtest failure aborts rather than becoming a counted-and-replaced Optuna failed trial. Thus 500 is not guaranteed to mean 500 successful completed trials.
+Startup trials consume the total budget. A skipped empty-subset iteration also consumes an iteration without adding a completed observation. A backtest failure aborts without replacement; CMA-ES additionally marks its pending Optuna trial `FAIL`. Thus 500 is not guaranteed to mean 500 successful completed trials.
 
 The optimization budget is iteration-based, not elapsed-time-based. No Optuna/per-trial timeout exists. External/computational limits include:
 
@@ -636,7 +640,7 @@ An implemented procedure for repeated-seed confidence intervals, hypothesis test
 3. Load raw cached/provider data plus accounting dependencies; normalize split units, annotate quality, and prepare prior-session eligibility over the wider job horizon.
 4. Initialize strategy objects and independent USD 100,000 portfolios.
 5. For each of the three trainable strategies, run 500 attempted parameter trials, each with a fresh 49-other-stocks-plus-SPY sample and approximately 90-day window.
-6. Use custom random proposals throughout the baseline or for ten completed warm-up trials; subsequently reconstruct transient Optuna studies to propose adaptive candidates from prior training scores.
+6. Use custom random proposals throughout the baseline or for ten completed warm-up trials; subsequently use a persistent ask/tell study for CMA-ES, or reconstructed transient studies for GP/TPE, to propose adaptive candidates.
 7. Backtest candidate and SPY with delayed close-centered spread fills, USD 2 fees, fresh state, final liquidation, and the penalized training objective.
 8. Rank completed training candidates and take up to ten per strategy for a common full-universe validation stage.
 9. Validate fresh portfolios with USD 1 execution fees already included in net profits and no extra per-buy scoring charge; keep two candidates per strategy by validation tuple.
@@ -687,7 +691,7 @@ The launcher values below assume no inherited overrides of child-default setting
 | UCB exploration | `kappa=2.0` | Custom private-API GP subclass |
 | SLURM resources | 1 node, 1 task, 64 CPUs, 230gb, 50 hours, exclusive `cpu-single` | Main matrix requests no GPU |
 | Memory worker estimate | 40 GiB each; reserve fraction 0 | Worker count also capped by task/strategy count |
-| Persistent Optuna study / pruning | None / none | Transient reconstructed studies |
+| Persistent Optuna study / pruning | CMA-ES in memory / none | GP/TPE use transient studies; no disk checkpoint/resume |
 | CSV / finalized Step-1 writes | `SAVE_CSV=0` / `SAVE_FIRST_STEP=0` | Existing finalized cache can still be read |
 | Python / Optuna requirement | Python module 3.13.1 / `optuna>=5.0.0` | Exact executed package versions not recorded |
 | Planned jobs / optimization runs | 25 / 75 per seed invocation | Completion not guaranteed by archive presence |
@@ -713,7 +717,7 @@ Additional cleaning defaults: `confirmation_tolerance=0.05`, `volume_window=20`,
 | Custom scalar objective/activity penalty | Implemented | Net dollar profit (including execution fees) minus low-activity penalty |
 | Validation-based final selection | Implemented | Two winners from ten training-ranked candidates |
 | Test-driven parameter feedback | Not implemented in main loop | Printed test ranking and manual inspection remain possible |
-| Persistent/resumable Optuna optimization | Not implemented | JSON histories are not study checkpoints |
+| Resumable Optuna optimization | Not implemented | CMA-ES state persists in memory only; JSON histories are not study checkpoints |
 | Sharpe/drawdown/return reporting | Implemented | Sharpe uses fixed √252 on adjacent snapshots |
 | CAGR/Sortino/win rate/average trade return | Not implemented in active path | Not saved as performance metrics |
 | Complete validation history retention | Partially implemented | Winner-only numeric JSON, diagnostic plots |

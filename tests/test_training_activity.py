@@ -21,7 +21,7 @@ def test_training_passes_penalized_scores_to_sampler_and_candidate_selection(
 
     sampler_history = []
 
-    def suggest(strategy_class, completed_trials, rng, np_rng):
+    def suggest(strategy_class, completed_trials, rng, np_rng, optuna_search=None):
         sampler_history.append(list(completed_trials))
         return {"buys": trial_buys[len(completed_trials)]}, "test"
 
