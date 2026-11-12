@@ -242,8 +242,10 @@ def _run_parallel_strategy_worker(strategy_name: str):
     if context is None:
         raise RuntimeError("Parallel backtest worker context was not initialized")
 
-    _parallel_worker_log(f"strategy={strategy_name}")
-    penguin = context["penguins"][strategy_name]
+    _parallel_worker_log(f"strategy={strategy_name} pid={os.getpid()}", include_memory=True)
+    # Each strategy is submitted once. Drop the worker's reference after use
+    # instead of retaining mutated strategy instances across subsequent tasks.
+    penguin = context["penguins"].pop(strategy_name)
     traded_symbols = getattr(penguin, "TRADED_SYMBOLS", None)
     worker_symbols = (
         sorted(set(context["symbols"]).intersection(traded_symbols))
@@ -256,6 +258,13 @@ def _run_parallel_strategy_worker(strategy_name: str):
         context["progress_queue"].put((strategy_name, percent, elapsed, remaining, rate))
 
     try:
+        # The pool has already serialized the preceding task's result. Release
+        # its cyclic buffers and allocator arenas before evaluating another.
+        gc.collect()
+        try:
+            ctypes.CDLL(None).malloc_trim(0)
+        except (AttributeError, OSError):
+            pass
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             result = run_backtest(
                 symbols=worker_symbols,
@@ -1067,10 +1076,11 @@ def run_backtest(
         progress_details = {}
         display_index = 0
         displayed_progress = {}
-        # Pool.maxtasksperchild is the multiprocessing.Pool equivalent of
-        # ProcessPoolExecutor(max_tasks_per_child=1) and remains compatible
-        # with fork, allowing workers to inherit the already-loaded dataset.
-        pool = parallel_context.Pool(processes=worker_count, maxtasksperchild=1)
+        # Keep the initial workers alive. Pool replaces retired workers from
+        # its handler thread; repeatedly forking that multithreaded parent can
+        # deadlock before a replacement even starts its first strategy.
+        pool = parallel_context.Pool(processes=worker_count)
+        known_workers = set(pool._pool)
         try:
             pending_results = {}
             next_strategy_index = 0
@@ -1200,14 +1210,21 @@ def run_backtest(
                             f"progress={{{', '.join(f'{name}={last_progress.get(name, 0)}%' for name in sorted(pending_results))}}}"
                         )
                     if not pending_results:
+                        if next_strategy_index < len(strategy_names):
+                            # A whole batch can finish in one poll. Refill the
+                            # available slots before diagnosing missing work.
+                            break
                         raise RuntimeError(
                             "Parallel strategy execution lost all pending workers "
                             f"with {len(completed_strategies)}/{len(strategy_names)} complete"
                         )
+                    # Pool may remove/replace a dead child before we inspect
+                    # _pool. Retain its Process object so a lost task fails fast.
+                    known_workers.update(pool._pool)
                     failed_workers = [
-                        process.pid
-                        for process in pool._pool
-                        if process.exitcode not in (None, 0)
+                        f"{process.pid} (exitcode={process.exitcode})"
+                        for process in known_workers
+                        if process.exitcode is not None
                     ]
                     if failed_workers:
                         raise RuntimeError(
@@ -1225,11 +1242,12 @@ def run_backtest(
                     except Exception:
                         pass
             shutdown_gracefully = False
-            _PARALLEL_BACKTEST_CONTEXT = None
             raise
         finally:
-            _shutdown_parallel_pool(pool, graceful=shutdown_gracefully)
-        _PARALLEL_BACKTEST_CONTEXT = None
+            try:
+                _shutdown_parallel_pool(pool, graceful=shutdown_gracefully)
+            finally:
+                _PARALLEL_BACKTEST_CONTEXT = None
 
         return (
             strategy_results,

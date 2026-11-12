@@ -837,6 +837,7 @@ def run_training_step(
             training_pareto_path,
             relative_to=TRAINING_RELATIVE_TO,
             minimum_buy_trades=TRAINING_MIN_BUY_TRADES,
+            annotate_trials=False,
         )
         filtered_pareto_path = Path(artifacts_dir).parent / FILTERED_PARETO_FILENAME
         create_training_pareto_pdf(

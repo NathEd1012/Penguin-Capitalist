@@ -362,8 +362,9 @@ def create_training_pareto_pdf(
     relative_to: int | str = 0,
     exclude_zero_buy_trials: bool = False,
     minimum_buy_trades: int = TRAINING_MIN_BUY_TRADES,
+    annotate_trials: bool = True,
 ):
-    """Plot trials meeting the buy minimum, retaining SP500 and full legend counts."""
+    """Plot trials meeting the buy minimum; optionally number only the best point."""
     output_path = Path(output_pdf)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     use_relative_benchmark = relative_to not in (0, "0", None, False)
@@ -446,16 +447,6 @@ def create_training_pareto_pdf(
                     zorder=4,
                 )
 
-                for x_value, y_value, trial_number in zip(x_values, y_values, trial_numbers):
-                    ax.annotate(
-                        str(trial_number),
-                        (x_value, y_value),
-                        textcoords="offset points",
-                        xytext=(5, 4),
-                        fontsize=8,
-                        zorder=1,
-                    )
-
                 cbar = fig.colorbar(scatter, ax=ax)
                 cbar.set_label("Normalized L2 distance to optimal parameters")
 
@@ -467,6 +458,18 @@ def create_training_pareto_pdf(
                 best_x = int(best_trial.get("buy_trades", best_trial.get("total_trades", 0)))
                 best_y = float(best_trial.get("relative_profit_amount", best_trial.get("profit_amount", 0.0)))
                 best_params = dict(trial_parameter_map.get(best_trial_number, {}))
+
+                for x_value, y_value, trial_number in zip(x_values, y_values, trial_numbers):
+                    if not annotate_trials and trial_number != best_trial_number:
+                        continue
+                    ax.annotate(
+                        str(trial_number),
+                        (x_value, y_value),
+                        textcoords="offset points",
+                        xytext=(5, 4),
+                        fontsize=8,
+                        zorder=7 if not annotate_trials else 1,
+                    )
 
                 ax.scatter(
                     [best_x],
@@ -504,6 +507,7 @@ def create_training_pareto_pdf(
             ax.set_xlabel("Number of buys")
             ax.set_ylabel(profit_axis_label)
             ax.grid(True, alpha=0.25)
+            ax.axhline(0.0, color="gray", linestyle="--", linewidth=1.2, label="Profit = 0", zorder=2)
 
             ax.plot(
                 [],

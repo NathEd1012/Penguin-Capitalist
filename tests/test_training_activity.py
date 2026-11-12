@@ -63,18 +63,18 @@ def test_training_passes_penalized_scores_to_sampler_and_candidate_selection(
     assert any("activity_penalty=$142,500.00" in line for line in logs)
 
 
-def test_pareto_does_not_draw_zero_score_line(monkeypatch, tmp_path):
-    from matplotlib.axes import Axes
-
+def test_pareto_draws_horizontal_zero_profit_line(monkeypatch, tmp_path):
     zero_lines = []
-    original_plot = Axes.plot
+    original_savefig = plotting.PdfPages.savefig
 
-    def capture_plot(self, *args, **kwargs):
-        if kwargs.get("label") == "net score = 0":
-            zero_lines.append((args[0], args[1]))
-        return original_plot(self, *args, **kwargs)
+    def capture_page(self, figure, *args, **kwargs):
+        zero_lines.extend(
+            list(line.get_ydata()) for line in figure.axes[0].lines
+            if line.get_label() == "Profit = 0"
+        )
+        return original_savefig(self, figure, *args, **kwargs)
 
-    monkeypatch.setattr(Axes, "plot", capture_plot)
+    monkeypatch.setattr(plotting.PdfPages, "savefig", capture_page)
     output = tmp_path / "pareto.pdf"
     plotting.create_training_pareto_pdf(
         {"Strategy": [{
@@ -85,4 +85,4 @@ def test_pareto_does_not_draw_zero_score_line(monkeypatch, tmp_path):
     )
 
     assert output.is_file()
-    assert zero_lines == []
+    assert zero_lines == [[0.0, 0.0]]
