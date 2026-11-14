@@ -16,3 +16,4 @@ a_docs/
 run_present/**/artifacts/trades_log.txt
 run_present/**/artifacts/json/
 tests/**
+tests_not_used/**
