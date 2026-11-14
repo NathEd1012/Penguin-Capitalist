@@ -1,8 +1,9 @@
 # Bonus analyses of saved runs
 
 These scripts read existing run artifacts. They do not import the simulation,
-rerun training/backtests, or change existing reports. New outputs go directly
-into the selected run's `artifacts` directory.
+rerun training/backtests, or change existing reports. PDFs are saved directly
+in the selected run directory, beside `report.pdf`. CSV and JSON outputs stay
+in the run's `artifacts` directory.
 
 ## Launcher
 
@@ -113,5 +114,6 @@ module load devel/python/3.13.1
 
 Other options: `--color-by profit` and `--output /path/to/custom.pdf`.
 Both analysis scripts accept `--output`;
-companion CSV/JSON files use the same basename. Rerunning replaces only these
+companion CSV/JSON files use the same basename and stay in the run's `artifacts`
+directory, including when a custom PDF output path is supplied. Rerunning replaces only these
 bonus-analysis output files.

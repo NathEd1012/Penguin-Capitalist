@@ -27,8 +27,8 @@ TRAINING_TRANSACTION_COST = float(os.getenv("FIXED_TRAIN_TC", TRAINING_TRANSACTI
 
 # Below this buy count, subtract 1.5 times starting capital times the missing-buy fraction.
 TRAINING_MIN_BUY_TRADES = int(os.getenv("TRAINING_MIN_BUY_TRADES", "20"))
-if TRAINING_MIN_BUY_TRADES < 1:
-    raise ValueError("TRAINING_MIN_BUY_TRADES must be positive")
+if TRAINING_MIN_BUY_TRADES < 0:
+    raise ValueError("TRAINING_MIN_BUY_TRADES must be nonnegative")
 
 # Train on a different date window from the live execution window when requested.
 TRAINING_START_DATE = os.getenv("FIXED_TRAIN_START", DEFAULT_TRAINING_START_DATE)

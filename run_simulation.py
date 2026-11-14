@@ -92,6 +92,7 @@ from config.parameter_search_con import (
     has_parameter_search_space,
 )
 from scripts.parameter_search import suggest_parameters
+from scripts.training_objective import ACTIVITY_PENALTY_CAPITAL_MULTIPLIER
 from penguins import SP500
 
 
@@ -440,7 +441,7 @@ def _format_runtime_configuration_banner(
         f"Training Steps:        {training_iterations}",
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
-        f"Minimum Buy Trades:   {TRAINING_MIN_BUY_TRADES} (linear penalty up to 1.5x capital below this)",
+        f"Minimum Buy Trades:   {TRAINING_MIN_BUY_TRADES} (linear penalty up to {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}x capital below this)",
         f"Maximum Period:       {max_period}",
         f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",

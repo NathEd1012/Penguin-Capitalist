@@ -62,6 +62,7 @@ from penguins import SP500
 from scripts.plotting import create_training_pareto_pdf
 from scripts.parameter_search import OptunaSearch, suggest_parameters
 from scripts.training_objective import (
+    ACTIVITY_PENALTY_CAPITAL_MULTIPLIER,
     activity_penalty,
     score_training_candidate as _score_training_candidate,
     training_profit_amount as _training_profit_amount,
@@ -132,7 +133,7 @@ def _print_training_configuration(trainable_strategy_classes) -> None:
     print(f"Training Steps:    {TRAINING_ITERATIONS}")
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
-    print(f"Minimum Buys:      {TRAINING_MIN_BUY_TRADES} (linear penalty up to 1.5x capital below this)")
+    print(f"Minimum Buys:      {TRAINING_MIN_BUY_TRADES} (linear penalty up to {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}x capital below this)")
     print(
         f"Maximum Period:    "
         f"{max_period_for_strategies(trainable_strategy_classes)}"

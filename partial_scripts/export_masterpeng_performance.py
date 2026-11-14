@@ -4,6 +4,7 @@ Run with the cluster Python module for PDF output:
     module load devel/python/3.13.1
     python partial_scripts/export_masterpeng_performance.py
     python partial_scripts/export_masterpeng_performance.py --relative-to-spy
+    python partial_scripts/export_masterpeng_performance.py --root run_log/167OOF_ALL_RUNS_TC1.0_TS167 --training-steps 167 --seeds 55
 
 The XLSX and CSV writers use only the standard library. PDF output uses matplotlib.
 SPY is used only as a benchmark; it never gets its own evaluation table.
@@ -45,12 +46,13 @@ def strategy_title(base, variant):
         base.replace("Penguin", ""), variant)
 
 
-def collect(root):
+def collect(root, training_steps=500, seeds=None):
+    seeds = SEEDS if seeds is None else seeds
     records, failures, run_counts = [], [], Counter()
     for year in YEARS:
         for method, _ in METHODS:
-            for seed in SEEDS:
-                name = "MR_{}_broad_{}_500_RS_{}".format(year, method, seed)
+            for seed in seeds:
+                name = "MR_{}_broad_{}_{}_RS_{}".format(year, method, training_steps, seed)
                 run = root / "Year{}".format(year) / "RS_{}".format(seed) / name
                 metrics_path = run / "artifacts/json/metrics_summary.json"
                 metrics = json.loads(metrics_path.read_text()) if metrics_path.is_file() else None
@@ -113,9 +115,9 @@ def collect(root):
     return records, failures, dict(run_counts)
 
 
-def cell_text(records, year, method, base, variant, relative_to_spy=False):
+def cell_text(records, year, method, base, variant, relative_to_spy=False, seeds=None):
     lines = []
-    for seed in SEEDS:
+    for seed in SEEDS if seeds is None else seeds:
         record = records[(year, method, seed, base, variant)]
         value = record["excess_return_pp" if relative_to_spy else "return_pct"]
         suffix = " pp" if relative_to_spy else "%"
@@ -187,7 +189,11 @@ def worksheet(rows, widths, heights=None, merges=(), freeze=None, autofilter=Non
 
 
 def write_xlsx(path, records, lookup, failures, counts, relative_to_spy=False,
-               root=DEFAULT_ROOT):
+               root=DEFAULT_ROOT, seeds=None, training_steps=500):
+    seeds = SEEDS if seeds is None else seeds
+    seed_order = ", ".join(map(str, seeds))
+    expected_runs = len(YEARS) * len(METHODS) * len(seeds)
+    per_cell = "one seed result per cell" if len(seeds) == 1 else f"{len(seeds)} seed results per cell"
     sheets = []
     metric_label = "excess return vs SPY (pp)" if relative_to_spy else "test return (%)"
     explanation = ("Strategy test return (%) minus SPY test return (%). "
@@ -196,20 +202,20 @@ def write_xlsx(path, records, lookup, failures, counts, relative_to_spy=False,
     for base, variant in STRATEGIES:
         title = strategy_title(base, variant)
         rows = [[(title + " | " + metric_label, 1)],
-                [("Rows: start year | columns: search method | five seed results per cell", 4)],
+                [("Rows: start year | columns: search method | " + per_cell, 4)],
                 [("Variant 1: original name without suffix. Variant 2: original name with numeric suffix.", 4)],
-                [("Seed order: 11, 22, 33, 42, 55. FAILED means no final test result; it is not zero.", 4)],
+                [("Seed order: " + seed_order + ". FAILED means no final test result; it is not zero.", 4)],
                 [("Year", 2)] + [(label, 2) for _, label in METHODS]]
         for year in YEARS:
             row = [(year, 2)]
             for method, _ in METHODS:
-                value = cell_text(lookup, year, method, base, variant, relative_to_spy)
+                value = cell_text(lookup, year, method, base, variant, relative_to_spy, seeds)
                 row.append((value, 6 if "FAILED" in value else 3))
             rows.append(row)
         rows.append([(explanation, 4)])
         sheets.append((title.replace(" — variant ", " "), worksheet(
             rows, [12] + [26] * 5, heights={1: 30, 2: 24, 3: 24, 4: 24, 11: 30,
-                                         **{i: 96 for i in range(6, 11)}},
+                                         **{i: max(30, 18 * len(seeds) + 6) for i in range(6, 11)}},
             merges=["A1:F1", "A2:F2", "A3:F3", "A4:F4", "A11:F11"],
             freeze=(1, 5), landscape=True)))
     raw_rows = [[(field, 2) for field in FIELDS]]
@@ -228,15 +234,16 @@ def write_xlsx(path, records, lookup, failures, counts, relative_to_spy=False,
                                              heights={i: 72 for i in range(2, len(failures) + 2)},
                                              freeze=(0, 1))))
     about = [
-        "MasterPeng performance tables" + (" relative to SPY" if relative_to_spy else ""),
-        "5 start years × 5 search methods; five random seed returns in each cell.",
+        root.name.split("_ALL_RUNS", 1)[0] + " performance tables" + (" relative to SPY" if relative_to_spy else ""),
+        "5 start years × 5 search methods; " + per_cell + ".",
+        "Training steps per strategy: " + str(training_steps),
         explanation,
         "Performance is from the saved test results; not annualized or training performance.",
         "Variant 1 = strategy name without numeric suffix. Variant 2 = strategy name with numeric suffix.",
         "Numeric suffixes are original trial identifiers and are preserved in the Raw data sheet.",
         "SPY reference = saved SP500 buy-and-hold return from the same run; there is no separate benchmark evaluation.",
-        "Seed order: 11, 22, 33, 42, 55. Failed results are blank in Raw data and CSV, never zero.",
-        "Completed: {} / 125; failed: {} / 125.".format(counts.get("Completed", 0), counts.get("Failed", 0)),
+        "Seed order: " + seed_order + ". Failed results are blank in Raw data and CSV, never zero.",
+        "Completed: {} / {}; failed: {} / {}.".format(counts.get("Completed", 0), expected_runs, counts.get("Failed", 0), expected_runs),
         "Raw data return_pct and max_drawdown use percentage units, e.g. -45.18 means -45.18%.",
         "Raw data spy_return_pct is the SPY reference; excess_return_pp = return_pct - spy_return_pct (percentage points).",
         "Source: */artifacts/json/metrics_summary.json in " + str(root),
@@ -289,7 +296,11 @@ def write_workbook(path, sheets, styles):
         archive.writestr("xl/styles.xml", styles)
 
 
-def write_pdf(path, lookup, counts, relative_to_spy=False):
+def write_pdf(path, lookup, counts, relative_to_spy=False, seeds=None, training_steps=500):
+    seeds = SEEDS if seeds is None else seeds
+    seed_order = ", ".join(map(str, seeds))
+    expected_runs = len(YEARS) * len(METHODS) * len(seeds)
+    per_cell = "one seed result per cell" if len(seeds) == 1 else f"{len(seeds)} seed results per cell"
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -302,15 +313,15 @@ def write_pdf(path, lookup, counts, relative_to_spy=False):
             fig.text(0.055, 0.945, strategy_title(base, variant), fontsize=23,
                      color="#17354a", weight="bold")
             metric_label = "Excess return vs SPY (pp)" if relative_to_spy else "Test return (%)"
-            fig.text(0.055, 0.908, metric_label + " | start year × search method | five seed results per cell",
+            fig.text(0.055, 0.908, metric_label + " | start year × search method | " + per_cell + f" | TS {training_steps}",
                      fontsize=12, color="#43596a")
-            contents = [[str(year)] + [cell_text(lookup, year, method, base, variant, relative_to_spy)
+            contents = [[str(year)] + [cell_text(lookup, year, method, base, variant, relative_to_spy, seeds)
                                        for method, _ in METHODS] for year in YEARS]
             table = ax.table(cellText=contents, colLabels=["Year"] + [label for _, label in METHODS],
                              cellLoc="left", colWidths=[0.07] + [0.186] * 5,
                              bbox=[0, 0, 1, 1])
             table.auto_set_font_size(False)
-            table.set_fontsize(11)
+            table.set_fontsize(14 if len(seeds) == 1 else 11)
             for (row, column), cell in table.get_celld().items():
                 cell.set_edgecolor("#d4dee5")
                 cell.set_linewidth(0.8)
@@ -333,8 +344,8 @@ def write_pdf(path, lookup, counts, relative_to_spy=False):
                      "Variant 1 = no numeric suffix; variant 2 = numeric suffix. SPY is the reference benchmark.",
                      fontsize=10, color="#43596a")
             fig.text(0.055, 0.051,
-                     "Seed order: 11, 22, 33, 42, 55. FAILED = missing final test result, not zero. "
-                     "Completed: {}/125.".format(counts.get("Completed", 0)),
+                     "Seed order: " + seed_order + ". FAILED = missing final test result, not zero. "
+                     "Completed: {}/{}.".format(counts.get("Completed", 0), expected_runs),
                      fontsize=10, color="#43596a")
             fig.text(0.945, 0.025, "{} / {}".format(page, len(STRATEGIES)),
                      ha="right", fontsize=9, color="#43596a")
@@ -347,16 +358,21 @@ def write_pdf(path, lookup, counts, relative_to_spy=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
+    parser.add_argument("--training-steps", type=int, default=500)
+    parser.add_argument("--seeds", type=int, nargs="+", default=SEEDS)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--skip-pdf", action="store_true")
     parser.add_argument("--relative-to-spy", action="store_true",
                         help="Show strategy return minus SPY return in percentage points.")
     args = parser.parse_args()
+    if args.training_steps < 1 or any(seed < 0 for seed in args.seeds) or len(set(args.seeds)) != len(args.seeds):
+        parser.error("Use positive training steps and distinct nonnegative seeds.")
     root = args.root.resolve()
     output = args.output or root / ("spy_relative_performance_tables" if args.relative_to_spy
                                    else "performance_tables")
-    basename = "masterpeng_relative_to_spy" if args.relative_to_spy else "masterpeng_performance"
-    records, failures, counts = collect(root)
+    prefix = root.name.split("_ALL_RUNS", 1)[0].lower()
+    basename = prefix + ("_relative_to_spy" if args.relative_to_spy else "_performance")
+    records, failures, counts = collect(root, args.training_steps, args.seeds)
     lookup = {(r["year"], r["method"], r["seed"], r["strategy"], r["variant"]): r
               for r in records}
     output.mkdir(parents=True, exist_ok=True)
@@ -366,12 +382,14 @@ def main():
         writer.writeheader()
         writer.writerows(records)
     write_xlsx(output / (basename + ".xlsx"), records, lookup, failures, counts,
-               relative_to_spy=args.relative_to_spy, root=root)
+               relative_to_spy=args.relative_to_spy, root=root,
+               seeds=args.seeds, training_steps=args.training_steps)
     if not args.skip_pdf:
         write_pdf(output / (basename + ".pdf"), lookup, counts,
-                  relative_to_spy=args.relative_to_spy)
+                  relative_to_spy=args.relative_to_spy,
+                  seeds=args.seeds, training_steps=args.training_steps)
     print(json.dumps({"output": str(output), "runs": counts, "tables": len(STRATEGIES),
-                      "cells_per_table": 25, "seed_results_per_cell": 5,
+                      "cells_per_table": 25, "seed_results_per_cell": len(args.seeds),
                       "metric": "excess_return_pp" if args.relative_to_spy else "return_pct",
                       "saved_returns": sum(r["return_pct"] is not None for r in records),
                       "missing_returns": sum(r["return_pct"] is None for r in records)}, indent=2))

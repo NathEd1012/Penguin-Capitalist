@@ -15,3 +15,4 @@ partial_scripts/output/
 a_docs/
 run_present/**/artifacts/trades_log.txt
 run_present/**/artifacts/json/
+tests/**

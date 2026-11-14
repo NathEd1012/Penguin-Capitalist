@@ -149,7 +149,7 @@ def generate(run_dir, destination=None, *, neighbors=15, min_dist=0.1, seed=42,
                     "profit_amount": trial.get("profit_amount", ""),
                     "buy_trades": trial.get("buy_trades", 0), "best_objective": trial["trial"] == best_trial,
                 })
-    csv_path = destination.with_suffix(".csv")
+    csv_path = run_dir / "artifacts" / destination.with_suffix(".csv").name
     fields = ["strategy", "trial", "umap_1", "umap_2", "objective_value", "relative_profit_amount", "profit_amount", "buy_trades", "best_objective"]
     with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -162,16 +162,17 @@ def generate(run_dir, destination=None, *, neighbors=15, min_dist=0.1, seed=42,
         "scaling": "min-max of observed eligible parameter values; constant parameters removed",
         "performance_used_as_embedding_feature": False, "strategies": details_by_strategy,
     }
-    destination.with_suffix(".json").write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
+    json_path = csv_path.with_suffix(".json")
+    json_path.write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
     print(f"Saved {destination} ({len(histories)} strategy pages)")
-    print(f"Saved {csv_path} and {destination.with_suffix('.json')}")
+    print(f"Saved {csv_path} and {json_path}")
     return destination
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", required=True, help="Run directory or path below run_log.")
-    parser.add_argument("--output", type=Path, help="Output PDF; default: artifacts/umap_pareto.pdf")
+    parser.add_argument("--output", type=Path, help="Output PDF; default: umap_pareto.pdf beside report.pdf. CSV/JSON stay in artifacts.")
     parser.add_argument("--neighbors", type=int, default=15)
     parser.add_argument("--min-dist", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42, help="UMAP layout seed; does not change any experiment seed.")

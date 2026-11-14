@@ -22,6 +22,6 @@ def load_json(path):
 
 
 def output_path(run_dir, supplied, filename):
-    path = Path(supplied).expanduser() if supplied else run_dir / "artifacts" / filename
+    path = Path(supplied).expanduser() if supplied else run_dir / filename
     path.parent.mkdir(parents=True, exist_ok=True)
     return path

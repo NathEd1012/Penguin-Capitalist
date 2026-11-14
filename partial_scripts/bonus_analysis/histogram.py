@@ -138,7 +138,7 @@ def generate(run_dir, destination=None):
             figure = plot_strategy(name, values[name], orders[name], run_dir.name)
             pdf.savefig(figure)
             plt.close(figure)
-    csv_path = destination.with_suffix(".csv")
+    csv_path = artifacts / destination.with_suffix(".csv").name
     with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
         writer.writerow(["strategy", "rank", "symbol", "purchase_value_usd", "buy_orders"])
@@ -153,7 +153,7 @@ def generate(run_dir, destination=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", required=True, help="Run directory or path below run_log.")
-    parser.add_argument("--output", type=Path, help="Output PDF; default: artifacts/buy_histograms.pdf")
+    parser.add_argument("--output", type=Path, help="Output PDF; default: buy_histograms.pdf beside report.pdf. CSV stays in artifacts.")
     args = parser.parse_args()
     generate(args.run_dir, args.output)
 

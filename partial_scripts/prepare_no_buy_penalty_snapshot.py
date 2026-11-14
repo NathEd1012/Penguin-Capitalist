@@ -41,32 +41,24 @@ def create_snapshot(project, destination, long_script):
     config = destination / "config/training_step.py"
     replace_once(config, 'os.getenv("TRAINING_MIN_BUY_TRADES", "20")',
                  'os.getenv("TRAINING_MIN_BUY_TRADES", "0")')
-    replace_once(config, "if TRAINING_MIN_BUY_TRADES < 1:",
-                 "if TRAINING_MIN_BUY_TRADES < 0:")
-    replace_once(config, "TRAINING_MIN_BUY_TRADES must be positive",
-                 "TRAINING_MIN_BUY_TRADES must be nonnegative (0 disables the penalty)")
     replace_once(config,
                  "# Below this buy count, subtract 1.5 times starting capital times the missing-buy fraction.",
                  "# Isolated experiment: 0 disables the low-buy activity penalty.")
 
     objective = destination / "scripts/training_objective.py"
     replace_once(objective,
-                 '    if minimum_buys < 1:\n        raise ValueError("minimum_buys must be positive")',
-                 '    if minimum_buys < 0:\n        raise ValueError("minimum_buys must be nonnegative")\n'
-                 '    if minimum_buys == 0:\n        return 0.0')
-    replace_once(objective,
-                 '"""Penalize missing buys linearly, up to 1.5 times starting capital."""',
+                 '"""Penalize missing buys linearly using the configured capital multiplier."""',
                  '"""Zero minimum disables the penalty; positive minima retain linear scoring."""')
 
     training = destination / "scripts/train_trainable_penguins.py"
     replace_once(training,
-                 '(linear penalty up to 1.5x capital below this)',
+                 '(linear penalty up to {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}x capital below this)',
                  '(low-buy activity penalty disabled)')
     # Do not hide zero-buy candidates in the experiment's training plot.
     replace_once(training, "exclude_zero_buy_trials=True,",
                  "exclude_zero_buy_trials=TRAINING_MIN_BUY_TRADES > 0,")
     replace_once(destination / "run_simulation.py",
-                 '(linear penalty up to 1.5x capital below this)',
+                 '(linear penalty up to {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}x capital below this)',
                  '(low-buy activity penalty disabled)')
 
     # Output validation resolves the same archive root; market data is shared.

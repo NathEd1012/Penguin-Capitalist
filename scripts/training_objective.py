@@ -1,6 +1,12 @@
 """Shared, deterministic scoring for training and validation candidates."""
 
-ACTIVITY_PENALTY_CAPITAL_MULTIPLIER = 1.5
+import math
+import os
+
+# Set in run_ALLRUNS.sh; 0 disables the activity penalty.
+ACTIVITY_PENALTY_CAPITAL_MULTIPLIER = float(os.getenv("ACTIVITY_PENALTY_CAPITAL_MULTIPLIER", "1.5"))
+if not math.isfinite(ACTIVITY_PENALTY_CAPITAL_MULTIPLIER) or ACTIVITY_PENALTY_CAPITAL_MULTIPLIER < 0:
+    raise ValueError("ACTIVITY_PENALTY_CAPITAL_MULTIPLIER must be finite and nonnegative")
 
 
 def training_profit_amount(candidate_metrics, benchmark_metrics, relative_to) -> float:
@@ -12,9 +18,11 @@ def training_profit_amount(candidate_metrics, benchmark_metrics, relative_to) ->
 
 
 def activity_penalty(buy_trades: int, initial_capital: float, minimum_buys: int) -> float:
-    """Penalize missing buys linearly, up to 1.5 times starting capital."""
-    if minimum_buys < 1:
-        raise ValueError("minimum_buys must be positive")
+    """Penalize missing buys linearly using the configured capital multiplier."""
+    if minimum_buys < 0:
+        raise ValueError("minimum_buys must be nonnegative")
+    if minimum_buys == 0:
+        return 0.0
     shortfall = max(0, minimum_buys - max(0, buy_trades))
     return ACTIVITY_PENALTY_CAPITAL_MULTIPLIER * float(initial_capital) * shortfall / minimum_buys
 

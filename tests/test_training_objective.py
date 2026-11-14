@@ -73,9 +73,18 @@ def test_configured_minimum_changes_when_the_penalty_disappears():
     assert activity_penalty(40, 100_000, 40) == 0
 
 
-@pytest.mark.parametrize("minimum", [0, -1])
-def test_nonpositive_minimum_is_rejected(minimum):
-    with pytest.raises(ValueError, match="minimum_buys must be positive"):
+@pytest.mark.parametrize("buys", [0, 1, 5, 20, 100])
+def test_zero_minimum_skips_penalty_and_preserves_net_profit(buys):
+    assert activity_penalty(buys, 100_000, 0) == 0
+    assert score_training_candidate(
+        metrics(buys, 1234), {"total_return": 500}, "SPY", 100_000,
+        minimum_buys=0,
+    ) == (734, -buys, -2 * buys)
+
+
+@pytest.mark.parametrize("minimum", [-1, -20])
+def test_negative_minimum_is_rejected(minimum):
+    with pytest.raises(ValueError, match="minimum_buys must be nonnegative"):
         activity_penalty(0, 100_000, minimum)
 
 

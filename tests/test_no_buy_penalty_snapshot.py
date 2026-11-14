@@ -44,8 +44,7 @@ class NoBuyPenaltySnapshotTests(unittest.TestCase):
         )
         live = objective_at(PROJECT / "scripts/training_objective.py")
         self.assertEqual(live.activity_penalty(0, 100_000, 20), 150_000)
-        with self.assertRaises(ValueError):
-            live.activity_penalty(0, 100_000, 0)
+        self.assertEqual(live.activity_penalty(0, 100_000, 0), 0)
 
     def test_zero_minimum_removes_only_the_activity_penalty(self):
         objective = objective_at(self.snapshot / "scripts/training_objective.py")
