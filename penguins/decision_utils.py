@@ -4,7 +4,7 @@ import inspect
 from typing import Any, List, Optional
 
 from backtest.portfolio import Portfolio
-
+import os
 
 def rsi(prices: List[float], period: int) -> float:
     if len(prices) < period + 1:
@@ -55,6 +55,9 @@ def bollinger_bands(
 
 
 def ker(prices: List[float], period: int) -> float:
+
+    KER_NEG_MULT = float(os.getenv("KER_NEG_MULT", "1.0"))
+
     if len(prices) < period + 1:
         return 0.0
     total_upward_change = 0.0
@@ -69,7 +72,12 @@ def ker(prices: List[float], period: int) -> float:
             total_downward_change -= change
     if total_price_movement <= 0:
         return 0.0
-    return 100.0 * abs(total_upward_change - total_downward_change) / total_price_movement
+    
+    net_change = total_upward_change - total_downward_change
+    ker_value = 100.0 * abs(net_change) / total_price_movement
+    if net_change < 0:
+        return ker_value * KER_NEG_MULT
+    return ker_value
 
 
 def relative_performance(

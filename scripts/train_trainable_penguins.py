@@ -134,6 +134,8 @@ def _print_training_configuration(trainable_strategy_classes) -> None:
     print(f"Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     print(f"Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
     print(f"Minimum Buys:      {TRAINING_MIN_BUY_TRADES} (linear penalty up to {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}x capital below this)")
+    print(f"ACTIVITY_PENALTY_CAPITAL_MULTIPLIER: {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}")
+    print(f"KER_NEG_MULT:      {float(os.getenv('KER_NEG_MULT', '1.0')):g}")
     print(
         f"Maximum Period:    "
         f"{max_period_for_strategies(trainable_strategy_classes)}"
@@ -362,6 +364,8 @@ def _train_trainable_penguins(
     log_lines.append(f"  Training Sample:   {TRAINING_SUBSET_STOCKS} stocks x {TRAINING_SUBSET_MONTHS} month(s)")
     log_lines.append(f"  Training Cost:     ${TRAINING_TRANSACTION_COST:.2f}")
     log_lines.append(f"  Minimum Buys:      {TRAINING_MIN_BUY_TRADES}")
+    log_lines.append(f"  ACTIVITY_PENALTY_CAPITAL_MULTIPLIER: {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}")
+    log_lines.append(f"  KER_NEG_MULT:      {float(os.getenv('KER_NEG_MULT', '1.0')):g}")
     log_lines.append(
         f"  Activity penalty:  ${activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES):,.2f} times the missing-buy fraction"
     )
@@ -779,6 +783,8 @@ def run_training_step(
                 "benchmark_symbol": benchmark_symbol,
                 "training_transaction_cost": TRAINING_TRANSACTION_COST,
                 "minimum_buy_trades": TRAINING_MIN_BUY_TRADES,
+                "activity_penalty_capital_multiplier": ACTIVITY_PENALTY_CAPITAL_MULTIPLIER,
+                "ker_neg_mult": float(os.getenv("KER_NEG_MULT", "1.0")),
                 "activity_penalty_max": activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES),
                 "t_plus_x": t_plus_x,
                 "trainable_strategies": trained_parameters,
@@ -799,6 +805,8 @@ def run_training_step(
                 "benchmark_symbol": benchmark_symbol,
                 "training_transaction_cost": TRAINING_TRANSACTION_COST,
                 "minimum_buy_trades": TRAINING_MIN_BUY_TRADES,
+                "activity_penalty_capital_multiplier": ACTIVITY_PENALTY_CAPITAL_MULTIPLIER,
+                "ker_neg_mult": float(os.getenv("KER_NEG_MULT", "1.0")),
                 "activity_penalty_max": activity_penalty(0, initial_capital, TRAINING_MIN_BUY_TRADES),
                 "resampling_cadence": "one fresh stock subset and one fresh time window per trial",
                 "trial_history": training_parameter_history,
@@ -821,6 +829,8 @@ def run_training_step(
                     f"Benchmark symbol: {benchmark_symbol}",
                     f"Training transaction cost: {TRAINING_TRANSACTION_COST}",
                     f"Minimum buy trades: {TRAINING_MIN_BUY_TRADES}",
+                    f"ACTIVITY_PENALTY_CAPITAL_MULTIPLIER: {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}",
+                    f"KER_NEG_MULT: {float(os.getenv('KER_NEG_MULT', '1.0')):g}",
                     f"Parameter log: {TRAINING_PARAMETER_LOG_FILENAME}",
                     f"Parameter delta report: {TRAINING_PARAMETER_DELTA_FILENAME}",
                     "",

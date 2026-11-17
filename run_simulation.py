@@ -442,6 +442,8 @@ def _format_runtime_configuration_banner(
         f"Training Sample:       {training_subset_stocks} stocks x {training_subset_months} month(s)",
         f"Training Transaction Cost: ${training_transaction_cost:.2f}",
         f"Minimum Buy Trades:   {TRAINING_MIN_BUY_TRADES} (linear penalty up to {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}x capital below this)",
+        f"ACTIVITY_PENALTY_CAPITAL_MULTIPLIER: {ACTIVITY_PENALTY_CAPITAL_MULTIPLIER:g}",
+        f"KER_NEG_MULT:          {float(os.getenv('KER_NEG_MULT', '1.0')):g}",
         f"Maximum Period:       {max_period}",
         f"T_PLUS_X (bars):      {t_plus_x}",
         f"Training Seed:         {training_random_seed}",
@@ -676,6 +678,8 @@ def run_backtest(
             validation_end_date=validation_end_for_cache,
             warmup_bars=cache_warmup_bars,
             symbol_list_name=ACTIVE_SYMBOL_LIST,
+            reuse_saved_snapshot=True,
+            refresh_cache=os.environ.get("PENGUIN_REFRESH_FINALIZED_CACHE", "0").lower() in {"1", "true", "yes"},
         )
         if cached_step1 is not None:
             print("Step 1: Loaded finalized historical data from local cache.")

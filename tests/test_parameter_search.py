@@ -1,8 +1,12 @@
+from pathlib import Path
 import random
+import runpy
 from datetime import datetime, timezone
 from types import SimpleNamespace
 
+import numpy as np
 import optuna
+from optuna._gp import optim_mixed
 import pytest
 
 from scripts import parameter_search as search
@@ -142,3 +146,107 @@ def test_training_keeps_cmaes_study_per_strategy(cmaes, monkeypatch, warmup, ski
         assert sum(trial["proposal_source"] == "random_warmup" for trial in completed) == warmup
         assert max(trial.system_attrs.get("cma:generation", -1) for trial in study_completed) > 1
         assert all(trial.state != optuna.trial.TrialState.RUNNING for trial in session.study.trials)
+
+
+@pytest.fixture
+def acquisition(monkeypatch):
+    captured = {}
+
+    def capture(acqf, **kwargs):
+        captured["acqf"] = acqf
+        return np.array([0.5, 0.5]), 0.0
+
+    class Posterior:
+        def posterior(self, x):
+            return 1.5 + x.sum(dim=-1), 0.25 + 0.0 * x[..., 0]
+
+    monkeypatch.setattr(optim_mixed, "optimize_acqf_mixed", capture)
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_SAMPLER", "gp")
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA", 2.0)
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA", 0.1)
+
+    def build(mode="bp_ucb", weight=1.0):
+        monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_ACQUISITION", mode)
+        monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA", weight)
+        sampler = search._optuna_sampler(seed=42)
+        sampler._optimize_acqf(
+            SimpleNamespace(_gpr=Posterior(), length_scales=np.ones(2), search_space=object()),
+            best_params=None,
+        )
+        return captured["acqf"]
+
+    return build
+
+
+@pytest.mark.parametrize("mode,weight", [("bp_ucb", 1.0), ("bp_ucb", 2.5), ("bp_ucb", 0.0), ("ucb", 1.0)])
+def test_boundary_penalty_values(acquisition, mode, weight):
+    acqf = acquisition(mode, weight)
+    points = np.array([
+        [0.5, 0.5], [0.0, 0.5], [1.0, 0.5], [0.05, 0.5],
+        [0.5, 0.95], [0.0, 1.0], [0.1, 0.9], [0.02, 0.04],
+    ])
+    # Multiple boundary coordinates contribute their maximum, rather than their sum.
+    penalties = np.array([0.0, 1.0, 1.0, 0.25, 0.25, 1.0, 0.0, 0.64])
+    expected = 2.5 + points.sum(axis=-1)
+    if mode == "bp_ucb":
+        expected -= weight * penalties
+
+    np.testing.assert_allclose(acqf.eval_acqf_no_grad(points), expected)
+    for point, value in zip(points, expected):
+        assert acqf.eval_acqf_no_grad(point) == pytest.approx(value)
+
+
+@pytest.mark.parametrize("point", [[0.02, 0.5], [0.98, 0.5], [0.5, 0.5], [0.1, 0.5]])
+def test_boundary_penalty_gradient_matches_finite_differences(acquisition, point):
+    acqf = acquisition(weight=1.5)
+    point = np.array(point)
+    value, gradient = acqf.eval_acqf_with_grad(point)
+    offsets = np.eye(2) * 1e-7
+    expected = np.array([
+        (acqf.eval_acqf_no_grad(point + offset) - acqf.eval_acqf_no_grad(point - offset)) / 2e-7
+        for offset in offsets
+    ])
+    assert value == pytest.approx(acqf.eval_acqf_no_grad(point))
+    np.testing.assert_allclose(gradient, expected, atol=1e-5)
+
+
+def load_config(monkeypatch, mode="bp_ucb", sampler="gp"):
+    monkeypatch.setenv("PARAMETER_SEARCH_BAYESIAN_SAMPLER", sampler)
+    monkeypatch.setenv("PARAMETER_SEARCH_BAYESIAN_ACQUISITION", mode)
+    return runpy.run_path(str(Path(search.__file__).parents[1] / "config" / "parameter_search_con.py"))
+
+
+@pytest.mark.parametrize("mode", ["ei", "ucb", "bp_ucb"])
+def test_gp_acquisition_configuration(monkeypatch, mode):
+    monkeypatch.delenv("PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA", raising=False)
+    monkeypatch.delenv("PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA", raising=False)
+    config = load_config(monkeypatch, mode)
+    assert config["PARAMETER_SEARCH_STRATEGY"] == f"gp_{mode}"
+    assert config["SEARCH_STRATEGIES"][f"gp_{mode}"] == {"sampler": "gp", "acquisition": mode}
+    assert config["PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA"] == 1.0
+    assert config["PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA"] == 0.1
+
+
+def test_boundary_penalty_configuration_overrides(monkeypatch):
+    monkeypatch.setenv("PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA", "0")
+    monkeypatch.setenv("PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA", "0.2")
+    config = load_config(monkeypatch)
+    assert config["PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA"] == 0.0
+    assert config["PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA"] == 0.2
+
+
+@pytest.mark.parametrize("sampler", ["tpe", "cmaes"])
+def test_boundary_penalty_requires_gp(monkeypatch, sampler):
+    with pytest.raises(ValueError, match="requires the gp sampler"):
+        load_config(monkeypatch, sampler=sampler)
+
+
+@pytest.mark.parametrize("setting,value", [
+    ("LAMBDA", "-1"), ("LAMBDA", "nan"), ("LAMBDA", "inf"),
+    ("DELTA", "0"), ("DELTA", "-0.1"), ("DELTA", "nan"), ("DELTA", "inf"),
+])
+def test_invalid_boundary_penalty_settings(monkeypatch, setting, value):
+    variable = f"PARAMETER_SEARCH_BAYESIAN_BP_UCB_{setting}"
+    monkeypatch.setenv(variable, value)
+    with pytest.raises(ValueError, match=variable):
+        load_config(monkeypatch)

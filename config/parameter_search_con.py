@@ -1,16 +1,19 @@
 """Parameter-search methods, ranges, and strategy assignments."""
 import inspect
+import math
 import os
 
 
 # Search modes:
 #   gp_ei  - Gaussian Process with Expected Improvement
 #   gp_ucb - Gaussian Process with Upper Confidence Bound
+#   gp_bp_ucb - Gaussian Process with boundary-penalized Upper Confidence Bound
 #   tpe    - Tree-structured Parzen Estimator
 #   cmaes  - Covariance Matrix Adaptation Evolution Strategy
 SEARCH_STRATEGIES = {
    "gp_ei": {"sampler": "gp", "acquisition": "ei"},
    "gp_ucb": {"sampler": "gp", "acquisition": "ucb"},
+   "gp_bp_ucb": {"sampler": "gp", "acquisition": "bp_ucb"},
    "tpe": {"sampler": "tpe", "acquisition": "ei"},
    "cmaes": {"sampler": "cmaes", "acquisition": "ei"},
 }
@@ -37,12 +40,12 @@ if PARAMETER_SEARCH_BAYESIAN_SAMPLER not in {"gp", "tpe", "cmaes"}:
        f"Unsupported Bayesian sampler: {PARAMETER_SEARCH_BAYESIAN_SAMPLER}. "
        "Choose gp, tpe, or cmaes."
     )
-if PARAMETER_SEARCH_BAYESIAN_ACQUISITION not in {"ei", "ucb"}:
+if PARAMETER_SEARCH_BAYESIAN_ACQUISITION not in {"ei", "ucb", "bp_ucb"}:
    raise ValueError(
        f"Unsupported Bayesian acquisition: {PARAMETER_SEARCH_BAYESIAN_ACQUISITION}. "
-       "Choose ei or ucb."
+       "Choose ei, ucb, or bp_ucb."
    )
-if PARAMETER_SEARCH_BAYESIAN_ACQUISITION == "ucb" and PARAMETER_SEARCH_BAYESIAN_SAMPLER != "gp":
+if PARAMETER_SEARCH_BAYESIAN_ACQUISITION in {"ucb", "bp_ucb"} and PARAMETER_SEARCH_BAYESIAN_SAMPLER != "gp":
    raise ValueError("UCB acquisition requires the gp sampler.")
 
 PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA = float(
@@ -50,6 +53,19 @@ PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA = float(
 )
 if PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA <= 0:
    raise ValueError("PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA must be positive.")
+
+# Boundary penalty on Optuna's normalized coordinates; J includes all searched parameters.
+PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA = float(
+   os.getenv("PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA", "1.0")
+)
+if not math.isfinite(PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA) or PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA < 0:
+   raise ValueError("PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA must be finite and nonnegative.")
+
+PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA = float(
+   os.getenv("PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA", "0.1")
+)
+if not math.isfinite(PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA) or PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA <= 0:
+   raise ValueError("PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA must be finite and positive.")
 
 PARAMETER_SEARCH_WARMUP_TRIALS = int(os.getenv("PARAMETER_SEARCH_WARMUP_TRIALS", "4"))
 PARAMETERS_EXECUTED = max(1, int(os.getenv("PARAMETERS_EXECUTED", "1")))
@@ -362,6 +378,8 @@ __all__ = [
     "PARAMETER_SEARCH_BAYESIAN_SAMPLER",
     "PARAMETER_SEARCH_BAYESIAN_ACQUISITION",
     "PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA",
+    "PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA",
+    "PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA",
     "PARAMETER_SEARCH_WARMUP_TRIALS",
     "PARAMETER_RANGE_OVERVIEW",
     "STRATEGY_PARAMETER_REQUIREMENTS",

@@ -5,6 +5,8 @@ from typing import Dict, List
 
 from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
+    PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA,
+    PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA,
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
     PARAMETER_SEARCH_METHOD,
@@ -17,9 +19,9 @@ ParameterValues = Dict[str, int | float]
 
 
 class _UCBGPSampler:
-    """Optuna GPSampler with an upper-confidence-bound acquisition function."""
+    """Optuna GPSampler with UCB and an optional boundary penalty."""
 
-    def __new__(cls, seed: int):
+    def __new__(cls, seed: int, *, boundary_penalty: bool = False):
         try:
             import numpy as np
             import torch
@@ -41,7 +43,15 @@ class _UCBGPSampler:
 
                     def eval_acqf(self, x):
                         mean, variance = gpr.posterior(x)
-                        return mean + kappa * torch.sqrt(torch.clamp(variance, min=0.0))
+                        value = mean + kappa * torch.sqrt(torch.clamp(variance, min=0.0))
+                        if boundary_penalty:
+                            distance = torch.minimum(x, 1.0 - x)
+                            penalty = torch.clamp(
+                                1.0 - distance / PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA,
+                                min=0.0,
+                            ).square().amax(dim=-1)
+                            value = value - PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA * penalty
+                        return value
 
                     def eval_acqf_no_grad(self, x):
                         with torch.no_grad():
@@ -98,6 +108,8 @@ def _optuna_sampler(seed: int):
         return optuna.samplers.CmaEsSampler(seed=seed, n_startup_trials=0)
     if PARAMETER_SEARCH_BAYESIAN_ACQUISITION == "ucb":
         return _UCBGPSampler(seed)
+    if PARAMETER_SEARCH_BAYESIAN_ACQUISITION == "bp_ucb":
+        return _UCBGPSampler(seed, boundary_penalty=True)
     if not hasattr(optuna.samplers, "GPSampler"):
         raise RuntimeError("The installed Optuna version does not provide GPSampler; install optuna>=4.0.0.")
     return optuna.samplers.GPSampler(seed=seed, n_startup_trials=0)

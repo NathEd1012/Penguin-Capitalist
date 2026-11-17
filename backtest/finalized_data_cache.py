@@ -1,4 +1,4 @@
-"""Cache completed Step 1 data loads for exact backtest configurations."""
+"""Cache Step 1 results, with optional reuse of a saved input-data snapshot."""
 import hashlib
 import gzip
 import json
@@ -95,6 +95,49 @@ def _path(
     return cache_dir / filename
 
 
+class _MetadataComplete(Exception):
+    pass
+
+
+class _MetadataReader(pickle.Unpickler):
+    def find_class(self, module, name):
+        # Configuration contains only builtins and precedes the prepared bars.
+        # Stop before reconstructing arrays/objects from a multi-GB snapshot.
+        raise _MetadataComplete
+
+
+def _stored_configuration(path: Path) -> Optional[dict]:
+    try:
+        with gzip.open(path, "rb") as handle:
+            reader = _MetadataReader(handle)
+            try:
+                reader.load()
+            except _MetadataComplete:
+                pass
+            for value in reader.memo.copy().values():
+                if isinstance(value, dict) and {"cache_version", "raw_files", "symbols", "start_date"} <= value.keys():
+                    return value
+    except (OSError, ValueError, pickle.PickleError, EOFError, AttributeError):
+        pass
+    return None
+
+
+def _same_snapshot_settings(saved: dict, requested: dict) -> bool:
+    # Snapshot mode freezes the saved data. Dates, symbols and processing rules
+    # must still match; raw-file changes do not replace that saved experiment input.
+    return ({key: value for key, value in saved.items() if key != "raw_files"}
+            == {key: value for key, value in requested.items() if key != "raw_files"})
+
+
+def _snapshot_path(cache_dir: Path, configuration: dict) -> Optional[Path]:
+    candidates = sorted(cache_dir.glob("*.pkl.gz"), key=lambda path: path.stat().st_mtime_ns, reverse=True)
+    for path in candidates:
+        saved = _stored_configuration(path)
+        if saved is not None and _same_snapshot_settings(saved, configuration):
+            return path
+    return None
+
+
 def load(
     cache_dir: Path,
     symbols: List[str],
@@ -111,8 +154,13 @@ def load(
     enable_data_quality_checks: bool = True,
     refresh_cache: bool = False,
     symbol_list_name: Optional[str] = None,
+    reuse_saved_snapshot: bool = False,
 ) -> Optional[dict]:
-    """Load a finalized Step 1 result when its configuration matches exactly."""
+    """Load exact inputs, or explicitly reuse saved data with matching settings.
+
+    Snapshot reuse ignores subsequent raw-file changes, preserving the saved
+    experiment input. refresh_cache=True always bypasses both lookup modes.
+    """
     configuration = _configuration(
         symbols,
         start_date,
@@ -131,15 +179,24 @@ def load(
     if refresh_cache:
         return None
     cache_path = _path(cache_dir, configuration)
+    if not cache_path.is_file() and reuse_saved_snapshot:
+        cache_path = _snapshot_path(cache_dir, configuration)
+        if cache_path is None:
+            return None
     try:
         with gzip.open(cache_path, "rb") as handle:
             cache = pickle.load(handle)
         if (
             not isinstance(cache, dict)
-            or cache.get("configuration") != configuration
+            or not isinstance(cache.get("configuration"), dict)
+            or not (cache["configuration"] == configuration or (
+                reuse_saved_snapshot and _same_snapshot_settings(cache["configuration"], configuration)
+            ))
             or not isinstance(cache.get("result"), dict)
         ):
             return None
+        if cache["configuration"] != configuration:
+            print(f"  Reusing finalized Step 1 snapshot: {cache_path.name}; raw-cache changes are excluded from this run's saved inputs.")
         return cache["result"]
     except (OSError, ValueError, pickle.PickleError, EOFError, AttributeError):
         return None

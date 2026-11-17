@@ -390,6 +390,11 @@ class DataCache:
         retained = cached_df[~cached_df["timestamp"].isin(new_df["timestamp"])]
         merged = pd.concat([retained, new_df], ignore_index=True)
         merged = merged.sort_values("timestamp").reset_index(drop=True)
+
+        if merged.equals(cached_df.sort_values("timestamp").reset_index(drop=True)):
+            # Inclusive tail fetches can return only the already cached last bar.
+            # Keep the existing file and timestamp when nothing actually changed.
+            return merged
         
         # Save merged data back to cache
         self.save_cache(symbol, timeframe, merged)
