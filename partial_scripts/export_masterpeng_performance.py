@@ -24,6 +24,8 @@ from xml.etree import ElementTree as ET
 
 PROJECT = Path(__file__).resolve().parents[1]
 DEFAULT_ROOT = PROJECT / "run_log" / "MasterPeng_ALL_RUNS_TC1.0_TS500"
+if (PROJECT / "run_log/Done_usefull" / DEFAULT_ROOT.name).is_dir():
+    DEFAULT_ROOT = PROJECT / "run_log/Done_usefull" / DEFAULT_ROOT.name
 YEARS = list(range(2020, 2025))
 SEEDS = [11, 22, 33, 42, 55]
 METHODS = [("random", "Random"), ("cmaes", "CMA-ES"), ("tpe", "TPE"),
@@ -33,10 +35,10 @@ STRATEGIES = [(base, variant) for base in
               for variant in [1, 2]]
 FIELDS = ["year", "method", "seed", "strategy", "variant", "original_strategy_name",
           "return_pct", "spy_return_pct", "excess_return_pp", "total_return",
-          "max_drawdown", "sharpe_ratio", "final_value",
+          "max_drawdown", "sharpe_ratio", "final_value", "buy_trades",
           "status", "failure", "source_file"]
 NUMERIC_FIELDS = {"return_pct", "spy_return_pct", "excess_return_pp", "total_return",
-                  "max_drawdown", "sharpe_ratio", "final_value"}
+                  "max_drawdown", "sharpe_ratio", "final_value", "buy_trades"}
 SHEET_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 
@@ -102,12 +104,15 @@ def collect(root, training_steps=500, seeds=None):
                                   variant=variant, original_strategy_name=original,
                                   status=status, failure=error, source_file=str(metrics_path))
                     for field in ["return_pct", "total_return", "max_drawdown",
-                                  "sharpe_ratio", "final_value"]:
+                                  "sharpe_ratio", "final_value", "buy_trades"]:
                         value = values.get(field)
                         if metrics is not None and (not isinstance(value, (int, float))
                                                     or not math.isfinite(value)):
                             raise ValueError("Invalid {} in {}".format(field, metrics_path))
                         record[field] = value
+                    if metrics is not None and (record["buy_trades"] < 0
+                                                or int(record["buy_trades"]) != record["buy_trades"]):
+                        raise ValueError("Invalid buy_trades in {}".format(metrics_path))
                     record["spy_return_pct"] = spy_return
                     record["excess_return_pp"] = (round(record["return_pct"] - spy_return, 2)
                                                   if metrics is not None else None)
@@ -116,13 +121,16 @@ def collect(root, training_steps=500, seeds=None):
 
 
 def cell_text(records, year, method, base, variant, relative_to_spy=False, seeds=None):
-    lines = []
+    lines, buys = [], []
     for seed in SEEDS if seeds is None else seeds:
         record = records[(year, method, seed, base, variant)]
         value = record["excess_return_pp" if relative_to_spy else "return_pct"]
         suffix = " pp" if relative_to_spy else "%"
         lines.append("RS {}: {}".format(seed, "FAILED" if value is None
                                          else "{:+.2f}{}".format(value, suffix)))
+        if value is not None and record.get("buy_trades") is not None:
+            buys.append(record["buy_trades"])
+    lines.append("Avg buys: " + ("{:,.1f}".format(sum(buys) / len(buys)) if buys else "N/A"))
     return "\n".join(lines)
 
 
@@ -215,7 +223,7 @@ def write_xlsx(path, records, lookup, failures, counts, relative_to_spy=False,
         rows.append([(explanation, 4)])
         sheets.append((title.replace(" — variant ", " "), worksheet(
             rows, [12] + [26] * 5, heights={1: 30, 2: 24, 3: 24, 4: 24, 11: 30,
-                                         **{i: max(30, 18 * len(seeds) + 6) for i in range(6, 11)}},
+                                         **{i: max(42, 18 * (len(seeds) + 1) + 6) for i in range(6, 11)}},
             merges=["A1:F1", "A2:F2", "A3:F3", "A4:F4", "A11:F11"],
             freeze=(1, 5), landscape=True)))
     raw_rows = [[(field, 2) for field in FIELDS]]
@@ -246,6 +254,7 @@ def write_xlsx(path, records, lookup, failures, counts, relative_to_spy=False,
         "Completed: {} / {}; failed: {} / {}.".format(counts.get("Completed", 0), expected_runs, counts.get("Failed", 0), expected_runs),
         "Raw data return_pct and max_drawdown use percentage units, e.g. -45.18 means -45.18%.",
         "Raw data spy_return_pct is the SPY reference; excess_return_pp = return_pct - spy_return_pct (percentage points).",
+        "Avg buys = average executed test BUY orders across completed seeds; missing runs are excluded.",
         "Source: */artifacts/json/metrics_summary.json in " + str(root),
         "Generated (UTC): " + datetime.now(timezone.utc).isoformat(),
     ]
@@ -332,7 +341,7 @@ def write_pdf(path, lookup, counts, relative_to_spy=False, seeds=None, training_
                     text = cell.get_text().get_text()
                     cell.set_facecolor("#fff1dc" if "FAILED" in text else "#f1f5f8")
                     cell.get_text().set_fontfamily("DejaVu Sans Mono")
-                    cell.get_text().set_linespacing(1.6)
+                    cell.get_text().set_linespacing(1.15)
                 cell.set_height(0.06 if row == 0 else 0.188)
             ax.set_position([0.055, 0.14, 0.89, 0.72])
             explanation = ("Strategy return (%) minus SPY return (%). Positive = outperformance; "
@@ -341,8 +350,8 @@ def write_pdf(path, lookup, counts, relative_to_spy=False, seeds=None, training_
             fig.text(0.055, 0.105, explanation,
                      fontsize=10, color="#43596a")
             fig.text(0.055, 0.078,
-                     "Variant 1 = no numeric suffix; variant 2 = numeric suffix. SPY is the reference benchmark.",
-                     fontsize=10, color="#43596a")
+                     "Avg buys = executed test BUY orders averaged across completed seeds. Variants: 1 = no suffix; 2 = numeric suffix.",
+                     fontsize=9, color="#43596a")
             fig.text(0.055, 0.051,
                      "Seed order: " + seed_order + ". FAILED = missing final test result, not zero. "
                      "Completed: {}/{}.".format(counts.get("Completed", 0), expected_runs),

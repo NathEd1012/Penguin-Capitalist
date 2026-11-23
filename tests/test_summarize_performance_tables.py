@@ -57,6 +57,31 @@ class SeedStatisticsTests(unittest.TestCase):
 
 
 class TableGroupingTests(unittest.TestCase):
+    def test_buy_average_uses_completed_seeds_including_zero_buys(self):
+        rows = [{**seed_row(11, 0), "buy_trades": "0"},
+                {**seed_row(22, 10), "buy_trades": "100"},
+                {**seed_row(33, "", status="Missing"), "buy_trades": ""},
+                {**seed_row(11, 100, variant=2), "buy_trades": "900"}]
+        stats = [s for s in summarize(rows) if s["year"] == 2020 and s["method"] == "random"
+                 and s["strategy"] == "EmperorPenguin"]
+        self.assertEqual((stats[0]["mean_buy_trades"], stats[0]["buy_count_n"]), (50, 2))
+        self.assertEqual((stats[1]["mean_buy_trades"], stats[1]["buy_count_n"]), (900, 1))
+        self.assertEqual(stats[0]["included_seeds"], [11, 22])
+
+    def test_invalid_or_missing_buy_counts_cannot_change_the_denominator(self):
+        for buys in ("", None, "-1", "1.5", "nan", "inf"):
+            with self.subTest(buys=buys), self.assertRaises(ValueError):
+                summarize([{**seed_row(11, 1), "buy_trades": buys}])
+
+    def test_single_seed_and_bp_ucb_collection_dimensions(self):
+        row = {**seed_row(42, 3), "method": "gpbpucb", "year": "2023", "buy_trades": 12}
+        stats = summarize([row], years=[2023, 2024], methods=[("gpbpucb", "GP-BP-UCB")], seeds=[42])
+        self.assertEqual(len(stats), 12)
+        self.assertEqual((stats[0]["n"], stats[0]["expected_n"], stats[0]["mean_buy_trades"]), (1, 1, 12))
+        self.assertIsNone(stats[0]["sem_pp"])
+        self.assertEqual((stats[1]["n"], stats[1]["expected_n"]), (0, 1))
+        self.assertIsNone(stats[1]["mean_buy_trades"])
+
     def test_failed_rows_are_excluded_zero_returns_and_variants_are_preserved(self):
         rows = [seed_row(11, 0), seed_row(22, 10), seed_row(33, "", status="Failed"),
                 seed_row(11, 100, variant=2)]

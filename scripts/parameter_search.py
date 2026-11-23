@@ -7,6 +7,7 @@ from config.parameter_search_con import (
     PARAMETER_SEARCH_BAYESIAN_ACQUISITION,
     PARAMETER_SEARCH_BAYESIAN_BP_UCB_DELTA,
     PARAMETER_SEARCH_BAYESIAN_BP_UCB_LAMBDA,
+    PARAMETER_SEARCH_BAYESIAN_GP_MEAN,
     PARAMETER_SEARCH_BAYESIAN_SAMPLER,
     PARAMETER_SEARCH_BAYESIAN_UCB_KAPPA,
     PARAMETER_SEARCH_METHOD,
@@ -26,7 +27,7 @@ class _UCBGPSampler:
             import numpy as np
             import torch
             from optuna._gp import optim_mixed
-            from optuna.samplers import GPSampler
+            from scripts.fixed_mean_gp import FixedMeanGPSampler as GPSampler
         except ImportError as exc:
             raise RuntimeError(
                 "UCB acquisition requires Optuna, NumPy, and PyTorch. Install requirements.txt."
@@ -72,7 +73,7 @@ class _UCBGPSampler:
                     rng=self._rng.rng,
                 )[0]
 
-        return UCBGPSampler(seed=seed, n_startup_trials=0)
+        return UCBGPSampler(seed=seed, n_startup_trials=0, mean_value=PARAMETER_SEARCH_BAYESIAN_GP_MEAN)
 
 
 def _sample_parameters_from_space(parameter_space: ParameterSpace, rng: random.Random) -> ParameterValues:
@@ -112,7 +113,9 @@ def _optuna_sampler(seed: int):
         return _UCBGPSampler(seed, boundary_penalty=True)
     if not hasattr(optuna.samplers, "GPSampler"):
         raise RuntimeError("The installed Optuna version does not provide GPSampler; install optuna>=4.0.0.")
-    return optuna.samplers.GPSampler(seed=seed, n_startup_trials=0)
+    from scripts.fixed_mean_gp import FixedMeanGPSampler
+
+    return FixedMeanGPSampler(seed=seed, n_startup_trials=0, mean_value=PARAMETER_SEARCH_BAYESIAN_GP_MEAN)
 
 
 def _create_optuna_study(

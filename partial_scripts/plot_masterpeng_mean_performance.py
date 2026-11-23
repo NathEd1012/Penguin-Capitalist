@@ -24,6 +24,7 @@ except ImportError:
 
 
 DEFAULT_INPUT = DEFAULT_ROOT / "performance_tables/masterpeng_performance.csv"
+METHOD_LABELS = dict(METHODS + [("gpbpucb", "GP-BP-UCB")])
 VMIN, VMAX = -100, 50
 METRICS = {
     "return_pct": ("Test return", "%"),
@@ -31,7 +32,7 @@ METRICS = {
 }
 
 
-def cell_statistics(rows, metric):
+def cell_statistics(rows, metric, *, years=None, methods=None, seeds=None):
     """Reuse the exported table's seed validation and exclude missing results."""
     if metric not in METRICS:
         raise ValueError(f"Unknown metric: {metric}")
@@ -43,7 +44,7 @@ def cell_statistics(rows, metric):
             raise ValueError(f"Input has no {metric} column.")
         selected.append({**row, "excess_return_pp": row[metric]})
     cells = []
-    for stat in summarize(selected):
+    for stat in summarize(selected, years=years, methods=methods, seeds=seeds):
         variance = stat["sample_sd_pp"] ** 2 if stat["sample_sd_pp"] is not None else None
         cells.append({
             "strategy": stat["strategy"], "variant": stat["variant"],
@@ -51,12 +52,23 @@ def cell_statistics(rows, metric):
             "n": stat["n"], "expected_n": stat["expected_n"],
             "mean": stat["mean_pp"], "sample_variance": variance,
             "standard_error": math.sqrt(variance / stat["n"]) if variance is not None else None,
+            "mean_buy_trades": stat["mean_buy_trades"], "buy_count_n": stat["buy_count_n"],
             "included_seeds": stat["included_seeds"], "missing_seeds": stat["missing_seeds"],
         })
     return cells
 
 
-def write_pdf(path, cells, metric):
+def cell_text(cell, unit):
+    if cell["mean"] is None:
+        text = "No results"
+    else:
+        error = "N/A" if cell["standard_error"] is None else f"{cell['standard_error']:.2f}"
+        text = f"{cell['mean']:+.2f} ± {error} {unit}"
+    buys = "N/A" if cell["mean_buy_trades"] is None else f"{cell['mean_buy_trades']:,.1f}"
+    return text + f"\nAvg buys: {buys}\nn = {cell['n']}/{cell['expected_n']}"
+
+
+def write_pdf(path, cells, metric, collection=None):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -66,6 +78,11 @@ def write_pdf(path, cells, metric):
     from matplotlib.ticker import FuncFormatter
 
     label, unit = METRICS[metric]
+    years = sorted({cell["year"] for cell in cells})
+    present_methods = {cell["method"] for cell in cells}
+    methods = [(method, label) for method, label in METHOD_LABELS.items() if method in present_methods]
+    if len(methods) != len(present_methods):
+        raise ValueError(f"Unknown search methods: {present_methods - METHOD_LABELS.keys()}")
     cmap = plt.get_cmap("viridis")
     norm = Normalize(vmin=VMIN, vmax=VMAX, clip=True)
     lookup = {(c["strategy"], c["variant"], c["year"], c["method"]): c for c in cells}
@@ -78,20 +95,19 @@ def write_pdf(path, cells, metric):
                         fontsize=23, weight="bold", color="#17354a")
             figure.text(0.055, 0.905, f"{label}: mean ± standard error ({unit}) | start year × search method",
                         fontsize=12, color="#43596a")
+            if collection:
+                figure.text(0.055, 0.875, collection, fontsize=10, color="#43596a")
             contents = []
-            for year in YEARS:
+            for year in years:
                 row = [str(year)]
-                for method, _ in METHODS:
+                for method, _ in methods:
                     cell = lookup[(base, variant, year, method)]
-                    if cell["mean"] is None:
-                        text = "No results"
-                    else:
-                        error = "N/A" if cell["standard_error"] is None else f"{cell['standard_error']:.2f}"
-                        text = f"{cell['mean']:+.2f} ± {error} {unit}"
-                    row.append(text + f"\nn = {cell['n']}/{cell['expected_n']}")
+                    row.append(cell_text(cell, unit))
                 contents.append(row)
-            table = axis.table(cellText=contents, colLabels=["Year"] + [name for _, name in METHODS],
-                               cellLoc="center", colWidths=[0.07] + [0.186] * 5, bbox=[0, 0, 1, 1])
+            year_width = 0.07 if len(methods) >= 4 else 0.16
+            table = axis.table(cellText=contents, colLabels=["Year"] + [name for _, name in methods],
+                               cellLoc="center", colWidths=[year_width] + [(1 - year_width) / len(methods)] * len(methods),
+                               bbox=[0, 0, 1, 1])
             table.auto_set_font_size(False)
             table.set_fontsize(12)
             for (row, column), box in table.get_celld().items():
@@ -101,12 +117,12 @@ def write_pdf(path, cells, metric):
                     box.set_facecolor("#17354a")
                     box.set_text_props(color="white", weight="bold")
                 else:
-                    cell = lookup[(base, variant, YEARS[row - 1], METHODS[column - 1][0])]
+                    cell = lookup[(base, variant, years[row - 1], methods[column - 1][0])]
                     color = cmap(norm(cell["mean"])) if cell["mean"] is not None else (0.88, 0.89, 0.91, 1)
                     box.set_facecolor(color)
                     brightness = sum(weight * channel for weight, channel in zip((0.2126, 0.7152, 0.0722), color[:3]))
                     box.set_text_props(color="black" if brightness > 0.5 else "white")
-                    box.get_text().set_linespacing(1.7)
+                    box.get_text().set_linespacing(1.3)
             axis.set_position([0.055, 0.265, 0.89, 0.585])
             color_axis = figure.add_axes([0.22, 0.18, 0.56, 0.025])
             bar = figure.colorbar(ScalarMappable(norm=norm, cmap=cmap), cax=color_axis,
@@ -115,8 +131,8 @@ def write_pdf(path, cells, metric):
             bar.set_label(f"Cell color = mean {label.lower()} ({unit}); fixed scale −100 to +50")
             figure.text(0.055, 0.09, "Error = SEM = √(s² / n); s² = Σ(x − mean)² / (n − 1). Missing seeds are excluded.",
                         fontsize=10, color="#43596a")
-            figure.text(0.055, 0.06, "Colors saturate outside the scale; printed values are unchanged. One result has no estimable SEM.",
-                        fontsize=10, color="#43596a")
+            figure.text(0.055, 0.06, "Avg buys = executed test BUY orders averaged across the included seeds. One seed has no estimable SEM; colors saturate outside the scale.",
+                        fontsize=9, color="#43596a")
             figure.text(0.945, 0.03, f"{page} / {len(STRATEGIES)}", ha="right", fontsize=9, color="#43596a")
             pdf.savefig(figure)
             if page == 1:
@@ -145,6 +161,7 @@ def main():
     path.with_suffix(".json").write_text(json.dumps({
         "input": str(source), "metric": args.metric, "units": METRICS[args.metric][1],
         "error": "sqrt(sample variance / n), sample variance uses n - 1",
+        "average_buys": "mean executed test BUY orders across the same included seeds as returns",
         "colormap": "viridis", "vmin": VMIN, "vmax": VMAX, "cells": cells,
     }, indent=2, allow_nan=False) + "\n")
     print(f"Saved {path} ({len(STRATEGIES)} pages, {len(cells)} cells), CSV and JSON statistics.")

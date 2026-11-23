@@ -23,12 +23,12 @@ from xml.etree import ElementTree as ET
 try:
     from .export_masterpeng_performance import (
         DEFAULT_ROOT, METHODS, SEEDS, SHEET_NS, STRATEGIES, YEARS,
-        strategy_title, worksheet, write_workbook, xml_bytes,
+        col_name, strategy_title, worksheet, write_workbook, xml_bytes,
     )
 except ImportError:
     from export_masterpeng_performance import (
         DEFAULT_ROOT, METHODS, SEEDS, SHEET_NS, STRATEGIES, YEARS,
-        strategy_title, worksheet, write_workbook, xml_bytes,
+        col_name, strategy_title, worksheet, write_workbook, xml_bytes,
     )
 
 
@@ -41,7 +41,8 @@ QUALITY = {
 }
 STAT_FIELDS = ["strategy", "variant", "year", "method", "n", "expected_n",
                "mean_pp", "sample_sd_pp", "sem_pp", "ci95_half_width_pp",
-               "ci95_low_pp", "ci95_high_pp", "quality", "included_seeds", "missing_seeds"]
+               "ci95_low_pp", "ci95_high_pp", "quality", "mean_buy_trades", "buy_count_n",
+               "included_seeds", "missing_seeds"]
 NS = {"s": SHEET_NS}
 # Two-sided Student-t 95% critical values, df = n - 1. The tables have <=5 seeds.
 T95 = {1: 12.706204736432095, 2: 4.302652729696142,
@@ -92,11 +93,12 @@ def read_table(path):
                 for row in grid[1:]]
 
 
-def seed_statistics(seed_values):
+def seed_statistics(seed_values, seeds=None):
     """Return sample statistics, preserving unavailable standard errors as None."""
+    seeds = SEEDS if seeds is None else seeds
     included = sorted(seed_values)
     values = [seed_values[seed] for seed in included]
-    if not set(included) <= set(SEEDS):
+    if not set(included) <= set(seeds):
         raise ValueError("Unexpected seed in a table cell.")
     if not all(isinstance(value, (float, int)) and math.isfinite(value) for value in values):
         raise ValueError("All included returns must be finite numbers.")
@@ -109,16 +111,21 @@ def seed_statistics(seed_values):
     high = mean + half_width if half_width is not None else None
     quality = ("insufficient" if n < 2 else "above_spy" if low > 0
                else "below_spy" if high < 0 else "unclear")
-    return {"n": n, "expected_n": len(SEEDS), "mean_pp": mean, "sample_sd_pp": sd,
+    return {"n": n, "expected_n": len(seeds), "mean_pp": mean, "sample_sd_pp": sd,
             "sem_pp": sem, "ci95_half_width_pp": half_width,
             "ci95_low_pp": low, "ci95_high_pp": high, "quality": quality,
-            "included_seeds": included, "missing_seeds": sorted(set(SEEDS) - set(included))}
+            "included_seeds": included, "missing_seeds": sorted(set(seeds) - set(included))}
 
 
-def summarize(rows):
+def summarize(rows, *, years=None, methods=None, seeds=None):
     """Group only completed seed results; reject duplicate or malformed rows."""
-    groups, seen = {}, set()
-    methods = {method for method, _ in METHODS}
+    years = YEARS if years is None else years
+    methods = METHODS if methods is None else methods
+    seeds = SEEDS if seeds is None else seeds
+    method_names = {method for method, _ in methods}
+    rows = list(rows)
+    has_buys = any("buy_trades" in row for row in rows)
+    groups, buy_groups, seen = {}, {}, set()
     for row in rows:
         if row.get("strategy") in {"SP500", "SP500Penguin"}:
             continue
@@ -127,7 +134,7 @@ def summarize(rows):
             raise ValueError("Input must contain SPY-relative seed data, including excess_return_pp and status.")
         base, variant = row["strategy"], int(row["variant"])
         year, method, seed = int(row["year"]), row["method"], int(row["seed"])
-        if (base, variant) not in STRATEGIES or year not in YEARS or method not in methods or seed not in SEEDS:
+        if (base, variant) not in STRATEGIES or year not in years or method not in method_names or seed not in seeds:
             raise ValueError(f"Unexpected table coordinates: {(base, variant, year, method, seed)}")
         key = (base, variant, year, method)
         if (*key, seed) in seen:
@@ -141,13 +148,31 @@ def summarize(rows):
             if not math.isfinite(value):
                 raise ValueError(f"Non-finite relative return: {(*key, seed)}")
             groups.setdefault(key, {})[seed] = value
+            if has_buys:
+                raw_buys = row.get("buy_trades")
+                if raw_buys in ("", None):
+                    raise ValueError(f"Completed row has no BUY count: {(*key, seed)}")
+                buys = float(raw_buys)
+                if not math.isfinite(buys) or buys < 0 or not buys.is_integer():
+                    raise ValueError(f"Invalid BUY count: {(*key, seed)}")
+                buy_groups.setdefault(key, {})[seed] = int(buys)
         elif value not in ("", None):
             raise ValueError(f"Unfinished row contains a performance value: {(*key, seed)}")
+        elif row.get("buy_trades") not in ("", None):
+            raise ValueError(f"Unfinished row contains a BUY count: {(*key, seed)}")
     if not seen:
         raise ValueError("Input contains no strategy seed results.")
-    return [{"strategy": base, "variant": variant, "year": year, "method": method,
-             **seed_statistics(groups.get((base, variant, year, method), {}))}
-            for base, variant in STRATEGIES for year in YEARS for method, _ in METHODS]
+    stats = []
+    for base, variant in STRATEGIES:
+        for year in years:
+            for method, _ in methods:
+                key = (base, variant, year, method)
+                buys = buy_groups.get(key, {})
+                stats.append({"strategy": base, "variant": variant, "year": year, "method": method,
+                              **seed_statistics(groups.get(key, {}), seeds),
+                              "mean_buy_trades": statistics.mean(buys.values()) if buys else None,
+                              "buy_count_n": len(buys)})
+    return stats
 
 
 def cell_text(stat):
@@ -157,7 +182,8 @@ def cell_text(stat):
         value = f"{stat['mean_pp']:+.2f} ± N/A pp"
     else:
         value = f"{stat['mean_pp']:+.2f} ± {stat['sem_pp']:.2f} pp"
-    return value + f"\nn = {stat['n']}/{stat['expected_n']}"
+    buys = "N/A" if stat["mean_buy_trades"] is None else f"{stat['mean_buy_trades']:,.1f}"
+    return value + f"\nAvg buys: {buys}\nn = {stat['n']}/{stat['expected_n']}"
 
 
 def styles_xml():
@@ -226,13 +252,14 @@ def write_xlsx(path, stats, source):
         numeric_rows.append([( ", ".join(map(str, stat[field])) if isinstance(stat[field], list)
                               else stat[field], QUALITY[stat["quality"]][2] if field == "quality"
                               else 5 if field.endswith("_pp") else 0) for field in STAT_FIELDS])
-    sheets.append(("Cell statistics", worksheet(numeric_rows, [25, 10, 10, 13, 9, 13] + [21] * 9,
-                                                freeze=(0, 1), autofilter=f"A1:O{len(numeric_rows)}")))
+    sheets.append(("Cell statistics", worksheet(numeric_rows, [25, 10, 10, 13, 9, 13] + [21] * (len(STAT_FIELDS) - 6),
+                                                freeze=(0, 1), autofilter=f"A1:{col_name(len(STAT_FIELDS))}{len(numeric_rows)}")))
     notes = ["SPY-relative performance: seed averages and statistical errors",
              "Cell values are mean ± SEM, in percentage points. SEM = sample SD / sqrt(n), with SD using n - 1.",
              "95% CI = mean ± t(0.975, n - 1) × SEM. Confidence intervals are separate from the displayed ± SEM.",
              "Green: CI above zero. Red: CI below zero. Amber: CI includes zero. Gray: fewer than two seed results.",
              "Failed and absent seeds are excluded, never replaced by zeros. A one-seed cell has no estimable SEM or CI.",
+             "Avg buys = average executed test BUY orders across the same completed seeds used for returns.",
              "These are seed-level, unadjusted intervals on shared test market data; they do not describe variation across market periods.",
              "Variant 1: original name without a numeric suffix. Variant 2: original name with a numeric suffix.",
              "SPY is a reference benchmark only; no separate SP500 evaluation is produced.",
@@ -269,7 +296,7 @@ def write_pdf(path, stats):
                 else:
                     stat = lookup[(base, variant, YEARS[row - 1], METHODS[column - 1][0])]
                     cell.set_facecolor(QUALITY[stat["quality"]][1])
-                    cell.get_text().set_linespacing(1.7)
+                    cell.get_text().set_linespacing(1.3)
                 cell.set_height(0.07 if row == 0 else 0.186)
             axis.set_position([0.055, 0.23, 0.89, 0.62])
             figure.legend(handles=[Patch(facecolor=color, edgecolor="#b0bac3", label=label)
@@ -279,8 +306,8 @@ def write_pdf(path, stats):
                         fontsize=10, color="#43596a")
             figure.text(0.055, 0.09, "Failed seeds excluded; n = available / 5. Intervals describe seed variation on shared market data; comparisons are unadjusted.",
                         fontsize=9, color="#43596a")
-            figure.text(0.055, 0.06, "Variant 1 = no numeric suffix; variant 2 = numeric suffix. Positive means outperformance of SPY.",
-                        fontsize=10, color="#43596a")
+            figure.text(0.055, 0.06, "Avg buys = executed test BUY orders averaged across the included seeds. Positive returns mean outperformance of SPY.",
+                        fontsize=9, color="#43596a")
             figure.text(0.945, 0.03, f"{page} / {len(STRATEGIES)}", ha="right", fontsize=9, color="#43596a")
             pdf.savefig(figure)
             if page == 1:
@@ -306,6 +333,7 @@ def main():
                           for key, value in stat.items()} for stat in stats)
     metadata = {"input": str(source), "display": "mean ± sample standard error, in percentage points",
                 "standard_error": "sample SD (ddof=1) / sqrt(n)",
+                "average_buys": "mean executed test BUY orders across the same included seeds as returns",
                 "confidence_interval": "two-sided 95% Student-t, df=n-1; unadjusted across comparisons",
                 "quality_legend": {key: {"label": value[0], "color": value[1]} for key, value in QUALITY.items()},
                 "generated_at_utc": datetime.now(timezone.utc).isoformat(), "cells": stats}

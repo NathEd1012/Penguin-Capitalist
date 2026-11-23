@@ -6,8 +6,10 @@ from types import SimpleNamespace
 
 import numpy as np
 import optuna
-from optuna._gp import optim_mixed
+from optuna._gp import gp, optim_mixed
+from optuna.samplers._gp import sampler as gp_sampler
 import pytest
+import torch
 
 from scripts import parameter_search as search
 
@@ -250,3 +252,103 @@ def test_invalid_boundary_penalty_settings(monkeypatch, setting, value):
     monkeypatch.setenv(variable, value)
     with pytest.raises(ValueError, match=variable):
         load_config(monkeypatch)
+
+
+@pytest.mark.parametrize("setting,expected", [(None, 0.0), ("0", 0.0), ("-10000", -10000.0)])
+def test_gp_mean_configuration(monkeypatch, setting, expected):
+    monkeypatch.delenv("PARAMETER_SEARCH_BAYESIAN_GP_MEAN", raising=False)
+    if setting is not None:
+        monkeypatch.setenv("PARAMETER_SEARCH_BAYESIAN_GP_MEAN", setting)
+    config = runpy.run_path(str(Path(search.__file__).parents[1] / "config/parameter_search_con.py"))
+    assert config["PARAMETER_SEARCH_BAYESIAN_GP_MEAN"] == expected
+
+
+@pytest.mark.parametrize("setting", ["nan", "inf", "-inf"])
+def test_gp_mean_rejects_nonfinite_values(monkeypatch, setting):
+    monkeypatch.setenv("PARAMETER_SEARCH_BAYESIAN_GP_MEAN", setting)
+    with pytest.raises(ValueError, match="PARAMETER_SEARCH_BAYESIAN_GP_MEAN"):
+        runpy.run_path(str(Path(search.__file__).parents[1] / "config/parameter_search_con.py"))
+
+
+@pytest.mark.parametrize("mode", ["ei", "ucb", "bp_ucb"])
+@pytest.mark.parametrize("prior_mean", [0.0, -10000.0])
+@pytest.mark.parametrize("values", [[-2000.0, -1000.0, -3000.0], [-2000.0] * 3])
+def test_gp_reverts_to_fixed_prior_and_fits_observations(monkeypatch, mode, prior_mean, values):
+    # Hold the kernel fixed to test prior behavior independently of hyperparameter fitting.
+    def fixed_kernel(X, Y, is_categorical, **kwargs):
+        gpr = gp.GPRegressor(
+            is_categorical=torch.from_numpy(is_categorical),
+            X_train=torch.from_numpy(X),
+            y_train=torch.from_numpy(Y),
+            inverse_squared_lengthscales=torch.full((X.shape[1],), 2500.0, dtype=torch.float64),
+            kernel_scale=torch.tensor(1.0, dtype=torch.float64),
+            noise_var=torch.tensor(1e-8, dtype=torch.float64),
+        )
+        gpr._cache_matrix()
+        return gpr
+
+    captured = {}
+
+    def capture(acqf, **kwargs):
+        captured["acqf"] = acqf
+        return np.array([0.5]), 0.0
+
+    original_standardizer = gp_sampler._standardize_values
+    # Resolve Optuna's lazy module proxies before patching their functions.
+    monkeypatch.setattr(gp_sampler, "gp", gp)
+    monkeypatch.setattr(gp_sampler, "optim_mixed", optim_mixed)
+    monkeypatch.setattr(gp, "fit_kernel_params", fixed_kernel)
+    monkeypatch.setattr(optim_mixed, "optimize_acqf_mixed", capture)
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_SAMPLER", "gp")
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_ACQUISITION", mode)
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_GP_MEAN", prior_mean)
+    history = [
+        {"status": "completed", "params": {"x": x}, "objective_value": value}
+        for x, value in zip([0.45, 0.5, 0.55], values)
+    ]
+    study = search._create_optuna_study([("x", "float", 0.0, 1.0)], history, seed=42)
+    trial = study.ask()
+    assert trial.suggest_float("x", 0.0, 1.0) == 0.5
+
+    # At distant boundaries the raw posterior returns to the configured constant;
+    # at observed parameters it still reproduces the measured objectives.
+    points = torch.tensor([[0.0], [0.45], [0.5], [0.55], [1.0]], dtype=torch.float64)
+    posterior, _ = study.sampler._gprs_cache_list[0].posterior(points)
+    scale = float(np.std(values)) or 1.0
+    np.testing.assert_allclose(
+        posterior.numpy() * scale + prior_mean,
+        [prior_mean, *values, prior_mean],
+        atol=1e-3,
+    )
+    if mode == "ei":
+        # The improvement threshold must use the same residual scale as the GP.
+        assert captured["acqf"]._threshold * scale + prior_mean == pytest.approx(max(values))
+    else:
+        assert np.isfinite(captured["acqf"].eval_acqf_no_grad(points.numpy())).all()
+    assert [t.value for t in study.trials[:-1]] == values
+    assert gp_sampler._standardize_values is original_standardizer
+    # Ordinary Optuna samplers retain their observed-mean centering.
+    standardized, means, _ = original_standardizer(np.array(values)[:, None])
+    assert means[0] == pytest.approx(np.mean(values))
+    assert np.mean(standardized) == pytest.approx(0.0)
+
+
+@pytest.mark.parametrize("mode", ["ei", "ucb", "bp_ucb"])
+def test_fixed_mean_gp_with_real_fitting_and_acquisition(monkeypatch, mode):
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_SAMPLER", "gp")
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_ACQUISITION", mode)
+    monkeypatch.setattr(search, "PARAMETER_SEARCH_BAYESIAN_GP_MEAN", -10000.0)
+    values = [-2000.0, -1000.0, -3000.0]
+    history = [
+        {"status": "completed", "params": {"x": x}, "objective_value": value}
+        for x, value in zip([0.25, 0.5, 0.75], values)
+    ]
+    study = search._create_optuna_study([("x", "float", 0.0, 1.0)], history, seed=42)
+    study.sampler._n_preliminary_samples = 32
+    study.sampler._n_local_search = 2
+    trial = study.ask()
+    x = trial.suggest_float("x", 0.0, 1.0)
+    assert np.isfinite(x) and 0.0 <= x <= 1.0
+    study.tell(trial, -1000.0 - 40000.0 * (x - 0.5) ** 2)
+    assert [t.value for t in study.trials[:3]] == values
+    assert np.isfinite(study.trials[-1].value)
